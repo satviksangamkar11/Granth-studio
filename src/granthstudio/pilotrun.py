@@ -21,7 +21,7 @@ from .integrity import atomic_write_json, normalize_text, read_json, sha256_file
 from .pilot import PILOT_DEFINITIONS, plan_pilot, score_receipts
 from .pipeline import (ASSEMBLY_VERSION, LANGUAGE_NAME, Bundle, check_recovery_evidence, episode_store, load_bundle,
                        plan_tasks, production_problems, snapshot)
-from .runtime import (gpu_status, load_runtime, preflight, ram_available_mb, enforce_gpu_policy, require_single_worker,
+from .runtime import (gpu_status, load_runtime, preflight, ram_available_mb, gate_gpu_tasks, require_single_worker,
                       stop_before_deadline, write_run_receipt)
 from .scheduler import RUN_LOG, Scheduler
 from .schemas import validate_document
@@ -104,7 +104,7 @@ def run_pilot(project: Project, adhyay: int, store_name: str | None, execute: bo
     runtime = load_runtime(project)
     require_single_worker(runtime)
     report = preflight(project, models, runtime, gpu_status(), ram_available_mb())
-    enforce_gpu_policy(selected, report, cpu_only)
+    gate_gpu_tasks(selected, report, cpu_only)
     results = scheduler.run(selected, should_stop=stop_before_deadline(runtime))
     path = write_run_receipt(project, "pilot_run", adhyay, started, results, [], snapshot(bundle), report, scheduler.store)
     return mapping, selected, full_chapter, results, path

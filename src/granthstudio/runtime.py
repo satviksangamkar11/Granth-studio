@@ -171,16 +171,29 @@ def require_source_pins(project: Project, models: dict[str, Any]) -> None:
         raise IntegrationUnavailable(f"ComfyUI/node source pins {check['status']}: {check['detail'] or 'unrecorded'}: NOT VALIDATED")
 
 
-def enforce_gpu_policy(tasks, report: dict[str, Any], cpu_only: bool = False) -> None:
-    """Every executing path calls this with the tasks it is about to run. Tasks that can invoke GPU generation
-    need a passing preflight (source pins included); CPU-only mode refuses them instead of running them unchecked."""
-    gpu = sorted(t.name for t in tasks if t.stage in GPU_STAGES)
-    if not gpu:
-        return
-    if cpu_only:
-        raise IntegrationUnavailable(f"CPU-only mode refuses GPU task(s) {gpu[:5]}{'...' if len(gpu) > 5 else ''}: "
-                                     "run without --cpu-only on a GPU-ready host")
-    require_gpu_ready(report)
+def gate_gpu_tasks(tasks, report: dict[str, Any], cpu_only: bool = False, abort: bool = False) -> list[str]:
+    """Every executing path calls this on the tasks it is about to run. A task that can invoke GPU generation
+    keeps running only if the preflight report passed (source pins included); otherwise its preflight is replaced
+    by a refusal (``abort=True``, used by the Kaggle session, raises before any task starts instead), so the scheduler records it as not_validated with zero submissions while CPU tasks still run.
+    CPU-only mode refuses GPU tasks the same way. Returns the names of the gated tasks."""
+    gated = []
+    for task in tasks:
+        if task.stage not in GPU_STAGES:
+            continue
+        try:
+            if cpu_only:
+                raise IntegrationUnavailable(f"CPU-only mode refuses GPU task {task.name}: run without --cpu-only on a GPU-ready host")
+            require_gpu_ready(report)
+            continue
+        except IntegrationUnavailable as exc:
+            if abort:
+                raise
+            reason = str(exc)
+        def refuse(reason=reason):
+            raise IntegrationUnavailable(reason)
+        task.preflight = refuse
+        gated.append(task.name)
+    return gated
 
 
 def source_consistency(models: dict[str, Any], runtime: dict[str, Any]) -> dict[str, Any]:

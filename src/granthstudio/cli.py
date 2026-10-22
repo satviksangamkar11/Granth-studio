@@ -28,7 +28,7 @@ from .pipeline import episode_store, hard_gates, load_bundle, plan_tasks, snapsh
 from .qa import write_report
 from .research import approve, load_research, require_approved, verify_source
 from .runtime import (bootstrap_plan, fetch, get_storage, gpu_status, load_runtime, preflight, ram_available_mb,
-                      enforce_gpu_policy, require_gpu_ready, require_single_worker, stop_before_deadline, verify_downloads, write_run_receipt)
+                      gate_gpu_tasks, require_gpu_ready, require_single_worker, stop_before_deadline, verify_downloads, write_run_receipt)
 from .scheduler import Scheduler
 
 EXIT_OK, EXIT_ERROR, EXIT_REFUSED, EXIT_NOT_VALIDATED = 0, 1, 2, 3
@@ -186,7 +186,7 @@ def cmd_plan(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
-def _execute_plan(project, args, kind="episode_run", cpu_only=False):
+def _execute_plan(project, args, kind="episode_run", cpu_only=False, abort_unready=False):
     """Run the plan with a session-deadline stop, then write the run receipt and QA report."""
     started = _now()
     runtime = load_runtime(project)
@@ -196,7 +196,7 @@ def _execute_plan(project, args, kind="episode_run", cpu_only=False):
     bundle = load_bundle(project, models, args.adhyay)
     scheduler = Scheduler(episode_store(project, args.adhyay))
     tasks = plan_tasks(bundle, scheduler)
-    enforce_gpu_policy(tasks, report, cpu_only)
+    gate_gpu_tasks(tasks, report, cpu_only, abort=abort_unready and not cpu_only)
     results = scheduler.run(tasks, should_stop=stop_before_deadline(runtime))
     for result in results:
         print(f"{result.status:<13} {result.stage:<9} {result.name:<26} {result.detail}")
@@ -230,7 +230,7 @@ def cmd_session(args: argparse.Namespace) -> int:
     if (storage.root / args.export_name / "export_manifest.json").is_file():
         storage.restore(args.export_name, project.artifacts_dir)
     try:
-        return _execute_plan(project, args, cpu_only=args.cpu_only)
+        return _execute_plan(project, args, cpu_only=args.cpu_only, abort_unready=True)
     finally:
         storage.export(project.artifacts_dir, args.export_name)
         print(f"exported artifacts to {storage.root / args.export_name}")
@@ -341,7 +341,7 @@ def cmd_refs_generate(args: argparse.Namespace) -> int:
         print("dry run: add --execute (needs a validated SDXL setup)")
         return EXIT_OK
     runtime = load_runtime(project)
-    enforce_gpu_policy(tasks, preflight(project, models, runtime, gpu_status(), ram_available_mb()), False)
+    gate_gpu_tasks(tasks, preflight(project, models, runtime, gpu_status(), ram_available_mb()), False)
     results = scheduler.run(tasks, should_stop=stop_before_deadline(runtime))
     for result in results:
         print(f"{result.status:<13} {result.name:<40} {result.detail}")

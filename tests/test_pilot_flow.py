@@ -292,8 +292,9 @@ def test_source_pin_mismatch_means_zero_gpu_submissions_on_every_execute_path(pi
     root = ["--root", str(pilot.root)]
     assert main([*root, "run", "1", "--execute"]) == 3
     assert main([*root, "session", "1", "--export-name", "x"]) == 3
-    with pytest.raises(IntegrationUnavailable, match="source"):
-        pilotrun.run_pilot(pilot, 1, None, execute=True)
+    _, _, _, results, _ = pilotrun.run_pilot(pilot, 1, None, execute=True)
+    gpu = [r for r in results if r.stage in ("keyframe", "tier1", "tier2", "lipsync")]
+    assert gpu and all(r.status == "not_validated" and "source" in r.detail for r in gpu)
     assert main([*root, "pilot", "run", "1", "--execute"]) == 3
     assert comfy.posts == []
     # a direct scheduler run (bypassing every CLI preflight) still cannot reach the server
@@ -303,14 +304,15 @@ def test_source_pin_mismatch_means_zero_gpu_submissions_on_every_execute_path(pi
     assert any(r.status == "not_validated" and "source pins" in r.detail for r in results) and comfy.posts == []
 
 
-def test_cpu_only_mode_refuses_gpu_tasks_but_runs_cpu_tasks(pilot, comfy, capsys):
-    from granthstudio.runtime import enforce_gpu_policy
+def test_cpu_only_mode_refuses_gpu_tasks_but_runs_cpu_tasks(pilot, comfy):
+    from granthstudio.runtime import gate_gpu_tasks
     bundle = pilotrun._bundle(pilot, load_models(pilot), 1)
     scheduler = Scheduler(pilotrun.store_for(pilot, 1, "cpuonly"))
     tasks = plan_tasks(bundle, scheduler)
-    with pytest.raises(IntegrationUnavailable, match="CPU-only mode refuses GPU task"):
-        enforce_gpu_policy(tasks, {"gpu_ready": True, "checks": {}}, cpu_only=True)
-    enforce_gpu_policy([t for t in tasks if t.stage in ("audio", "tier0", "assembly")], {"gpu_ready": False, "checks": {}}, cpu_only=True)
-    with pytest.raises(IntegrationUnavailable, match="not passed"):
-        enforce_gpu_policy(tasks, {"gpu_ready": False, "checks": {"gpu": {"status": "fail"}}})
+    gated = gate_gpu_tasks(tasks, {"gpu_ready": True, "checks": {}}, cpu_only=True)
+    assert gated and all(t.stage in ("tier1", "tier2") for t in tasks if t.name in gated)
+    results = {r.name: r for r in scheduler.run(tasks)}
+    for name in gated:
+        assert results[name].status == "not_validated" and "CPU-only mode refuses GPU task" in results[name].detail
+    assert all(r.status == "complete" for n, r in results.items() if n.endswith("_voice"))   # CPU tasks still run
     assert comfy.posts == []
