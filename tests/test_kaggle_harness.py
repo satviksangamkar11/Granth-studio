@@ -111,3 +111,27 @@ def test_wrong_commit_is_not_run(tmp_path):
     receipt = json.loads((tmp_path / "out" / "receipt.json").read_text())
     assert code == 1 and receipt["verdict"] == "NOT_RUN_WRONG_COMMIT"
     assert (tmp_path / "out.zip").is_file() and "environment.json" in receipt["artifacts"]
+
+
+def test_notebook_setup_cell_can_be_run_twice(tmp_path):
+    """Run All must be repeatable in one session: execute the real setup cell twice against a local bundle."""
+    import json, subprocess
+    work = tmp_path / "working"; work.mkdir()
+    branch = "sprint/remaining-pipeline"
+    if subprocess.run(["git", "-C", str(REPO), "rev-parse", "--verify", "-q", branch], capture_output=True).returncode != 0:
+        pytest.skip("branch not present in this checkout")
+    bundle = tmp_path / "granthstudio.bundle"
+    subprocess.run(["git", "-C", str(REPO), "bundle", "create", str(bundle), branch], capture_output=True, check=True)
+    nb = json.loads((REPO / "notebooks" / "kaggle_linux_cpu_verify.ipynb").read_text(encoding="utf-8"))
+    setup = "".join(nb["cells"][2]["source"]).replace('WORK = "/kaggle/working"', f'WORK = {str(work)!r}')
+    import os, shutil, types
+    def rmtree(path, ignore_errors=False):               # Windows keeps .git pack files read-only; Linux needs no help
+        if not os.path.exists(path):
+            return
+        shutil.rmtree(path, onerror=lambda func, target, _exc: (os.chmod(target, 0o700), func(target)))   # flag deliberately unused
+    scope = {"BUNDLE": str(bundle), "BASELINE": lv.BASELINE, "subprocess": subprocess, "os": os,
+             "shutil": types.SimpleNamespace(rmtree=rmtree, copytree=shutil.copytree, which=shutil.which)}
+    for _ in range(2):                                   # the second pass sees every directory the first one created
+        exec(compile(setup, "notebook-setup-cell", "exec"), scope)
+        assert subprocess.run(["git", "-C", str(work / "granthstudio"), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip() == lv.BASELINE
+        assert (work / "harness" / "linux_cpu_verify.py").is_file()
