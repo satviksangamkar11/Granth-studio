@@ -207,6 +207,24 @@ def unplaced_required_actions(compiled: dict[str, Any], placed_cutaways: set[str
                   if not a["artistic"] and (scene["scene_id"], a["id"]) not in seen)
 
 
+def trimmed_required_actions(compiled: dict[str, Any], coverage: list[dict[str, Any]]) -> list[str]:
+    """Conservative rule (no per-action timing exists): footage that is the only credit for a required action
+    must be placed whole. A cutaway placed for less than its full duration is trimmed, so the action it carries
+    may be cut off. ``coverage`` rows: {shot_id, duration_s, source_duration_s} as recorded in the edit plan."""
+    shots = {s["shot_id"]: s for s in compiled["shots"]}
+    primary = {(s["scene_id"], a) for s in compiled["shots"] if not s["cutaway"] for a in s["action_ids"]}
+    required = {(scene["scene_id"], a["id"]) for scene in compiled["research_scenes"] for a in scene["actions"]
+                if not a["artistic"]}
+    bad = []
+    for row in coverage:
+        shot = shots[row["shot_id"]]
+        sole = sorted(a for a in shot["action_ids"] if (shot["scene_id"], a) in required and (shot["scene_id"], a) not in primary)
+        if sole and row["duration_s"] + 1e-3 < row["source_duration_s"]:
+            bad.append(f"{row['shot_id']}: trimmed to {row['duration_s']:.3f}s of {row['source_duration_s']:.3f}s, "
+                       f"may cut required action(s) {sole}")
+    return bad
+
+
 def compiled_digest(compiled: dict[str, Any]) -> str:
     return sha256_obj(compiled)
 

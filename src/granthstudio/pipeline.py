@@ -18,7 +18,7 @@ from .canon import Canon, load_canon
 from .comfy import (ComfyBackend, check_checkpoint_binding, ensure_validated, execution_seconds, load_template,
                     render_graph, select_video)
 from .config import Project, load_models, require_capability, verify_benchmark_runtime
-from .episodes import compile_episode, unplaced_required_actions
+from .episodes import compile_episode, trimmed_required_actions, unplaced_required_actions
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
 from .lipsync import plan_lipsync
@@ -295,7 +295,8 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
                 hold_clip(clip, edit_main, duration)
                 assemble([edit_main, trimmed], edit)
                 coverage = {"mode": "cutaway", "shot_id": cover["shot_id"], "duration_s": extra,
-                            "source_sha256": sha256_file(cut)}
+                            "source_sha256": sha256_file(cut),
+                            "source_duration_s": (lambda i: i.video_duration_s if i.video_duration_s is not None else i.duration_s)(probe(cut))}
             else:
                 hold_clip(clip, edit, span)
                 coverage = None
@@ -318,6 +319,9 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
         missing = unplaced_required_actions(bundle.compiled, {e["coverage"]["shot_id"] for e in edits if "coverage" in e})
         if missing:
             raise GateFailure(f"required approved actions absent from the rendered plan: {missing}")
+        trimmed = trimmed_required_actions(bundle.compiled, [e["coverage"] for e in edits if "coverage" in e])
+        if trimmed:
+            raise GateFailure("cutaway trimming could remove required approved actions: " + "; ".join(trimmed))
         assemble_audio(segments, work / "voice.wav")
         atomic_write_bytes(work / f"{stem}.srt", srt_text(cues).encode("utf-8"))
         assemble(clips, work / f"{stem}.mp4", work / "voice.wav")
@@ -345,6 +349,9 @@ def _verify_assembly(bundle, lang, directory):
     missing = unplaced_required_actions(bundle.compiled, {s["coverage"]["shot_id"] for s in plan["shots"] if "coverage" in s})
     if missing:
         raise TaskFailed(f"required approved actions absent from the editorial plan: {missing}")
+    trimmed = trimmed_required_actions(bundle.compiled, [s["coverage"] for s in plan["shots"] if "coverage" in s])
+    if trimmed:
+        raise TaskFailed("cutaway trimming could remove required approved actions: " + "; ".join(trimmed))
     duration = plan["duration_s"]
     if not math.isfinite(duration) or duration <= 0:
         raise TaskFailed("invalid editorial duration")

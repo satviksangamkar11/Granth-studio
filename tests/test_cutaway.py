@@ -190,3 +190,37 @@ def test_mandatory_action_on_primary_shot_is_in_final_timeline(approved_project)
         _, plan = plan_of(scheduler, tasks, lang)
         bundle = load_bundle(approved_project, load_models(approved_project), 1)
         assert unplaced_required_actions(bundle.compiled, {s["coverage"]["shot_id"] for s in plan["shots"] if "coverage" in s}) == []
+
+
+def long_cutaway_with_action(manifest, shots):
+    shots[1]["action_ids"] = []; shots[1]["coverage"] = cover()
+    shots[2]["action_ids"] = ["action_turn"]; shots[2]["duration_s"] = 3.0
+
+
+@MEDIA
+def test_shortened_cutaway_carrying_required_action_is_refused_per_language(approved_project):
+    make_cpu_project(approved_project)
+    edit_manifest(approved_project, long_cutaway_with_action)
+    scheduler, tasks, results = run(approved_project)
+    by_name = {t.name: r for t, r in zip(tasks, results)}
+    assert by_name["assemble_hi"].status == "failed" and "trimming could remove required" in by_name["assemble_hi"].detail
+    assert by_name["assemble_mr"].status == "failed"  # Marathi never places the cutaway at all
+
+
+@MEDIA
+def test_whole_cutaway_placement_accepted_and_resumed_assembly_rechecks_coverage(approved_project):
+    from granthstudio import pipeline
+    from granthstudio.errors import TaskFailed
+    make_cpu_project(approved_project)
+    edit_manifest(approved_project, action_on_cutaway(True))      # 0.5 s cutaway, fully placed in Hindi
+    scheduler, tasks, results = run(approved_project)
+    assert {t.name: r.status for t, r in zip(tasks, results)}["assemble_hi"] == "complete"
+    assert scheduler.run(tasks)[-1].status in ("resumed", "failed")
+    directory, plan = plan_of(scheduler, tasks, "hi")
+    cov = next(s for s in plan["shots"] if "coverage" in s)["coverage"]
+    assert cov["duration_s"] + 1e-3 >= cov["source_duration_s"]
+    cov["source_duration_s"] = cov["duration_s"] + 2.0            # as if the cutaway had been trimmed
+    atomic_write_json(directory / "edit_plan.json", plan)
+    bundle = load_bundle(approved_project, load_models(approved_project), 1)
+    with pytest.raises(TaskFailed, match="trimming could remove"):
+        pipeline._verify_assembly(bundle, "hi", directory)
