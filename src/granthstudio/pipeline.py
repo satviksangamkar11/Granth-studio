@@ -20,7 +20,7 @@ from .comfy import (ComfyBackend, check_checkpoint_binding, ensure_validated, ex
 from .config import Project, load_models, require_capability, verify_benchmark_runtime
 from .episodes import compile_episode
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
-from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, validate_audio, validate_video
+from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
 from .keyframes import (approved_keyframe, keyframe_request, load_registry, require_references, sdxl_generate,
                         sdxl_preflight)
 from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, normalize_text, read_json, sha256_bytes,
@@ -258,18 +258,33 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
         clips, segments, cues, edits = [], [], [], []
         cursor = 0.0
         for index, shot in enumerate(bundle.compiled["shots"]):
+            if shot["cutaway"]:
+                continue  # coverage footage: only placed through another shot's coverage
             clip = scheduler.task_dir(shot_tasks[shot["shot_id"]]) / "clip.mp4"
             info = probe(clip)
             duration = info.video_duration_s if info.video_duration_s is not None else info.duration_s
             speech = sum(timings[line]["duration_s"] for line in shot["dialogue_ids"])
             span = math.ceil(max(duration, shot["duration_s"], speech) * FPS - 1e-6) / FPS
-            if span - duration > 1e-6 and not shot.get("coverage"):
+            cover = shot.get("coverage")
+            if span - duration > 1e-6 and not cover:
                 if speech > duration:
                     raise GateFailure(f"{shot['shot_id']}: extra speech needs reviewed final-frame coverage")
                 raise GateFailure(f"{shot['shot_id']}: rendered clip {duration:.3f}s is shorter than the planned "
                                   f"{shot['duration_s']:.3f}s; reviewed final-frame coverage is required")
             edit = work / f"edit_{index:04d}.mp4"
-            hold_clip(clip, edit, span)
+            extra = span - duration
+            if cover and cover["mode"] == "cutaway" and extra > 1e-6:
+                cut = scheduler.task_dir(shot_tasks[cover["shot_id"]]) / "clip.mp4"
+                trimmed = work / f"cutaway_{index:04d}.mp4"
+                trim_hold(cut, trimmed, extra)
+                edit_main = work / f"main_{index:04d}.mp4"
+                hold_clip(clip, edit_main, duration)
+                assemble([edit_main, trimmed], edit)
+                coverage = {"mode": "cutaway", "shot_id": cover["shot_id"], "duration_s": extra,
+                            "source_sha256": sha256_file(cut)}
+            else:
+                hold_clip(clip, edit, span)
+                coverage = None
             clips.append(edit)
             offset = 0.0
             for line in shot["dialogue_ids"]:
@@ -282,6 +297,7 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
             marker = clip.parent / "fallback.json"
             edits.append({"shot_id": shot["shot_id"], "start_s": cursor, "duration_s": span,
                           "source_sha256": sha256_file(clip), "primary_action_duration_s": duration,
+                          **({"coverage": coverage} if coverage else {}),
                           "clip_source": "fallback_tier0" if marker.is_file() else "rendered",
                           **({"fallback": read_json(marker)} if marker.is_file() else {})})
             cursor += span
@@ -306,7 +322,7 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
 def _verify_assembly(bundle, lang, directory):
     stem = f"adhyay_{bundle.adhyay:02d}_{LANGUAGE_NAME[lang]}"
     plan = read_json(directory / "edit_plan.json")
-    if plan["language"] != lang or [s["shot_id"] for s in plan["shots"]] != [s["shot_id"] for s in bundle.compiled["shots"]]:
+    if plan["language"] != lang or [s["shot_id"] for s in plan["shots"]] != [s["shot_id"] for s in bundle.compiled["shots"] if not s["cutaway"]]:
         raise TaskFailed("editorial plan omits/reorders required shots")
     duration = plan["duration_s"]
     if not math.isfinite(duration) or duration <= 0:

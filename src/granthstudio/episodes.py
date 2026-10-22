@@ -110,6 +110,21 @@ def compile_episode(
                     raise CanonReferenceError(f"{shot_id}: dialogue {line_id} is not in research scene {scene['research_scene']}")
                 if line["speaker"] not in scene["characters"]:
                     raise CanonReferenceError(f"{line_id}: speaker {line['speaker']} is not in scene {scene['scene_id']}")
+            if shot.get("cutaway") and shot["dialogue_ids"]:
+                raise ConfigError(f"{shot_id}: a cutaway shot carries no dialogue")
+            cover = shot.get("coverage")
+            if cover and cover["mode"] == "cutaway":
+                target = next((o for o in scene["shots"] if o["shot_id"] == cover["shot_id"]), None)
+                if cover["shot_id"] == shot_id:
+                    raise ConfigError(f"{shot_id}: a shot cannot be its own cutaway")
+                if target is None:
+                    raise ConfigError(f"{shot_id}: cutaway shot {cover['shot_id']} is not in scene {scene['scene_id']}")
+                if not target.get("cutaway"):
+                    raise ConfigError(f"{shot_id}: cutaway target {cover['shot_id']} is not flagged cutaway: true")
+                if target["dialogue_ids"]:
+                    raise ConfigError(f"{shot_id}: cutaway target {cover['shot_id']} must carry no dialogue")
+                if target.get("coverage"):
+                    raise ConfigError(f"{shot_id}: cutaway target {cover['shot_id']} must not have coverage of its own")
             kind = TIER_KIND[shot["tier"]]
             if kind == "still":
                 if "frames" in shot or "end_visual_id" in shot:
@@ -153,6 +168,7 @@ def compile_episode(
                     "props": list(scene.get("props", [])),
                     "lighting": scene.get("lighting", "unspecified"),
                     "artistic_flags": list(scene.get("artistic_flags", [])),
+                    "cutaway": bool(shot.get("cutaway")),
                     "coverage": shot.get("coverage"),
                     "fallback": shot.get("fallback"),
                     "pilot_shot": label,

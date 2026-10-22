@@ -203,22 +203,50 @@
             "F"
           ]
         },
+        "cutaway": {
+          "type": "boolean"
+        },
         "coverage": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "mode",
-            "reviewed_by"
-          ],
-          "properties": {
-            "mode": {
-              "const": "hold_final_frame"
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "mode",
+                "reviewed_by"
+              ],
+              "properties": {
+                "mode": {
+                  "const": "hold_final_frame"
+                },
+                "reviewed_by": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
             },
-            "reviewed_by": {
-              "type": "string",
-              "pattern": "\\S"
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "mode",
+                "shot_id",
+                "reviewed_by"
+              ],
+              "properties": {
+                "mode": {
+                  "const": "cutaway"
+                },
+                "shot_id": {
+                  "$ref": "#/$defs/shot_id"
+                },
+                "reviewed_by": {
+                  "type": "string",
+                  "pattern": "\\S"
+                }
+              }
             }
-          }
+          ]
         },
         "action_ids": {
           "type": "array",

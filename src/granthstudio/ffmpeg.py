@@ -177,6 +177,15 @@ def hold_clip(clip: Path, out: Path, duration_s: float) -> None:
           "-t", f"{duration_s:.6f}", "-an", "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(out)])
 
 
+def trim_hold(clip: Path, out: Path, duration_s: float) -> None:
+    """Exactly duration_s of silent video: truncate if longer, hold the final frame if shorter (cutaway coverage)."""
+    info = probe(clip)
+    original = info.video_duration_s if info.video_duration_s is not None else info.duration_s
+    _run([_tool("ffmpeg"), "-y", "-v", "error", "-i", str(clip), "-vf",
+          f"tpad=stop_mode=clone:stop_duration={max(0, duration_s-original):.6f}",
+          "-t", f"{duration_s:.6f}", "-an", "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(out)])
+
+
 def assemble_audio(segments: list[tuple[Path | None, float]], out: Path) -> None:
     if not segments:
         raise TaskFailed("no audio segments")
