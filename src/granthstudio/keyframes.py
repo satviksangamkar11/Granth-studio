@@ -8,7 +8,6 @@ refuses rather than assuming a choice.
 from __future__ import annotations
 
 import re
-import shutil
 from pathlib import Path
 from typing import Any
 
@@ -20,7 +19,7 @@ from .config import Project, load_yaml
 from .errors import ConfigError, GateFailure, IntegrationUnavailable, TaskFailed
 from .ffmpeg import probe
 from .scheduler import Scheduler, Task
-from .integrity import atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
+from .integrity import create_new_file, reject_link_components, atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
 from .schemas import validate_document
 
 PROMPT_TEMPLATE_VERSION = "keyframe-prompt-v1"
@@ -343,9 +342,10 @@ def _register(project: Project, registry: dict[str, Any], source: Path, meta: di
         return duplicate
     version = _next_version(registry, asset_id)
     relative = f"{asset_id}/v{version}/image{suffix}"
-    target = contained_path(references_root(project), relative)  # resolves symlinks/junctions before any write
-    target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, target)
+    # Anchored to the trusted artifact root: a redirected references directory is rejected before any write.
+    trusted = project.artifacts_dir.resolve()
+    reject_link_components(project.artifacts_dir, f"{REFERENCE_DIR}/{relative}")
+    create_new_file(trusted, f"{REFERENCE_DIR}/{relative}", source)
     asset = {"asset_id": asset_id, "version": version, "kind": meta["kind"], "path": relative, "sha256": digest,
              "status": "pending", "origin": origin}
     for key in ("canon_id", "visual_id", "view", "request_sha256"):
@@ -357,6 +357,7 @@ def _register(project: Project, registry: dict[str, Any], source: Path, meta: di
 
 def import_asset(project: Project, canon: Canon, asset_id: str, kind: str, canon_id: str | None,
                  visual_id: str | None, view: str, source: Path) -> dict[str, Any]:
+    reject_link_components(project.artifacts_dir, REFERENCE_DIR)
     registry = load_registry(project, canon)
     asset = _register(project, registry, source, {"asset_id": asset_id, "kind": kind, "canon_id": canon_id,
                                                    "visual_id": visual_id, "view": view}, "imported")
@@ -367,6 +368,7 @@ def import_asset(project: Project, canon: Canon, asset_id: str, kind: str, canon
 
 def collect_generated(project: Project, canon: Canon, stores: list[Path]) -> list[dict[str, Any]]:
     """Register generated images from completed, receipt-valid task folders as pending assets."""
+    reject_link_components(project.artifacts_dir, REFERENCE_DIR)
     registry = load_registry(project, canon)
     added = []
     for store in stores:

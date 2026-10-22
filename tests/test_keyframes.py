@@ -196,7 +196,16 @@ def test_reference_sheets_derive_from_the_approved_front_master(kf_project, tmp_
     assert bare["ref_chr_synth_a_profile"]["missing_references"] == ["design:chr_synth_a", "front:chr_synth_a"]
 
 
-def test_refs_cli_generate_collect_and_approve_gate(kf_project, comfy, tmp_path, capsys):
+def test_refs_cli_generate_collect_and_approve_gate(kf_project, comfy, tmp_path, capsys, monkeypatch):
+    from tests.test_pilot_flow import make_gpu_ready
+    models = load_models(kf_project)
+    files = {}
+    for kind in ("checkpoint", "vae", "text_encoder"):
+        path = tmp_path / f"{kind}.bin"; path.write_bytes(kind.encode()); files[kind] = {"path": str(path), "sha256": sha256_file(path)}
+    models["ltx"]["runtime"] = {"files": files, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40, "gpu": "T4",
+                                "precision": "fp16", "width": 160, "height": 120}
+    atomic_write_json(kf_project.root / "config" / "models.yaml", models)
+    make_gpu_ready(kf_project, tmp_path, monkeypatch)                  # synthetic ready host; SDXL tasks are GPU tasks
     root = ["--root", str(kf_project.root)]
     # only the sheet views not already registered are planned
     assert main([*root, "refs", "generate"]) == 0
@@ -239,3 +248,56 @@ def test_symlinked_asset_dir_cannot_escape(kf_project, tmp_path):
     with pytest.raises(ConfigError):
         kf.import_asset(kf_project, canon, "ref_link", "location", LOC, None, "establishing", make_still(tmp_path / "y.png"))
     assert not list(outside.iterdir())
+
+
+def _link_dir(link, target):
+    import subprocess, sys
+    if sys.platform == "win32":
+        done = subprocess.run(["cmd", "/c", "mklink", "/J", str(link), str(target)], capture_output=True)
+        if done.returncode != 0:
+            pytest.skip("junction creation unavailable")
+    else:
+        try:
+            link.symlink_to(target, target_is_directory=True)
+        except OSError:
+            pytest.skip("symlinks unavailable")
+
+
+def _import(project, canon, name, tmp_path):
+    return kf.import_asset(project, canon, name, "location", LOC, None, "establishing", make_still(tmp_path / "src.png"))
+
+
+def test_redirected_references_root_is_refused_without_writes(kf_project, tmp_path):
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    outside = tmp_path / "outside"; outside.mkdir()
+    root = kf.references_root(kf_project)
+    if root.exists():
+        import shutil; shutil.rmtree(root)
+    _link_dir(root, outside)                                    # references/ is now a junction/symlink to outside
+    with pytest.raises(ConfigError, match="link or junction"):
+        _import(kf_project, canon, "ref_new_place", tmp_path)
+    assert not list(outside.rglob("*"))
+
+
+def test_nested_link_and_existing_destination_are_refused_and_untouched(kf_project, tmp_path):
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    outside = tmp_path / "outside2"; outside.mkdir()
+    root = kf.references_root(kf_project); root.mkdir(parents=True, exist_ok=True)
+    _link_dir(root / "ref_nested", outside)
+    with pytest.raises(ConfigError, match="link or junction"):
+        _import(kf_project, canon, "ref_nested", tmp_path)
+    assert not list(outside.rglob("*"))
+    sentinel = root / "ref_sentinel" / "v1" / "image.png"        # unregistered file already at the destination
+    sentinel.parent.mkdir(parents=True); sentinel.write_bytes(b"precious")
+    with pytest.raises(ConfigError, match="already exists"):
+        _import(kf_project, canon, "ref_sentinel", tmp_path)
+    assert sentinel.read_bytes() == b"precious"
+    assert not any(a["asset_id"] == "ref_sentinel" for a in kf.load_registry(kf_project)["assets"])
+
+
+@pytest.mark.parametrize("name", ["src.exe", "src.png.ps1", "src"])
+def test_unsafe_extension_is_refused(kf_project, tmp_path, name):
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    source = tmp_path / name; source.write_bytes(b"x")
+    with pytest.raises(ConfigError, match="unsupported reference image type"):
+        kf.import_asset(kf_project, canon, "ref_ext", "location", LOC, None, "establishing", source)
