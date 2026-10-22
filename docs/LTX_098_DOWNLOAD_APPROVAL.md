@@ -67,8 +67,12 @@ nvidia-smi before/after, VRAM trace, the journal, the clip). Verdicts: `PASS` (o
 
 | Decision | Name | Date |
 |---|---|---|
-| I accepted the LTXV Open Weights License 0.X (commercial use below US$10 M annual revenue; AI-generated content disclosed when published; use restrictions) and read the ComfyUI-LTXVideo LICENSE | | |
-| Approve downloads A and B as listed, and one Kaggle T4 session to run section D | | |
+| I accepted the LTXV Open Weights License 0.X (commercial use below US$10 M annual revenue; AI-generated content disclosed when published; use restrictions) and read the ComfyUI-LTXVideo LICENSE | Satvik Sangamkar | 2026-10-23 |
+| Approve downloads A and B as listed, and one controlled Kaggle GPU T4 x2 testing session (stages gpu0, gpu1, concurrent, retry) to run section D | Satvik Sangamkar | 2026-10-23 |
 
 Owner decision recorded 2026-10-23 (chat): *approve with edits* - approved in principle: the two weights, one Kaggle T4, a 240-minute maximum, one synthetic I2V clip, and (after a first successful clip) a controlled
 cache/retry test. Not approved: full Adhyay scenes, marking LTX production-validated. The signature rows above stay blank until the named person fills them; `LTX_DOWNLOAD_APPROVED`/`APPROVER` must carry that same name.
+
+Approval recorded 2026-10-23 from the owner's own chat statement: "I, Satvik Sangamkar, have read and accepted the LTXV Open Weights License 0.X. I authorize the two approved model downloads and one controlled
+Kaggle T4 x2 testing session." Recorded by the assistant at the owner's explicit instruction; the acceptance is the owner's, not the assistant's. `LTX_DOWNLOAD_APPROVED` / `APPROVER` = `Satvik Sangamkar`.
+Order set by the owner: CPU tests, commit, focused Codex review, and only then GPU execution. Scope unchanged: synthetic clips only, no full Adhyay, LTX not marked validated from clips.

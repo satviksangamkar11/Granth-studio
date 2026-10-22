@@ -182,3 +182,17 @@ def test_source_pin_mismatch_blocks_gpu_readiness(project, tmp_path, monkeypatch
         require_gpu_ready(report)
     models["ltx"]["runtime"] = None  # unrecorded pins are not "ready" either
     assert preflight(project, models, ready_runtime(project, tmp_path), T4, 16000)["gpu_ready"] is False
+
+
+def test_gpu_index_env_selects_one_physical_card(monkeypatch):
+    two = "0, Tesla T4, 15360, 100, 15260\n1, Tesla T4, 15360, 9000, 6360\n"
+    monkeypatch.delenv("GRANTHSTUDIO_GPU_INDEX", raising=False)
+    assert [g["index"] for g in gpu_status(lambda _: two)] == [0, 1]
+    monkeypatch.setenv("GRANTHSTUDIO_GPU_INDEX", "1")
+    only = gpu_status(lambda _: two)
+    assert [g["index"] for g in only] == [1] and only[0]["memory_used_mb"] == 9000.0          # this worker measures ITS card, never GPU 0
+    monkeypatch.setenv("GRANTHSTUDIO_GPU_INDEX", "7")
+    assert gpu_status(lambda _: two) == []                                                    # an index that does not exist is not ready
+    monkeypatch.setenv("GRANTHSTUDIO_GPU_INDEX", "one")
+    with pytest.raises(ConfigError, match="physical GPU index"):
+        gpu_status(lambda _: two)

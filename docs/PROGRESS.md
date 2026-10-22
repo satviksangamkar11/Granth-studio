@@ -346,3 +346,8 @@ this clip is only a technical prerequisite.
 - Windows CPU suite at `2a5865b`: 394 passed, 4 skipped (JUnit kept outside the repo at D:/kaggle_upload/stage2_evidence/cpu_stage2e.xml). The Linux/Kaggle run of `0860a32` still covers the POSIX harness, which did not change after it.
 - Codex micro-check of `0860a32..2a5865b` raised one blocker (docs named the older bundle - fixed here) and two non-blocking notes: a rerun in the same workdir after a failure can spend more of the durable
   3-generation budget (now documented), and the OOM message says "CUDA" for any memory error (left as is; wording only).
+
+## Dual-T4 preparation (uncommitted -> committed in the next checkpoint)
+- Staged dual-worker orchestration (`ltx_first_test.sh` STAGE=gpu0|gpu1|concurrent|retry), `host_check.py`, `gpu_attribution.py`, `concurrent_check.py`, per-card VRAM selection (`GRANTHSTUDIO_GPU_INDEX`), variant-b shot, controlled retry test; notebook gains `STAGE`.
+- Windows suite: 439 tests, all passing after an autouse fixture stopped `GRANTHSTUDIO_GPU_INDEX` leaking between tests. No weights downloaded, no Kaggle kernel pushed.
+- Blocked on a human: a named approver for `LTX_DOWNLOAD_APPROVED` / manifest section E (licence acceptance). Mini-film stages additionally need research approval, canon/style approval and model choices (O-006/O-007, voice consent): all NOT VALIDATED.

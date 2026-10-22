@@ -181,3 +181,9 @@ def make_clip(path: Path, seconds: float = 1.0) -> Path:
         check=True, timeout=120,
     )
     return path
+
+
+@pytest.fixture(autouse=True)
+def _no_leaked_gpu_index(monkeypatch):
+    """ltx_first_test.main() exports GRANTHSTUDIO_GPU_INDEX for its process; a test must never inherit another test's value."""
+    monkeypatch.delenv("GRANTHSTUDIO_GPU_INDEX", raising=False)

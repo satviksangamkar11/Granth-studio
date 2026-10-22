@@ -28,7 +28,8 @@ class FakeComfy:
         self.running, self.pending, self.history, self.nodes = [], [], {}, {"SyntheticLoader", "SyntheticSave"}
         self.forget_history = False
         self.uploads = {}        # staged input images, name -> bytes
-        self.node_cache, self.executions, self.cache_hits, self.sampler_runs = set(), 0, 0, 0   # node-level, dependency-aware cache
+        self.node_cache, self.executions, self.cache_hits, self.sampler_runs = set(), 0, 0, 0
+        self.cached_by_pid, self.last_cached = {}, []   # node-level, dependency-aware cache
         self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
         self.auto_status = "success"   # ComfyUI status_str of those auto-finished jobs ("error" simulates a failed render)
         self.view_bytes = b""      # body served by /view
@@ -51,6 +52,7 @@ class FakeComfy:
                 if self.path == "/prompt":
                     pid = f"p{len(outer.posts) + 1}"; outer.posts.append(body)
                     outer.run_prompt(body["prompt"])   # extra_data / prompt_id are NOT part of any cache key
+                    outer.cached_by_pid[pid] = outer.last_cached
                     outer.running.append([0, pid, body["prompt"], body.get("extra_data", {}), []])
                     if outer.auto_outputs is not None:
                         outer.finish(pid, status=outer.auto_status)
@@ -100,10 +102,11 @@ class FakeComfy:
             needed.add(i)
             stack += [v[0] for v in nodes[i].get("inputs", {}).values() if isinstance(v, list) and len(v) == 2 and v[0] in nodes]
         fresh = [i for i in needed if key(i) not in self.node_cache]
+        self.last_cached = sorted(needed - set(fresh))          # what a real server reports as 'execution_cached'
         self.node_cache.update(key(i) for i in fresh)
         if fresh:
             self.executions += 1
-            self.sampler_runs += sum(1 for i in fresh if "seed" in nodes[i].get("inputs", {}))
+            self.sampler_runs += sum(1 for i in fresh if {"seed", "noise_seed"} & set(nodes[i].get("inputs", {})))
         else:
             self.cache_hits += 1
 
@@ -111,7 +114,9 @@ class FakeComfy:
         item = next(i for i in self.running if i[1] == pid); self.running.remove(item)
         self.history[pid] = {"prompt": item, "outputs": {"2": {"videos": [{"filename": "a.mp4"}]}},
                              "status": {"status_str": status, "messages": [
-                                 ["execution_start", {"timestamp": ts[0]}], ["execution_success", {"timestamp": ts[1]}]]}}
+                                 ["execution_start", {"timestamp": ts[0]}],
+                                 *([["execution_cached", {"nodes": self.cached_by_pid[pid], "prompt_id": pid}]] if pid in self.cached_by_pid else []),
+                                 ["execution_success", {"timestamp": ts[1]}]]}}
 
     def close(self): self.server.shutdown(); self.server.server_close()
 

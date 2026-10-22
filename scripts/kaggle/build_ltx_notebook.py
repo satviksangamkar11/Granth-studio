@@ -1,4 +1,4 @@
-"""Generate notebooks/kaggle_ltx_first_test.ipynb: the notebook for the first real LTX 0.9.8 I2V compatibility test on ONE Kaggle T4.
+"""Generate notebooks/kaggle_ltx_first_test.ipynb: the notebook for the staged LTX 0.9.8 I2V compatibility tests on Kaggle GPU T4 x2.
 
 The approver name and the expected commit are deliberately NOT baked in: the responsible human types them into the parameter cell
 (that act is the licence acceptance / signature recorded in docs/LTX_098_DOWNLOAD_APPROVAL.md section E). Nothing runs until that cell is filled.
@@ -11,10 +11,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 CELLS = [
-    ("markdown", """# GranthStudio — first LTX 0.9.8 I2V compatibility test (ONE Tesla T4)
+    ("markdown", """# GranthStudio — LTX 0.9.8 I2V compatibility tests (two Tesla T4, one worker per card)
 
-**Session settings:** Accelerator **GPU T4 x1**, Internet **On**, dataset `granthstudio-cpu-baseline` attached.
-This downloads ~16.1 GB of weights (two pinned files, SHA-256 checked) and runs ONE synthetic image-to-video clip through the existing GranthStudio pipeline.
+**Session settings:** Accelerator **GPU T4 x2**, Internet **On**, dataset `granthstudio-cpu-baseline` attached.
+This downloads ~16.1 GB of weights (two pinned files, SHA-256 checked) and runs ONE synthetic image-to-video clip per stage through the existing GranthStudio pipeline.
 It is a technical prerequisite, not the Phase 1 milestone. A decoded clip does **not** validate LTX. Not approved: batch rendering, Granth scenes, production.
 
 Before running, the responsible human must have read and accepted the LTXV Open Weights License 0.X and signed section E of `docs/LTX_098_DOWNLOAD_APPROVAL.md`.
@@ -23,11 +23,13 @@ and stops (no retry) on a CUDA out-of-memory error."""),
     ("code", """# --- parameters: filled by the responsible human --------------------------------------------------------------
 APPROVER = ""            # the name that signed section E and accepted the licence (not a placeholder, not an assistant)
 EXPECTED_COMMIT = ""     # the reviewed GranthStudio commit (BUNDLE_INFO.json branch_tip), 40 hex characters
+STAGE = "gpu0"           # gpu0 (always first) -> gpu1 -> concurrent -> retry; later stages need earlier PASS receipts
 SESSION_MINUTES = 240    # a maximum, not a target
 # ----------------------------------------------------------------------------------------------------------------
 import re
 assert APPROVER.strip(), "fill APPROVER with the authorised person's name (licence acceptance + manifest section E)"
 assert re.fullmatch(r"[0-9a-f]{40}", EXPECTED_COMMIT), "EXPECTED_COMMIT must be the full 40-character commit sha"
+assert STAGE in ("gpu0", "gpu1", "concurrent", "retry")
 assert 30 <= SESSION_MINUTES <= 720"""),
     ("code", """import glob, os, shutil, subprocess, sys
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout or "NO GPU VISIBLE: stop here")
@@ -41,22 +43,25 @@ print("bundle HEAD:", head)
 assert head == EXPECTED_COMMIT, f"the attached bundle is at {head}, not the reviewed {EXPECTED_COMMIT}: refusing"
 assert not subprocess.run(["git", "-C", f"{WORK}/granthstudio", "status", "--porcelain"], capture_output=True, text=True).stdout, "dirty checkout"
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest"], check=True)"""),
-    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "W": WORK}
+    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "STAGE": STAGE, "W": WORK}
 process = subprocess.Popen(["bash", f"{WORK}/granthstudio/scripts/kaggle/ltx_first_test.sh"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
     print(line, end="")
 exit_code = process.wait()
 print("script exit status:", exit_code)"""),
     ("code", """import json
-receipt = f"{WORK}/ltx_first_test/test_receipt.json"
-if os.path.exists(receipt):
-    r = json.load(open(receipt))
-    print("VERDICT:", r["verdict"], "-", r["reason"])
-    print("clip:", r.get("clip")); print("wall_s:", r.get("wall_s")); print("out_of_memory:", r.get("out_of_memory"))
-    print("peak VRAM / generation:", (r.get("metrics") or {}).get("peak_vram_mb"), (r.get("metrics") or {}).get("generation"))
-else:
-    print("no receipt: the script stopped before the test (see the output above)")
-print("evidence bundle:", f"{WORK}/ltx_first_test_evidence.tgz", os.path.exists(f"{WORK}/ltx_first_test_evidence.tgz"))"""),
+receipts = {"gpu0": "ltx_gpu0/test_receipt.json", "gpu1": "ltx_gpu1/test_receipt.json", "retry": "ltx_gpu0/retry_receipt.json"}
+for label in ([STAGE] if STAGE != "concurrent" else ["conc0", "conc1"]):
+    path = f"{WORK}/" + receipts.get(label, f"ltx_{label}/test_receipt.json")
+    if os.path.exists(path):
+        r = json.load(open(path))
+        print(label, "VERDICT:", r["verdict"], "-", r["reason"])
+        print("  gpu_index:", r.get("gpu_index"), "clip:", r.get("clip"), "wall_s:", r.get("wall_s"), "oom:", r.get("out_of_memory"))
+        print("  peak VRAM / generation:", (r.get("metrics") or {}).get("peak_vram_mb"), (r.get("metrics") or {}).get("generation"))
+    else:
+        print(label, "no receipt: the script stopped before the test (see the output above)")
+evidence = f"{WORK}/ltx_evidence_{STAGE}.tgz"
+print("evidence bundle:", evidence, os.path.exists(evidence))"""),
 ]
 
 

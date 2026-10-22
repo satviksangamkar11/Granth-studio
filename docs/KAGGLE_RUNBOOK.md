@@ -64,13 +64,26 @@ If Python on the image is older than 3.12 the harness stops with `NOT_RUN_PYTHON
 different interpreter silently. Resolving that (for example installing Python 3.12 with `uv`) is a decision to take after seeing
 the receipt.
 
-## Stage 2 — first LTX 0.9.8 I2V test on a Kaggle T4 (NOT part of the preparation phase; needs the signed manifest)
+## Stage 2 — LTX 0.9.8 I2V tests on Kaggle "GPU T4 x2" (NOT part of the preparation phase; needs the signed manifest)
 
-Everything, including the exact command, is in `docs/LTX_098_DOWNLOAD_APPROVAL.md` section D and is implemented by
-`scripts/kaggle/ltx_first_test.sh`. The script refuses to run without `LTX_DOWNLOAD_APPROVED`, without exactly one Tesla T4, or
-if any pinned commit/hash does not match. It then verifies the pins offline (`scripts/verify_ltx_pins.py`), proves the candidate API workflow
-against the live `/object_info` (`scripts/comfy/ui_to_api.py`), and runs one Tier-1 shot through the existing pipeline
-(`scripts/ltx_first_test.py`). Exit 0 means PASS (one clip decoded); the capability stays unvalidated until a human reviews the clip.
+Implemented by `scripts/kaggle/ltx_first_test.sh` (notebook `notebooks/kaggle_ltx_first_test.ipynb`, parameter `STAGE`). Details of the licence/approval boundary are in
+`docs/LTX_098_DOWNLOAD_APPROVAL.md` (section E stays blank until the human who accepted the licence signs it; nothing is downloaded before that).
+
+Two independent workers, never a pooled 32 GB: one ComfyUI process per physical card (`CUDA_VISIBLE_DEVICES=N`, own port, own output/temp/input/user dirs),
+each with its own GranthStudio project, journal, token and submission namespace. Checkpoint files are shared read-only on disk.
+
+| STAGE | what runs | prerequisite |
+|---|---|---|
+| `gpu0` | one synthetic I2V (variant a) on GPU 0; GPU 1 must stay idle | none |
+| `gpu1` | a different shot (variant b) on GPU 1; GPU 0 must stay idle | gpu0 PASS receipt on the same commit |
+| `concurrent` | both workers at once, distinct shots, fresh projects | gpu0 and gpu1 PASS |
+| `retry` | controlled output rejection on GPU 0: sampler must execute again on a changed seed | gpu0 PASS |
+
+Refused before any clone/download: missing approval, wrong or dirty commit, bad session deadline, no ffmpeg, <40 GB disk, a host that is not exactly two idle Tesla T4
+(`scripts/kaggle/host_check.py`: indices 0/1, distinct UUIDs, >=14000 MiB, sm_75 in PyTorch, RAM >=24 GB), an unmet stage prerequisite, a busy port.
+After each stage: `gpu_attribution.py` (which card filled, the other stayed untouched; falls back to memory evidence when container nvidia-smi hides pids) and,
+for `concurrent`, `concurrent_check.py` (distinct namespaces/tokens/prompt ids, exactly one submission each, overlapping windows, different outputs).
+One attempt per invocation; an out-of-memory error stops the stage with no retry or alternative configuration. PASS means decoded clip(s) only; LTX stays NOT VALIDATED until a human reviews them.
 
 ## What is not claimed
 

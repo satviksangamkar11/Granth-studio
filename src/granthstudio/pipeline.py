@@ -282,12 +282,13 @@ def _ltx_run(bundle, shot, visual, capability, journal):
         backend.require_nodes(graph)
         backend.require_model_files(graph)
         stats = backend.system_stats()
-        peak, gpu_names = [], []
+        peak, gpu_names, gpu_indices = [], [], []
         def sample():
             gpus = gpu_status()
             if gpus:
                 peak.append(gpus[0]["memory_used_mb"])
                 gpu_names[:] = [gpus[0]["name"]]
+                gpu_indices[:] = [gpus[0]["index"]]
         started = time.monotonic()
         history = backend.execute(graph, journal, sample, max_attempts=MAX_ATTEMPTS, output_node=template.output_node, generation={
             "seed": values["SEED"], "base_seed": _seed(shot["shot_id"]), "seed_offset": values["SEED"] - _seed(shot["shot_id"])})
@@ -302,7 +303,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
                            "seed_inputs": read_json(journal)["history"][-1]["seed_inputs"]},
             "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs,
             "runtime_sha256": verify_benchmark_runtime(bundle.models, capability, template.version),
-            "gpu": gpu_names[0] if gpu_names else None,
+            "gpu": gpu_names[0] if gpu_names else None, "gpu_index": gpu_indices[0] if gpu_indices else None,
             "execution_s": {"value": execution_seconds(history), "kind": "measured by ComfyUI status messages"},
             "wall_s": {"value": wall, "kind": "measured in this session only (excludes earlier sessions)"},
             "peak_vram_mb": {"value": max(peak) if peak else None,

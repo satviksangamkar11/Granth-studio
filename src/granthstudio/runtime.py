@@ -40,8 +40,14 @@ def load_runtime(project: Project) -> dict[str, Any]:
 
 # ---------------------------------------------------------------- measurements
 
+GPU_INDEX_ENV = "GRANTHSTUDIO_GPU_INDEX"
+
+
 def gpu_status(runner: Callable[[list[str]], str] | None = None) -> list[dict[str, Any]] | None:
-    """GPUs from nvidia-smi, or None when nvidia-smi is absent (not measured, not 'no GPU')."""
+    """GPUs from nvidia-smi, or None when nvidia-smi is absent (not measured, not 'no GPU').
+
+    On a multi-GPU host each worker sets GRANTHSTUDIO_GPU_INDEX to the PHYSICAL index it owns (the same index it hides the other cards from with
+    CUDA_VISIBLE_DEVICES); preflight and VRAM sampling then look at that card only. An index that does not exist yields an empty list (not ready)."""
     command = ["nvidia-smi", "--query-gpu=index,name,memory.total,memory.used,memory.free",
                "--format=csv,noheader,nounits"]
     try:
@@ -54,6 +60,13 @@ def gpu_status(runner: Callable[[list[str]], str] | None = None) -> list[dict[st
         index, name, total, used, free = (part.strip() for part in line.split(","))
         gpus.append({"index": int(index), "name": name, "memory_total_mb": float(total),
                      "memory_used_mb": float(used), "memory_free_mb": float(free)})
+    selected = os.environ.get(GPU_INDEX_ENV)
+    if selected is not None:
+        try:
+            wanted = int(selected)
+        except ValueError as exc:
+            raise ConfigError(f"{GPU_INDEX_ENV} must be a physical GPU index, not {selected!r}") from exc
+        gpus = [g for g in gpus if g["index"] == wanted]
     return gpus
 
 

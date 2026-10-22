@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts" / "kaggle"))
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT))
 
@@ -45,6 +46,31 @@ def git_head(path: Path) -> str:
     return done.stdout.strip() if done.returncode == 0 else ""
 
 
+VARIANT_B_ACTION = "slow camera push-in"
+
+
+def make_variant_b(project) -> None:
+    """A different synthetic shot: another test pattern and another (synthetic) approved action text. Runs BEFORE the synthetic research approval."""
+    from granthstudio.config import dump_yaml, load_yaml
+    from granthstudio.integrity import sha256_file as digest
+    research_path = project.research_dir / "adhyay_01" / "research.yaml"
+    research = load_yaml(research_path)
+    research["scenes"][0]["actions"][0]["text"] = VARIANT_B_ACTION
+    dump_yaml(research_path, research)
+    manifest_path = project.episodes_dir / "adhyay_01" / "manifest.yaml"
+    manifest = load_yaml(manifest_path)
+    for shot in manifest["scenes"][0]["shots"]:
+        if shot.get("motion_prompt"):
+            shot["motion_prompt"] = VARIANT_B_ACTION
+    visual = project.artifacts_dir / "visuals" / "vis" / "room.png"
+    done = subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc2=size=640x360", "-frames:v", "1", str(visual)],
+                          capture_output=True, text=True)
+    if done.returncode != 0:
+        raise RuntimeError(f"cannot create the variant-b still: {done.stderr}")
+    manifest["visuals"][0]["sha256"] = digest(visual)
+    dump_yaml(manifest_path, manifest)
+
+
 def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa: F821
     from granthstudio.config import dump_yaml, load_models, load_project
     from granthstudio.research import approve
@@ -55,6 +81,8 @@ def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa:
         project = load_project(root)
     else:
         project = make_project(root)
+        if args.variant == "b":
+            make_variant_b(project)
         approve(project, 1, "synthetic-ltx-first-test", FIXED_TIME)   # synthetic fixture research only; never Granth content
     template = root / "workflows" / "comfyui" / "ltx_i2v_098.json"
     template.write_bytes((ROOT / pins["workflow"]["api_candidate"]).read_bytes())   # project-local copy; the shipped stub stays a stub
@@ -137,6 +165,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-ram-mb", type=float, default=12000)
     parser.add_argument("--min-disk-gb", type=float, default=30)
     parser.add_argument("--min-session-s", type=float, default=1800)
+    parser.add_argument("--gpu-index", type=int, choices=[0, 1], help="PHYSICAL index of the one T4 this worker owns (required with --execute)")
+    parser.add_argument("--variant", choices=["a", "b"], default="a", help="which synthetic shot: a = head-turn on a test pattern, b = camera push-in on another pattern")
+    parser.add_argument("--other-gpu-idle-mb", type=float, default=800, help="the OTHER card must show at most this much memory in use at start (isolation)")
+    parser.add_argument("--allow-other-gpu-busy", action="store_true", help="concurrent stage: the other card is another worker's, so do not require it idle")
+    parser.add_argument("--worker-pid", type=int, help="pid of the ComfyUI process this worker talks to (recorded in the receipt)")
+    parser.add_argument("--cuda-visible-devices", help="CUDA_VISIBLE_DEVICES the ComfyUI worker was started with (recorded)")
+    parser.add_argument("--retry-test", action="store_true",
+                        help="after a PASS in the same --workdir: reject that output in the journal and run once more; the sampler must execute again with a changed seed")
     parser.add_argument("--skip-static-verify", action="store_true", help="CPU plumbing tests only (never accepted together with --execute by main())")
     parser.add_argument("--execute", action="store_true", help="really submit to ComfyUI (GPU); without it only prepare and print the plan")
     return parser
@@ -150,6 +186,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return args
 
 
+def physical_gpus() -> list[dict] | None:
+    """All GPUs on the host with uuid (never filtered by GRANTHSTUDIO_GPU_INDEX)."""
+    import host_check
+    try:
+        return host_check.parse_nvidia_smi(subprocess.run(host_check.QUERY, capture_output=True, text=True, timeout=30, check=True).stdout)
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return None
+
+
 def execution_gate_problems(args: argparse.Namespace) -> list[str]:
     """Refusals that apply to every real submission, whichever way this file is started."""
     import os
@@ -158,10 +203,16 @@ def execution_gate_problems(args: argparse.Namespace) -> list[str]:
         problems.append("LTX_DOWNLOAD_APPROVED is not set (the signed docs/LTX_098_DOWNLOAD_APPROVAL.md section E)")
     if args.skip_static_verify:
         problems.append("--skip-static-verify cannot be combined with --execute")
-    from granthstudio.runtime import gpu_status, session_remaining_s
-    gpus = gpu_status()
-    if gpus is None or len(gpus) != 1 or "Tesla T4" not in gpus[0]["name"]:
-        problems.append(f"exactly one Tesla T4 is required, saw {[g['name'] for g in gpus] if gpus else gpus}")
+    from granthstudio.runtime import session_remaining_s
+    gpus = physical_gpus()
+    if gpus is None or sorted(g["index"] for g in gpus) != [0, 1] or any("Tesla T4" not in g["name"] for g in gpus):
+        problems.append(f"the host must have exactly two Tesla T4 (physical indices 0 and 1), saw {[(g['index'], g['name']) for g in gpus] if gpus else gpus}")
+    elif args.gpu_index is None:
+        problems.append("--gpu-index (the physical card this worker owns) is required with --execute")
+    elif not args.allow_other_gpu_busy:
+        other = next(g for g in gpus if g["index"] != args.gpu_index)
+        if other["memory_used_mb"] > args.other_gpu_idle_mb:
+            problems.append(f"GPU {other['index']} must stay idle for this stage but already uses {other['memory_used_mb']:.0f} MiB")
     try:
         remaining = session_remaining_s()
     except Exception as exc:                       # an unparsable deadline is a refusal, not a crash
@@ -191,6 +242,73 @@ def comfy_log_excerpt(path: Path | None, limit: int = 120) -> list[str]:
             if any(k in line.lower() for k in keys)][:limit]
 
 
+def _history_cached_nodes(base_url: str, prompt_id: str) -> list[str] | None:
+    """Node ids ComfyUI reports as served from cache for this prompt ('execution_cached' status message), or None when it reports nothing."""
+    from granthstudio.comfy import ComfyBackend
+    entry = json.loads(ComfyBackend(base_url)._request("GET", f"/history/{prompt_id}")).get(prompt_id, {})
+    for message in entry.get("status", {}).get("messages", []):
+        if isinstance(message, list) and len(message) == 2 and message[0] == "execution_cached":
+            return [str(n) for n in message[1].get("nodes", [])]
+    return None
+
+
+def _retry_test(args, receipt, finish, scheduler, selected, models) -> int:
+    """Controlled output-rejection test, only after a PASS in the same workdir: reject the first output in the journal, drop its task receipt,
+    run once more. The real sampler must execute again (not be served from cache) with a changed effective seed."""
+    import shutil
+    from granthstudio.comfy import reject_output
+    from granthstudio.ffmpeg import probe
+    task = next(t for t in selected if t.name == SHOT)
+    directory = scheduler.task_dir(task)
+    journal = scheduler.store / "pending" / f"{task.task_id()}.json"
+    if not journal.is_file() or not (directory / "clip.mp4").is_file():
+        return finish("NOT_RUN", "no completed first run in this workdir: nothing to reject")
+    before = json.loads(journal.read_text(encoding="utf-8"))
+    if before.get("state") != "completed":
+        return finish("NOT_RUN", f"journal state is {before.get('state')!r}, not 'completed': the retry test needs a finished first clip")
+    first = {"prompt_id": before["prompt_id"], "attempt": before["attempt"], "seed": before["history"][-1]["generation"].get("seed"),
+             "fingerprint": before["history"][-1]["fingerprint"], "clip_sha256": sha256_file(directory / "clip.mp4"), "namespace": before.get("namespace")}
+    receipt["first_output"] = first
+    if not reject_output(journal, "controlled output-rejection test (synthetic): the decoded clip was fine; this checks the retry path"):
+        return finish("FAIL", "the journal refused the rejection")
+    shutil.rmtree(directory)                           # the sealed receipt described the rejected output; a fresh render must replace it
+    began = time.monotonic()
+    results = scheduler.run(selected)
+    receipt["wall_s"] = round(time.monotonic() - began, 1)
+    receipt["results"] = [r.__dict__ for r in results]
+    result = next(r for r in results if r.name == SHOT)
+    after = json.loads(journal.read_text(encoding="utf-8"))
+    receipt["journal"] = after
+    if result.status != "complete":
+        oom = oom_markers(args.comfy_log, result.detail)
+        receipt["out_of_memory"] = bool(oom)
+        return finish("FAIL", ("CUDA out of memory; not retried further. " if oom else "") + f"{result.status}: {result.detail}")
+    new = {"prompt_id": after["prompt_id"], "attempt": after["attempt"], "seed": after["history"][-1]["generation"].get("seed"),
+           "fingerprint": after["history"][-1]["fingerprint"], "clip_sha256": sha256_file(scheduler.task_dir(task) / "clip.mp4")}
+    receipt["second_output"] = new
+    cached = _history_cached_nodes(args.comfy_url, new["prompt_id"])
+    sampler_nodes = {item["node"] for item in after["history"][-1]["seed_inputs"]} | {"101"}
+    checks = {
+        "new_prompt_id": new["prompt_id"] != first["prompt_id"],
+        "attempt_incremented": new["attempt"] == first["attempt"] + 1,
+        "rejection_recorded": len(after.get("rejections", [])) == len(before.get("rejections", [])) + 1,
+        "seed_changed": new["seed"] != first["seed"],
+        "generation_fingerprint_changed": new["fingerprint"] != first["fingerprint"],
+        "same_store_namespace": after.get("namespace") == first["namespace"],
+        "output_differs": new["clip_sha256"] != first["clip_sha256"],
+        "history_reports_cache": cached is not None,
+        "sampler_executed_not_cached": cached is not None and not (sampler_nodes & set(cached)),
+    }
+    info = probe(scheduler.task_dir(task) / "clip.mp4")
+    checks["decodes_at_requested_size"] = (info.width, info.height) == (args.width, args.height)
+    receipt["retry_checks"] = checks
+    receipt["cached_nodes_reported"] = cached
+    failed = sorted(k for k, ok in checks.items() if not ok)
+    if failed:
+        return finish("FAIL", f"retry checks failed: {failed}")
+    return finish("PASS", "the rejected output was replaced by a fresh generation: new prompt, changed seed on the sampler path, sampler executed (not cached)")
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     return _run(args, enforce_gates=args.execute)
@@ -199,19 +317,25 @@ def main(argv: list[str] | None = None) -> int:
 def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     """Everything after argument parsing. ``enforce_gates=False`` exists only so CPU plumbing tests can drive a fake server; main() always
     enforces the gates for --execute."""
+    import os
     args.workdir.mkdir(parents=True, exist_ok=True)
+    if args.gpu_index is not None:
+        os.environ["GRANTHSTUDIO_GPU_INDEX"] = str(args.gpu_index)      # preflight and VRAM sampling then watch THIS physical card only
     pins = yaml.safe_load((ROOT / "config" / "ltx_098_pins.yaml").read_text(encoding="utf-8"))
     receipt: dict = {"schema_version": 1, "kind": "ltx_first_i2v_test", "started": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                      "harness_commit": git_head(ROOT), "pins_status": pins["status"], "shot": SHOT,
                      "approved_by": __import__("os").environ.get("LTX_DOWNLOAD_APPROVED", ""),
-                     "expected_precision": args.precision,
+                     "expected_precision": args.precision, "variant": args.variant, "gpu_index": args.gpu_index,
+                     "workdir": str(args.workdir), "cuda_visible_devices_of_worker": args.cuda_visible_devices, "worker_pid": args.worker_pid, "comfy_url": args.comfy_url,
+                     "physical_gpus_at_start": physical_gpus() if args.execute else None,
                      "note": "A PASS means one clip decoded through the existing pipeline. The i2v capability stays 'unvalidated' until a human reviews the clip."}
 
     def finish(verdict: str, reason: str) -> int:
         receipt.update(verdict=verdict, reason=reason, finished=datetime.now(timezone.utc).isoformat(timespec="seconds"),
                        comfyui_log_excerpt=comfy_log_excerpt(args.comfy_log))
-        (args.workdir / "test_receipt.json").write_text(json.dumps(receipt, indent=2, default=str), encoding="utf-8")
-        print(f"VERDICT: {verdict} - {reason}\nreceipt: {args.workdir / 'test_receipt.json'}")
+        name = "retry_receipt.json" if args.retry_test else "test_receipt.json"       # the retry run never overwrites the first test's receipt
+        (args.workdir / name).write_text(json.dumps(receipt, indent=2, default=str), encoding="utf-8")
+        print(f"VERDICT: {verdict} - {reason}\nreceipt: {args.workdir / name}")
         return 0 if verdict == "PASS" else 1
 
     if enforce_gates:
@@ -260,8 +384,12 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     if not args.execute:
         return finish("NOT_RUN", f"dry run (no --execute); preflight gpu_ready={report['gpu_ready']}")
     gate_gpu_tasks(selected, report)
+    if args.retry_test:
+        return _retry_test(args, receipt, finish, scheduler, selected, models)
     began = time.monotonic()
+    receipt["exec_started"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
     results = scheduler.run(selected)
+    receipt["exec_finished"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
     receipt["wall_s"] = round(time.monotonic() - began, 1)
     receipt["results"] = [r.__dict__ for r in results]
     task = next(t for t in selected if t.name == SHOT)
