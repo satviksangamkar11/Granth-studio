@@ -98,13 +98,10 @@ def passing_receipts(benchmarks_dir: Path, capability: str, checkpoint_sha256: s
     return found
 
 
-def require_capability(models: dict[str, Any], capability: str, benchmarks_dir: Path, workflow_version: str | None = None) -> dict[str, Any]:
-    if capability not in CAPABILITIES:
-        raise ConfigError(f"unknown capability {capability!r}")
+def verified_runtime_hash(models: dict[str, Any], workflow_version: str | None) -> str:
+    """Identity and file checks every LTX run needs, validated or benchmark: pinned checkpoint,
+    recorded runtime inventory, local files matching their hashes. Returns the runtime hash."""
     ltx = models["ltx"]
-    status = ltx["capabilities"][capability]
-    if status != "validated":
-        raise CapabilityDisabled(f"LTX {capability} status is '{status}': NOT VALIDATED")
     pin = ltx["checkpoint_sha256"]
     if pin is None:
         raise CapabilityDisabled("LTX checkpoint_sha256 is not pinned: NOT VALIDATED")
@@ -120,8 +117,31 @@ def require_capability(models: dict[str, Any], capability: str, benchmarks_dir: 
             raise CapabilityDisabled(f"{kind} runtime file/hash mismatch: NOT VALIDATED")
     if runtime["files"]["checkpoint"]["sha256"] != pin:
         raise CapabilityDisabled("runtime checkpoint differs from model pin: NOT VALIDATED")
-    runtime_hash = sha256_obj({"runtime": runtime, "frame_counts": ltx["frame_counts"],
-                               "family": ltx["family"], "version": ltx["version"], "variant": ltx["variant"]})
+    return sha256_obj({"runtime": runtime, "frame_counts": ltx["frame_counts"],
+                       "family": ltx["family"], "version": ltx["version"], "variant": ltx["variant"]})
+
+
+def verify_benchmark_runtime(models: dict[str, Any], capability: str, workflow_version: str | None) -> str:
+    """Benchmark mode (frozen section 15): the pilot must be able to run an unvalidated capability to
+    produce the evidence that validates it. Only the 'validated' status and receipt checks are
+    skipped; a disabled capability, missing pins or mismatched files still refuse."""
+    if capability not in CAPABILITIES:
+        raise ConfigError(f"unknown capability {capability!r}")
+    status = models["ltx"]["capabilities"][capability]
+    if status == "disabled":
+        raise CapabilityDisabled(f"LTX {capability} is disabled: not benchmarked")
+    return verified_runtime_hash(models, workflow_version)
+
+
+def require_capability(models: dict[str, Any], capability: str, benchmarks_dir: Path, workflow_version: str | None = None) -> dict[str, Any]:
+    if capability not in CAPABILITIES:
+        raise ConfigError(f"unknown capability {capability!r}")
+    ltx = models["ltx"]
+    status = ltx["capabilities"][capability]
+    if status != "validated":
+        raise CapabilityDisabled(f"LTX {capability} status is '{status}': NOT VALIDATED")
+    pin = ltx["checkpoint_sha256"]
+    runtime_hash = verified_runtime_hash(models, workflow_version)
     found = passing_receipts(benchmarks_dir, capability, pin, workflow_version, runtime_hash)
     if not found:
         raise CapabilityDisabled(

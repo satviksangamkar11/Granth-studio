@@ -510,6 +510,73 @@ def cmd_pilot_plan(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _pilot_store(args):
+    return getattr(args, "store", None)
+
+
+def cmd_pilot_run(args: argparse.Namespace) -> int:
+    from . import pilotrun
+    project = _project(args)
+    mapping, selected, full_chapter, results, receipt = pilotrun.run_pilot(
+        project, args.adhyay, _pilot_store(args), args.execute, not args.cpu_only)
+    if results is None:
+        for label, shot_id in mapping.items():
+            print(f"{label}  {shot_id}")
+        for task in selected:
+            print(f"planned  {task.stage:<9} {task.name:<26} {task.task_id()}")
+        print("assembly included" if full_chapter else "assembly NOT included: the chapter has non-pilot shots, so F stays pending")
+        print("dry run: add --execute (benchmark mode: pins enforced, validation status waived)")
+        return EXIT_OK
+    for result in results:
+        print(f"{result.status:<13} {result.stage:<9} {result.name:<26} {result.elapsed_s:>8.1f}s  {result.detail}")
+    print(f"run receipt {receipt}")
+    if any(r.status == "not_validated" for r in results):
+        return EXIT_NOT_VALIDATED
+    return EXIT_OK if all(r.status in ("complete", "resumed") for r in results) else EXIT_REFUSED
+
+
+def cmd_pilot_receipts(args: argparse.Namespace) -> int:
+    from . import pilotrun
+    summary = pilotrun.build_receipts(_project(args), args.adhyay, _pilot_store(args))
+    print(f"receipts written: {', '.join(summary['written']) or 'none'}")
+    for label, reason in summary["missing"].items():
+        print(f"missing {label}: {reason}")
+    print(f"awaiting human review: {', '.join(summary['awaiting_review']) or 'none'}")
+    return EXIT_OK
+
+
+def cmd_pilot_review(args: argparse.Namespace) -> int:
+    from . import pilotrun
+    _need_confirm(args, "reviewed the clip against the rubric")
+    ratings = {}
+    for item in args.rating or []:
+        name, _, rest = item.partition("=")
+        rating, _, note = rest.partition(":")
+        ratings[name] = (rating, note)
+    review = pilotrun.record_review(_project(args), args.adhyay, _pilot_store(args), args.shot, args.reviewer,
+                                    args.decision, ratings, args.note or "")
+    print(f"review of {args.shot} recorded: {review['decision']} by {review['reviewer']} (bound to {review['measurement_sha256'][:12]}); run 'pilot receipts'")
+    return EXIT_OK
+
+
+def cmd_pilot_report(args: argparse.Namespace) -> int:
+    from . import pilotrun
+    report, path = pilotrun.pilot_report(_project(args), args.adhyay, _pilot_store(args))
+    throughput = report["throughput"]
+    print(f"pilot report {path}")
+    print(f"throughput: {throughput['value'] if throughput['value'] else 'not computed: ' + str(throughput.get('note'))} [{throughput['kind']}]")
+    print(f"budget: {report['acceptance_budget']['value']} ({report['acceptance_budget']['kind']}); decision: {report['decision']['production_go']}")
+    return EXIT_OK
+
+
+def cmd_pilot_recovery(args: argparse.Namespace) -> int:
+    from . import pilotrun
+    _need_confirm(args, "inspected both runs")
+    path = pilotrun.build_recovery_evidence(_project(args), args.adhyay, args.clean, args.resumed, args.reviewer)
+    print(f"recovery evidence written and verified: {path}")
+    return EXIT_OK
+
+
 def cmd_pilot_score(args: argparse.Namespace) -> int:
     receipts: list[dict[str, Any]] = []
     for path in sorted(args.receipts_dir.rglob("*.json")):
@@ -691,6 +758,37 @@ def build_parser() -> argparse.ArgumentParser:
     pilot_plan = pilot_actions.add_parser("plan", help="map shots A-F for one adhyay")
     pilot_plan.add_argument("adhyay", type=int)
     pilot_plan.set_defaults(handler=cmd_pilot_plan)
+    pilot_run = pilot_actions.add_parser("run", help="run the A-F pilot tasks in benchmark mode")
+    pilot_run.add_argument("adhyay", type=int)
+    pilot_run.add_argument("--store", help="named task store under artifacts/tasks (default: the episode store)")
+    pilot_run.add_argument("--execute", action="store_true")
+    pilot_run.add_argument("--cpu-only", action="store_true", help="skip the GPU preflight requirement")
+    pilot_run.set_defaults(handler=cmd_pilot_run)
+    pilot_receipts = pilot_actions.add_parser("receipts", help="build benchmark receipts from the run")
+    pilot_receipts.add_argument("adhyay", type=int)
+    pilot_receipts.add_argument("--store")
+    pilot_receipts.set_defaults(handler=cmd_pilot_receipts)
+    pilot_review = pilot_actions.add_parser("review", help="record the human rubric for one shot")
+    pilot_review.add_argument("adhyay", type=int)
+    pilot_review.add_argument("--store")
+    pilot_review.add_argument("--shot", required=True, choices=list("ABCDEF"))
+    pilot_review.add_argument("--reviewer", required=True)
+    pilot_review.add_argument("--decision", required=True, choices=["accept", "reject"])
+    pilot_review.add_argument("--rating", action="append", metavar="CRITERION=pass|fail|not_assessed[:note]")
+    pilot_review.add_argument("--note")
+    pilot_review.add_argument("--confirm", action="store_true")
+    pilot_review.set_defaults(handler=cmd_pilot_review)
+    pilot_report = pilot_actions.add_parser("report", help="evidence report for the human GO/NO-GO")
+    pilot_report.add_argument("adhyay", type=int)
+    pilot_report.add_argument("--store")
+    pilot_report.set_defaults(handler=cmd_pilot_report)
+    pilot_recovery = pilot_actions.add_parser("recovery-evidence", help="build recovery evidence from two real runs")
+    pilot_recovery.add_argument("adhyay", type=int)
+    pilot_recovery.add_argument("--clean", required=True, help="store name of the clean run")
+    pilot_recovery.add_argument("--resumed", required=True, help="store name of the interrupted-then-resumed run")
+    pilot_recovery.add_argument("--reviewer", required=True)
+    pilot_recovery.add_argument("--confirm", action="store_true")
+    pilot_recovery.set_defaults(handler=cmd_pilot_recovery)
     pilot_score = pilot_actions.add_parser("score", help="accepted seconds per GPU-hour from receipts")
     pilot_score.add_argument("receipts_dir", type=Path)
     pilot_score.set_defaults(handler=cmd_pilot_score)

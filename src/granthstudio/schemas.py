@@ -29,6 +29,8 @@ KNOWN = (
     "visual_assets",
     "translation_candidates",
     "voices",
+    "pilot_config",
+    "pilot_review",
 )
 
 

@@ -52,3 +52,11 @@ asr:
   model: null
   revision: null
   timeout_s: 1800
+# Model-based QA diagnostics (face embedding, CLIP style, object presence, anachronism). Optional and
+# never enforced; same JSON-over-stdio contract. Not configured: those diagnostics log not_computed.
+diagnostics:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800

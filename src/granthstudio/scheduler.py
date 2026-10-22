@@ -4,8 +4,9 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import time
 import uuid
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
@@ -48,6 +49,7 @@ class TaskResult:
     status: str
     attempts: int
     detail: str
+    elapsed_s: float = 0.0  # wall clock of this run() call for the task, all attempts included
 
 def _now():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -139,6 +141,7 @@ class Scheduler:
         done = set()
         for task in tasks:
             task_id = task.task_id()
+            began = time.monotonic()
             try:
                 if should_stop is not None and should_stop():
                     result = TaskResult(task.stage, task.name, task_id, "deferred", 0, "stop requested before start")
@@ -158,6 +161,7 @@ class Scheduler:
                 result = TaskResult(task.stage, task.name, task_id, "not_validated", 0, str(exc))
             except (GranthError, OSError, ValueError) as exc:
                 result = TaskResult(task.stage, task.name, task_id, "failed", 0, str(exc))
+            result = replace(result, elapsed_s=round(time.monotonic() - began, 3))
             if result.status in ("complete", "resumed"):
                 done.add(task_id)
             results.append(result)

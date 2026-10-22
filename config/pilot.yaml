@@ -1,0 +1,11 @@
+schema_version: 1
+# Pilot acceptance inputs that only the user can decide.
+rubric:
+  # Human review criteria for the A-F pilot (O-005: who judges identity continuity and sacred
+  # fidelity, and how). Empty means no review can be recorded yet. Names are lower_snake_case,
+  # e.g. identity_continuity. Automated diagnostics never replace these.
+  criteria: []
+acceptance:
+  # Accepted seconds per GPU-hour required for a production GO (O-004). Null = not decided; the
+  # report shows the measured value and no verdict.
+  min_accepted_sec_per_gpu_hour: null

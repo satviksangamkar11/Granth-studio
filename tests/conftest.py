@@ -47,7 +47,7 @@ def make_project(root: Path) -> Project:
             "frame_counts": [49, 65, 81, 89, 97, 121],
             "capabilities": {"i2v": "unvalidated", "flf": "unvalidated"},
         },
-        **{k: v for k, v in yaml.safe_load((REPO / "config" / "models.yaml").read_text(encoding="utf-8")).items() if k in ("sdxl", "translation", "speech", "asr")},
+        **{k: v for k, v in yaml.safe_load((REPO / "config" / "models.yaml").read_text(encoding="utf-8")).items() if k in ("sdxl", "translation", "speech", "asr", "diagnostics")},
     })
     _dump(root / "config" / "quality_gates.yaml", {
         "schema_version": 1,
@@ -55,7 +55,7 @@ def make_project(root: Path) -> Project:
         "diagnostics": ["face_embedding_similarity"], "enforced_thresholds": [],
     })
     # Infrastructure config is copied from the repository so tests follow the shipped contract.
-    for name in ("runtime.yaml",):
+    for name in ("runtime.yaml", "pilot.yaml"):
         shutil.copyfile(REPO / "config" / name, root / "config" / name)
     template_dir = root / "workflows" / "comfyui"
     template_dir.mkdir(parents=True, exist_ok=True)

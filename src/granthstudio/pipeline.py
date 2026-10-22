@@ -17,7 +17,7 @@ from typing import Any
 from .canon import Canon, load_canon
 from .comfy import (ComfyBackend, check_checkpoint_binding, ensure_validated, execution_seconds, load_template,
                     render_graph, select_video)
-from .config import Project, load_models, require_capability
+from .config import Project, load_models, require_capability, verify_benchmark_runtime
 from .episodes import compile_episode
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, validate_audio, validate_video
@@ -50,8 +50,9 @@ class Bundle:
     research: dict[str, Any]
     compiled: dict[str, Any]
     timelines: dict[str, dict[str, Any]]
+    benchmark: bool = False  # pilot only: may run LTX capabilities that are not validated yet
 
-def load_bundle(project: Project, models: dict[str, Any], adhyay: int) -> Bundle:
+def load_bundle(project: Project, models: dict[str, Any], adhyay: int, benchmark: bool = False) -> Bundle:
     canon = load_canon(project)
     receipt = require_approved(project, adhyay)
     research = load_research(project, adhyay)
@@ -62,7 +63,7 @@ def load_bundle(project: Project, models: dict[str, Any], adhyay: int) -> Bundle
     problems = check_timelines(canon, compiled, research, timelines["mr"], timelines["hi"])
     if problems:
         raise GateFailure("timeline gate failed: " + "; ".join(problems))
-    return Bundle(project, models, adhyay, canon, research, compiled, timelines)
+    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark)
 
 def episode_store(project: Project, adhyay: int) -> Path:
     return project.artifacts_dir / "tasks" / f"adhyay_{adhyay:02d}"
@@ -74,7 +75,7 @@ def snapshot(bundle: Bundle) -> dict:
             "timelines": {lang: sha256_obj(timeline) for lang, timeline in bundle.timelines.items()}}
 
 def require_current(bundle: Bundle) -> None:
-    current = load_bundle(bundle.project, load_models(bundle.project), bundle.adhyay)
+    current = load_bundle(bundle.project, load_models(bundle.project), bundle.adhyay, bundle.benchmark)
     if snapshot(current) != snapshot(bundle):
         raise GateFailure("production input snapshot changed; reload and reconcile affected tasks")
 
@@ -177,8 +178,16 @@ def _verify_keyframe(bundle, visual_id, directory):
 
 def _ltx_preflight(bundle, capability):
     template = load_template(contained_path(bundle.project.root, bundle.models["ltx"]["workflow_templates"][capability]))
-    require_capability(bundle.models, capability, bundle.project.benchmarks_dir, template.version)
-    ensure_validated(template)
+    if bundle.benchmark:
+        # Frozen section 15: benchmark the pinned runtime to earn validation. Pins, runtime files and the
+        # checkpoint binding still apply; only the 'validated' status and receipt requirements are waived.
+        verify_benchmark_runtime(bundle.models, capability, template.version)
+        graph = json.loads(template.text)
+        if not template.output_node or template.output_node not in graph:
+            raise IntegrationUnavailable(f"workflow {template.name} has no real graph/_output_node: NOT VALIDATED")
+    else:
+        require_capability(bundle.models, capability, bundle.project.benchmarks_dir, template.version)
+        ensure_validated(template)
     check_checkpoint_binding(template, bundle.models["ltx"]["checkpoint_file"])
     return template
 
@@ -214,11 +223,12 @@ def _ltx_run(bundle, shot, visual, capability, journal):
         graph = render_graph(template, values)
         backend.require_nodes(graph)
         stats = backend.system_stats()
-        peak = []
+        peak, gpu_names = [], []
         def sample():
             gpus = gpu_status()
             if gpus:
                 peak.append(gpus[0]["memory_used_mb"])
+                gpu_names[:] = [gpus[0]["name"]]
         started = time.monotonic()
         history = backend.execute(graph, journal, sample)
         wall = time.monotonic() - started
@@ -227,6 +237,8 @@ def _ltx_run(bundle, shot, visual, capability, journal):
             "schema_version": 1, "capability": capability, "shot_id": shot["shot_id"],
             "prompt_id": read_json(journal)["prompt_id"], "workflow_version": template.version,
             "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs,
+            "runtime_sha256": verify_benchmark_runtime(bundle.models, capability, template.version),
+            "gpu": gpu_names[0] if gpu_names else None,
             "execution_s": {"value": execution_seconds(history), "kind": "measured by ComfyUI status messages"},
             "wall_s": {"value": wall, "kind": "measured in this session only (excludes earlier sessions)"},
             "peak_vram_mb": {"value": max(peak) if peak else None,
@@ -403,6 +415,51 @@ def _recovery_provenance(root, output, name, record):
         raise GateFailure(f"recovery output {name} is not the assemble_{language} release")
     return store, receipt["task_id"]
 
+def check_recovery_evidence(artifacts_dir, evidence, pilot_sha256):
+    """Recovery proof must be two distinct real scheduler runs with identical outputs (D4/M1).
+    Raises GateFailure; shared by production approval and the recovery-evidence builder."""
+    validate_document("recovery_evidence", evidence)
+    if evidence["pilot_plan_sha256"] != pilot_sha256:
+        raise GateFailure("recovery evidence belongs to another pilot plan")
+    clean, resumed = evidence["clean_outputs"], evidence["resumed_outputs"]
+    if set(clean) != set(resumed):
+        raise GateFailure("clean/resumed recovery output sets differ")
+    records = [(run, name, outputs[name]) for run, outputs in (("clean", clean), ("resumed", resumed))
+               for name in sorted(outputs)]
+    seen, paths = {}, {}
+    for run, name, record in records:
+        output = contained_path(artifacts_dir, record["path"])
+        if sha256_file(output) != record["sha256"]:
+            raise GateFailure(f"recovery output hash mismatch: {name}")
+        # One file cannot prove two runs or two languages: reject same path
+        # (case-insensitive on Windows) and same file identity (hard links).
+        info = output.stat()
+        keys = [os.path.normcase(str(output))] + ([(info.st_dev, info.st_ino)] if info.st_ino else [])
+        for key in keys:
+            if key in seen:
+                raise GateFailure(f"recovery outputs alias one file: {seen[key]} and {run}.{name}")
+            seen[key] = f"{run}.{name}"
+        paths[run, name] = output
+    stores, task_ids = {}, {}
+    for run, name, record in records:
+        store, task_ids[run, name] = _recovery_provenance(artifacts_dir, paths[run, name], name, record)
+        stores.setdefault(run, set()).add(os.path.normcase(str(store)))
+    if len(stores["clean"]) != 1 or len(stores["resumed"]) != 1:
+        raise GateFailure("each recovery run must come from a single scheduler store")
+    if stores["clean"] == stores["resumed"]:
+        raise GateFailure("clean and resumed recovery outputs must come from different scheduler stores")
+    for run, must_resume in (("clean", False), ("resumed", True)):
+        log = Path(next(iter(stores[run]))) / RUN_LOG
+        statuses = [json.loads(line)["status"] for line in log.read_text(encoding="utf-8").splitlines() if line.strip()]
+        if ("resumed" in statuses) != must_resume:
+            raise GateFailure("resumed recovery store has no resumed task in its run log" if must_resume
+                              else "clean recovery store reused earlier work; it is not a clean run")
+    for name in sorted(clean):
+        if task_ids["clean", name] != task_ids["resumed", name]:
+            raise GateFailure(f"clean/resumed recovery outputs come from different tasks: {name}")
+        if clean[name]["sha256"] != resumed[name]["sha256"]:
+            raise GateFailure(f"clean/resumed recovery hashes differ: {name}")
+
 def production_problems(bundle):
     """Read authorization evidence. Never create or infer human approval."""
     path = bundle.project.root / "approvals" / f"adhyay_{bundle.adhyay:02d}.json"
@@ -472,47 +529,7 @@ def production_problems(bundle):
         if sha256_file(path) != recovery["sha256"]:
             raise GateFailure("recovery evidence changed")
         evidence = read_json(path)
-        validate_document("recovery_evidence", evidence)
-        if evidence["pilot_plan_sha256"] != pilot["sha256"]:
-            raise GateFailure("recovery evidence belongs to another pilot plan")
-        clean, resumed = evidence["clean_outputs"], evidence["resumed_outputs"]
-        if set(clean) != set(resumed):
-            raise GateFailure("clean/resumed recovery output sets differ")
-        records = [(run, name, outputs[name]) for run, outputs in (("clean", clean), ("resumed", resumed))
-                   for name in sorted(outputs)]
-        seen, paths = {}, {}
-        for run, name, record in records:
-            output = contained_path(bundle.project.artifacts_dir, record["path"])
-            if sha256_file(output) != record["sha256"]:
-                raise GateFailure(f"recovery output hash mismatch: {name}")
-            # One file cannot prove two runs or two languages: reject same path
-            # (case-insensitive on Windows) and same file identity (hard links).
-            info = output.stat()
-            keys = [os.path.normcase(str(output))] + ([(info.st_dev, info.st_ino)] if info.st_ino else [])
-            for key in keys:
-                if key in seen:
-                    raise GateFailure(f"recovery outputs alias one file: {seen[key]} and {run}.{name}")
-                seen[key] = f"{run}.{name}"
-            paths[run, name] = output
-        stores, task_ids = {}, {}
-        for run, name, record in records:
-            store, task_ids[run, name] = _recovery_provenance(bundle.project.artifacts_dir, paths[run, name], name, record)
-            stores.setdefault(run, set()).add(os.path.normcase(str(store)))
-        if len(stores["clean"]) != 1 or len(stores["resumed"]) != 1:
-            raise GateFailure("each recovery run must come from a single scheduler store")
-        if stores["clean"] == stores["resumed"]:
-            raise GateFailure("clean and resumed recovery outputs must come from different scheduler stores")
-        for run, must_resume in (("clean", False), ("resumed", True)):
-            log = Path(next(iter(stores[run]))) / RUN_LOG
-            statuses = [json.loads(line)["status"] for line in log.read_text(encoding="utf-8").splitlines() if line.strip()]
-            if ("resumed" in statuses) != must_resume:
-                raise GateFailure("resumed recovery store has no resumed task in its run log" if must_resume
-                                  else "clean recovery store reused earlier work; it is not a clean run")
-        for name in sorted(clean):
-            if task_ids["clean", name] != task_ids["resumed", name]:
-                raise GateFailure(f"clean/resumed recovery outputs come from different tasks: {name}")
-            if clean[name]["sha256"] != resumed[name]["sha256"]:
-                raise GateFailure(f"clean/resumed recovery hashes differ: {name}")
+        check_recovery_evidence(bundle.project.artifacts_dir, evidence, pilot["sha256"])
         return []
     except (GranthError, OSError, ValueError, KeyError, TypeError) as exc:
         return [str(exc)]
