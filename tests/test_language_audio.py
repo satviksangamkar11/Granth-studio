@@ -523,3 +523,48 @@ def test_speech_approval_rejects_evidence_recorded_for_a_different_request(appro
     atomic_write_json(path, record)
     with pytest.raises(GateFailure, match="different request"):
         speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_evidence_tampering_after_a_completed_release_is_caught_on_resume(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    models = load_models(approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", GOOD)
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    record = read_json(speech.record_path(approved_project, "mr", "d_0001"))
+    speech.approve_speech(approved_project, 1, "mr", "d_0001", "synthetic-test-only")
+    scheduler = Scheduler(episode_store(approved_project, 1))
+    def release():
+        tasks = plan_tasks(load_bundle(approved_project, models, 1), scheduler)
+        return {r.name: r for r in scheduler.run(tasks)}
+    assert release()["assemble_mr"].status == "complete"
+    assert release()["assemble_mr"].status == "resumed"                          # untouched: receipts are reused
+    (speech.evidence_root(approved_project) / f"{record['evidence_sha256']}.json").unlink()   # tamper after completion
+    results = release()
+    assert results["mr_voice"].status == "failed" and "is missing" in results["mr_voice"].detail
+    assert results["assemble_mr"].status == "blocked"                            # no stale verified claim is reused
+
+
+def test_translation_release_checks_current_hindi_text_against_the_evidence(approved_project, hindi_setup):
+    from granthstudio import pipeline
+    table, tmp_path = hindi_setup
+    set_models(approved_project, translation=runner_section(tmp_path, "translate", TRANSLATE))
+    models = load_models(approved_project)
+    canon = load_bundle.__globals__["load_canon"](approved_project)
+    translation.generate_candidates(approved_project, models, 1, execute=True)
+    for line in ("d_0001", "d_0002"):
+        translation.approve_translation(approved_project, canon, 1, line, "synthetic-test-only")
+    bundle = load_bundle(approved_project, models, 1)
+    hi = bundle.timelines["hi"]["entries"][0]
+    assert pipeline._release_translation(bundle, hi)["model_identity"]["status"] == "unverified"   # fake emits no evidence
+    path = approved_project.episodes_dir / "adhyay_01" / "hi.yaml"
+    document = load_yaml(path)
+    entry = document["entries"][0]
+    entry["text"] += " बदला"                                                     # Hindi text changed after generation...
+    entry["alignment"]["verification"]["hi_sha256"] = sha256_obj(normalize_text(entry["text"]))   # ...with the review refreshed
+    atomic_write_json(path, document)
+    changed = load_bundle(approved_project, models, 1)
+    with pytest.raises(GateFailure, match="does not cover this output"):
+        pipeline._release_translation(changed, changed.timelines["hi"]["entries"][0])

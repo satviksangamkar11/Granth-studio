@@ -167,7 +167,7 @@ def generation_evidence(graph: dict[str, Any], output_node: str | None) -> dict[
     if output_node is None:
         return {"fingerprint": sha256_obj(graph), "seed_inputs": [], "scope": "whole_graph"}
     closure = generation_closure(graph, output_node)
-    upstream = {k: v for k, v in closure.items() if k != output_node} or closure   # the save node's own fields (filename_prefix...) are not generation inputs
+    upstream = {k: v for k, v in closure.items() if k != output_node}   # the save node's own fields (filename_prefix...) are not generation inputs
     seeds = [{"node": node_id, "input": name, "value": node["inputs"][name]} for node_id, node in sorted(upstream.items())
              for name in SEED_INPUTS if isinstance((node.get("inputs") or {}).get(name), int)
              and not isinstance(node["inputs"][name], bool)]

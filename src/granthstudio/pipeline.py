@@ -140,8 +140,11 @@ def _release_translation(bundle, entry):
     if source and source.get("origin") == "model_candidate":
         source = {**source, "model_identity": verify_run_evidence(
             bundle.project.artifacts_dir / "evidence" / "model_runs", source.get("evidence_sha256"), source.get("model_identity"),
-            source["model"], source["revision"], {"candidates": {entry["dialogue_id"]: source["candidate_sha256"]}},
-            f"{entry['dialogue_id']} release translation")}
+            source["model"], source["revision"],
+            {"candidates": {entry["dialogue_id"]: sha256_obj(normalize_text(entry["text"]))}},    # the CURRENT Hindi text
+            f"{entry['dialogue_id']} release translation",
+            {"mr_sha256": {entry["dialogue_id"]: sha256_obj(normalize_text(
+                next(m for m in bundle.timelines["mr"]["entries"] if m["dialogue_id"] == entry["dialogue_id"])["text"]))}})}
     return source
 
 
@@ -180,6 +183,8 @@ def _verify_audio(bundle, lang, directory):
             raise TaskFailed("audio artifact does not match reviewed audio")
         if abs(validate_audio(path) - item["duration_s"]) > 0.001:
             raise TaskFailed("audio duration receipt mismatch")
+        if item["provenance"] != _release_provenance(bundle, entry):    # evidence is re-checked on every resume
+            raise TaskFailed(f"{entry['dialogue_id']}: audio provenance no longer matches its verified run evidence")
 
 def _seed(shot_id):
     return int(sha256_bytes(shot_id.encode())[:8], 16) % 2**31
@@ -386,6 +391,11 @@ def _verify_assembly(bundle, lang, directory):
     plan = read_json(directory / "edit_plan.json")
     if plan["language"] != lang or [s["shot_id"] for s in plan["shots"]] != [s["shot_id"] for s in bundle.compiled["shots"] if not s["cutaway"]]:
         raise TaskFailed("editorial plan omits/reorders required shots")
+    entries = {e["dialogue_id"]: e for e in bundle.timelines[lang]["entries"]}
+    for line in read_json(directory / "provenance.json")["lines"]:     # evidence is re-checked on every resume
+        if (line["audio"] != _release_provenance(bundle, entries[line["dialogue_id"]])
+                or line["translation"] != _release_translation(bundle, entries[line["dialogue_id"]])):
+            raise TaskFailed(f"{line['dialogue_id']}: release provenance no longer matches its verified run evidence")
     missing = unplaced_required_actions(bundle.compiled, {s["coverage"]["shot_id"] for s in plan["shots"] if "coverage" in s})
     if missing:
         raise TaskFailed(f"required approved actions absent from the editorial plan: {missing}")

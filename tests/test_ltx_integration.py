@@ -562,3 +562,20 @@ def test_adopting_an_uncertain_submission_still_finds_its_prompt_by_the_original
     assert read_json(b)["submission_namespace"] == store_namespace(a)
     assert reconcile(backend(comfy), b)["prompt_id"] == "p1"                         # found under the namespace the server holds
     assert len(comfy.posts) == 1
+
+
+def test_output_only_graph_cannot_use_its_own_fields_as_generation_evidence(comfy, tmp_path):
+    from granthstudio.comfy import generation_evidence, reject_output
+    from granthstudio.errors import GateFailure
+    def only(prefix):
+        return {"2": {"class_type": "SyntheticSave", "inputs": {"seed": 1, "filename_prefix": prefix}}}
+    assert generation_evidence(only("a"), "2")["seed_inputs"] == []                # nothing upstream: no seed evidence
+    assert generation_evidence(only("a"), "2")["fingerprint"] == generation_evidence(only("b"), "2")["fingerprint"]
+    journal = tmp_path / "job.json"
+    with pytest.raises(JobPending):
+        backend(comfy).execute(only("a"), journal, output_node="2")
+    comfy.finish("p1"); backend(comfy).execute(only("a"), journal, output_node="2")
+    reject_output(journal, "flat")
+    with pytest.raises(GateFailure, match="no seed input on the path"):
+        backend(comfy).execute(only("b"), journal, output_node="2")
+    assert len(comfy.posts) == 1
