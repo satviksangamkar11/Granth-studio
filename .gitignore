@@ -1,0 +1,17 @@
+# Generated media, renders and model weights stay outside Git (hashes and receipts are committed instead)
+artifacts/images/
+artifacts/videos/
+artifacts/audio/
+*.safetensors
+*.ckpt
+*.gguf
+*.pt
+*.bin
+*.mp4
+*.wav
+*.png
+*.jpg
+.venv/
+__pycache__/
+*.pyc
+.secrets/

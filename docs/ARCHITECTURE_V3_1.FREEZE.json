@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "architecture_version": "3.1",
+  "status": "core_frozen_benchmark_gated",
+  "frozen_on": "2026-10-22",
+  "timezone": "Asia/Calcutta",
+  "project_root": "D:\\aai work",
+  "file": "GranthStudio-Zero-DB-v3.1-FROZEN.md",
+  "sha256": "decd0af573e7b0c882d9dc5e8c98788bcecedd924a31dfc264ec1f883404f7c1",
+  "authority": "User request: Freeze the plan",
+  "research_approved_by_this_freeze": false,
+  "implementation_started": false,
+  "benchmark_passed": false,
+  "tier_2_enabled": false,
+  "next_milestone": "Shots A-F Bilingual Pilot Benchmark on Kaggle Dual T4",
+  "reserved_sections": [
+    11,
+    12,
+    14
+  ],
+  "unresolved_source_details": [
+    "Frame-count formula absent from supplied text",
+    "Primary throughput formula and numerical acceptance thresholds not supplied"
+  ]
+}
