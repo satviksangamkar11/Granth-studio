@@ -12,7 +12,7 @@ from pathlib import Path
 from .config import Project
 from .integrity import atomic_write_json
 
-HARD_GATES = ("source_integrity", "canon_identity", "marathi_lock", "hindi_terms", "task_outputs", "video_decode")
+HARD_GATES = ("source_integrity", "canon_identity", "marathi_lock", "hindi_terms", "task_outputs", "video_decode", "production_go")
 DIAGNOSTICS = (
     "face_embedding_similarity",
     "clip_style_similarity",
@@ -39,13 +39,16 @@ def report_path(project: Project, adhyay: int) -> Path:
     return project.artifacts_dir / "reports" / f"adhyay_{adhyay:02d}_qa.json"
 
 
-def write_report(project: Project, adhyay: int, gates: list[GateResult]) -> Path:
+def write_report(project: Project, adhyay: int, gates: list[GateResult], input_snapshot: dict | None = None) -> Path:
     names = {g.name for g in gates}
+    technically_complete = set(HARD_GATES[:-1]) <= names and all(g.passed for g in gates if g.name != "production_go")
     released = set(HARD_GATES) <= names and all(g.passed for g in gates)
     report = {
         "schema_version": 1,
         "adhyay": adhyay,
+        "input_snapshot": input_snapshot,
         "released": released,
+        "technically_complete": technically_complete,
         "hard_gates": [asdict(g) for g in gates],
         "diagnostics": {name: {"status": "not_computed", "enforced": False} for name in DIAGNOSTICS},
         "notes": "Diagnostics are logged only. No threshold is calibrated or enforced.",

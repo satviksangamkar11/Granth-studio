@@ -38,6 +38,9 @@ def load_research(project: Project, adhyay: int) -> dict[str, Any]:
     if data["adhyay"] != adhyay:
         raise ConfigError(f"research folder adhyay {adhyay} declares adhyay {data['adhyay']}")
     prefix = f"a{adhyay:02d}_s"
+    scene_ids = [scene["scene_id"] for scene in data["scenes"]]
+    if len(set(scene_ids)) != len(scene_ids):
+        raise ConfigError("duplicate research scene id")
     for scene in data["scenes"]:
         if not scene["scene_id"].startswith(prefix):
             raise ConfigError(f"scene {scene['scene_id']} does not belong to adhyay {adhyay}")
@@ -64,6 +67,8 @@ def _read_receipt(project: Project, adhyay: int) -> dict[str, Any] | None:
         return None
     data = read_json(path)
     validate_document("source_receipt", data)
+    if data["adhyay"] != adhyay:
+        raise ConfigError("source receipt belongs to another adhyay")
     return data
 
 

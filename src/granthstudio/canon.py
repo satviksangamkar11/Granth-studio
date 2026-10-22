@@ -16,7 +16,7 @@ from .errors import CanonReferenceError, ConfigError, IdentityConflict
 from .integrity import normalize_text, sha256_obj
 from .schemas import validate_document
 
-PREFIX = {"characters": "chr", "locations": "loc", "terminology": "term"}
+PREFIX = {"characters": "chr", "locations": "loc", "terminology": "term", "props": "prp"}
 
 
 @dataclass(frozen=True)

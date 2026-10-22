@@ -7,7 +7,9 @@ import json
 import os
 import unicodedata
 import uuid
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
+
+from .errors import ConfigError
 from typing import Any
 
 
@@ -53,3 +55,16 @@ def atomic_write_json(path: Path, obj: Any) -> None:
 
 def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def contained_path(base: Path, relative: str) -> Path:
+    """Data paths are relative to their declared root, on Windows and POSIX."""
+    win = PureWindowsPath(relative)
+    parts = relative.replace("\\", "/").split("/")
+    if not relative or win.drive or win.root or Path(relative).is_absolute() or ".." in parts:
+        raise ConfigError(f"path must stay under {base}: {relative!r}")
+    root = base.resolve()
+    result = root.joinpath(*parts).resolve()
+    if not result.is_relative_to(root) or result == root:
+        raise ConfigError(f"path escapes {base}: {relative!r}")
+    return result

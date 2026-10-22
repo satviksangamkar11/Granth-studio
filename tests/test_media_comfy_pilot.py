@@ -17,7 +17,7 @@ from tests.conftest import have_tool, make_clip
 
 def _template(tmp_path: Path, status: str = "unvalidated") -> Path:
     path = tmp_path / "t.json"
-    path.write_text('{"_status": "%s", "1": {"inputs": {"image": "{{START_IMAGE}}", "n": "{{FRAMES}}"}}}' % status,
+    path.write_text('{"_status": "%s", "_output_node": "1", "1": {"class_type": "SyntheticNode", "inputs": {"image": "{{START_IMAGE}}", "n": "{{FRAMES}}"}}}' % status,
                     encoding="utf-8")
     return path
 
@@ -55,16 +55,28 @@ def test_capability_refused_when_checkpoint_unpinned(models, tmp_path):
 
 def test_capability_needs_passing_receipt(models, tmp_path):
     models["ltx"]["capabilities"]["i2v"] = "validated"
-    models["ltx"]["checkpoint_sha256"] = "a" * 64
+    from granthstudio.integrity import sha256_file, sha256_obj
+    files = {}
+    for kind in ("checkpoint", "vae", "text_encoder"):
+        path = tmp_path / f"{kind}.synthetic"
+        path.write_bytes(kind.encode())
+        files[kind] = {"path": str(path), "sha256": sha256_file(path)}
+    models["ltx"]["checkpoint_sha256"] = files["checkpoint"]["sha256"]
+    models["ltx"]["runtime"] = {"files": files, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40,
+        "gpu": "T4", "precision": "fp16", "width": 512, "height": 320}
     with pytest.raises(CapabilityDisabled, match="benchmark receipt"):
-        require_capability(models, "i2v", tmp_path)
+        require_capability(models, "i2v", tmp_path, "v")
     receipt = {
-        "schema_version": 1, "capability": "i2v", "shot": "B", "checkpoint_sha256": "a" * 64,
+        "schema_version": 1, "capability": "i2v", "shot": "B", "checkpoint_sha256": models["ltx"]["checkpoint_sha256"],
         "workflow_version": "v", "gpu": "T4", "gpu_count": 1, "gpu_seconds_total": 60.0, "attempts": 1,
         "video_seconds": 2.0, "accepted": True, "outcome": "pass", "recorded_at": "2026-10-22T00:00:00Z",
     }
+    receipt["runtime_sha256"] = sha256_obj({"runtime": models["ltx"]["runtime"],
+        "frame_counts": models["ltx"]["frame_counts"], "family": "LTX-Video", "version": "0.9.8", "variant": "2b-distilled"})
+    receipt["output_sha256"] = "c" * 64
+    receipt["peak_vram_mb"] = 12000
     atomic_write_json(tmp_path / "b.json", receipt)
-    assert require_capability(models, "i2v", tmp_path)["shot"] == "B"
+    assert require_capability(models, "i2v", tmp_path, "v")["shot"] == "B"
     assert passing_receipts(tmp_path, "flf", "a" * 64) == []
 
 

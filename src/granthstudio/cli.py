@@ -24,7 +24,7 @@ from .errors import ConfigError, GranthError
 from .ffmpeg import probe
 from .integrity import atomic_write_json, read_json
 from .pilot import RECOVERY_CHECK, plan_pilot, score_receipts
-from .pipeline import episode_store, hard_gates, load_bundle, plan_tasks
+from .pipeline import episode_store, hard_gates, load_bundle, plan_tasks, snapshot
 from .qa import write_report
 from .research import approve, load_research, require_approved, verify_source
 from .scheduler import Scheduler
@@ -156,7 +156,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     for result in results:
         print(f"{result.status:<13} {result.stage:<9} {result.name:<26} {result.detail}")
     gates = hard_gates(bundle, results)
-    path = write_report(project, args.adhyay, gates)
+    path = write_report(project, args.adhyay, gates, snapshot(bundle))
     released = all(g.passed for g in gates)
     print(f"QA report {path}: released={released}")
     if any(r.status == "not_validated" for r in results):
@@ -170,7 +170,7 @@ def cmd_report(args: argparse.Namespace) -> int:
     scheduler = Scheduler(episode_store(project, args.adhyay))
     results = scheduler.status(plan_tasks(bundle, scheduler))
     gates = hard_gates(bundle, results)
-    path = write_report(project, args.adhyay, gates)
+    path = write_report(project, args.adhyay, gates, snapshot(bundle))
     released = all(g.passed for g in gates)
     print(f"QA report {path}: released={released}")
     return EXIT_OK if released else EXIT_REFUSED

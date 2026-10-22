@@ -3,15 +3,42 @@
   "title": "quality_gates",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "hard_gates", "diagnostics", "enforced_thresholds"],
+  "required": [
+    "schema_version",
+    "hard_gates",
+    "diagnostics",
+    "enforced_thresholds"
+  ],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {
+      "const": 1
+    },
     "hard_gates": {
       "type": "array",
       "uniqueItems": true,
-      "items": {"enum": ["source_integrity", "canon_identity", "marathi_lock", "hindi_terms", "task_outputs", "video_decode"]}
+      "items": {
+        "enum": [
+          "source_integrity",
+          "canon_identity",
+          "marathi_lock",
+          "hindi_terms",
+          "task_outputs",
+          "video_decode",
+          "production_go"
+        ]
+      }
     },
-    "diagnostics": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "enforced_thresholds": {"type": "array", "maxItems": 0}
+    "diagnostics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "enforced_thresholds": {
+      "type": "array",
+      "maxItems": 0
+    }
   }
 }

@@ -1,4 +1,6 @@
-# Implementation plan (M0 audit result, 2026-10-22)
+# Implementation plan (historical M0 audit, 2026-10-22)
+
+Current correction scope and evidence: `TASK_CONTRACT.md`, `PROGRESS.md`, `IMPLEMENTATION_SPEC.md`. The inventory below records the pre-implementation M0 state.
 
 Authority: `docs/ARCHITECTURE_V3_1.md` (frozen). This plan does not change it.
 

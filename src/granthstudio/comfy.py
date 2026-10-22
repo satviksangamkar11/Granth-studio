@@ -17,8 +17,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .errors import ConfigError, IntegrationUnavailable, TaskFailed
-from .integrity import sha256_file
+from .errors import ConfigError, IntegrationUnavailable, JobPending, TaskFailed
+from .integrity import atomic_write_json, read_json, sha256_file, sha256_obj
 
 CLIENT_ID = "granthstudio"
 _PLACEHOLDER = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
@@ -31,6 +31,7 @@ class WorkflowTemplate:
     version: str
     status: str
     text: str
+    output_node: str | None = None
 
 
 def load_template(path: Path) -> WorkflowTemplate:
@@ -47,12 +48,19 @@ def load_template(path: Path) -> WorkflowTemplate:
         version=sha256_file(path),
         status=str(data.get("_status", "unvalidated")),
         text=text,
+        output_node=data.get("_output_node"),
     )
 
 
 def ensure_validated(template: WorkflowTemplate) -> None:
     if template.status != "validated":
         raise IntegrationUnavailable(f"workflow {template.name} status is '{template.status}': NOT VALIDATED")
+    graph = json.loads(template.text)
+    if not template.output_node or template.output_node not in graph:
+        raise ConfigError("validated workflows must designate _output_node")
+    for key, node in graph.items():
+        if not key.startswith("_") and (not isinstance(node, dict) or not node.get("class_type") or not isinstance(node.get("inputs"), dict)):
+            raise ConfigError("expected a ComfyUI API node graph with class_type and inputs")
 
 
 def render_graph(template: WorkflowTemplate, values: dict[str, str]) -> dict[str, Any]:
@@ -60,10 +68,18 @@ def render_graph(template: WorkflowTemplate, values: dict[str, str]) -> dict[str
     if missing:
         raise ConfigError(f"unresolved placeholders in {template.name}: {sorted(missing)}")
 
-    def substitute(match: re.Match[str]) -> str:
-        return json.dumps(str(values[match.group(1)]), ensure_ascii=False)[1:-1]
-
-    graph = json.loads(_PLACEHOLDER.sub(substitute, template.text))
+    def substitute(value):
+        if isinstance(value, str):
+            match = _PLACEHOLDER.fullmatch(value)
+            if match:
+                return values[match.group(1)]
+            return _PLACEHOLDER.sub(lambda m: str(values[m.group(1)]), value)
+        if isinstance(value, list):
+            return [substitute(v) for v in value]
+        if isinstance(value, dict):
+            return {k: substitute(v) for k, v in value.items()}
+        return value
+    graph = substitute(json.loads(template.text))
     return {key: value for key, value in graph.items() if not key.startswith("_")}
 
 
@@ -111,10 +127,48 @@ class ComfyBackend:
                     raise TaskFailed(f"ComfyUI execution error for prompt {prompt_id}")
                 return entry
             time.sleep(self.poll_s)
-        raise TaskFailed(f"ComfyUI prompt {prompt_id} did not finish within {self.max_wait_s} s")
+        raise JobPending(f"ComfyUI prompt {prompt_id} remains outstanding after {self.max_wait_s} s; resume polling")
 
     def fetch(self, item: dict[str, Any], dest: Path) -> None:
         query = urllib.parse.urlencode(
             {"filename": item["filename"], "subfolder": item.get("subfolder", ""), "type": item.get("type", "output")}
         )
         dest.write_bytes(self._request("GET", f"/view?{query}"))
+
+
+    def execute(self, graph: dict[str, Any], journal: Path) -> dict[str, Any]:
+        """Persist intent before POST; an ambiguous submission must be reconciled, never repeated."""
+        identity = {"base_url": self.base_url, "graph_sha256": sha256_obj(graph)}
+        state = read_json(journal) if journal.exists() else None
+        if state and any(state.get(k) != v for k, v in identity.items()):
+            raise JobPending("submission journal belongs to different runtime/graph")
+        if state and state.get("state") == "submitting":
+            raise JobPending("submission outcome unknown; reconcile with ComfyUI before another POST")
+        if not state or state.get("state") == "failed":
+            state = {**identity, "state": "submitting"}
+            atomic_write_json(journal, state)
+            try:
+                prompt_id = self.submit(graph)
+            except IntegrationUnavailable as exc:
+                raise JobPending("submission outcome unknown; retained journal for reconciliation") from exc
+            except TaskFailed:
+                atomic_write_json(journal, {**identity, "state": "failed"})
+                raise
+            state = {**identity, "state": "submitted", "prompt_id": prompt_id}
+            atomic_write_json(journal, state)
+        try:
+            return self.wait(state["prompt_id"])
+        except IntegrationUnavailable as exc:
+            raise JobPending("connection lost; retain prompt and resume polling") from exc
+        except TaskFailed:
+            atomic_write_json(journal, {**state, "state": "failed"})
+            raise
+
+
+def select_video(history: dict[str, Any], output_node: str) -> dict[str, Any]:
+    node = history.get("outputs", {}).get(output_node, {})
+    candidates = [item for key in ("videos", "gifs") for item in node.get(key, [])
+                  if str(item.get("filename", "")).lower().endswith(".mp4")]
+    if len(candidates) != 1:
+        raise TaskFailed("designated output node must produce exactly one MP4")
+    return candidates[0]

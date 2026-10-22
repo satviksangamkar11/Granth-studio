@@ -55,3 +55,32 @@ Frozen architecture copied and hash-verified; audit docs and instruction files w
 1. `cd "D:/aai work/granthstudio"`; `uv sync`; `uv run pytest -q` should report 58 passed.
 2. `uv run granthstudio validate` and `uv run granthstudio config`.
 3. Next work: (a) answer the Adhyay 1 open questions in `D:\aai work\v3_final\open_questions_ALL_1to12_FINAL.md` and approve Adhyay 1 with `research approve 1 --reviewer NAME --confirm` only after a human has reviewed `research/adhyay_01/research.yaml`; (b) on the Kaggle T4 runtime, pin the LTX checkpoint hash and export a validated ComfyUI graph; (c) then run the A-F pilot.
+
+
+## CPU audit corrections (Codex, explicitly authorized by the user)
+
+- Corrected F01-F12: dependency/current-input receipt binding; approved research
+  coverage/provenance; text-bound Hindi review; measured bilingual edits; actual media
+  decode; runtime/workflow binding; durable ComfyUI prompt recovery; designated video
+  selection; production GO; path containment; execution snapshot checks.
+- Added reviewed imported-audio CPU path. TTS/translation/image generation remain absent
+  or refusal stubs, and real ComfyUI/LTX remains NOT VALIDATED.
+- Added global empty props registry, curated fact contracts, CPU timeout regression,
+  and actual killed-process recovery checks including clean-vs-resumed final video hashes.
+- Actual CPU test result: **95 passed, 1 skipped**. JUnit: `benchmarks/cpu_review_fixes.xml`.
+  Skip reason is recorded in that receipt (host symlink creation unavailable).
+- Actual repository CLI verification: `validate` exits 0; `plan 1` and `run 1 --execute`
+  exit 2 because no research is approved. No real production outputs are generated.
+- A complete synthetic CPU bilingual run is technically complete with independent
+  durations; `released=false` without human production GO, as required.
+- Documentation corrected: `IMPLEMENTATION_SPEC.md`, coverage matrix, operator guide,
+  task contract and historical plan/decision status.
+- No dependencies installed, real research approved, model downloaded, GPU/Kaggle
+  accessed, commits made or branches changed. Frozen files/instruction files preserved.
+
+### Remaining work
+
+Actual curated research approval, human Hindi/speech acceptance, SDXL/style/reference
+sheets, IndicTrans2/IndicF5, real LTX/ComfyUI validation, calibrated pilot acceptance,
+voice licences, resource preflight and persistent Kaggle storage remain deferred.
+CPU correction evidence is not a production readiness claim.

@@ -14,7 +14,7 @@ from typing import Any
 from .canon import Canon
 from .config import Project, load_yaml
 from .errors import ConfigError, GateFailure
-from .integrity import normalize_text
+from .integrity import normalize_text, sha256_obj
 from .research import dialogue_index
 from .schemas import validate_document
 
@@ -48,7 +48,11 @@ def check_timelines(
     problems: list[str] = []
     dialogue = dialogue_index(research)
     shots = {shot["shot_id"]: shot for shot in compiled["shots"]}
-    episode_lines = {line for shot in compiled["shots"] for line in shot["dialogue_ids"]}
+    ordered_lines = [line for shot in compiled["shots"] for line in shot["dialogue_ids"]]
+    episode_lines = set(ordered_lines)
+    for label, timeline in (("Marathi", marathi), ("Hindi", hindi)):
+        if [e["dialogue_id"] for e in timeline["entries"]] != ordered_lines:
+            problems.append(f"{label}: dialogue order/coverage differs from approved scene order")
 
     mr_by_id: dict[str, dict[str, Any]] = {}
     for entry in marathi["entries"]:
@@ -104,6 +108,12 @@ def check_timelines(
             problems.append(f"{line_id}: Hindi speaker differs from Marathi")
         if entry["shot_id"] != mr_line["shot_id"]:
             problems.append(f"{line_id}: Hindi shot differs from Marathi")
+        verification = alignment.get("verification", {})
+        if alignment.get("reviewed") is not True or not verification.get("reviewer", "").strip():
+            problems.append(f"{line_id}: Hindi semantic review is not approved")
+        if (verification.get("mr_sha256") != sha256_obj(normalize_text(mr_line["text"]))
+                or verification.get("hi_sha256") != sha256_obj(normalize_text(entry["text"]))):
+            problems.append(f"{line_id}: Hindi semantic review does not match current text")
         mr_text = normalize_text(mr_line["text"])
         hi_text = normalize_text(entry["text"])
         if numbers_in(mr_text) != numbers_in(hi_text):
@@ -115,6 +125,13 @@ def check_timelines(
                     problems.append(f"{term['id']}: protected term has no Hindi form in canon")
                 elif not any(form in hi_text for form in allowed):
                     problems.append(f"{line_id}: protected term {term['id']} lacks an allowed Hindi form")
+    for language, timeline in (("mr", marathi), ("hi", hindi)):
+        for entry in timeline["entries"]:
+            audio = entry.get("audio")
+            if audio and (audio["language"] != language or audio["speaker"] != entry["speaker"]
+                          or audio["text_sha256"] != sha256_obj(normalize_text(entry["text"]))
+                          or not audio["speech_reviewed_by"].strip()):
+                problems.append(f"{entry['dialogue_id']}: audio metadata/review differs from script")
     return problems
 
 
@@ -133,7 +150,10 @@ def srt_text(entries: list[dict[str, Any]]) -> str:
         duration = entry.get("measured_duration_s")
         if duration is None:
             raise GateFailure(f"{entry['dialogue_id']}: audio duration not measured; subtitles cannot be timed")
-        end = cursor + duration
-        cues.append(f"{index}\n{_timestamp(cursor)} --> {_timestamp(end)}\n{entry['text']}\n")
+        start = entry.get("start_s", cursor)
+        if duration <= 0 or start < cursor:
+            raise GateFailure("subtitle duration must be positive and cues must not overlap")
+        end = start + duration
+        cues.append(f"{index}\n{_timestamp(start)} --> {_timestamp(end)}\n{entry['text']}\n")
         cursor = end
     return "\n".join(cues)

@@ -44,6 +44,12 @@ def compile_episode(
         raise SourceChanged(
             f"manifest pins research version {manifest['research_version']}, approved is {receipt['version']}"
         )
+    if manifest["episode_id"] != f"ep{adhyay:02d}":
+        raise ConfigError("episode_id does not match adhyay")
+    expected_scenes = [s["scene_id"] for s in research["scenes"]]
+    actual_scenes = [s["research_scene"] for s in manifest["scenes"]]
+    if actual_scenes != expected_scenes:
+        raise GateFailure("manifest must cover every approved scene exactly once in approved order")
     scenes_by_id = {scene["scene_id"]: scene for scene in research["scenes"]}
     dialogue = dialogue_index(research)
     visuals: dict[str, dict[str, Any]] = {}
@@ -60,10 +66,36 @@ def compile_episode(
     for scene in manifest["scenes"]:
         if scene["research_scene"] not in scenes_by_id:
             raise CanonReferenceError(f"research scene {scene['research_scene']} is not in approved research")
+        source_scene = scenes_by_id[scene["research_scene"]]
+        if scene["scene_id"] != scene["research_scene"]:
+            raise GateFailure("scene_id must equal its research_scene")
+        if scene["location"] != source_scene["location"] or set(scene["characters"]) != set(source_scene["characters"]):
+            raise CanonReferenceError("scene location/speaker/cast differs from approved research")
+        if scene.get("props", []) != source_scene.get("props", []):
+            raise GateFailure("scene props differ from approved research")
+        expected_lines = [line["id"] for line in source_scene["dialogue"]]
+        actual_lines = [line for shot in scene["shots"] for line in shot["dialogue_ids"]]
+        if actual_lines != expected_lines:
+            raise GateFailure("shots must cover all approved dialogue once in approved order")
+        for prop in scene.get("props", []):
+            canon.require(prop, "props")
         canon.require(scene["location"], "locations")
         for char_id in scene["characters"]:
             canon.require(char_id, "characters")
+        action_facts = {fact["id"]: fact for fact in source_scene["actions"]}
+        if len(action_facts) != len(source_scene["actions"]):
+            raise ConfigError("duplicate approved action ID")
+        required_actions = {key for key, fact in action_facts.items() if not fact["artistic"]}
+        covered_actions = {key for shot in scene["shots"] for key in shot.get("action_ids", [])}
+        if not required_actions <= covered_actions or not covered_actions <= set(action_facts):
+            raise GateFailure("shots must reference every required approved action and no invented actions")
         for shot in scene["shots"]:
+            action_ids = shot.get("action_ids", [])
+            approved_motion = "; ".join(action_facts[key]["text"] for key in action_ids)
+            if shot.get("motion_prompt", approved_motion) != approved_motion:
+                raise GateFailure("motion prompt differs from referenced approved action text")
+            if shot["tier"] in (1, 2) and not approved_motion:
+                raise GateFailure("motion generation requires approved action references")
             shot_id = shot["shot_id"]
             if shot_id in seen_shots:
                 raise ConfigError(f"duplicate shot id {shot_id}")
@@ -105,8 +137,16 @@ def compile_episode(
                     "end_visual_id": shot.get("end_visual_id"),
                     "duration_s": shot["duration_s"],
                     "frames": shot.get("frames"),
-                    "motion_prompt": shot.get("motion_prompt", ""),
-                    "dialogue_ids": sorted(shot["dialogue_ids"]),
+                    "motion_prompt": approved_motion,
+                    "action_ids": list(action_ids),
+                    "dialogue_ids": list(shot["dialogue_ids"]),
+                    "research_scene": dict(source_scene),
+                    "location": scene["location"],
+                    "characters": list(scene["characters"]),
+                    "props": list(scene.get("props", [])),
+                    "lighting": scene.get("lighting", "unspecified"),
+                    "artistic_flags": list(scene.get("artistic_flags", [])),
+                    "coverage": shot.get("coverage"),
                     "pilot_shot": label,
                 }
             )
@@ -119,7 +159,8 @@ def compile_episode(
         "manifest_sha256": sha256_file(episode_dir(project, adhyay) / "manifest.yaml"),
         "canon_sha256": canon.digest(),
         "visuals": sorted((dict(v) for v in visuals.values()), key=lambda v: v["visual_id"]),
-        "shots": sorted(shots, key=lambda s: s["shot_id"]),
+        "shots": shots,
+        "research_scenes": research["scenes"],
         "pilot": dict(sorted(pilot.items())),
     }
 

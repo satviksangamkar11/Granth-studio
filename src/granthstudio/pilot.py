@@ -37,6 +37,14 @@ def plan_pilot(compiled: dict[str, Any]) -> dict[str, str]:
         expected = PILOT_DEFINITIONS[label]["tier"]
         if expected is not None and by_id[shot_id]["tier"] != expected:
             raise ConfigError(f"pilot shot {label} must be tier {expected}")
+    b, c, e, d = (by_id[mapping[label]] for label in "BCED")
+    if (b["scene_id"] != c["scene_id"] or b["visual_id"] != c["visual_id"]
+            or b["characters"] != c["characters"]):
+        raise ConfigError("pilot B/C must compare the same scene, start visual and characters")
+    if not set(b["characters"]) & set(e["characters"]) or b["lighting"] == e["lighting"] or "unspecified" in (b["lighting"], e["lighting"]):
+        raise ConfigError("pilot E needs a recurring B character under different specified lighting")
+    if not d["dialogue_ids"]:
+        raise ConfigError("pilot D must include dialogue coverage")
     return dict(sorted(mapping.items()))
 
 

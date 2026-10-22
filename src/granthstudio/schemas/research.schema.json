@@ -3,50 +3,259 @@
   "title": "research",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "adhyay", "scenes", "open_questions"],
+  "required": [
+    "schema_version",
+    "adhyay",
+    "scenes",
+    "open_questions"
+  ],
   "properties": {
-    "schema_version": {"const": 1},
-    "adhyay": {"$ref": "#/$defs/adhyay"},
-    "scenes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/scene"}},
-    "open_questions": {"type": "array", "items": {"$ref": "#/$defs/question"}}
+    "schema_version": {
+      "const": 1
+    },
+    "adhyay": {
+      "$ref": "#/$defs/adhyay"
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scene"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    },
+    "overview": {
+      "type": "string"
+    },
+    "objects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "time_and_season": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "uncertain_words": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "corrections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "clarifications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "cross_chapter_links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    }
   },
   "$defs": {
-    "adhyay": {"type": "integer", "minimum": 1, "maximum": 21},
-    "scene_id": {"type": "string", "pattern": "^a[0-9]{2}_s[0-9]{2}$"},
-    "char_id": {"type": "string", "pattern": "^chr_[a-z0-9_]+$"},
-    "dialogue_id": {"type": "string", "pattern": "^d_[0-9]{4,}$"},
+    "adhyay": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 21
+    },
+    "scene_id": {
+      "type": "string",
+      "pattern": "^a[0-9]{2}_s[0-9]{2}$"
+    },
+    "char_id": {
+      "type": "string",
+      "pattern": "^chr_[a-z0-9_]+$"
+    },
+    "dialogue_id": {
+      "type": "string",
+      "pattern": "^d_[0-9]{4,}$"
+    },
     "scene": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["scene_id", "source_refs", "characters", "dialogue"],
+      "required": [
+        "scene_id",
+        "source_refs",
+        "characters",
+        "dialogue",
+        "location",
+        "description",
+        "actions",
+        "visual_details",
+        "continuity"
+      ],
       "properties": {
-        "scene_id": {"$ref": "#/$defs/scene_id"},
-        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-        "location": {"type": "string", "pattern": "^loc_[a-z0-9_]+$"},
-        "characters": {"type": "array", "items": {"$ref": "#/$defs/char_id"}},
-        "dialogue": {"type": "array", "items": {"$ref": "#/$defs/line"}}
+        "scene_id": {
+          "$ref": "#/$defs/scene_id"
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "location": {
+          "type": "string",
+          "pattern": "^loc_[a-z0-9_]+$"
+        },
+        "characters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/char_id"
+          }
+        },
+        "dialogue": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/line"
+          }
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "props": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^prp_[a-z0-9_]+$"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact"
+          }
+        },
+        "visual_details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact"
+          }
+        },
+        "continuity": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact"
+          }
+        }
       }
     },
     "line": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "speaker", "text"],
+      "required": [
+        "id",
+        "speaker",
+        "text"
+      ],
       "properties": {
-        "id": {"$ref": "#/$defs/dialogue_id"},
-        "speaker": {"$ref": "#/$defs/char_id"},
-        "text": {"type": "string", "minLength": 1},
-        "source_ref": {"type": "string"}
+        "id": {
+          "$ref": "#/$defs/dialogue_id"
+        },
+        "speaker": {
+          "$ref": "#/$defs/char_id"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "string"
+        }
       }
     },
     "question": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "status"],
+      "required": [
+        "id",
+        "status"
+      ],
       "properties": {
-        "id": {"type": "string", "minLength": 1},
-        "status": {"enum": ["open", "provisional", "answered"]},
-        "ovi": {"type": "string"}
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "open",
+            "provisional",
+            "answered"
+          ]
+        },
+        "ovi": {
+          "type": "string"
+        }
       }
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "source_refs",
+        "artistic"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "artistic": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "artistic": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "source_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

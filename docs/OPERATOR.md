@@ -1,78 +1,71 @@
-# Operator guide
+# Operator guide after the CPU corrections
 
-## Setup (Windows, PowerShell or Git Bash)
+## CPU checks
 
-```bash
-cd "D:/aai work/granthstudio"
-uv sync                       # creates .venv and installs pyyaml and jsonschema (approved)
-uv run granthstudio validate  # validates config, canon, research and manifests
-uv run pytest -q              # 58 synthetic tests (about 5 s; needs ffmpeg on PATH for media tests)
+Use the existing environment; no model downloads are needed:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q --junitxml=benchmarks/cpu_review_fixes.xml
+.\.venv\Scripts\python.exe -m granthstudio validate
 ```
 
-Artifacts go to `D:\aai work\granthstudio-artifacts` (set in `config/project.yaml`, outside Git).
+Contracts and approval evidence fields: `docs/IMPLEMENTATION_SPEC.md`.
+The frozen architecture remains authoritative. Tests use synthetic content only.
 
-## Configuration examples
+## Research and language inputs
 
-`config/project.yaml`
+Research is a curated structured export of reviewed chapter material. Each scene needs
+description, source_refs, location, characters, dialogue, actions, visual_details and
+continuity. Fact records explicitly distinguish sourced facts from artistic choices.
+Do not remove unresolved questions to make approval pass. No real research has been
+approved by the code corrections.
 
-```yaml
-schema_version: 1
-artifacts_dir: "../granthstudio-artifacts"
-research_dir: "research"
-canon_dir: "canon"
-episodes_dir: "episodes"
-benchmarks_dir: "benchmarks"
-timezone: "Asia/Calcutta"
-```
+After actual human review, the existing `research approve N --reviewer NAME --confirm`
+records the source version. Manifests must cover every approved scene and line in order.
+Hindi lines require text-bound semantic review evidence; translation is not generated.
 
-`config/models.yaml` (excerpt). `checkpoint_sha256` stays `null` until the official file is hashed on the runtime. While it is `null`, every LTX capability is refused.
+For CPU media integration, timeline entries may reference reviewed per-line audio under
+`artifacts/audio/`, with hash, language, speaker, text hash and speech reviewer. These are
+measured/decoded and copied to task storage. Without them, TTS remains NOT VALIDATED.
 
-```yaml
-comfyui:
-  base_url: "http://127.0.0.1:8188"
-ltx:
-  checkpoint_file: ltxv-2b-0.9.8-distilled.safetensors
-  checkpoint_sha256: null
-  precision: fp16
-  frame_counts: [49, 65, 81, 89, 97, 121]
-  capabilities: {i2v: unvalidated, flf: unvalidated}
-```
+Longer language speech requires explicit reviewed `hold_final_frame` coverage on the
+shot. Assembly preserves primary actions and inserts silence/holds at the actual edit
+positions. It refuses mismatched audio/video and never truncates speech via `-shortest`.
 
-A capability may be set to `validated` only after a passing benchmark receipt exists for the same checkpoint hash (see `benchmarks/pilot_af/receipts/`).
+## Commands and outcomes
 
-`research/adhyay_NN/research.yaml` (structure only, not real content)
+Existing commands: `version`, `config`, `validate`, `research status/approve`, `canon check`,
+`episode compile`, `timeline check`, `plan`, `run`, `report`, `ffprobe`, `pilot plan/score`.
+`plan` and `run` without `--execute` do not generate output.
 
-```yaml
-schema_version: 1
-adhyay: 1
-scenes:
-  - scene_id: a01_s01
-    source_refs: ["<reviewed source reference>"]
-    location: loc_<approved_location>
-    characters: [chr_<approved_character>]
-    dialogue:
-      - {id: d_0001, speaker: chr_<approved_character>, text: "<approved Marathi line>"}
-open_questions:
-  - {id: A1-1, status: answered}   # every item must be 'answered' before approval
-```
-
-## Operating sequence for one adhyay
-
-1. `uv run granthstudio research status N`
-2. A human reviews `research/adhyay_NN/research.yaml`. Then `uv run granthstudio research approve N --reviewer "NAME" --confirm`.
-3. `uv run granthstudio episode compile N`
-4. `uv run granthstudio timeline check N`
-5. `uv run granthstudio plan N` (inspect task IDs; nothing runs)
-6. `uv run granthstudio run N --execute`. Exit code 3 means a stage is NOT VALIDATED and nothing was produced for it. Exit code 2 means a gate blocked release.
-7. `uv run granthstudio report N` (QA report from receipts only)
+Exit 0: command succeeded (a dry run or validation is not production approval).
+Exit 1: malformed configuration/usage. Exit 2: failed/pending/gated release.
+Exit 3: an integration/capability is NOT VALIDATED. A CPU run may be technically complete
+while `released=false` because human production GO is absent.
 
 ## Recovery
 
-- A crashed run leaves only `.work-*` folders, which are removed at the next run. Verified tasks are reused. Re-run `run N --execute` to resume.
-- If a visual or research file changes after compilation, the task is refused with a clear message. Re-compile after re-approval.
+Re-run the same command. Current inputs, dependency identities/output hashes, actual
+media and output receipts are checked before reuse. Stale temporary work is discarded;
+valid completed tasks are reused. Old receipt formats are intentionally invalidated.
 
-## What is NOT validated on this machine
+ComfyUI intent/prompt IDs are saved outside temporary work in `tasks/.../pending/`.
+After a polling timeout, resume polling that prompt rather than submit another job.
+A journal with state `submitting` has an unknown POST result. Inspect the ComfyUI server
+to establish whether it accepted the job; record the verified prompt ID with state
+`submitted`, or record `failed` only after confirming no outstanding job remains.
+Never delete an ambiguous journal just to retry. No real server recovery is validated yet.
 
-- LTX 0.9.8 2B I2V and FLF: no ComfyUI server, GPU or checkpoint has been run. Refused by the capability gate.
-- SDXL keyframes, IndicF5 voice and IndicTrans2: adapters exist as explicit NOT VALIDATED stages. They refuse to run and never report success.
-- Kaggle T4 execution and the A-F pilot: not run. Requires the user's GO and an upload approval.
+## Production authorization
+
+The runner never creates production approval. See `IMPLEMENTATION_SPEC.md` for the
+existing-human-evidence contract under `approvals/adhyay_NN.json`. It binds the exact input
+snapshot, accepted A-F receipts, pilot plan, explicit FLF GO/NO-GO, throughput budget and
+reviewed interruption evidence. Missing/stale evidence leaves `released=false`.
+
+## Remaining gates
+
+LTX, ComfyUI graphs, IndicF5, IndicTrans2, SDXL, visual style, voice rights, semantic
+accuracy, Kaggle runtime constraints and persistent external storage remain unvalidated
+or absent. No model inference, research approval, GPU execution or production GO was
+performed by the CPU correction work.

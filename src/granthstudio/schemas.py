@@ -22,6 +22,7 @@ KNOWN = (
     "timeline",
     "benchmark_receipt",
     "task_receipt",
+    "production_approval",
 )
 
 

@@ -1,0 +1,110 @@
+{
+  "base_commit": "a96b7de",
+  "cli_checks": [
+    {
+      "arguments": [
+        "validate"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "config, models, quality gates and canon: valid"
+    },
+    {
+      "arguments": [
+        "plan",
+        "1"
+      ],
+      "exit_code": 2,
+      "stderr": "ResearchNotApproved: adhyay 1: no source receipt (not approved)",
+      "stdout": ""
+    },
+    {
+      "arguments": [
+        "run",
+        "1",
+        "--execute"
+      ],
+      "exit_code": 2,
+      "stderr": "ResearchNotApproved: adhyay 1: no source receipt (not approved)",
+      "stdout": ""
+    }
+  ],
+  "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 1,
+    "tests": 96
+  },
+  "gpu_or_model_execution": false,
+  "junit_path": "benchmarks/cpu_review_fixes.xml",
+  "junit_sha256": "bc3f92fac749fa2ab547478253a7395ce068724447d0a9ea4a8481587b72c0a5",
+  "kind": "cpu_correction_verification",
+  "recorded_at": "2026-10-22T06:59:08.677474+00:00",
+  "recovery_properties": {
+    "hi_clean_sha256": "999b8e134bc0e5a1ce7716720c36efe1463e0da8142d0a12dd0075db598fcc10",
+    "hi_recovered_sha256": "999b8e134bc0e5a1ce7716720c36efe1463e0da8142d0a12dd0075db598fcc10",
+    "mr_clean_sha256": "5715c11ced85f368d8bbdd6815c3a1722b08ddf496f7f190044a272725a60fd5",
+    "mr_recovered_sha256": "5715c11ced85f368d8bbdd6815c3a1722b08ddf496f7f190044a272725a60fd5",
+    "real_process_media_recovery": "passed"
+  },
+  "research_or_production_approval": false,
+  "result": "95 passed, 1 skipped",
+  "schema_version": 1,
+  "source_files": {
+    "canon/characters.yaml": "e167426b220c02a939792bcc9b5016024ef9287d054b685933e9fd4fedca9a10",
+    "canon/locations.yaml": "a432a50de52cf47b977d1c568d86e9fdc611d227226da2748fb23bcb19d162c1",
+    "canon/props.yaml": "dc269bf50efd49f00b8ea764f2f2f990ed150020ebe3bc0e9b4c95f4e71f8bfc",
+    "canon/terminology.yaml": "2b2be98faa22e5c87f58beef1e7d3e4a2cc50110115a7345b66c0faa87417d51",
+    "config/models.yaml": "5b17fda512c2aebbf28bbf3f2cfb953807d4aa72faf08404014d96a984194be3",
+    "config/project.yaml": "e693bea9919cdedff758e030ee56683252f8d430ca498302fc4b184bd71a50d4",
+    "config/quality_gates.yaml": "d7bec4b9dcc3298a0f98e5b551aa8d2a4601e221ac6d35da466fb2d19baf179d",
+    "docs/ARCHITECTURE_V3_1.FREEZE.json": "19710ee13d9a7f58d723cdf9604ddef734c867bc96c248fd0c3a691c2bd38f32",
+    "docs/ARCHITECTURE_V3_1.md": "decd0af573e7b0c882d9dc5e8c98788bcecedd924a31dfc264ec1f883404f7c1",
+    "docs/COVERAGE_MATRIX.md": "bf39d118278da27e7fbc7e25e5831c9a5c9c7e084c1ade2409706ab1d4d4ec6d",
+    "docs/DECISIONS.md": "7d0e5a8489e025fbd98a567a689c2ee8a42ec256b96c75ae734c20633654b873",
+    "docs/IMPLEMENTATION_PLAN.md": "0f076ecb97fff141d0b872b774e23abd2e05be1903e1da4be324b1eb779fdf2b",
+    "docs/IMPLEMENTATION_SPEC.md": "f2e64b45fbbba525afe47d51930f68015017ae02c6a8b08a1bad39cab82eccdd",
+    "docs/OPERATOR.md": "a9aaddf459e2bfdb2266293e37756824250ac97a1137d8e0b9ae251021bb67b2",
+    "docs/PROGRESS.md": "c7340d22be5cb1b01d828900ac0a5d27accc20f4f0a27fb090f7b6045d122506",
+    "docs/SPEC_SECTIONS_11_12_14.md": "27e4bd9c5d50fa7d9f4f74d1150d14ac9df0bd3957b6c73678b68e7bc9b05932",
+    "docs/TASK_CONTRACT.md": "a1745e81041e2a8c447a83e68060cd62e480d88d15deb831ba8d04529c626250",
+    "src/granthstudio/__init__.py": "219865d76e0b94cded980a19993643442024511f67c015e4e23225f99f00da92",
+    "src/granthstudio/__main__.py": "e0930aeba5a3e2e2d94ca6c5fac4f72c0c4eb2be9bba283becf98e909091471c",
+    "src/granthstudio/canon.py": "819ff68996f8ce0bb589fbca6d8789200abce1d3b1fa41f6a7b81177f4de3720",
+    "src/granthstudio/cli.py": "81e456aa8c3aa31099c7a7d11669bad068a93d7769e97f96eb87d8201c15e52c",
+    "src/granthstudio/comfy.py": "7d5d9b514d269309f35a2d72125468762a59541fdf9329148fa825204b7d778a",
+    "src/granthstudio/config.py": "5f3bb6c93cca30f4a03084efef2e08c2c97342284d6e0e1fc7830670081f3de4",
+    "src/granthstudio/episodes.py": "49900b02ba408109af6652f7c53ab529ad552a4aa88658fa206b64072d0782ed",
+    "src/granthstudio/errors.py": "249fd4d60228ab5b632e88d550b1bb18d8d8cc8d9e93d1cd6a769545c5164c63",
+    "src/granthstudio/ffmpeg.py": "a83e627b6b3b33b6d20e7cbea302437314359e4120c37a79d1ab75e978f92402",
+    "src/granthstudio/integrity.py": "98ebf816e905aece95583be7829bf8ffcc4f374a9ad7bb744307655252ca6e9d",
+    "src/granthstudio/pilot.py": "33769a73413faf86c7155e881bc62e78e837435e7c32b94c3f725f167801fd13",
+    "src/granthstudio/pipeline.py": "4640ba75201b7326ef263affe9814ba3678f9008050c93c83b248dcaa0c8a622",
+    "src/granthstudio/qa.py": "836c3f2e3b7becd0caf4ad6374daf59b4f7492c2dda8424281e2b65cc1b027f5",
+    "src/granthstudio/research.py": "b0c21a76c6cf3ed4dc1022e5375ea6b9508fc7f627a1412642cf8b624e31303a",
+    "src/granthstudio/scheduler.py": "0b42070adfc5b80e1a13b44ee3e4418ef78234ff575f5bb36c785b52faffdf1d",
+    "src/granthstudio/schemas.py": "091decfdf1c15f51fa42fed9b6bb56e35208669f2b0353f27d492e4acd257864",
+    "src/granthstudio/schemas/benchmark_receipt.schema.json": "de32b0d83f991aa5f7287843cae0b187311208866a0876cd136a25594253ead4",
+    "src/granthstudio/schemas/canon.schema.json": "459c5c5384fea65f6dd6f1e212f5eb0bebe924238edcf1324fcf055f41c75640",
+    "src/granthstudio/schemas/episode_manifest.schema.json": "c4a3d980402bf8205684fe51889d23348ef3311f5f5b33635afda5e0ce1f3a4f",
+    "src/granthstudio/schemas/models.schema.json": "0f232f155a96c3559c4e11ec136e9567b7f01dc4523df8f0391b974fd86b3013",
+    "src/granthstudio/schemas/production_approval.schema.json": "ee97a729c69179c766b99962fd8c5c8cb7f7d935c52071654e3ee47ef148edd9",
+    "src/granthstudio/schemas/project.schema.json": "764a00a1e11c0c11f1cb08a33d7e09569e03b18b68de7c6faf0e58aeaed57369",
+    "src/granthstudio/schemas/quality_gates.schema.json": "eb47dc855f843c99b82765262336ce9ac2ada9afbba234d93cfb6ce8939e1bce",
+    "src/granthstudio/schemas/research.schema.json": "9f51b49af66d94aa40d1db276c3a6c091883a3bd32e08a0a8a48c3c6e5e6272b",
+    "src/granthstudio/schemas/source_receipt.schema.json": "c63cd204f11fa8be7f068224cab9b8642e560f1b7bdb16b9a168ed5129980be1",
+    "src/granthstudio/schemas/task_receipt.schema.json": "94c798ffbf7b6a28e02749ff507df32cb31fba4c462b1f4c77e4a5420a96f25f",
+    "src/granthstudio/schemas/timeline.schema.json": "540ae1ed4f2f1e83d1eb61d960a952d6590581fa3b545eafa4c22fc24a8d6e0e",
+    "src/granthstudio/timelines.py": "4718feda78d9a9424a0e05f8878ae37ae30f5539ad921a347765d80d49fd26d7",
+    "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/conftest.py": "b1637df9759bab357852b0bf4803b53fc9218d131bd02aa3e646f85fb183639f",
+    "tests/test_foundations.py": "16ef7e385494128a5b5aedc44698db7805c6eb6b1359b1d55ada4d9d5d31964f",
+    "tests/test_governance.py": "0ec9c0064b1c77888c70872ee20aaab140a1b11c1a5680782c175437056bf5eb",
+    "tests/test_media_comfy_pilot.py": "b305491783f29ac5aa6c41b8941349fbbce998fc79b3b020b6b9c60809eee9a4",
+    "tests/test_pipeline.py": "ad4bf4e39a3c28f481e3fc955bf71e94726a09c722098fa49b23f7db34ddbe52",
+    "tests/test_review_regressions.py": "b74ad7168b40767e567b04ed682f927628290eb9733118a75387af20d7ade2a2",
+    "tests/test_timelines_and_scheduler.py": "ea6841b93456d54fbcb6c9f1fcbe4a964f6f7691bee91cacdb76442593d03cdc",
+    "workflows/comfyui/ltx_flf_098.json": "78d10f2afcde263dae89316a14ccb096331efc87e68ca6c7bf597a0a804fd201",
+    "workflows/comfyui/ltx_i2v_098.json": "064abbf5bcca33afc8bd19189de7be6d8f90610634caa11ea2d4e350ce5239ce"
+  }
+}

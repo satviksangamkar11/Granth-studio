@@ -21,15 +21,19 @@ Each entry: ID, date, status (APPROVED / PROPOSED / OPEN), source, decision. Onl
 - **D-008:** Synthetic fixtures are used for tests only (`tests/conftest.py`). No Granth text is committed as fixture or canon.
 - **D-009:** Execution is sequential. Worker concurrency stays benchmark-dependent (frozen §8).
 
-## Still open (no decision yet)
-
 ## Open (no decision yet)
 
-- **O-001 (frozen §12):** episode manifest schema (fields, provenance links, dependency invalidation, workflow versions, receipts). To be drafted in milestone M1 for approval; not invented here.
-- **O-002 (frozen §14):** CLI commands and options. To be drafted in M1 for approval.
+- **O-001 (frozen §12):** derived manifest contract implemented under D-005; CPU enforcement corrections in `IMPLEMENTATION_SPEC.md`. This does not approve production research or model configuration.
+- **O-002 (frozen §14):** CLI contract implemented under D-005; model execution remains gated.
 - **O-003 (frozen §7):** LTX frame-count and resolution rule. The freeze lists example frame counts 49, 65, 81, 89, 97, 121 without a formula. Confirm the exact rule from the pinned workflow and model code before use.
 - **O-004:** numerical acceptance budget for accepted sec/GPU-hour and per-shot render time.
 - **O-005:** human acceptance protocol for the pilot (who judges identity continuity and sacred fidelity, with what rubric). Automated metrics are diagnostics only (frozen §9).
 - **O-006:** exact SDXL checkpoint, identity-conditioning method, art style (frozen §17 GATE OPEN).
 - **O-007:** IndicTrans2 and IndicF5 exact versions, licences, and T4 compatibility; licensed or consented voice references (frozen §5.3).
 - **O-008:** persistent artifact storage outside Kaggle (frozen §8, §9).
+
+## Task-specific correction authorization
+
+The user explicitly authorized Codex code edits and CPU tests after the independent audit.
+No frozen-core revision, research approval, model compatibility decision, acceptance budget
+or production GO was supplied by that authorization.

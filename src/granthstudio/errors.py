@@ -51,5 +51,9 @@ class IntegrationUnavailable(GranthError):
     exit_code = 3
 
 
+class JobPending(GranthError):
+    """An external submission is unresolved; do not submit another job."""
+
+
 class TaskFailed(GranthError):
     """A scheduled task failed on one attempt."""

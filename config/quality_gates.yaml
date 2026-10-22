@@ -6,6 +6,7 @@ hard_gates:
   - hindi_terms
   - task_outputs
   - video_decode
+  - production_go
 diagnostics:
   - face_embedding_similarity
   - clip_style_similarity

@@ -3,29 +3,99 @@
   "title": "task_receipt",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "task_id", "stage", "name", "inputs", "workflow_version", "outputs", "attempts", "status", "completed_at"],
+  "required": [
+    "schema_version",
+    "task_id",
+    "stage",
+    "name",
+    "inputs",
+    "workflow_version",
+    "outputs",
+    "attempts",
+    "status",
+    "completed_at",
+    "depends_on",
+    "dependency_hashes"
+  ],
   "properties": {
-    "schema_version": {"const": 1},
-    "task_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
-    "stage": {"enum": ["audio", "keyframe", "tier0", "tier1", "tier2", "assembly"]},
-    "name": {"type": "string", "minLength": 1},
-    "inputs": {"type": "object", "additionalProperties": {"type": "string"}},
-    "workflow_version": {"type": "string", "minLength": 1},
+    "schema_version": {
+      "const": 1
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{20}$"
+    },
+    "stage": {
+      "enum": [
+        "audio",
+        "keyframe",
+        "tier0",
+        "tier1",
+        "tier2",
+        "assembly"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "workflow_version": {
+      "type": "string",
+      "minLength": 1
+    },
     "outputs": {
       "type": "object",
       "minProperties": 1,
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["path", "sha256"],
+        "required": [
+          "path",
+          "sha256"
+        ],
         "properties": {
-          "path": {"type": "string", "minLength": 1},
-          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
         }
       }
     },
-    "attempts": {"type": "integer", "minimum": 1},
-    "status": {"const": "complete"},
-    "completed_at": {"type": "string", "minLength": 1}
+    "attempts": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "const": "complete"
+    },
+    "completed_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "depends_on": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{20}$"
+      }
+    },
+    "dependency_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
   }
 }

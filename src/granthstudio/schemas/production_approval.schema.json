@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "production_approval",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "adhyay": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 21
+    },
+    "approved": {
+      "const": true
+    },
+    "reviewed_by": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "pilot_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "pilot_receipts": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "recovery_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "minimum_accepted_sec_per_gpu_hour": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "flf_decision": {
+      "enum": [
+        "go",
+        "no_go"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "adhyay",
+    "approved",
+    "reviewed_by",
+    "input_sha256",
+    "pilot_plan",
+    "pilot_receipts",
+    "recovery_evidence",
+    "minimum_accepted_sec_per_gpu_hour",
+    "flf_decision"
+  ]
+}

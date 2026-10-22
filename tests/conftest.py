@@ -10,7 +10,7 @@ import pytest
 import yaml
 
 from granthstudio.config import Project, load_models, load_project
-from granthstudio.integrity import sha256_file
+from granthstudio.integrity import sha256_file, sha256_obj, normalize_text
 from granthstudio.research import approve
 
 FIXED_TIME = "2026-10-22T00:00:00+00:00"
@@ -18,6 +18,13 @@ FIXED_TIME = "2026-10-22T00:00:00+00:00"
 
 def _dump(path: Path, document: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.name == "hi.yaml":
+        master = yaml.safe_load((path.parent / "mr.yaml").read_text(encoding="utf-8"))
+        lines = {line["dialogue_id"]: line for line in master["entries"]}
+        for entry in document["entries"]:
+            entry["alignment"]["verification"] = {"reviewer": "synthetic-test-only",
+                "mr_sha256": sha256_obj(normalize_text(lines[entry["dialogue_id"]]["text"])),
+                "hi_sha256": sha256_obj(normalize_text(entry["text"]))}
     path.write_text(yaml.safe_dump(document, allow_unicode=True, sort_keys=False), encoding="utf-8")
 
 
@@ -60,6 +67,7 @@ def make_project(root: Path) -> Project:
         "schema_version": 1, "kind": "locations", "identity_decisions": [],
         "entries": [{"id": "loc_synth_room", "canonical_name": "SYNTH-ROOM", "aliases": [], "status": "approved"}],
     })
+    _dump(root / "canon" / "props.yaml", {"schema_version": 1, "kind": "props", "entries": [], "identity_decisions": []})
     _dump(root / "canon" / "terminology.yaml", {
         "schema_version": 1, "kind": "terminology", "identity_decisions": [],
         "entries": [{"id": "term_synth_x", "canonical_name": "TERMX", "aliases": [], "status": "approved",
@@ -72,6 +80,9 @@ def make_project(root: Path) -> Project:
         "scenes": [{
             "scene_id": "a01_s01", "source_refs": ["fixture:s01"], "location": "loc_synth_room",
             "characters": ["chr_synth_a", "chr_synth_b"],
+            "description": "Synthetic scene for CPU tests only",
+            "actions": [{"id": "action_turn", "text": "slight head turn", "source_refs": ["fixture:3"], "artistic": False}],
+            "visual_details": [], "continuity": [],
             "dialogue": [
                 {"id": "d_0001", "speaker": "chr_synth_a", "text": "SYNTH-A says 2 things", "source_ref": "fixture:1"},
                 {"id": "d_0002", "speaker": "chr_synth_b", "text": "TERMX is named", "source_ref": "fixture:2"},
@@ -94,7 +105,7 @@ def make_project(root: Path) -> Project:
                 {"shot_id": "a01_s01_sh01", "tier": 0, "visual_id": "vis_room_still", "duration_s": 1.0,
                  "dialogue_ids": ["d_0001"], "pilot_shot": "A"},
                 {"shot_id": "a01_s01_sh02", "tier": 1, "visual_id": "vis_room_still", "duration_s": 2.04,
-                 "frames": 49, "motion_prompt": "slight head turn", "dialogue_ids": ["d_0002"], "pilot_shot": "B"},
+                 "frames": 49, "motion_prompt": "slight head turn", "action_ids": ["action_turn"], "dialogue_ids": ["d_0002"], "pilot_shot": "B"},
             ],
         }],
     })
@@ -161,6 +172,6 @@ def make_clip(path: Path, seconds: float = 1.0) -> Path:
     subprocess.run(
         ["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", f"color=c=red:s=320x240:d={seconds}",
          "-c:v", "libx264", "-pix_fmt", "yuv420p", str(path)],
-        check=True,
+        check=True, timeout=120,
     )
     return path
