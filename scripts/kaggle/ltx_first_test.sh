@@ -90,10 +90,9 @@ for _ in $(seq 1 120); do
   if curl -sf "http://127.0.0.1:$PORT/system_stats" > "$OUT/system_stats.json"; then READY=1; break; fi; sleep 5
 done
 [ "$READY" = 1 ] || { echo "ComfyUI did not come up; see comfyui.log"; exit 5; }
-if command -v ss >/dev/null; then
-  ss -ltnp "sport = :$PORT" 2>/dev/null | grep -q "pid=$COMFY_PID," || { echo "the listener on port $PORT does not belong to the ComfyUI process this script launched"; exit 5; }
-fi
-# the port was fresh and free before launch, our process is alive, and (where ss exists) it owns the listener; if the server reports its argv it must carry our unique output directory
+# mandatory proof (Linux /proc, no extra tools): the process this script launched holds the listening socket on the fresh port
+python "$REPO/scripts/kaggle/port_owner.py" "$COMFY_PID" "$PORT" || { echo "cannot prove the answering server is the ComfyUI process this script launched"; exit 5; }
+# the port was fresh and free before launch, our process is alive and owns the listener (above); if the server reports its argv it must carry our unique output directory
 if grep -q '"argv"' "$OUT/system_stats.json"; then
   grep -q "$OUT/comfy_output" "$OUT/system_stats.json" || { echo "the server on port $PORT is not the ComfyUI this script launched"; exit 5; }
 else

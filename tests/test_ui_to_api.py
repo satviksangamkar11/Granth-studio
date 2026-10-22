@@ -166,9 +166,13 @@ def test_negative_source_slot_and_two_linked_inputs_with_one_name_are_refused():
     ui["links"][[l[0] for l in ui["links"]].index(87)][2] = -1
     with pytest.raises(conv.ConversionError, match="output slot -1"):
         conv.convert(ui, sigs())
-    ui = copy.deepcopy(UI)
+    ui = copy.deepcopy(UI)                                                   # two DIFFERENT, correctly addressed links into inputs both named float_list
     node = next(n for n in ui["nodes"] if n["id"] == 98)
-    node["inputs"][0]["link"] = 251; node["inputs"][1]["link"] = 251        # both float_list entries linked
-    ui["links"][[l[0] for l in ui["links"]].index(251)][4] = 1
-    with pytest.raises(conv.ConversionError):
+    node["inputs"][0]["link"] = 900
+    ui["links"].append([900, 100, 0, 98, 0, "FLOAT"])
+    with pytest.raises(conv.ConversionError, match="two linked inputs are both named 'float_list'"):
+        conv.convert(ui, sigs())
+    ui = copy.deepcopy(UI)
+    ui["links"][[l[0] for l in ui["links"]].index(87)][2] = True              # a JSON boolean is not a slot number
+    with pytest.raises(conv.ConversionError, match="output slot True"):
         conv.convert(ui, sigs())

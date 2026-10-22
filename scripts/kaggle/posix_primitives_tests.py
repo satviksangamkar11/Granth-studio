@@ -70,3 +70,20 @@ def test_dangling_symlink_at_the_destination_is_not_followed(tmp_path):
     with pytest.raises(ConfigError):
         create_new_file(root, "d/image.png", source)
     assert list(outside.iterdir()) == []
+
+
+def test_port_owner_proves_listener_ownership_against_the_real_proc(tmp_path):
+    """The GPU script refuses to continue unless scripts/kaggle/port_owner.py proves the launched ComfyUI owns the port: check it on real /proc."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("port_owner", os.path.join(os.path.dirname(__file__), "port_owner.py"))
+    po = importlib.util.module_from_spec(spec); spec.loader.exec_module(po)
+    code = "import socket,time;s=socket.socket();s.bind(('127.0.0.1',0));s.listen(1);print(s.getsockname()[1],flush=True);time.sleep(60)"
+    child = subprocess.Popen([sys.executable, "-c", code], stdout=subprocess.PIPE, text=True)
+    try:
+        port = int(child.stdout.readline())
+        assert po.main([str(child.pid), str(port)]) == 0                  # the process that listens owns it
+        assert po.main([str(os.getpid()), str(port)]) == 1                # this process answers nothing on that port
+        assert po.main([str(child.pid), "1"]) == 1                        # nothing of the child's listens on port 1
+    finally:
+        child.kill(); child.wait()
+    assert po.main([str(child.pid), str(port)]) == 2                      # the process is gone: cannot inspect -> refusal

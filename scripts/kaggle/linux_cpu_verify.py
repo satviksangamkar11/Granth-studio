@@ -37,13 +37,14 @@ REQUIRED = [
 ]
 
 
-# The five supplementary tests in posix_primitives_tests.py: all must run and pass.
+# The six supplementary tests in posix_primitives_tests.py: all must run and pass.
 SUPPLEMENTARY = [
     "harness/posix_primitives_tests.py::test_fcntl_flock_backs_the_journal_lock",
     "harness/posix_primitives_tests.py::test_dir_fd_primitives_exist_for_reference_creation",
     "harness/posix_primitives_tests.py::test_flock_excludes_a_second_real_process",
     "harness/posix_primitives_tests.py::test_symlink_creation_is_possible_and_refused_by_reference_import",
     "harness/posix_primitives_tests.py::test_dangling_symlink_at_the_destination_is_not_followed",
+    "harness/posix_primitives_tests.py::test_port_owner_proves_listener_ownership_against_the_real_proc",
 ]
 # Every test in the accepted baseline (318 passed + 3 skipped on Windows = 321 collected). A smaller collection means
 # something filtered or truncated the run, which can never be a PASS.

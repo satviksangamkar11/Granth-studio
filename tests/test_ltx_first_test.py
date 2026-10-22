@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -139,6 +140,7 @@ def test_gpu_script_is_syntactically_valid_and_refuses_before_any_network_step(t
     assert text.index("LTX_DOWNLOAD_APPROVED:?") < text.index("== 0. refusals") < text.index("== 1. GPU") < text.index("git clone") < text.index("curl -L")
     assert text.index("local modifications: refusing") < text.index("pip install") < text.index("main.py")      # clean-tree check precedes any install or launch
     assert text.index("something already listens on port") < text.index("main.py") and "kill -0 $COMFY_PID" in text
+    assert "port_owner.py" in text and "ss -ltnp" not in text and text.index("port_owner.py") < text.index("object_info.json")   # mandatory /proc proof, no optional tool
     assert 'PORT="$(python -c' in text and "8188" not in text and '"${LAUNCH[@]}"' in text and "$LAUNCH " not in text.replace("${LAUNCH[@]}", "")   # fresh port, argument array
     assert text.index("kill $VRAM_PID 2>/dev/null || true; wait") < text.index("tar czf")                     # tracer stopped before archiving
     assert 'clone ltxvideo_nodes "$W/ComfyUI-LTXVideo-src"' in text and 'clone ltxvideo_nodes "$COMFY' not in text   # source only, never a node pack
@@ -248,3 +250,27 @@ def test_the_scripts_port_probe_line_refuses_an_occupied_port_and_allows_a_free_
     srv.close()
     free = probe(taken)                                                                           # the same port, now closed
     assert "something already listens" not in free.stdout and "reached-1" in free.stdout
+
+
+def test_port_owner_matches_a_listening_socket_to_the_process_that_holds_it(tmp_path):
+    import importlib.util as iu
+    nl = chr(10)
+    spec = iu.spec_from_file_location("port_owner", REPO / "scripts" / "kaggle" / "port_owner.py")
+    po = iu.module_from_spec(spec); spec.loader.exec_module(po)
+    proc = tmp_path / "proc"; (proc / "net").mkdir(parents=True)
+    header = "  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode"
+    row = lambda port, state, inode: f"   0: 0100007F:{port:04X} 00000000:0000 {state} 00000000:00000000 00:00000000 00000000  1000        0 {inode} 1 0000000000000000 100 0 0 10 0"
+    (proc / "net" / "tcp").write_text(nl.join([header, row(8190, "0A", 111), row(8190, "01", 222), row(9999, "0A", 333)]), encoding="utf-8")
+    (proc / "net" / "tcp6").write_text(header + nl, encoding="utf-8")
+    assert po.listening_inodes(proc, 8190) == {"111"}                          # LISTEN rows only, right port only
+    for pid in (10, 20):
+        (proc / str(pid) / "fd").mkdir(parents=True)
+    try:
+        os.symlink("socket:[111]", proc / "10" / "fd" / "3")                      # pid 10 holds the listener
+        os.symlink("socket:[222]", proc / "20" / "fd" / "3")                      # pid 20 only holds a connected socket
+    except OSError:
+        pytest.skip("symlinks unavailable (the logic is exercised by the Linux run)")
+    assert po.main(["10", "8190", "--proc-root", str(proc)]) == 0
+    assert po.main(["20", "8190", "--proc-root", str(proc)]) == 1              # another process answering on the port is refused
+    assert po.main(["10", "7777", "--proc-root", str(proc)]) == 1              # nothing listens there
+    assert po.main(["30", "8190", "--proc-root", str(proc)]) == 2              # cannot inspect: refusal, never a pass
