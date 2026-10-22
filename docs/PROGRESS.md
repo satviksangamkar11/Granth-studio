@@ -357,3 +357,5 @@ this clip is only a technical prerequisite.
 2. MAJOR failed isolation stage unlocked later stages: stages unlock only through `ltx_evidence_<stage>/stage_verdict.json`, written after client PASS + attribution (+ concurrent check), bound to the receipt sha256 and commit.
 3. MAJOR concurrent overlap used scheduler windows: now ComfyUI's own execution_start/execution_success timestamps (receipt `comfy_execution`); missing -> refusal.
 4. MAJOR missing process telemetry weakened attribution: sampler writes #OK/#FAIL markers; no successful sample or any failure -> problem; the memory-only fallback also needs verified per-worker isolation evidence (`worker_evidence.json`).
+
+Codex re-review (06_dual_t4_rereview.md): no blocking issue; one MINOR (stale telemetry across reruns) fixed by truncating traces per invocation.

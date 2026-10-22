@@ -116,6 +116,7 @@ fetch() { # index
 fetch 0; fetch 1
 
 echo "== 5. traces: VRAM of BOTH cards, compute apps per card, host RAM"
+: > "$OUT/vram_trace.csv"; : > "$OUT/apps_trace.csv"; : > "$OUT/ram_trace.txt"   # every invocation starts its traces afresh
 nvidia-smi --query-gpu=timestamp,index,uuid,memory.used --format=csv,noheader,nounits -l 2 > "$OUT/vram_trace.csv" 2>/dev/null &
 VRAM_PID=$!
 ( while true; do
