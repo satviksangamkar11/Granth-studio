@@ -36,6 +36,7 @@ class Task:
     # attempt genuinely failed. Never used for NOT VALIDATED, pending or gate-failed tasks.
     fallback: RunFn | None = field(default=None, repr=False)
     fallback_info: dict | None = None
+    journal: Path | None = None  # ComfyUI submission journal; a completed-but-invalid render is rejected in it
 
     def __post_init__(self):
         if self.stage not in STAGE_ORDER or self.max_attempts < 1:
@@ -180,11 +181,17 @@ class Scheduler:
             work = self.store / task.stage / f".work-{task_id}-{uuid.uuid4().hex[:8]}"
             work.mkdir(parents=True)
             try:
-                files = task.run(work)
-                if task.preflight:
-                    task.preflight()
-                if task.verify:
-                    task.verify(work)
+                try:
+                    files = task.run(work)
+                    if task.preflight:
+                        task.preflight()
+                    if task.verify:
+                        task.verify(work)
+                except TaskFailed as exc:
+                    if task.journal is not None:
+                        from .comfy import reject_output  # no-op unless the render had completed
+                        reject_output(task.journal, str(exc))
+                    raise
                 self._seal(task, task_id, work, files, attempt, [*history, {"attempt": str(attempt), "outcome": "complete"}])
                 os.replace(work, directory)
                 return TaskResult(task.stage, task.name, task_id, "complete", attempt, "ok")

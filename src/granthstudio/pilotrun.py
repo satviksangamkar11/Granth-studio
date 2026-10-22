@@ -78,15 +78,15 @@ def selection(bundle: Bundle, scheduler: Scheduler):
     by_id = {t.task_id(): t for t in tasks}
     wanted = {by_name[mapping[label]].task_id() for label in SHOT_LABELS}
     wanted |= {t.task_id() for t in tasks if t.stage == "audio"}
-    stack = list(wanted)
+    full_chapter = {s["shot_id"] for s in bundle.compiled["shots"]} <= set(mapping.values())
+    if full_chapter:
+        wanted |= {t.task_id() for t in tasks if t.stage == "assembly"}
+    stack = list(wanted)  # close over dependencies AFTER assembly joins: lip-sync and audio deps come with it
     while stack:
         for dep in by_id[stack.pop()].depends_on:
             if dep not in wanted:
                 wanted.add(dep)
                 stack.append(dep)
-    full_chapter = {s["shot_id"] for s in bundle.compiled["shots"]} <= set(mapping.values())
-    if full_chapter:
-        wanted |= {t.task_id() for t in tasks if t.stage == "assembly"}
     return mapping, [t for t in tasks if t.task_id() in wanted], full_chapter
 
 

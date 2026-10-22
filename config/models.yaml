@@ -55,13 +55,16 @@ asr:
   timeout_s: 1800
 # Optional lip-sync (frozen sections 10 and 13): a separate Marathi/Hindi render for essential
 # visible-speech close-ups. Payload {video_path, audio_path, language, out_path}; the runner writes an mp4.
-# Usable only when validated AND validated_style_id equals the approved style in canon/visual_assets.yaml.
+# Usable only when validated AND validated_style_id, validated_style_version and validated_style_sha256 (digest of
+# style_id, version, prompt_prefix, negative_prompt; see lipsync.style_identity) equal the approved style now.
 lipsync:
   status: unvalidated
   command: null
   model: null
   revision: null
   validated_style_id: null
+  validated_style_version: null
+  validated_style_sha256: null
   timeout_s: 3600
 # Model-based QA diagnostics (face embedding, CLIP style, object presence, anachronism). Optional and
 # never enforced; same JSON-over-stdio contract. Not configured: those diagnostics log not_computed.

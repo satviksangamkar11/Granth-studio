@@ -17,6 +17,7 @@ from granthstudio.integrity import atomic_write_json, read_json
 from granthstudio.pipeline import episode_store, load_bundle, plan_tasks
 from granthstudio.scheduler import Scheduler
 from tests.conftest import have_tool
+from granthstudio.lipsync import style_identity
 from tests.test_review_regressions import make_cpu_project
 
 pytestmark = pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
@@ -46,7 +47,14 @@ def set_lip_sync(project, shot_id=SHOT1, lip=LIP):
     atomic_write_json(path, manifest)
 
 
-def configure(project, tmp_path, fail=False, style_id="style_synth", status="validated", registry_style="approved"):
+def style_dict(registry_style="approved", version=1, prefix="synthetic style"):
+    return None if registry_style is None else {"style_id": "style_synth", "version": version, "status": registry_style,
+        **({"approved_by": "synthetic-test-only"} if registry_style == "approved" else {}),
+        "prompt_prefix": prefix, "negative_prompt": ""}
+
+
+def configure(project, tmp_path, fail=False, style_id="style_synth", status="validated", registry_style="approved",
+              version=1, prefix="synthetic style", bind=True):
     """Write a lipsync runner section and the visual-assets style; returns the runner log path."""
     log = tmp_path / "runner.log"
     script = tmp_path / "runner.py"
@@ -54,10 +62,11 @@ def configure(project, tmp_path, fail=False, style_id="style_synth", status="val
     models = load_models(project)
     models["lipsync"] = {"status": status, "command": [sys.executable, str(script)], "model": "synthetic-double",
                          "revision": "test", "validated_style_id": style_id, "timeout_s": 120}
+    if bind:  # the runner was validated against exactly this approved style version and content
+        identity = style_identity(style_dict("approved", version, prefix))
+        models["lipsync"].update(validated_style_version=identity["version"], validated_style_sha256=identity["sha256"])
     atomic_write_json(project.root / "config" / "models.yaml", models)
-    style = None if registry_style is None else {"style_id": "style_synth", "version": 1, "status": registry_style,
-        **({"approved_by": "synthetic-test-only"} if registry_style == "approved" else {}),
-        "prompt_prefix": "synthetic style", "negative_prompt": ""}
+    style = style_dict(registry_style, version, prefix)
     (project.canon_dir / "visual_assets.yaml").write_text(
         yaml.safe_dump({"schema_version": 1, "style": style, "designs": [], "assets": []}), encoding="utf-8")
     return log
@@ -165,3 +174,39 @@ def test_manifest_rejects_malformed_lip_sync(approved_project, lip):
     set_lip_sync(approved_project, lip=lip)
     with pytest.raises(GranthError, match="lip_sync"):
         load_bundle(approved_project, load_models(approved_project), 1)
+
+
+def test_changed_approved_style_content_invalidates_lipsync_even_with_same_style_id(approved_project, tmp_path):
+    set_lip_sync(approved_project)
+    make_cpu_project(approved_project)
+    log = configure(approved_project, tmp_path)                       # runner validated for style_synth v1
+    scheduler, tasks, results = run_all(approved_project)
+    assert all(r.status == "complete" for r in results.values()), results
+    v1_ids = {t.name: t.task_id() for t in tasks}
+    # approved style_synth moves to version 2 with new content; style_id unchanged, runner binding untouched
+    (approved_project.canon_dir / "visual_assets.yaml").write_text(
+        yaml.safe_dump({"schema_version": 1, "style": style_dict("approved", 2, "different style"), "designs": [], "assets": []}),
+        encoding="utf-8")
+    again = plan_tasks(load_bundle(approved_project, load_models(approved_project), 1), scheduler)
+    assert {t.name for t in again if t.task_id() != v1_ids[t.name]} == {f"lipsync_mr_{SHOT1}", "assemble_mr"}
+    calls = len(log.read_text().splitlines())
+    results = {r.name: r for r in scheduler.run(again)}
+    assert results[f"lipsync_mr_{SHOT1}"].status == "not_validated" and "v1" in results[f"lipsync_mr_{SHOT1}"].detail
+    assert len(log.read_text().splitlines()) == calls                 # stale runner validation never executed
+    assert results["assemble_mr"].status == "blocked"
+    # content change at the same version is caught by the digest alone
+    configure(approved_project, tmp_path, version=2, prefix="different style")
+    (approved_project.canon_dir / "visual_assets.yaml").write_text(
+        yaml.safe_dump({"schema_version": 1, "style": style_dict("approved", 2, "silently edited"), "designs": [], "assets": []}),
+        encoding="utf-8")
+    results = {r.name: r for r in Scheduler(episode_store(approved_project, 1)).run(
+        plan_tasks(load_bundle(approved_project, load_models(approved_project), 1), scheduler))}
+    assert results[f"lipsync_mr_{SHOT1}"].status == "not_validated"
+
+
+def test_unbound_style_digest_fails_closed(approved_project, tmp_path):
+    set_lip_sync(approved_project)
+    make_cpu_project(approved_project)
+    log = configure(approved_project, tmp_path, bind=False)
+    _, _, results = run_all(approved_project)
+    assert results[f"lipsync_mr_{SHOT1}"].status == "not_validated" and not log.exists()

@@ -244,10 +244,13 @@ class ComfyBackend:
             raise JobPending("submission outcome unknown; run 'comfy reconcile' before another POST")
         if state and state.get("state") == "cancelled":
             raise JobPending("job was cancelled; run 'comfy reconcile' to confirm it stopped before resubmitting")
-        if not state or state.get("state") == "failed":
+        if not state or state.get("state") in ("failed", "rejected"):
+            # failed: definitive submission/execution failure. rejected: the render completed but its media was
+            # judged invalid, so that output is dead and a fresh attempt identity may be submitted.
             attempt = (state or {}).get("attempt", 0) + 1
             token = sha256_obj({**identity, "journal": journal.name, "attempt": attempt})
-            state = {**identity, "state": "submitting", "job_token": token, "attempt": attempt}
+            state = {**identity, "state": "submitting", "job_token": token, "attempt": attempt,
+                     **({"rejections": state["rejections"]} if state and state.get("rejections") else {})}
             atomic_write_json(journal, state)
             try:
                 prompt_id = self.submit(graph, token)
@@ -259,12 +262,29 @@ class ComfyBackend:
             state = {**state, "state": "submitted", "prompt_id": prompt_id}
             atomic_write_json(journal, state)
         try:
-            return self.wait(state["prompt_id"], sampler) if sampler else self.wait(state["prompt_id"])
+            history = self.wait(state["prompt_id"], sampler) if sampler else self.wait(state["prompt_id"])
+            if state.get("state") != "completed":
+                atomic_write_json(journal, {**state, "state": "completed"})
+            return history
         except IntegrationUnavailable as exc:
             raise JobPending("connection lost; retain prompt and resume polling") from exc
         except TaskFailed:
             atomic_write_json(journal, {**state, "state": "failed"})
             raise
+
+
+def reject_output(journal: Path, reason: str) -> bool:
+    """Record that a *completed* render failed media validation so a fresh attempt may be submitted.
+    Any other journal state (uncertain submission, still polling, failed) is left untouched: never
+    resubmit while the previous job might be active."""
+    if not journal.is_file():
+        return False
+    state = read_json(journal)
+    if state.get("state") != "completed":
+        return False
+    rejection = {"attempt": state["attempt"], "prompt_id": state["prompt_id"], "reason": reason[:500]}
+    atomic_write_json(journal, {**state, "state": "rejected", "rejections": [*state.get("rejections", []), rejection]})
+    return True
 
 
 def select_video(history: dict[str, Any], output_node: str) -> dict[str, Any]:

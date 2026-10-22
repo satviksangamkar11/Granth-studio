@@ -646,6 +646,28 @@
               "pattern": "^style_[a-z0-9_]+$"
             }
           ]
+        },
+        "validated_style_version": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "validated_style_sha256": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          ]
         }
       }
     },

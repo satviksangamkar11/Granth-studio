@@ -224,3 +224,24 @@ def test_pilot_cli_surface(pilot, capsys):
     assert main([*root, "pilot", "report", "1"]) == 0
     assert "evidence only" in capsys.readouterr().out
     assert main([*root, "pilot", "recovery-evidence", "1", "--clean", "a", "--resumed", "b", "--reviewer", "x"]) == 1
+
+
+def test_pilot_selection_includes_lipsync_dependencies_of_assembly(pilot, tmp_path):
+    from tests.test_lipsync import LIP, configure
+    path = pilot.episodes_dir / "adhyay_01" / "manifest.yaml"
+    manifest = load_yaml(path)
+    speaking = next(sh for sc in manifest["scenes"] for sh in sc["shots"] if sh["dialogue_ids"])
+    speaking["lip_sync"] = LIP
+    SHOT1 = speaking["shot_id"]
+    atomic_write_json(path, manifest)
+    configure(pilot, tmp_path)
+    scheduler = Scheduler(pilotrun.store_for(pilot, 1, "lip"))
+    bundle = pilotrun._bundle(pilot, load_models(pilot), 1)
+    mapping, selected, full = pilotrun.selection(bundle, scheduler)
+    names = [t.name for t in selected]
+    assert full and f"lipsync_mr_{SHOT1}" in names and "assemble_mr" in names
+    assert names.index(f"lipsync_mr_{SHOT1}") < names.index("assemble_mr")
+    ids = {t.task_id() for t in selected}
+    assert all(dep in ids for t in selected for dep in t.depends_on)          # closed under dependencies
+    assert [r.status for r in scheduler.status(selected)].count("missing") == len(selected)  # plan validates (_plan ran)
+    assert [t.name for t in selected] == [t.name for t in pilotrun.selection(bundle, scheduler)[1]]  # deterministic

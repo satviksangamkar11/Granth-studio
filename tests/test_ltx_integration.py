@@ -206,3 +206,45 @@ def test_input_validation_interface(approved_project, tmp_path):
     bad = tmp_path / "bad.png"; bad.write_bytes(b"not an image")
     with pytest.raises(Exception):
         validate_ltx_inputs(models, shot, bad)
+
+
+def test_rejected_output_gets_fresh_attempt_valid_output_does_not(comfy, tmp_path):
+    from granthstudio.comfy import reject_output
+    b = backend(comfy); journal = tmp_path / "job.json"
+    with pytest.raises(JobPending):
+        b.execute(GRAPH, journal)                      # polling uncertain: prompt id preserved
+    assert reject_output(journal, "nope") is False and read_json(journal)["state"] == "submitted"
+    with pytest.raises(JobPending):
+        b.execute(GRAPH, journal)
+    assert len(comfy.posts) == 1                       # no duplicate POST while the job may be active
+    comfy.finish("p1")
+    b.execute(GRAPH, journal)
+    assert read_json(journal)["state"] == "completed"
+    b.execute(GRAPH, journal)
+    assert len(comfy.posts) == 1                       # valid completed output: never resubmitted
+    first_token = read_json(journal)["job_token"]
+    assert reject_output(journal, "flat video") is True
+    interrupted = read_json(journal)                   # durable across an interruption
+    assert interrupted["state"] == "rejected" and interrupted["rejections"][0]["prompt_id"] == "p1"
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, journal)         # fresh process, fresh submission
+    state = read_json(journal)
+    assert len(comfy.posts) == 2 and state["attempt"] == 2 and state["prompt_id"] == "p2"
+    assert state["job_token"] != first_token and state["rejections"][0]["reason"] == "flat video"
+
+
+def test_scheduler_resubmits_after_media_rejection_only(comfy, tmp_path):
+    from granthstudio.errors import TaskFailed
+    from granthstudio.scheduler import Scheduler, Task
+    comfy.auto_outputs = {"2": {"videos": [{"filename": "a.mp4"}]}}
+    b = backend(comfy); journal = tmp_path / "pending" / "t.json"; seen = []
+    def run(work):
+        b.execute(GRAPH, journal); (work / "out.txt").write_text("x"); return {"out": "out.txt"}
+    def verify(directory):
+        seen.append(len(comfy.posts))
+        if len(seen) == 1:
+            raise TaskFailed("decoded video is flat")
+    task = Task("tier1", "t", {}, "v1", run, max_attempts=2, verify=verify, journal=journal)
+    result = Scheduler(tmp_path / "store").run([task])[0]
+    assert result.status == "complete" and seen == [1, 2] and len(comfy.posts) == 2
+    assert read_json(journal)["rejections"][0]["reason"] == "decoded video is flat"

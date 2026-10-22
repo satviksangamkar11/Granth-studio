@@ -435,6 +435,7 @@ def sheet_tasks(project: Project, canon: Canon, models: dict[str, Any], schedule
                     "sdxl": sha256_obj(models.get("sdxl"))}, "reference-sheet-v1", lambda work: {},
                     max_attempts=1, preflight=preflight, verify=verify)
         journal = scheduler.store / "pending" / f"{task.task_id()}.json"
+        task.journal = journal
         task.run = lambda work, request=request, journal=journal: sdxl_generate(project, models, request, journal, work)
         tasks.append(task)
     return tasks

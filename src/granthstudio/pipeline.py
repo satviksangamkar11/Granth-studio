@@ -390,7 +390,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
                 depends_on=(keyframes[request["derived_from"]["visual_id"]].task_id(),) if derived(vid) else (),
                 preflight=lambda vid=vid: (require_current(bundle), _keyframe_preflight(bundle, vid)),
                 verify=lambda directory, vid=vid: _verify_keyframe(bundle, vid, directory))
-            keyframes[vid].run = _keyframe_run(bundle, vid, scheduler.store / "pending" / f"{keyframes[vid].task_id()}.json")
+            keyframes[vid].journal = scheduler.store / "pending" / f"{keyframes[vid].task_id()}.json"
+            keyframes[vid].run = _keyframe_run(bundle, vid, keyframes[vid].journal)
             tasks.append(keyframes[vid])
     for shot in compiled["shots"]:
         visual = visuals[shot["visual_id"]]
@@ -431,7 +432,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             task.fallback = _tier0_run(bundle, {**shot, "duration_s": duration}, visual)
             task.fallback_info = {"mode": "tier0", "shot_id": shot["shot_id"], **shot["fallback"]}
         if capability:
-            task.run = _ltx_run(bundle, shot, visual, capability, scheduler.store / "pending" / f"{task.task_id()}.json")
+            task.journal = scheduler.store / "pending" / f"{task.task_id()}.json"
+            task.run = _ltx_run(bundle, shot, visual, capability, task.journal)
         shot_tasks[shot["shot_id"]] = task
         tasks.append(task)
     lipsync_tasks = plan_lipsync(bundle, scheduler, audio, shot_tasks, require_current)

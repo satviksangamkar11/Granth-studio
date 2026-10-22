@@ -21,6 +21,14 @@ CLIP = "lipsync.mp4"
 TOLERANCE_S = 1 / 24
 
 
+def style_identity(style: dict[str, Any] | None) -> dict[str, Any]:
+    """Version and content digest of the approved style: what a lip-sync validation is bound to."""
+    if style is None:
+        return {"style_id": None, "version": None, "sha256": None}
+    content = {k: style.get(k) for k in ("style_id", "version", "prompt_prefix", "negative_prompt")}
+    return {"style_id": style["style_id"], "version": style["version"], "sha256": sha256_obj(content)}
+
+
 def usable_runner(bundle) -> dict[str, Any]:
     """The lipsync runner section, or IntegrationUnavailable (NOT VALIDATED) naming what is missing."""
     section = require_runner(bundle.models, "lipsync", "Lip-sync runner")
@@ -33,6 +41,14 @@ def usable_runner(bundle) -> dict[str, Any]:
     if validated != style["style_id"]:
         raise IntegrationUnavailable(f"lip-sync runner was validated for style {validated}, "
                                      f"but the approved style is {style['style_id']}: NOT VALIDATED")
+    now = style_identity(style)
+    bound = (section.get("validated_style_version"), section.get("validated_style_sha256"))
+    if bound[1] is None or bound[0] is None:
+        raise IntegrationUnavailable("lip-sync validated_style_version/validated_style_sha256 are not set: NOT VALIDATED")
+    if bound != (now["version"], now["sha256"]):
+        raise IntegrationUnavailable(
+            f"lip-sync runner was validated for style {validated} v{bound[0]} ({str(bound[1])[:12]}), but the approved style "
+            f"is v{now['version']} ({now['sha256'][:12]}): NOT VALIDATED")
     return section
 
 
@@ -64,12 +80,14 @@ def plan_lipsync(bundle, scheduler, audio, shot_tasks, require_current) -> dict[
     """{language: {shot_id: Task}} for every shot that declares lip_sync for that language."""
     plan: dict[str, dict[str, Any]] = {"mr": {}, "hi": {}}
     section_hash = sha256_obj(bundle.models.get("lipsync"))
+    style = style_identity(_style(load_registry(bundle.project, bundle.canon)))
     for shot in bundle.compiled["shots"]:
         declared = shot.get("lip_sync")
         for lang in (declared["languages"] if declared else ()):
             shot_task = shot_tasks[shot["shot_id"]]
             task = Task("lipsync", f"lipsync_{lang}_{shot['shot_id']}",
-                        {"language": lang, "shot": sha256_obj(shot), "lipsync_model": section_hash},
+                        {"language": lang, "shot": sha256_obj(shot), "lipsync_model": section_hash,
+                         "style": sha256_obj(style)},
                         LIPSYNC_VERSION, _run(bundle, scheduler, shot, lang, shot_task, audio[lang]),
                         depends_on=(shot_task.task_id(), audio[lang].task_id()), max_attempts=1,
                         preflight=lambda: (require_current(bundle), usable_runner(bundle)),
