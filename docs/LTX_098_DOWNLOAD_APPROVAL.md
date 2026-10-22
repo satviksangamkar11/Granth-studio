@@ -58,8 +58,8 @@ cd granthstudio && pip install -q pyyaml jsonschema pytest
 LTX_DOWNLOAD_APPROVED="<approver name>" LTX_EXPECTED_COMMIT="<reviewed sha>" SESSION_MINUTES=240 bash scripts/kaggle/ltx_first_test.sh
 ```
 
-`SESSION_MINUTES` is a maximum, not a target. The first test allows **one attempt**: on a CUDA out-of-memory error (or any failure) it stops and records the evidence; it never retries automatically or tries
-another configuration. Evidence: `/kaggle/working/ltx_first_test_evidence.tgz` (receipt, pin report, live node inventory, rebuilt workflow, converter report, ComfyUI log and launch arguments, pip freeze,
+`SESSION_MINUTES` is a maximum, not a target. The reviewed commit to type is **`2a5865b96045612d7893e7d0f1929926668b38be`** (the bundle now in the dataset). The first test allows **one attempt**: on a CUDA out-of-memory error (or any failure) it stops and records the evidence; it never retries automatically or tries
+another configuration. This is one attempt per INVOCATION: a human who reruns in the same workdir after a failure can spend another generation from the journal's durable budget of 3, so decide deliberately before rerunning. Evidence: `/kaggle/working/ltx_first_test_evidence.tgz` (receipt, pin report, live node inventory, rebuilt workflow, converter report, ComfyUI log and launch arguments, pip freeze,
 nvidia-smi before/after, VRAM trace, the journal, the clip). Verdicts: `PASS` (one clip decoded through the pipeline, capability still unvalidated), `FAIL` (task failed, out of memory, or wrong dimensions),
 `NOT_VALIDATED` (pipeline refused, e.g. unready host), `NOT_RUN` (a precondition failed before any request).
 

@@ -329,7 +329,7 @@ negative slots and judges the seed on the output's dependency path; the upload r
 
 - Windows CPU suite: **390 passed, 4 skipped** (`benchmarks/cpu_stage2d.xml`). Linux CPU run on Kaggle (kernel version 4, baseline `f8d5d02` + harness at this commit): **LINUX_CPU_PASS_ON_KAGGLE**,
   319 passed / 2 Windows-only skips, 10/10 required POSIX tests, **6/6 supplementary** including `port_owner.py` against the real Linux /proc (`benchmarks/linux/stage2_run3/`).
-- Fresh Kaggle bundle published: private dataset `sangeetasangamkar/granthstudio-cpu-baseline`, branch tip `0860a32df877adc57d7712648c001ce3f147140a`, bundle SHA-256 `0da9607e…49df10` (538 708 bytes). It is a snapshot at that commit; this docs/evidence commit is not in it and the bundle must not be rebuilt before the run.
+- Fresh Kaggle bundle published: private dataset `sangeetasangamkar/granthstudio-cpu-baseline`, branch tip `0860a32df877adc57d7712648c001ce3f147140a`, bundle SHA-256 `0da9607e…49df10` (538 708 bytes). That bundle is SUPERSEDED (see the next section): the dataset now holds the later reviewed commit `2a5865b`.
 - Codex: Stage 2 narrow reviews FAIL -> fixes -> PASS WITH ISSUES; final delta check: SAFE FOR THE FIRST T4 TEST = yes (one low, non-blocking note on `port_owner.py` exit codes for unreadable /proc tables).
 - Nothing downloaded; no GPU use; the LTXV licence has not been accepted by a human; all real capabilities remain NOT VALIDATED.
 
@@ -338,3 +338,11 @@ Approved in principle: download the two pinned weights after human licence accep
 successful clip. Not approved: full Adhyay scenes, production validation. Added in response: one attempt per run and a clean stop on CUDA out-of-memory (no automatic retry or variant),
 `notebooks/kaggle_ltx_first_test.ipynb` (approver name and expected commit are typed by the human; nothing is pre-signed). Phase 1 remains the source-backed short video through the complete pipeline;
 this clip is only a technical prerequisite.
+
+
+### Bundle in the dataset now (supersedes the one above) and the last Codex micro-check
+- Private dataset `sangeetasangamkar/granthstudio-cpu-baseline` holds the bundle with branch tip **`2a5865b96045612d7893e7d0f1929926668b38be`** (SHA-256 `f18b3c04…0b611a62`, 578 250 bytes). That is the value
+  to type as `EXPECTED_COMMIT` in `notebooks/kaggle_ltx_first_test.ipynb`. Docs/evidence commits made after it are not in the bundle and need no rebuild; do not rebuild before the run.
+- Windows CPU suite at `2a5865b`: 394 passed, 4 skipped (JUnit kept outside the repo at D:/kaggle_upload/stage2_evidence/cpu_stage2e.xml). The Linux/Kaggle run of `0860a32` still covers the POSIX harness, which did not change after it.
+- Codex micro-check of `0860a32..2a5865b` raised one blocker (docs named the older bundle - fixed here) and two non-blocking notes: a rerun in the same workdir after a failure can spend more of the durable
+  3-generation budget (now documented), and the OOM message says "CUDA" for any memory error (left as is; wording only).
