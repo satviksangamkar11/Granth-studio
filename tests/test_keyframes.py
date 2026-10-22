@@ -301,3 +301,42 @@ def test_unsafe_extension_is_refused(kf_project, tmp_path, name):
     source = tmp_path / name; source.write_bytes(b"x")
     with pytest.raises(ConfigError, match="unsupported reference image type"):
         kf.import_asset(kf_project, canon, "ref_ext", "location", LOC, None, "establishing", source)
+
+
+def test_junction_planted_before_mkdir_creates_nothing_outside(kf_project, tmp_path, monkeypatch):
+    from granthstudio import integrity
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    outside = tmp_path / "outside_mkdir"; outside.mkdir()
+    def plant(stage, path):
+        if stage == "before_mkdir" and path.name == "ref_race":
+            _link_dir(path, outside)                       # attacker wins the race to create the component
+    monkeypatch.setattr(integrity, "_race_hook", plant)
+    with pytest.raises(ConfigError):
+        _import(kf_project, canon, "ref_race", tmp_path)
+    assert not list(outside.rglob("*"))
+
+
+def test_ancestor_swapped_between_pinning_and_open_cannot_redirect_the_write(kf_project, tmp_path, monkeypatch):
+    import os
+    from granthstudio import integrity
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    outside = tmp_path / "outside_open"; outside.mkdir()
+    outcome = {}
+    def swap(stage, path):
+        if stage == "before_open" and path.parent.name == "v1" and "ref_swap" in str(path):
+            moved = path.parent.with_name("v1_moved")
+            try:
+                os.rename(path.parent, moved)              # try to replace the pinned directory with a junction
+                _link_dir(path.parent, outside)
+                outcome["swapped"] = True
+            except OSError as exc:
+                outcome["swapped"] = False; outcome["why"] = str(exc)
+    monkeypatch.setattr(integrity, "_race_hook", swap)
+    try:
+        _import(kf_project, canon, "ref_swap", tmp_path)
+    except ConfigError:
+        pass
+    assert not list(outside.rglob("*")), outcome                  # nothing ever lands outside the artifact root
+    import sys
+    if sys.platform == "win32":
+        assert outcome["swapped"] is False                        # the pinned directory could not be replaced
