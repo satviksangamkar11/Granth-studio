@@ -226,4 +226,4 @@ CPU/synthetic evidence only; frozen architecture SHA-256 `decd0af5…f7c1` uncha
 7. **Reference paths** `integrity.create_new_file`/`reject_link_components`: anchored to the artifact root, no link/junction components, O_EXCL destination, link-count check.
 8. **Model provenance** `runners.identity_block`: `model_identity` (verified/unverified) from runner → candidate → approval → release provenance; mismatch rejected, missing evidence stays `unverified`. Real-library `_commit_hash` behaviour remains unvalidated.
 
-Skipped: symlink-creation test when unprivileged and one media-tool-dependent case (see JUnit).
+Skipped: two symlink-creation tests (symlinks unavailable without privilege on this host; the junction tests ran).
