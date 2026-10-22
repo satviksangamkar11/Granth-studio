@@ -1,0 +1,87 @@
+schema_version: 1
+# EXPECTED pins for the first real LTX 0.9.8 I2V validation, gathered from public sources on 2026-10-22.
+# status: PROPOSED. Nothing here is approved, downloaded or executed. scripts/verify_ltx_pins.py compares a
+# LOCAL machine against these values; a PASS there means local files match, never that inference works.
+# "evidence" says how each value was obtained. Values from the GitHub / Hugging Face APIs were read through a
+# summarising fetch tool: re-derive them locally with the verify script before relying on them.
+status: PROPOSED_NOT_APPROVED
+frame_rule:
+  # O-003, from ComfyUI core comfy_extras/nodes_lt.py at the pinned ComfyUI commit (LTXVImgToVideo):
+  # length: min 9, step 8; latent frames = ((length - 1) // 8) + 1; width/height step 32, latent = size // 32.
+  frames: "8n+1"
+  min_frames: 9
+  frame_step: 8
+  size_multiple: 32
+  fps_workflow_default: 24          # LTXVConditioning frame_rate and VHS_VideoCombine frame_rate in the official example
+  default_resolution: [768, 512]    # official example widgets: [768, 512, 97, 1] (width, height, length, batch)
+  evidence: "ComfyUI 2f74e17 comfy_extras/nodes_lt.py, read via fetch tool; official example widgets_values"
+sources:
+  comfyui:
+    repo: https://github.com/comfyanonymous/ComfyUI
+    commit: 2f74e17975696d829af455845c584574bbc85774        # tag v0.3.47
+    tag: v0.3.47
+    license: GPL-3.0
+    evidence: "git/refs/tags; compare API shows 9bc2798 (2025-07-16 'LTXV VAE decoder: switch default padding mode') is an ancestor (ahead_by 42)"
+  ltxvideo_nodes:
+    repo: https://github.com/Lightricks/ComfyUI-LTXVideo
+    commit: 36fdaf500b3cd6f7fa8b2dfec36e984746e630a2        # 2025-07-16, newest commit at/before the 0.9.8 release; its README documents 0.9.8
+    license: "NOASSERTION (GitHub reports 'Other'; read the repository LICENSE before use)"
+    evidence: "commits API until 2025-08-15; README at that commit lists ltxv-*-0.9.8 files"
+  videohelpersuite:
+    repo: https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite
+    commit: 9e963ff5ed0b69e588ee3d965711766b0f3cf829        # 2025-07-14, newest before 2025-07-17; PROPOSED only
+    license: GPL-3.0
+    evidence: "commits API until 2025-07-17; not checked against the official workflow's requirements"
+  kjnodes:
+    repo: https://github.com/kijai/ComfyUI-KJNodes
+    commit: ad37ce656c13e9abea002b46e3a89be3dba32355        # 2025-07-16, newest before 2025-07-17; PROPOSED only
+    license: GPL-3.0
+    evidence: "defines StringToFloatList at main (fetch tool); FloatToSigmas provider NOT found (see required_nodes)"
+workflow:
+  repo: https://github.com/Lightricks/ComfyUI-LTXVideo
+  commit: 36fdaf500b3cd6f7fa8b2dfec36e984746e630a2
+  path: example_workflows/low_level/ltxvideo-i2v-distilled.json
+  git_blob_sha: 2260170f4ebacb077b938302b825e6e5a97b1290
+  size_bytes: 18595
+  format: comfyui_ui            # UI format (nodes/links arrays); the repo's adapter needs API format (class_type/inputs)
+  checkpoint_named_in_workflow: ltxv-2b-0.9.6-distilled-04-25.safetensors   # NOT the 0.9.8 file
+  checkpoint_substitution_verified: false
+  evidence: "contents API (two reads agree on sha and size); node/link inventory read via fetch tool"
+files:
+  - name: ltxv-2b-0.9.8-distilled.safetensors
+    role: ltx_checkpoint_with_bundled_vae
+    dest_dir: models/checkpoints
+    size_bytes: 6340744492
+    sha256: 76aa8c4786af752fa6f951947129d5290c3c6c0b2fadcadea6b5e114ae2cad8f
+    source: https://huggingface.co/Lightricks/LTX-Video/blob/8984fa25007f376c1a299016d0957a37a2f797bb/ltxv-2b-0.9.8-distilled.safetensors
+    license: "LTXV Open Weights License 0.X (Lightricks)"
+    evidence: "HF tree API oid and the raw LFS pointer file agree (two reads)"
+  - name: t5xxl_fp16.safetensors
+    role: text_encoder
+    dest_dir: models/text_encoders
+    size_bytes: 9787841024
+    sha256: 6e480b09fae049a72d2a8c5fbccb8d3e92febeb233bbe9dfe7256958a9167635
+    source: https://huggingface.co/comfyanonymous/flux_text_encoders/blob/6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5/t5xxl_fp16.safetensors
+    license: apache-2.0
+    evidence: "HF tree API oid and the raw LFS pointer file agree (two reads)"
+  # No separate VAE file: the official workflow takes its VAE from CheckpointLoaderSimple (output slot 2).
+required_nodes:
+  # class: provider. 'core' = ComfyUI itself; status says what has actually been verified.
+  - {class: CheckpointLoaderSimple, provider: core, status: assumed}
+  - {class: CLIPLoader, provider: core, status: assumed}
+  - {class: CLIPTextEncode, provider: core, status: assumed}
+  - {class: LoadImage, provider: core, status: assumed}
+  - {class: VAEDecode, provider: core, status: assumed}
+  - {class: LTXVImgToVideo, provider: core, status: verified_in_source}
+  - {class: LTXVConditioning, provider: core, status: verified_in_source}
+  - {class: LTXVPreprocess, provider: core, status: verified_in_source}
+  - {class: SamplerCustomAdvanced, provider: core, status: verified_in_source}
+  - {class: KSamplerSelect, provider: core, status: verified_in_source}
+  - {class: CFGGuider, provider: core, status: verified_in_source}
+  - {class: RandomNoise, provider: core, status: verified_in_source}
+  - {class: StringToFloatList, provider: kjnodes, status: seen_in_kjnodes_main_only}
+  - {class: FloatToSigmas, provider: UNKNOWN, status: unverified}
+  - {class: VHS_VideoCombine, provider: videohelpersuite, status: assumed}
+expected_output:
+  designated_output_node_class: VHS_VideoCombine     # emits an mp4 under 'gifs' in /history; comfy.select_video accepts 'gifs'
+  container: mp4
