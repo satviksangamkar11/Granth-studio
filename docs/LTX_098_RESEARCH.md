@@ -14,8 +14,8 @@ so each is marked with how it was confirmed. `scripts/verify_ltx_pins.py` re-che
 | Official workflow | `example_workflows/low_level/ltxvideo-i2v-distilled.json` at that commit; git blob `2260170f4ebacb077b938302b825e6e5a97b1290`, 18 595 bytes | contents API read twice, same sha and size |
 | LTX checkpoint | `ltxv-2b-0.9.8-distilled.safetensors`, 6 340 744 492 bytes, SHA-256 `76aa8c47…cad8f`, repo `Lightricks/LTX-Video` @ `8984fa25007f376c1a299016d0957a37a2f797bb` | HF tree API oid and the raw git-LFS pointer file agree |
 | Text encoder | `t5xxl_fp16.safetensors`, 9 787 841 024 bytes, SHA-256 `6e480b09…67635`, repo `comfyanonymous/flux_text_encoders` @ `6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5` | tree API oid and raw LFS pointer agree |
-| VideoHelperSuite (`VHS_VideoCombine`) | `9e963ff5ed0b69e588ee3d965711766b0f3cf829` (2025-07-14) | newest commit before 2025-07-17; **not checked against the workflow** |
-| ComfyUI-KJNodes (`StringToFloatList`) | `ad37ce656c13e9abea002b46e3a89be3dba32355` (2025-07-16) | newest commit before 2025-07-17; the class was seen at KJNodes `main`, **not at this commit** |
+| VideoHelperSuite (`VHS_VideoCombine`) | `9e963ff5ed0b69e588ee3d965711766b0f3cf829` (2025-07-14) | newest commit before 2025-07-17; `VideoCombine` inputs and `h264-mp4` format widgets read AT this commit (Stage 2) |
+| ComfyUI-KJNodes (`StringToFloatList`, `FloatToSigmas`) | `ad37ce656c13e9abea002b46e3a89be3dba32355` (2025-07-16) | newest commit before 2025-07-17; both classes read AT this commit (Stage 2): `nodes/nodes.py` and `nodes/curve_nodes.py`, registered in `__init__.py` |
 
 Full 64-character hashes are in the pins file. The 2026 "latest" states of these repositories target LTX-2.x (the
 workflow folder is now `2.0/2.3/2.5`); the 0.9.8-era files only exist at the old commits pinned above.
@@ -37,25 +37,26 @@ Facts that matter for the repository's adapter:
   was found at the pinned commit (the 0.9.8 distilled workflows in `13b-distilled/` are for the 13B model). Replacing the
   file name with the 0.9.8 file is an inference that **has not been verified** (`checkpoint_substitution_verified: false`).
 - The VAE comes from the checkpoint (`CheckpointLoaderSimple` output 2); no separate VAE file exists for this path.
-- `LoadImage` takes an image **name inside ComfyUI's input folder**, but the adapter passes `START_IMAGE` as a filesystem path.
+- `LoadImage` takes an image **name inside ComfyUI's input folder**, and the adapter used to pass `START_IMAGE` as a filesystem path. **Stage 2:** fixed by staging the image through POST `/upload/image` (B4).
 - The positive/negative prompts are widget text in the workflow; the adapter's placeholders are `START_IMAGE MOTION_PROMPT
-  FRAMES SEED FPS WIDTH HEIGHT` only (no `NEGATIVE_PROMPT`, no sigma list, no checkpoint name placeholder).
+  FRAMES SEED FPS WIDTH HEIGHT` only. **Stage 2:** the candidate uses exactly these seven (`MOTION_PROMPT` = positive prompt, `WIDTH`/`HEIGHT`
+  = LTXVImgToVideo, `FRAMES` = `length`, `FPS` = both frame_rate fields); the negative prompt, sigma list and checkpoint name are literals.
 - The designated output would be `VHS_VideoCombine`. `comfy.select_video` accepts mp4 items under `videos` or `gifs`; whether
   VHS reports under `gifs` on this ComfyUI was not verified.
 - The seed lives in `RandomNoise` (`noise_seed`) upstream of the sampler, so `comfy.generation_seed` would change a
   cache-relevant input (the retry freshness gate is satisfied by that path).
 
-## 3. Required node classes
+## 3. Required node classes (updated in Stage 2)
 
-Verified in ComfyUI source (`comfy_extras/nodes_lt.py` and `nodes_custom_sampler.py` at the pinned commit):
-`LTXVImgToVideo`, `LTXVConditioning`, `LTXVPreprocess`, `SamplerCustomAdvanced`, `KSamplerSelect`, `CFGGuider`, `RandomNoise`.
-Assumed core, not checked: `CheckpointLoaderSimple`, `CLIPLoader`, `CLIPTextEncode`, `LoadImage`, `VAEDecode`.
-Third-party: `VHS_VideoCombine` (VideoHelperSuite, GPL-3.0, needs ffmpeg). `StringToFloatList` and `FloatToSigmas` are both
-registered by ComfyUI-KJNodes at the pinned commit (`__init__.py` `NODE_CONFIG` entries read on 2026-10-22; they are absent from
-ComfyUI core's `nodes_custom_sampler.py`). `StringToFloatList` takes one `string` input (multiline); the `FloatToSigmas` class body and its
-input names were **not** read, so its API-format inputs are still unknown.
-The pins file records these statuses honestly; the real answer comes from `/object_info` on a running server, which the verify
-script compares class by class.
+All 15 classes now have a source-read input signature (`scripts/comfy/node_signatures.yaml`); the file/commit each was read from is
+recorded per entry. ComfyUI core at `2f74e17`: `CheckpointLoaderSimple`, `CLIPLoader` (type list includes `ltxv`), `CLIPTextEncode`, `LoadImage`,
+`VAEDecode`, `LTXVPreprocess`, `LTXVImgToVideo`, `LTXVConditioning`, `RandomNoise`, `CFGGuider`, `KSamplerSelect`, `SamplerCustomAdvanced`.
+ComfyUI-KJNodes at `ad37ce6` (GPL-3.0): `StringToFloatList` (`nodes/nodes.py`: one `string` input) and `FloatToSigmas`
+(`nodes/curve_nodes.py`: input `float_list`, FLOAT with `forceInput` so it is a link; returns SIGMAS; both registered in `__init__.py`
+`NODE_CONFIG`). ComfyUI-VideoHelperSuite at `9e963ff`: `VHS_VideoCombine` (required: images, frame_rate, loop_count, filename_prefix,
+format, pingpong, save_output; the `h264-mp4` format adds pix_fmt, crf, save_metadata, trim_to_audio; OUTPUT_NODE; returns `ui.gifs`).
+Every entry was read through a summarising fetch tool; the authoritative cross-check is the converter run against the live
+server's `/object_info` (section 8, step 6 of the GPU script).
 
 ## 4. Frame, size and FPS rules (O-003) — source-supported
 
@@ -86,17 +87,30 @@ multiple-of-32 size; it only checks list membership (see blocker B5). FPS: the o
   (`NOASSERTION`); read its LICENSE file. T5-XXL encoder repo: Apache-2.0 per HF metadata (underlying Google T5 licence not
   separately checked).
 
-## 7. Unresolved questions and blockers
+## 7. Stage 2 blocker matrix
 
-| ID | Question / blocker | Needed to resolve |
-|---|---|---|
-| B1 | Is the 2B **0.9.8** distilled checkpoint compatible with the 0.9.6-2B workflow graph unchanged? | A real run, or Lightricks' statement; no official 2B 0.9.8 low-level workflow found |
-| B2 | `FloatToSigmas` provider is KJNodes (registered at the pinned commit), but its input names and the output slot semantics are unread | read the class in KJNodes at the pinned commit and compare with `/object_info` |
-| B3 | UI-format workflow must become API-format with every widget value in the right slot | Export from a running ComfyUI with these nodes installed (or convert mechanically using `/object_info`); do not hand-write |
-| B4 | `LoadImage` needs an uploaded/input-folder image name; adapter passes a path | Adapter change (upload via `/upload/image` or copy into the input folder) — a code change not made here |
-| B5 | Adapter does not enforce 8n+1 or multiple-of-32 sizes; `config` `ltx.runtime.width/height` unset; test fixtures use 160×120 | Small validation change after the first run confirms the rule |
-| B6 | `models.yaml` schema requires a separate `vae` file in `ltx.runtime.files`; this path has none | Decide: reuse the checkpoint entry, or make `vae` optional |
-| B7 | Which T5 encoder packaging is "official": README names `google_t5-v1_1-xxl_encoderonly`; the example workflow uses `t5xxl_fp16.safetensors` | Owner choice; the example's file is pinned here |
-| B8 | VHS and KJNodes commits are unvalidated proposals; GPL/other licences of the stack and the LTX revenue clause | Owner review |
-| B9 | O-004 throughput budget and O-005 rubric still open | Owner decisions; the first test can only be recorded as "NOT VALIDATED" until set |
-| B10 | Real-library behaviour of the model-identity evidence (`_commit_hash`) | Out of scope for LTX; part of later speech/translation validation |
+| ID | Blocker | Status | Evidence / where it lives |
+|---|---|---|---|
+| B1 | 0.9.8 checkpoint inside a workflow that names the 0.9.6 file | **OPEN, UNVERIFIED** (substitution recorded, never silent) | No official 2B-0.9.8 workflow exists (model card: "N/A"). Circumstantial: the official 13B-distilled workflows at the pinned commit use the same `CheckpointLoaderSimple` + `CLIPLoader(t5xxl_fp16, ltxv)` + `euler_ancestral` + identical 8-step sigma string with 0.9.7/0.9.8 file names. The verifier reports `workflow:model_names` UNVERIFIED and the first GPU test is the actual check. |
+| B2 | `FloatToSigmas` source and inputs | **RESOLVED by source** | KJNodes `ad37ce6` `nodes/curve_nodes.py`, input `float_list`, registered in `NODE_CONFIG`. |
+| B3 | UI-format workflow to API format | **RESOLVED in tooling, UNVERIFIED on the live server** | `scripts/comfy/ui_to_api.py` + recipe produce `workflows/comfyui/ltx_i2v_098.candidate.json` (16 nodes) from the reconstructed inventory; every connection comes from the UI links, every literal from `widgets_values`; 11 listed overrides and 1 defaulted widget (`strength = 1.0`, absent from the older UI file) are printed. Proof on the GPU host: rebuild from the official file and the live `/object_info`, then `compare` must say IDENTICAL. |
+| B4 | `LoadImage` needs a name in ComfyUI's input folder | **RESOLVED in code** (fake-server tested) | `ComfyBackend.upload_image` (POST `/upload/image`, content-addressed name) used by `pipeline._ltx_run` for `START_IMAGE`/`END_IMAGE`. The real endpoint is unverified until the GPU run. |
+| B5 | Frame and size rule not enforced | **RESOLVED in code** | `config.ltx_dimension_problems` (frames 8n+1 ≥ 9; width/height multiples of 32 ≥ 64) is enforced when `models.yaml` loads and again in `validate_ltx_inputs`. |
+| B6 | Embedded vs separate VAE | **RESOLVED** | Embedded (official workflow takes VAE from `CheckpointLoaderSimple` output 2). `ltx.runtime.files.vae` may now be `null`; text encoder stays mandatory. |
+| B7 | T5 packaging | **RESOLVED for the first test** | The example's `t5xxl_fp16.safetensors` (type `ltxv`) is pinned; the README's encoder-only alternative is not used. |
+| B8 | VHS/KJNodes commits, licences, LTX revenue clause | **OPEN: owner approval** | Commits are the newest before the 0.9.8 release, not validated against the workflow beyond the class registrations above. |
+| B9 | O-004 throughput budget, O-005 rubric | **OPEN: owner decisions** | The first test uses explicit floors (10 GB free VRAM, 12 GB RAM, 30 GB disk, 30 min session), which are safety floors, not budgets. |
+| B10 | `_commit_hash` evidence behaviour in real libraries | **OUT OF SCOPE here** | Speech/translation validation. |
+| B11 | Negative prompt | **GranthStudio's own text** | The official one exceeded the 125-character read limit and was not reproduced; effect on quality unknown. Positive prompt = the shot's `motion_prompt` only (LTX-2B prefers long descriptive prompts). |
+| B12 | Custom-node Python requirements are unpinned | **OPEN** | The GPU script records `pip freeze`; no version pin exists in the sources read. |
+| B13 | Whether 2B fp16 + T5-XXL fp16 fit and finish on a T4 | **UNMEASURED** | The test records peak VRAM, wall time, and the preflight report. |
+| B14 | VHS reports the mp4 under `gifs` | **Source-supported, unverified live** | `comfy.select_video` accepts `gifs`; the real history shape is checked by the run. |
+
+## 8. Exact sequence the GPU script follows (scripts/kaggle/ltx_first_test.sh)
+
+1 require approval variable and exactly one Tesla T4 → 2 clone the four sources at pinned commits (checked) → 3 install requirements,
+record `pip freeze` → 4 download the two weight files from pinned revisions and `sha256sum -c` against the pins → 5 start ComfyUI,
+save `/system_stats` and `/object_info` → 6 rebuild the API workflow from the official file + live `/object_info` and require
+IDENTICAL to the committed candidate → 7 `scripts/ltx_first_test.py --execute`: static pin verification, synthetic project, readiness,
+one Tier-1 shot through `load_bundle(benchmark=True) → plan_tasks → gate_gpu_tasks → Scheduler.run`, clip probe, receipt.
+Recovery and fresh-render retry are NOT part of this first run; they follow only after a decoded clip.

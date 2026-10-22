@@ -64,23 +64,13 @@ If Python on the image is older than 3.12 the harness stops with `NOT_RUN_PYTHON
 different interpreter silently. Resolving that (for example installing Python 3.12 with `uv`) is a decision to take after seeing
 the receipt.
 
-## Stage 2 — static pin verification on the GPU host (after Stage 1 and after approval; NOT part of this phase)
+## Stage 2 — first LTX 0.9.8 I2V test on a Kaggle T4 (NOT part of the preparation phase; needs the signed manifest)
 
-Only after `docs/LTX_098_DOWNLOAD_APPROVAL.md` section D is signed: fetch the pinned sources and the two weight files into a
-GPU session, then, before starting ComfyUI inference:
-
-```bash
-python scripts/verify_ltx_pins.py \
-  --source comfyui=/kaggle/working/ComfyUI --source ltxvideo_nodes=/kaggle/working/ComfyUI/custom_nodes/ComfyUI-LTXVideo \
-  --source videohelpersuite=/kaggle/working/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite \
-  --source kjnodes=/kaggle/working/ComfyUI/custom_nodes/ComfyUI-KJNodes \
-  --models-dir /kaggle/working/ComfyUI --workflow /kaggle/working/ComfyUI/custom_nodes/ComfyUI-LTXVideo/example_workflows/low_level/ltxvideo-i2v-distilled.json \
-  --node-inventory object_info.json --models-yaml config/models.yaml --json pin_report.json
-```
-
-`object_info.json` is the saved response of the running server's `/object_info`. Exit 0 requires every check PASS; exit 1 means
-MISSING/MISMATCH; exit 2 means only UNVERIFIED items remain. A PASS is a static match, not evidence the model runs. The GPU
-steps that follow (resource preflight, one I2V shot, recovery) are listed in the task brief and are **not** prepared or run here.
+Everything, including the exact command, is in `docs/LTX_098_DOWNLOAD_APPROVAL.md` section D and is implemented by
+`scripts/kaggle/ltx_first_test.sh`. The script refuses to run without `LTX_DOWNLOAD_APPROVED`, without exactly one Tesla T4, or
+if any pinned commit/hash does not match. It then verifies the pins offline (`scripts/verify_ltx_pins.py`), proves the candidate API workflow
+against the live `/object_info` (`scripts/comfy/ui_to_api.py`), and runs one Tier-1 shot through the existing pipeline
+(`scripts/ltx_first_test.py`). Exit 0 means PASS (one clip decoded); the capability stays unvalidated until a human reviews the clip.
 
 ## What is not claimed
 

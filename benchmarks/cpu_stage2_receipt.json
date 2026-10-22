@@ -1,0 +1,9 @@
+{
+  "source_commit": "4881340d47ff02100db99e66971629fd9f4168fa",
+  "suite": "367 passed, 3 skipped (Windows)",
+  "junit": "benchmarks/cpu_stage2.xml",
+  "junit_sha256": "c164da6a4e6c9632e5bff0ea2a848313f6b08259a3f26c07c4da7fa7024a474c",
+  "architecture_sha256": "decd0af573e7b0c882d9dc5e8c98788bcecedd924a31dfc264ec1f883404f7c1",
+  "scope": "CPU/synthetic only; no GPU, model, ComfyUI or Linux run",
+  "later_changes_not_in_this_run": "docs only, plus a raw-string fix of one pytest regex in tests/test_foundations.py (that file was re-run: 11 passed)"
+}

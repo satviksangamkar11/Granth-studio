@@ -83,7 +83,7 @@ def test_ltx_frame_and_size_rule_and_embedded_vae(project):
     original = [*models["ltx"]["frame_counts"]]
     models["ltx"]["frame_counts"] = [49, 50]
     atomic_write_json(path, models)
-    with pytest.raises(ConfigError, match="frames 50 is not 8n\+1"):
+    with pytest.raises(ConfigError, match=r"frames 50 is not 8n\+1"):
         load_models(project)
     models["ltx"]["frame_counts"] = original
     atomic_write_json(path, models)

@@ -300,3 +300,18 @@ collection (Codex findings, fixed in `1e563e1`). Code under test: the accepted b
   receipt matches the files and the zip (`benchmarks/linux/`).
 - Rerun safety is covered by a unit test that executes the notebook's setup cell twice; this Kaggle run was a fresh kernel, not a second Run All.
 - Not validated: any GPU, model, ComfyUI or LTX behaviour.
+
+## Stage 2: LTX 0.9.8 integration blockers (code commit `4881340`, base `5077465`)
+
+Windows CPU suite at that commit: **367 passed, 3 skipped**, JUnit `benchmarks/cpu_stage2.xml`, receipt `benchmarks/cpu_stage2_receipt.json`. Not run on Linux again; no GPU,
+model, ComfyUI or Kaggle GPU run. All real model capabilities remain NOT VALIDATED. Nothing was downloaded.
+
+- Research: pinned ComfyUI `2f74e17`, ComfyUI-LTXVideo `36fdaf5`, VideoHelperSuite `9e963ff`, KJNodes `ad37ce6`; input signatures of all 15 node classes read from source;
+  `FloatToSigmas` is in KJNodes `nodes/curve_nodes.py` (input `float_list`). See `docs/LTX_098_RESEARCH.md` (blocker matrix, section 7).
+- Adapter: `config.ltx_dimension_problems` (8n+1 frames, multiples of 32) enforced on config load and in `validate_ltx_inputs`; `ltx.runtime.files.vae` may be null (embedded VAE);
+  `ComfyBackend.upload_image` stages START/END images through POST `/upload/image` (fake-server tested; the real endpoint is unverified); test fixtures that used 160x120 now use 160x96.
+- Workflow: `scripts/comfy/ui_to_api.py` + recipe produce `workflows/comfyui/ltx_i2v_098.candidate.json` from a reconstructed inventory (the official file was only read, not saved);
+  one defaulted widget (`strength`) and 11 overrides are reported. The shipped stub templates are unchanged.
+- Tools: `scripts/verify_ltx_pins.py` gained API-workflow structure checks; `scripts/ltx_first_test.py` runs one Tier-1 shot through the existing pipeline;
+  `scripts/kaggle/ltx_first_test.sh` is the guarded GPU command (refuses without `LTX_DOWNLOAD_APPROVED`).
+- Open: B1 (0.9.6 workflow vs 0.9.8 checkpoint), live proof of the converter, download approval (docs/LTX_098_DOWNLOAD_APPROVAL.md), O-004/O-005, T4 fit, unpinned custom-node requirements.

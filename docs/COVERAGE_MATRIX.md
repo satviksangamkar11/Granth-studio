@@ -124,3 +124,7 @@ Seven safety corrections after the Codex re-review (CPU/synthetic evidence only)
 - Section 8/9: IMPLEMENTED OS-enforced journal ownership (two-process tests), closure-based cache-aware regeneration, journal-persisted retry cap, location-bound store identity with explicit adoption, task-boundary GPU readiness. Real ComfyUI cache behaviour and T4 measurements NOT VALIDATED.
 - Sections 4.3/6: IMPLEMENTED directory-pinned exclusive reference creation (junction race tests ran; symlink tests skipped on this host).
 - Sections 5.3/7: IMPLEMENTED per-candidate, content-addressed model-run evidence through approval and release. IndicF5/IndicTrans2 and `_commit_hash` NOT VALIDATED.
+
+Stage 2 LTX integration (CPU/fake-server evidence only; real ComfyUI, LTX and T4 behaviour NOT VALIDATED):
+- Section 8/9: IMPLEMENTED the LTX 8n+1 / multiple-of-32 rule, embedded-VAE configuration, image staging via /upload/image, a candidate API workflow with a converter and structural verifier, and a guarded first-test runner through the existing pipeline.
+- Open: checkpoint substitution (0.9.6 example -> 0.9.8 file), live /object_info reconciliation, download approval, GPU fit and timing.
