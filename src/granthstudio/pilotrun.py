@@ -156,9 +156,17 @@ def measured_receipt(bundle: Bundle, scheduler: Scheduler, mapping, tasks, label
     directory = scheduler.task_dir(task)
     if task.task_id() not in complete:
         return None
+    elapsed, attempts = run_history(scheduler.store, task.task_id())
+    if (directory / "fallback.json").is_file():
+        # The LTX renders failed and a Tier 0 stand-in was used: that is evidence against the capability, not for it.
+        return {"schema_version": 1, "shot": label, "gpu_count": 1, "attempts": attempts, "video_seconds": 0.0,
+                "output_sha256": None, "pilot_plan_sha256": plan_sha, "capability": "i2v" if task.stage == "tier1" else "flf",
+                "checkpoint_sha256": None, "workflow_version": task.workflow_version, "gpu": "unknown",
+                "gpu_seconds_total": elapsed, "peak_vram_mb": None,
+                "measurement_notes": {"fallback": "all LTX attempts failed; a Tier 0 stand-in was used and is not counted",
+                                      "gpu_seconds_total": "estimated: wall-clock of every attempt"}}
     info = probe(directory / "clip.mp4")
     seconds = info.video_duration_s if info.video_duration_s is not None else info.duration_s
-    elapsed, attempts = run_history(scheduler.store, task.task_id())
     base = {"schema_version": 1, "shot": label, "gpu_count": 1, "attempts": attempts, "video_seconds": seconds,
             "output_sha256": sha256_file(directory / "clip.mp4"), "pilot_plan_sha256": plan_sha}
     if task.stage == "tier0":
@@ -203,7 +211,9 @@ def build_receipts(project: Project, adhyay: int, store_name: str | None) -> dic
             continue
         review_path = pilot_dir(project) / "reviews" / f"{label}.json"
         review = read_json(review_path) if review_path.is_file() else None
-        if review and review["measurement_sha256"] == _digest(measured):
+        if "fallback" in measured.get("measurement_notes", {}):
+            accepted, outcome = False, "fail"  # a stand-in clip can never accept the capability it replaced
+        elif review and review["measurement_sha256"] == _digest(measured):
             accepted, outcome = review["decision"] == "accept", "pass" if review["decision"] == "accept" else "fail"
         else:
             accepted, outcome = None, "pending"

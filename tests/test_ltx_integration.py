@@ -28,6 +28,7 @@ class FakeComfy:
         self.running, self.pending, self.history, self.nodes = [], [], {}, {"SyntheticLoader", "SyntheticSave"}
         self.forget_history = False
         self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
+        self.auto_status = "success"   # ComfyUI status_str of those auto-finished jobs ("error" simulates a failed render)
         self.view_bytes = b""      # body served by /view
         outer = self
 
@@ -42,7 +43,7 @@ class FakeComfy:
                     pid = f"p{len(outer.posts) + 1}"; outer.posts.append(body)
                     outer.running.append([0, pid, body["prompt"], body.get("extra_data", {}), []])
                     if outer.auto_outputs is not None:
-                        outer.finish(pid)
+                        outer.finish(pid, status=outer.auto_status)
                         outer.history[pid]["outputs"] = outer.auto_outputs
                     self._send({"prompt_id": pid})
                 elif self.path == "/interrupt":

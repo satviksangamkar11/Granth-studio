@@ -279,8 +279,11 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
                 offset += item["duration_s"]
             if span - offset > 0.000001:
                 segments.append((None, span - offset))
+            marker = clip.parent / "fallback.json"
             edits.append({"shot_id": shot["shot_id"], "start_s": cursor, "duration_s": span,
-                          "source_sha256": sha256_file(clip), "primary_action_duration_s": duration})
+                          "source_sha256": sha256_file(clip), "primary_action_duration_s": duration,
+                          "clip_source": "fallback_tier0" if marker.is_file() else "rendered",
+                          **({"fallback": read_json(marker)} if marker.is_file() else {})})
             cursor += span
         assemble_audio(segments, work / "voice.wav")
         atomic_write_bytes(work / f"{stem}.srt", srt_text(cues).encode("utf-8"))
@@ -291,6 +294,7 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
             "research_sha256": bundle.compiled["research_sha256"],
             "video_sha256": sha256_file(work / f"{stem}.mp4"), "subtitles_sha256": sha256_file(work / f"{stem}.srt"),
             "voice_sha256": sha256_file(work / "voice.wav"), "edit_plan_sha256": sha256_file(work / "edit_plan.json"),
+            "fallback_shots": [e["shot_id"] for e in edits if e["clip_source"] == "fallback_tier0"],
             "lines": [{"dialogue_id": line, "text_sha256": sha256_obj(normalize_text(entries[line]["text"])),
                        "audio_sha256": timings[line]["sha256"], "audio": timings[line]["provenance"],
                        "translation": entries[line].get("alignment", {}).get("source")}
@@ -378,8 +382,13 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             _visual_file(bundle, visual)
             if shot["tier"] == 2:
                 _visual_file(bundle, visuals[shot["end_visual_id"]])
+        if shot.get("fallback"):
+            inputs["fallback"] = sha256_obj(shot["fallback"])
         task = Task(stage, shot["shot_id"], inputs, version, run, depends_on=tuple(deps), max_attempts=MAX_ATTEMPTS,
                     preflight=preflight, verify=lambda directory, duration=duration: _verify_clip(directory, duration))
+        if shot.get("fallback"):  # frozen 9: Tier 0 stand-in, only after real failed renders, recorded in the receipt
+            task.fallback = _tier0_run(bundle, {**shot, "duration_s": duration}, visual)
+            task.fallback_info = {"mode": "tier0", "shot_id": shot["shot_id"], **shot["fallback"]}
         if capability:
             task.run = _ltx_run(bundle, shot, visual, capability, scheduler.store / "pending" / f"{task.task_id()}.json")
         shot_tasks[shot["shot_id"]] = task

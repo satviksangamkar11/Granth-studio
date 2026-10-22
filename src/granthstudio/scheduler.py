@@ -32,6 +32,10 @@ class Task:
     max_attempts: int = 1
     preflight: Callable[[], None] | None = field(default=None, repr=False)
     verify: Callable[[Path], None] | None = field(default=None, repr=False)
+    # Frozen section 9: a declared, human-reviewed fallback (e.g. Tier 0) used only after every render
+    # attempt genuinely failed. Never used for NOT VALIDATED, pending or gate-failed tasks.
+    fallback: RunFn | None = field(default=None, repr=False)
+    fallback_info: dict | None = None
 
     def __post_init__(self):
         if self.stage not in STAGE_ORDER or self.max_attempts < 1:
@@ -171,6 +175,7 @@ class Scheduler:
 
     def _execute(self, task, task_id, directory):
         detail = ""
+        history: list[dict[str, str]] = []
         for attempt in range(1, task.max_attempts + 1):
             work = self.store / task.stage / f".work-{task_id}-{uuid.uuid4().hex[:8]}"
             work.mkdir(parents=True)
@@ -180,7 +185,7 @@ class Scheduler:
                     task.preflight()
                 if task.verify:
                     task.verify(work)
-                self._seal(task, task_id, work, files, attempt)
+                self._seal(task, task_id, work, files, attempt, [*history, {"attempt": str(attempt), "outcome": "complete"}])
                 os.replace(work, directory)
                 return TaskResult(task.stage, task.name, task_id, "complete", attempt, "ok")
             except JobPending as exc:
@@ -195,9 +200,34 @@ class Scheduler:
             except Exception as exc:
                 shutil.rmtree(work, ignore_errors=True)
                 detail = f"attempt {attempt}: {type(exc).__name__}: {exc}"
+                history.append({"attempt": str(attempt), "outcome": "failed", "detail": detail[:300]})
+        if task.fallback is not None:
+            return self._run_fallback(task, task_id, directory, history, detail)
         return TaskResult(task.stage, task.name, task_id, "failed", task.max_attempts, detail)
 
-    def _seal(self, task, task_id, work, files, attempt):
+    def _run_fallback(self, task, task_id, directory, history, detail):
+        """Used only after real failed attempts. The fallback is recorded in the receipt, never silent."""
+        work = self.store / task.stage / f".work-{task_id}-{uuid.uuid4().hex[:8]}"
+        work.mkdir(parents=True)
+        try:
+            files = dict(task.fallback(work))
+            atomic_write_json(work / "fallback.json", {"schema_version": 1, **(task.fallback_info or {}),
+                                                       "failed_attempts": history})
+            files["fallback"] = "fallback.json"
+            if task.preflight:
+                task.preflight()
+            if task.verify:
+                task.verify(work)
+            self._seal(task, task_id, work, files, task.max_attempts, [*history, {"attempt": "fallback", "outcome": "complete"}])
+            os.replace(work, directory)
+            return TaskResult(task.stage, task.name, task_id, "complete", task.max_attempts,
+                              f"FALLBACK after {len(history)} failed attempt(s): {detail}")
+        except Exception as exc:
+            shutil.rmtree(work, ignore_errors=True)
+            return TaskResult(task.stage, task.name, task_id, "failed", task.max_attempts,
+                              f"{detail}; fallback also failed: {type(exc).__name__}: {exc}")
+
+    def _seal(self, task, task_id, work, files, attempt, history=None):
         if not files:
             raise TaskFailed("task produced no outputs")
         outputs = {}
@@ -210,6 +240,8 @@ class Scheduler:
                    "inputs": task.inputs, "workflow_version": task.workflow_version, "outputs": outputs,
                    "depends_on": list(task.depends_on), "dependency_hashes": self._dependency_hashes(task),
                    "attempts": attempt, "status": "complete", "completed_at": _now()}
+        if history:
+            receipt["attempt_history"] = history
         validate_document("task_receipt", receipt)
         atomic_write_json(work / RECEIPT, receipt)
         return receipt

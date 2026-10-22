@@ -122,6 +122,13 @@ def compile_episode(
                         raise CanonReferenceError(f"{shot_id}: flf shots need a known end_visual_id")
                 elif "end_visual_id" in shot:
                     raise ConfigError(f"{shot_id}: only flf shots take an end_visual_id")
+            fallback = shot.get("fallback")
+            if fallback is not None:
+                if shot["tier"] == 0:
+                    raise ConfigError(f"{shot_id}: a Tier 0 shot has nothing to fall back from")
+                if fallback["kind"] == "ambient" and set(action_ids) & required_actions:
+                    raise GateFailure(f"{shot_id}: an ambient fallback cannot replace a required approved action; "
+                                      "use kind 'faithful' only if a reviewer attests Tier 0 still shows the action")
             label = shot.get("pilot_shot")
             if label is not None:
                 if label in pilot:
@@ -147,6 +154,7 @@ def compile_episode(
                     "lighting": scene.get("lighting", "unspecified"),
                     "artistic_flags": list(scene.get("artistic_flags", [])),
                     "coverage": shot.get("coverage"),
+                    "fallback": shot.get("fallback"),
                     "pilot_shot": label,
                 }
             )

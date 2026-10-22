@@ -96,6 +96,31 @@
         "type": "string",
         "pattern": "^[0-9a-f]{64}$"
       }
+    },
+    "attempt_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attempt",
+          "outcome"
+        ],
+        "properties": {
+          "attempt": {
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "complete",
+              "failed"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

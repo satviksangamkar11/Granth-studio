@@ -227,6 +227,30 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "fallback": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "kind",
+            "reviewed_by"
+          ],
+          "properties": {
+            "mode": {
+              "const": "tier0"
+            },
+            "kind": {
+              "enum": [
+                "ambient",
+                "faithful"
+              ]
+            },
+            "reviewed_by": {
+              "type": "string",
+              "pattern": "\\S"
+            }
+          }
         }
       }
     }
