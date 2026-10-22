@@ -171,3 +171,16 @@ def test_api_workflow_mutations_are_caught(tmp_path):
     assert mutated(lambda d: d["102"]["inputs"].pop("noise_seed"))["api:seed_on_generation_path"] == vp.MISMATCH
     assert mutated(lambda d: d.update({"500": {"class_type": "Surprise", "inputs": {}}}))["api:node_classes"] == vp.MISMATCH
     assert api_checks(None)["api_workflow"] == vp.UNVERIFIED and api_checks(tmp_path / "nope.json")["api_workflow"] == vp.MISSING
+
+
+def test_reconstructed_official_inventory_is_judged_honestly(tmp_path):
+    """The reconstruction is NOT the official file's bytes, and the official file names the 0.9.6 checkpoint."""
+    pins = yaml.safe_load((REPO / "config" / "ltx_098_pins.yaml").read_text(encoding="utf-8"))
+    got = statuses(vp.check_workflow(pins, REPO / "workflows" / "comfyui" / "source" / "ltxvideo_i2v_distilled.ui_inventory.json"))
+    assert got["workflow:identity"] == vp.MISMATCH                      # different bytes than the pinned blob
+    assert got["workflow:links"] == got["workflow:node_classes"] == vp.PASS
+    assert got["workflow:model_names"] == vp.UNVERIFIED                 # 0.9.6 named in the file; substitution recorded, not verified
+    pins["workflow"]["checkpoint_substitution_verified"] = True
+    pins["workflow"]["checkpoint_named_in_workflow"] = "something-else.safetensors"
+    assert statuses(vp.check_workflow(pins, REPO / "workflows" / "comfyui" / "source" / "ltxvideo_i2v_distilled.ui_inventory.json"))[
+        "workflow:model_names"] == vp.MISMATCH                          # an unrecorded name is a mismatch, never tolerated

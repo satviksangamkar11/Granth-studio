@@ -168,10 +168,15 @@ def check_workflow(pins: dict[str, Any], path: Path | None) -> list[dict[str, st
                       f"not in pins: {extra}; pinned but unused: {missing}" if extra or missing else "workflow classes equal the pinned list"))
     named = [str(v) for n in nodes.values() for v in n.get("widgets_values", []) if isinstance(v, str) and v.endswith(".safetensors")]
     expected = [f["name"] for f in pins["files"]]
-    stale = [v for v in named if v not in expected and not v.startswith("t5xxl")]
-    out.append(result("workflow:model_names", MISMATCH if stale else PASS,
-                      f"workflow names {stale} which are not pinned files (checkpoint substitution is "
-                      f"{'verified' if pin['checkpoint_substitution_verified'] else 'NOT verified'})" if stale else "all model names are pinned"))
+    stale = sorted({v for v in named if v not in expected and not v.startswith("t5xxl")})
+    recorded = pin.get("checkpoint_named_in_workflow")
+    if not stale:
+        out.append(result("workflow:model_names", PASS, "all model names are pinned"))
+    elif set(stale) == {recorded} and not pin.get("checkpoint_substitution_verified", False):
+        out.append(result("workflow:model_names", UNVERIFIED,
+                          f"the official file names {recorded}, not the pinned checkpoint: the substitution is recorded but NOT verified (a real run is the test)"))
+    else:
+        out.append(result("workflow:model_names", MISMATCH, f"workflow names {stale}, which are not pinned files"))
     return out
 
 
