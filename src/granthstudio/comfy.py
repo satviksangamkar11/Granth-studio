@@ -29,20 +29,57 @@ NAMESPACE_FILE = ".store_namespace"
 _PLACEHOLDER = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
 
 
+def _location(journal: Path) -> str:
+    return os.path.normcase(str(journal.parent.resolve()))
+
+
 def store_namespace(journal: Path) -> str:
-    """Durable per-store namespace (the journal's directory): independent stores never share tokens."""
+    """Durable per-store submission namespace bound to the store's location.
+
+    Recovery of the same store (same location, any number of restarts or restores into that place) keeps its
+    namespace. A copy or restore into a different location is a fork: it gets a NEW namespace (recording the
+    parent) so two stores that are active at once can never share tokens; journals written under the parent
+    namespace then need an explicit ``adopt_journal`` before this store may touch their prompts."""
     path = journal.parent / NAMESPACE_FILE
-    if not path.is_file():
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_name(f".{NAMESPACE_FILE}.{uuid.uuid4().hex}.tmp")
-        tmp.write_text(uuid.uuid4().hex, encoding="utf-8")
-        try:
-            os.link(tmp, path)       # atomic create-if-absent that already carries its content
-        except FileExistsError:
-            pass
-        finally:
-            tmp.unlink(missing_ok=True)
-    return path.read_text(encoding="utf-8").strip()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    here = _location(journal)
+    with owned(path):
+        record = None
+        if path.is_file():
+            text = path.read_text(encoding="utf-8").strip()
+            try:
+                record = json.loads(text)
+            except ValueError:
+                record = {"namespace": text, "location": here}      # legacy plain-text id: adopt this location
+        if record is None or record.get("location") != here:
+            record = {"namespace": uuid.uuid4().hex, "location": here,
+                      **({"forked_from": record["namespace"]} if record else {})}
+        if not path.is_file() or json.loads(path.read_text(encoding="utf-8") or "null") != record:
+            atomic_write_json(path, record)
+        return record["namespace"]
+
+
+def adopt_journal(journal: Path, authorized_by: str, original_inactive: bool = False) -> dict[str, Any]:
+    """Bind a journal written under another (parent) namespace to this store, deliberately.
+
+    Terminal states (failed/rejected/completed) hold nothing outstanding and can be adopted by a named reviewer.
+    A submitting/submitted/cancelled journal may still have a live prompt on the server for the original store,
+    so adoption additionally needs ``original_inactive=True`` (the operator confirms the original is stopped).
+    The old namespace is kept in ``adopted_from``; nothing is resubmitted by adopting."""
+    if not authorized_by.strip():
+        raise ConfigError("a reviewer name is required to adopt a journal")
+    namespace = store_namespace(journal)
+    with owned(journal):
+        state = read_json(journal)
+        if state.get("namespace", namespace) == namespace:
+            return state
+        if state["state"] not in ("failed", "rejected", "completed") and not original_inactive:
+            raise ConfigError(f"journal state {state['state']!r} may belong to a live prompt of the original store; "
+                              "confirm the original is inactive to adopt it")
+        state = {**state, "namespace": namespace,
+                 "adopted_from": [*state.get("adopted_from", []), {"namespace": state["namespace"], "by": authorized_by.strip()}]}
+        atomic_write_json(journal, state)
+    return state
 
 
 if os.name == "nt":
@@ -361,8 +398,11 @@ class ComfyBackend:
         evidence = generation_evidence(graph, output_node)
         with owned(journal):
             state = read_json(journal) if journal.exists() else None
-            if state and (state.get("base_url") != self.base_url or state.get("namespace", namespace) != namespace):
-                raise JobPending("submission journal belongs to a different runtime or store")
+            if state and state.get("base_url") != self.base_url:
+                raise JobPending("submission journal belongs to a different runtime")
+            if state and state.get("namespace", namespace) != namespace:
+                raise JobPending("submission journal belongs to another store identity (copied or restored elsewhere); "
+                                 "adopt it explicitly with 'comfy adopt' before this store touches its prompt")
             if state and state.get("state") in ("submitting", "submitted", "completed", "cancelled") \
                     and state.get("graph_sha256") != graph_sha:
                 raise JobPending("submission journal belongs to a different graph")
@@ -480,6 +520,8 @@ def reconcile(backend: ComfyBackend, journal: Path, declare_lost: bool = False) 
 
 def _reconcile(backend, journal, declare_lost):
     state = read_json(journal)
+    if state.get("namespace", store_namespace(journal)) != store_namespace(journal):
+        raise JobPending("journal belongs to another store identity; adopt it explicitly before reconciling")
     if state["state"] == "submitting":
         found = (backend.locate(token=state.get("job_token"), namespace=state.get("namespace"))
                  if state.get("job_token") else None)
@@ -507,6 +549,8 @@ def cancel(backend: ComfyBackend, journal: Path) -> dict[str, Any]:
 
 def _cancel(backend, journal):
     state = read_json(journal)
+    if state.get("namespace", store_namespace(journal)) != store_namespace(journal):
+        raise JobPending("journal belongs to another store identity; adopt it explicitly before cancelling")
     if state["state"] != "submitted":
         raise ConfigError(f"only a submitted job can be cancelled (journal state {state['state']!r}); reconcile first")
     found = backend.locate(prompt_id=state["prompt_id"])

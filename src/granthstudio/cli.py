@@ -300,6 +300,15 @@ def cmd_comfy_reset_budget(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def cmd_comfy_adopt(args: argparse.Namespace) -> int:
+    from .comfy import adopt_journal
+    _need_confirm(args, "checked this store is the intended continuation of the original")
+    _, path = _journal(_project(args), args)
+    state = adopt_journal(path, args.reviewer, args.original_inactive)
+    print(f"{args.shot}: journal state {state['state']} now bound to this store's identity (by {args.reviewer})")
+    return EXIT_OK
+
+
 def _canon_models(project):
     return load_canon(project), load_models(project)
 
@@ -777,6 +786,15 @@ def build_parser() -> argparse.ArgumentParser:
     reset_p.add_argument("--reviewer", required=True)
     reset_p.add_argument("--confirm", action="store_true")
     reset_p.set_defaults(handler=cmd_comfy_reset_budget)
+
+    adopt_p = comfy_actions.add_parser("adopt", help="bind a copied/restored store's journal to this store's identity")
+    adopt_p.add_argument("adhyay", type=int)
+    adopt_p.add_argument("shot")
+    adopt_p.add_argument("--reviewer", required=True)
+    adopt_p.add_argument("--confirm", action="store_true")
+    adopt_p.add_argument("--original-inactive", action="store_true",
+                         help="the original store is stopped, so a live prompt cannot be duplicated")
+    adopt_p.set_defaults(handler=cmd_comfy_adopt)
 
     ffprobe = commands.add_parser("ffprobe", help="probe a media file")
     ffprobe.add_argument("file", type=Path)

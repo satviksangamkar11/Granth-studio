@@ -474,3 +474,45 @@ def test_established_cap_cannot_be_bypassed_by_omitting_or_raising_it(comfy, tmp
     with pytest.raises(GateFailure):
         backend(comfy).execute(seeded(79), journal, output_node="2")
     assert len(comfy.posts) == 4
+
+
+def test_restored_copy_gets_its_own_identity_and_must_adopt_outstanding_prompts(comfy, tmp_path):
+    import shutil
+    from granthstudio.comfy import adopt_journal, store_namespace
+    a = tmp_path / "A" / "pending" / "job.json"; a.parent.mkdir(parents=True)
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, a)                           # original store, prompt p1 outstanding
+    ns_a = store_namespace(a)
+    shutil.copytree(tmp_path / "A", tmp_path / "B")                # concurrently active restored copy
+    b = tmp_path / "B" / "pending" / "job.json"
+    assert store_namespace(a) == ns_a and store_namespace(a) == store_namespace(a)   # original: restart-stable
+    ns_b = store_namespace(b)
+    assert ns_b != ns_a and store_namespace(b) == ns_b             # copy forks once, then is stable
+    assert read_json(b.parent / ".store_namespace")["forked_from"] == ns_a
+    with pytest.raises(JobPending, match="another store identity"):
+        backend(comfy).execute(GRAPH, b)                           # no blind resubmission, no silent takeover
+    assert len(comfy.posts) == 1
+    with pytest.raises(JobPending, match="adopt it explicitly"):
+        reconcile(backend(comfy), b)
+    # same task name and graph in both stores, new journals: distinct tokens
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, a.with_name("same_task.json"))
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, b.with_name("same_task.json"))
+    assert read_json(a.with_name("same_task.json"))["job_token"] != read_json(b.with_name("same_task.json"))["job_token"]
+    # a lost response in the copy cannot attach the original's prompt
+    lost = b.with_name("lost.json")
+    atomic_write_json(lost, {"base_url": backend(comfy).base_url, "graph_sha256": sha256_obj(GRAPH), "namespace": ns_b,
+                             "state": "submitting", "job_token": read_json(a)["job_token"], "attempt": 1})
+    with pytest.raises(JobPending, match="not found"):
+        reconcile(backend(comfy), lost)
+    # deliberate adoption of the outstanding prompt: needs the operator to confirm the original is stopped
+    with pytest.raises(ConfigError, match="live prompt"):
+        adopt_journal(b, "synthetic-test-only")
+    with pytest.raises(ConfigError, match="reviewer"):
+        adopt_journal(b, " ", original_inactive=True)
+    adopted = adopt_journal(b, "synthetic-test-only", original_inactive=True)
+    assert adopted["adopted_from"] == [{"namespace": ns_a, "by": "synthetic-test-only"}] and adopted["prompt_id"] == "p1"
+    comfy.finish("p1")
+    backend(comfy).execute(GRAPH, b)                               # polls the adopted prompt; still one POST for the job
+    assert len([p for p in comfy.posts if p["extra_data"]["granthstudio_job"] == read_json(a)["job_token"]]) == 1
