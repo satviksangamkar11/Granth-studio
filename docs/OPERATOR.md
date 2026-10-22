@@ -86,3 +86,50 @@ Do not create replacement approval records without the required human review.
 
 Current correction verification: `benchmarks/claude_d_focused.xml`,
 `benchmarks/claude_d_cpu.xml`, and `benchmarks/claude_d_receipt.json`.
+
+
+## Kaggle and GPU entry points (nothing here has run on a GPU)
+
+Before any GPU spend, in this order. Each step refuses with a precise reason until its inputs exist.
+
+1. Decide and record in `config/`: `runtime.yaml` (resource minimums from a measured run, a durable
+   storage provider (O-008), source repositories **and 40-character commits**, package pins, weight
+   downloads with SHA-256), `models.yaml` (SDXL checkpoint and identity method (O-006), translation/speech/
+   ASR/diagnostics runners (O-007), the LTX runtime inventory), `pilot.yaml` (review criteria (O-005) and
+   the throughput budget (O-004)).
+2. On the GPU host: `granthstudio runtime bootstrap --execute` (clones the pinned commits, installs pinned
+   packages), `runtime fetch NAME` (add `--record` once to learn an unpinned file's hash, then pin it),
+   `runtime verify`, `runtime preflight --gpu` (exit 0 only when every GPU check passes).
+3. Set `GRANTHSTUDIO_SESSION_DEADLINE` (ISO 8601 with offset) so tasks stop launching near the end of the
+   session; unstarted tasks are recorded as `deferred` and resume from receipts.
+4. `granthstudio session N` restores the durable export, runs with GPU preflight, writes a run receipt, and
+   always exports artifacts back (`--cpu-only` skips the GPU requirement). `runtime export|restore` do the
+   same by hand.
+5. A hung or unknown ComfyUI job: `comfy reconcile N SHOT` finds it by its job token in the server's queue
+   or history. Only `--declare-lost` (after you confirmed on the server that it is gone) allows resubmission.
+   `comfy cancel N SHOT` interrupts or dequeues the prompt. `comfy inspect` lists missing nodes and checks
+   the pinned-checkpoint binding.
+
+Dual-T4 is refused: `workers.dual_t4` must stay `disabled` until a benchmark justifies a design.
+
+## Approval handoffs (every one needs a named human and `--confirm`)
+
+- Research: `research import FILE.md --adhyay N --questions FINAL.md [--compare OTHER.md:M] [--write]`
+  produces a draft that cannot load as research. Fill locations, cast, the exact Marathi dialogue and
+  artistic flags; resolve every question; delete the `_import` block; `research check-draft N`;
+  `research promote N`; then `research approve N`.
+- Visual canon: write `style` and `designs` in `canon/visual_assets.yaml`; `refs import`/`refs generate`/
+  `refs collect`; `refs approve ASSET --version V --reviewer R --confirm`. Keyframes follow the same path.
+- Hindi: `translate candidates N --execute`, `translate review N`, `translate approve N --line ID`.
+- Speech: record each voice's licence/consent in `canon/voices.yaml`; `speech generate`, `speech asr`,
+  `speech approve` (after listening).
+- Pilot: `pilot run N --execute`, `pilot receipts N`, `pilot review N --shot X --decision accept|reject
+  --rating CRITERION=pass|fail|not_assessed`, `pilot receipts N` again, `pilot report N`. For recovery run the
+  pilot twice into named stores (`--store clean`; `--store resumed`, interrupted once), then
+  `pilot recovery-evidence N --clean clean --resumed resumed --reviewer R --confirm`.
+- To validate an LTX capability: after accepted receipts exist, a human sets its `capabilities` entry to
+  `validated` and the workflow `_status` to `validated`. The code never does this and never writes
+  `approvals/adhyay_NN.json`.
+
+The pilot report states measured, estimated, not_computed and unvalidated values. GPU seconds are
+wall-clock estimates of every attempt (failed ones included). It gives no GO/NO-GO.

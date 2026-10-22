@@ -134,3 +134,34 @@ Current model generation and real production remain gated.
 
 These are CPU-tested enforcement corrections. Real GPU, ComfyUI/model execution,
 historical/semantic correctness, research approval and production GO remain deferred.
+
+
+## Remaining-pipeline contracts (sprint after the H1/M1/L1/R1 round)
+
+- **Runner contract.** Translation, speech, ASR and diagnostics are argv lists in `models.yaml` (no shell) that read
+  one JSON object on stdin and print one JSON object on stdout. A section is used only when `status: validated`
+  with `command`, `model` and `revision` set; otherwise exit 3 NOT VALIDATED (O-007). Payloads: translation
+  `{src_lang, tgt_lang, texts}` -> `{translations}`; speech `{text, language, reference_audio, reference_transcript,
+  out_path, ...}` -> writes `out_path`; ASR `{audio_path, language}` -> `{text}`; diagnostics `{metric,
+  media_path, reference_paths}` -> `{value}`.
+- **Translation.** Candidates live in `translation_candidates.json` bound to the Marathi text hash. Approval writes
+  one `hi.yaml` line after `hindi_line_problems` (numeric facts, protected terms) passes, with the reviewer and the
+  exact Marathi and Hindi hashes and an `alignment.source` (`model_candidate` or `human_text`).
+- **Voices and speech.** A voice needs `consent` (basis, granted_by, document_ref, recorded_at) and a hashed
+  reference. Candidates are bound to the request hash; approval requires the script text hash to be unchanged and
+  writes the timeline `audio` block with `provenance` (voice, model, revision, request, optional ASR report hash).
+  `assemble_*` outputs include `provenance.json` tying video, subtitle and voice hashes to per-line sources.
+- **Visual canon.** Requests contain only approved research facts, canon names and human-written designs. A
+  keyframe is usable only when an approved asset exists for the exact current request hash (`approved_keyframe`).
+  SDXL runs only with status validated, a pinned and locally verified checkpoint, a decided identity method and a
+  validated workflow (O-006).
+- **Benchmark mode.** `load_bundle(..., benchmark=True)` is used only by `pilot` commands. It keeps pins, runtime
+  file hashes, the checkpoint-binding check and a real `_output_node`, and waives only the capability `validated`
+  status, the passing-receipt requirement and the workflow `_status`. Without it the pilot could never produce the
+  evidence that validates LTX. Strict mode is unchanged and is what production approval uses.
+- **Receipt accounting (D-004).** `gpu_seconds_total` is the wall-clock sum of every logged attempt of the task across
+  sessions, failed attempts included, one GPU; it is an estimate, not utilisation. `peak_vram_mb` is the highest
+  `nvidia-smi` sample at poll time, a lower bound. Tier 0 and assembly use no GPU. Shot F (assembly) reports
+  `video_seconds` 0 because edits re-use footage counted once; the user may change that (O-004).
+- **Review binding.** A review stores the digest of the measured fields it saw; receipts take `accepted`/`outcome`
+  only from a review whose digest still matches. Criteria come from `config/pilot.yaml` (O-005).

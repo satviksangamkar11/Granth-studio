@@ -146,3 +146,39 @@ CPU correction evidence is not a production readiness claim.
   "clean" runs are refused with specific reasons. Synthetic fixtures now produce evidence
   by running the scheduler (clean run; interrupted then resumed run), not hand-written files.
   Full CPU suite after this follow-up: **137 passed, 1 skipped** (symlink test); `validate` exit 0.
+
+
+## Remaining-pipeline sprint (Phases A-F) — 2026-10-22
+
+Branch `sprint/remaining-pipeline`, parent `0964494`. One writer, one checkpoint commit per phase. The frozen
+architecture (sha256 `decd0af5…f7c1`) is unchanged; `pyproject.toml` and `uv.lock` are unchanged (no new
+dependencies). Nothing was run on a GPU, no model was downloaded, no research was approved, no production GO exists.
+
+- **A — Kaggle runtime** (`d100feb`): `runtime.py`, `config/runtime.yaml`. Preflight, pinned fetch, `local_dir` durable
+  storage with hash-manifest export/restore, session-deadline stop (`deferred` tasks), run receipts, pin-only
+  bootstrap, dual-T4 refused. CLI `runtime …`, `session N`.
+- **B — LTX/ComfyUI** (`05bbd3d`): checkpoint-binding check, node availability, token-tagged submissions with
+  `comfy reconcile|cancel|inspect`, input validation interface, per-clip metrics. Shipped workflows remain stubs; the
+  0.9.8 graph, frame rule (O-003) and VAE were NOT invented.
+- **C — SDXL / visual canon** (`3e9919b`): `keyframes.py`, `canon/visual_assets.yaml`, `refs …`. Refuses while checkpoint,
+  identity method and style are unselected (O-006).
+- **D — language and audio** (`20e0ed0`): `runners.py`, `translation.py`, `speech.py`; consent-gated voices, hash-bound
+  approvals, ASR reports, provenance into `provenance.json`. Models unselected (O-007).
+- **E — research importer** (`b534a57`): `importer.py`, `research import|check-draft|promote`. Reproduces exactly 104 open
+  and 75 provisional items; writes only an unloadable draft; never approves, answers or merges.
+- **F — pilot and diagnostics** (`7f0bc58`): `pilotrun.py`, `diagnostics.py`, `config/pilot.yaml`. Found and closed a
+  circularity (the pilot could not run because LTX needed receipts only a pilot produces) with an explicit benchmark mode.
+  Receipts from run data, hash-bound rubric reviews, evidence report with no verdict, recovery evidence from two real runs.
+
+Testing: fake ComfyUI server over real sockets, fake subprocess runners, synthetic fixtures. Full CPU suite is recorded
+in `benchmarks/sprint_cpu.xml`. These tests show interfaces and refusals work; they do not show any real model, workflow,
+GPU timing or translation/voice quality works.
+
+Open decisions that block real execution: O-003 frame rule, O-004 throughput budget, O-005 review rubric, O-006 SDXL
+checkpoint/identity/style, O-007 IndicTrans2/IndicF5/ASR choices, voice licences, O-008 storage provider; plus the
+research approval itself (Adhyay 1 still has unresolved items).
+
+Handoff for the independent re-review: diff `0964494..HEAD`; check (1) strict mode is unchanged and benchmark mode is
+reachable only from `pilot`; (2) no code path writes `approvals/adhyay_NN.json`, sets a status to `validated`, or
+answers/approves research; (3) every runner/ComfyUI refusal is exit 3 and produces no output; (4) the two refactors
+(`verified_runtime_hash`, `check_recovery_evidence`) are behaviour-neutral.

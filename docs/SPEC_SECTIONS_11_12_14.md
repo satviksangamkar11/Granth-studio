@@ -63,3 +63,27 @@ accepted sec per GPU-hour = (sum of video seconds where accepted = true) / (sum 
 - Frame-count rule (O-003): the pinned list is used; the exact rule is not confirmed.
 - Numerical acceptance threshold (O-004): not set. No threshold is enforced.
 - Manifest fields for lip-sync and language-specific visual variants are not yet specified (not needed for the A-F pilot).
+
+
+## Additions after the remaining-pipeline sprint
+
+New configuration: `config/runtime.yaml`, `config/pilot.yaml`; `config/models.yaml` gains `sdxl`, `translation`,
+`speech`, `asr`, `diagnostics`. New canon files: `canon/visual_assets.yaml`, `canon/voices.yaml` (optional).
+Per episode: `translation_candidates.json`. Per research folder: `research.draft.yaml`, `import_report.json`.
+Under `benchmarks/pilot_af/`: `pilot_plan.json`, `receipts/A-F.json`, `reviews/A-F.json`, `recovery_evidence.json`.
+Under the artifacts folder: `runs/` (run receipts), `references/` (versioned reference images), `voices/`,
+`audio/candidates/` and `audio/generated/`, `reports/pilot_adhyay_NN.json`. `scripts/runners/` holds two
+UNVALIDATED reference runners.
+
+New commands (all exit codes as above; 3 = NOT VALIDATED):
+
+| Command | Purpose |
+|---|---|
+| `runtime preflight [--gpu]`, `fetch NAME [--record]`, `verify`, `export`, `restore`, `bootstrap [--execute]` | GPU host checks, pinned weights, durable storage |
+| `session N [--cpu-only]` | restore, preflight, run with a deadline stop, run receipt, export |
+| `comfy inspect`, `reconcile N SHOT [--declare-lost]`, `cancel N SHOT` | ComfyUI compatibility and job control |
+| `refs status|import|generate|collect|approve` | visual canon, reference sheets, keyframe assets |
+| `translate candidates|review|approve` | Hindi candidates and hash-bound approval |
+| `speech voices|generate|asr|approve` | voice consent, speech candidates, ASR report, listening approval |
+| `research import|check-draft|promote` | Markdown research draft and handoff |
+| `pilot run|receipts|review|report|recovery-evidence` | A-F pilot (benchmark mode), receipts, rubric, evidence report |
