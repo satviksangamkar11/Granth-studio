@@ -265,3 +265,10 @@ Source commit `6b0b999`: **315 passed, 3 skipped** (two symlink-creation tests, 
 - F2: freshness ignores the save node's own fields; seed inputs are read from upstream nodes only.
 - F5: BASE plain-text namespaces migrate in place; adoption keeps `submission_namespace` so an uncertain submission is still found.
 - F8: approval recomputes the candidate text hash; evidence also binds request inputs (speech request/text hash, translation Marathi hash); release re-verifies evidence for generated audio and model-candidate translations.
+
+## Round 3 after the narrow re-review (base `97f34ea`)
+
+Source commit `3a3195e`: **318 passed, 3 skipped** (two symlink-creation tests and one POSIX-only sentinel test; POSIX behaviour is not executed on this Windows host). JUnit `benchmarks/cpu_final_round3.xml`, receipt `benchmarks/cpu_final_round3_receipt.json`.
+
+- F2: the output node is excluded unconditionally; an output-only graph yields no seed evidence and a rejected retry is refused.
+- F8: `_verify_audio` and `_verify_assembly` re-verify generated-audio and model-translation evidence on every resume; translation release is checked against the current Hindi text hash and the current Marathi hash.
