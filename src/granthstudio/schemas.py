@@ -24,6 +24,8 @@ KNOWN = (
     "task_receipt",
     "production_approval",
     "recovery_evidence",
+    "runtime",
+    "run_receipt",
 )
 
 

@@ -129,7 +129,9 @@ class Scheduler:
             for stale in (self.store / stage).glob(".work-*"):
                 shutil.rmtree(stale, ignore_errors=True)
 
-    def run(self, tasks: list[Task]) -> list[TaskResult]:
+    def run(self, tasks: list[Task], should_stop: Callable[[], bool] | None = None) -> list[TaskResult]:
+        """``should_stop`` is checked before each task (e.g. Kaggle session deadline); unstarted
+        tasks are recorded as ``deferred`` and resume on the next run from their receipts."""
         self._plan(tasks)
         self.store.mkdir(parents=True, exist_ok=True)
         self._remove_stale_work()
@@ -138,7 +140,9 @@ class Scheduler:
         for task in tasks:
             task_id = task.task_id()
             try:
-                if any(dep not in done for dep in task.depends_on):
+                if should_stop is not None and should_stop():
+                    result = TaskResult(task.stage, task.name, task_id, "deferred", 0, "stop requested before start")
+                elif any(dep not in done for dep in task.depends_on):
                     result = TaskResult(task.stage, task.name, task_id, "blocked", 0, "upstream task not complete")
                 else:
                     if task.preflight:

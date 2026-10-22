@@ -27,6 +27,8 @@ from .pilot import RECOVERY_CHECK, plan_pilot, score_receipts
 from .pipeline import episode_store, hard_gates, load_bundle, plan_tasks, snapshot
 from .qa import write_report
 from .research import approve, load_research, require_approved, verify_source
+from .runtime import (bootstrap_plan, fetch, get_storage, gpu_status, load_runtime, preflight, ram_available_mb,
+                      require_gpu_ready, require_single_worker, stop_before_deadline, verify_downloads, write_run_receipt)
 from .scheduler import Scheduler
 
 EXIT_OK, EXIT_ERROR, EXIT_REFUSED, EXIT_NOT_VALIDATED = 0, 1, 2, 3
@@ -142,26 +144,112 @@ def cmd_plan(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
-def cmd_run(args: argparse.Namespace) -> int:
-    project = _project(args)
-    bundle = load_bundle(project, load_models(project), args.adhyay)
+def _execute_plan(project, args, kind="episode_run", require_gpu=False):
+    """Run the plan with a session-deadline stop, then write the run receipt and QA report."""
+    started = _now()
+    runtime = load_runtime(project)
+    require_single_worker(runtime)
+    models = load_models(project)
+    report = preflight(project, models, runtime, gpu_status(), ram_available_mb())
+    if require_gpu:
+        require_gpu_ready(report)
+    bundle = load_bundle(project, models, args.adhyay)
     scheduler = Scheduler(episode_store(project, args.adhyay))
     tasks = plan_tasks(bundle, scheduler)
-    if not args.execute:
-        for task in tasks:
-            print(f"planned  {task.stage:<9} {task.name:<26} {task.task_id()}")
-        print("dry run: nothing executed. Add --execute to run; NOT VALIDATED stages will refuse.")
-        return EXIT_OK
-    results = scheduler.run(tasks)
+    results = scheduler.run(tasks, should_stop=stop_before_deadline(runtime))
     for result in results:
         print(f"{result.status:<13} {result.stage:<9} {result.name:<26} {result.detail}")
     gates = hard_gates(bundle, results)
     path = write_report(project, args.adhyay, gates, snapshot(bundle))
+    receipt = write_run_receipt(project, kind, args.adhyay, started, results, gates, snapshot(bundle), report,
+                                scheduler.store)
     released = all(g.passed for g in gates)
     print(f"QA report {path}: released={released}")
+    print(f"run receipt {receipt}")
     if any(r.status == "not_validated" for r in results):
         return EXIT_NOT_VALIDATED
     return EXIT_OK if released else EXIT_REFUSED
+
+
+def cmd_run(args: argparse.Namespace) -> int:
+    project = _project(args)
+    if not args.execute:
+        bundle = load_bundle(project, load_models(project), args.adhyay)
+        for task in plan_tasks(bundle, Scheduler(episode_store(project, args.adhyay))):
+            print(f"planned  {task.stage:<9} {task.name:<26} {task.task_id()}")
+        print("dry run: nothing executed. Add --execute to run; NOT VALIDATED stages will refuse.")
+        return EXIT_OK
+    return _execute_plan(project, args)
+
+
+def cmd_session(args: argparse.Namespace) -> int:
+    """Kaggle entry point: restore durable artifacts, GPU preflight, run, export (frozen sections 8-9)."""
+    project = _project(args)
+    storage = get_storage(load_runtime(project))
+    if (storage.root / args.export_name / "export_manifest.json").is_file():
+        storage.restore(args.export_name, project.artifacts_dir)
+    try:
+        return _execute_plan(project, args, require_gpu=not args.cpu_only)
+    finally:
+        storage.export(project.artifacts_dir, args.export_name)
+        print(f"exported artifacts to {storage.root / args.export_name}")
+
+
+def cmd_runtime_preflight(args: argparse.Namespace) -> int:
+    project = _project(args)
+    report = preflight(project, load_models(project), load_runtime(project), gpu_status(), ram_available_mb())
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    if args.gpu:
+        require_gpu_ready(report)
+    return EXIT_OK
+
+
+def _download(project, name):
+    item = next((d for d in load_runtime(project)["downloads"] if d["name"] == name), None)
+    if item is None:
+        raise ConfigError(f"no download named {name!r} in runtime.yaml")
+    return item
+
+
+def cmd_runtime_fetch(args: argparse.Namespace) -> int:
+    from .integrity import contained_path
+    item = _download(_project(args), args.name)
+    digest = fetch(item["url"], contained_path(args.base, item["dest"]), item["sha256"], record=args.record)
+    note = "" if item["sha256"] else " (RECORD ONLY: review, then pin it; nothing validated)"
+    print(f"{args.name}: sha256 {digest}{note}")
+    return EXIT_OK
+
+
+def cmd_runtime_verify(args: argparse.Namespace) -> int:
+    status = verify_downloads(load_runtime(_project(args)), args.base)
+    print(json.dumps(status, indent=2))
+    return EXIT_OK if status and all(v == "verified" for v in status.values()) else EXIT_NOT_VALIDATED
+
+
+def cmd_runtime_export(args: argparse.Namespace) -> int:
+    project = _project(args)
+    manifest = get_storage(load_runtime(project)).export(project.artifacts_dir, args.name)
+    print(f"exported {len(manifest['files'])} files as {args.name}")
+    return EXIT_OK
+
+
+def cmd_runtime_restore(args: argparse.Namespace) -> int:
+    project = _project(args)
+    manifest = get_storage(load_runtime(project)).restore(args.name, project.artifacts_dir)
+    print(f"restored and verified {len(manifest['files'])} files from {args.name}")
+    return EXIT_OK
+
+
+def cmd_runtime_bootstrap(args: argparse.Namespace) -> int:
+    import subprocess
+    commands = bootstrap_plan(load_runtime(_project(args)), args.workdir)
+    for command in commands:
+        print(" ".join(command))
+        if args.execute:
+            subprocess.run(command, check=True)
+    if not args.execute:
+        print("dry run: add --execute on the GPU host")
+    return EXIT_OK
 
 
 def cmd_report(args: argparse.Namespace) -> int:
@@ -245,6 +333,35 @@ def build_parser() -> argparse.ArgumentParser:
         if name == "run":
             sub.add_argument("--execute", action="store_true", help="really run the tasks")
         sub.set_defaults(handler=handler)
+
+    session = commands.add_parser("session", help="Kaggle session: restore, preflight, run, export")
+    session.add_argument("adhyay", type=int)
+    session.add_argument("--export-name", default="artifacts")
+    session.add_argument("--cpu-only", action="store_true", help="skip the GPU preflight requirement")
+    session.set_defaults(handler=cmd_session)
+
+    runtime = commands.add_parser("runtime", help="GPU host preflight, weights and durable storage")
+    runtime_actions = runtime.add_subparsers(dest="action", required=True)
+    pre = runtime_actions.add_parser("preflight", help="resource and configuration checks")
+    pre.add_argument("--gpu", action="store_true", help="fail unless every GPU check passes")
+    pre.set_defaults(handler=cmd_runtime_preflight)
+    models_dir = Path("/kaggle/working/ComfyUI/models")
+    fetch_cmd = runtime_actions.add_parser("fetch", help="download one pinned weight file and verify it")
+    fetch_cmd.add_argument("name")
+    fetch_cmd.add_argument("--base", type=Path, default=models_dir)
+    fetch_cmd.add_argument("--record", action="store_true", help="unpinned: download and print the hash only")
+    fetch_cmd.set_defaults(handler=cmd_runtime_fetch)
+    verify_cmd = runtime_actions.add_parser("verify", help="verify downloaded weights against pins")
+    verify_cmd.add_argument("--base", type=Path, default=models_dir)
+    verify_cmd.set_defaults(handler=cmd_runtime_verify)
+    for name, handler in (("export", cmd_runtime_export), ("restore", cmd_runtime_restore)):
+        sub_cmd = runtime_actions.add_parser(name, help=f"{name} artifacts to/from durable storage")
+        sub_cmd.add_argument("--name", default="artifacts")
+        sub_cmd.set_defaults(handler=handler)
+    boot = runtime_actions.add_parser("bootstrap", help="reproduce the GPU host from pins")
+    boot.add_argument("--workdir", type=Path, default=Path("/kaggle/working"))
+    boot.add_argument("--execute", action="store_true")
+    boot.set_defaults(handler=cmd_runtime_bootstrap)
 
     ffprobe = commands.add_parser("ffprobe", help="probe a media file")
     ffprobe.add_argument("file", type=Path)

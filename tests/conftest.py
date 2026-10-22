@@ -13,6 +13,8 @@ from granthstudio.config import Project, load_models, load_project
 from granthstudio.integrity import sha256_file, sha256_obj, normalize_text
 from granthstudio.research import approve
 
+REPO = Path(__file__).resolve().parents[1]
+
 FIXED_TIME = "2026-10-22T00:00:00+00:00"
 
 
@@ -51,6 +53,9 @@ def make_project(root: Path) -> Project:
         "hard_gates": ["source_integrity", "canon_identity", "marathi_lock", "hindi_terms", "task_outputs", "video_decode"],
         "diagnostics": ["face_embedding_similarity"], "enforced_thresholds": [],
     })
+    # Infrastructure config is copied from the repository so tests follow the shipped contract.
+    for name in ("runtime.yaml",):
+        shutil.copyfile(REPO / "config" / name, root / "config" / name)
     template_dir = root / "workflows" / "comfyui"
     template_dir.mkdir(parents=True, exist_ok=True)
     for name in ("ltx_i2v_098.json", "ltx_flf_098.json"):

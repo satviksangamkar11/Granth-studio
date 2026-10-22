@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "run_receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "adhyay", "started_at", "finished_at", "git_commit", "input_snapshot", "preflight", "results", "gates"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"enum": ["episode_run", "pilot_run", "recovery_clean", "recovery_resumed"]},
+    "adhyay": {"type": "integer", "minimum": 1, "maximum": 21},
+    "started_at": {"type": "string", "minLength": 1},
+    "finished_at": {"type": "string", "minLength": 1},
+    "git_commit": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{40}$"}]},
+    "input_snapshot": {"type": "object"},
+    "preflight": {"anyOf": [{"type": "null"}, {"type": "object"}]},
+    "store": {"type": "string"},
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stage", "name", "task_id", "status", "attempts", "detail"],
+        "properties": {
+          "stage": {"type": "string"},
+          "name": {"type": "string"},
+          "task_id": {"type": "string"},
+          "status": {"enum": ["complete", "resumed", "failed", "pending", "blocked", "not_validated", "deferred", "missing"]},
+          "attempts": {"type": "integer", "minimum": 0},
+          "detail": {"type": "string"}
+        }
+      }
+    },
+    "gates": {"type": "array", "items": {"type": "object"}}
+  }
+}
