@@ -311,6 +311,9 @@ def _language_report(project: Project, bundle: Bundle, scheduler: Scheduler, tas
             asr = read_json(asr_path) if asr_path.is_file() else None
             audio = entry.get("audio") or {}
             matches = asr is not None and asr["audio_sha256"] == audio.get("sha256")
+            align_path = candidate_root(project, language) / f"{line_id}.align.json"
+            align = read_json(align_path) if align_path.is_file() else None
+            align_ok = align is not None and align["audio_sha256"] == audio.get("sha256")
             row = {"dialogue_id": line_id,
                    "duration_s": typed(timings[line_id]["duration_s"], "measured") if line_id in timings
                    else typed(None, "not_computed", "audio task has no timings in this store"),
@@ -318,6 +321,9 @@ def _language_report(project: Project, bundle: Bundle, scheduler: Scheduler, tas
                                            "extra_words": asr["extra_words"]}, "measured",
                                           "word-level comparison with the script; not a pronunciation judgment")
                    if matches else typed(None, "not_computed", "no ASR report for the current audio"),
+                   "word_alignment": typed({"words": align["words"], "model": align["model"], "revision": align["revision"]},
+                                           "measured", "word timings only; subtitles stay phrase level (frozen 5.4)")
+                   if align_ok else typed(None, "not_computed", "no word alignment for the current audio"),
                    "audio_provenance": audio.get("provenance", {"origin": "imported"}) if audio else "no audio attached"}
             if language == "hi":
                 alignment = entry["alignment"]

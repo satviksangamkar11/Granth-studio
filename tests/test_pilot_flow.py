@@ -35,7 +35,7 @@ def comfy(tmp_path):
     server = FakeComfy()
     server.nodes = {"SyntheticLoader", "SyntheticSave"}
     clip = tmp_path / "server_clip.mp4"
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "color=c=blue:s=160x120:r=24", "-frames:v", "49",
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc=size=160x120:rate=24", "-frames:v", "49",
                     "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(clip)], check=True, timeout=30)
     server.view_bytes = clip.read_bytes()
     server.auto_outputs = {"9": {"videos": [{"filename": "o.mp4", "type": "output"}]}}

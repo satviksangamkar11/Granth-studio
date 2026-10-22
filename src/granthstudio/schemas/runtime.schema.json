@@ -10,7 +10,8 @@
     "workers",
     "sources",
     "python_packages",
-    "downloads"
+    "downloads",
+    "checks"
   ],
   "properties": {
     "schema_version": {
@@ -212,6 +213,18 @@
               }
             ]
           }
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reject_flat_output"
+      ],
+      "properties": {
+        "reject_flat_output": {
+          "type": "boolean"
         }
       }
     }

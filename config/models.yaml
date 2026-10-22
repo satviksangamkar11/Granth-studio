@@ -71,3 +71,11 @@ diagnostics:
   model: null
   revision: null
   timeout_s: 1800
+# Optional word-level forced aligner (frozen 5.4): {"audio_path","text","language"} ->
+# {"words":[{"word","start_s","end_s"}]}. Data only; subtitles stay sentence/phrase level.
+aligner:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800

@@ -286,6 +286,7 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
     backend = ComfyBackend(models["comfyui"]["base_url"])
     graph = render_graph(template, values)
     backend.require_nodes(graph)
+    backend.require_model_files(graph)
     history = backend.execute(graph, journal)
     backend.fetch(select_image(history, template.output_node), work / "keyframe.png")
     info = probe(work / "keyframe.png")

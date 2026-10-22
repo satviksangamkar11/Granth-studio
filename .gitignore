@@ -17,3 +17,6 @@ __pycache__/
 .secrets/
 *.egg-info/
 .pytest_cache/
+
+# agent worktrees
+.claude/

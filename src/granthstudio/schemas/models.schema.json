@@ -270,7 +270,10 @@
           "minLength": 1
         },
         "edit_workflow_template": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "minLength": 1
         },
         "identity_conditioning": {
@@ -643,6 +646,67 @@
               "pattern": "^style_[a-z0-9_]+$"
             }
           ]
+        }
+      }
+    },
+    "aligner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "command",
+        "model",
+        "revision",
+        "timeout_s"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "unvalidated",
+            "validated",
+            "disabled"
+          ]
+        },
+        "command": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ]
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "timeout_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
         }
       }
     }
