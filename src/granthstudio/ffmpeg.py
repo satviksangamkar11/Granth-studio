@@ -114,7 +114,8 @@ def validate_video(path: Path, expected_duration_s: float, tolerance_s: float = 
 def still_motion_clip(image: Path, out: Path, duration_s: float, fps: int = 24, size: tuple[int, int] = (1280, 720)) -> None:
     if duration_s <= 0:
         raise ValueError("duration must be positive")
-    frames = round(duration_s * fps)
+    # Round up to whole frames, as the editorial span does, so the still never falls a frame short.
+    frames = math.ceil(duration_s * fps - 1e-6)
     width, height = size
     video_filter = (
         f"zoompan=z='min(zoom+0.0008,1.1)':d={frames}"
@@ -123,7 +124,7 @@ def still_motion_clip(image: Path, out: Path, duration_s: float, fps: int = 24, 
     _run(
         [
             _tool("ffmpeg"), "-y", "-loglevel", "error", "-loop", "1", "-i", str(image),
-            "-vf", video_filter, "-frames:v", str(frames), "-t", f"{duration_s:.3f}",
+            "-vf", video_filter, "-frames:v", str(frames), "-t", f"{frames / fps:.6f}",
             "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(out),
         ]
     )
@@ -136,7 +137,8 @@ def assemble(clips: list[Path], out: Path, audio: Path | None = None) -> None:
         videos = [probe(clip) for clip in clips]
         duration = sum(v.video_duration_s if v.video_duration_s is not None else v.duration_s for v in videos)
         audio_duration = validate_audio(audio)
-        if abs(duration - audio_duration) > audio_video_tolerance(probe(audio), videos):
+        audio_info = probe(audio)
+        if abs(duration - audio_duration) > audio_video_tolerance(audio_info, videos):
             raise TaskFailed("audio and editorial video durations differ; refusing speech truncation")
     with tempfile.TemporaryDirectory() as scratch:
         listing = Path(scratch) / "clips.txt"
@@ -144,7 +146,10 @@ def assemble(clips: list[Path], out: Path, audio: Path | None = None) -> None:
         listing.write_text("".join(f"file '{name}'\n" for name in escaped), encoding="utf-8")
         command = [_tool("ffmpeg"), "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(listing)]
         if audio is not None:
-            command += ["-i", str(audio), "-map", "0:v:0", "-map", "1:a:0", "-c:a", "aac"]
+            # MP4 edit lists use the movie timescale (default 1/1000 s), which would cut the
+            # recorded audio length to whole milliseconds; use the audio rate so it stays exact.
+            command += ["-i", str(audio), "-map", "0:v:0", "-map", "1:a:0", "-c:a", "aac",
+                        "-movie_timescale", str(audio_info.audio_sample_rate or 24000)]
         command += ["-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(out)]
         _run(command)
 
@@ -175,19 +180,38 @@ def hold_clip(clip: Path, out: Path, duration_s: float) -> None:
 def assemble_audio(segments: list[tuple[Path | None, float]], out: Path) -> None:
     if not segments:
         raise TaskFailed("no audio segments")
-    command = [_tool("ffmpeg"), "-y", "-v", "error"]
-    filters = []
-    for i, (path, duration) in enumerate(segments):
-        if duration <= 0:
-            raise TaskFailed("audio segment duration must be positive")
-        if path is None:
-            command += ["-f", "lavfi", "-t", f"{duration:.6f}", "-i", "anullsrc=r=24000:cl=mono"]
-        else:
-            measured = validate_audio(path)
-            if abs(measured-duration) > 0.001:
-                raise TaskFailed("speech segment duration differs from measured audio")
-            command += ["-i", str(path)]
-        filters.append(f"[{i}:a]aresample=24000,aformat=channel_layouts=mono[a{i}]")
-    filters.append("".join(f"[a{i}]" for i in range(len(segments))) + f"concat=n={len(segments)}:v=0:a=1[out]")
-    command += ["-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "pcm_s16le", str(out)]
-    _run(command)
+    rate = 24000
+    with tempfile.TemporaryDirectory() as scratch:
+        command = [_tool("ffmpeg"), "-y", "-v", "error"]
+        filters = []
+        target = 0.0  # planned timeline position, seconds
+        written = 0   # samples actually placed so far
+        for i, (path, duration) in enumerate(segments):
+            if duration <= 0:
+                raise TaskFailed("audio segment duration must be positive")
+            target += duration
+            if path is None:
+                # Silence absorbs resampling rounding so the output lands on the planned sample.
+                samples = round(target * rate) - written
+                if samples <= 0:
+                    continue
+                command += ["-f", "lavfi", "-i", f"anullsrc=r={rate}:cl=mono"]
+                trim = f",atrim=end_sample={samples}"
+            else:
+                measured = validate_audio(path)
+                if abs(measured-duration) > 0.001:
+                    raise TaskFailed("speech segment duration differs from measured audio")
+                # Resample speech whole (never trimmed) and count its real samples.
+                speech = Path(scratch) / f"speech_{i:04d}.wav"
+                _run([_tool("ffmpeg"), "-y", "-v", "error", "-i", str(path), "-af",
+                      f"aresample={rate},aformat=channel_layouts=mono", "-c:a", "pcm_s16le", str(speech)])
+                info = probe(speech)
+                samples = round((info.audio_duration_s if info.audio_duration_s is not None else info.duration_s) * rate)
+                command += ["-i", str(speech)]
+                trim = ""
+            index = len(filters)
+            filters.append(f"[{index}:a]aresample={rate},aformat=channel_layouts=mono{trim}[a{index}]")
+            written += samples
+        filters.append("".join(f"[a{i}]" for i in range(len(filters))) + f"concat=n={len(filters)}:v=0:a=1[out]")
+        command += ["-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "pcm_s16le", str(out)]
+        _run(command)

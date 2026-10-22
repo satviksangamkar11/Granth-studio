@@ -112,3 +112,29 @@ CPU correction evidence is not a production readiness claim.
   `benchmarks/claude_d_receipt.json`. Frozen files and real research remain untouched.
 - No dependency install, model download, Kaggle/GPU execution or research/production GO.
 - Next: independent read-only Claude review per `docs/CLAUDE_REVIEW_D1_D7.md`.
+
+
+## Claude H1/M1/L1/R1 correction round — 2026-10-22
+
+- Parent: `c2c7daaa77c6fde9d6f1143bace40a6c974038e4` (review verdict FAIL).
+- H1 (F08): an HTTP 4xx is definitive only outside `/history/` polling. A 403/404/429 while
+  polling stays `JobPending`, keeps the `submitted` journal and original `prompt_id`, and
+  never re-POSTs, including across scheduler retries (`max_attempts=3`).
+- M1: recovery evidence is refused when any two clean/resumed or Marathi/Hindi records
+  are one file (same normalized path, Windows case variant, or same device/inode, which
+  covers hard links). Hash checks unchanged. Not done: binding outputs to scheduler
+  task receipts (no such field in the recovery contract; needs a decision).
+- L1: Tier-0 stills render `ceil` whole frames, so off-frame durations (1.3 s) no longer
+  fall a frame short; a short clip now reports a visual-duration error, not "extra speech".
+- R1 (demonstrated defect): 44.1/22.05 kHz speech drifted 4 samples over 12 shots and
+  was refused. Speech is now resampled whole and measured; silence is sized in samples
+  to land on the planned timeline. No speech trimming.
+- D6 follow-up (demonstrated defect): MP4's default 1/1000 s movie timescale cut the
+  muxed audio edit list to whole ms (8 samples short), failing the 2-sample check for
+  most chapter lengths. `assemble` now sets `-movie_timescale` to the audio rate.
+- Tests: D4 cases now assert the exact refusal reason; added Adhyay-1 D3 binding test.
+- Full CPU suite, run once: **130 passed, 1 skipped** (symlink test, host lacks symlinks).
+  Evidence: `benchmarks/claude_h_cpu.xml` (clean == recovered final video hashes, both
+  languages). `validate`: exit 0.
+- No dependency install, model download, Kaggle/GPU execution or research/production GO.
+  LTX/ComfyUI/IndicF5 behaviour behind real tunnels remains NOT VALIDATED.

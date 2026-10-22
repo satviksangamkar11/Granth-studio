@@ -6,6 +6,7 @@ explicitly NOT VALIDATED. No production authorization is created by this module.
 from __future__ import annotations
 
 import math
+import os
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -180,7 +181,10 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
             speech = sum(timings[line]["duration_s"] for line in shot["dialogue_ids"])
             span = math.ceil(max(duration, shot["duration_s"], speech) * FPS - 1e-6) / FPS
             if span - duration > 1e-6 and not shot.get("coverage"):
-                raise GateFailure(f"{shot['shot_id']}: extra speech needs reviewed final-frame coverage")
+                if speech > duration:
+                    raise GateFailure(f"{shot['shot_id']}: extra speech needs reviewed final-frame coverage")
+                raise GateFailure(f"{shot['shot_id']}: rendered clip {duration:.3f}s is shorter than the planned "
+                                  f"{shot['duration_s']:.3f}s; reviewed final-frame coverage is required")
             edit = work / f"edit_{index:04d}.mp4"
             hold_clip(clip, edit, span)
             clips.append(edit)
@@ -368,11 +372,20 @@ def production_problems(bundle):
         clean, resumed = evidence["clean_outputs"], evidence["resumed_outputs"]
         if set(clean) != set(resumed):
             raise GateFailure("clean/resumed recovery output sets differ")
+        seen = {}
         for name in clean:
-            for record in (clean[name], resumed[name]):
+            for run, record in (("clean", clean[name]), ("resumed", resumed[name])):
                 output = contained_path(bundle.project.artifacts_dir, record["path"])
                 if sha256_file(output) != record["sha256"]:
                     raise GateFailure(f"recovery output hash mismatch: {name}")
+                # One file cannot prove two runs or two languages: reject same path
+                # (case-insensitive on Windows) and same file identity (hard links).
+                info = output.stat()
+                keys = [os.path.normcase(str(output))] + ([(info.st_dev, info.st_ino)] if info.st_ino else [])
+                for key in keys:
+                    if key in seen:
+                        raise GateFailure(f"recovery outputs alias one file: {seen[key]} and {run}.{name}")
+                    seen[key] = f"{run}.{name}"
             if clean[name]["sha256"] != resumed[name]["sha256"]:
                 raise GateFailure(f"clean/resumed recovery hashes differ: {name}")
         return []

@@ -108,7 +108,9 @@ class ComfyBackend:
             with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
                 return response.read()
         except urllib.error.HTTPError as exc:
-            if 400 <= exc.code < 500:
+            # Only a 4xx on the submission itself proves nothing was queued. A 4xx on a status
+            # poll (proxy/tunnel 404, 403, 429) says nothing about an accepted prompt.
+            if 400 <= exc.code < 500 and not path.startswith("/history/"):
                 raise TaskFailed(f"ComfyUI HTTP {exc.code} rejected {method} {path}: {exc.reason}") from exc
             # A server error does not establish whether a submitted job was accepted.
             raise IntegrationUnavailable(f"ComfyUI HTTP {exc.code} at {self.base_url}: {exc.reason}") from exc

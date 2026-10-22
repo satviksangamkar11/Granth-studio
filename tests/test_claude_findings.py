@@ -160,6 +160,50 @@ def test_d1_transport_timeout_and_server_error_remain_ambiguous(tmp_path,monkeyp
     assert read_json(tmp_path/'job.json')['state']=='submitting'
 
 
+def fake_comfy(monkeypatch, poll_status):
+    """POST /prompt is accepted; /history answers poll_status (an HTTP error code) or the finished entry."""
+    import granthstudio.comfy as comfy
+    calls={'POST':0,'GET':0,'poll':poll_status}
+    def urlopen(request,**kwargs):
+        calls[request.method]+=1
+        if request.method=='POST':
+            return io.BytesIO(b'{"prompt_id":"original"}')
+        if calls['poll'] is not None:
+            raise urllib.error.HTTPError(request.full_url,calls['poll'],'proxy status',None,io.BytesIO(b''))
+        return io.BytesIO(b'{"original":{"status":{"status_str":"success"},"outputs":{}}}')
+    monkeypatch.setattr(comfy.urllib.request,'urlopen',urlopen)
+    return calls
+
+
+@pytest.mark.parametrize('status',[403,404,429])
+def test_h1_status_poll_4xx_never_resubmits(tmp_path,monkeypatch,status):
+    calls=fake_comfy(monkeypatch,status)
+    backend=ComfyBackend('http://synthetic.invalid'); journal=tmp_path/'job.json'
+    for _ in range(2):
+        with pytest.raises(JobPending): backend.execute({},journal)
+    state=read_json(journal)
+    assert calls['POST']==1 and state['state']=='submitted' and state['prompt_id']=='original'
+    calls['poll']=None  # proxy recovers: resume polling the original prompt
+    assert backend.execute({},journal)['status']['status_str']=='success'
+    assert calls['POST']==1
+
+
+@pytest.mark.parametrize('status',[404,429])
+def test_h1_scheduler_retries_cannot_duplicate_gpu_submission(tmp_path,monkeypatch,status):
+    calls=fake_comfy(monkeypatch,status)
+    journal=tmp_path/'job.json'
+    def run(work):
+        ComfyBackend('http://synthetic.invalid').execute({},journal)
+        (work/'clip.mp4').write_bytes(b'synthetic'); return {'clip':'clip.mp4'}
+    task=Task('tier1','shot',{},'v',run,max_attempts=3)
+    first=Scheduler(tmp_path/'store').run([task])
+    assert first[0].status=='pending' and first[0].attempts==1
+    assert calls['POST']==1 and read_json(journal)['prompt_id']=='original'
+    calls['poll']=None
+    assert Scheduler(tmp_path/'store').run([task])[0].status=='complete'
+    assert calls['POST']==1
+
+
 def test_d2_srt_point_one_point_two_five_point_one_rounding():
     entries=[{'dialogue_id':'d_0001','text':'one','start_s':0,'measured_duration_s':0.1},
              {'dialogue_id':'d_0002','text':'two','start_s':0.3-0.2,'measured_duration_s':0.25},
@@ -201,8 +245,17 @@ def test_d3_valid_file_hash_cannot_hide_different_current_pilot_assignments(appr
     assert any('current compiled pilot manifest' in p for p in production_problems(current))
 
 
-@pytest.mark.parametrize('change',['flag_only','wrong_hash','different_outputs','missing_file','other_pilot'])
-def test_d4_recovery_requires_actual_matching_output_files(approved_project,monkeypatch,change):
+def rewrite_recovery(project,approval,approval_path,recovery_path,evidence):
+    atomic_write_json(recovery_path,evidence)
+    approval['recovery_evidence']['sha256']=sha256_file(recovery_path)
+    atomic_write_json(approval_path,approval)
+
+
+@pytest.mark.parametrize('change,reason',[('flag_only','recovery_evidence'),('wrong_hash','hash mismatch: mr_video'),
+    ('different_outputs','hashes differ: mr_video'),('missing_file','No such file|cannot find'),
+    ('other_pilot','another pilot plan')])
+def test_d4_recovery_requires_actual_matching_output_files(approved_project,monkeypatch,change,reason):
+    import re
     current,approval,approval_path,recovery_path,_=policy_fixture(approved_project,monkeypatch)
     evidence=read_json(recovery_path)
     if change=='flag_only': evidence={'passed':True,'reviewed_by':'synthetic-test-only'}
@@ -213,10 +266,32 @@ def test_d4_recovery_requires_actual_matching_output_files(approved_project,monk
     elif change=='missing_file':
         path=approved_project.artifacts_dir/evidence['resumed_outputs']['hi_video']['path']; path.unlink()
     else: evidence['pilot_plan_sha256']='d'*64
-    atomic_write_json(recovery_path,evidence)
-    approval['recovery_evidence']['sha256']=sha256_file(recovery_path)
-    atomic_write_json(approval_path,approval)
-    assert production_problems(current)
+    rewrite_recovery(approved_project,approval,approval_path,recovery_path,evidence)
+    problems=production_problems(current)
+    assert len(problems)==1 and re.search(reason,problems[0]),problems
+
+
+@pytest.mark.parametrize('alias',['clean_is_resumed','marathi_is_hindi','case_variant','hard_link'])
+def test_m1_one_file_cannot_prove_two_recovery_outputs(approved_project,monkeypatch,alias):
+    current,approval,approval_path,recovery_path,_=policy_fixture(approved_project,monkeypatch)
+    evidence=read_json(recovery_path)
+    clean,resumed=evidence['clean_outputs'],evidence['resumed_outputs']
+    if alias=='clean_is_resumed':
+        resumed['mr_video']=dict(clean['mr_video'])
+    elif alias=='marathi_is_hindi':
+        # Same bytes for both languages in both runs, so only identity can reject it.
+        for run in (clean,resumed): run['hi_video']=dict(run['mr_video'])
+        resumed['hi_video']=dict(clean['mr_video'])
+    elif alias=='case_variant':
+        if os.name!='nt': pytest.skip('case-insensitive paths are a Windows property')
+        resumed['mr_video']={'path':clean['mr_video']['path'].upper(),'sha256':clean['mr_video']['sha256']}
+    else:
+        target=approved_project.artifacts_dir/resumed['mr_video']['path']; target.unlink()
+        try: os.link(approved_project.artifacts_dir/clean['mr_video']['path'],target)
+        except OSError as exc: pytest.skip(f'hard links unsupported here: {exc}')
+    rewrite_recovery(approved_project,approval,approval_path,recovery_path,evidence)
+    problems=production_problems(current)
+    assert len(problems)==1 and 'alias one file' in problems[0],problems
 
 
 def test_d5_gate_failure_stops_first_attempt_and_blocks_dependents(tmp_path):
@@ -306,3 +381,62 @@ def test_windows_junction_cannot_escape_artifact_root(tmp_path):
         assert junction.parent.resolve()==root.resolve() and junction.is_junction()
         os.rmdir(junction)
     assert (outside/'frame.png').is_file()
+
+
+@pytest.mark.skipif(not (have_tool('ffmpeg') and have_tool('ffprobe')),reason='media tools unavailable')
+def test_l1_off_frame_tier0_without_dialogue_assembles(approved_project):
+    from granthstudio.pipeline import episode_store, plan_tasks
+    from tests.test_review_regressions import make_cpu_project
+    make_cpu_project(approved_project)
+    path=approved_project.episodes_dir/'adhyay_01'/'manifest.yaml'; manifest=load_yaml(path)
+    # Its 0.2 s speech is far shorter than the shot, so only frame rounding could demand coverage.
+    silent=manifest['scenes'][0]['shots'][0]
+    assert silent['tier']==0
+    silent['duration_s']=1.3; silent.pop('coverage')  # 31.2 frames: used to render 31 and fail
+    atomic_write_json(path,manifest)
+    current=load_bundle(approved_project,load_models(approved_project),1)
+    scheduler=Scheduler(episode_store(approved_project,1)); tasks=plan_tasks(current,scheduler)
+    results=scheduler.run(tasks)
+    assert all(r.status=='complete' for r in results),results
+    plan=read_json(scheduler.task_dir(next(t for t in tasks if t.name=='assemble_mr'))/'edit_plan.json')
+    shot=next(s for s in plan['shots'] if s['shot_id']==silent['shot_id'])
+    assert shot['duration_s']==shot['primary_action_duration_s']==32/24
+
+
+@pytest.mark.skipif(not (have_tool('ffmpeg') and have_tool('ffprobe')),reason='media tools unavailable')
+def test_r1_resampled_44k_22k_speech_lands_on_timeline_without_truncation(tmp_path):
+    import math
+    from granthstudio.ffmpeg import assemble_audio, still_motion_clip, validate_audio
+    from tests.conftest import make_still
+    still=make_still(tmp_path/'still.png'); segments=[]; clips=[]; speech=0.0; total=0.0
+    for i in range(12):  # realistic per-segment rounding: 22.05/44.1 kHz never divide into 24 kHz
+        source=tmp_path/f'line_{i}.wav'
+        subprocess.run(['ffmpeg','-y','-v','error','-f','lavfi','-i',
+            f'sine=sample_rate={44100 if i%2 else 22050}:duration={0.3137+0.071*i}','-c:a','pcm_s16le',str(source)],
+            check=True,timeout=20)
+        measured=validate_audio(source); span=math.ceil(measured*24-1e-6)/24
+        segments += [(source,measured),(None,span-measured)]; speech+=measured; total+=span
+        clips.append(tmp_path/f'clip_{i}.mp4'); still_motion_clip(still,clips[-1],span,size=(160,120))
+    voice=tmp_path/'voice.wav'; assemble_audio(segments,voice)
+    voice_info=probe(voice)
+    assert abs(validate_audio(voice)-total)<=audio_video_tolerance(voice_info)
+    assert validate_audio(voice)>=speech
+    out=tmp_path/'release.mp4'; assemble(clips,out,voice)  # refuses if speech would be truncated
+    assert validate_video(out,total,tolerance_s=1/24,require_audio=True)==[]
+
+
+def test_d3_adhyay_one_release_binds_its_own_compiled_pilot(approved_project,monkeypatch):
+    current,approval,_,recovery_path,pilot_path=policy_fixture(approved_project,monkeypatch)
+    first=load_bundle(approved_project,current.models,1)
+    receipt_path=approved_project.benchmarks_dir/'synthetic-C.json'; receipt=read_json(receipt_path)
+    receipt.update(accepted=True,outcome='pass'); atomic_write_json(receipt_path,receipt)
+    approval=copy.deepcopy(approval)
+    approval.update(adhyay=1,flf_decision='go',input_sha256=sha256_obj(snapshot(first)))
+    next(r for r in approval['pilot_receipts'] if r['path']==receipt_path.name)['sha256']=sha256_file(receipt_path)
+    path=approved_project.root/'approvals'/'adhyay_01.json'; atomic_write_json(path,approval)
+    assert production_problems(first)==[]
+    plan=read_json(pilot_path); plan['title_note']='edited after approval'
+    atomic_write_json(pilot_path,plan); approval['pilot_plan']['sha256']=sha256_file(pilot_path)
+    atomic_write_json(path,approval)
+    problems=production_problems(first)
+    assert len(problems)==1 and 'current compiled pilot manifest' in problems[0],problems
