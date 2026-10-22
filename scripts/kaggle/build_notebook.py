@@ -19,7 +19,7 @@ bundles = glob.glob("/kaggle/input/**/granthstudio.bundle", recursive=True)
 assert bundles, "attach the granthstudio-cpu-baseline dataset (granthstudio.bundle) to this notebook"
 BUNDLE = bundles[0]
 print("python", sys.version.split()[0], "| platform", platform.platform(), "| bundle", BUNDLE)
-print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout or "no GPU attached (expected)")"""),
+print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout if shutil.which("nvidia-smi") else "no nvidia-smi: CPU session (expected)")"""),
     ("code", """WORK = "/kaggle/working"
 def run(*cmd, cwd=None):
     done = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
