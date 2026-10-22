@@ -172,6 +172,17 @@ def execution_gate_problems(args: argparse.Namespace) -> list[str]:
     return problems
 
 
+OOM_PATTERNS = ("out of memory", "outofmemoryerror", "oom due to", "cuda error: out of memory", "cublas_status_alloc_failed")
+
+
+def oom_markers(log: Path | None, detail: str = "") -> list[str]:
+    """Lines of the ComfyUI log (and the task detail) that show a CUDA out-of-memory failure."""
+    lines = [detail] if detail else []
+    if log is not None and log.is_file():
+        lines += log.read_text(encoding="utf-8", errors="replace").splitlines()[-400:]
+    return [line.strip() for line in lines if any(p in line.lower() for p in OOM_PATTERNS)]
+
+
 def comfy_log_excerpt(path: Path | None, limit: int = 120) -> list[str]:
     if path is None or not path.is_file():
         return []
@@ -237,6 +248,9 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
             if dep not in wanted:
                 wanted.add(dep); stack.append(dep)
     selected = [t for t in tasks if t.task_id() in wanted]
+    for t in selected:                    # first test: one attempt per run, no automatic retries and no fallback stand-in
+        t.max_attempts, t.fallback = 1, None
+    receipt["attempts_allowed_per_task"] = 1
     print("plan:", [(t.stage, t.name) for t in selected])
     report = preflight(project, models, load_runtime(project), gpu_status(), ram_available_mb())
     receipt["preflight"] = report
@@ -258,6 +272,10 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     if result.status == "not_validated":
         return finish("NOT_VALIDATED", result.detail)
     if result.status not in ("complete", "resumed"):             # 'resumed' = a verified receipt from an earlier identical run was reused
+        oom = oom_markers(args.comfy_log, result.detail)
+        receipt["out_of_memory"] = bool(oom)
+        if oom:                           # stop cleanly: no retry, no cheaper/costlier variant is tried automatically
+            return finish("FAIL", f"CUDA out of memory ({oom[0][:120]!r}); not retried. Decide on a lower-memory plan before another run. {result.status}: {result.detail}")
         return finish("FAIL", f"{result.status}: {result.detail}")
     receipt["reused_earlier_output"] = result.status == "resumed"
     from granthstudio.ffmpeg import probe

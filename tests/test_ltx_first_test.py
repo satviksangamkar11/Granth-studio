@@ -274,3 +274,50 @@ def test_port_owner_matches_a_listening_socket_to_the_process_that_holds_it(tmp_
     assert po.main(["20", "8190", "--proc-root", str(proc)]) == 1              # another process answering on the port is refused
     assert po.main(["10", "7777", "--proc-root", str(proc)]) == 1              # nothing listens there
     assert po.main(["30", "8190", "--proc-root", str(proc)]) == 2              # cannot inspect: refusal, never a pass
+
+
+def test_first_test_allows_exactly_one_attempt_and_reports_out_of_memory_without_retrying(host, tmp_path):
+    server = host[0]
+    server.auto_status = "error"                       # every job the fake accepts fails, like an exhausted GPU would
+    log = tmp_path / "comfyui.log"
+    log.write_text("got prompt" + chr(10) + "torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.00 GiB" + chr(10), encoding="utf-8")
+    code, receipt = run(host, "--execute", "--comfy-log", str(log))
+    assert code == 1 and receipt["verdict"] == "FAIL" and receipt["out_of_memory"] is True
+    assert "CUDA out of memory" in receipt["reason"] and "not retried" in receipt["reason"]
+    assert receipt["attempts_allowed_per_task"] == 1 and len(server.posts) == 1          # one submission, never a second attempt
+    assert receipt["results"][0]["attempts"] == 1
+
+
+def test_a_plain_failure_is_a_fail_without_the_oom_claim(host, tmp_path):
+    host[0].auto_status = "error"
+    log = tmp_path / "comfyui.log"; log.write_text("some other error" + chr(10), encoding="utf-8")
+    code, receipt = run(host, "--execute", "--comfy-log", str(log))
+    assert receipt["verdict"] == "FAIL" and receipt["out_of_memory"] is False and "out of memory" not in receipt["reason"].lower()
+    assert len(host[0].posts) == 1
+
+
+def test_oom_markers_reads_only_the_log_tail_and_the_detail(tmp_path):
+    log = tmp_path / "l.log"; log.write_text(chr(10).join(["fine"] * 500 + ["CUDA error: out of memory"]), encoding="utf-8")
+    assert ft.oom_markers(log) == ["CUDA error: out of memory"]
+    assert ft.oom_markers(None, "ComfyUI execution error") == [] and ft.oom_markers(None, "OutOfMemoryError: x")
+
+
+def test_gpu_notebook_is_generated_valid_and_cannot_run_until_a_human_fills_it():
+    import ast
+    nb = json.loads((REPO / "notebooks" / "kaggle_ltx_first_test.ipynb").read_text(encoding="utf-8"))
+    code = ["".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code"]
+    for source in code:
+        ast.parse(source)
+    params = code[0]
+    assert 'APPROVER = ""' in params and 'EXPECTED_COMMIT = ""' in params                  # nothing is signed on anyone's behalf
+    assert "assert APPROVER.strip()" in params and "[0-9a-f]{40}" in params
+    namespace = {}
+    with pytest.raises(AssertionError, match="APPROVER"):
+        exec(params, namespace)                                                             # the unfilled notebook stops at its first cell
+    joined = "\n".join(code)
+    assert "assert head == EXPECTED_COMMIT" in joined and "scripts/kaggle/ltx_first_test.sh" in joined and "LTX_DOWNLOAD_APPROVED" in joined
+    assert joined.index("assert head == EXPECTED_COMMIT") < joined.index("ltx_first_test.sh")   # commit check precedes the download script
+    spec = importlib.util.spec_from_file_location("build_ltx_notebook", REPO / "scripts" / "kaggle" / "build_ltx_notebook.py")
+    mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+    assert json.dumps(nb, indent=1) == json.dumps({"cells": [mod.cell(k, s) for k, s in mod.CELLS], "nbformat": 4, "nbformat_minor": 5,
+        "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"}, "language_info": {"name": "python"}}}, indent=1)

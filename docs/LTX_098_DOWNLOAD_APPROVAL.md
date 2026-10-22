@@ -45,24 +45,30 @@ GPL-3.0 components are used as separate processes/nodes on a rented notebook; no
    changed effective seed, plus recovery evidence.
 9. Estimated GPU time: unknown (B13); weights and fp32 sampling both take real time. Plan one full session and expect to rerun.
 
-## D. Exact command for the first Kaggle T4 compatibility test
+## D. Exact way to run the first Kaggle T4 compatibility test
 
-Kaggle notebook: accelerator **GPU T4 x1**, Internet **On**, the refreshed dataset `granthstudio-cpu-baseline` attached. `<SHA>` is the reviewed commit printed in
-`BUNDLE_INFO.json` (`branch_tip`) and recorded in `docs/PROGRESS.md`.
+Notebook `notebooks/kaggle_ltx_first_test.ipynb` (import it as a new Kaggle notebook): accelerator **GPU T4 x1**, Internet **On**, dataset
+`sangeetasangamkar/granthstudio-cpu-baseline` attached (private; the version whose `BUNDLE_INFO.json` `branch_tip` equals the reviewed commit). In its first cell the responsible human types
+`APPROVER` (the real name that accepted the licence and signed section E) and `EXPECTED_COMMIT` (the reviewed commit, full sha, from `BUNDLE_INFO.json`); the notebook stops at that cell until both are
+filled, then clones the bundle, refuses any other commit or a dirty tree, and runs `scripts/kaggle/ltx_first_test.sh` with those values. Equivalent shell form:
 
 ```bash
 cd /kaggle/working && git clone -q -b sprint/remaining-pipeline /kaggle/input/granthstudio-cpu-baseline/granthstudio.bundle granthstudio
 cd granthstudio && pip install -q pyyaml jsonschema pytest
-LTX_DOWNLOAD_APPROVED="<approver name>" LTX_EXPECTED_COMMIT="<SHA>" SESSION_MINUTES=240 bash scripts/kaggle/ltx_first_test.sh
+LTX_DOWNLOAD_APPROVED="<approver name>" LTX_EXPECTED_COMMIT="<reviewed sha>" SESSION_MINUTES=240 bash scripts/kaggle/ltx_first_test.sh
 ```
 
-Evidence: `/kaggle/working/ltx_first_test_evidence.tgz` (receipt, pin report, live node inventory, rebuilt workflow, converter report, ComfyUI log and launch arguments,
-pip freeze, nvidia-smi before/after, VRAM trace, the journal, the clip). Verdicts: `PASS` (one clip decoded through the pipeline, capability still unvalidated),
-`FAIL` (task failed or wrong dimensions), `NOT_VALIDATED` (pipeline refused, e.g. unready host), `NOT_RUN` (a precondition failed before any request).
+`SESSION_MINUTES` is a maximum, not a target. The first test allows **one attempt**: on a CUDA out-of-memory error (or any failure) it stops and records the evidence; it never retries automatically or tries
+another configuration. Evidence: `/kaggle/working/ltx_first_test_evidence.tgz` (receipt, pin report, live node inventory, rebuilt workflow, converter report, ComfyUI log and launch arguments, pip freeze,
+nvidia-smi before/after, VRAM trace, the journal, the clip). Verdicts: `PASS` (one clip decoded through the pipeline, capability still unvalidated), `FAIL` (task failed, out of memory, or wrong dimensions),
+`NOT_VALIDATED` (pipeline refused, e.g. unready host), `NOT_RUN` (a precondition failed before any request).
 
-## E. Approval
+## E. Approval — to be completed by the responsible human (an assistant cannot sign or accept a licence)
 
 | Decision | Name | Date |
 |---|---|---|
-| Approve downloads A and B as listed, and a Kaggle T4 session to run section D (yes/no, with edits) | | |
-| LTXV Open Weights License 0.X read and accepted by the responsible person | | |
+| I accepted the LTXV Open Weights License 0.X (commercial use below US$10 M annual revenue; AI-generated content disclosed when published; use restrictions) and read the ComfyUI-LTXVideo LICENSE | | |
+| Approve downloads A and B as listed, and one Kaggle T4 session to run section D | | |
+
+Owner decision recorded 2026-10-23 (chat): *approve with edits* - approved in principle: the two weights, one Kaggle T4, a 240-minute maximum, one synthetic I2V clip, and (after a first successful clip) a controlled
+cache/retry test. Not approved: full Adhyay scenes, marking LTX production-validated. The signature rows above stay blank until the named person fills them; `LTX_DOWNLOAD_APPROVED`/`APPROVER` must carry that same name.

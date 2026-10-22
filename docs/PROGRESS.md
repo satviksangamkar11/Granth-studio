@@ -332,3 +332,9 @@ negative slots and judges the seed on the output's dependency path; the upload r
 - Fresh Kaggle bundle published: private dataset `sangeetasangamkar/granthstudio-cpu-baseline`, branch tip `0860a32df877adc57d7712648c001ce3f147140a`, bundle SHA-256 `0da9607e…49df10` (538 708 bytes). It is a snapshot at that commit; this docs/evidence commit is not in it and the bundle must not be rebuilt before the run.
 - Codex: Stage 2 narrow reviews FAIL -> fixes -> PASS WITH ISSUES; final delta check: SAFE FOR THE FIRST T4 TEST = yes (one low, non-blocking note on `port_owner.py` exit codes for unreadable /proc tables).
 - Nothing downloaded; no GPU use; the LTXV licence has not been accepted by a human; all real capabilities remain NOT VALIDATED.
+
+### Owner decision on the first T4 test (2026-10-23): approve with edits
+Approved in principle: download the two pinned weights after human licence acceptance, one Kaggle T4, a 240-minute maximum session, one synthetic I2V clip, a controlled cache/retry experiment after a first
+successful clip. Not approved: full Adhyay scenes, production validation. Added in response: one attempt per run and a clean stop on CUDA out-of-memory (no automatic retry or variant),
+`notebooks/kaggle_ltx_first_test.ipynb` (approver name and expected commit are typed by the human; nothing is pre-signed). Phase 1 remains the source-backed short video through the complete pipeline;
+this clip is only a technical prerequisite.
