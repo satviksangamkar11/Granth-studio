@@ -152,6 +152,57 @@ def asr_check(project: Project, models: dict[str, Any], adhyay: int, language: s
     return report
 
 
+def validate_alignment(words: Any, script_text: str, duration_s: float) -> list[dict[str, Any]]:
+    """Frozen 5.4 word-level alignment checks. Pure: raises GateFailure, returns clean word rows."""
+    if not isinstance(words, list) or not all(isinstance(w, dict) for w in words):
+        raise GateFailure("aligner must return {'words': [{'word','start_s','end_s'}]}")
+    if _tokens(" ".join(str(w.get("word", "")) for w in words)) != _tokens(script_text):
+        raise GateFailure("aligned words differ from the script's tokens")
+    previous_end = previous_start = 0.0
+    for w in words:
+        start, end = w.get("start_s"), w.get("end_s")
+        if not all(isinstance(v, (int, float)) and not isinstance(v, bool) and v == v for v in (start, end)):
+            raise GateFailure(f"word {w['word']!r}: start_s/end_s must be numbers")
+        if start < 0 or end < start:
+            raise GateFailure(f"word {w['word']!r}: invalid span {start}..{end}")
+        if start < previous_start:
+            raise GateFailure(f"word {w['word']!r}: starts before the previous word")
+        if start < previous_end - 0.001:
+            raise GateFailure(f"word {w['word']!r}: overlaps the previous word")
+        previous_start, previous_end = start, max(previous_end, end)
+    if words and previous_end > duration_s + 0.001:
+        raise GateFailure(f"alignment ends at {previous_end:.3f}s, after the audio ({duration_s:.3f}s)")
+    return [{"word": w["word"], "start_s": w["start_s"], "end_s": w["end_s"]} for w in words]
+
+
+def align_words(project: Project, models: dict[str, Any], adhyay: int, language: str, line_id: str) -> dict[str, Any]:
+    section = require_runner(models, "aligner", "aligner")
+    entry = next((e for e in load_timeline(project, adhyay, language)["entries"] if e["dialogue_id"] == line_id), None)
+    if entry is None:
+        raise ConfigError(f"unknown dialogue id {line_id}")
+    record_file = record_path(project, language, line_id)
+    if record_file.is_file():
+        record = read_json(record_file)
+        audio = contained_path(candidate_root(project, language), record["audio"]["path"])
+        digest = record["audio"]["sha256"]
+    elif entry.get("audio"):
+        audio = contained_path(project.artifacts_dir / "audio", entry["audio"]["path"])
+        digest = entry["audio"]["sha256"]
+    else:
+        raise GateFailure(f"{line_id}: no speech candidate or timeline audio for {language}")
+    if not audio.is_file() or sha256_file(audio) != digest:
+        raise GateFailure(f"{line_id}: audio missing or changed")
+    duration = validate_audio(audio)
+    answer = run_json(section, {"audio_path": str(audio), "text": entry["text"], "language": language})
+    words = validate_alignment(answer.get("words"), entry["text"], duration)
+    report = {"schema_version": 1, "dialogue_id": line_id, "language": language, "audio_sha256": digest,
+              "expected_text_sha256": sha256_obj(normalize_text(entry["text"])), "words": words,
+              "model": section["model"], "revision": section["revision"], "enforced": False,
+              "note": "Word-level data only; subtitles stay sentence/phrase level (frozen 5.4)."}
+    atomic_write_json(candidate_root(project, language) / f"{line_id}.align.json", report)
+    return report
+
+
 def _record(project: Project, language: str, line_id: str) -> Path:
     path = record_path(project, language, line_id)
     if not path.is_file():

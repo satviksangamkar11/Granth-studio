@@ -43,6 +43,21 @@ def _frames(path: Path, video_filter: str) -> list[dict[str, float]]:
     return frames
 
 
+def _flat_flags(path: Path) -> list[bool]:
+    return [all(f.get(f"{p}MIN") is not None and f.get(f"{p}MIN") == f.get(f"{p}MAX") for p in "YUV")
+            for f in _frames(path, "")]
+
+
+def flat_frames(path: Path) -> int:
+    """Frames that are one flat colour (min == max on all three planes)."""
+    return sum(_flat_flags(path))
+
+
+def is_degenerate(path: Path) -> bool:
+    """True when every frame is flat: the output of a failed decode, not an image."""
+    return all(_flat_flags(path))
+
+
 def _summary(values: list[float]) -> dict[str, float]:
     return {"mean": statistics.fmean(values), "min": min(values), "max": max(values),
             "std": statistics.pstdev(values) if len(values) > 1 else 0.0}

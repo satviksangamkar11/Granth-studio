@@ -87,7 +87,8 @@ def node_types(graph: dict[str, Any]) -> set[str]:
     return {node["class_type"] for key, node in graph.items() if not key.startswith("_")}
 
 
-_WEIGHT_NAME = re.compile(r'"([^"\\]+\.(?:safetensors|ckpt|pt|pth|gguf))"')
+_WEIGHT_EXTENSIONS = (".safetensors", ".ckpt", ".pt", ".pth", ".gguf")
+_WEIGHT_NAME =re.compile(r'"([^"\\]+\.(?:safetensors|ckpt|pt|pth|gguf))"')
 
 
 def check_checkpoint_binding(template: WorkflowTemplate, checkpoint_file: str) -> None:
@@ -167,6 +168,24 @@ class ComfyBackend:
         missing = sorted(node_types(graph) - set(self.object_info()))
         if missing:
             raise IntegrationUnavailable(f"ComfyUI at {self.base_url} lacks required nodes {missing}: NOT VALIDATED")
+
+    def require_model_files(self, graph: dict[str, Any]) -> None:
+        """Every weight file a node names must be among the options ComfyUI lists for that input.
+        Absent definitions or option-less inputs are skipped (tolerant)."""
+        info = self.object_info()
+        for node_id, node in graph.items():
+            if not isinstance(node, dict):
+                continue
+            definition = info.get(node.get("class_type"))
+            sections = ((definition or {}).get("input") or {}) if isinstance(definition, dict) else {}
+            for name, value in (node.get("inputs") or {}).items():
+                if not (isinstance(value, str) and value.lower().endswith(_WEIGHT_EXTENSIONS)):
+                    continue
+                spec = next((sections[s][name] for s in ("required", "optional")
+                             if isinstance(sections.get(s), dict) and name in sections[s]), None)
+                if isinstance(spec, list) and spec and isinstance(spec[0], list) and value not in spec[0]:
+                    raise IntegrationUnavailable(f"ComfyUI at {self.base_url} cannot see weight file {value} "
+                                                 f"for node {node_id}: NOT VALIDATED")
 
     def locate(self, prompt_id: str | None = None, token: str | None = None) -> tuple[str, str, dict | None] | None:
         """Find a job in the queue or history by prompt id or by the job token sent at submission."""

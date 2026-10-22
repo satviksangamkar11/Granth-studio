@@ -418,6 +418,14 @@ def cmd_speech_asr(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def cmd_speech_align(args: argparse.Namespace) -> int:
+    from . import speech
+    project = _project(args)
+    report = speech.align_words(project, load_models(project), args.adhyay, args.lang, args.line)
+    print(f"{args.line}: {len(report['words'])} aligned word(s) (data only, not enforced)")
+    return EXIT_OK
+
+
 def cmd_speech_approve(args: argparse.Namespace) -> int:
     from . import speech
     _need_confirm(args, "listened to the generated audio")
@@ -726,8 +734,9 @@ def build_parser() -> argparse.ArgumentParser:
     gen_s.add_argument("--line", action="append")
     gen_s.add_argument("--execute", action="store_true")
     gen_s.set_defaults(handler=cmd_speech_generate)
-    for name, handler in (("asr", cmd_speech_asr), ("approve", cmd_speech_approve)):
-        sub_cmd = speech_actions.add_parser(name, help="ASR comparison report" if name == "asr" else "human listening approval")
+    for name, handler in (("asr", cmd_speech_asr), ("align", cmd_speech_align), ("approve", cmd_speech_approve)):
+        sub_cmd = speech_actions.add_parser(name, help={"asr": "ASR comparison report", "align": "word-level alignment data",
+                                                        "approve": "human listening approval"}[name])
         sub_cmd.add_argument("adhyay", type=int)
         sub_cmd.add_argument("--lang", required=True, choices=["mr", "hi"])
         sub_cmd.add_argument("--line", required=True)

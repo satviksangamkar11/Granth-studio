@@ -30,6 +30,7 @@ class FakeComfy:
         self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
         self.auto_status = "success"   # ComfyUI status_str of those auto-finished jobs ("error" simulates a failed render)
         self.view_bytes = b""      # body served by /view
+        self.object_info_override = None   # optional richer /object_info dict (tests/test_weight_checks.py)
         outer = self
 
         class Handler(BaseHTTPRequestHandler):
@@ -56,7 +57,7 @@ class FakeComfy:
                 if self.path.startswith("/view"):
                     self.send_response(200); self.send_header("Content-Length", str(len(outer.view_bytes)))
                     self.end_headers(); self.wfile.write(outer.view_bytes)
-                elif self.path == "/object_info": self._send({n: {} for n in outer.nodes})
+                elif self.path == "/object_info": self._send(outer.object_info_override if outer.object_info_override is not None else {n: {} for n in outer.nodes})
                 elif self.path == "/system_stats": self._send({"system": {"comfyui_version": "synthetic"}})
                 elif self.path == "/queue": self._send({"queue_running": outer.running, "queue_pending": outer.pending})
                 elif self.path == "/history":

@@ -162,10 +162,20 @@ def _tier0_run(bundle, shot, visual):
         return {"clip": "clip.mp4"}
     return run
 
-def _verify_clip(directory, duration):
+def _reject_flat(project, path, what):
+    """Frozen 8 numerical-stability proxy: every frame one flat colour means a failed generation."""
+    from .diagnostics import is_degenerate
+    from .runtime import load_runtime
+    if load_runtime(project)["checks"]["reject_flat_output"] and is_degenerate(path):
+        raise TaskFailed(f"{what}: every frame is one flat colour: likely a failed FP16 decode")
+
+def _verify_clip(directory, duration, project=None):
+    """``project`` is passed for LTX tasks only; a Tier 0 fallback stand-in is never flat-checked."""
     problems = validate_video(directory / "clip.mp4", duration, tolerance_s=1 / FPS)
     if problems:
         raise TaskFailed("; ".join(problems))
+    if project is not None and not (directory / "fallback.json").is_file():
+        _reject_flat(project, directory / "clip.mp4", "LTX clip")
 
 def _verify_keyframe(bundle, visual_id, directory):
     request, _ = _keyframe_request(bundle, visual_id)
@@ -175,6 +185,7 @@ def _verify_keyframe(bundle, visual_id, directory):
     info = probe(directory / "keyframe.png")
     if (info.width, info.height) != (request["width"], request["height"]):
         raise TaskFailed(f"keyframe {visual_id}: decoded size differs from the request")
+    _reject_flat(bundle.project, directory / "keyframe.png", f"keyframe {visual_id}")
 
 def _ltx_preflight(bundle, capability):
     template = load_template(contained_path(bundle.project.root, bundle.models["ltx"]["workflow_templates"][capability]))
@@ -222,6 +233,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
         backend = ComfyBackend(bundle.models["comfyui"]["base_url"])
         graph = render_graph(template, values)
         backend.require_nodes(graph)
+        backend.require_model_files(graph)
         stats = backend.system_stats()
         peak, gpu_names = [], []
         def sample():
@@ -385,7 +397,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
         if shot.get("fallback"):
             inputs["fallback"] = sha256_obj(shot["fallback"])
         task = Task(stage, shot["shot_id"], inputs, version, run, depends_on=tuple(deps), max_attempts=MAX_ATTEMPTS,
-                    preflight=preflight, verify=lambda directory, duration=duration: _verify_clip(directory, duration))
+                    preflight=preflight, verify=lambda directory, duration=duration, ltx=bool(capability): _verify_clip(
+                        directory, duration, bundle.project if ltx else None))
         if shot.get("fallback"):  # frozen 9: Tier 0 stand-in, only after real failed renders, recorded in the receipt
             task.fallback = _tier0_run(bundle, {**shot, "duration_s": duration}, visual)
             task.fallback_info = {"mode": "tier0", "shot_id": shot["shot_id"], **shot["fallback"]}
