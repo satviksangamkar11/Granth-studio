@@ -54,7 +54,8 @@ def generate_candidates(project: Project, models: dict[str, Any], adhyay: int, e
     if not execute or not todo:
         return [e["dialogue_id"] for e in todo]
     section = require_runner(models, "translation", "IndicTrans2")
-    result = run_json(section, {"src_lang": SRC_LANG, "tgt_lang": TGT_LANG, "texts": [e["text"] for e in todo]})
+    result = run_json(section, {"src_lang": SRC_LANG, "tgt_lang": TGT_LANG, "texts": [e["text"] for e in todo],
+                                "model": section["model"], "revision": section["revision"]})
     texts = result.get("translations")
     if not (isinstance(texts, list) and len(texts) == len(todo) and all(isinstance(t, str) and t.strip() for t in texts)):
         raise TaskFailed("translation runner must return one non-empty string per input line")

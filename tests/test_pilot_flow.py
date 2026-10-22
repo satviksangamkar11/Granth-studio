@@ -245,3 +245,25 @@ def test_pilot_selection_includes_lipsync_dependencies_of_assembly(pilot, tmp_pa
     assert all(dep in ids for t in selected for dep in t.depends_on)          # closed under dependencies
     assert [r.status for r in scheduler.status(selected)].count("missing") == len(selected)  # plan validates (_plan ran)
     assert [t.name for t in selected] == [t.name for t in pilotrun.selection(bundle, scheduler)[1]]  # deterministic
+
+
+@pytest.mark.parametrize("audio_ok,text_ok,kind", [(True, True, "measured"), (False, True, "stale"),
+                                                   (True, False, "stale"), (False, False, "stale"), (True, None, "stale")])
+def test_asr_and_alignment_evidence_needs_current_audio_and_text_hashes(pilot, audio_ok, text_ok, kind):
+    from granthstudio.speech import candidate_root
+    full_run(pilot)
+    bundle = pilotrun._bundle(pilot, load_models(pilot), 1)
+    scheduler = Scheduler(pilotrun.store_for(pilot, 1, None))
+    _, selected, _ = pilotrun.selection(bundle, scheduler)
+    entry = bundle.timelines["mr"]["entries"][0]
+    base = {"dialogue_id": entry["dialogue_id"], "language": "mr",
+            "audio_sha256": entry["audio"]["sha256"] if audio_ok else "0" * 64}
+    if text_ok is not None:
+        base["expected_text_sha256"] = sha256_obj(normalize_text(entry["text"])) if text_ok else "1" * 64
+    root = candidate_root(pilot, "mr"); root.mkdir(parents=True, exist_ok=True)
+    atomic_write_json(root / f"{entry['dialogue_id']}.asr.json", {**base, "similarity": 1.0, "missing_words": [], "extra_words": []})
+    atomic_write_json(root / f"{entry['dialogue_id']}.align.json", {**base, "words": [], "model": "m", "revision": "r"})
+    row = pilotrun._language_report(pilot, bundle, scheduler, selected)["mr"][0]
+    assert row["asr_alignment"]["kind"] == kind and row["word_alignment"]["kind"] == kind
+    if kind == "stale":
+        assert row["asr_alignment"]["value"] is None and row["word_alignment"]["value"] is None

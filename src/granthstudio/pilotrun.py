@@ -17,7 +17,7 @@ from .config import Project, load_models, load_yaml
 from .diagnostics import measure_shot
 from .errors import ConfigError, GateFailure
 from .ffmpeg import probe
-from .integrity import atomic_write_json, read_json, sha256_file, sha256_obj
+from .integrity import atomic_write_json, normalize_text, read_json, sha256_file, sha256_obj
 from .pilot import PILOT_DEFINITIONS, plan_pilot, score_receipts
 from .pipeline import (ASSEMBLY_VERSION, LANGUAGE_NAME, Bundle, check_recovery_evidence, episode_store, load_bundle,
                        plan_tasks, production_problems, snapshot)
@@ -31,6 +31,7 @@ KINDS = {
     "measured": "taken directly from a tool or file in this run",
     "estimated": "derived from measurements with a stated approximation",
     "not_computed": "no measurement exists; the reason is given",
+    "stale": "a report exists but is bound to different audio or script text; it is not evidence for the current release",
     "unvalidated": "depends on a model, workflow or setting that no human has validated",
 }
 
@@ -310,20 +311,27 @@ def _language_report(project: Project, bundle: Bundle, scheduler: Scheduler, tas
             asr_path = candidate_root(project, language) / f"{line_id}.asr.json"
             asr = read_json(asr_path) if asr_path.is_file() else None
             audio = entry.get("audio") or {}
-            matches = asr is not None and asr["audio_sha256"] == audio.get("sha256")
+            text_sha = sha256_obj(normalize_text(entry["text"]))
+
+            def current(report):  # BOTH the audio hash and the normalized-text hash must match the release now
+                return (report is not None and audio.get("sha256") is not None
+                        and report.get("audio_sha256") == audio["sha256"] and report.get("expected_text_sha256") == text_sha)
+            matches = current(asr)
             align_path = candidate_root(project, language) / f"{line_id}.align.json"
             align = read_json(align_path) if align_path.is_file() else None
-            align_ok = align is not None and align["audio_sha256"] == audio.get("sha256")
+            align_ok = current(align)
             row = {"dialogue_id": line_id,
                    "duration_s": typed(timings[line_id]["duration_s"], "measured") if line_id in timings
                    else typed(None, "not_computed", "audio task has no timings in this store"),
                    "asr_alignment": typed({"similarity": asr["similarity"], "missing_words": asr["missing_words"],
                                            "extra_words": asr["extra_words"]}, "measured",
                                           "word-level comparison with the script; not a pronunciation judgment")
-                   if matches else typed(None, "not_computed", "no ASR report for the current audio"),
+                   if matches else typed(None, "stale", "ASR report is bound to different audio or script text") if asr is not None
+                   else typed(None, "not_computed", "no ASR report for the current audio"),
                    "word_alignment": typed({"words": align["words"], "model": align["model"], "revision": align["revision"]},
                                            "measured", "word timings only; subtitles stay phrase level (frozen 5.4)")
-                   if align_ok else typed(None, "not_computed", "no word alignment for the current audio"),
+                   if align_ok else typed(None, "stale", "alignment is bound to different audio or script text") if align is not None
+                   else typed(None, "not_computed", "no word alignment for the current audio"),
                    "audio_provenance": audio.get("provenance", {"origin": "imported"}) if audio else "no audio attached"}
             if language == "hi":
                 alignment = entry["alignment"]

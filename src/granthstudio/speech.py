@@ -110,7 +110,7 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
         root.mkdir(parents=True, exist_ok=True)
         part = root / f".{entry['dialogue_id']}.{uuid.uuid4().hex}.part.wav"
         try:
-            run_json(section, {**request, "reference_audio": str(reference), "out_path": str(part)})
+            answer = run_json(section, {**request, "reference_audio": str(reference), "out_path": str(part)})
             if not part.is_file():
                 raise TaskFailed(f"{entry['dialogue_id']}: speech runner wrote no audio")
             duration = validate_audio(part)
@@ -122,7 +122,8 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
         atomic_write_json(old, {"schema_version": 1, "dialogue_id": entry["dialogue_id"], "language": language,
             "text_sha256": request["text_sha256"], "request_sha256": request["request_sha256"], "voice_id": voice["voice_id"],
             "model": section["model"], "revision": section["revision"], "audio": {"path": final.name, "sha256": digest},
-            "duration_s": duration, "generated_at": _now()})
+            "duration_s": duration, "generated_at": _now(),
+            **({"runner_verified": answer["verified"]} if isinstance(answer.get("verified"), dict) else {})})
         done.append(entry["dialogue_id"])
     return done
 
