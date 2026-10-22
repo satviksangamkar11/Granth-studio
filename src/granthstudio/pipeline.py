@@ -89,8 +89,8 @@ def _keyframe_request(bundle, visual_id):
     return keyframe_request(bundle.compiled, bundle.canon, registry, bundle.models, visual_id), registry
 
 def _keyframe_preflight(bundle, visual_id):
-    sdxl_preflight(bundle.project, bundle.models)
     request, _ = _keyframe_request(bundle, visual_id)
+    sdxl_preflight(bundle.project, bundle.models, request)
     require_references(request, bundle.models)
 
 def _keyframe_run(bundle, visual_id, journal):
@@ -357,13 +357,16 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             VOICE_VERSION, _audio_run(bundle, lang), preflight=audio_preflight,
             verify=lambda directory, lang=lang: _verify_audio(bundle, lang, directory))
         tasks.append(audio[lang])
-    for vid, visual in sorted(visuals.items()):
+    requests = {vid: _keyframe_request(bundle, vid)[0] for vid, v in visuals.items() if v["source"] == "keyframe"}
+    derived = lambda vid: (requests[vid].get("derived_from") or {}).get("kind") == "keyframe"
+    for vid, visual in sorted(visuals.items(), key=lambda kv: (kv[0] in requests and derived(kv[0]), kv[0])):
         if visual["source"] == "keyframe":
-            request, _ = _keyframe_request(bundle, vid)
+            request = requests[vid]
             keyframes[vid] = Task("keyframe", f"keyframe_{vid}", {"visual": sha256_obj(visual),
                 "source": compiled["research_sha256"], "canon": compiled["canon_sha256"],
                 "request": request["request_sha256"], "sdxl": sha256_obj(bundle.models.get("sdxl"))},
                 KEYFRAME_VERSION, lambda work: {}, max_attempts=1,
+                depends_on=(keyframes[request["derived_from"]["visual_id"]].task_id(),) if derived(vid) else (),
                 preflight=lambda vid=vid: (require_current(bundle), _keyframe_preflight(bundle, vid)),
                 verify=lambda directory, vid=vid: _verify_keyframe(bundle, vid, directory))
             keyframes[vid].run = _keyframe_run(bundle, vid, scheduler.store / "pending" / f"{keyframes[vid].task_id()}.json")
