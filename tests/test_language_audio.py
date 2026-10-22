@@ -313,3 +313,83 @@ def test_release_alignment_uses_approved_audio_and_rejects_stale_candidates(appr
     _edit(approved_project, "mr", lambda e: e["audio"].update(text_sha256="1" * 64))
     with pytest.raises(GateFailure, match="different script text"):
         speech.align_words(approved_project, models, 1, "mr", "d_0001")
+
+
+# ------------------------------------------------------------------ Fix 8: verified model provenance
+
+def with_identity(source):
+    """Fake runner that reports the identity it 'loaded' via FAKE_VERIFIED ('' = no evidence, else model@revision)."""
+    return source.replace("print(json.dumps({", "_v = os.environ.get('FAKE_VERIFIED', '')\n"
+        "_m, _, _r = _v.partition('@')\nprint(json.dumps({**({'verified': {'model': _m, 'revision': _r}} if _v else {}), ", 1)
+
+
+TTS_ID = with_identity(TTS)
+TRANSLATE_ID = with_identity("import os\n" + TRANSLATE)
+GOOD = "synthetic-tts@synthetic-1"
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_verified_identity_survives_runner_candidate_approval_and_release(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    models = load_models(approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", GOOD)
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    record = read_json(speech.record_path(approved_project, "mr", "d_0001"))
+    assert record["model_identity"] == {"status": "verified", "model": "synthetic-tts", "revision": "synthetic-1"}
+    audio = speech.approve_speech(approved_project, 1, "mr", "d_0001", "synthetic-test-only")   # approval keeps it
+    assert audio["provenance"]["model_identity"] == record["model_identity"]
+    scheduler = Scheduler(episode_store(approved_project, 1))
+    tasks = plan_tasks(load_bundle(approved_project, models, 1), scheduler)
+    assert all(r.status == "complete" for r in scheduler.run(tasks))
+    release = read_json(scheduler.task_dir(next(t for t in tasks if t.name == "assemble_mr")) / "provenance.json")
+    assert release["lines"][0]["audio"]["model_identity"]["status"] == "verified"
+    assert release["lines"][1]["audio"].get("model_identity") is None   # imported audio claims nothing
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_missing_or_mismatched_or_tampered_identity_is_never_recorded_as_verified(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    models = load_models(approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", "")                                   # no verification evidence
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    path = speech.record_path(approved_project, "mr", "d_0001")
+    assert read_json(path)["model_identity"] == {"status": "unverified"}
+    assert speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")["provenance"]["model_identity"] == {"status": "unverified"}
+    path.unlink()
+    for old in speech.candidate_root(approved_project, "mr").glob("d_0001_*.wav"):
+        old.unlink()
+    monkeypatch.setenv("FAKE_VERIFIED", "synthetic-tts@other-revision")       # mismatched identity
+    with pytest.raises(GateFailure, match="refusing the output"):
+        speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    assert not path.exists() and not list(speech.candidate_root(approved_project, "mr").glob("d_0001_*.wav"))
+    monkeypatch.setenv("FAKE_VERIFIED", GOOD)
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    record = read_json(path); record["revision"] = "forged"; atomic_write_json(path, record)   # tampered record
+    with pytest.raises(GateFailure, match="stored verified identity differs"):
+        speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
+
+
+def test_translation_identity_reaches_the_approved_hindi_line_and_rejects_mismatch(approved_project, hindi_setup, monkeypatch):
+    table, tmp_path = hindi_setup
+    set_models(approved_project, translation=runner_section(tmp_path, "translate", TRANSLATE_ID))
+    models = load_models(approved_project)
+    canon = load_bundle.__globals__["load_canon"](approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", "synthetic-translate@other")
+    with pytest.raises(GateFailure, match="refusing the output"):
+        translation.generate_candidates(approved_project, models, 1, execute=True)
+    assert not translation.candidates_path(approved_project, 1).exists()
+    monkeypatch.setenv("FAKE_VERIFIED", "synthetic-translate@synthetic-1")
+    translation.generate_candidates(approved_project, models, 1, execute=True)
+    entry = translation.approve_translation(approved_project, canon, 1, "d_0001", "synthetic-test-only")
+    assert entry["alignment"]["source"]["model_identity"] == {"status": "verified", "model": "synthetic-translate", "revision": "synthetic-1"}
+    translation.approve_translation(approved_project, canon, 1, "d_0002", "synthetic-test-only")
+    hindi = load_bundle(approved_project, models, 1).timelines["hi"]["entries"]
+    assert [e["alignment"]["source"]["model_identity"]["status"] for e in hindi] == ["verified", "verified"]
+    monkeypatch.setenv("FAKE_VERIFIED", "")
+    path = translation.candidates_path(approved_project, 1); path.unlink()
+    translation.generate_candidates(approved_project, models, 1, execute=True)
+    assert translation.approve_translation(approved_project, canon, 1, "d_0002", "x")["alignment"]["source"]["model_identity"] == {"status": "unverified"}  # missing evidence is never "verified"

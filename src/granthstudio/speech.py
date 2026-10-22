@@ -20,7 +20,7 @@ from .config import Project, dump_yaml, load_yaml
 from .errors import ConfigError, GateFailure, TaskFailed
 from .ffmpeg import validate_audio
 from .integrity import atomic_write_json, contained_path, normalize_text, read_json, sha256_file, sha256_obj
-from .runners import require_runner, run_json
+from .runners import identity_block, require_consistent_identity, require_runner, run_json
 from .schemas import validate_document
 from .timelines import load_timeline, timeline_path
 
@@ -111,6 +111,7 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
         part = root / f".{entry['dialogue_id']}.{uuid.uuid4().hex}.part.wav"
         try:
             answer = run_json(section, {**request, "reference_audio": str(reference), "out_path": str(part)})
+            identity = identity_block(section, answer)   # mismatched evidence rejects the output before it is kept
             if not part.is_file():
                 raise TaskFailed(f"{entry['dialogue_id']}: speech runner wrote no audio")
             duration = validate_audio(part)
@@ -123,7 +124,7 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
             "text_sha256": request["text_sha256"], "request_sha256": request["request_sha256"], "voice_id": voice["voice_id"],
             "model": section["model"], "revision": section["revision"], "audio": {"path": final.name, "sha256": digest},
             "duration_s": duration, "generated_at": _now(),
-            **({"runner_verified": answer["verified"]} if isinstance(answer.get("verified"), dict) else {})})
+            "model_identity": identity})
         done.append(entry["dialogue_id"])
     return done
 
@@ -258,6 +259,8 @@ def approve_speech(project: Project, adhyay: int, language: str, line_id: str, r
                       "speaker": entry["speaker"], "text_sha256": text_hash, "speech_reviewed_by": reviewer.strip(),
                       "provenance": {"origin": "generated", "voice_id": record["voice_id"], "model": record["model"],
                                      "revision": record["revision"], "request_sha256": record["request_sha256"],
+                                     "model_identity": require_consistent_identity(
+                                         record.get("model_identity"), record["model"], record["revision"], line_id),
                                      "asr_report_sha256": asr_hash}}
     validate_document("timeline", document)
     dump_yaml(path, document)

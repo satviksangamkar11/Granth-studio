@@ -125,6 +125,44 @@
                 "candidate_sha256": {
                   "type": "string",
                   "pattern": "^[0-9a-f]{64}$"
+                },
+                "model_identity": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "status"
+                      ],
+                      "properties": {
+                        "status": {
+                          "const": "unverified"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "status",
+                        "model",
+                        "revision"
+                      ],
+                      "properties": {
+                        "status": {
+                          "const": "verified"
+                        },
+                        "model": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "revision": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -213,6 +251,44 @@
                     {
                       "type": "string",
                       "pattern": "^[0-9a-f]{64}$"
+                    }
+                  ]
+                },
+                "model_identity": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "status"
+                      ],
+                      "properties": {
+                        "status": {
+                          "const": "unverified"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "status",
+                        "model",
+                        "revision"
+                      ],
+                      "properties": {
+                        "status": {
+                          "const": "verified"
+                        },
+                        "model": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "revision": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
                     }
                   ]
                 }
