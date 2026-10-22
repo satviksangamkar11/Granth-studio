@@ -252,6 +252,23 @@ def _history_cached_nodes(base_url: str, prompt_id: str) -> list[str] | None:
     return None
 
 
+def _history_execution_window(base_url: str, prompt_id: str) -> dict | None:
+    """ComfyUI's own execution_start / execution_success timestamps (epoch ms) for a prompt, or None when it reports none: the only evidence of when the
+    GPU job itself ran, as opposed to the scheduler's surrounding preflight/hash/transfer time."""
+    from granthstudio.comfy import ComfyBackend
+    try:
+        entry = json.loads(ComfyBackend(base_url)._request("GET", f"/history/{prompt_id}")).get(prompt_id, {})
+    except Exception:  # noqa: BLE001 - evidence is optional here; the concurrent verdict refuses when it is missing
+        return None
+    stamps = {}
+    for message in entry.get("status", {}).get("messages", []):
+        if isinstance(message, list) and len(message) == 2 and message[0] in ("execution_start", "execution_success"):
+            stamps[message[0]] = message[1].get("timestamp")
+    if not isinstance(stamps.get("execution_start"), (int, float)) or not isinstance(stamps.get("execution_success"), (int, float)):
+        return None
+    return {"prompt_id": prompt_id, "start_ms": stamps["execution_start"], "end_ms": stamps["execution_success"]}
+
+
 def _retry_test(args, receipt, finish, scheduler, selected, models) -> int:
     """Controlled output-rejection test, only after a PASS in the same workdir: reject the first output in the journal, drop its task receipt,
     run once more. The real sampler must execute again (not be served from cache) with a changed effective seed."""
@@ -411,6 +428,8 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     receipt["clip"] = {"sha256": sha256_file(directory / "clip.mp4"), "width": info.width, "height": info.height,
                        "duration_s": info.video_duration_s if info.video_duration_s is not None else info.duration_s}
     receipt["metrics"] = json.loads((directory / "metrics.json").read_text(encoding="utf-8"))
+    if receipt["journal"]:
+        receipt["comfy_execution"] = _history_execution_window(args.comfy_url, receipt["journal"]["prompt_id"])
     if (info.width, info.height) != (args.width, args.height):
         return finish("FAIL", f"decoded clip is {info.width}x{info.height}, requested {args.width}x{args.height}")
     if receipt["static_verification"]["exit"] is None:

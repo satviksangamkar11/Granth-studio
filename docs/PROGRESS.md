@@ -351,3 +351,9 @@ this clip is only a technical prerequisite.
 - Staged dual-worker orchestration (`ltx_first_test.sh` STAGE=gpu0|gpu1|concurrent|retry), `host_check.py`, `gpu_attribution.py`, `concurrent_check.py`, per-card VRAM selection (`GRANTHSTUDIO_GPU_INDEX`), variant-b shot, controlled retry test; notebook gains `STAGE`.
 - Windows suite: 439 tests, all passing after an autouse fixture stopped `GRANTHSTUDIO_GPU_INDEX` leaking between tests. No weights downloaded, no Kaggle kernel pushed.
 - Blocked on a human: a named approver for `LTX_DOWNLOAD_APPROVED` / manifest section E (licence acceptance). Mini-film stages additionally need research approval, canon/style approval and model choices (O-006/O-007, voice consent): all NOT VALIDATED.
+
+## Codex dual-T4 review (docs/evidence/codex_reviews/05_dual_t4_review.md): FAIL, all four findings fixed
+1. BLOCKER retry lost the completed task (random port is part of task identity): ports are now chosen once per workspace (`ltx_ports.env`) and reused, still re-verified free each stage.
+2. MAJOR failed isolation stage unlocked later stages: stages unlock only through `ltx_evidence_<stage>/stage_verdict.json`, written after client PASS + attribution (+ concurrent check), bound to the receipt sha256 and commit.
+3. MAJOR concurrent overlap used scheduler windows: now ComfyUI's own execution_start/execution_success timestamps (receipt `comfy_execution`); missing -> refusal.
+4. MAJOR missing process telemetry weakened attribution: sampler writes #OK/#FAIL markers; no successful sample or any failure -> problem; the memory-only fallback also needs verified per-worker isolation evidence (`worker_evidence.json`).

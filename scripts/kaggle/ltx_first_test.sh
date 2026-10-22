@@ -25,7 +25,7 @@ case "$STAGE" in gpu0|gpu1|concurrent|retry) ;; *) echo "STAGE must be gpu0, gpu
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 W="${W:-/kaggle/working}"; COMFY="$W/ComfyUI"; OUT="$W/ltx_evidence_$STAGE"; PINS="$REPO/config/ltx_098_pins.yaml"
 SESSION_MINUTES="${SESSION_MINUTES:-240}"
-mkdir -p "$OUT"; exec > >(tee "$OUT/run_log.txt") 2>&1
+mkdir -p "$OUT"; rm -f "$OUT/stage_verdict.json"; exec > >(tee "$OUT/run_log.txt") 2>&1
 echo "stage $STAGE | approved by: $LTX_DOWNLOAD_APPROVED | $(date -u +%FT%TZ)"
 
 echo "== 0. refusals that need no network"
@@ -38,22 +38,38 @@ export GRANTHSTUDIO_SESSION_DEADLINE; echo "session deadline: $GRANTHSTUDIO_SESS
 command -v ffmpeg >/dev/null || { echo "ffmpeg is required (VideoHelperSuite encodes the mp4 with it)"; exit 2; }
 mkdir -p "$W"; FREE_GB=$(df -BG --output=avail "$W" | tail -1 | tr -dc 0-9); [ "$FREE_GB" -ge 40 ] || { echo "only ${FREE_GB} GB free in $W, need 40"; exit 2; }
 freeport() { python -c "import socket;s=socket.socket();s.bind(('127.0.0.1',0));print(s.getsockname()[1]);s.close()"; }
-PORT0="$(freeport)"; PORT1="$(freeport)"
-[ "$PORT0" != "$PORT1" ] || PORT1="$(freeport)"
+# The submission journal and task identity are bound to the server URL, so the retry stage (and any rerun) must reach the SAME address the first stage used:
+# ports are chosen at random once per workspace, then reused (and re-verified free below) by every later stage.
+PORTS_FILE="$W/ltx_ports.env"
+if [ -f "$PORTS_FILE" ]; then
+  read -r PORT0 PORT1 < "$PORTS_FILE" || true
+  case "$PORT0$PORT1" in ""|*[!0-9]*) echo "$PORTS_FILE is malformed: refusing"; exit 2;; esac
+  { [ -n "$PORT0" ] && [ -n "$PORT1" ] && [ "$PORT0" != "$PORT1" ]; } || { echo "$PORTS_FILE is malformed: refusing"; exit 2; }
+else
+  PORT0="$(freeport)"; PORT1="$(freeport)"
+  [ "$PORT0" != "$PORT1" ] || PORT1="$(freeport)"
+  echo "$PORT0 $PORT1" > "$PORTS_FILE"
+fi
 for P in $PORT0 $PORT1; do
   python -c "import socket,sys;s=socket.socket();s.settimeout(1);sys.exit(0 if s.connect_ex(('127.0.0.1',$P)) == 0 else 1)" && { echo "something already listens on port $P: refusing"; exit 2; }
 done
-echo "fresh ports: worker0 $PORT0, worker1 $PORT1"
-receipt_verdict() { python -c "import json,sys;print(json.load(open(sys.argv[1])).get('verdict'))" "$1" 2>/dev/null || echo MISSING; }
-need_pass() { # label receipt
-  [ "$(receipt_verdict "$2")" = "PASS" ] || { echo "stage prerequisite not met: $1 has no PASS receipt at $2"; exit 2; }
-  python -c "import json,sys;r=json.load(open(sys.argv[1]));sys.exit(0 if r.get('harness_commit')==sys.argv[2] else 1)" "$2" "$LTX_EXPECTED_COMMIT" \
-    || { echo "$1 was recorded by a different GranthStudio commit: rerun it on $LTX_EXPECTED_COMMIT"; exit 2; }
+echo "ports (random once per workspace, then reused): worker0  $PORT0, worker1 $PORT1"
+# A stage unlocks later stages only through its FINAL verdict file, written after the client PASS, the per-card attribution and (concurrent) the overlap check
+# all succeeded, and bound to the client receipt's sha256 and to the reviewed commit.
+need_pass() { # label stage
+  python - "$W/ltx_evidence_$2/stage_verdict.json" "$LTX_EXPECTED_COMMIT" <<'EOF' || { echo "stage prerequisite not met: $1 has no final PASS verdict for commit $LTX_EXPECTED_COMMIT (rerun it)"; exit 2; }
+import hashlib, json, sys
+v = json.load(open(sys.argv[1]))
+assert v.get("verdict") == "PASS" and v.get("commit") == sys.argv[2] and v.get("receipts"), v
+for path, digest in v["receipts"].items():
+    assert hashlib.sha256(open(path, "rb").read()).hexdigest() == digest, path
+r = json.load(open(next(iter(v["receipts"]))))
+assert r.get("verdict") == "PASS" and r.get("harness_commit") == sys.argv[2]
+EOF
 }
 case "$STAGE" in
-  gpu1) need_pass "stage gpu0" "$W/ltx_gpu0/test_receipt.json";;
-  concurrent) need_pass "stage gpu0" "$W/ltx_gpu0/test_receipt.json"; need_pass "stage gpu1" "$W/ltx_gpu1/test_receipt.json";;
-  retry) need_pass "stage gpu0" "$W/ltx_gpu0/test_receipt.json";;
+  gpu1|retry) need_pass "stage gpu0" gpu0;;
+  concurrent) need_pass "stage gpu0" gpu0; need_pass "stage gpu1" gpu1;;
 esac
 
 pin() { python - "$PINS" "$1" <<'EOF'
@@ -102,7 +118,12 @@ fetch 0; fetch 1
 echo "== 5. traces: VRAM of BOTH cards, compute apps per card, host RAM"
 nvidia-smi --query-gpu=timestamp,index,uuid,memory.used --format=csv,noheader,nounits -l 2 > "$OUT/vram_trace.csv" 2>/dev/null &
 VRAM_PID=$!
-( while true; do nvidia-smi --query-compute-apps=gpu_uuid,pid,used_memory --format=csv,noheader,nounits >> "$OUT/apps_trace.csv" 2>/dev/null; sleep 2; done ) &
+( while true; do
+    if apps_out="$(nvidia-smi --query-compute-apps=gpu_uuid,pid,used_memory --format=csv,noheader,nounits 2>/dev/null)"; then
+      echo "#OK" >> "$OUT/apps_trace.csv"; [ -z "$apps_out" ] || echo "$apps_out" >> "$OUT/apps_trace.csv"
+    else echo "#FAIL" >> "$OUT/apps_trace.csv"; fi
+    sleep 2
+  done ) &
 APPS_PID=$!
 ( while true; do { date -u +%T; free -m | sed -n 2p; } >> "$OUT/ram_trace.txt"; sleep 5; done ) &
 RAM_PID=$!
@@ -128,7 +149,7 @@ start_worker() { # index port : one ComfyUI process that can see ONLY that physi
   python "$REPO/scripts/kaggle/port_owner.py" "${WPID[$n]}" "$port" || { echo "cannot prove the answering server is worker $n"; exit 5; }
   tr '\0' '\n' < "/proc/${WPID[$n]}/environ" | grep -qx "CUDA_VISIBLE_DEVICES=$n" || { echo "worker $n does not run with CUDA_VISIBLE_DEVICES=$n"; exit 5; }
   curl -sf "http://127.0.0.1:$port/object_info" > "$d/object_info.json"
-  python - "$d/system_stats.json" "$n" "$OUT/host_check.json" <<'EOF'
+  python - "$d/system_stats.json" "$n" "$OUT/host_check.json" "$d/worker_evidence.json" "${WPID[$n]}" <<'EOF'
 import json, sys
 stats = json.load(open(sys.argv[1])); host = json.load(open(sys.argv[3])); n = int(sys.argv[2])
 devices = stats.get("devices", [])
@@ -138,6 +159,7 @@ card = next(g for g in host["gpus"] if g["index"] == n)
 if abs(devices[0].get("vram_total", 0) / 1048576 - card["memory_total_mb"]) > 0.06 * card["memory_total_mb"]:
     sys.exit(f"worker {n}'s device reports {devices[0].get('vram_total')} bytes, physical card {n} has {card['memory_total_mb']} MiB")
 print(f"worker {n}: ComfyUI sees one device {devices[0].get('name')!r}, matching physical GPU {n} ({card['uuid']})")
+json.dump({"index": n, "pid": int(sys.argv[5]), "cuda_visible_devices": str(n), "visible_devices": len(devices), "uuid": card["uuid"]}, open(sys.argv[4], "w"))   # CVD itself was proven above from /proc
 EOF
 }
 
@@ -187,10 +209,11 @@ case "$STAGE" in
     WORKERS="--worker 0=${WPID[0]} --worker 1=${WPID[1]}";;
 esac
 
+EVIDENCE=""; for n in 0 1; do [ -f "$OUT/worker$n/worker_evidence.json" ] && EVIDENCE="$EVIDENCE --worker-evidence $OUT/worker$n/worker_evidence.json"; done
 echo "== 9. which physical card did the work, and did the other stay untouched"
 sleep 4
 # shellcheck disable=SC2086
-python "$REPO/scripts/kaggle/gpu_attribution.py" --vram-trace "$OUT/vram_trace.csv" --apps-trace "$OUT/apps_trace.csv" $WORKERS --json "$OUT/gpu_attribution.json" || STATUS=1
+python "$REPO/scripts/kaggle/gpu_attribution.py" --vram-trace "$OUT/vram_trace.csv" --apps-trace "$OUT/apps_trace.csv" $WORKERS $EVIDENCE --json "$OUT/gpu_attribution.json" || STATUS=1
 
 mkdir -p "$OUT/receipts"
 for r in "$W"/ltx_gpu0/*.json "$W"/ltx_gpu1/*.json "$W"/ltx_conc0/*.json "$W"/ltx_conc1/*.json; do
@@ -201,6 +224,15 @@ for d in gpu0 gpu1 conc0 conc1; do
   cp "$W"/ltx_$d/project/artifacts/tasks/adhyay_01/pending/*.json "$OUT/journal_$d.json" 2>/dev/null || true
 done
 nvidia-smi > "$OUT/nvidia_smi_after.txt" || true
+if [ "$STATUS" = 0 ]; then
+  case "$STAGE" in concurrent) FINAL="$W/ltx_conc0/test_receipt.json $W/ltx_conc1/test_receipt.json";; *) FINAL="$RECEIPT";; esac
+  python - "$OUT/stage_verdict.json" "$LTX_EXPECTED_COMMIT" "$STAGE" $FINAL <<'EOF'
+import hashlib, json, sys
+out, commit, stage, *paths = sys.argv[1:]
+json.dump({"stage": stage, "verdict": "PASS", "commit": commit,
+           "receipts": {p: hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}}, open(out, "w"), indent=2)
+EOF
+fi
 cleanup; trap - EXIT; sleep 1
 (cd "$W" && tar czf "ltx_evidence_$STAGE.tgz" "ltx_evidence_$STAGE")
 echo "stage $STAGE exit status $STATUS; evidence: $W/ltx_evidence_$STAGE.tgz"

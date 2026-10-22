@@ -3,7 +3,7 @@
 Inputs (written by scripts/kaggle/ltx_first_test.sh while the workers run):
   --vram-trace      CSV from `nvidia-smi --query-gpu=timestamp,index,uuid,memory.used --format=csv,noheader,nounits -l 2`
   --apps-trace      CSV from `nvidia-smi --query-compute-apps=timestamp?,gpu_uuid,pid,used_memory --format=csv,noheader,nounits` samples,
-                    one block per sample, lines: gpu_uuid, pid, used_memory
+                    lines: gpu_uuid, pid, used_memory, plus a '#OK' / '#FAIL' marker per sample
   --worker INDEX=PID[:active]   a worker (physical GPU index and ComfyUI pid); `:idle` marks a card that must stay idle
 Verdicts (all must hold, otherwise exit 1):
   * each active worker's pid appears under ITS card's uuid in the compute-apps trace and under no other card's uuid;
@@ -38,12 +38,30 @@ def read_apps(path: Path) -> dict[str, set[int]]:
     return seen
 
 
+def read_telemetry(path: Path) -> tuple[int, int]:
+    """(successful, failed) compute-apps samples, from the '#OK' / '#FAIL' marker lines the sampler writes."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return lines.count("#OK"), lines.count("#FAIL")
+
+
 def attribute(cards: dict[str, dict], apps: dict[str, set[int]], workers: dict[int, tuple[int, bool]], idle_slack_mb: float, min_rise_mb: float,
-              notes: list[str] | None = None) -> list[str]:
+              notes: list[str] | None = None, telemetry: tuple[int, int] | None = None, evidence: dict[int, dict] | None = None) -> list[str]:
     problems = []
-    pids_visible = any(apps.values())      # inside a container nvidia-smi may list no processes (or host pids): then only memory evidence is available
-    if not pids_visible and notes is not None:
-        notes.append("nvidia-smi listed no compute apps: attribution rests on per-card memory rise, CUDA_VISIBLE_DEVICES and ComfyUI's own device report")
+    ok, failed = telemetry if telemetry is not None else (0, 0)
+    if not ok:
+        problems.append("the compute-apps sampler never produced a successful sample: telemetry unavailable, nothing can be attributed")
+    if failed:
+        problems.append(f"the compute-apps sampler failed {failed} time(s): the trace may be incomplete")
+    pids_visible = any(apps.values())      # inside a container nvidia-smi may list no processes (or host pids)
+    if not pids_visible:
+        # Fallback, accepted only for a working sampler that simply lists nobody: each active worker must carry verified evidence that it ran with exactly
+        # its own card visible (CUDA_VISIBLE_DEVICES == its physical index, checked in /proc/<pid>/environ by the launcher) and that ComfyUI saw one device.
+        if notes is not None:
+            notes.append("nvidia-smi listed no compute apps: attribution rests on per-card memory rise plus verified CUDA_VISIBLE_DEVICES isolation of each worker")
+        for index, (pid, active) in sorted(workers.items()):
+            item = (evidence or {}).get(index)
+            if active and not (item and item.get("pid") == pid and str(item.get("cuda_visible_devices")) == str(index) and item.get("visible_devices") == 1):
+                problems.append(f"no verified isolation evidence for worker {index} (pid {pid}): pid attribution is unavailable, so the fallback is refused")
     uuid_of = {c["index"]: u for u, c in cards.items()}
     for index, (pid, active) in sorted(workers.items()):
         uuid = uuid_of.get(index)
@@ -72,6 +90,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--vram-trace", required=True, type=Path)
     parser.add_argument("--apps-trace", required=True, type=Path)
     parser.add_argument("--worker", action="append", required=True, metavar="INDEX=PID[:idle]")
+    parser.add_argument("--worker-evidence", action="append", default=[], type=Path, help="worker_evidence.json written by the launcher (repeatable)")
     parser.add_argument("--idle-slack-mb", type=float, default=300)
     parser.add_argument("--min-rise-mb", type=float, default=1000)
     parser.add_argument("--json", type=Path)
@@ -83,7 +102,11 @@ def main(argv: list[str] | None = None) -> int:
         workers[int(index)] = (int(pid or 0), flag != "idle")
     cards, apps = read_vram(args.vram_trace), read_apps(args.apps_trace)
     notes: list[str] = []
-    problems = attribute(cards, apps, workers, args.idle_slack_mb, args.min_rise_mb, notes)
+    evidence = {}
+    for path in args.worker_evidence:
+        item = json.loads(path.read_text(encoding="utf-8"))
+        evidence[int(item["index"])] = item
+    problems = attribute(cards, apps, workers, args.idle_slack_mb, args.min_rise_mb, notes, read_telemetry(args.apps_trace), evidence)
     report = {"notes": notes, "cards": cards, "compute_apps": {k: sorted(v) for k, v in apps.items()}, "workers": {str(k): {"pid": v[0], "active": v[1]} for k, v in workers.items()},
               "problems": problems, "ok": not problems}
     if args.json:

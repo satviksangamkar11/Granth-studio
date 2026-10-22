@@ -57,12 +57,14 @@ def test_host_check_refuses_everything_that_is_not_the_planned_dual_t4_host(name
     assert any(fragment in p for p in host(**changes)), (name, host(**changes))
 
 
-def attribute(tmp_path, a1, b1, apps, workers):
+def attribute(tmp_path, a1, b1, apps, workers, telemetry=(5, 0), evidence="default"):
     vram = tmp_path / "v.csv"
     vram.write_text(NL.join(["t,0,GPU-aaaa,3", "t,1,GPU-bbbb,3", f"t,0,GPU-aaaa,{a1}", f"t,1,GPU-bbbb,{b1}"]), encoding="utf-8")
     trace = tmp_path / "a.csv"; trace.write_text(apps, encoding="utf-8")
     notes = []
-    return ga.attribute(ga.read_vram(vram), ga.read_apps(trace), workers, 300, 1000, notes), notes
+    if evidence == "default":
+        evidence = {i: {"index": i, "pid": pid, "cuda_visible_devices": str(i), "visible_devices": 1} for i, (pid, active) in workers.items() if active}
+    return ga.attribute(ga.read_vram(vram), ga.read_apps(trace), workers, 300, 1000, notes, telemetry, evidence), notes
 
 
 def test_gpu0_worker_with_gpu1_idle_passes(tmp_path):
@@ -95,10 +97,33 @@ def test_without_visible_process_ids_only_memory_evidence_counts_and_says_so(tmp
     assert problems                                                                  # memory on the idle card still betrays it
 
 
+def test_the_memory_only_fallback_is_refused_without_working_telemetry_or_verified_isolation(tmp_path):
+    workers = {0: (111, True), 1: (0, False)}
+    problems, _ = attribute(tmp_path, 9000, 5, "", workers, telemetry=(0, 7))
+    assert any("never produced a successful sample" in p for p in problems) and any("failed 7" in p for p in problems)
+    problems, _ = attribute(tmp_path, 9000, 5, "", workers, telemetry=None)
+    assert any("never produced a successful sample" in p for p in problems)
+    problems, _ = attribute(tmp_path, 9000, 5, "", workers, evidence={})
+    assert any("no verified isolation evidence for worker 0" in p for p in problems)
+    bad = {0: {"index": 0, "pid": 111, "cuda_visible_devices": "1", "visible_devices": 1}}
+    problems, _ = attribute(tmp_path, 9000, 5, "", workers, evidence=bad)
+    assert any("no verified isolation evidence" in p for p in problems)
+    problems, _ = attribute(tmp_path, 9000, 5, "GPU-aaaa, 111, 9000" + NL, workers, telemetry=(5, 2))
+    assert any("failed 2" in p for p in problems)                                    # even with visible pids a flaky sampler is not trusted
+
+
+def test_a_stage_needs_overlapping_comfyui_timestamps_not_just_scheduler_windows():
+    r0, r1 = receipt(0, "a", 0, 100), receipt(1, "b", 200, 100)                       # GPU jobs back to back
+    r0["exec_started"], r0["exec_finished"] = "2026-10-24T12:00:00+00:00", "2026-10-24T12:10:00+00:00"
+    r1["exec_started"], r1["exec_finished"] = "2026-10-24T12:00:05+00:00", "2026-10-24T12:10:00+00:00"   # scheduler windows overlap widely
+    problems, _ = cc.check(r0, r1, 20)
+    assert any("sequential, not concurrent" in p for p in problems)
+
+
 def receipt(index, variant, start, seconds, **over):
     t0 = datetime(2026, 10, 24, 12, 0, 0, tzinfo=timezone.utc) + timedelta(seconds=start)
     base = {"verdict": "PASS", "gpu_index": index, "variant": variant, "workdir": f"/w/gpu{index}", "comfy_url": f"http://127.0.0.1:{9000 + index}",
-            "exec_started": t0.isoformat(), "exec_finished": (t0 + timedelta(seconds=seconds)).isoformat(), "wall_s": seconds,
+            "comfy_execution": {"start_ms": t0.timestamp() * 1000, "end_ms": (t0 + timedelta(seconds=seconds)).timestamp() * 1000}, "wall_s": seconds,
             "journal": {"attempt": 1, "history": [{}], "namespace": f"ns{index}", "job_token": f"tok{index}", "prompt_id": f"p{index}"},
             "clip": {"sha256": f"{index}" * 64}, "metrics": {"peak_vram_mb": {"value": 9000 + index}}, "reason": "ok"}
     base.update(over)
@@ -123,7 +148,7 @@ def test_concurrent_stage_passes_only_for_two_distinct_overlapping_passing_worke
      receipt(1, "b", 0, 300), "expected exactly one"),
     ("identical outputs", receipt(0, "a", 0, 300), receipt(1, "b", 0, 300, clip={"sha256": "0" * 64}), "byte-identical"),
     ("no clip", receipt(0, "a", 0, 300, clip=None), receipt(1, "b", 0, 300), "no decoded clip"),
-    ("no windows", {k: v for k, v in receipt(0, "a", 0, 300).items() if k != "exec_started"}, receipt(1, "b", 0, 300), "windows are missing"),
+    ("no windows", receipt(0, "a", 0, 300, comfy_execution=None), receipt(1, "b", 0, 300), "timestamps are missing"),
 ])
 def test_concurrent_stage_refuses_every_gap(name, r0, r1, fragment):
     problems, _ = cc.check(r0, r1, 20)

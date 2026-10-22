@@ -4,7 +4,7 @@
 
 Passes only when, for the two receipts: both verdicts are PASS; they belong to physical GPUs 0 and 1 (one each); they ran different synthetic shots in different
 workdirs on different ComfyUI ports; their journals have distinct store namespaces, job tokens and prompt ids and each shows exactly ONE submission (no duplicate);
-their outputs are different decoded files; and their execution windows genuinely overlapped (otherwise it was sequential, not concurrent).
+their outputs are different decoded files; and ComfyUI's own execution timestamps for the two prompts genuinely overlapped (otherwise it was sequential, not concurrent).
 Per-card memory evidence is judged separately by gpu_attribution.py.
 """
 from __future__ import annotations
@@ -12,12 +12,13 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
 
 
-def window(receipt: dict) -> tuple[datetime, datetime]:
-    return datetime.fromisoformat(receipt["exec_started"]), datetime.fromisoformat(receipt["exec_finished"])
+def window(receipt: dict) -> tuple[float, float]:
+    """Seconds, from ComfyUI's own execution_start/execution_success of the submitted prompt (not the scheduler's wider wall-clock window)."""
+    e = receipt["comfy_execution"]
+    return float(e["start_ms"]) / 1000, float(e["end_ms"]) / 1000
 
 
 def check(r0: dict, r1: dict, min_overlap_s: float) -> tuple[list[str], dict]:
@@ -47,9 +48,9 @@ def check(r0: dict, r1: dict, min_overlap_s: float) -> tuple[list[str], dict]:
     overlap = 0.0
     try:
         (s0, e0), (s1, e1) = window(r0), window(r1)
-        overlap = (min(e0, e1) - max(s0, s1)).total_seconds()
-    except (KeyError, ValueError):
-        problems.append("execution windows are missing: concurrency cannot be shown")
+        overlap = min(e0, e1) - max(s0, s1)
+    except (KeyError, TypeError, ValueError):
+        problems.append("ComfyUI execution timestamps are missing from a receipt: concurrency cannot be shown")
     else:
         if overlap < min_overlap_s:
             problems.append(f"execution windows overlap {overlap:.1f}s (< {min_overlap_s}s): sequential, not concurrent")

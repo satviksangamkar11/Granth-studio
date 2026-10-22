@@ -252,7 +252,7 @@ def test_gpu_script_refuses_a_legacy_installed_ltxvideo_pack_before_any_clone_or
            "LTX_DOWNLOAD_APPROVED": "tester", "LTX_EXPECTED_COMMIT": head, "SESSION_MINUTES": "60"}
     done = subprocess.run(["bash", str(clone / "scripts" / "kaggle" / "ltx_first_test.sh")], capture_output=True, text=True, env=env, timeout=120)
     assert done.returncode == 4 and "legacy" in done.stdout and "installs no LTXVideo node pack" in done.stdout, (done.stdout, done.stderr)
-    assert "session deadline:" in done.stdout and "fresh ports:" in done.stdout    # every earlier refusal was passed
+    assert "session deadline:" in done.stdout and "ports (random once per workspace" in done.stdout    # every earlier refusal was passed
     assert not (work / "ComfyUI" / ".git").exists() and not (work / "ComfyUI-LTXVideo-src").exists()    # nothing was cloned
     assert not (work / "ltx_first_test_evidence" / "pip_freeze.txt").exists()                           # nothing was installed
 
@@ -403,3 +403,13 @@ def test_retry_test_fails_when_the_server_reports_no_cache_information(host, tmp
     server.finish = lambda pid, status="success", ts=(1000, 4500): (server.cached_by_pid.pop(pid, None), orig(pid, status, ts))[1]
     code, retry = run(host, "--execute", "--retry-test")
     assert retry["verdict"] == "FAIL" and "history_reports_cache" in retry["reason"]      # cannot prove the sampler executed: not a PASS
+
+
+def test_gpu_script_reuses_ports_and_unlocks_stages_only_through_a_final_verdict():
+    text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
+    assert "ltx_ports.env" in text and text.index("ltx_ports.env") < text.index("something already listens on port")       # same URL for the retry stage
+    assert 'rm -f "$OUT/stage_verdict.json"' in text and text.index('rm -f "$OUT/stage_verdict.json"') < text.index("== 0. refusals")
+    assert 'need_pass "stage gpu0" gpu0' in text and "stage_verdict.json" in text and "hashlib.sha256" in text
+    assert text.index("gpu_attribution.py") < text.rindex("stage_verdict.json") and 'if [ "$STATUS" = 0 ]' in text            # verdict only after attribution succeeded
+    assert "test_receipt.json\" ] ||" not in text and "receipt_verdict" not in text                                          # the bare client receipt no longer unlocks anything
+    assert '"#OK"' in text and '"#FAIL"' in text and "--worker-evidence" in text
