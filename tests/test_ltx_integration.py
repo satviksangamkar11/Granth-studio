@@ -291,7 +291,65 @@ def test_attempt_budget_survives_restart_and_polling_does_not_consume_it(comfy, 
     assert len(comfy.posts) == 5 and read_json(other)["attempt"] == 1
 
 
-def test_two_concurrent_callers_submit_exactly_once(comfy, tmp_path):
+def child(comfy, mode, journal, signal):
+    import subprocess, sys
+    from pathlib import Path
+    script = Path(__file__).with_name("_comfy_child.py")
+    return subprocess.Popen([sys.executable, str(script), mode, comfy.url, str(journal), str(signal)],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def test_live_owner_is_never_displaced_by_a_second_real_process(comfy, tmp_path):
+    import time
+    journal, signal = tmp_path / "job.json", tmp_path / "sig"; signal.mkdir()
+    a = child(comfy, "hold", journal, signal)                     # owns the journal, pauses before writing intent
+    for _ in range(300):
+        if (signal / "held").exists(): break
+        time.sleep(0.05)
+    assert (signal / "held").exists()
+    b = child(comfy, "fast", journal, signal)                     # same task, second OS process
+    out, err = b.communicate(timeout=60)
+    assert b.returncode == 5 and "owned by another process" in out, (out, err)
+    assert comfy.posts == []                                       # B was refused; nothing submitted yet
+    # no age rule exists: the lock file persists, so a long pause cannot let anyone else in
+    (signal / "release").write_text("1")
+    a_out, a_err = a.communicate(timeout=60)
+    assert a.returncode == 5, (a_out, a_err)                       # A finished (job still running -> JobPending)
+    assert len(comfy.posts) == 1 and read_json(journal)["state"] == "submitted"
+
+
+def test_owner_crash_before_and_after_post_is_recoverable_without_duplicates(comfy, tmp_path):
+    before, after = tmp_path / "before.json", tmp_path / "after.json"
+    signal = tmp_path / "sig"; signal.mkdir()
+    assert child(comfy, "crash_before_post", before, signal).wait(timeout=60) == 9      # died holding the lock
+    assert read_json(before)["state"] == "submitting" and comfy.posts == []
+    with pytest.raises(JobPending, match="reconcile"):                                   # OS freed the lock on death
+        backend(comfy).execute(GRAPH, before)
+    assert comfy.posts == []
+    assert child(comfy, "crash_after_post", after, signal).wait(timeout=60) == 9
+    assert read_json(after)["state"] == "submitting" and len(comfy.posts) == 1           # reply never journaled
+    with pytest.raises(JobPending, match="reconcile"):
+        backend(comfy).execute(GRAPH, after)
+    assert reconcile(backend(comfy), after)["prompt_id"] == "p1"                         # found by token
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, after)
+    assert len(comfy.posts) == 1
+
+
+def test_journal_write_failure_before_post_submits_nothing(comfy, tmp_path, monkeypatch):
+    from granthstudio import comfy as module
+    journal = tmp_path / "job.json"
+    monkeypatch.setattr(module, "atomic_write_json", lambda *a, **k: (_ for _ in ()).throw(OSError("disk full")))
+    with pytest.raises(OSError):
+        backend(comfy).execute(GRAPH, journal)
+    assert comfy.posts == []
+    monkeypatch.undo()
+    with pytest.raises(JobPending):                                  # lock was released by the failed owner
+        backend(comfy).execute(GRAPH, journal)
+    assert len(comfy.posts) == 1
+
+
+def test_threads_in_one_process_also_submit_exactly_once(comfy, tmp_path):
     import threading
     journal = tmp_path / "job.json"; barrier = threading.Barrier(2); outcomes = []
     def caller():
@@ -303,31 +361,6 @@ def test_two_concurrent_callers_submit_exactly_once(comfy, tmp_path):
     threads = [threading.Thread(target=caller) for _ in range(2)]
     [t.start() for t in threads]; [t.join() for t in threads]
     assert len(comfy.posts) == 1 and len(outcomes) == 2
-    assert not list(tmp_path.glob("*.lock"))                    # ownership released
-
-
-def test_abandoned_owner_after_submission_intent_reconciles_instead_of_resubmitting(comfy, tmp_path):
-    import os, time
-    from granthstudio.comfy import owned
-    journal = tmp_path / "job.json"
-    with pytest.raises(JobPending):
-        backend(comfy).execute(GRAPH, journal)
-    state = read_json(journal); state.pop("prompt_id"); state["state"] = "submitting"   # owner died before recording the reply
-    atomic_write_json(journal, state)
-    lock = tmp_path / "job.json.lock"; lock.write_text("{}")
-    old = time.time() - 10_000; os.utime(lock, (old, old))                              # abandoned ownership
-    with pytest.raises(JobPending, match="reconcile"):
-        backend(comfy).execute(GRAPH, journal)
-    assert len(comfy.posts) == 1 and not lock.exists()
-    assert reconcile(backend(comfy), journal)["prompt_id"] == "p1"
-    with pytest.raises(JobPending):
-        backend(comfy).execute(GRAPH, journal)
-    assert len(comfy.posts) == 1
-    lock.write_text("{}")                                                                # a fresh lock is never broken
-    with pytest.raises(JobPending, match="owned by another"):
-        with owned(journal, wait_s=0.1):
-            pass
-    assert lock.exists()
 
 
 def test_store_namespaces_keep_tokens_and_reconciliation_apart(comfy, tmp_path):

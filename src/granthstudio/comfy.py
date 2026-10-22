@@ -24,7 +24,6 @@ from .errors import ConfigError, GateFailure, IntegrationUnavailable, JobPending
 from .integrity import atomic_write_json, read_json, sha256_file, sha256_obj
 
 CLIENT_ID = "granthstudio"
-LOCK_TTL_S = 300.0   # far above one journal decision + POST (timeout_s); see owned() for abandoned-lock recovery
 LOCK_WAIT_S = 60.0
 NAMESPACE_FILE = ".store_namespace"
 _PLACEHOLDER = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
@@ -46,53 +45,58 @@ def store_namespace(journal: Path) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
-@contextmanager
-def owned(journal: Path, ttl_s: float | None = None, wait_s: float | None = None):
-    """Exclusive journal ownership via O_CREAT|O_EXCL on a sibling lock file (atomic on NTFS and POSIX).
+if os.name == "nt":
+    import msvcrt
 
-    Abandoned ownership: a lock older than ttl_s is moved aside (one rename wins) and retaken. That is
-    safe because the lock only guards the decision; an owner that died after recording submission intent
-    left state "submitting" in the journal, which still forces reconcile instead of a resubmission.
-    ponytail: age-based, not pid-based (pid probes are not portable); owners must finish well within ttl_s.
-    """
-    ttl_s = LOCK_TTL_S if ttl_s is None else ttl_s
+    def _try_lock(fd: int) -> None:
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)      # OSError while another handle holds byte 0
+
+    def _unlock(fd: int) -> None:
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _try_lock(fd: int) -> None:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)   # BlockingIOError (an OSError) while held elsewhere
+
+    def _unlock(fd: int) -> None:
+        fcntl.flock(fd, fcntl.LOCK_UN)
+
+
+@contextmanager
+def owned(journal: Path, wait_s: float | None = None):
+    """Exclusive journal ownership: an OS lock held on a persistent sibling file for the whole transaction.
+
+    The operating system drops the lock when the owning process dies and never while it lives, so a live
+    process is never displaced however long it holds the journal; there is deliberately no age-based
+    takeover. A contender waits ``wait_s`` and then gets JobPending. The lock file is never deleted or
+    replaced (no reclamation races). An owner that died after recording submission intent leaves state
+    "submitting", which forces reconcile rather than a resubmission."""
     wait_s = LOCK_WAIT_S if wait_s is None else wait_s
     lock = journal.with_name(journal.name + ".lock")
     lock.parent.mkdir(parents=True, exist_ok=True)
-    me = uuid.uuid4().hex
+    fd = os.open(lock, os.O_RDWR | os.O_CREAT)
     deadline = time.monotonic() + wait_s
-    while True:
-        try:
-            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-        except FileExistsError:
+    try:
+        while True:
             try:
-                if time.time() - lock.stat().st_mtime > ttl_s:
-                    aside = lock.with_name(f"{lock.name}.stale-{uuid.uuid4().hex}")
-                    os.replace(lock, aside)
-                    if time.time() - aside.stat().st_mtime <= ttl_s:   # raced with a fresh owner: give it back
-                        try:
-                            os.link(aside, lock)
-                        except OSError:
-                            pass
-                    aside.unlink(missing_ok=True)
-                    continue
+                _try_lock(fd)
+                break
+            except OSError:
+                if time.monotonic() >= deadline:
+                    raise JobPending(f"journal {journal.name} is owned by another process") from None
+                time.sleep(0.02)
+        try:
+            yield
+        finally:
+            try:
+                _unlock(fd)
             except OSError:
                 pass
-            if time.monotonic() >= deadline:
-                raise JobPending(f"journal {journal.name} is owned by another process")
-            time.sleep(0.02)
-            continue
-        with os.fdopen(fd, "w") as handle:
-            handle.write(json.dumps({"owner": me, "pid": os.getpid(), "at": time.time()}))
-        break
-    try:
-        yield
     finally:
-        try:
-            if json.loads(lock.read_text(encoding="utf-8")).get("owner") == me:
-                lock.unlink()
-        except (OSError, ValueError):
-            pass
+        os.close(fd)
 
 
 def generation_seed(journal: Path, base_seed: int) -> int:
