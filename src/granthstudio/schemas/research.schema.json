@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "research",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "adhyay", "scenes", "open_questions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "adhyay": {"$ref": "#/$defs/adhyay"},
+    "scenes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/scene"}},
+    "open_questions": {"type": "array", "items": {"$ref": "#/$defs/question"}}
+  },
+  "$defs": {
+    "adhyay": {"type": "integer", "minimum": 1, "maximum": 21},
+    "scene_id": {"type": "string", "pattern": "^a[0-9]{2}_s[0-9]{2}$"},
+    "char_id": {"type": "string", "pattern": "^chr_[a-z0-9_]+$"},
+    "dialogue_id": {"type": "string", "pattern": "^d_[0-9]{4,}$"},
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scene_id", "source_refs", "characters", "dialogue"],
+      "properties": {
+        "scene_id": {"$ref": "#/$defs/scene_id"},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "location": {"type": "string", "pattern": "^loc_[a-z0-9_]+$"},
+        "characters": {"type": "array", "items": {"$ref": "#/$defs/char_id"}},
+        "dialogue": {"type": "array", "items": {"$ref": "#/$defs/line"}}
+      }
+    },
+    "line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "speaker", "text"],
+      "properties": {
+        "id": {"$ref": "#/$defs/dialogue_id"},
+        "speaker": {"$ref": "#/$defs/char_id"},
+        "text": {"type": "string", "minLength": 1},
+        "source_ref": {"type": "string"}
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["open", "provisional", "answered"]},
+        "ovi": {"type": "string"}
+      }
+    }
+  }
+}

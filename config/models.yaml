@@ -1,0 +1,20 @@
+schema_version: 1
+# Model pins. checkpoint_sha256 is null until the official file is downloaded on the pinned
+# runtime and hashed; while null, every LTX capability is refused (NOT VALIDATED).
+comfyui:
+  base_url: "http://127.0.0.1:8188"
+ltx:
+  family: LTX-Video
+  version: "0.9.8"
+  variant: 2b-distilled
+  checkpoint_file: ltxv-2b-0.9.8-distilled.safetensors
+  checkpoint_sha256: null
+  precision: fp16
+  workflow_templates:
+    i2v: workflows/comfyui/ltx_i2v_098.json
+    flf: workflows/comfyui/ltx_flf_098.json
+  # Example frame counts from the frozen plan. The exact rule is still OPEN (decision O-003).
+  frame_counts: [49, 65, 81, 89, 97, 121]
+  capabilities:
+    i2v: unvalidated
+    flf: unvalidated

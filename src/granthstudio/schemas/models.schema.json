@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "models",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "comfyui", "ltx"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "comfyui": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_url"],
+      "properties": {"base_url": {"type": "string", "pattern": "^https?://"}}
+    },
+    "ltx": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "version", "variant", "checkpoint_file", "checkpoint_sha256", "precision", "workflow_templates", "frame_counts", "capabilities"],
+      "properties": {
+        "family": {"const": "LTX-Video"},
+        "version": {"const": "0.9.8"},
+        "variant": {"const": "2b-distilled"},
+        "checkpoint_file": {"const": "ltxv-2b-0.9.8-distilled.safetensors"},
+        "checkpoint_sha256": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{64}$"}]},
+        "precision": {"const": "fp16"},
+        "workflow_templates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["i2v", "flf"],
+          "properties": {"i2v": {"type": "string"}, "flf": {"type": "string"}}
+        },
+        "frame_counts": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}},
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["i2v", "flf"],
+          "properties": {
+            "i2v": {"enum": ["unvalidated", "validated", "disabled"]},
+            "flf": {"enum": ["unvalidated", "validated", "disabled"]}
+          }
+        }
+      }
+    }
+  }
+}

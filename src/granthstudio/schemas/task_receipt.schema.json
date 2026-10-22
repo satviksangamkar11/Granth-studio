@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "task_receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "stage", "name", "inputs", "workflow_version", "outputs", "attempts", "status", "completed_at"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "task_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+    "stage": {"enum": ["audio", "keyframe", "tier0", "tier1", "tier2", "assembly"]},
+    "name": {"type": "string", "minLength": 1},
+    "inputs": {"type": "object", "additionalProperties": {"type": "string"}},
+    "workflow_version": {"type": "string", "minLength": 1},
+    "outputs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "attempts": {"type": "integer", "minimum": 1},
+    "status": {"const": "complete"},
+    "completed_at": {"type": "string", "minLength": 1}
+  }
+}

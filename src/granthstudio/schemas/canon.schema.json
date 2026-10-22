@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "canon",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "entries"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"enum": ["characters", "locations", "terminology"]},
+    "entries": {"type": "array", "items": {"$ref": "#/$defs/entry"}},
+    "identity_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ids", "decision"],
+        "properties": {
+          "ids": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+          "decision": {"enum": ["same", "different"]}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "canonical_name", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(chr|loc|term)_[a-z0-9_]+$"},
+        "canonical_name": {"type": "string", "minLength": 1},
+        "aliases": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "status": {"enum": ["approved", "pending"]},
+        "possible_matches": {"type": "array", "items": {"type": "string"}},
+        "hi_allowed": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "protected": {"type": "boolean"},
+        "evidence": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

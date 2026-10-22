@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifacts_dir", "research_dir", "canon_dir", "episodes_dir", "benchmarks_dir", "timezone"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "artifacts_dir": {"type": "string", "minLength": 1},
+    "research_dir": {"type": "string", "minLength": 1},
+    "canon_dir": {"type": "string", "minLength": 1},
+    "episodes_dir": {"type": "string", "minLength": 1},
+    "benchmarks_dir": {"type": "string", "minLength": 1},
+    "timezone": {"type": "string", "minLength": 1}
+  }
+}

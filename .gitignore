@@ -15,3 +15,5 @@ artifacts/audio/
 __pycache__/
 *.pyc
 .secrets/
+*.egg-info/
+.pytest_cache/

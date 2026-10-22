@@ -1,0 +1,5 @@
+schema_version: 1
+kind: terminology
+# Protected terms: canonical_name is the Marathi form; hi_allowed lists approved Hindi renderings.
+entries: []
+identity_decisions: []

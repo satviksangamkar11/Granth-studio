@@ -1,0 +1,8 @@
+schema_version: 1
+# Generated media, renders and weights live outside the Git repository (frozen section 2D / task rules).
+artifacts_dir: "../granthstudio-artifacts"
+research_dir: "research"
+canon_dir: "canon"
+episodes_dir: "episodes"
+benchmarks_dir: "benchmarks"
+timezone: "Asia/Calcutta"

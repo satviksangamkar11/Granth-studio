@@ -9,11 +9,19 @@ Each entry: ID, date, status (APPROVED / PROPOSED / OPEN), source, decision. Onl
 - **D-003 (2026-10-22, APPROVED, user):** Gate order: architecture audit → CPU production runner → LTX runtime validation on Kaggle T4 → six-shot A-F pilot → Codex review → user GO/NO-GO for production.
 - **D-004 (2026-10-22, APPROVED, user):** Throughput accounting. Accepted sec/GPU-hour = accepted video seconds ÷ total GPU-hours consumed. Total GPU-hours include failed renders, retries and rework; two T4s for one hour = 2 GPU-hours. No numerical acceptance threshold has been set (still OPEN, see O-004).
 
-## Proposed (need the user's GO)
+- **P-001 (repository structure, APPROVED 2026-10-22, user):** the layout in `docs/SPEC_SECTIONS_11_12_14.md`. Media lives outside Git in `../granthstudio-artifacts`.
+- **P-002 (pilot shot definitions, APPROVED 2026-10-22, user):** frozen §15 defines A-F (A Tier 0, B I2V recurring character, C FLF, D gesture/dialogue coverage, E different lighting, F shared-visual MR/HI edits). Recovery is a required test beside A-F.
+- **P-003 (pilot chapter, APPROVED 2026-10-22, user):** Adhyay 1. Its source lock needs all open and provisional items answered and the chapter approved; until then the pipeline refuses to compile it.
 
-- **P-001 (frozen §11, repository structure):** use the layout from the user's execution plan (`config/`, `canon/`, `research/adhyay_NN/`, `episodes/adhyay_NN/{manifest,shots,mr,hi}.yaml`, `workflows/comfyui/`, `src/granthstudio/`, `tests/`, `scripts/`, `benchmarks/pilot_af/`, `artifacts/` outside Git for media). Create directories only when a milestone needs them.
-- **P-002 (pilot shot definitions):** the user's execution plan proposed a different A-F mapping (A ordinary I2V … F recovery). The frozen §15 mapping takes precedence (A Tier 0, B I2V recurring character, C FLF of the same shot, D gesture/dialogue coverage, E recurring character in different lighting, F shared-visual MR/HI edits). Recovery-after-interrupt becomes a mandatory pilot test alongside A-F, not a shot.
-- **P-003 (pilot source):** use Adhyay 1 as the pilot chapter. It has the most checking (print verification of 26 items plus web verification); recurring characters Gajanan Maharaj, Bankatlal, Damodarpant; location the street outside Devidas Paturkar's house. Its remaining open questions must be answered and the chapter approved before the pilot's source lock.
+## Implementation decisions (2026-10-22, approved with the implementation GO)
+
+- **D-005:** Sections 11, 12 and 14 are implemented as the specification in `docs/SPEC_SECTIONS_11_12_14.md`. The frozen document is not edited.
+- **D-006:** Runtime dependencies are limited to `pyyaml` and `jsonschema`; test dependency `pytest`. No database, no agent framework, no orchestration platform.
+- **D-007:** Every external integration that has not been run here is an explicit NOT VALIDATED stage (LTX I2V/FLF, SDXL keyframes, IndicF5, IndicTrans2, ComfyUI). It raises and never reports success.
+- **D-008:** Synthetic fixtures are used for tests only (`tests/conftest.py`). No Granth text is committed as fixture or canon.
+- **D-009:** Execution is sequential. Worker concurrency stays benchmark-dependent (frozen §8).
+
+## Still open (no decision yet)
 
 ## Open (no decision yet)
 

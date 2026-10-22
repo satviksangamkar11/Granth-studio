@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "benchmark_receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "capability", "shot", "checkpoint_sha256", "workflow_version", "gpu", "gpu_count", "gpu_seconds_total", "attempts", "video_seconds", "accepted", "outcome", "recorded_at"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "capability": {"enum": ["i2v", "flf", "tier0", "assembly"]},
+    "shot": {"enum": ["A", "B", "C", "D", "E", "F"]},
+    "checkpoint_sha256": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{64}$"}]},
+    "workflow_version": {"type": "string"},
+    "gpu": {"type": "string"},
+    "gpu_count": {"type": "integer", "minimum": 1},
+    "gpu_seconds_total": {"type": "number", "minimum": 0},
+    "attempts": {"type": "integer", "minimum": 1},
+    "video_seconds": {"type": "number", "minimum": 0},
+    "accepted": {"anyOf": [{"type": "null"}, {"type": "boolean"}]},
+    "outcome": {"enum": ["pass", "fail", "pending"]},
+    "peak_vram_mb": {"anyOf": [{"type": "null"}, {"type": "number"}]},
+    "output_sha256": {"anyOf": [{"type": "null"}, {"type": "string"}]},
+    "recorded_at": {"type": "string", "minLength": 1}
+  }
+}

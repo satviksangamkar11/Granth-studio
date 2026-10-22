@@ -1,0 +1,4 @@
+{
+  "_status": "unvalidated",
+  "_note": "NOT VALIDATED. FLF (LTXVAddGuide) stays disabled until a working graph is validated against the pinned 0.9.8 2B checkpoint and passes the T4 benchmark. Placeholders: START_IMAGE, END_IMAGE, MOTION_PROMPT, FRAMES, SEED, FPS."
+}

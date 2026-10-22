@@ -1,0 +1,5 @@
+schema_version: 1
+kind: characters
+# Empty by design: canon comes only from approved research. Nothing is invented here.
+entries: []
+identity_decisions: []
