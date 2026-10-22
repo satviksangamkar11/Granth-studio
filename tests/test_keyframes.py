@@ -216,3 +216,26 @@ def test_refs_cli_generate_collect_and_approve_gate(kf_project, comfy, tmp_path,
     approved = next(a for a in kf.load_registry(kf_project)["assets"] if a["asset_id"] == target)
     assert approved["status"] == "approved" and approved["approved_by"] == "synthetic-test-only"
     assert main([*root, "refs", "status"]) == 0
+
+
+@pytest.mark.parametrize("bad", ["../escape", "ref_x/../../escape", "/abs/ref_x", "C:"+chr(92)+"evil"+chr(92)+"ref_x", chr(92)*2+"host"+chr(92)+"share"+chr(92)+"ref_x", "ref_X", "ref_a/b", ""])
+def test_invalid_asset_id_cannot_write_outside_references(kf_project, tmp_path, bad):
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    source = make_still(tmp_path / "x.png")
+    before = {p for p in kf_project.root.parent.rglob("*")}
+    with pytest.raises(ConfigError):
+        kf.import_asset(kf_project, canon, bad, "character_sheet", CHARS[0], None, "front", source)
+    assert {p for p in kf_project.root.parent.rglob("*")} == before
+
+
+def test_symlinked_asset_dir_cannot_escape(kf_project, tmp_path):
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    outside = tmp_path / "outside"; outside.mkdir()
+    root = kf.references_root(kf_project); root.mkdir(parents=True, exist_ok=True)
+    try:
+        (root / "ref_link").symlink_to(outside, target_is_directory=True)
+    except OSError:
+        pytest.skip("symlinks unavailable")
+    with pytest.raises(ConfigError):
+        kf.import_asset(kf_project, canon, "ref_link", "location", LOC, None, "establishing", make_still(tmp_path / "y.png"))
+    assert not list(outside.iterdir())

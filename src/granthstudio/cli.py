@@ -421,7 +421,8 @@ def cmd_speech_asr(args: argparse.Namespace) -> int:
 def cmd_speech_align(args: argparse.Namespace) -> int:
     from . import speech
     project = _project(args)
-    report = speech.align_words(project, load_models(project), args.adhyay, args.lang, args.line)
+    report = speech.align_words(project, load_models(project), args.adhyay, args.lang, args.line,
+                                 "candidate" if args.candidate else "release")
     print(f"{args.line}: {len(report['words'])} aligned word(s) (data only, not enforced)")
     return EXIT_OK
 
@@ -743,6 +744,8 @@ def build_parser() -> argparse.ArgumentParser:
         if name == "approve":
             sub_cmd.add_argument("--reviewer", required=True)
             sub_cmd.add_argument("--confirm", action="store_true")
+        if name == "align":
+            sub_cmd.add_argument("--candidate", action="store_true", help="align the unapproved candidate instead of release audio")
         sub_cmd.set_defaults(handler=handler)
 
     comfy = commands.add_parser("comfy", help="ComfyUI server compatibility and job control")

@@ -86,7 +86,13 @@ def compile_episode(
         if len(action_facts) != len(source_scene["actions"]):
             raise ConfigError("duplicate approved action ID")
         required_actions = {key for key, fact in action_facts.items() if not fact["artistic"]}
-        covered_actions = {key for shot in scene["shots"] for key in shot.get("action_ids", [])}
+        referenced_cutaways = {s["coverage"]["shot_id"] for s in scene["shots"]
+                               if (s.get("coverage") or {}).get("mode") == "cutaway"}
+        # An action on a cutaway nothing refers to can never reach the picture, so it does not count.
+        covered_actions = {key for shot in scene["shots"] if not shot.get("cutaway") or shot["shot_id"] in referenced_cutaways
+                           for key in shot.get("action_ids", [])}
+        if not {key for shot in scene["shots"] for key in shot.get("action_ids", [])} <= set(action_facts):
+            raise GateFailure("shots must reference every required approved action and no invented actions")
         if not required_actions <= covered_actions or not covered_actions <= set(action_facts):
             raise GateFailure("shots must reference every required approved action and no invented actions")
         for shot in scene["shots"]:
@@ -190,6 +196,15 @@ def compile_episode(
         "research_scenes": research["scenes"],
         "pilot": dict(sorted(pilot.items())),
     }
+
+
+def unplaced_required_actions(compiled: dict[str, Any], placed_cutaways: set[str]) -> list[str]:
+    """Required approved actions absent from the effective timeline: non-cutaway shots plus only those
+    cutaways actually placed in the render (a cutaway used for no extension contributes nothing)."""
+    seen = {(s["scene_id"], a) for s in compiled["shots"] if not s["cutaway"] or s["shot_id"] in placed_cutaways
+            for a in s["action_ids"]}
+    return sorted(f"{scene['scene_id']}:{a['id']}" for scene in compiled["research_scenes"] for a in scene["actions"]
+                  if not a["artistic"] and (scene["scene_id"], a["id"]) not in seen)
 
 
 def compiled_digest(compiled: dict[str, Any]) -> str:

@@ -93,9 +93,14 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
     if not execute:
         return [e["dialogue_id"] for e in entries]
     section = require_runner(models, "speech", "IndicF5")
+    voices = {e["dialogue_id"]: voice_for(project, e["speaker"], language) for e in entries}  # consent first
+    # Approved Marathi source, Hindi review, protected terms, numeric facts, attribution and text hashes
+    # (one gate, shared with the release path) must hold before any model runner is invoked.
+    from .pipeline import load_bundle
+    load_bundle(project, models, adhyay)
     done = []
     for entry in entries:
-        voice = voice_for(project, entry["speaker"], language)
+        voice = voices[entry["dialogue_id"]]
         reference = contained_path(voice_root(project), voice["reference_audio"]["path"])
         request = speech_request(section, voice, entry, language)
         root = candidate_root(project, language)
@@ -175,31 +180,41 @@ def validate_alignment(words: Any, script_text: str, duration_s: float) -> list[
     return [{"word": w["word"], "start_s": w["start_s"], "end_s": w["end_s"]} for w in words]
 
 
-def align_words(project: Project, models: dict[str, Any], adhyay: int, language: str, line_id: str) -> dict[str, Any]:
+def align_words(project: Project, models: dict[str, Any], adhyay: int, language: str, line_id: str,
+                source: str = "release") -> dict[str, Any]:
+    """Word alignment. ``release`` (default) aligns the current approved timeline audio; ``candidate``
+    aligns an unapproved candidate and is written separately so it never stands in for release audio."""
+    if source not in ("release", "candidate"):
+        raise ConfigError(f"alignment source must be 'release' or 'candidate', not {source!r}")
     section = require_runner(models, "aligner", "aligner")
     entry = next((e for e in load_timeline(project, adhyay, language)["entries"] if e["dialogue_id"] == line_id), None)
     if entry is None:
         raise ConfigError(f"unknown dialogue id {line_id}")
-    record_file = record_path(project, language, line_id)
-    if record_file.is_file():
-        record = read_json(record_file)
-        audio = contained_path(candidate_root(project, language), record["audio"]["path"])
-        digest = record["audio"]["sha256"]
-    elif entry.get("audio"):
-        audio = contained_path(project.artifacts_dir / "audio", entry["audio"]["path"])
-        digest = entry["audio"]["sha256"]
+    text_hash = sha256_obj(normalize_text(entry["text"]))
+    if source == "release":
+        approved = entry.get("audio")
+        if not approved:
+            raise GateFailure(f"{line_id}: no approved timeline audio for {language}; use source='candidate' for candidates")
+        if approved["text_sha256"] != text_hash:
+            raise GateFailure(f"{line_id}: approved audio is bound to different script text")
+        audio = contained_path(project.artifacts_dir / "audio", approved["path"])
+        digest, provenance, name = approved["sha256"], approved.get("provenance"), f"{line_id}.align.json"
     else:
-        raise GateFailure(f"{line_id}: no speech candidate or timeline audio for {language}")
+        record = read_json(_record(project, language, line_id))
+        if record["text_sha256"] != text_hash:
+            raise GateFailure(f"{line_id}: candidate record is stale (script text changed since generation)")
+        audio = contained_path(candidate_root(project, language), record["audio"]["path"])
+        digest, provenance, name = record["audio"]["sha256"], {"request_sha256": record["request_sha256"]}, f"{line_id}.align.candidate.json"
     if not audio.is_file() or sha256_file(audio) != digest:
         raise GateFailure(f"{line_id}: audio missing or changed")
     duration = validate_audio(audio)
     answer = run_json(section, {"audio_path": str(audio), "text": entry["text"], "language": language})
     words = validate_alignment(answer.get("words"), entry["text"], duration)
     report = {"schema_version": 1, "dialogue_id": line_id, "language": language, "audio_sha256": digest,
-              "expected_text_sha256": sha256_obj(normalize_text(entry["text"])), "words": words,
+              "expected_text_sha256": text_hash, "audio_source": source, "audio_provenance": provenance, "words": words,
               "model": section["model"], "revision": section["revision"], "enforced": False,
               "note": "Word-level data only; subtitles stay sentence/phrase level (frozen 5.4)."}
-    atomic_write_json(candidate_root(project, language) / f"{line_id}.align.json", report)
+    atomic_write_json(candidate_root(project, language) / name, report)
     return report
 
 

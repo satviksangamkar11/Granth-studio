@@ -7,6 +7,7 @@ refuses rather than assuming a choice.
 """
 from __future__ import annotations
 
+import re
 import shutil
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,8 @@ from .schemas import validate_document
 PROMPT_TEMPLATE_VERSION = "keyframe-prompt-v1"
 SHEET_VIEWS = ("front", "three_quarter", "profile", "full_body")
 REFERENCE_DIR = "references"
+ASSET_ID = re.compile(r"^ref_[a-z0-9_]+$")
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 EMPTY_REGISTRY = {"schema_version": 1, "style": None, "designs": [], "assets": []}
 
 
@@ -324,14 +327,22 @@ def _next_version(registry: dict[str, Any], asset_id: str) -> int:
 
 
 def _register(project: Project, registry: dict[str, Any], source: Path, meta: dict[str, Any], origin: str) -> dict[str, Any]:
-    digest = sha256_file(source)
     asset_id = meta["asset_id"]
+    suffix = source.suffix.lower()
+    if not isinstance(asset_id, str) or not ASSET_ID.fullmatch(asset_id):
+        raise ConfigError(f"invalid asset id {asset_id!r}: must match {ASSET_ID.pattern}")
+    if suffix not in IMAGE_SUFFIXES:
+        raise ConfigError(f"unsupported reference image type {suffix!r}")
+    for key in ("canon_id", "visual_id", "view", "request_sha256"):
+        if meta.get(key) is not None and not isinstance(meta[key], str):
+            raise ConfigError(f"{key} must be a string")
+    digest = sha256_file(source)
     duplicate = next((a for a in registry["assets"] if a["asset_id"] == asset_id and a["sha256"] == digest), None)
     if duplicate:
         return duplicate
     version = _next_version(registry, asset_id)
-    relative = f"{asset_id}/v{version}/image{source.suffix.lower()}"
-    target = references_root(project) / asset_id / f"v{version}" / f"image{source.suffix.lower()}"
+    relative = f"{asset_id}/v{version}/image{suffix}"
+    target = contained_path(references_root(project), relative)  # resolves symlinks/junctions before any write
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
     asset = {"asset_id": asset_id, "version": version, "kind": meta["kind"], "path": relative, "sha256": digest,

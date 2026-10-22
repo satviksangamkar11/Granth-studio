@@ -252,3 +252,64 @@ def test_speech_cli_dry_run_and_confirm_gate(approved_project, tmp_path, capsys)
     assert "would be generated" in capsys.readouterr().out
     assert main([*root, "speech", "generate", "1", "--lang", "mr", "--execute"]) == 3  # speech runner NOT VALIDATED
     assert main([*root, "speech", "approve", "1", "--lang", "mr", "--line", "d_0001", "--reviewer", "x"]) == 1
+
+
+ALIGN = '''
+import json, sys, pathlib
+payload = json.load(sys.stdin)
+with (pathlib.Path(__file__).parent / "align.log").open("a") as log:
+    log.write(payload["audio_path"] + chr(10))
+words = payload["text"].split()
+print(json.dumps({"words": [{"word": w, "start_s": 0.01 * i, "end_s": 0.01 * i + 0.009} for i, w in enumerate(words)]}))
+'''
+
+
+def _edit(project, lang, mutate):
+    path = project.episodes_dir / "adhyay_01" / f"{lang}.yaml"
+    document = load_yaml(path); mutate(document["entries"][0])
+    atomic_write_json(path, document)
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+@pytest.mark.parametrize("lang,mutate,match", [
+    ("mr", lambda e: e.update(text=e["text"] + " बदल"), "Marathi lock"),                      # unapproved Marathi text
+    ("hi", lambda e: e.update(text=e["text"] + " बदला"), "Hindi semantic review does not match"),  # stale Hindi review
+    ("hi", lambda e: e["alignment"].update(reviewed=False), "Hindi semantic review is not approved"),
+    ("mr", lambda e: e.update(speaker="chr_synth_b"), "speaker differs"),                       # dialogue attribution
+])
+def test_speech_validation_failure_never_invokes_tts(approved_project, tmp_path, lang, mutate, match):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS))
+    _edit(approved_project, lang, mutate)
+    with pytest.raises(GateFailure, match=match):
+        speech.generate_speech(approved_project, load_models(approved_project), 1, lang, ["d_0001"], execute=True)
+    assert not (tmp_path / "tts.log").exists()
+    assert not speech.candidate_root(approved_project, lang).exists()
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_release_alignment_uses_approved_audio_and_rejects_stale_candidates(approved_project, tmp_path):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS), aligner=runner_section(tmp_path, "align", ALIGN))
+    models = load_models(approved_project)
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)  # candidate, not approved
+    release = load_yaml(approved_project.episodes_dir / "adhyay_01" / "mr.yaml")["entries"][0]["audio"]
+    report = speech.align_words(approved_project, models, 1, "mr", "d_0001")
+    assert report["audio_sha256"] == release["sha256"] and report["audio_source"] == "release"  # not the newer candidate
+    assert (speech.candidate_root(approved_project, "mr") / "d_0001.align.json").is_file()
+    cand = speech.align_words(approved_project, models, 1, "mr", "d_0001", source="candidate")
+    assert cand["audio_sha256"] != release["sha256"] and cand["audio_source"] == "candidate"
+    assert (speech.candidate_root(approved_project, "mr") / "d_0001.align.candidate.json").is_file()
+    assert read_json(speech.candidate_root(approved_project, "mr") / "d_0001.align.json")["audio_sha256"] == release["sha256"]
+    # stale candidate: script text changed after generation
+    record = read_json(speech.record_path(approved_project, "mr", "d_0001"))
+    record["text_sha256"] = "0" * 64
+    atomic_write_json(speech.record_path(approved_project, "mr", "d_0001"), record)
+    with pytest.raises(GateFailure, match="stale"):
+        speech.align_words(approved_project, models, 1, "mr", "d_0001", source="candidate")
+    # release audio bound to other text is refused too
+    _edit(approved_project, "mr", lambda e: e["audio"].update(text_sha256="1" * 64))
+    with pytest.raises(GateFailure, match="different script text"):
+        speech.align_words(approved_project, models, 1, "mr", "d_0001")

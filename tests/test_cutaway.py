@@ -150,3 +150,43 @@ def test_hold_final_frame_still_works(approved_project):
     assert all(r.status == "complete" for r in results)
     _, plan = plan_of(scheduler, tasks, "hi")
     assert "coverage" not in plan["shots"][1] and plan["shots"][1]["duration_s"] > 0.5
+
+
+def action_on_cutaway(cover_it):
+    def change(manifest, shots):
+        shots[1]["action_ids"] = []; shots[2]["action_ids"] = ["action_turn"]
+        if cover_it:
+            shots[1]["coverage"] = cover()
+    return change
+
+
+def test_required_action_only_on_unused_cutaway_is_refused(approved_project):
+    make_cpu_project(approved_project)
+    edit_manifest(approved_project, action_on_cutaway(False))
+    with pytest.raises(GateFailure, match="required approved action"):
+        compile_project(approved_project)
+
+
+@MEDIA
+def test_required_action_on_cutaway_omitted_when_extension_unnecessary_fails_that_language(approved_project):
+    make_cpu_project(approved_project)
+    edit_manifest(approved_project, action_on_cutaway(True))
+    scheduler, tasks, results = run(approved_project)
+    by_name = {t.name: r for t, r in zip(tasks, results)}
+    assert by_name["assemble_mr"].status == "failed" and "required approved actions absent" in by_name["assemble_mr"].detail
+    assert by_name["assemble_hi"].status == "complete"  # Hindi speech overruns, so the cutaway is placed
+    _, plan = plan_of(scheduler, tasks, "hi")
+    assert next(s for s in plan["shots"] if s["shot_id"] == SH2)["coverage"]["shot_id"] == CUT
+
+
+@MEDIA
+def test_mandatory_action_on_primary_shot_is_in_final_timeline(approved_project):
+    make_cpu_project(approved_project)
+    edit_manifest(approved_project, set_cover(cover()))  # action_turn stays on the primary shot
+    scheduler, tasks, results = run(approved_project)
+    assert all(r.status == "complete" for r in results), results
+    from granthstudio.episodes import unplaced_required_actions
+    for lang in ("mr", "hi"):
+        _, plan = plan_of(scheduler, tasks, lang)
+        bundle = load_bundle(approved_project, load_models(approved_project), 1)
+        assert unplaced_required_actions(bundle.compiled, {s["coverage"]["shot_id"] for s in plan["shots"] if "coverage" in s}) == []
