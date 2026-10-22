@@ -28,7 +28,7 @@ from .pipeline import episode_store, hard_gates, load_bundle, plan_tasks, snapsh
 from .qa import write_report
 from .research import approve, load_research, require_approved, verify_source
 from .runtime import (bootstrap_plan, fetch, get_storage, gpu_status, load_runtime, preflight, ram_available_mb,
-                      require_gpu_ready, require_single_worker, stop_before_deadline, verify_downloads, write_run_receipt)
+                      enforce_gpu_policy, require_gpu_ready, require_single_worker, stop_before_deadline, verify_downloads, write_run_receipt)
 from .scheduler import Scheduler
 
 EXIT_OK, EXIT_ERROR, EXIT_REFUSED, EXIT_NOT_VALIDATED = 0, 1, 2, 3
@@ -186,18 +186,17 @@ def cmd_plan(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
-def _execute_plan(project, args, kind="episode_run", require_gpu=False):
+def _execute_plan(project, args, kind="episode_run", cpu_only=False):
     """Run the plan with a session-deadline stop, then write the run receipt and QA report."""
     started = _now()
     runtime = load_runtime(project)
     require_single_worker(runtime)
     models = load_models(project)
     report = preflight(project, models, runtime, gpu_status(), ram_available_mb())
-    if require_gpu:
-        require_gpu_ready(report)
     bundle = load_bundle(project, models, args.adhyay)
     scheduler = Scheduler(episode_store(project, args.adhyay))
     tasks = plan_tasks(bundle, scheduler)
+    enforce_gpu_policy(tasks, report, cpu_only)
     results = scheduler.run(tasks, should_stop=stop_before_deadline(runtime))
     for result in results:
         print(f"{result.status:<13} {result.stage:<9} {result.name:<26} {result.detail}")
@@ -231,7 +230,7 @@ def cmd_session(args: argparse.Namespace) -> int:
     if (storage.root / args.export_name / "export_manifest.json").is_file():
         storage.restore(args.export_name, project.artifacts_dir)
     try:
-        return _execute_plan(project, args, require_gpu=not args.cpu_only)
+        return _execute_plan(project, args, cpu_only=args.cpu_only)
     finally:
         storage.export(project.artifacts_dir, args.export_name)
         print(f"exported artifacts to {storage.root / args.export_name}")
@@ -341,7 +340,9 @@ def cmd_refs_generate(args: argparse.Namespace) -> int:
             print(f"planned  {task.name:<40} {task.task_id()}")
         print("dry run: add --execute (needs a validated SDXL setup)")
         return EXIT_OK
-    results = scheduler.run(tasks, should_stop=stop_before_deadline(load_runtime(project)))
+    runtime = load_runtime(project)
+    enforce_gpu_policy(tasks, preflight(project, models, runtime, gpu_status(), ram_available_mb()), False)
+    results = scheduler.run(tasks, should_stop=stop_before_deadline(runtime))
     for result in results:
         print(f"{result.status:<13} {result.name:<40} {result.detail}")
     return EXIT_NOT_VALIDATED if any(r.status == "not_validated" for r in results) else (
@@ -536,7 +537,7 @@ def cmd_pilot_run(args: argparse.Namespace) -> int:
     from . import pilotrun
     project = _project(args)
     mapping, selected, full_chapter, results, receipt = pilotrun.run_pilot(
-        project, args.adhyay, _pilot_store(args), args.execute, not args.cpu_only)
+        project, args.adhyay, _pilot_store(args), args.execute, args.cpu_only)
     if results is None:
         for label, shot_id in mapping.items():
             print(f"{label}  {shot_id}")
@@ -667,7 +668,7 @@ def build_parser() -> argparse.ArgumentParser:
     session = commands.add_parser("session", help="Kaggle session: restore, preflight, run, export")
     session.add_argument("adhyay", type=int)
     session.add_argument("--export-name", default="artifacts")
-    session.add_argument("--cpu-only", action="store_true", help="skip the GPU preflight requirement")
+    session.add_argument("--cpu-only", action="store_true", help="refuse GPU tasks instead of running them (CPU-only tasks need no GPU readiness)")
     session.set_defaults(handler=cmd_session)
 
     runtime = commands.add_parser("runtime", help="GPU host preflight, weights and durable storage")
@@ -790,7 +791,7 @@ def build_parser() -> argparse.ArgumentParser:
     pilot_run.add_argument("adhyay", type=int)
     pilot_run.add_argument("--store", help="named task store under artifacts/tasks (default: the episode store)")
     pilot_run.add_argument("--execute", action="store_true")
-    pilot_run.add_argument("--cpu-only", action="store_true", help="skip the GPU preflight requirement")
+    pilot_run.add_argument("--cpu-only", action="store_true", help="refuse GPU tasks instead of running them (CPU-only tasks need no GPU readiness)")
     pilot_run.set_defaults(handler=cmd_pilot_run)
     pilot_receipts = pilot_actions.add_parser("receipts", help="build benchmark receipts from the run")
     pilot_receipts.add_argument("adhyay", type=int)

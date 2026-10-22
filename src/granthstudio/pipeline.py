@@ -29,7 +29,7 @@ from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, n
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
-from .runtime import gpu_status
+from .runtime import gpu_status, require_source_pins
 from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
@@ -201,6 +201,7 @@ def _ltx_preflight(bundle, capability):
         require_capability(bundle.models, capability, bundle.project.benchmarks_dir, template.version)
         ensure_validated(template)
     check_checkpoint_binding(template, bundle.models["ltx"]["checkpoint_file"])
+    require_source_pins(bundle.project, bundle.models)  # no LTX submission path can skip the source-pin check
     return template
 
 def validate_ltx_inputs(models, shot, image):

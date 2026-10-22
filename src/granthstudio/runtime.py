@@ -23,6 +23,7 @@ from .errors import ConfigError, IntegrationUnavailable, TaskFailed
 from .integrity import atomic_write_json, contained_path, read_json, sha256_file
 from .schemas import validate_document
 
+GPU_STAGES = ("keyframe", "tier1", "tier2", "lipsync")   # stages whose tasks can submit to a GPU runtime
 GPU_CHECKS = ("gpu", "free_vram", "ram", "disk", "session", "python_packages", "storage", "workers", "sources")
 DEADLINE_ENV = "GRANTHSTUDIO_SESSION_DEADLINE"
 
@@ -162,6 +163,24 @@ def require_gpu_ready(report: dict[str, Any]) -> None:
         failing = {k: v["status"] + (f" ({v['detail']})" if k == "sources" and v.get("detail") else "")
                    for k, v in report["checks"].items() if k in GPU_CHECKS and v["status"] != "pass"}
         raise IntegrationUnavailable(f"GPU preflight not passed: {failing}: NOT VALIDATED")
+
+
+def require_source_pins(project: Project, models: dict[str, Any]) -> None:
+    check = source_consistency(models, load_runtime(project))
+    if check["status"] != "pass":
+        raise IntegrationUnavailable(f"ComfyUI/node source pins {check['status']}: {check['detail'] or 'unrecorded'}: NOT VALIDATED")
+
+
+def enforce_gpu_policy(tasks, report: dict[str, Any], cpu_only: bool = False) -> None:
+    """Every executing path calls this with the tasks it is about to run. Tasks that can invoke GPU generation
+    need a passing preflight (source pins included); CPU-only mode refuses them instead of running them unchecked."""
+    gpu = sorted(t.name for t in tasks if t.stage in GPU_STAGES)
+    if not gpu:
+        return
+    if cpu_only:
+        raise IntegrationUnavailable(f"CPU-only mode refuses GPU task(s) {gpu[:5]}{'...' if len(gpu) > 5 else ''}: "
+                                     "run without --cpu-only on a GPU-ready host")
+    require_gpu_ready(report)
 
 
 def source_consistency(models: dict[str, Any], runtime: dict[str, Any]) -> dict[str, Any]:

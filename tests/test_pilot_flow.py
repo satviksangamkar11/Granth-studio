@@ -10,7 +10,7 @@ import yaml
 from granthstudio import pilotrun
 from granthstudio.cli import main
 from granthstudio.config import load_models, load_yaml, require_capability
-from granthstudio.errors import CapabilityDisabled, ConfigError, GateFailure
+from granthstudio.errors import CapabilityDisabled, ConfigError, GateFailure, IntegrationUnavailable
 from granthstudio.integrity import atomic_write_json, normalize_text, read_json, sha256_file, sha256_obj
 from granthstudio.pipeline import load_bundle, plan_tasks
 from granthstudio.scheduler import Scheduler
@@ -76,7 +76,24 @@ def pilot(approved_project, tmp_path, comfy, monkeypatch):
     atomic_write_json(project.root / "workflows" / "comfyui" / "ltx_i2v_098.json", graph())
     atomic_write_json(project.root / "workflows" / "comfyui" / "ltx_flf_098.json", graph("end"))
     monkeypatch.setattr("granthstudio.pipeline.gpu_status", lambda: T4)
+    make_gpu_ready(project, tmp_path, monkeypatch)
     return project
+
+
+def make_gpu_ready(project, tmp_path, monkeypatch, node_commit="b" * 40):
+    """Synthetic 'ready' GPU host: measured T4, resources, storage and matching source pins. Not a real host."""
+    import importlib.metadata
+    runtime = load_yaml(project.root / "config" / "runtime.yaml")
+    runtime["resources"] = {"min_free_vram_mb": 5000, "min_ram_mb": 8000, "min_disk_gb": 0.001, "min_session_remaining_s": 600}
+    runtime["storage"] = {"provider": "local_dir", "path": str(tmp_path / "durable")}
+    runtime["python_packages"] = {"pytest": importlib.metadata.version("pytest")}
+    runtime["sources"].update(comfyui_commit="a" * 40, node_pack_commit=node_commit)
+    from granthstudio.config import dump_yaml
+    dump_yaml(project.root / "config" / "runtime.yaml", runtime)
+    monkeypatch.setenv("GRANTHSTUDIO_SESSION_DEADLINE", "2999-01-01T00:00:00+00:00")
+    for module in ("pilotrun", "cli"):
+        monkeypatch.setattr(f"granthstudio.{module}.gpu_status", lambda: T4)
+        monkeypatch.setattr(f"granthstudio.{module}.ram_available_mb", lambda: 16000)
 
 
 def set_rubric(project, criteria=("identity_continuity", "sacred_fidelity"), budget=None):
@@ -90,7 +107,7 @@ def passes(*names):
 
 
 def full_run(project, store=None):
-    mapping, selected, full, results, receipt = pilotrun.run_pilot(project, 1, store, execute=True, require_gpu=False)
+    mapping, selected, full, results, receipt = pilotrun.run_pilot(project, 1, store, execute=True)
     return mapping, selected, full, results, receipt
 
 
@@ -218,7 +235,8 @@ def test_pilot_cli_surface(pilot, capsys):
     assert "assembly included" in out and "dry run" in out and out.count("planned") >= 8
     assert main([*root, "pilot", "run", "2"]) == 1  # the pilot chapter is Adhyay 1
     assert main([*root, "pilot", "review", "1", "--shot", "B", "--reviewer", "x", "--decision", "accept"]) == 1  # no --confirm
-    assert main([*root, "pilot", "run", "1", "--execute", "--cpu-only"]) == 0
+    assert main([*root, "pilot", "run", "1", "--execute", "--cpu-only"]) == 3   # GPU tasks are refused in CPU-only mode
+    assert main([*root, "pilot", "run", "1", "--execute"]) == 0
     assert main([*root, "pilot", "receipts", "1"]) == 0
     assert "awaiting human review: A, B, C, D, E, F" in capsys.readouterr().out
     assert main([*root, "pilot", "report", "1"]) == 0
@@ -267,3 +285,32 @@ def test_asr_and_alignment_evidence_needs_current_audio_and_text_hashes(pilot, a
     assert row["asr_alignment"]["kind"] == kind and row["word_alignment"]["kind"] == kind
     if kind == "stale":
         assert row["asr_alignment"]["value"] is None and row["word_alignment"]["value"] is None
+
+
+def test_source_pin_mismatch_means_zero_gpu_submissions_on_every_execute_path(pilot, comfy, tmp_path, monkeypatch, capsys):
+    make_gpu_ready(pilot, tmp_path, monkeypatch, node_commit="c" * 40)       # runtime.yaml differs from models.yaml
+    root = ["--root", str(pilot.root)]
+    assert main([*root, "run", "1", "--execute"]) == 3
+    assert main([*root, "session", "1", "--export-name", "x"]) == 3
+    with pytest.raises(IntegrationUnavailable, match="source"):
+        pilotrun.run_pilot(pilot, 1, None, execute=True)
+    assert main([*root, "pilot", "run", "1", "--execute"]) == 3
+    assert comfy.posts == []
+    # a direct scheduler run (bypassing every CLI preflight) still cannot reach the server
+    bundle = pilotrun._bundle(pilot, load_models(pilot), 1)
+    scheduler = Scheduler(pilotrun.store_for(pilot, 1, "direct"))
+    results = scheduler.run(plan_tasks(bundle, scheduler))
+    assert any(r.status == "not_validated" and "source pins" in r.detail for r in results) and comfy.posts == []
+
+
+def test_cpu_only_mode_refuses_gpu_tasks_but_runs_cpu_tasks(pilot, comfy, capsys):
+    from granthstudio.runtime import enforce_gpu_policy
+    bundle = pilotrun._bundle(pilot, load_models(pilot), 1)
+    scheduler = Scheduler(pilotrun.store_for(pilot, 1, "cpuonly"))
+    tasks = plan_tasks(bundle, scheduler)
+    with pytest.raises(IntegrationUnavailable, match="CPU-only mode refuses GPU task"):
+        enforce_gpu_policy(tasks, {"gpu_ready": True, "checks": {}}, cpu_only=True)
+    enforce_gpu_policy([t for t in tasks if t.stage in ("audio", "tier0", "assembly")], {"gpu_ready": False, "checks": {}}, cpu_only=True)
+    with pytest.raises(IntegrationUnavailable, match="not passed"):
+        enforce_gpu_policy(tasks, {"gpu_ready": False, "checks": {"gpu": {"status": "fail"}}})
+    assert comfy.posts == []

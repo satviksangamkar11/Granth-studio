@@ -82,7 +82,7 @@ def test_flag_controls_clip_rejection(pilot, tmp_path):  # noqa: F811
 def test_flat_ltx_render_fails_without_fallback(pilot, comfy, tmp_path):  # noqa: F811
     make(tmp_path / "flat.mp4", "color=c=blue:s=160x120:r=24", frames=49)
     comfy.view_bytes = (tmp_path / "flat.mp4").read_bytes()
-    _, _, _, results, _ = pilotrun.run_pilot(pilot, 1, None, execute=True, require_gpu=False)
+    _, _, _, results, _ = pilotrun.run_pilot(pilot, 1, None, execute=True)
     ltx = [r for r in results if r.stage in ("tier1", "tier2")]
     assert ltx and all(r.status == "failed" and "flat colour" in r.detail and "FALLBACK" not in r.detail for r in ltx), \
         [(r.name, r.status, r.detail) for r in results]
