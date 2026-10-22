@@ -9,9 +9,11 @@ from __future__ import annotations
 
 import json
 import subprocess
+from pathlib import Path
 from typing import Any
 
 from .errors import GateFailure, IntegrationUnavailable, TaskFailed
+from .integrity import atomic_write_json, read_json, sha256_obj
 
 
 def require_runner(models: dict[str, Any], key: str, label: str) -> dict[str, Any]:
@@ -59,12 +61,49 @@ def identity_block(section: dict[str, Any], answer: dict[str, Any]) -> dict[str,
     return {"status": "verified", "model": found["model"], "revision": found["revision"]}
 
 
-def require_consistent_identity(identity: Any, model: str, revision: str, where: str) -> dict[str, Any]:
-    """Re-check a stored identity block before it is carried forward (candidate -> approval -> release)."""
-    if identity is None:
-        return {"status": "unverified"}   # legacy record: never upgraded to verified
-    if identity.get("status") == "verified" and (identity.get("model"), identity.get("revision")) != (model, revision):
-        raise GateFailure(f"{where}: stored verified identity differs from the recorded model {model}@{revision}")
-    if identity.get("status") not in ("verified", "unverified"):
-        raise GateFailure(f"{where}: unknown identity status {identity.get('status')!r}")
-    return identity
+def record_run_evidence(root: Path, section: dict[str, Any], request_sha256: str, answer: dict[str, Any],
+                        outputs: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    """Bind one runner execution: the request, the exact response, the identity the runner reported, the
+    configured identity and the outputs it produced. The record is stored content-addressed under ``root``
+    (file name = hash of its content), so later stages can re-verify it. This makes tampering detectable; it does
+    not authenticate the runner (no signing key exists), and real-library behaviour stays NOT VALIDATED."""
+    identity = identity_block(section, answer)
+    evidence = {"schema_version": 1, "kind": "model_run", "request_sha256": request_sha256,
+                "response_sha256": sha256_obj(answer), "configured": {"model": section["model"], "revision": section["revision"]},
+                "identity": identity, "outputs": outputs}
+    digest = sha256_obj(evidence)
+    root.mkdir(parents=True, exist_ok=True)
+    atomic_write_json(root / f"{digest}.json", {**evidence, "evidence_sha256": digest})
+    return identity, digest
+
+
+def verify_run_evidence(root: Path, digest: Any, identity: Any, model: str, revision: str, outputs: dict[str, Any],
+                        where: str) -> dict[str, Any]:
+    """Re-verify stored evidence at approval/release. Returns the identity block that may be carried forward:
+    ``verified`` only when intact evidence confirms it for exactly these outputs; a claim without it is refused."""
+    claimed = identity or {"status": "unverified"}
+    if claimed.get("status") not in ("verified", "unverified"):
+        raise GateFailure(f"{where}: unknown identity status {claimed.get('status')!r}")
+    if digest is None:
+        if claimed["status"] == "verified":
+            raise GateFailure(f"{where}: claims a verified model identity but carries no run evidence")
+        return {"status": "unverified"}
+    path = root / f"{digest}.json"
+    if not path.is_file():
+        raise GateFailure(f"{where}: run evidence {str(digest)[:12]} is missing")
+    record = read_json(path)
+    body = {k: v for k, v in record.items() if k != "evidence_sha256"}
+    if sha256_obj(body) != digest or record.get("evidence_sha256") != digest:
+        raise GateFailure(f"{where}: run evidence {str(digest)[:12]} fails its integrity check")
+    if record["configured"] != {"model": model, "revision": revision}:
+        raise GateFailure(f"{where}: run evidence was recorded for a different configured model")
+    if record["identity"] != claimed:
+        raise GateFailure(f"{where}: stored identity differs from the run evidence")
+    for key, value in outputs.items():
+        have = record["outputs"].get(key)
+        covered = (isinstance(have, dict) and all(have.get(k) == v for k, v in value.items())) if isinstance(value, dict) else have == value
+        if not covered:
+            raise GateFailure(f"{where}: run evidence does not cover this output ({key})")
+    if claimed["status"] == "verified" and (claimed.get("model"), claimed.get("revision")) != (model, revision):
+        raise GateFailure(f"{where}: verified identity differs from the recorded model {model}@{revision}")
+    return claimed

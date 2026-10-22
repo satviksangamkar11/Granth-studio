@@ -163,6 +163,17 @@
                       }
                     }
                   ]
+                },
+                "evidence_sha256": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  ]
                 }
               }
             }
@@ -289,6 +300,17 @@
                           "minLength": 1
                         }
                       }
+                    }
+                  ]
+                },
+                "evidence_sha256": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
                     }
                   ]
                 }

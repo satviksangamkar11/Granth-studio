@@ -14,7 +14,7 @@ from .canon import Canon
 from .config import Project, dump_yaml, load_yaml
 from .errors import ConfigError, GateFailure, TaskFailed
 from .integrity import atomic_write_json, normalize_text, read_json, sha256_obj
-from .runners import identity_block, require_consistent_identity, require_runner, run_json
+from .runners import record_run_evidence, require_runner, run_json, verify_run_evidence
 from .schemas import validate_document
 from .timelines import hindi_line_problems, load_timeline, protected_terms, timeline_path
 
@@ -56,19 +56,20 @@ def generate_candidates(project: Project, models: dict[str, Any], adhyay: int, e
     section = require_runner(models, "translation", "IndicTrans2")
     result = run_json(section, {"src_lang": SRC_LANG, "tgt_lang": TGT_LANG, "texts": [e["text"] for e in todo],
                                 "model": section["model"], "revision": section["revision"]})
-    identity = identity_block(section, result)
-    if current and (existing or {}).get("model_identity", {"status": "unverified"}) != identity:
-        identity = {"status": "unverified"}   # retained older candidates were not covered by this run's evidence
     texts = result.get("translations")
     if not (isinstance(texts, list) and len(texts) == len(todo) and all(isinstance(t, str) and t.strip() for t in texts)):
         raise TaskFailed("translation runner must return one non-empty string per input line")
+    outputs = {"candidates": {e["dialogue_id"]: sha256_obj(normalize_text(t)) for e, t in zip(todo, texts)}}
+    request_sha = sha256_obj({"texts": [e["text"] for e in todo], "model": section["model"], "revision": section["revision"]})
+    identity, evidence_sha = record_run_evidence(project.artifacts_dir / "evidence" / "model_runs", section, request_sha,
+                                                 result, outputs)       # per run; each candidate below keeps its own
     for entry, text in zip(todo, texts):
         current[entry["dialogue_id"]] = {"dialogue_id": entry["dialogue_id"], "mr_sha256": _mr_hash(entry["text"]),
                                          "text": text, "candidate_sha256": sha256_obj(normalize_text(text)),
-                                         "generated_at": _now()}
+                                         "generated_at": _now(), "model_identity": identity, "evidence_sha256": evidence_sha}
     order = [e["dialogue_id"] for e in marathi["entries"]]
     document = {"schema_version": 1, "adhyay": adhyay, "model": section["model"], "revision": section["revision"],
-                "model_identity": identity, "candidates": [current[i] for i in order if i in current]}
+                "candidates": [current[i] for i in order if i in current]}
     validate_document("translation_candidates", document)
     atomic_write_json(candidates_path(project, adhyay), document)
     return [e["dialogue_id"] for e in todo]
@@ -107,8 +108,11 @@ def approve_translation(project: Project, canon: Canon, adhyay: int, line_id: st
             raise GateFailure(f"{line_id}: no current candidate to approve; generate one or pass --text")
         text = candidate["text"]
         source = {"origin": "model_candidate", "model": found["model"], "revision": found["revision"],
-                  "model_identity": require_consistent_identity(found.get("model_identity"), found["model"],
-                                                                found["revision"], line_id),
+                  "model_identity": verify_run_evidence(
+                      project.artifacts_dir / "evidence" / "model_runs", candidate.get("evidence_sha256"),
+                      candidate.get("model_identity"), found["model"], found["revision"],
+                      {"candidates": {line_id: candidate["candidate_sha256"]}}, line_id),
+                  "evidence_sha256": candidate.get("evidence_sha256"),
                   "candidate_sha256": candidate["candidate_sha256"]}
     else:
         source = {"origin": "human_text"}

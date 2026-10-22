@@ -369,7 +369,7 @@ def test_missing_or_mismatched_or_tampered_identity_is_never_recorded_as_verifie
     monkeypatch.setenv("FAKE_VERIFIED", GOOD)
     speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
     record = read_json(path); record["revision"] = "forged"; atomic_write_json(path, record)   # tampered record
-    with pytest.raises(GateFailure, match="stored verified identity differs"):
+    with pytest.raises(GateFailure, match="different configured model"):
         speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
 
 
@@ -393,3 +393,84 @@ def test_translation_identity_reaches_the_approved_hindi_line_and_rejects_mismat
     path = translation.candidates_path(approved_project, 1); path.unlink()
     translation.generate_candidates(approved_project, models, 1, execute=True)
     assert translation.approve_translation(approved_project, canon, 1, "d_0002", "x")["alignment"]["source"]["model_identity"] == {"status": "unverified"}  # missing evidence is never "verified"
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_speech_evidence_is_content_addressed_and_forgeries_are_refused(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    models = load_models(approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", "")
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)       # genuinely unverified run
+    path = speech.record_path(approved_project, "mr", "d_0001")
+    original = read_json(path)
+    assert original["model_identity"] == {"status": "unverified"} and original["evidence_sha256"]
+    forged = {**original, "model_identity": {"status": "verified", "model": "synthetic-tts", "revision": "synthetic-1"}}
+    atomic_write_json(path, forged)                                  # editable, self-consistent "verified" block
+    with pytest.raises(GateFailure, match="stored identity differs from the run evidence"):
+        speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
+    atomic_write_json(path, {**forged, "evidence_sha256": None})     # ...or with the evidence pointer removed
+    with pytest.raises(GateFailure, match="carries no run evidence"):
+        speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
+    atomic_write_json(path, original)
+    evidence_file = speech.evidence_root(approved_project) / f"{original['evidence_sha256']}.json"
+    body = read_json(evidence_file); body["identity"] = {"status": "verified", "model": "synthetic-tts", "revision": "synthetic-1"}
+    atomic_write_json(evidence_file, body)                           # forge the evidence file too
+    with pytest.raises(GateFailure, match="integrity check"):
+        speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
+    evidence_file.unlink()
+    with pytest.raises(GateFailure, match="evidence .* is missing"):
+        speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_release_provenance_keeps_the_exact_evidence_pointer(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    models = load_models(approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", GOOD)
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    evidence = read_json(speech.record_path(approved_project, "mr", "d_0001"))["evidence_sha256"]
+    audio = speech.approve_speech(approved_project, 1, "mr", "d_0001", "synthetic-test-only")
+    assert audio["provenance"]["evidence_sha256"] == evidence
+    scheduler = Scheduler(episode_store(approved_project, 1))
+    tasks = plan_tasks(load_bundle(approved_project, models, 1), scheduler)
+    assert all(r.status == "complete" for r in scheduler.run(tasks))
+    release = read_json(scheduler.task_dir(next(t for t in tasks if t.name == "assemble_mr")) / "provenance.json")
+    assert release["lines"][0]["audio"]["evidence_sha256"] == evidence
+    assert read_json(speech.evidence_root(approved_project) / f"{evidence}.json")["identity"]["status"] == "verified"
+
+
+def test_translation_batches_keep_their_own_evidence_and_later_runs_do_not_downgrade(approved_project, hindi_setup, monkeypatch):
+    table, tmp_path = hindi_setup
+    set_models(approved_project, translation=runner_section(tmp_path, "translate", TRANSLATE_ID))
+    models = load_models(approved_project)
+    canon = load_bundle.__globals__["load_canon"](approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", "synthetic-translate@synthetic-1")
+    translation.generate_candidates(approved_project, models, 1, execute=True)              # batch 1: both verified
+    # Marathi line 2 changes -> only it is regenerated, by a run that provides no verification evidence
+    mr_path = approved_project.episodes_dir / "adhyay_01" / "mr.yaml"
+    document = load_yaml(mr_path); old_text = document["entries"][1]["text"]
+    document["entries"][1]["text"] = old_text + " extra"; atomic_write_json(mr_path, document)
+    table[old_text + " extra"] = table[old_text]
+    (tmp_path / "table.json").write_text(json.dumps(table, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("FAKE_VERIFIED", "")
+    assert translation.generate_candidates(approved_project, models, 1, execute=True) == ["d_0002"]
+    found = read_json(translation.candidates_path(approved_project, 1))
+    first, second = found["candidates"]
+    assert first["model_identity"]["status"] == "verified" and second["model_identity"] == {"status": "unverified"}
+    assert first["evidence_sha256"] != second["evidence_sha256"]
+    assert translation.approve_translation(approved_project, canon, 1, "d_0001", "x")["alignment"]["source"]["model_identity"]["status"] == "verified"
+    # tamper: claim verification for the unverified candidate
+    found["candidates"][1]["model_identity"] = {"status": "verified", "model": "synthetic-translate", "revision": "synthetic-1"}
+    atomic_write_json(translation.candidates_path(approved_project, 1), found)
+    with pytest.raises(GateFailure, match="stored identity differs from the run evidence"):
+        translation.approve_translation(approved_project, canon, 1, "d_0002", "x")
+    # tamper: a candidate text edited after the run is not covered by its evidence
+    found["candidates"][1]["model_identity"] = {"status": "unverified"}
+    found["candidates"][1]["candidate_sha256"] = "0" * 64
+    atomic_write_json(translation.candidates_path(approved_project, 1), found)
+    with pytest.raises(GateFailure, match="does not cover this output"):
+        translation.approve_translation(approved_project, canon, 1, "d_0002", "x")

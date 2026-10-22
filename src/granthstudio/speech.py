@@ -20,7 +20,7 @@ from .config import Project, dump_yaml, load_yaml
 from .errors import ConfigError, GateFailure, TaskFailed
 from .ffmpeg import validate_audio
 from .integrity import atomic_write_json, contained_path, normalize_text, read_json, sha256_file, sha256_obj
-from .runners import identity_block, require_consistent_identity, require_runner, run_json
+from .runners import record_run_evidence, require_runner, run_json, verify_run_evidence
 from .schemas import validate_document
 from .timelines import load_timeline, timeline_path
 
@@ -29,6 +29,10 @@ _EDGE = string.punctuation + "।॥“”‘’…–—"
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def evidence_root(project: Project) -> Path:
+    return project.artifacts_dir / "evidence" / "model_runs"
 
 
 def voices_path(project: Project) -> Path:
@@ -111,11 +115,13 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
         part = root / f".{entry['dialogue_id']}.{uuid.uuid4().hex}.part.wav"
         try:
             answer = run_json(section, {**request, "reference_audio": str(reference), "out_path": str(part)})
-            identity = identity_block(section, answer)   # mismatched evidence rejects the output before it is kept
             if not part.is_file():
                 raise TaskFailed(f"{entry['dialogue_id']}: speech runner wrote no audio")
             duration = validate_audio(part)
             digest = sha256_file(part)
+            # mismatched evidence rejects the output before it is kept; the run is bound to this exact audio
+            identity, evidence_sha = record_run_evidence(evidence_root(project), section, request["request_sha256"], answer,
+                                                         {"audio_sha256": digest})
             final = root / f"{entry['dialogue_id']}_{digest[:12]}.wav"
             os.replace(part, final)
         finally:
@@ -124,7 +130,7 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
             "text_sha256": request["text_sha256"], "request_sha256": request["request_sha256"], "voice_id": voice["voice_id"],
             "model": section["model"], "revision": section["revision"], "audio": {"path": final.name, "sha256": digest},
             "duration_s": duration, "generated_at": _now(),
-            "model_identity": identity})
+            "model_identity": identity, "evidence_sha256": evidence_sha})
         done.append(entry["dialogue_id"])
     return done
 
@@ -255,12 +261,13 @@ def approve_speech(project: Project, adhyay: int, language: str, line_id: str, r
         os.replace(tmp, target)
     asr = candidate_root(project, language) / f"{line_id}.asr.json"
     asr_hash = sha256_file(asr) if asr.is_file() and read_json(asr)["audio_sha256"] == record["audio"]["sha256"] else None
+    identity = verify_run_evidence(evidence_root(project), record.get("evidence_sha256"), record.get("model_identity"),
+                                   record["model"], record["revision"], {"audio_sha256": record["audio"]["sha256"]}, line_id)
     entry["audio"] = {"path": relative, "sha256": record["audio"]["sha256"], "language": language,
                       "speaker": entry["speaker"], "text_sha256": text_hash, "speech_reviewed_by": reviewer.strip(),
                       "provenance": {"origin": "generated", "voice_id": record["voice_id"], "model": record["model"],
                                      "revision": record["revision"], "request_sha256": record["request_sha256"],
-                                     "model_identity": require_consistent_identity(
-                                         record.get("model_identity"), record["model"], record["revision"], line_id),
+                                     "model_identity": identity, "evidence_sha256": record.get("evidence_sha256"),
                                      "asr_report_sha256": asr_hash}}
     validate_document("timeline", document)
     dump_yaml(path, document)
