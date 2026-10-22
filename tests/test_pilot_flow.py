@@ -91,7 +91,16 @@ def make_gpu_ready(project, tmp_path, monkeypatch, node_commit="b" * 40):
     from granthstudio.config import dump_yaml
     dump_yaml(project.root / "config" / "runtime.yaml", runtime)
     monkeypatch.setenv("GRANTHSTUDIO_SESSION_DEADLINE", "2999-01-01T00:00:00+00:00")
-    for module in ("pilotrun", "cli"):
+    models = load_models(project)
+    if models["ltx"].get("runtime") is None:       # source pins must exist for readiness; synthetic placeholders
+        files = {}
+        for kind in ("checkpoint", "vae", "text_encoder"):
+            path = tmp_path / f"ready_{kind}.bin"; path.write_bytes(kind.encode())
+            files[kind] = {"path": str(path), "sha256": sha256_file(path)}
+        models["ltx"]["runtime"] = {"files": files, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40, "gpu": "T4",
+                                    "precision": "fp16", "width": 160, "height": 120}
+        atomic_write_json(project.root / "config" / "models.yaml", models)
+    for module in ("pilotrun", "cli", "runtime"):
         monkeypatch.setattr(f"granthstudio.{module}.gpu_status", lambda: T4)
         monkeypatch.setattr(f"granthstudio.{module}.ram_available_mb", lambda: 16000)
 
@@ -316,3 +325,24 @@ def test_cpu_only_mode_refuses_gpu_tasks_but_runs_cpu_tasks(pilot, comfy):
         assert results[name].status == "not_validated" and "CPU-only mode refuses GPU task" in results[name].detail
     assert all(r.status == "complete" for n, r in results.items() if n.endswith("_voice"))   # CPU tasks still run
     assert comfy.posts == []
+
+
+@pytest.mark.parametrize("failure", ["vram", "session"])
+def test_direct_scheduler_run_with_matching_pins_but_failed_resources_submits_nothing(pilot, comfy, monkeypatch, failure):
+    # source pins MATCH (make_gpu_ready in the fixture); only a measured resource check fails
+    if failure == "vram":
+        runtime = load_yaml(pilot.root / "config" / "runtime.yaml"); runtime["resources"]["min_free_vram_mb"] = 20000
+        from granthstudio.config import dump_yaml
+        dump_yaml(pilot.root / "config" / "runtime.yaml", runtime)
+    else:
+        monkeypatch.setenv("GRANTHSTUDIO_SESSION_DEADLINE", "2000-01-01T00:00:00+00:00")
+    from granthstudio.runtime import preflight, load_runtime, gpu_status, ram_available_mb
+    report = preflight(pilot, load_models(pilot), load_runtime(pilot), gpu_status(), ram_available_mb())
+    assert report["checks"]["sources"]["status"] == "pass" and report["gpu_ready"] is False
+    bundle = pilotrun._bundle(pilot, load_models(pilot), 1)
+    scheduler = Scheduler(pilotrun.store_for(pilot, 1, f"direct_{failure}"))
+    results = {r.name: r for r in scheduler.run(plan_tasks(bundle, scheduler))}   # no CLI gate
+    gpu = [r for r in results.values() if r.stage in ("tier1", "tier2")]
+    assert gpu and all(r.status == "not_validated" and "GPU preflight not passed" in r.detail for r in gpu)
+    assert comfy.posts == []
+    assert results["assemble_mr"].status == "blocked" and results["assemble_hi"].status == "blocked"   # no false success

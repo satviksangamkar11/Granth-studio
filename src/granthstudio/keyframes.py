@@ -18,6 +18,7 @@ from .comfy import ComfyBackend, generation_seed, load_template, render_graph, s
 from .config import Project, load_yaml
 from .errors import ConfigError, GateFailure, IntegrationUnavailable, TaskFailed
 from .ffmpeg import probe
+from .runtime import require_host_ready
 from .scheduler import Scheduler, Task
 from .integrity import create_new_file, reject_link_components, atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
 from .schemas import validate_document
@@ -254,6 +255,7 @@ def sdxl_preflight(project: Project, models: dict[str, Any], request: dict[str, 
         raise IntegrationUnavailable(f"SDXL {what} status is '{template.status}': NOT VALIDATED")
     if sdxl["checkpoint_file"] not in template.text:
         raise ConfigError(f"SDXL workflow {template.name} does not load the pinned checkpoint {sdxl['checkpoint_file']}")
+    require_host_ready(project, models)    # this is the GPU task boundary: no SDXL job on an unready host
     return template
 
 

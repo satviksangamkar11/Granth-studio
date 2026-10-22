@@ -13,6 +13,7 @@ from .errors import IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble_audio, probe, validate_video
 from .integrity import contained_path, read_json, sha256_obj
 from .keyframes import _style, load_registry
+from .runtime import require_host_ready
 from .runners import require_runner, run_json
 from .scheduler import Task
 
@@ -49,6 +50,7 @@ def usable_runner(bundle) -> dict[str, Any]:
         raise IntegrationUnavailable(
             f"lip-sync runner was validated for style {validated} v{bound[0]} ({str(bound[1])[:12]}), but the approved style "
             f"is v{now['version']} ({now['sha256'][:12]}): NOT VALIDATED")
+    require_host_ready(bundle.project, bundle.models)   # lip-sync runners are GPU-capable: same task-boundary gate
     return section
 
 

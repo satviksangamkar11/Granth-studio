@@ -29,7 +29,7 @@ from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, n
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
-from .runtime import gpu_status, require_source_pins
+from .runtime import gpu_status, require_host_ready, require_source_pins
 from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
@@ -204,6 +204,13 @@ def _ltx_preflight(bundle, capability):
     require_source_pins(bundle.project, bundle.models)  # no LTX submission path can skip the source-pin check
     return template
 
+
+def _ltx_ready(bundle, capability):
+    """Capability checks plus measured host readiness: what an LTX task needs immediately before it may submit."""
+    template = _ltx_preflight(bundle, capability)
+    require_host_ready(bundle.project, bundle.models)
+    return template
+
 def validate_ltx_inputs(models, shot, image):
     """Interface checks only. The exact LTX 0.9.8 frame/resolution rule is still O-003:
     frames must be in the pinned list, and size/FPS come from the pinned runtime."""
@@ -224,7 +231,7 @@ def validate_ltx_inputs(models, shot, image):
 def _ltx_run(bundle, shot, visual, capability, journal):
     visuals = {v["visual_id"]: v for v in bundle.compiled["visuals"]}
     def run(work):
-        template = _ltx_preflight(bundle, capability)
+        template = _ltx_ready(bundle, capability)
         start = _visual_file(bundle, visual)
         inputs = validate_ltx_inputs(bundle.models, shot, start)
         values = {"START_IMAGE": str(start), "MOTION_PROMPT": shot["motion_prompt"],
@@ -430,7 +437,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
         def preflight(shot=shot, visual=visual, capability=capability):
             require_current(bundle)
             if capability:
-                _ltx_preflight(bundle, capability)
+                _ltx_ready(bundle, capability)
             _visual_file(bundle, visual)
             if shot["tier"] == 2:
                 _visual_file(bundle, visuals[shot["end_visual_id"]])

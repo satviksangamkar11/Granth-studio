@@ -118,11 +118,15 @@ def test_request_changes_with_design_reference_version_and_slots(kf_project, tmp
         kf.require_references(request_for(kf_project), {"sdxl": {"identity_conditioning": {"reference_slots": 1}}})
 
 
-def test_preflight_refuses_every_unselected_or_unverified_choice(approved_project, tmp_path, comfy):
+def test_preflight_refuses_every_unselected_or_unverified_choice(approved_project, tmp_path, comfy, monkeypatch):
     with pytest.raises(IntegrationUnavailable, match="not 'validated'"):
         kf.sdxl_preflight(approved_project, load_models(approved_project))
     write_registry(approved_project)
     configure_sdxl(approved_project, tmp_path, comfy)
+    from tests.test_pilot_flow import make_gpu_ready
+    with pytest.raises(IntegrationUnavailable, match="GPU preflight not passed"):   # complete config, unready host
+        kf.sdxl_preflight(approved_project, load_models(approved_project))
+    make_gpu_ready(approved_project, tmp_path, monkeypatch)
     kf.sdxl_preflight(approved_project, load_models(approved_project))
     models = load_models(approved_project); models["sdxl"]["identity_conditioning"]["method"] = None
     with pytest.raises(IntegrationUnavailable, match="undecided"):
@@ -340,3 +344,13 @@ def test_ancestor_swapped_between_pinning_and_open_cannot_redirect_the_write(kf_
     import sys
     if sys.platform == "win32":
         assert outcome["swapped"] is False                        # the pinned directory could not be replaced
+
+
+def test_direct_scheduler_sdxl_run_on_unready_host_makes_zero_submissions(kf_project, comfy, tmp_path):
+    from granthstudio.scheduler import Scheduler
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    scheduler = Scheduler(kf.sheet_store(kf_project))
+    tasks = kf.sheet_tasks(kf_project, canon, load_models(kf_project), scheduler)
+    results = scheduler.run(tasks)                                  # no CLI wrapper involved
+    assert tasks and all(r.status == "not_validated" and "GPU preflight not passed" in r.detail for r in results)
+    assert comfy.posts == []

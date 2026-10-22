@@ -165,6 +165,14 @@ def require_gpu_ready(report: dict[str, Any]) -> None:
         raise IntegrationUnavailable(f"GPU preflight not passed: {failing}: NOT VALIDATED")
 
 
+def require_host_ready(project: Project, models: dict[str, Any]) -> dict[str, Any]:
+    """Task-boundary readiness: measured VRAM/RAM/disk/session/package/storage checks and source pins, taken now.
+    Every GPU-capable task calls this from its own preflight, so no caller (CLI or direct Scheduler.run) skips it."""
+    report = preflight(project, models, load_runtime(project), gpu_status(), ram_available_mb())
+    require_gpu_ready(report)
+    return report
+
+
 def require_source_pins(project: Project, models: dict[str, Any]) -> None:
     check = source_consistency(models, load_runtime(project))
     if check["status"] != "pass":

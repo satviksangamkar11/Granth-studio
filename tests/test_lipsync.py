@@ -38,6 +38,13 @@ print("{{}}")
 '''
 
 
+@pytest.fixture(autouse=True)
+def ready_host(approved_project, tmp_path, monkeypatch):
+    """Lip-sync runners are GPU-capable tasks: run them on a synthetic ready host (not a real one)."""
+    from tests.test_pilot_flow import make_gpu_ready
+    make_gpu_ready(approved_project, tmp_path, monkeypatch)
+
+
 def set_lip_sync(project, shot_id=SHOT1, lip=LIP):
     path = project.episodes_dir / "adhyay_01" / "manifest.yaml"
     manifest = load_yaml(path)
@@ -210,3 +217,16 @@ def test_unbound_style_digest_fails_closed(approved_project, tmp_path):
     log = configure(approved_project, tmp_path, bind=False)
     _, _, results = run_all(approved_project)
     assert results[f"lipsync_mr_{SHOT1}"].status == "not_validated" and not log.exists()
+
+
+def test_lipsync_task_on_unready_host_never_calls_the_runner(approved_project, tmp_path):
+    from granthstudio.config import dump_yaml
+    set_lip_sync(approved_project)
+    make_cpu_project(approved_project)
+    log = configure(approved_project, tmp_path)
+    runtime = load_yaml(approved_project.root / "config" / "runtime.yaml"); runtime["resources"]["min_free_vram_mb"] = 20000
+    dump_yaml(approved_project.root / "config" / "runtime.yaml", runtime)       # pins match; VRAM check fails
+    _, _, results = run_all(approved_project)
+    lip = results[f"lipsync_mr_{SHOT1}"]
+    assert lip.status == "not_validated" and "GPU preflight not passed" in lip.detail and not log.exists()
+    assert results["assemble_mr"].status == "blocked"
