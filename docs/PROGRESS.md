@@ -272,3 +272,17 @@ Source commit `3a3195e`: **318 passed, 3 skipped** (two symlink-creation tests a
 
 - F2: the output node is excluded unconditionally; an output-only graph yields no seed evidence and a rejected retry is refused.
 - F8: `_verify_audio` and `_verify_assembly` re-verify generated-audio and model-translation evidence on every resume; translation release is checked against the current Hindi text hash and the current Marathi hash.
+
+## Linux CPU verification on Kaggle (executed 2026-10-22)
+
+Notebook `notebooks/kaggle_linux_cpu_verify.ipynb` (Kaggle kernel `sangeetasangamkar/granthstudio-linux-cpu-verify`, version 2, private,
+accelerator None, internet off, dataset `granthstudio-cpu-baseline`) ran the accepted baseline `f8d5d02f609a68806e8272617d1e04c98cf6040c`
+(detached) with harness scripts from bundle tip `942932d`. Receipt verdict: **LINUX_CPU_PASS_ON_KAGGLE**.
+
+- Host: Linux 6.18.48 x86_64, Python 3.13.15, ffmpeg 6.1.1, 4 CPUs, ext4, no GPU, running as root (uid 0).
+- Full suite: **319 passed, 0 failed, 0 errors, 2 skipped**; the two skips are Windows-only tests (case-insensitive paths, Windows junctions).
+- All 10 required POSIX tests passed without skips (two-process journal lock, crash recovery, parent-swap sentinel, symlink/redirect refusals);
+  5 supplementary POSIX primitive tests passed (fcntl flock, dir_fd, second-process lock contention, symlink, dangling symlink).
+- Architecture SHA-256 equals the frozen value. Evidence: `benchmarks/linux/` (receipt, environment, JUnit, log, zip).
+- Limits: the session ran as root, so permission-based refusals were not exercised; Kaggle version 1 of the notebook failed in its first cell
+  (an unguarded `nvidia-smi` call, fixed in `454734f`) and is not a test result. This does not validate any GPU, model, ComfyUI or LTX behaviour.
