@@ -121,7 +121,8 @@ def generate_speech(project: Project, models: dict[str, Any], adhyay: int, langu
             digest = sha256_file(part)
             # mismatched evidence rejects the output before it is kept; the run is bound to this exact audio
             identity, evidence_sha = record_run_evidence(evidence_root(project), section, request["request_sha256"], answer,
-                                                         {"audio_sha256": digest})
+                                                         {"audio_sha256": digest},
+                                                         {"request_sha256": request["request_sha256"], "text_sha256": request["text_sha256"]})
             final = root / f"{entry['dialogue_id']}_{digest[:12]}.wav"
             os.replace(part, final)
         finally:
@@ -262,7 +263,8 @@ def approve_speech(project: Project, adhyay: int, language: str, line_id: str, r
     asr = candidate_root(project, language) / f"{line_id}.asr.json"
     asr_hash = sha256_file(asr) if asr.is_file() and read_json(asr)["audio_sha256"] == record["audio"]["sha256"] else None
     identity = verify_run_evidence(evidence_root(project), record.get("evidence_sha256"), record.get("model_identity"),
-                                   record["model"], record["revision"], {"audio_sha256": record["audio"]["sha256"]}, line_id)
+                                   record["model"], record["revision"], {"audio_sha256": record["audio"]["sha256"]}, line_id,
+                                   {"request_sha256": record["request_sha256"], "text_sha256": text_hash})
     entry["audio"] = {"path": relative, "sha256": record["audio"]["sha256"], "language": language,
                       "speaker": entry["speaker"], "text_sha256": text_hash, "speech_reviewed_by": reviewer.strip(),
                       "provenance": {"origin": "generated", "voice_id": record["voice_id"], "model": record["model"],

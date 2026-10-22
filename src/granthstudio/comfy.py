@@ -44,17 +44,20 @@ def store_namespace(journal: Path) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     here = _location(journal)
     with owned(path):
-        record = None
+        record, changed = None, False
         if path.is_file():
             text = path.read_text(encoding="utf-8").strip()
             try:
                 record = json.loads(text)
+                if not isinstance(record, dict) or "namespace" not in record:
+                    raise ValueError("not a namespace record")
             except ValueError:
-                record = {"namespace": text, "location": here}      # legacy plain-text id: adopt this location
+                record, changed = {"namespace": text, "location": here}, True    # BASE-format plain-text id: migrate in place
         if record is None or record.get("location") != here:
             record = {"namespace": uuid.uuid4().hex, "location": here,
                       **({"forked_from": record["namespace"]} if record else {})}
-        if not path.is_file() or json.loads(path.read_text(encoding="utf-8") or "null") != record:
+            changed = True
+        if changed:
             atomic_write_json(path, record)
         return record["namespace"]
 
@@ -77,6 +80,7 @@ def adopt_journal(journal: Path, authorized_by: str, original_inactive: bool = F
             raise ConfigError(f"journal state {state['state']!r} may belong to a live prompt of the original store; "
                               "confirm the original is inactive to adopt it")
         state = {**state, "namespace": namespace,
+                 "submission_namespace": state.get("submission_namespace", state["namespace"]),   # what the server holds
                  "adopted_from": [*state.get("adopted_from", []), {"namespace": state["namespace"], "by": authorized_by.strip()}]}
         atomic_write_json(journal, state)
     return state
@@ -163,10 +167,11 @@ def generation_evidence(graph: dict[str, Any], output_node: str | None) -> dict[
     if output_node is None:
         return {"fingerprint": sha256_obj(graph), "seed_inputs": [], "scope": "whole_graph"}
     closure = generation_closure(graph, output_node)
-    seeds = [{"node": node_id, "input": name, "value": node["inputs"][name]} for node_id, node in sorted(closure.items())
+    upstream = {k: v for k, v in closure.items() if k != output_node} or closure   # the save node's own fields (filename_prefix...) are not generation inputs
+    seeds = [{"node": node_id, "input": name, "value": node["inputs"][name]} for node_id, node in sorted(upstream.items())
              for name in SEED_INPUTS if isinstance((node.get("inputs") or {}).get(name), int)
              and not isinstance(node["inputs"][name], bool)]
-    return {"fingerprint": sha256_obj({k: closure[k] for k in sorted(closure)}), "seed_inputs": seeds, "scope": "output_closure"}
+    return {"fingerprint": sha256_obj({k: upstream[k] for k in sorted(upstream)}), "seed_inputs": seeds, "scope": "output_closure"}
 
 
 def generation_seed(journal: Path, base_seed: int) -> int:
@@ -432,7 +437,7 @@ class ComfyBackend:
                 carry = {k: state[k] for k in ("rejections", "rejected_fingerprints", "attempt_base", "budget_resets",
                                                "history") if state and k in state}
                 state = {**carry, "base_url": self.base_url, "graph_sha256": graph_sha, "namespace": namespace,
-                         **({"max_attempts": cap} if cap is not None else {}), "state": "submitting", "job_token": token, "attempt": attempt,
+                         **({"max_attempts": cap} if cap is not None else {}), "state": "submitting", "job_token": token, "attempt": attempt, "submission_namespace": namespace,
                          "history": [*carry.get("history", []), {"attempt": attempt, "job_token": token,
                                                                  "graph_sha256": graph_sha, "generation": generation or {},
                                                                  "fingerprint": evidence["fingerprint"],
@@ -523,7 +528,8 @@ def _reconcile(backend, journal, declare_lost):
     if state.get("namespace", store_namespace(journal)) != store_namespace(journal):
         raise JobPending("journal belongs to another store identity; adopt it explicitly before reconciling")
     if state["state"] == "submitting":
-        found = (backend.locate(token=state.get("job_token"), namespace=state.get("namespace"))
+        found = (backend.locate(token=state.get("job_token"),
+                                namespace=state.get("submission_namespace", state.get("namespace")))
                  if state.get("job_token") else None)
         if found:
             state = {**state, "state": "submitted", "prompt_id": found[1]}

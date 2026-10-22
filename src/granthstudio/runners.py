@@ -62,7 +62,7 @@ def identity_block(section: dict[str, Any], answer: dict[str, Any]) -> dict[str,
 
 
 def record_run_evidence(root: Path, section: dict[str, Any], request_sha256: str, answer: dict[str, Any],
-                        outputs: dict[str, Any]) -> tuple[dict[str, Any], str]:
+                        outputs: dict[str, Any], inputs: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:
     """Bind one runner execution: the request, the exact response, the identity the runner reported, the
     configured identity and the outputs it produced. The record is stored content-addressed under ``root``
     (file name = hash of its content), so later stages can re-verify it. This makes tampering detectable; it does
@@ -70,15 +70,19 @@ def record_run_evidence(root: Path, section: dict[str, Any], request_sha256: str
     identity = identity_block(section, answer)
     evidence = {"schema_version": 1, "kind": "model_run", "request_sha256": request_sha256,
                 "response_sha256": sha256_obj(answer), "configured": {"model": section["model"], "revision": section["revision"]},
-                "identity": identity, "outputs": outputs}
+                "identity": identity, "outputs": outputs, "inputs": inputs or {}}
     digest = sha256_obj(evidence)
     root.mkdir(parents=True, exist_ok=True)
     atomic_write_json(root / f"{digest}.json", {**evidence, "evidence_sha256": digest})
     return identity, digest
 
 
+def _covers(have: Any, want: Any) -> bool:
+    return (isinstance(have, dict) and all(_covers(have.get(k), v) for k, v in want.items())) if isinstance(want, dict) else have == want
+
+
 def verify_run_evidence(root: Path, digest: Any, identity: Any, model: str, revision: str, outputs: dict[str, Any],
-                        where: str) -> dict[str, Any]:
+                        where: str, inputs: dict[str, Any] | None = None) -> dict[str, Any]:
     """Re-verify stored evidence at approval/release. Returns the identity block that may be carried forward:
     ``verified`` only when intact evidence confirms it for exactly these outputs; a claim without it is refused."""
     claimed = identity or {"status": "unverified"}
@@ -99,11 +103,10 @@ def verify_run_evidence(root: Path, digest: Any, identity: Any, model: str, revi
         raise GateFailure(f"{where}: run evidence was recorded for a different configured model")
     if record["identity"] != claimed:
         raise GateFailure(f"{where}: stored identity differs from the run evidence")
-    for key, value in outputs.items():
-        have = record["outputs"].get(key)
-        covered = (isinstance(have, dict) and all(have.get(k) == v for k, v in value.items())) if isinstance(value, dict) else have == value
-        if not covered:
-            raise GateFailure(f"{where}: run evidence does not cover this output ({key})")
+    if not _covers(record["outputs"], outputs):
+        raise GateFailure(f"{where}: run evidence does not cover this output")
+    if inputs and not _covers(record.get("inputs", {}), inputs):
+        raise GateFailure(f"{where}: run evidence was recorded for a different request")
     if claimed["status"] == "verified" and (claimed.get("model"), claimed.get("revision")) != (model, revision):
         raise GateFailure(f"{where}: verified identity differs from the recorded model {model}@{revision}")
     return claimed

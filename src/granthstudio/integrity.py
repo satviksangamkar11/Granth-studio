@@ -148,7 +148,8 @@ def _create_posix(root: Path, parts: list[str], source: Path) -> Path:
             if index == len(parts) - 1:
                 _race_hook("before_open", current)
                 fd = os.open(part, os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0), 0o600, dir_fd=fds[-1])
-                return _copy_fd(fd, current, source, root)
+                parent_fd = fds[-1]
+                return _copy_fd(fd, current, source, lambda: os.unlink(part, dir_fd=parent_fd))
             _race_hook("before_mkdir", current)
             try:
                 os.mkdir(part, dir_fd=fds[-1])
@@ -164,15 +165,21 @@ def _create_posix(root: Path, parts: list[str], source: Path) -> Path:
     raise AssertionError("unreachable")
 
 
-def _copy_fd(fd: int, target: Path, source: Path, root: Path) -> Path:
+def _copy_fd(fd: int, target: Path, source: Path, discard) -> Path:
+    """Write through the already-open descriptor; link count and cleanup use that descriptor / the pinned parent
+    (``discard``), never the pathname, which an attacker may have redirected meanwhile."""
     try:
         with source.open("rb") as reader, os.fdopen(fd, "wb") as writer:
             for block in iter(lambda: reader.read(1 << 20), b""):
                 writer.write(block)
-        if target.stat().st_nlink != 1:
-            raise ConfigError(f"destination aliases another file: {target}")
+            writer.flush()
+            if os.fstat(writer.fileno()).st_nlink != 1:
+                raise ConfigError(f"destination aliases another file: {target}")
     except BaseException:
-        target.unlink(missing_ok=True)       # a partial copy is ours (O_EXCL): never leave it to block a retry
+        try:
+            discard()                         # a partial copy is ours (O_EXCL): never leave it to block a retry
+        except OSError:
+            pass
         raise
     return target
 
@@ -182,7 +189,7 @@ def _copy_exclusive(target: Path, source: Path, root: Path) -> Path:
         fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0), 0o600)
     except FileExistsError as exc:
         raise ConfigError(f"destination already exists and is not registered: {target}") from exc
-    return _copy_fd(fd, target, source, root)
+    return _copy_fd(fd, target, source, lambda: target.unlink(missing_ok=True))   # Windows: ancestors are pinned
 
 
 def create_new_file(root: Path, relative: str, source: Path) -> Path:
@@ -202,7 +209,7 @@ def create_new_file(root: Path, relative: str, source: Path) -> Path:
             raise ConfigError("no race-free directory-relative file creation on this platform; refusing")
     except FileExistsError as exc:
         raise ConfigError(f"destination already exists and is not registered: {exc.filename}") from exc
-    if not target.resolve().is_relative_to(root):
+    if os.name == "nt" and not target.resolve().is_relative_to(root):   # POSIX: the pinned descriptors already guarantee it
         target.unlink(missing_ok=True)
         raise ConfigError(f"destination left the trusted root: {target}")
     return target

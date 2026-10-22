@@ -3,6 +3,7 @@ checkpoint, style, designs and identity conditioning below are test fixtures, no
 from __future__ import annotations
 
 import copy
+import os
 
 import pytest
 import yaml
@@ -359,3 +360,20 @@ def test_direct_scheduler_sdxl_run_on_unready_host_makes_zero_submissions(kf_pro
     results = scheduler.run(tasks)                                  # no CLI wrapper involved
     assert tasks and all(r.status == "not_validated" and "GPU preflight not passed" in r.detail for r in results)
     assert comfy.posts == []
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX dir_fd path; not executable on this Windows host")
+def test_posix_parent_swap_never_touches_an_outside_sentinel(kf_project, tmp_path, monkeypatch):
+    from granthstudio import integrity
+    canon = load_bundle(kf_project, load_models(kf_project), 1).canon
+    outside = tmp_path / "outside_sentinel"; outside.mkdir()
+    sentinel = outside / "image.png"; sentinel.write_bytes(b"outside, must survive")
+    def swap(stage, path):
+        if stage == "before_open" and path.parent.name == "v1" and "ref_posix" in str(path):
+            os.rename(path.parent, path.parent.with_name("v1_moved")); path.parent.symlink_to(outside, target_is_directory=True)
+    monkeypatch.setattr(integrity, "_race_hook", swap)
+    try:
+        _import(kf_project, canon, "ref_posix", tmp_path)
+    except ConfigError:
+        pass
+    assert sentinel.read_bytes() == b"outside, must survive" and [p.name for p in outside.iterdir()] == ["image.png"]

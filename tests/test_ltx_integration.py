@@ -371,10 +371,11 @@ def test_owner_crash_before_and_after_post_is_recoverable_without_duplicates(com
 def test_journal_write_failure_before_post_submits_nothing(comfy, tmp_path, monkeypatch):
     from granthstudio import comfy as module
     journal = tmp_path / "job.json"
+    module.store_namespace(journal)                     # create the namespace first so the failure hits the JOURNAL write
     monkeypatch.setattr(module, "atomic_write_json", lambda *a, **k: (_ for _ in ()).throw(OSError("disk full")))
     with pytest.raises(OSError):
         backend(comfy).execute(GRAPH, journal)
-    assert comfy.posts == []
+    assert comfy.posts == [] and not journal.exists()
     monkeypatch.undo()
     with pytest.raises(JobPending):                                  # lock was released by the failed owner
         backend(comfy).execute(GRAPH, journal)
@@ -516,3 +517,48 @@ def test_restored_copy_gets_its_own_identity_and_must_adopt_outstanding_prompts(
     comfy.finish("p1")
     backend(comfy).execute(GRAPH, b)                               # polls the adopted prompt; still one POST for the job
     assert len([p for p in comfy.posts if p["extra_data"]["granthstudio_job"] == read_json(a)["job_token"]]) == 1
+
+
+def test_save_node_only_change_does_not_qualify_as_fresh_generation(comfy, tmp_path):
+    from granthstudio.comfy import generation_evidence, reject_output
+    from granthstudio.errors import GateFailure
+    def with_prefix(seed, prefix):
+        g = seeded(seed); g["2"] = {"class_type": "SyntheticSave", "inputs": {"images": ["3", 0], "filename_prefix": prefix}}
+        return g
+    assert generation_evidence(with_prefix(1, "a"), "2")["fingerprint"] == generation_evidence(with_prefix(1, "b"), "2")["fingerprint"]
+    assert generation_evidence(with_prefix(1, "a"), "2")["fingerprint"] != generation_evidence(with_prefix(2, "a"), "2")["fingerprint"]
+    journal = tmp_path / "job.json"
+    with pytest.raises(JobPending):
+        backend(comfy).execute(with_prefix(1, "a"), journal, output_node="2")
+    comfy.finish("p1"); backend(comfy).execute(with_prefix(1, "a"), journal, output_node="2")
+    reject_output(journal, "flat")
+    with pytest.raises(GateFailure, match="same generation inputs"):
+        backend(comfy).execute(with_prefix(1, "b"), journal, output_node="2")      # only the save-node field changed
+    assert len(comfy.posts) == 1
+    comfy.run_prompt(with_prefix(1, "b")); assert comfy.sampler_runs == 1   # fake: sampler output cached, no new sampling
+
+
+def test_base_format_plaintext_namespace_migrates_and_stays_stable(tmp_path):
+    from granthstudio.comfy import store_namespace
+    journal = tmp_path / "pending" / "job.json"; journal.parent.mkdir()
+    (journal.parent / ".store_namespace").write_text("0123456789abcdef0123456789abcdef", encoding="utf-8")   # as written by BASE
+    assert store_namespace(journal) == "0123456789abcdef0123456789abcdef"            # legitimate store keeps its identity
+    assert read_json(journal.parent / ".store_namespace")["location"]                # migrated in place
+    assert store_namespace(journal) == "0123456789abcdef0123456789abcdef"
+
+
+def test_adopting_an_uncertain_submission_still_finds_its_prompt_by_the_original_namespace(comfy, tmp_path):
+    import shutil
+    from granthstudio.comfy import adopt_journal, store_namespace
+    a = tmp_path / "A" / "pending" / "job.json"; a.parent.mkdir(parents=True)
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, a)
+    state = read_json(a); state.pop("prompt_id"); state["state"] = "submitting"      # the reply was lost
+    atomic_write_json(a, state)
+    shutil.copytree(tmp_path / "A", tmp_path / "B")
+    b = tmp_path / "B" / "pending" / "job.json"
+    assert store_namespace(b) != store_namespace(a)
+    adopt_journal(b, "synthetic-test-only", original_inactive=True)
+    assert read_json(b)["submission_namespace"] == store_namespace(a)
+    assert reconcile(backend(comfy), b)["prompt_id"] == "p1"                         # found under the namespace the server holds
+    assert len(comfy.posts) == 1

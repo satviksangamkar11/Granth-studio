@@ -118,6 +118,33 @@ def _audio_file(bundle, entry):
         raise TaskFailed(f"audio missing or changed: {entry['dialogue_id']}")
     return path
 
+def _release_provenance(bundle, entry):
+    """Provenance that may enter a release: generated-model claims are re-verified against their run evidence now,
+    so evidence that was removed or altered after approval cannot ride into the release as 'verified'."""
+    from .runners import verify_run_evidence
+    from .speech import evidence_root
+    provenance = dict(entry["audio"].get("provenance", {"origin": "imported"}))
+    if provenance.get("origin") == "generated":
+        identity = verify_run_evidence(
+            evidence_root(bundle.project), provenance.get("evidence_sha256"), provenance.get("model_identity"),
+            provenance["model"], provenance["revision"], {"audio_sha256": entry["audio"]["sha256"]},
+            f"{entry['dialogue_id']} release provenance",
+            {"request_sha256": provenance["request_sha256"], "text_sha256": entry["audio"]["text_sha256"]})
+        provenance["model_identity"] = identity
+    return provenance
+
+
+def _release_translation(bundle, entry):
+    from .runners import verify_run_evidence
+    source = (entry.get("alignment") or {}).get("source")
+    if source and source.get("origin") == "model_candidate":
+        source = {**source, "model_identity": verify_run_evidence(
+            bundle.project.artifacts_dir / "evidence" / "model_runs", source.get("evidence_sha256"), source.get("model_identity"),
+            source["model"], source["revision"], {"candidates": {entry["dialogue_id"]: source["candidate_sha256"]}},
+            f"{entry['dialogue_id']} release translation")}
+    return source
+
+
 def _audio_run(bundle, lang):
     def run(work):
         files = {}
@@ -130,7 +157,7 @@ def _audio_run(bundle, lang):
             timings[entry["dialogue_id"]] = {"duration_s": duration, "path": name,
                 "sha256": sha256_file(work / name), "language": lang, "speaker": entry["speaker"],
                 "text_sha256": entry["audio"]["text_sha256"], "speech_reviewed_by": entry["audio"]["speech_reviewed_by"],
-                "provenance": entry["audio"].get("provenance", {"origin": "imported"})}
+                "provenance": _release_provenance(bundle, entry)}
             files[entry["dialogue_id"]] = name
         atomic_write_json(work / "timings.json", timings)
         files["timings"] = "timings.json"
@@ -348,7 +375,7 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
             "lipsync_shots": [e["shot_id"] for e in edits if e["clip_source"] == "lipsync"],
             "lines": [{"dialogue_id": line, "text_sha256": sha256_obj(normalize_text(entries[line]["text"])),
                        "audio_sha256": timings[line]["sha256"], "audio": timings[line]["provenance"],
-                       "translation": entries[line].get("alignment", {}).get("source")}
+                       "translation": _release_translation(bundle, entries[line])}
                       for shot in bundle.compiled["shots"] for line in shot["dialogue_ids"]]})
         return {"video": f"{stem}.mp4", "subtitles": f"{stem}.srt", "edit_plan": "edit_plan.json", "voice": "voice.wav",
                 "provenance": "provenance.json"}

@@ -62,7 +62,8 @@ def generate_candidates(project: Project, models: dict[str, Any], adhyay: int, e
     outputs = {"candidates": {e["dialogue_id"]: sha256_obj(normalize_text(t)) for e, t in zip(todo, texts)}}
     request_sha = sha256_obj({"texts": [e["text"] for e in todo], "model": section["model"], "revision": section["revision"]})
     identity, evidence_sha = record_run_evidence(project.artifacts_dir / "evidence" / "model_runs", section, request_sha,
-                                                 result, outputs)       # per run; each candidate below keeps its own
+                                                 result, outputs,
+                                                 {"mr_sha256": {e["dialogue_id"]: _mr_hash(e["text"]) for e in todo}})
     for entry, text in zip(todo, texts):
         current[entry["dialogue_id"]] = {"dialogue_id": entry["dialogue_id"], "mr_sha256": _mr_hash(entry["text"]),
                                          "text": text, "candidate_sha256": sha256_obj(normalize_text(text)),
@@ -107,11 +108,14 @@ def approve_translation(project: Project, canon: Canon, adhyay: int, line_id: st
         if candidate is None or candidate["mr_sha256"] != _mr_hash(mr_entry["text"]):
             raise GateFailure(f"{line_id}: no current candidate to approve; generate one or pass --text")
         text = candidate["text"]
+        if sha256_obj(normalize_text(text)) != candidate["candidate_sha256"]:
+            raise GateFailure(f"{line_id}: candidate text was edited after generation; approve it as human text instead")
         source = {"origin": "model_candidate", "model": found["model"], "revision": found["revision"],
                   "model_identity": verify_run_evidence(
                       project.artifacts_dir / "evidence" / "model_runs", candidate.get("evidence_sha256"),
                       candidate.get("model_identity"), found["model"], found["revision"],
-                      {"candidates": {line_id: candidate["candidate_sha256"]}}, line_id),
+                      {"candidates": {line_id: candidate["candidate_sha256"]}}, line_id,
+                      {"mr_sha256": {line_id: candidate["mr_sha256"]}}),
                   "evidence_sha256": candidate.get("evidence_sha256"),
                   "candidate_sha256": candidate["candidate_sha256"]}
     else:

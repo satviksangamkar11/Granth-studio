@@ -470,7 +470,56 @@ def test_translation_batches_keep_their_own_evidence_and_later_runs_do_not_downg
         translation.approve_translation(approved_project, canon, 1, "d_0002", "x")
     # tamper: a candidate text edited after the run is not covered by its evidence
     found["candidates"][1]["model_identity"] = {"status": "unverified"}
-    found["candidates"][1]["candidate_sha256"] = "0" * 64
+    good_hash = found["candidates"][1]["candidate_sha256"]
+    found["candidates"][1]["text"] += " edited"                      # text edited, original hash and evidence kept
+    atomic_write_json(translation.candidates_path(approved_project, 1), found)
+    with pytest.raises(GateFailure, match="edited after generation"):
+        translation.approve_translation(approved_project, canon, 1, "d_0002", "x")
+    found["candidates"][1]["candidate_sha256"] = sha256_obj(normalize_text(found["candidates"][1]["text"]))   # self-consistent edit
     atomic_write_json(translation.candidates_path(approved_project, 1), found)
     with pytest.raises(GateFailure, match="does not cover this output"):
         translation.approve_translation(approved_project, canon, 1, "d_0002", "x")
+
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_release_reverifies_evidence_and_request_binding_after_approval(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    models = load_models(approved_project)
+    monkeypatch.setenv("FAKE_VERIFIED", GOOD)
+    speech.generate_speech(approved_project, models, 1, "mr", ["d_0001"], execute=True)
+    record = read_json(speech.record_path(approved_project, "mr", "d_0001"))
+    speech.approve_speech(approved_project, 1, "mr", "d_0001", "synthetic-test-only")
+    evidence_file = speech.evidence_root(approved_project) / f"{record['evidence_sha256']}.json"
+    kept = evidence_file.read_bytes()
+    def release():
+        scheduler = Scheduler(episode_store(approved_project, 1))
+        tasks = plan_tasks(load_bundle(approved_project, models, 1), scheduler)
+        return {r.name: r for r in scheduler.run(tasks)}
+    evidence_file.unlink()                                           # evidence removed AFTER approval
+    results = release()
+    assert results["mr_voice"].status == "failed" and "is missing" in results["mr_voice"].detail
+    assert results["assemble_mr"].status == "blocked"
+    evidence_file.write_bytes(kept)
+    body = read_json(evidence_file); body["inputs"]["request_sha256"] = "3" * 64
+    atomic_write_json(evidence_file, body)                           # altered request metadata
+    results = release()
+    assert results["mr_voice"].status == "failed" and "integrity check" in results["mr_voice"].detail
+    evidence_file.write_bytes(kept)
+    assert release()["assemble_mr"].status == "complete"
+
+
+@pytest.mark.skipif(not (have_tool("ffmpeg") and have_tool("ffprobe")), reason="media tools missing")
+def test_speech_approval_rejects_evidence_recorded_for_a_different_request(approved_project, tmp_path, monkeypatch):
+    make_cpu_project(approved_project)
+    write_voices(approved_project)
+    set_models(approved_project, speech=runner_section(tmp_path, "tts", TTS_ID))
+    monkeypatch.setenv("FAKE_VERIFIED", GOOD)
+    speech.generate_speech(approved_project, load_models(approved_project), 1, "mr", ["d_0001"], execute=True)
+    path = speech.record_path(approved_project, "mr", "d_0001")
+    record = read_json(path); record["request_sha256"] = "4" * 64
+    atomic_write_json(path, record)
+    with pytest.raises(GateFailure, match="different request"):
+        speech.approve_speech(approved_project, 1, "mr", "d_0001", "x")
