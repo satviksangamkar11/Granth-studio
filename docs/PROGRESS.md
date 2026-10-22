@@ -138,3 +138,11 @@ CPU correction evidence is not a production readiness claim.
   languages). `validate`: exit 0.
 - No dependency install, model download, Kaggle/GPU execution or research/production GO.
   LTX/ComfyUI/IndicF5 behaviour behind real tunnels remains NOT VALIDATED.
+- Follow-up (user-approved): recovery evidence is now bound to real scheduler runs. Each
+  output must be listed with its hash in a valid `task_receipt.json` of the matching
+  `assemble_<lang>` task; clean and resumed come from different stores with the same task
+  ids; the resumed store's run log must show a resumed task and the clean store's none.
+  Copies outside task folders, swapped languages, shared stores, never-resumed or reused
+  "clean" runs are refused with specific reasons. Synthetic fixtures now produce evidence
+  by running the scheduler (clean run; interrupted then resumed run), not hand-written files.
+  Full CPU suite after this follow-up: **137 passed, 1 skipped** (symlink test); `validate` exit 0.

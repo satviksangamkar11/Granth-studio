@@ -5,6 +5,7 @@ explicitly NOT VALIDATED. No production authorization is created by this module.
 """
 from __future__ import annotations
 
+import json
 import math
 import os
 import shutil
@@ -22,7 +23,7 @@ from .integrity import atomic_write_bytes, atomic_write_json, contained_path, re
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
-from .scheduler import STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
+from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
 
@@ -297,6 +298,26 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     tasks.sort(key=lambda t: STAGE_ORDER.index(t.stage))
     return tasks
 
+def _recovery_provenance(root, output, name, record):
+    """A recovery output must be a sealed scheduler output: <store>/<stage>/<task_id>/<file>."""
+    task_dir = output.parent
+    store = task_dir.parent.parent
+    if not store.is_relative_to(root.resolve()) or store == root.resolve():
+        raise GateFailure(f"recovery output {name} must sit in a scheduler store under artifacts")
+    try:
+        receipt = read_json(task_dir / RECEIPT)
+        validate_document("task_receipt", receipt)
+    except (GranthError, OSError, ValueError) as exc:
+        raise GateFailure(f"recovery output {name} has no valid scheduler task receipt") from exc
+    listed = any(item["path"] == output.name and item["sha256"] == record["sha256"] for item in receipt["outputs"].values())
+    if (not listed or receipt["status"] != "complete" or receipt["task_id"] != task_dir.name
+            or receipt["stage"] != task_dir.parent.name):
+        raise GateFailure(f"recovery output {name} is not recorded by its task receipt")
+    language = name.removesuffix("_video")
+    if name.endswith("_video") and (receipt["stage"], receipt["name"]) != ("assembly", f"assemble_{language}"):
+        raise GateFailure(f"recovery output {name} is not the assemble_{language} release")
+    return store, receipt["task_id"]
+
 def production_problems(bundle):
     """Read authorization evidence. Never create or infer human approval."""
     path = bundle.project.root / "approvals" / f"adhyay_{bundle.adhyay:02d}.json"
@@ -372,20 +393,39 @@ def production_problems(bundle):
         clean, resumed = evidence["clean_outputs"], evidence["resumed_outputs"]
         if set(clean) != set(resumed):
             raise GateFailure("clean/resumed recovery output sets differ")
-        seen = {}
-        for name in clean:
-            for run, record in (("clean", clean[name]), ("resumed", resumed[name])):
-                output = contained_path(bundle.project.artifacts_dir, record["path"])
-                if sha256_file(output) != record["sha256"]:
-                    raise GateFailure(f"recovery output hash mismatch: {name}")
-                # One file cannot prove two runs or two languages: reject same path
-                # (case-insensitive on Windows) and same file identity (hard links).
-                info = output.stat()
-                keys = [os.path.normcase(str(output))] + ([(info.st_dev, info.st_ino)] if info.st_ino else [])
-                for key in keys:
-                    if key in seen:
-                        raise GateFailure(f"recovery outputs alias one file: {seen[key]} and {run}.{name}")
-                    seen[key] = f"{run}.{name}"
+        records = [(run, name, outputs[name]) for run, outputs in (("clean", clean), ("resumed", resumed))
+                   for name in sorted(outputs)]
+        seen, paths = {}, {}
+        for run, name, record in records:
+            output = contained_path(bundle.project.artifacts_dir, record["path"])
+            if sha256_file(output) != record["sha256"]:
+                raise GateFailure(f"recovery output hash mismatch: {name}")
+            # One file cannot prove two runs or two languages: reject same path
+            # (case-insensitive on Windows) and same file identity (hard links).
+            info = output.stat()
+            keys = [os.path.normcase(str(output))] + ([(info.st_dev, info.st_ino)] if info.st_ino else [])
+            for key in keys:
+                if key in seen:
+                    raise GateFailure(f"recovery outputs alias one file: {seen[key]} and {run}.{name}")
+                seen[key] = f"{run}.{name}"
+            paths[run, name] = output
+        stores, task_ids = {}, {}
+        for run, name, record in records:
+            store, task_ids[run, name] = _recovery_provenance(bundle.project.artifacts_dir, paths[run, name], name, record)
+            stores.setdefault(run, set()).add(os.path.normcase(str(store)))
+        if len(stores["clean"]) != 1 or len(stores["resumed"]) != 1:
+            raise GateFailure("each recovery run must come from a single scheduler store")
+        if stores["clean"] == stores["resumed"]:
+            raise GateFailure("clean and resumed recovery outputs must come from different scheduler stores")
+        for run, must_resume in (("clean", False), ("resumed", True)):
+            log = Path(next(iter(stores[run]))) / RUN_LOG
+            statuses = [json.loads(line)["status"] for line in log.read_text(encoding="utf-8").splitlines() if line.strip()]
+            if ("resumed" in statuses) != must_resume:
+                raise GateFailure("resumed recovery store has no resumed task in its run log" if must_resume
+                                  else "clean recovery store reused earlier work; it is not a clean run")
+        for name in sorted(clean):
+            if task_ids["clean", name] != task_ids["resumed", name]:
+                raise GateFailure(f"clean/resumed recovery outputs come from different tasks: {name}")
             if clean[name]["sha256"] != resumed[name]["sha256"]:
                 raise GateFailure(f"clean/resumed recovery hashes differ: {name}")
         return []

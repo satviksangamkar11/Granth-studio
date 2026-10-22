@@ -80,6 +80,8 @@ polling or explicit reconciliation and must not be treated as proof of rejection
 Rebuild pilot approvals after changes to the current compiled Adhyay 1 pilot. Recovery
 proof must include actual clean/resumed output paths and hashes under artifact storage,
 as documented in `IMPLEMENTATION_SPEC.md`. Old flag-only proof is intentionally invalid.
+Point recovery records at the final assembly outputs inside two real scheduler stores:
+one clean run and one interrupted-then-resumed run. Copied files are refused.
 Do not create replacement approval records without the required human review.
 
 Current correction verification: `benchmarks/claude_d_focused.xml`,

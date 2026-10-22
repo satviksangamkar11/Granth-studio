@@ -117,6 +117,12 @@ Current model generation and real production remain gated.
   outputs may be included but the sets must match. Values are `{path, sha256}`, with paths
   relative to the configured artifacts directory. Every file is rehashed; corresponding
   clean/resumed hashes must match. A pass flag alone or stale/missing output is refused.
+- Recovery outputs must be sealed scheduler outputs (`<store>/<stage>/<task_id>/<file>`
+  under artifacts): listed with the same hash in a valid, complete `task_receipt.json`;
+  `mr_video`/`hi_video` must be the `assemble_mr`/`assemble_hi` releases. All clean
+  records share one store and all resumed records another; matching outputs must have the
+  same task id. The resumed store's `run_log.jsonl` must record a `resumed` task and the
+  clean store's must not. No two records may be the same file (path, case or hard link).
 - `GateFailure` fails immediately, without rendering retries or a NOT VALIDATED label.
 - AV checks prefer `duration_ts * time_base` (then stream duration) over rounded container
   duration. Synchronization tolerance is two audio samples; missing stream timing/rate

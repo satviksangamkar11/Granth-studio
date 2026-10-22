@@ -83,19 +83,35 @@ def prepare_current_pilot(project):
     return load_bundle(project, models, 2)
 
 
+def recovery_tasks(interrupt=None, variant='pilot'):
+    """Synthetic assembly tasks; policy tests check provenance and hashes, not media or GPU results."""
+    tasks = []
+    for language in ('mr', 'hi'):
+        def run(work, language=language):
+            if language == interrupt:
+                raise TaskFailed('synthetic interruption')
+            (work / f'{language}.mp4').write_bytes(f'SYNTHETIC POLICY ARTIFACT {language}'.encode())
+            return {'video': f'{language}.mp4'}
+        tasks.append(Task('assembly', f'assemble_{language}', {'language': language, 'variant': variant}, 'synthetic', run))
+    return tasks
+
+
+def recovery_outputs(project, store, tasks):
+    scheduler = Scheduler(store)
+    return {f"{t.inputs['language']}_video": {
+        'path': (scheduler.task_dir(t) / f"{t.inputs['language']}.mp4").relative_to(project.artifacts_dir).as_posix(),
+        'sha256': sha256_file(scheduler.task_dir(t) / f"{t.inputs['language']}.mp4")} for t in tasks}
+
+
 def synthetic_recovery(project, pilot_hash):
-    outputs = {}
-    for run in ('clean', 'resumed'):
-        outputs[run] = {}
-        for language in ('mr', 'hi'):
-            relative = f'recovery/{run}/{language}.mp4'
-            path = project.artifacts_dir / relative
-            path.parent.mkdir(parents=True, exist_ok=True)
-            # Policy tests verify hashes of actual files, not media decoding or GPU results.
-            path.write_bytes(f'SYNTHETIC POLICY ARTIFACT {language}'.encode())
-            outputs[run][f'{language}_video'] = {'path':relative,'sha256':sha256_file(path)}
-    return {'schema_version':1,'passed':True,'reviewed_by':'synthetic-test-only',
-            'pilot_plan_sha256':pilot_hash,'clean_outputs':outputs['clean'],'resumed_outputs':outputs['resumed']}
+    """Real scheduler runs: one clean, one interrupted then resumed in a separate store."""
+    clean, resumed = project.artifacts_dir / 'recovery' / 'clean', project.artifacts_dir / 'recovery' / 'resumed'
+    assert all(r.status == 'complete' for r in Scheduler(clean).run(recovery_tasks()))
+    assert [r.status for r in Scheduler(resumed).run(recovery_tasks(interrupt='hi'))] == ['complete', 'failed']
+    assert [r.status for r in Scheduler(resumed).run(recovery_tasks())] == ['resumed', 'complete']
+    return {'schema_version':1,'passed':True,'reviewed_by':'synthetic-test-only','pilot_plan_sha256':pilot_hash,
+            'clean_outputs':recovery_outputs(project, clean, recovery_tasks()),
+            'resumed_outputs':recovery_outputs(project, resumed, recovery_tasks())}
 
 
 def policy_fixture(project, monkeypatch):
@@ -252,7 +268,8 @@ def rewrite_recovery(project,approval,approval_path,recovery_path,evidence):
 
 
 @pytest.mark.parametrize('change,reason',[('flag_only','recovery_evidence'),('wrong_hash','hash mismatch: mr_video'),
-    ('different_outputs','hashes differ: mr_video'),('missing_file','No such file|cannot find'),
+    ('different_outputs','hashes differ: mr_video'),('tampered_output','mr_video is not recorded by its task receipt'),
+    ('missing_file','No such file|cannot find'),
     ('other_pilot','another pilot plan')])
 def test_d4_recovery_requires_actual_matching_output_files(approved_project,monkeypatch,change,reason):
     import re
@@ -260,9 +277,12 @@ def test_d4_recovery_requires_actual_matching_output_files(approved_project,monk
     evidence=read_json(recovery_path)
     if change=='flag_only': evidence={'passed':True,'reviewed_by':'synthetic-test-only'}
     elif change=='wrong_hash': evidence['clean_outputs']['mr_video']['sha256']='0'*64
-    elif change=='different_outputs':
+    elif change in ('different_outputs','tampered_output'):
         ref=evidence['resumed_outputs']['mr_video']; path=approved_project.artifacts_dir/ref['path']
         path.write_bytes(b'different actual output'); ref['sha256']=sha256_file(path)
+        if change=='different_outputs':  # the resumed task really sealed different bytes
+            receipt=read_json(path.parent/'task_receipt.json'); receipt['outputs']['video']['sha256']=ref['sha256']
+            atomic_write_json(path.parent/'task_receipt.json',receipt)
     elif change=='missing_file':
         path=approved_project.artifacts_dir/evidence['resumed_outputs']['hi_video']['path']; path.unlink()
     else: evidence['pilot_plan_sha256']='d'*64
@@ -440,3 +460,41 @@ def test_d3_adhyay_one_release_binds_its_own_compiled_pilot(approved_project,mon
     atomic_write_json(path,approval)
     problems=production_problems(first)
     assert len(problems)==1 and 'current compiled pilot manifest' in problems[0],problems
+
+
+@pytest.mark.parametrize('change,reason',[
+    ('copied_outside_tasks','mr_video has no valid scheduler task receipt'),
+    ('swapped_languages','hi_video is not the assemble_hi release'),
+    ('same_store','must come from different scheduler stores'),
+    ('never_resumed','resumed recovery store has no resumed task'),
+    ('clean_reused_work','clean recovery store reused earlier work'),
+    ('different_task','come from different tasks: hi_video')])
+def test_m1_recovery_needs_distinct_real_scheduler_runs(approved_project,monkeypatch,change,reason):
+    current,approval,approval_path,recovery_path,_=policy_fixture(approved_project,monkeypatch)
+    evidence=read_json(recovery_path); artifacts=approved_project.artifacts_dir
+    clean,resumed=evidence['clean_outputs'],evidence['resumed_outputs']
+    if change=='copied_outside_tasks':
+        # Byte-identical copies with correct hashes but no scheduler provenance.
+        for run,record in (('clean',clean['mr_video']),('resumed',resumed['mr_video'])):
+            target=artifacts/'copies'/run/'x'/'mr.mp4'; target.parent.mkdir(parents=True)
+            target.write_bytes((artifacts/record['path']).read_bytes())
+            record['path']=target.relative_to(artifacts).as_posix()
+    elif change=='swapped_languages':
+        for run in (clean,resumed): run['mr_video'],run['hi_video']=run['hi_video'],run['mr_video']
+    elif change=='same_store':
+        # Distinct files, but both "runs" sealed in the clean store.
+        store=artifacts/'recovery'/'clean'; tasks=recovery_tasks(variant='second')
+        Scheduler(store).run(tasks); evidence['resumed_outputs']=recovery_outputs(approved_project,store,tasks)
+    elif change=='never_resumed':
+        store=artifacts/'recovery'/'fresh'; Scheduler(store).run(recovery_tasks())
+        evidence['resumed_outputs']=recovery_outputs(approved_project,store,recovery_tasks())
+    elif change=='clean_reused_work':
+        store=artifacts/'recovery'/'rerun'; Scheduler(store).run(recovery_tasks(interrupt='hi')); Scheduler(store).run(recovery_tasks())
+        evidence['clean_outputs']=recovery_outputs(approved_project,store,recovery_tasks())
+    else:
+        store=artifacts/'recovery'/'other'; tasks=recovery_tasks(variant='other')
+        Scheduler(store).run(tasks); Scheduler(store).run(tasks)
+        evidence['resumed_outputs']=recovery_outputs(approved_project,store,tasks)
+    rewrite_recovery(approved_project,approval,approval_path,recovery_path,evidence)
+    problems=production_problems(current)
+    assert len(problems)==1 and reason in problems[0],problems
