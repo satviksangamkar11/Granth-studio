@@ -68,3 +68,36 @@ def test_cli_help_parses_every_command():
 def test_cli_version_exit_code(capsys):
     assert main(["version"]) == 0
     assert "granthstudio" in capsys.readouterr().out
+
+
+def test_ltx_frame_and_size_rule_and_embedded_vae(project):
+    from granthstudio.config import ltx_dimension_problems, load_models
+    from granthstudio.errors import ConfigError
+    assert ltx_dimension_problems(frames=97, width=768, height=512) == []
+    assert ltx_dimension_problems(frames=9) == []
+    assert len(ltx_dimension_problems(frames=96, width=770, height=500)) == 3
+    assert ltx_dimension_problems(frames=8) and ltx_dimension_problems(width=32)          # below the minimum
+    from granthstudio.integrity import atomic_write_json
+    path = project.root / "config" / "models.yaml"
+    models = load_models(project)
+    original = [*models["ltx"]["frame_counts"]]
+    models["ltx"]["frame_counts"] = [49, 50]
+    atomic_write_json(path, models)
+    with pytest.raises(ConfigError, match="frames 50 is not 8n\+1"):
+        load_models(project)
+    models["ltx"]["frame_counts"] = original
+    atomic_write_json(path, models)
+    assert load_models(project)["ltx"]["frame_counts"] == original
+
+
+def test_runtime_vae_may_be_null_meaning_embedded(project, tmp_path):
+    from granthstudio.schemas import validate_document
+    from granthstudio.config import load_models
+    models = load_models(project)
+    files = {k: {"path": str(tmp_path / k), "sha256": "a" * 64} for k in ("checkpoint", "text_encoder")}
+    models["ltx"]["runtime"] = {"files": {**files, "vae": None}, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40,
+                                "gpu": "T4", "precision": "fp16", "width": 768, "height": 512}
+    validate_document("models", models)                       # embedded VAE: accepted
+    del models["ltx"]["runtime"]["files"]["text_encoder"]
+    with pytest.raises(Exception):
+        validate_document("models", models)                   # the text encoder is still mandatory

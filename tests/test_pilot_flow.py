@@ -71,7 +71,7 @@ def pilot(approved_project, tmp_path, comfy, monkeypatch):
     models["ltx"].update(checkpoint_sha256=files["checkpoint"]["sha256"],
         capabilities={"i2v": "unvalidated", "flf": "unvalidated"},
         runtime={"files": files, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40, "gpu": "T4",
-                 "precision": "fp16", "width": 160, "height": 120})
+                 "precision": "fp16", "width": 160, "height": 96})
     atomic_write_json(project.root / "config" / "models.yaml", models)
     atomic_write_json(project.root / "workflows" / "comfyui" / "ltx_i2v_098.json", graph())
     atomic_write_json(project.root / "workflows" / "comfyui" / "ltx_flf_098.json", graph("end"))
@@ -98,7 +98,7 @@ def make_gpu_ready(project, tmp_path, monkeypatch, node_commit="b" * 40):
             path = tmp_path / f"ready_{kind}.bin"; path.write_bytes(kind.encode())
             files[kind] = {"path": str(path), "sha256": sha256_file(path)}
         models["ltx"]["runtime"] = {"files": files, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40, "gpu": "T4",
-                                    "precision": "fp16", "width": 160, "height": 120}
+                                    "precision": "fp16", "width": 160, "height": 96}
         atomic_write_json(project.root / "config" / "models.yaml", models)
     for module in ("pilotrun", "cli", "runtime"):
         monkeypatch.setattr(f"granthstudio.{module}.gpu_status", lambda: T4)

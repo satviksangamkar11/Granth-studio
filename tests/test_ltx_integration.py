@@ -27,6 +27,7 @@ class FakeComfy:
         self.posts, self.interrupts, self.queue_deletes = [], [], []
         self.running, self.pending, self.history, self.nodes = [], [], {}, {"SyntheticLoader", "SyntheticSave"}
         self.forget_history = False
+        self.uploads = {}        # staged input images, name -> bytes
         self.node_cache, self.executions, self.cache_hits, self.sampler_runs = set(), 0, 0, 0   # node-level, dependency-aware cache
         self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
         self.auto_status = "success"   # ComfyUI status_str of those auto-finished jobs ("error" simulates a failed render)
@@ -40,7 +41,13 @@ class FakeComfy:
                 data = json.dumps(payload).encode(); self.send_response(code)
                 self.send_header("Content-Length", str(len(data))); self.end_headers(); self.wfile.write(data)
             def do_POST(self):
-                body = json.loads(self.rfile.read(int(self.headers["Content-Length"])) or b"{}")
+                raw = self.rfile.read(int(self.headers["Content-Length"]))
+                if self.path == "/upload/image":      # multipart: record the staged file like ComfyUI's input folder
+                    name = raw.split(b'name="image"; filename="', 1)[1].split(b'"', 1)[0].decode()
+                    crlf = bytes([13, 10])
+                    outer.uploads[name] = raw.split(crlf + crlf, 3)[-1].rsplit(crlf + b'--', 1)[0]
+                    return self._send({"name": name, "subfolder": "", "type": "input"})
+                body = json.loads(raw or b"{}")
                 if self.path == "/prompt":
                     pid = f"p{len(outer.posts) + 1}"; outer.posts.append(body)
                     outer.run_prompt(body["prompt"])   # extra_data / prompt_id are NOT part of any cache key
@@ -228,7 +235,7 @@ def test_input_validation_interface(approved_project, tmp_path):
         validate_ltx_inputs(models, shot, image)
     models["ltx"]["runtime"] = {"width": 768, "height": 512}
     result = validate_ltx_inputs(models, shot, image)
-    assert result["start_image"]["width"] == 640 and result["frame_rule"].endswith("(O-003)")
+    assert result["start_image"]["width"] == 640 and "8n+1" in result["frame_rule"]
     with pytest.raises(TaskFailed, match="not in pinned frame_counts"):
         validate_ltx_inputs(models, {**shot, "frames": 50}, image)
     bad = tmp_path / "bad.png"; bad.write_bytes(b"not an image")
@@ -579,3 +586,15 @@ def test_output_only_graph_cannot_use_its_own_fields_as_generation_evidence(comf
     with pytest.raises(GateFailure, match="no seed input on the path"):
         backend(comfy).execute(only("b"), journal, output_node="2")
     assert len(comfy.posts) == 1
+
+
+def test_upload_image_stages_content_addressed_names_and_exact_bytes(comfy, tmp_path):
+    image = tmp_path / "any name.PNG"; image.write_bytes(b"\x89PNG synthetic bytes \r\n with crlf \r\n--inside")
+    name = backend(comfy).upload_image(image)
+    assert name.startswith("granth_") and name.endswith(".png") and "/" not in name and " " not in name
+    assert comfy.uploads[name] == image.read_bytes()                       # byte-exact, even with CRLF and '--' inside
+    assert backend(comfy).upload_image(image) == name                      # idempotent
+    other = tmp_path / "b.png"; other.write_bytes(b"different")
+    assert backend(comfy).upload_image(other) != name                      # a changed image never reuses a name
+    with pytest.raises(TaskFailed, match="unsupported image type"):
+        backend(comfy).upload_image(tmp_path / "x.exe")

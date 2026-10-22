@@ -210,7 +210,7 @@ def test_refs_cli_generate_collect_and_approve_gate(kf_project, comfy, tmp_path,
     for kind in ("checkpoint", "vae", "text_encoder"):
         path = tmp_path / f"{kind}.bin"; path.write_bytes(kind.encode()); files[kind] = {"path": str(path), "sha256": sha256_file(path)}
     models["ltx"]["runtime"] = {"files": files, "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40, "gpu": "T4",
-                                "precision": "fp16", "width": 160, "height": 120}
+                                "precision": "fp16", "width": 160, "height": 96}
     atomic_write_json(kf_project.root / "config" / "models.yaml", models)
     make_gpu_ready(kf_project, tmp_path, monkeypatch)                  # synthetic ready host; SDXL tasks are GPU tasks
     root = ["--root", str(kf_project.root)]

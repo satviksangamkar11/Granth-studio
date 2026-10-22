@@ -132,7 +132,6 @@
               "additionalProperties": false,
               "required": [
                 "checkpoint",
-                "vae",
                 "text_encoder"
               ],
               "properties": {
@@ -155,22 +154,30 @@
                   }
                 },
                 "vae": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": [
-                    "path",
-                    "sha256"
-                  ],
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "minLength": 1
+                  "anyOf": [
+                    {
+                      "type": "null"
                     },
-                    "sha256": {
-                      "type": "string",
-                      "pattern": "^[0-9a-f]{64}$"
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "path",
+                        "sha256"
+                      ],
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        }
+                      }
                     }
-                  }
+                  ],
+                  "description": "null = the VAE is embedded in the checkpoint (LTX 0.9.8 official workflow: CheckpointLoaderSimple output 2)"
                 },
                 "text_encoder": {
                   "type": "object",

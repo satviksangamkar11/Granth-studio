@@ -7,6 +7,7 @@ also requires a pinned checkpoint and a passing benchmark receipt.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -299,9 +300,9 @@ class ComfyBackend:
         self.poll_s = poll_s
         self.max_wait_s = max_wait_s
 
-    def _request(self, method: str, path: str, body: bytes | None = None) -> bytes:
+    def _request(self, method: str, path: str, body: bytes | None = None, content_type: str = "application/json") -> bytes:
         request = urllib.request.Request(
-            self.base_url + path, data=body, method=method, headers={"Content-Type": "application/json"}
+            self.base_url + path, data=body, method=method, headers={"Content-Type": content_type}
         )
         try:
             with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
@@ -315,6 +316,29 @@ class ComfyBackend:
             raise IntegrationUnavailable(f"ComfyUI HTTP {exc.code} at {self.base_url}: {exc.reason}") from exc
         except (urllib.error.URLError, OSError) as exc:
             raise IntegrationUnavailable(f"ComfyUI unreachable at {self.base_url}: {exc}") from exc
+
+    def upload_image(self, path: Path) -> str:
+        """Stage a local image in ComfyUI's input folder (POST /upload/image) and return the name a LoadImage node must
+        be given: LoadImage lists names from the server's input directory, never filesystem paths. The name is
+        content-addressed (sha256 prefix), so staging is idempotent and a changed image can never reuse an old name."""
+        suffix = path.suffix.lower()
+        if suffix not in (".png", ".jpg", ".jpeg", ".webp"):
+            raise TaskFailed(f"cannot stage {path.name}: unsupported image type {suffix!r}")
+        data = path.read_bytes()
+        name = f"granth_{hashlib.sha256(data).hexdigest()[:20]}{suffix}"
+        boundary = "granthstudio" + uuid.uuid4().hex
+        crlf = b"\r\n"
+        parts = []
+        for field, value in (("type", "input"), ("overwrite", "true")):
+            parts.append(f'--{boundary}'.encode() + crlf + f'Content-Disposition: form-data; name="{field}"'.encode()
+                         + crlf + crlf + value.encode() + crlf)
+        parts.append(f'--{boundary}'.encode() + crlf + f'Content-Disposition: form-data; name="image"; filename="{name}"'.encode()
+                     + crlf + b"Content-Type: application/octet-stream" + crlf + crlf + data + crlf)
+        parts.append(f"--{boundary}--".encode() + crlf)
+        answer = json.loads(self._request("POST", "/upload/image", b"".join(parts), f"multipart/form-data; boundary={boundary}"))
+        if answer.get("type") != "input" or not answer.get("name"):
+            raise TaskFailed(f"ComfyUI did not stage {name} in its input folder: {answer}")
+        return f"{answer['subfolder']}/{answer['name']}" if answer.get("subfolder") else answer["name"]
 
     def system_stats(self) -> dict[str, Any]:
         return json.loads(self._request("GET", "/system_stats"))

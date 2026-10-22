@@ -65,8 +65,30 @@ def _load_checked(project: Project, schema: str, filename: str) -> dict[str, Any
     return data
 
 
+# LTX frame and size rule (frozen O-003), read from ComfyUI core LTXVImgToVideo at the pinned commit:
+# length min 9 step 8 (frames = 8n + 1); width/height min 64 step 32. See docs/LTX_098_RESEARCH.md section 4.
+LTX_MIN_FRAMES, LTX_FRAME_STEP, LTX_MIN_SIZE, LTX_SIZE_STEP = 9, 8, 64, 32
+
+
+def ltx_dimension_problems(frames: int | None = None, width: int | None = None, height: int | None = None) -> list[str]:
+    problems = []
+    if frames is not None and (frames < LTX_MIN_FRAMES or (frames - 1) % LTX_FRAME_STEP):
+        problems.append(f"frames {frames} is not 8n+1 and >= {LTX_MIN_FRAMES}")
+    for name, value in (("width", width), ("height", height)):
+        if value is not None and (value < LTX_MIN_SIZE or value % LTX_SIZE_STEP):
+            problems.append(f"{name} {value} is not a multiple of {LTX_SIZE_STEP} and >= {LTX_MIN_SIZE}")
+    return problems
+
+
 def load_models(project: Project) -> dict[str, Any]:
-    return _load_checked(project, "models", "models.yaml")
+    models = _load_checked(project, "models", "models.yaml")
+    ltx = models["ltx"]
+    runtime = ltx.get("runtime") or {}
+    problems = [p for n in ltx["frame_counts"] for p in ltx_dimension_problems(frames=n)]
+    problems += ltx_dimension_problems(width=runtime.get("width"), height=runtime.get("height"))
+    if problems:
+        raise ConfigError("models.yaml ltx violates the LTX frame/size rule: " + "; ".join(dict.fromkeys(problems)))
+    return models
 
 
 def load_quality_gates(project: Project) -> dict[str, Any]:
@@ -112,6 +134,8 @@ def verified_runtime_hash(models: dict[str, Any], workflow_version: str | None) 
         raise CapabilityDisabled("runtime inventory is missing: NOT VALIDATED")
     validate_document("models", models)
     for kind, file in runtime["files"].items():
+        if file is None:       # vae: null means embedded in the checkpoint; there is no separate file to check
+            continue
         path = Path(file["path"])
         if not path.is_absolute() or not path.is_file() or sha256_file(path) != file["sha256"]:
             raise CapabilityDisabled(f"{kind} runtime file/hash mismatch: NOT VALIDATED")

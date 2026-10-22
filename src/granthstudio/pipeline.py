@@ -17,7 +17,7 @@ from typing import Any
 from .canon import Canon, load_canon
 from .comfy import (ComfyBackend, check_checkpoint_binding, generation_seed, ensure_validated, execution_seconds, load_template,
                     render_graph, select_video)
-from .config import Project, load_models, require_capability, verify_benchmark_runtime
+from .config import Project, load_models, ltx_dimension_problems, require_capability, verify_benchmark_runtime
 from .episodes import compile_episode, trimmed_required_actions, unplaced_required_actions
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
@@ -252,12 +252,15 @@ def validate_ltx_inputs(models, shot, image):
     runtime = ltx.get("runtime") or {}
     if not runtime.get("width") or not runtime.get("height"):
         raise IntegrationUnavailable("LTX runtime width/height are not pinned: NOT VALIDATED")
+    rule = ltx_dimension_problems(shot["frames"], runtime["width"], runtime["height"])
+    if rule:
+        raise TaskFailed(f"{shot['shot_id']}: " + "; ".join(rule))   # the LTX frame/size rule is enforced, not just listed
     info = probe(image)
     if not info.width or not info.height:
         raise TaskFailed(f"{image.name}: start image is not decodable")
     return {"frames": shot["frames"], "fps": FPS, "width": runtime["width"], "height": runtime["height"],
             "start_image": {"width": info.width, "height": info.height, "sha256": sha256_file(image)},
-            "frame_rule": "pinned list only; exact rule open (O-003)"}
+            "frame_rule": "8n+1 frames, width/height multiples of 32 (config.ltx_dimension_problems), plus the pinned list"}
 
 
 def _ltx_run(bundle, shot, visual, capability, journal):
@@ -272,6 +275,9 @@ def _ltx_run(bundle, shot, visual, capability, journal):
         if capability == "flf":
             values["END_IMAGE"] = str(_visual_file(bundle, visuals[shot["end_visual_id"]]))
         backend = ComfyBackend(bundle.models["comfyui"]["base_url"])
+        for key in ("START_IMAGE", "END_IMAGE"):      # LoadImage takes a name from ComfyUI's input folder, not a path
+            if key in values:
+                values[key] = backend.upload_image(Path(values[key]))
         graph = render_graph(template, values)
         backend.require_nodes(graph)
         backend.require_model_files(graph)
