@@ -8,8 +8,11 @@ also requires a pinned checkpoint and a passing benchmark receipt.
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
+import uuid
+from contextlib import contextmanager
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -17,11 +20,87 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .errors import ConfigError, IntegrationUnavailable, JobPending, TaskFailed
+from .errors import ConfigError, GateFailure, IntegrationUnavailable, JobPending, TaskFailed
 from .integrity import atomic_write_json, read_json, sha256_file, sha256_obj
 
 CLIENT_ID = "granthstudio"
+LOCK_TTL_S = 300.0   # far above one journal decision + POST (timeout_s); see owned() for abandoned-lock recovery
+LOCK_WAIT_S = 60.0
+NAMESPACE_FILE = ".store_namespace"
 _PLACEHOLDER = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
+
+
+def store_namespace(journal: Path) -> str:
+    """Durable per-store namespace (the journal's directory): independent stores never share tokens."""
+    path = journal.parent / NAMESPACE_FILE
+    if not path.is_file():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(f".{NAMESPACE_FILE}.{uuid.uuid4().hex}.tmp")
+        tmp.write_text(uuid.uuid4().hex, encoding="utf-8")
+        try:
+            os.link(tmp, path)       # atomic create-if-absent that already carries its content
+        except FileExistsError:
+            pass
+        finally:
+            tmp.unlink(missing_ok=True)
+    return path.read_text(encoding="utf-8").strip()
+
+
+@contextmanager
+def owned(journal: Path, ttl_s: float | None = None, wait_s: float | None = None):
+    """Exclusive journal ownership via O_CREAT|O_EXCL on a sibling lock file (atomic on NTFS and POSIX).
+
+    Abandoned ownership: a lock older than ttl_s is moved aside (one rename wins) and retaken. That is
+    safe because the lock only guards the decision; an owner that died after recording submission intent
+    left state "submitting" in the journal, which still forces reconcile instead of a resubmission.
+    ponytail: age-based, not pid-based (pid probes are not portable); owners must finish well within ttl_s.
+    """
+    ttl_s = LOCK_TTL_S if ttl_s is None else ttl_s
+    wait_s = LOCK_WAIT_S if wait_s is None else wait_s
+    lock = journal.with_name(journal.name + ".lock")
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    me = uuid.uuid4().hex
+    deadline = time.monotonic() + wait_s
+    while True:
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError:
+            try:
+                if time.time() - lock.stat().st_mtime > ttl_s:
+                    aside = lock.with_name(f"{lock.name}.stale-{uuid.uuid4().hex}")
+                    os.replace(lock, aside)
+                    if time.time() - aside.stat().st_mtime <= ttl_s:   # raced with a fresh owner: give it back
+                        try:
+                            os.link(aside, lock)
+                        except OSError:
+                            pass
+                    aside.unlink(missing_ok=True)
+                    continue
+            except OSError:
+                pass
+            if time.monotonic() >= deadline:
+                raise JobPending(f"journal {journal.name} is owned by another process")
+            time.sleep(0.02)
+            continue
+        with os.fdopen(fd, "w") as handle:
+            handle.write(json.dumps({"owner": me, "pid": os.getpid(), "at": time.time()}))
+        break
+    try:
+        yield
+    finally:
+        try:
+            if json.loads(lock.read_text(encoding="utf-8")).get("owner") == me:
+                lock.unlink()
+        except (OSError, ValueError):
+            pass
+
+
+def generation_seed(journal: Path, base_seed: int) -> int:
+    """Seed for the next generation. ComfyUI caches node outputs by class and inputs, so a new prompt_id or
+    extra_data does not force fresh inference; after each definitively rejected render the sampler seed input is
+    offset by the rejection count (recorded in the journal) so the graph genuinely differs."""
+    state = read_json(journal) if journal.is_file() else {}
+    return base_seed + len(state.get("rejections", []))
 
 
 @dataclass(frozen=True)
@@ -187,12 +266,13 @@ class ComfyBackend:
                     raise IntegrationUnavailable(f"ComfyUI at {self.base_url} cannot see weight file {value} "
                                                  f"for node {node_id}: NOT VALIDATED")
 
-    def locate(self, prompt_id: str | None = None, token: str | None = None) -> tuple[str, str, dict | None] | None:
+    def locate(self, prompt_id: str | None = None, token: str | None = None, namespace: str | None = None) -> tuple[str, str, dict | None] | None:
         """Find a job in the queue or history by prompt id or by the job token sent at submission."""
         def matches(item):
             extra = item[3] if len(item) > 3 and isinstance(item[3], dict) else {}
             return (prompt_id is not None and item[1] == prompt_id) or (
-                token is not None and extra.get("granthstudio_job") == token)
+                token is not None and extra.get("granthstudio_job") == token
+                and (namespace is None or extra.get("granthstudio_ns") in (None, namespace)))
         queue = json.loads(self._request("GET", "/queue"))
         for where in ("queue_running", "queue_pending"):
             for item in queue.get(where, []):
@@ -203,10 +283,10 @@ class ComfyBackend:
                 return "history", pid, entry
         return None
 
-    def submit(self, graph: dict[str, Any], token: str | None = None) -> str:
+    def submit(self, graph: dict[str, Any], token: str | None = None, namespace: str | None = None) -> str:
         payload = {"prompt": graph, "client_id": CLIENT_ID}
         if token is not None:
-            payload["extra_data"] = {"granthstudio_job": token}
+            payload["extra_data"] = {"granthstudio_job": token, **({"granthstudio_ns": namespace} if namespace else {})}
         body = json.dumps(payload).encode("utf-8")
         data = json.loads(self._request("POST", "/prompt", body))
         if "prompt_id" not in data:
@@ -234,57 +314,100 @@ class ComfyBackend:
         dest.write_bytes(self._request("GET", f"/view?{query}"))
 
 
-    def execute(self, graph: dict[str, Any], journal: Path, sampler=None) -> dict[str, Any]:
-        """Persist intent before POST; an ambiguous submission must be reconciled, never repeated."""
-        identity = {"base_url": self.base_url, "graph_sha256": sha256_obj(graph)}
-        state = read_json(journal) if journal.exists() else None
-        if state and any(state.get(k) != v for k, v in identity.items()):
-            raise JobPending("submission journal belongs to different runtime/graph")
-        if state and state.get("state") == "submitting":
-            raise JobPending("submission outcome unknown; run 'comfy reconcile' before another POST")
-        if state and state.get("state") == "cancelled":
-            raise JobPending("job was cancelled; run 'comfy reconcile' to confirm it stopped before resubmitting")
-        if not state or state.get("state") in ("failed", "rejected"):
-            # failed: definitive submission/execution failure. rejected: the render completed but its media was
-            # judged invalid, so that output is dead and a fresh attempt identity may be submitted.
-            attempt = (state or {}).get("attempt", 0) + 1
-            token = sha256_obj({**identity, "journal": journal.name, "attempt": attempt})
-            state = {**identity, "state": "submitting", "job_token": token, "attempt": attempt,
-                     **({"rejections": state["rejections"]} if state and state.get("rejections") else {})}
-            atomic_write_json(journal, state)
-            try:
-                prompt_id = self.submit(graph, token)
-            except IntegrationUnavailable as exc:
-                raise JobPending("submission outcome unknown; retained journal for reconciliation") from exc
-            except TaskFailed:
-                atomic_write_json(journal, {**state, "state": "failed"})
-                raise
-            state = {**state, "state": "submitted", "prompt_id": prompt_id}
-            atomic_write_json(journal, state)
+    def execute(self, graph: dict[str, Any], journal: Path, sampler=None, max_attempts: int | None = None,
+                generation: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Persist intent before POST under exclusive journal ownership; an ambiguous submission must be
+        reconciled, never repeated. ``max_attempts`` is a durable budget of generations (POSTs) for this journal;
+        polling or reconciling an existing prompt never consumes it. ``generation`` (e.g. the seed used) is
+        recorded with the attempt."""
+        namespace, graph_sha = store_namespace(journal), sha256_obj(graph)
+        with owned(journal):
+            state = read_json(journal) if journal.exists() else None
+            if state and (state.get("base_url") != self.base_url or state.get("namespace", namespace) != namespace):
+                raise JobPending("submission journal belongs to a different runtime or store")
+            if state and state.get("state") in ("submitting", "submitted", "completed", "cancelled") \
+                    and state.get("graph_sha256") != graph_sha:
+                raise JobPending("submission journal belongs to a different graph")
+            if state and state.get("state") == "submitting":
+                raise JobPending("submission outcome unknown; run 'comfy reconcile' before another POST")
+            if state and state.get("state") == "cancelled":
+                raise JobPending("job was cancelled; run 'comfy reconcile' to confirm it stopped before resubmitting")
+            if not state or state.get("state") in ("failed", "rejected"):
+                # failed: definitive submission/execution failure. rejected: the render completed but its media
+                # was judged invalid; its output (and ComfyUI's cached node outputs for it) must not be reused.
+                if state and graph_sha in state.get("rejected_graph_sha256s", []):
+                    raise GateFailure("a rejected render cannot be resubmitted with identical graph inputs: ComfyUI "
+                                      "would reuse its execution cache; vary the generation seed (comfy.generation_seed)")
+                attempt = (state or {}).get("attempt", 0) + 1
+                if max_attempts is not None and attempt - (state or {}).get("attempt_base", 0) > max_attempts:
+                    raise GateFailure(f"generation budget exhausted: {max_attempts} attempt(s) already submitted for "
+                                      f"{journal.name}; an authorized reset (comfy reset-budget) is required")
+                token = sha256_obj({"base_url": self.base_url, "graph_sha256": graph_sha, "journal": journal.name,
+                                    "attempt": attempt, "namespace": namespace})
+                carry = {k: state[k] for k in ("rejections", "rejected_graph_sha256s", "attempt_base", "budget_resets",
+                                               "history") if state and k in state}
+                state = {**carry, "base_url": self.base_url, "graph_sha256": graph_sha, "namespace": namespace,
+                         "state": "submitting", "job_token": token, "attempt": attempt,
+                         "history": [*carry.get("history", []), {"attempt": attempt, "job_token": token,
+                                                                 "graph_sha256": graph_sha, "generation": generation or {}}]}
+                atomic_write_json(journal, state)
+                try:
+                    prompt_id = self.submit(graph, token, namespace)
+                except IntegrationUnavailable as exc:
+                    raise JobPending("submission outcome unknown; retained journal for reconciliation") from exc
+                except TaskFailed:
+                    atomic_write_json(journal, {**state, "state": "failed"})
+                    raise
+                state = {**state, "state": "submitted", "prompt_id": prompt_id}
+                atomic_write_json(journal, state)
+        prompt_id = state["prompt_id"]
         try:
-            history = self.wait(state["prompt_id"], sampler) if sampler else self.wait(state["prompt_id"])
-            if state.get("state") != "completed":
-                atomic_write_json(journal, {**state, "state": "completed"})
-            return history
+            history = self.wait(prompt_id, sampler) if sampler else self.wait(prompt_id)
         except IntegrationUnavailable as exc:
             raise JobPending("connection lost; retain prompt and resume polling") from exc
         except TaskFailed:
-            atomic_write_json(journal, {**state, "state": "failed"})
+            self._settle(journal, prompt_id, "failed")
             raise
+        self._settle(journal, prompt_id, "completed")
+        return history
+
+    @staticmethod
+    def _settle(journal: Path, prompt_id: str, new_state: str) -> None:
+        with owned(journal):
+            current = read_json(journal)
+            if current.get("prompt_id") == prompt_id and current.get("state") == "submitted":
+                atomic_write_json(journal, {**current, "state": new_state})
 
 
 def reject_output(journal: Path, reason: str) -> bool:
-    """Record that a *completed* render failed media validation so a fresh attempt may be submitted.
+    """Record that a *completed* render failed media validation so a fresh generation may be submitted.
     Any other journal state (uncertain submission, still polling, failed) is left untouched: never
     resubmit while the previous job might be active."""
     if not journal.is_file():
         return False
-    state = read_json(journal)
-    if state.get("state") != "completed":
-        return False
-    rejection = {"attempt": state["attempt"], "prompt_id": state["prompt_id"], "reason": reason[:500]}
-    atomic_write_json(journal, {**state, "state": "rejected", "rejections": [*state.get("rejections", []), rejection]})
+    with owned(journal):
+        state = read_json(journal)
+        if state.get("state") != "completed":
+            return False
+        rejection = {"attempt": state["attempt"], "prompt_id": state["prompt_id"], "reason": reason[:500],
+                     "graph_sha256": state["graph_sha256"]}
+        atomic_write_json(journal, {**state, "state": "rejected", "rejections": [*state.get("rejections", []), rejection],
+                                    "rejected_graph_sha256s": [*state.get("rejected_graph_sha256s", []), state["graph_sha256"]]})
     return True
+
+
+def reset_budget(journal: Path, authorized_by: str) -> dict[str, Any]:
+    """Explicit, named reset of the durable generation budget; only when no job is outstanding."""
+    if not authorized_by.strip():
+        raise ConfigError("a reviewer name is required to reset the generation budget")
+    with owned(journal):
+        state = read_json(journal)
+        if state["state"] not in ("failed", "rejected"):
+            raise ConfigError(f"budget can only be reset when no job is outstanding (journal state {state['state']!r})")
+        state = {**state, "attempt_base": state["attempt"],
+                 "budget_resets": [*state.get("budget_resets", []), {"at_attempt": state["attempt"], "by": authorized_by.strip()}]}
+        atomic_write_json(journal, state)
+    return state
 
 
 def select_video(history: dict[str, Any], output_node: str) -> dict[str, Any]:
@@ -302,9 +425,15 @@ def reconcile(backend: ComfyBackend, journal: Path, declare_lost: bool = False) 
     A job that cannot be found is only marked failed (resubmittable) when the operator
     declares it lost, because a cleared history would otherwise cause a duplicate GPU job.
     """
+    with owned(journal):
+        return _reconcile(backend, journal, declare_lost)
+
+
+def _reconcile(backend, journal, declare_lost):
     state = read_json(journal)
     if state["state"] == "submitting":
-        found = backend.locate(token=state.get("job_token")) if state.get("job_token") else None
+        found = (backend.locate(token=state.get("job_token"), namespace=state.get("namespace"))
+                 if state.get("job_token") else None)
         if found:
             state = {**state, "state": "submitted", "prompt_id": found[1]}
         elif declare_lost:
@@ -323,6 +452,11 @@ def reconcile(backend: ComfyBackend, journal: Path, declare_lost: bool = False) 
 
 def cancel(backend: ComfyBackend, journal: Path) -> dict[str, Any]:
     """Operator cancellation: remove a queued prompt, or interrupt it only when it is the running one."""
+    with owned(journal):
+        return _cancel(backend, journal)
+
+
+def _cancel(backend, journal):
     state = read_json(journal)
     if state["state"] != "submitted":
         raise ConfigError(f"only a submitted job can be cancelled (journal state {state['state']!r}); reconcile first")

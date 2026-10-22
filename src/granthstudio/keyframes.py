@@ -15,7 +15,7 @@ from typing import Any
 import yaml
 
 from .canon import Canon
-from .comfy import ComfyBackend, load_template, render_graph, select_image
+from .comfy import ComfyBackend, generation_seed, load_template, render_graph, select_image
 from .config import Project, load_yaml
 from .errors import ConfigError, GateFailure, IntegrationUnavailable, TaskFailed
 from .ffmpeg import probe
@@ -279,7 +279,7 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
     template = sdxl_preflight(project, models, request)
     require_references(request, models)
     slots = models["sdxl"]["identity_conditioning"]["reference_slots"]
-    values = {"PROMPT": request["prompt"], "NEGATIVE_PROMPT": request["negative_prompt"], "SEED": request["seed"],
+    values = {"PROMPT": request["prompt"], "NEGATIVE_PROMPT": request["negative_prompt"], "SEED": generation_seed(journal, request["seed"]),
               "WIDTH": request["width"], "HEIGHT": request["height"]}
     if request.get("role") == "end":
         values["START_IMAGE"] = str(derived_file(project, request["derived_from"]))
@@ -290,7 +290,8 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
     graph = render_graph(template, values)
     backend.require_nodes(graph)
     backend.require_model_files(graph)
-    history = backend.execute(graph, journal)
+    history = backend.execute(graph, journal, max_attempts=3, generation={
+        "seed": values["SEED"], "seed_offset": values["SEED"] - request["seed"]})
     backend.fetch(select_image(history, template.output_node), work / "keyframe.png")
     info = probe(work / "keyframe.png")
     if (info.width, info.height) != (request["width"], request["height"]):

@@ -292,6 +292,15 @@ def cmd_comfy_cancel(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def cmd_comfy_reset_budget(args: argparse.Namespace) -> int:
+    from .comfy import reset_budget
+    _need_confirm(args, "authorised more generation attempts for this shot")
+    _, path = _journal(_project(args), args)
+    state = reset_budget(path, args.reviewer)
+    print(f"{args.shot}: generation budget reset after attempt {state['attempt']} by {args.reviewer}")
+    return EXIT_OK
+
+
 def _canon_models(project):
     return load_canon(project), load_models(project)
 
@@ -760,6 +769,13 @@ def build_parser() -> argparse.ArgumentParser:
             sub_cmd.add_argument("--declare-lost", action="store_true",
                                  help="operator confirmed the job is not on the server; allow resubmission")
         sub_cmd.set_defaults(handler=handler)
+
+    reset_p = comfy_actions.add_parser("reset-budget", help="authorise further generation attempts for one LTX shot")
+    reset_p.add_argument("adhyay", type=int)
+    reset_p.add_argument("shot")
+    reset_p.add_argument("--reviewer", required=True)
+    reset_p.add_argument("--confirm", action="store_true")
+    reset_p.set_defaults(handler=cmd_comfy_reset_budget)
 
     ffprobe = commands.add_parser("ffprobe", help="probe a media file")
     ffprobe.add_argument("file", type=Path)

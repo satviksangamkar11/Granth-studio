@@ -27,6 +27,7 @@ class FakeComfy:
         self.posts, self.interrupts, self.queue_deletes = [], [], []
         self.running, self.pending, self.history, self.nodes = [], [], {}, {"SyntheticLoader", "SyntheticSave"}
         self.forget_history = False
+        self.cache, self.executions, self.cache_hits = set(), 0, 0   # ComfyUI caches node outputs by node inputs
         self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
         self.auto_status = "success"   # ComfyUI status_str of those auto-finished jobs ("error" simulates a failed render)
         self.view_bytes = b""      # body served by /view
@@ -42,6 +43,9 @@ class FakeComfy:
                 body = json.loads(self.rfile.read(int(self.headers["Content-Length"])) or b"{}")
                 if self.path == "/prompt":
                     pid = f"p{len(outer.posts) + 1}"; outer.posts.append(body)
+                    key = json.dumps(body["prompt"], sort_keys=True)   # extra_data / prompt_id are NOT part of the cache key
+                    if key in outer.cache: outer.cache_hits += 1
+                    else: outer.cache.add(key); outer.executions += 1
                     outer.running.append([0, pid, body["prompt"], body.get("extra_data", {}), []])
                     if outer.auto_outputs is not None:
                         outer.finish(pid, status=outer.auto_status)
@@ -208,43 +212,139 @@ def test_input_validation_interface(approved_project, tmp_path):
         validate_ltx_inputs(models, shot, bad)
 
 
-def test_rejected_output_gets_fresh_attempt_valid_output_does_not(comfy, tmp_path):
-    from granthstudio.comfy import reject_output
+def seeded(seed):
+    return {**GRAPH, "3": {"class_type": "SyntheticSampler", "inputs": {"seed": seed}}}
+
+
+def test_rejected_output_forces_fresh_generation_valid_output_does_not(comfy, tmp_path):
+    from granthstudio.comfy import generation_seed, reject_output
+    from granthstudio.errors import GateFailure
     b = backend(comfy); journal = tmp_path / "job.json"
     with pytest.raises(JobPending):
-        b.execute(GRAPH, journal)                      # polling uncertain: prompt id preserved
+        b.execute(seeded(generation_seed(journal, 7)), journal)   # polling uncertain: prompt id preserved
     assert reject_output(journal, "nope") is False and read_json(journal)["state"] == "submitted"
     with pytest.raises(JobPending):
-        b.execute(GRAPH, journal)
-    assert len(comfy.posts) == 1                       # no duplicate POST while the job may be active
+        b.execute(seeded(generation_seed(journal, 7)), journal)
+    assert len(comfy.posts) == 1 and comfy.executions == 1      # no duplicate generation while possibly active
     comfy.finish("p1")
-    b.execute(GRAPH, journal)
+    b.execute(seeded(7), journal)
     assert read_json(journal)["state"] == "completed"
-    b.execute(GRAPH, journal)
-    assert len(comfy.posts) == 1                       # valid completed output: never resubmitted
-    first_token = read_json(journal)["job_token"]
+    b.execute(seeded(7), journal)
+    assert len(comfy.posts) == 1                                # valid completed output: never resubmitted
     assert reject_output(journal, "flat video") is True
-    interrupted = read_json(journal)                   # durable across an interruption
-    assert interrupted["state"] == "rejected" and interrupted["rejections"][0]["prompt_id"] == "p1"
+    assert read_json(journal)["state"] == "rejected"            # durable across an interruption
+    with pytest.raises(GateFailure, match="identical graph inputs"):
+        backend(comfy).execute(seeded(7), journal)              # same inputs would be served from ComfyUI's cache
+    assert len(comfy.posts) == 1
+    seed = generation_seed(journal, 7)
+    assert seed == 8
     with pytest.raises(JobPending):
-        backend(comfy).execute(GRAPH, journal)         # fresh process, fresh submission
+        backend(comfy).execute(seeded(seed), journal, generation={"seed": seed, "seed_offset": 1})
     state = read_json(journal)
-    assert len(comfy.posts) == 2 and state["attempt"] == 2 and state["prompt_id"] == "p2"
-    assert state["job_token"] != first_token and state["rejections"][0]["reason"] == "flat video"
+    assert len(comfy.posts) == 2 and comfy.executions == 2 and comfy.cache_hits == 0   # genuinely new generation
+    assert state["attempt"] == 2 and state["prompt_id"] == "p2" and state["rejections"][0]["reason"] == "flat video"
+    assert [h["generation"] for h in state["history"]] == [{}, {"seed": 8, "seed_offset": 1}]
+    assert state["history"][0]["graph_sha256"] != state["history"][1]["graph_sha256"]
 
 
 def test_scheduler_resubmits_after_media_rejection_only(comfy, tmp_path):
+    from granthstudio.comfy import generation_seed
     from granthstudio.errors import TaskFailed
     from granthstudio.scheduler import Scheduler, Task
     comfy.auto_outputs = {"2": {"videos": [{"filename": "a.mp4"}]}}
     b = backend(comfy); journal = tmp_path / "pending" / "t.json"; seen = []
     def run(work):
-        b.execute(GRAPH, journal); (work / "out.txt").write_text("x"); return {"out": "out.txt"}
+        b.execute(seeded(generation_seed(journal, 1)), journal); (work / "out.txt").write_text("x"); return {"out": "out.txt"}
     def verify(directory):
         seen.append(len(comfy.posts))
         if len(seen) == 1:
             raise TaskFailed("decoded video is flat")
     task = Task("tier1", "t", {}, "v1", run, max_attempts=2, verify=verify, journal=journal)
     result = Scheduler(tmp_path / "store").run([task])[0]
-    assert result.status == "complete" and seen == [1, 2] and len(comfy.posts) == 2
+    assert result.status == "complete" and seen == [1, 2] and comfy.executions == 2
     assert read_json(journal)["rejections"][0]["reason"] == "decoded video is flat"
+
+
+def test_attempt_budget_survives_restart_and_polling_does_not_consume_it(comfy, tmp_path):
+    from granthstudio.comfy import reset_budget
+    from granthstudio.errors import GateFailure
+    journal = tmp_path / "job.json"
+    comfy.auto_outputs = {"2": {}}; comfy.auto_status = "error"
+    for n in range(3):
+        with pytest.raises(TaskFailed):
+            backend(comfy).execute(seeded(n), journal, max_attempts=3)   # a "restarted" backend each time
+    assert len(comfy.posts) == 3 and read_json(journal)["attempt"] == 3
+    with pytest.raises(GateFailure, match="budget exhausted"):
+        backend(comfy).execute(seeded(99), journal, max_attempts=3)
+    assert len(comfy.posts) == 3
+    with pytest.raises(ConfigError):
+        reset_budget(journal, " ")
+    reset_budget(journal, "synthetic-test-only")
+    with pytest.raises(TaskFailed):
+        backend(comfy).execute(seeded(100), journal, max_attempts=3)
+    assert len(comfy.posts) == 4 and read_json(journal)["budget_resets"][0]["by"] == "synthetic-test-only"
+    # an outstanding job is polled/recovered any number of times without spending budget
+    comfy.auto_outputs = None; other = tmp_path / "other.json"
+    for _ in range(5):
+        with pytest.raises(JobPending):
+            backend(comfy).execute(seeded(1), other, max_attempts=1)
+    assert len(comfy.posts) == 5 and read_json(other)["attempt"] == 1
+
+
+def test_two_concurrent_callers_submit_exactly_once(comfy, tmp_path):
+    import threading
+    journal = tmp_path / "job.json"; barrier = threading.Barrier(2); outcomes = []
+    def caller():
+        barrier.wait()
+        try:
+            backend(comfy).execute(GRAPH, journal)
+        except JobPending as exc:
+            outcomes.append(str(exc))
+    threads = [threading.Thread(target=caller) for _ in range(2)]
+    [t.start() for t in threads]; [t.join() for t in threads]
+    assert len(comfy.posts) == 1 and len(outcomes) == 2
+    assert not list(tmp_path.glob("*.lock"))                    # ownership released
+
+
+def test_abandoned_owner_after_submission_intent_reconciles_instead_of_resubmitting(comfy, tmp_path):
+    import os, time
+    from granthstudio.comfy import owned
+    journal = tmp_path / "job.json"
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, journal)
+    state = read_json(journal); state.pop("prompt_id"); state["state"] = "submitting"   # owner died before recording the reply
+    atomic_write_json(journal, state)
+    lock = tmp_path / "job.json.lock"; lock.write_text("{}")
+    old = time.time() - 10_000; os.utime(lock, (old, old))                              # abandoned ownership
+    with pytest.raises(JobPending, match="reconcile"):
+        backend(comfy).execute(GRAPH, journal)
+    assert len(comfy.posts) == 1 and not lock.exists()
+    assert reconcile(backend(comfy), journal)["prompt_id"] == "p1"
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, journal)
+    assert len(comfy.posts) == 1
+    lock.write_text("{}")                                                                # a fresh lock is never broken
+    with pytest.raises(JobPending, match="owned by another"):
+        with owned(journal, wait_s=0.1):
+            pass
+    assert lock.exists()
+
+
+def test_store_namespaces_keep_tokens_and_reconciliation_apart(comfy, tmp_path):
+    from granthstudio.comfy import store_namespace
+    a, b_ = tmp_path / "A" / "job.json", tmp_path / "B" / "job.json"
+    for j in (a, b_):
+        j.parent.mkdir()
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, a)
+    with pytest.raises(JobPending):
+        backend(comfy).execute(GRAPH, b_)
+    token_a, token_b = read_json(a)["job_token"], read_json(b_)["job_token"]
+    assert token_a != token_b and store_namespace(a) != store_namespace(b_)    # identical task and filename, distinct tokens
+    # store B's response is lost; the server only holds store A's job under A's token
+    lost = tmp_path / "B" / "lost.json"
+    atomic_write_json(lost, {"base_url": backend(comfy).base_url, "graph_sha256": sha256_obj(GRAPH), "namespace": store_namespace(b_),
+                             "state": "submitting", "job_token": token_a, "attempt": 1})
+    with pytest.raises(JobPending, match="not found"):
+        reconcile(backend(comfy), lost)                          # must not adopt A's prompt
+    assert store_namespace(b_) == read_json(b_)["namespace"]     # restart reuses the persisted namespace
