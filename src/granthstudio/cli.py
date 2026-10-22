@@ -107,6 +107,48 @@ def cmd_research_approve(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def cmd_research_import(args: argparse.Namespace) -> int:
+    from . import importer
+    project = _project(args)
+    compare = []
+    for item in args.compare or []:
+        path, _, number = item.rpartition(":")
+        if not path or not number.isdigit():
+            raise ConfigError("--compare takes FILE:ADHYAY, e.g. adhyay_02_analysis_v3.md:2")
+        compare.append((Path(path), int(number)))
+    report = importer.import_markdown(project, args.source, args.adhyay, args.questions, compare,
+                                      load_canon(project), write=args.write)
+    if args.json:
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        return EXIT_OK
+    counts = report["counts"]
+    print(f"adhyay {args.adhyay} from {args.source.name}: {counts['scenes']} scene(s), {counts['characters_found']} character(s), "
+          f"{counts['places_found']} place(s), {counts['dialogue_rows']} dialogue row(s)")
+    print(f"questions kept: {counts['open_questions']} open, {counts['provisional_items']} provisional, {counts['answered']} answered")
+    print(f"scenes missing a field: {report['scenes_missing_field']}; dialogue text imported: {report['dialogue_text_imported']}")
+    print(f"ambiguity markers in source: {report['ambiguity_markers']}")
+    for finding in report["identity_findings"]:
+        print(f"identity [{finding['kind']}] {' | '.join(finding['between'])}")
+    print("draft written" if report["written"] else "dry run: nothing written (add --write)")
+    return EXIT_OK
+
+
+def cmd_research_check_draft(args: argparse.Namespace) -> int:
+    from . import importer
+    blockers = importer.draft_blockers(_project(args), args.adhyay)
+    for blocker in blockers:
+        print(f"blocker: {blocker}")
+    print(f"{len(blockers)} blocker(s)" if blockers else "draft is complete: run 'research promote'")
+    return EXIT_REFUSED if blockers else EXIT_OK
+
+
+def cmd_research_promote(args: argparse.Namespace) -> int:
+    from . import importer
+    target = importer.promote_draft(_project(args), args.adhyay)
+    print(f"{target} created. Not approved: resolve every open and provisional item, then 'research approve'.")
+    return EXIT_OK
+
+
 def cmd_canon_check(args: argparse.Namespace) -> int:
     canon = load_canon(_project(args))
     counts = {kind: len(doc["entries"]) for kind, doc in canon.documents.items()}
@@ -496,6 +538,20 @@ def build_parser() -> argparse.ArgumentParser:
     approve_cmd.add_argument("--reviewer", required=True)
     approve_cmd.add_argument("--confirm", action="store_true")
     approve_cmd.set_defaults(handler=cmd_research_approve)
+    imp_r = research_actions.add_parser("import", help="Markdown research -> draft (dry run unless --write)")
+    imp_r.add_argument("source", type=Path)
+    imp_r.add_argument("--adhyay", type=int, required=True)
+    imp_r.add_argument("--questions", type=Path, help="open-questions file (Part A open, Part B provisional)")
+    imp_r.add_argument("--compare", action="append", metavar="FILE:ADHYAY", help="other analysis files for identity checks")
+    imp_r.add_argument("--write", action="store_true")
+    imp_r.add_argument("--json", action="store_true")
+    imp_r.set_defaults(handler=cmd_research_import)
+    chk = research_actions.add_parser("check-draft", help="list what still blocks promotion of the draft")
+    chk.add_argument("adhyay", type=int)
+    chk.set_defaults(handler=cmd_research_check_draft)
+    prom = research_actions.add_parser("promote", help="rename a fully corrected draft to research.yaml (not approval)")
+    prom.add_argument("adhyay", type=int)
+    prom.set_defaults(handler=cmd_research_promote)
 
     canon = commands.add_parser("canon", help="canon registry")
     canon.add_subparsers(dest="action", required=True).add_parser("check").set_defaults(handler=cmd_canon_check)
