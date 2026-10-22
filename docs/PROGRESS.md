@@ -182,3 +182,32 @@ Handoff for the independent re-review: diff `0964494..HEAD`; check (1) strict mo
 reachable only from `pilot`; (2) no code path writes `approvals/adhyay_NN.json`, sets a status to `validated`, or
 answers/approves research; (3) every runner/ComfyUI refusal is exit 3 and produces no output; (4) the two refactors
 (`verified_runtime_hash`, `check_recovery_evidence`) are behaviour-neutral.
+
+## Final integration audit corrections (H1–H7, M8–M10)
+
+Base `0964494`, audited `42e2917`. No architecture change; frozen SHA-256 `decd0af5…f7c1` verified unchanged.
+CPU/synthetic evidence only; no model, GPU, Kaggle run or research approval.
+
+- **H6** `keyframes._register`: asset id must match `^ref_[a-z0-9_]+$`, image suffix whitelisted, destination built with
+  `contained_path` (resolves symlinks/junctions) before any mkdir/copy.
+- **H5** `speech.generate_speech`: consent check for every line, then the full `load_bundle` gate (approved research,
+  Marathi lock, Hindi review hashes, protected terms, numeric facts, speaker/shot attribution) before any TTS call.
+- **H1** `episodes.compile_episode` counts cutaway actions only for cutaways referenced by coverage;
+  `episodes.unplaced_required_actions` is enforced at assembly (`pipeline._assembly_run`) and in `_verify_assembly`.
+- **H4** `runtime.GPU_CHECKS` now includes `sources`; `require_gpu_ready` names the failing source pin.
+- **H3** `comfy.execute` journals `completed`; `comfy.reject_output` (called by the scheduler on a `TaskFailed` from run/verify,
+  via `Task.journal`) turns a completed-but-invalid render into `rejected`, so the next attempt posts with a new attempt
+  token. Uncertain submission/polling states are never rejected, so no duplicate POST.
+- **H2** `pilotrun.selection` takes the dependency closure after adding assembly tasks.
+- **H7** `lipsync.style_identity`; runner section needs `validated_style_version` + `validated_style_sha256`
+  (fail closed when unset); the style digest is part of the lip-sync task inputs, so a style change invalidates outputs.
+- **M8** `speech.align_words(source="release"|"candidate")`; release uses current approved timeline audio with text/audio
+  hash checks; candidates write `*.align.candidate.json` and stale candidate records are refused.
+- **M9** `pilotrun._language_report` requires both audio SHA-256 and normalized-text SHA-256; otherwise kind `stale`.
+- **M10** `scripts/runners/_identity.py`: runners load the approved model at the approved revision, require
+  `config._commit_hash` evidence, refuse env substitution, and print `verified` (stored as `runner_verified` on candidates).
+
+Full CPU suite at source revision `5f8152d`: **279 passed, 2 skipped** (the symlink test skips without privilege). JUnit: `benchmarks/cpu_final_audit.xml`.
+
+Remaining external limitations: the real IndicF5/IndicTrans2/ComfyUI/LTX/lip-sync runtimes were not run; the M10
+evidence field (`_commit_hash`) is verified only against fake libraries.

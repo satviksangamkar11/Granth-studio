@@ -102,3 +102,14 @@ Everything above marked IMPLEMENTED for runtime, model, pilot and importer work 
 synthetic fixtures, fake local servers (ComfyUI) and fake subprocess runners. None of it shows that a
 real GPU, checkpoint, workflow, translation, voice or ASR model works. Evidence: `benchmarks/sprint_cpu.xml`.
 Remaining hardware-dependent work is listed in `PROGRESS.md`.
+
+Final integration audit (H1–H7, M8–M10), CPU/synthetic evidence only:
+- Section 5.3/5.4 speech: IMPLEMENTED approval gate before TTS (H5), explicit release/candidate alignment (M8), stale
+  ASR/alignment evidence reported `stale` (M9). Real speech models NOT VALIDATED.
+- Section 4.3/6 references: IMPLEMENTED asset-id containment (H6).
+- Section 10/12 editorial: IMPLEMENTED required actions must appear in the rendered plan (H1); lip-sync bound to the
+  approved style version and digest (H7). Real lip-sync NOT VALIDATED.
+- Section 8/9 runtime: IMPLEMENTED mandatory source-pin readiness (H4) and rejected-output resubmission with a new
+  attempt identity, never while a job may be active (H3). Real ComfyUI/LTX NOT VALIDATED.
+- Section 15 pilot: IMPLEMENTED dependency closure after assembly (H2). Runner model/revision enforcement (M10) tested
+  with fake libraries only; IndicF5/IndicTrans2 NOT VALIDATED.
