@@ -250,6 +250,74 @@ def cmd_comfy_cancel(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _canon_models(project):
+    return load_canon(project), load_models(project)
+
+
+def cmd_refs_status(args: argparse.Namespace) -> int:
+    from . import keyframes
+    project = _project(args)
+    canon, models = _canon_models(project)
+    registry = keyframes.load_registry(project, canon)
+    style = registry["style"]
+    print(f"style: {'none' if style is None else style['style_id'] + ' v' + str(style['version']) + ' ' + style['status']}")
+    print(f"sdxl: {(models.get('sdxl') or {}).get('status', 'not configured')} (NOT VALIDATED unless 'validated' after a real run)")
+    for asset in registry["assets"]:
+        print(f"{asset['asset_id']:<34} v{asset['version']:<3} {asset['kind']:<16} {asset['status']:<9} {asset['sha256'][:12]}")
+    for request in keyframes.sheet_requests(canon, registry, models):
+        if request["missing_references"]:
+            print(f"blocked  {request['asset_id']}: missing {request['missing_references']}")
+    return EXIT_OK
+
+
+def cmd_refs_import(args: argparse.Namespace) -> int:
+    from . import keyframes
+    project = _project(args)
+    asset = keyframes.import_asset(project, load_canon(project), args.asset_id, args.kind, args.canon_id,
+                                   args.visual_id, args.view, args.file)
+    print(f"registered {asset['asset_id']} v{asset['version']} as {asset['status']} ({asset['sha256'][:12]}); approve it after review")
+    return EXIT_OK
+
+
+def cmd_refs_generate(args: argparse.Namespace) -> int:
+    from . import keyframes
+    project = _project(args)
+    canon, models = _canon_models(project)
+    scheduler = Scheduler(keyframes.sheet_store(project))
+    tasks = keyframes.sheet_tasks(project, canon, models, scheduler)
+    if not args.execute:
+        for task in tasks:
+            print(f"planned  {task.name:<40} {task.task_id()}")
+        print("dry run: add --execute (needs a validated SDXL setup)")
+        return EXIT_OK
+    results = scheduler.run(tasks, should_stop=stop_before_deadline(load_runtime(project)))
+    for result in results:
+        print(f"{result.status:<13} {result.name:<40} {result.detail}")
+    return EXIT_NOT_VALIDATED if any(r.status == "not_validated" for r in results) else (
+        EXIT_OK if all(r.status in ("complete", "resumed") for r in results) else EXIT_REFUSED)
+
+
+def cmd_refs_collect(args: argparse.Namespace) -> int:
+    from . import keyframes
+    project = _project(args)
+    stores = [keyframes.sheet_store(project), *(episode_store(project, n) for n in args.adhyay)]
+    added = keyframes.collect_generated(project, load_canon(project), [s for s in stores if s.is_dir()])
+    for asset in added:
+        print(f"registered pending {asset['asset_id']} v{asset['version']}")
+    print(f"{len(added)} new generated asset(s); none are approved")
+    return EXIT_OK
+
+
+def cmd_refs_approve(args: argparse.Namespace) -> int:
+    from . import keyframes
+    if not args.confirm:
+        raise ConfigError("approval needs --confirm after a human has reviewed the image")
+    project = _project(args)
+    asset = keyframes.approve_asset(project, load_canon(project), args.asset_id, args.version, args.reviewer)
+    print(f"approved {asset['asset_id']} v{asset['version']} bound to sha256 {asset['sha256'][:16]}")
+    return EXIT_OK
+
+
 def cmd_runtime_preflight(args: argparse.Namespace) -> int:
     project = _project(args)
     report = preflight(project, load_models(project), load_runtime(project), gpu_status(), ram_available_mb())
@@ -417,6 +485,30 @@ def build_parser() -> argparse.ArgumentParser:
     boot.add_argument("--workdir", type=Path, default=Path("/kaggle/working"))
     boot.add_argument("--execute", action="store_true")
     boot.set_defaults(handler=cmd_runtime_bootstrap)
+
+    refs = commands.add_parser("refs", help="visual canon: reference sheets and keyframe assets")
+    refs_actions = refs.add_subparsers(dest="action", required=True)
+    refs_actions.add_parser("status", help="style, assets and blocked requests").set_defaults(handler=cmd_refs_status)
+    imp = refs_actions.add_parser("import", help="register a hand-supplied reference image (pending)")
+    imp.add_argument("asset_id")
+    imp.add_argument("--kind", required=True, choices=["character_sheet", "location", "prop", "keyframe"])
+    imp.add_argument("--canon-id")
+    imp.add_argument("--visual-id")
+    imp.add_argument("--view", required=True)
+    imp.add_argument("--file", required=True, type=Path)
+    imp.set_defaults(handler=cmd_refs_import)
+    gen = refs_actions.add_parser("generate", help="plan or run reference-sheet generation")
+    gen.add_argument("--execute", action="store_true")
+    gen.set_defaults(handler=cmd_refs_generate)
+    col = refs_actions.add_parser("collect", help="register generated images as pending assets")
+    col.add_argument("--adhyay", type=int, action="append", default=[])
+    col.set_defaults(handler=cmd_refs_collect)
+    appr = refs_actions.add_parser("approve", help="human approval bound to the image hash")
+    appr.add_argument("asset_id")
+    appr.add_argument("--version", type=int, required=True)
+    appr.add_argument("--reviewer", required=True)
+    appr.add_argument("--confirm", action="store_true")
+    appr.set_defaults(handler=cmd_refs_approve)
 
     comfy = commands.add_parser("comfy", help="ComfyUI server compatibility and job control")
     comfy_actions = comfy.add_subparsers(dest="action", required=True)

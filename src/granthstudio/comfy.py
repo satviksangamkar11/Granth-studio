@@ -101,6 +101,16 @@ def check_checkpoint_binding(template: WorkflowTemplate, checkpoint_file: str) -
         raise ConfigError(f"workflow {template.name} references other LTX weights {others}")
 
 
+def select_image(history: dict[str, Any], output_node: str) -> dict[str, Any]:
+    node = history.get("outputs", {}).get(output_node, {})
+    candidates = [item for item in node.get("images", [])
+                  if str(item.get("filename", "")).lower().endswith((".png", ".jpg", ".jpeg", ".webp"))
+                  and item.get("type", "output") == "output"]
+    if len(candidates) != 1:
+        raise TaskFailed("designated output node must produce exactly one saved image")
+    return candidates[0]
+
+
 def execution_seconds(history_entry: dict[str, Any]) -> float | None:
     """Server-side execution time from ComfyUI status messages, when the server reports them."""
     stamps = {}

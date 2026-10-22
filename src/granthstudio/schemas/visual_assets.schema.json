@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "visual_assets",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "style", "designs", "assets"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "style": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["style_id", "version", "status", "prompt_prefix", "negative_prompt"],
+          "properties": {
+            "style_id": {"type": "string", "pattern": "^style_[a-z0-9_]+$"},
+            "version": {"type": "integer", "minimum": 1},
+            "status": {"enum": ["pending", "approved"]},
+            "approved_by": {"type": "string", "pattern": "\\S"},
+            "prompt_prefix": {"type": "string", "minLength": 1},
+            "negative_prompt": {"type": "string"}
+          }
+        }
+      ]
+    },
+    "designs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["canon_id", "prompt", "source_refs", "artistic"],
+        "properties": {
+          "canon_id": {"type": "string", "pattern": "^(chr|loc|prp)_[a-z0-9_]+$"},
+          "prompt": {"type": "string", "minLength": 1},
+          "source_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "artistic": {"type": "boolean"}
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["asset_id", "version", "kind", "path", "sha256", "status", "origin"],
+        "properties": {
+          "asset_id": {"type": "string", "pattern": "^ref_[a-z0-9_]+$"},
+          "version": {"type": "integer", "minimum": 1},
+          "kind": {"enum": ["character_sheet", "location", "prop", "keyframe"]},
+          "canon_id": {"type": "string", "pattern": "^(chr|loc|prp)_[a-z0-9_]+$"},
+          "visual_id": {"type": "string", "pattern": "^vis_[a-z0-9_]+$"},
+          "view": {"enum": ["front", "three_quarter", "profile", "full_body", "establishing", "start", "end"]},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "status": {"enum": ["pending", "approved"]},
+          "origin": {"enum": ["imported", "generated"]},
+          "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "approved_by": {"type": "string", "pattern": "\\S"}
+        }
+      }
+    }
+  }
+}

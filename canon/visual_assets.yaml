@@ -1,0 +1,9 @@
+schema_version: 1
+# Global visual canon (frozen sections 4.3 and 4.4). Everything here is a human decision:
+#   style     one versioned art direction (O-006: not chosen yet)
+#   designs   human-written appearance prompts per canon id, with source references; the
+#             system never invents appearance
+#   assets    versioned reference images with immutable SHA-256 hashes
+style: null
+designs: []
+assets: []

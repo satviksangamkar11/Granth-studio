@@ -27,6 +27,8 @@ class FakeComfy:
         self.posts, self.interrupts, self.queue_deletes = [], [], []
         self.running, self.pending, self.history, self.nodes = [], [], {}, {"SyntheticLoader", "SyntheticSave"}
         self.forget_history = False
+        self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
+        self.view_bytes = b""      # body served by /view
         outer = self
 
         class Handler(BaseHTTPRequestHandler):
@@ -39,6 +41,9 @@ class FakeComfy:
                 if self.path == "/prompt":
                     pid = f"p{len(outer.posts) + 1}"; outer.posts.append(body)
                     outer.running.append([0, pid, body["prompt"], body.get("extra_data", {}), []])
+                    if outer.auto_outputs is not None:
+                        outer.finish(pid)
+                        outer.history[pid]["outputs"] = outer.auto_outputs
                     self._send({"prompt_id": pid})
                 elif self.path == "/interrupt":
                     outer.interrupts.append(body); self._send({})
@@ -47,7 +52,10 @@ class FakeComfy:
                 else:
                     self._send({}, 404)
             def do_GET(self):
-                if self.path == "/object_info": self._send({n: {} for n in outer.nodes})
+                if self.path.startswith("/view"):
+                    self.send_response(200); self.send_header("Content-Length", str(len(outer.view_bytes)))
+                    self.end_headers(); self.wfile.write(outer.view_bytes)
+                elif self.path == "/object_info": self._send({n: {} for n in outer.nodes})
                 elif self.path == "/system_stats": self._send({"system": {"comfyui_version": "synthetic"}})
                 elif self.path == "/queue": self._send({"queue_running": outer.running, "queue_pending": outer.pending})
                 elif self.path == "/history":

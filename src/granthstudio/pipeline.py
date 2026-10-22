@@ -21,6 +21,8 @@ from .config import Project, load_models, require_capability
 from .episodes import compile_episode
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, validate_audio, validate_video
+from .keyframes import (approved_keyframe, keyframe_request, load_registry, require_references, sdxl_generate,
+                        sdxl_preflight)
 from .integrity import atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
@@ -80,9 +82,25 @@ def _not_validated(component: str) -> RunFn:
         raise IntegrationUnavailable(f"{component} is NOT VALIDATED: no output produced")
     return run
 
+def _keyframe_request(bundle, visual_id):
+    registry = load_registry(bundle.project, bundle.canon)
+    return keyframe_request(bundle.compiled, bundle.canon, registry, bundle.models, visual_id), registry
+
+def _keyframe_preflight(bundle, visual_id):
+    sdxl_preflight(bundle.project, bundle.models)
+    request, _ = _keyframe_request(bundle, visual_id)
+    require_references(request, bundle.models)
+
+def _keyframe_run(bundle, visual_id, journal):
+    def run(work):
+        request, _ = _keyframe_request(bundle, visual_id)
+        return sdxl_generate(bundle.project, bundle.models, request, journal, work)
+    return run
+
 def _visual_file(bundle, visual):
-    if visual["source"] != "file":
-        raise IntegrationUnavailable("SDXL keyframe generation/output contract is NOT VALIDATED")
+    if visual["source"] == "keyframe":
+        request, registry = _keyframe_request(bundle, visual["visual_id"])
+        return approved_keyframe(bundle.project, registry, request)
     path = contained_path(bundle.project.artifacts_dir / "visuals", visual["path"])
     if not path.is_file() or sha256_file(path) != visual["sha256"]:
         raise TaskFailed(f"visual missing or changed: {visual['visual_id']}")
@@ -145,6 +163,15 @@ def _verify_clip(directory, duration):
     problems = validate_video(directory / "clip.mp4", duration, tolerance_s=1 / FPS)
     if problems:
         raise TaskFailed("; ".join(problems))
+
+def _verify_keyframe(bundle, visual_id, directory):
+    request, _ = _keyframe_request(bundle, visual_id)
+    stored = read_json(directory / "request.json")
+    if stored["request_sha256"] != request["request_sha256"] or stored != request:
+        raise TaskFailed(f"keyframe {visual_id}: stored request differs from the current request")
+    info = probe(directory / "keyframe.png")
+    if (info.width, info.height) != (request["width"], request["height"]):
+        raise TaskFailed(f"keyframe {visual_id}: decoded size differs from the request")
 
 def _ltx_preflight(bundle, capability):
     template = load_template(contained_path(bundle.project.root, bundle.models["ltx"]["workflow_templates"][capability]))
@@ -288,9 +315,14 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
         tasks.append(audio[lang])
     for vid, visual in sorted(visuals.items()):
         if visual["source"] == "keyframe":
+            request, _ = _keyframe_request(bundle, vid)
             keyframes[vid] = Task("keyframe", f"keyframe_{vid}", {"visual": sha256_obj(visual),
-                "source": compiled["research_sha256"], "canon": compiled["canon_sha256"]},
-                KEYFRAME_VERSION, _not_validated("SDXL keyframes"))
+                "source": compiled["research_sha256"], "canon": compiled["canon_sha256"],
+                "request": request["request_sha256"], "sdxl": sha256_obj(bundle.models.get("sdxl"))},
+                KEYFRAME_VERSION, lambda work: {}, max_attempts=1,
+                preflight=lambda vid=vid: (require_current(bundle), _keyframe_preflight(bundle, vid)),
+                verify=lambda directory, vid=vid: _verify_keyframe(bundle, vid, directory))
+            keyframes[vid].run = _keyframe_run(bundle, vid, scheduler.store / "pending" / f"{keyframes[vid].task_id()}.json")
             tasks.append(keyframes[vid])
     for shot in compiled["shots"]:
         visual = visuals[shot["visual_id"]]

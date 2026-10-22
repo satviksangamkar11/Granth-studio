@@ -217,6 +217,113 @@
           }
         }
       }
+    },
+    "sdxl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkpoint_file",
+        "checkpoint_sha256",
+        "checkpoint_path",
+        "workflow_template",
+        "identity_conditioning",
+        "width",
+        "height",
+        "status"
+      ],
+      "properties": {
+        "checkpoint_file": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "checkpoint_sha256": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "checkpoint_path": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "workflow_template": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_conditioning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "method",
+            "reference_slots"
+          ],
+          "properties": {
+            "method": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
+                }
+              ]
+            },
+            "reference_slots": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "width": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "height": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "unvalidated",
+            "validated",
+            "disabled"
+          ]
+        }
+      }
     }
   }
 }

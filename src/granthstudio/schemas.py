@@ -26,6 +26,7 @@ KNOWN = (
     "recovery_evidence",
     "runtime",
     "run_receipt",
+    "visual_assets",
 )
 
 

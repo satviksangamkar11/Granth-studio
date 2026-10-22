@@ -47,6 +47,7 @@ def make_project(root: Path) -> Project:
             "frame_counts": [49, 65, 81, 89, 97, 121],
             "capabilities": {"i2v": "unvalidated", "flf": "unvalidated"},
         },
+        "sdxl": yaml.safe_load((REPO / "config" / "models.yaml").read_text(encoding="utf-8"))["sdxl"],
     })
     _dump(root / "config" / "quality_gates.yaml", {
         "schema_version": 1,
@@ -58,7 +59,7 @@ def make_project(root: Path) -> Project:
         shutil.copyfile(REPO / "config" / name, root / "config" / name)
     template_dir = root / "workflows" / "comfyui"
     template_dir.mkdir(parents=True, exist_ok=True)
-    for name in ("ltx_i2v_098.json", "ltx_flf_098.json"):
+    for name in ("ltx_i2v_098.json", "ltx_flf_098.json", "sdxl_keyframe.json"):
         (template_dir / name).write_text('{"_status": "unvalidated"}', encoding="utf-8")
 
     _dump(root / "canon" / "characters.yaml", {

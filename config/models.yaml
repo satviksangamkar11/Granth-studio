@@ -18,3 +18,16 @@ ltx:
   capabilities:
     i2v: unvalidated
     flf: unvalidated
+# SDXL keyframes (frozen sections 4.4 and 6). Nothing is selected (O-006): every null is a
+# decision the user must make. Keyframe generation refuses until all are set and validated.
+sdxl:
+  checkpoint_file: null
+  checkpoint_sha256: null
+  checkpoint_path: null
+  workflow_template: workflows/comfyui/sdxl_keyframe.json
+  identity_conditioning:
+    method: null          # "none" is an explicit choice; null means not decided
+    reference_slots: 0    # reference images the workflow accepts (REFERENCE_IMAGE_1..N)
+  width: null
+  height: null
+  status: unvalidated
