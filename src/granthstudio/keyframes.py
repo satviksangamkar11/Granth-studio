@@ -19,7 +19,7 @@ from .config import Project, load_yaml
 from .errors import ConfigError, GateFailure, IntegrationUnavailable, TaskFailed
 from .ffmpeg import probe
 from .scheduler import Scheduler, Task
-from .integrity import atomic_write_json, atomic_write_bytes, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
+from .integrity import atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
 from .schemas import validate_document
 
 PROMPT_TEMPLATE_VERSION = "keyframe-prompt-v1"

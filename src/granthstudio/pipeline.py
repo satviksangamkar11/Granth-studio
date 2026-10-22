@@ -23,7 +23,8 @@ from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, validate_audio, validate_video
 from .keyframes import (approved_keyframe, keyframe_request, load_registry, require_references, sdxl_generate,
                         sdxl_preflight)
-from .integrity import atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
+from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, normalize_text, read_json, sha256_bytes,
+                        sha256_file, sha256_obj)
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
@@ -32,10 +33,10 @@ from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, Ta
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
 
-VOICE_VERSION = "reviewed-audio-import-v1"
+VOICE_VERSION = "reviewed-audio-v2"
 KEYFRAME_VERSION = "keyframe-adapter-not-validated-v0"
 TIER0_VERSION = "ffmpeg-zoompan-v2"
-ASSEMBLY_VERSION = "ffmpeg-language-edits-v2"
+ASSEMBLY_VERSION = "ffmpeg-language-edits-v3"
 MAX_ATTEMPTS = 3
 FPS = 24
 LANGUAGE_NAME = {"mr": "marathi", "hi": "hindi"}
@@ -126,7 +127,8 @@ def _audio_run(bundle, lang):
             shutil.copyfile(source, work / name)
             timings[entry["dialogue_id"]] = {"duration_s": duration, "path": name,
                 "sha256": sha256_file(work / name), "language": lang, "speaker": entry["speaker"],
-                "text_sha256": entry["audio"]["text_sha256"], "speech_reviewed_by": entry["audio"]["speech_reviewed_by"]}
+                "text_sha256": entry["audio"]["text_sha256"], "speech_reviewed_by": entry["audio"]["speech_reviewed_by"],
+                "provenance": entry["audio"].get("provenance", {"origin": "imported"})}
             files[entry["dialogue_id"]] = name
         atomic_write_json(work / "timings.json", timings)
         files["timings"] = "timings.json"
@@ -272,7 +274,17 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
         atomic_write_bytes(work / f"{stem}.srt", srt_text(cues).encode("utf-8"))
         assemble(clips, work / f"{stem}.mp4", work / "voice.wav")
         atomic_write_json(work / "edit_plan.json", {"language": lang, "duration_s": cursor, "shots": edits, "cues": cues})
-        return {"video": f"{stem}.mp4", "subtitles": f"{stem}.srt", "edit_plan": "edit_plan.json", "voice": "voice.wav"}
+        atomic_write_json(work / "provenance.json", {
+            "schema_version": 1, "language": lang, "adhyay": bundle.adhyay,
+            "research_sha256": bundle.compiled["research_sha256"],
+            "video_sha256": sha256_file(work / f"{stem}.mp4"), "subtitles_sha256": sha256_file(work / f"{stem}.srt"),
+            "voice_sha256": sha256_file(work / "voice.wav"), "edit_plan_sha256": sha256_file(work / "edit_plan.json"),
+            "lines": [{"dialogue_id": line, "text_sha256": sha256_obj(normalize_text(entries[line]["text"])),
+                       "audio_sha256": timings[line]["sha256"], "audio": timings[line]["provenance"],
+                       "translation": entries[line].get("alignment", {}).get("source")}
+                      for shot in bundle.compiled["shots"] for line in shot["dialogue_ids"]]})
+        return {"video": f"{stem}.mp4", "subtitles": f"{stem}.srt", "edit_plan": "edit_plan.json", "voice": "voice.wav",
+                "provenance": "provenance.json"}
     return run
 
 def _verify_assembly(bundle, lang, directory):

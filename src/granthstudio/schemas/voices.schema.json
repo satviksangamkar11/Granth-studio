@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "voices",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "voices"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "voices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "voice_id",
+          "speaker",
+          "language",
+          "reference_audio",
+          "reference_transcript",
+          "consent",
+          "model_version"
+        ],
+        "properties": {
+          "voice_id": {
+            "type": "string",
+            "pattern": "^voice_[a-z0-9_]+$"
+          },
+          "speaker": {
+            "type": "string",
+            "pattern": "^chr_[a-z0-9_]+$"
+          },
+          "language": {
+            "enum": [
+              "mr",
+              "hi"
+            ]
+          },
+          "reference_audio": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          },
+          "reference_transcript": {
+            "type": "string",
+            "minLength": 1
+          },
+          "consent": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "basis",
+              "granted_by",
+              "document_ref",
+              "recorded_at"
+            ],
+            "properties": {
+              "basis": {
+                "enum": [
+                  "licensed",
+                  "consented",
+                  "own_recording",
+                  "public_domain"
+                ]
+              },
+              "granted_by": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "document_ref": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "recorded_at": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          },
+          "model_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pronunciation_notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

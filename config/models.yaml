@@ -31,3 +31,24 @@ sdxl:
   width: null
   height: null
   status: unvalidated
+# Translation, speech and ASR run as external commands (argv list, no shell) that read one JSON
+# object on stdin and print one JSON object on stdout; see src/granthstudio/runners.py. Models and
+# revisions are not chosen (O-007) and no runner has ever been executed: all are NOT VALIDATED.
+translation:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 3600
+speech:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800
+asr:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800

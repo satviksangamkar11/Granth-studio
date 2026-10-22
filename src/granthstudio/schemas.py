@@ -27,6 +27,8 @@ KNOWN = (
     "runtime",
     "run_receipt",
     "visual_assets",
+    "translation_candidates",
+    "voices",
 )
 
 

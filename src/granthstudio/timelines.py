@@ -39,6 +39,28 @@ def numbers_in(text: str) -> list[str]:
     return _NUMBER.findall(normalize_text(text).translate(_DEVANAGARI_DIGITS))
 
 
+def hindi_line_problems(protected: list[dict[str, Any]], line_id: str, mr_text: str, hi_text: str) -> list[str]:
+    """Deterministic Hindi checks for one line: numeric facts and protected-term forms (frozen 5.2)."""
+    problems: list[str] = []
+    mr_text, hi_text = normalize_text(mr_text), normalize_text(hi_text)
+    if not hi_text:
+        return [f"{line_id}: Hindi text is empty"]
+    if numbers_in(mr_text) != numbers_in(hi_text):
+        problems.append(f"{line_id}: numeric facts differ (MR {numbers_in(mr_text)}, HI {numbers_in(hi_text)})")
+    for term in protected:
+        if normalize_text(term["canonical_name"]) in mr_text:
+            allowed = [normalize_text(form) for form in term.get("hi_allowed", [])]
+            if not allowed:
+                problems.append(f"{term['id']}: protected term has no Hindi form in canon")
+            elif not any(form in hi_text for form in allowed):
+                problems.append(f"{line_id}: protected term {term['id']} lacks an allowed Hindi form")
+    return problems
+
+
+def protected_terms(canon: Canon) -> list[dict[str, Any]]:
+    return [t for t in canon.documents["terminology"]["entries"] if t.get("protected")]
+
+
 def check_timelines(
     canon: Canon,
     compiled: dict[str, Any],
@@ -95,7 +117,7 @@ def check_timelines(
         elif line_id not in shots[entry["shot_id"]]["dialogue_ids"]:
             problems.append(f"{line_id}: placed in {entry['shot_id']} but not listed there")
 
-    protected = [t for t in canon.documents["terminology"]["entries"] if t.get("protected")]
+    protected = protected_terms(canon)
     for line_id, entry in hi_by_id.items():
         alignment = entry.get("alignment")
         if alignment is None:
@@ -115,17 +137,7 @@ def check_timelines(
         if (verification.get("mr_sha256") != sha256_obj(normalize_text(mr_line["text"]))
                 or verification.get("hi_sha256") != sha256_obj(normalize_text(entry["text"]))):
             problems.append(f"{line_id}: Hindi semantic review does not match current text")
-        mr_text = normalize_text(mr_line["text"])
-        hi_text = normalize_text(entry["text"])
-        if numbers_in(mr_text) != numbers_in(hi_text):
-            problems.append(f"{line_id}: numeric facts differ (MR {numbers_in(mr_text)}, HI {numbers_in(hi_text)})")
-        for term in protected:
-            if normalize_text(term["canonical_name"]) in mr_text:
-                allowed = [normalize_text(form) for form in term.get("hi_allowed", [])]
-                if not allowed:
-                    problems.append(f"{term['id']}: protected term has no Hindi form in canon")
-                elif not any(form in hi_text for form in allowed):
-                    problems.append(f"{line_id}: protected term {term['id']} lacks an allowed Hindi form")
+        problems += hindi_line_problems(protected, line_id, mr_line["text"], entry["text"])
     for language, timeline in (("mr", marathi), ("hi", hindi)):
         for entry in timeline["entries"]:
             audio = entry.get("audio")

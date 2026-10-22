@@ -128,3 +128,9 @@ def require_capability(models: dict[str, Any], capability: str, benchmarks_dir: 
             f"no passing benchmark receipt for LTX {capability} with this checkpoint: NOT VALIDATED"
         )
     return found[0]
+
+
+def dump_yaml(path: Path, data: dict[str, Any]) -> None:
+    """Atomic YAML write for human-edited files that tools update (comments are not preserved)."""
+    from .integrity import atomic_write_bytes
+    atomic_write_bytes(path, yaml.safe_dump(data, allow_unicode=True, sort_keys=False).encode("utf-8"))

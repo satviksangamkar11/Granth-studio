@@ -102,6 +102,31 @@
                   "pattern": "^[0-9a-f]{64}$"
                 }
               }
+            },
+            "source": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "origin"
+              ],
+              "properties": {
+                "origin": {
+                  "enum": [
+                    "model_candidate",
+                    "human_text"
+                  ]
+                },
+                "model": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "string"
+                },
+                "candidate_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
             }
           }
         },
@@ -153,6 +178,45 @@
             "speech_reviewed_by": {
               "type": "string",
               "minLength": 1
+            },
+            "provenance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "origin"
+              ],
+              "properties": {
+                "origin": {
+                  "enum": [
+                    "imported",
+                    "generated"
+                  ]
+                },
+                "voice_id": {
+                  "type": "string"
+                },
+                "model": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "string"
+                },
+                "request_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "asr_report_sha256": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  ]
+                }
+              }
             }
           }
         },

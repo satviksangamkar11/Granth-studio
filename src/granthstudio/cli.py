@@ -318,6 +318,72 @@ def cmd_refs_approve(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _need_confirm(args, what):
+    if not args.confirm:
+        raise ConfigError(f"approval needs --confirm after a human has {what}")
+
+
+def cmd_translate_candidates(args: argparse.Namespace) -> int:
+    from . import translation
+    project = _project(args)
+    todo = translation.generate_candidates(project, load_models(project), args.adhyay, args.execute)
+    print(f"{len(todo)} line(s) {'translated' if args.execute else 'need candidates (dry run; add --execute)'}: {', '.join(todo)}")
+    return EXIT_OK
+
+
+def cmd_translate_review(args: argparse.Namespace) -> int:
+    from . import translation
+    project = _project(args)
+    rows = translation.review_report(project, load_canon(project), args.adhyay)
+    for row in rows:
+        print(f"{row['dialogue_id']}\n  MR: {row['marathi']}\n  HI: {row['candidate']}\n  checks: {'; '.join(row['problems']) or 'deterministic checks pass (meaning NOT checked)'}")
+    return EXIT_OK
+
+
+def cmd_translate_approve(args: argparse.Namespace) -> int:
+    from . import translation
+    _need_confirm(args, "read the Marathi line and the Hindi text")
+    project = _project(args)
+    entry = translation.approve_translation(project, load_canon(project), args.adhyay, args.line, args.reviewer, args.text)
+    print(f"approved {args.line} ({entry['alignment']['match']}), bound to MR {entry['alignment']['verification']['mr_sha256'][:12]} / HI {entry['alignment']['verification']['hi_sha256'][:12]}")
+    return EXIT_OK
+
+
+def cmd_speech_voices(args: argparse.Namespace) -> int:
+    from . import speech
+    project = _project(args)
+    voices = speech.load_voices(project)
+    for voice in voices:
+        speech.voice_for(project, voice["speaker"], voice["language"])
+        print(f"{voice['voice_id']:<24} {voice['speaker']} {voice['language']} consent={voice['consent']['basis']} ({voice['consent']['document_ref']})")
+    print(f"{len(voices)} voice(s) with verified reference audio")
+    return EXIT_OK
+
+
+def cmd_speech_generate(args: argparse.Namespace) -> int:
+    from . import speech
+    project = _project(args)
+    done = speech.generate_speech(project, load_models(project), args.adhyay, args.lang, args.line or None, args.execute)
+    print(f"{len(done)} line(s) {'generated' if args.execute else 'would be generated (dry run; add --execute)'}: {', '.join(done)}")
+    return EXIT_OK
+
+
+def cmd_speech_asr(args: argparse.Namespace) -> int:
+    from . import speech
+    project = _project(args)
+    report = speech.asr_check(project, load_models(project), args.adhyay, args.lang, args.line)
+    print(f"{args.line}: similarity {report['similarity']:.3f}, missing {report['missing_words']}, extra {report['extra_words']} (diagnostic, not enforced)")
+    return EXIT_OK
+
+
+def cmd_speech_approve(args: argparse.Namespace) -> int:
+    from . import speech
+    _need_confirm(args, "listened to the generated audio")
+    audio = speech.approve_speech(_project(args), args.adhyay, args.lang, args.line, args.reviewer)
+    print(f"approved {args.line} audio {audio['sha256'][:12]} -> {audio['path']}")
+    return EXIT_OK
+
+
 def cmd_runtime_preflight(args: argparse.Namespace) -> int:
     project = _project(args)
     report = preflight(project, load_models(project), load_runtime(project), gpu_status(), ram_available_mb())
@@ -509,6 +575,43 @@ def build_parser() -> argparse.ArgumentParser:
     appr.add_argument("--reviewer", required=True)
     appr.add_argument("--confirm", action="store_true")
     appr.set_defaults(handler=cmd_refs_approve)
+
+    translate = commands.add_parser("translate", help="Hindi translation candidates and approval")
+    translate_actions = translate.add_subparsers(dest="action", required=True)
+    cand = translate_actions.add_parser("candidates", help="propose Hindi candidates with IndicTrans2")
+    cand.add_argument("adhyay", type=int)
+    cand.add_argument("--execute", action="store_true")
+    cand.set_defaults(handler=cmd_translate_candidates)
+    rev = translate_actions.add_parser("review", help="show Marathi, candidate and deterministic checks")
+    rev.add_argument("adhyay", type=int)
+    rev.set_defaults(handler=cmd_translate_review)
+    appr_t = translate_actions.add_parser("approve", help="human approval of one Hindi line, hash-bound")
+    appr_t.add_argument("adhyay", type=int)
+    appr_t.add_argument("--line", required=True)
+    appr_t.add_argument("--reviewer", required=True)
+    appr_t.add_argument("--text", help="human-edited Hindi instead of the candidate")
+    appr_t.add_argument("--confirm", action="store_true")
+    appr_t.set_defaults(handler=cmd_translate_approve)
+
+    speech_cmd = commands.add_parser("speech", help="voices, speech candidates, ASR and audio approval")
+    speech_actions = speech_cmd.add_subparsers(dest="action", required=True)
+    speech_actions.add_parser("voices", help="verify the consent/licence records and reference audio").set_defaults(
+        handler=cmd_speech_voices)
+    gen_s = speech_actions.add_parser("generate", help="generate speech candidates with IndicF5")
+    gen_s.add_argument("adhyay", type=int)
+    gen_s.add_argument("--lang", required=True, choices=["mr", "hi"])
+    gen_s.add_argument("--line", action="append")
+    gen_s.add_argument("--execute", action="store_true")
+    gen_s.set_defaults(handler=cmd_speech_generate)
+    for name, handler in (("asr", cmd_speech_asr), ("approve", cmd_speech_approve)):
+        sub_cmd = speech_actions.add_parser(name, help="ASR comparison report" if name == "asr" else "human listening approval")
+        sub_cmd.add_argument("adhyay", type=int)
+        sub_cmd.add_argument("--lang", required=True, choices=["mr", "hi"])
+        sub_cmd.add_argument("--line", required=True)
+        if name == "approve":
+            sub_cmd.add_argument("--reviewer", required=True)
+            sub_cmd.add_argument("--confirm", action="store_true")
+        sub_cmd.set_defaults(handler=handler)
 
     comfy = commands.add_parser("comfy", help="ComfyUI server compatibility and job control")
     comfy_actions = comfy.add_subparsers(dest="action", required=True)
