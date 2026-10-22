@@ -76,11 +76,13 @@ def add_keyframe_visual(project):
 
 
 @pytest.fixture
-def kf_project(approved_project, tmp_path, comfy):
+def kf_project(approved_project, tmp_path, comfy, monkeypatch):
     write_registry(approved_project)
     add_keyframe_visual(approved_project)
     approve_references(approved_project, tmp_path)
     configure_sdxl(approved_project, tmp_path, comfy)
+    from tests.test_pilot_flow import make_gpu_ready
+    make_gpu_ready(approved_project, tmp_path, monkeypatch)    # SDXL tasks are GPU tasks: synthetic ready host
     return approved_project
 
 
@@ -347,7 +349,10 @@ def test_ancestor_swapped_between_pinning_and_open_cannot_redirect_the_write(kf_
 
 
 def test_direct_scheduler_sdxl_run_on_unready_host_makes_zero_submissions(kf_project, comfy, tmp_path):
+    from granthstudio.config import dump_yaml
     from granthstudio.scheduler import Scheduler
+    runtime = load_yaml(kf_project.root / "config" / "runtime.yaml"); runtime["resources"]["min_free_vram_mb"] = 20000
+    dump_yaml(kf_project.root / "config" / "runtime.yaml", runtime)     # pins still match; only VRAM fails
     canon = load_bundle(kf_project, load_models(kf_project), 1).canon
     scheduler = Scheduler(kf.sheet_store(kf_project))
     tasks = kf.sheet_tasks(kf_project, canon, load_models(kf_project), scheduler)

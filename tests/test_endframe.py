@@ -41,10 +41,12 @@ def make_end(project, keyframe_start=False):
 
 
 @pytest.fixture
-def end_project(approved_project, tmp_path, comfy):  # noqa: F811
+def end_project(approved_project, tmp_path, comfy, monkeypatch):  # noqa: F811
     write_registry(approved_project)
     approve_references(approved_project, tmp_path)
     configure_sdxl(approved_project, tmp_path, comfy)
+    from tests.test_pilot_flow import make_gpu_ready
+    make_gpu_ready(approved_project, tmp_path, monkeypatch)    # SDXL derivation is a GPU task: synthetic ready host
     graph = {"_status": "validated", "_output_node": "9",
              "1": {"class_type": "SyntheticLoader", "inputs": {"ckpt_name": "sdxl_synth.safetensors", "text": "{{PROMPT}}",
                    "neg": "{{NEGATIVE_PROMPT}}", "seed": "{{SEED}}", "w": "{{WIDTH}}", "h": "{{HEIGHT}}",
