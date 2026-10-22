@@ -32,6 +32,7 @@
         "tier0",
         "tier1",
         "tier2",
+        "lipsync",
         "assembly"
       ]
     },

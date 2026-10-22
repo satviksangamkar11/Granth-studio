@@ -125,6 +125,8 @@ def compile_episode(
                     raise ConfigError(f"{shot_id}: cutaway target {cover['shot_id']} must carry no dialogue")
                 if target.get("coverage"):
                     raise ConfigError(f"{shot_id}: cutaway target {cover['shot_id']} must not have coverage of its own")
+            if shot.get("lip_sync") is not None and not shot["dialogue_ids"]:
+                raise GateFailure(f"{shot_id}: lip_sync needs a shot with dialogue (visible speech); dialogue_ids is empty")
             kind = TIER_KIND[shot["tier"]]
             if kind == "still":
                 if "frames" in shot or "end_visual_id" in shot:
@@ -170,6 +172,7 @@ def compile_episode(
                     "artistic_flags": list(scene.get("artistic_flags", [])),
                     "cutaway": bool(shot.get("cutaway")),
                     "coverage": shot.get("coverage"),
+                    "lip_sync": shot.get("lip_sync"),
                     "fallback": shot.get("fallback"),
                     "pilot_shot": label,
                 }

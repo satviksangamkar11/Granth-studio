@@ -279,6 +279,31 @@
               "pattern": "\\S"
             }
           }
+        },
+        "lip_sync": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "languages",
+            "reviewed_by"
+          ],
+          "properties": {
+            "languages": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "mr",
+                  "hi"
+                ]
+              }
+            },
+            "reviewed_by": {
+              "type": "string",
+              "pattern": "\\S"
+            }
+          }
         }
       }
     }
