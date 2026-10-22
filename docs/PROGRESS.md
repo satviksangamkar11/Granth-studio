@@ -227,3 +227,32 @@ CPU/synthetic evidence only; frozen architecture SHA-256 `decd0af5…f7c1` uncha
 8. **Model provenance** `runners.identity_block`: `model_identity` (verified/unverified) from runner → candidate → approval → release provenance; mismatch rejected, missing evidence stays `unverified`. Real-library `_commit_hash` behaviour remains unvalidated.
 
 Skipped: two symlink-creation tests (symlinks unavailable without privilege on this host; the junction tests ran).
+
+## Seven safety corrections after the Codex re-review (base `fa32a5a`)
+
+CPU/synthetic evidence only; frozen architecture SHA-256 `decd0af5…f7c1` unchanged. Source commit `10c007d`:
+**310 passed, 2 skipped** (both symlink-creation tests; unprivileged symlinks are unavailable here, the Windows junction tests ran).
+JUnit `benchmarks/cpu_final_seven.xml`, receipt `benchmarks/cpu_final_seven_receipt.json`.
+
+- **F4** `comfy.owned`: an OS lock (`msvcrt.locking` / `fcntl.flock`) on a persistent lock file, held for the transaction and
+  released by the OS when the process dies. No age-based takeover exists. Tests use two real child processes
+  (`tests/_comfy_child.py`): a live owner paused before writing intent is not displaced; crash before/after POST recovers
+  through reconcile with no duplicate; journal write failure submits nothing.
+- **F7** `integrity.create_new_file`: POSIX walks `dir_fd` with `O_NOFOLLOW`; Windows pins every ancestor without
+  `FILE_SHARE_DELETE` and rejects reparse points; `O_EXCL` destination; partial copies removed; fails closed elsewhere.
+  Deterministic race tests (junction planted before mkdir; ancestor swap before open) create nothing outside the root.
+- **F6** `runtime.require_host_ready` is called from the GPU task boundary (`_ltx_ready`, `sdxl_preflight`, `usable_runner`), so a
+  direct `Scheduler.run` with matching pins but failed VRAM/session submits nothing and blocks dependents.
+  `gate_gpu_tasks` still adds CPU-only refusal and the session abort.
+- **F2** `comfy.generation_evidence`: freshness is judged on the closure upstream of the designated output (fingerprint plus seed
+  inputs found on that path). A disconnected `{{SEED}}` or a seedless path cannot satisfy the retry gate. Fingerprint, seed
+  inputs and attempt are stored in the journal history and clip metrics. The fake ComfyUI now has a node-level dependency cache.
+- **F3** the established `max_attempts` is stored in the journal and is authoritative; callers can only tighten it. Only
+  `comfy reset-budget` spends more.
+- **F5** the namespace is bound to the store location. Same location keeps it across restarts/restores; a copy elsewhere forks to
+  a new namespace (`forked_from`), cannot touch parent journals, and needs `comfy adopt` (named reviewer; `--original-inactive`
+  for outstanding prompts).
+- **F8** every runner execution is recorded as content-addressed run evidence (request, response, configured and reported
+  identity, outputs hashes) under `artifacts/evidence/model_runs`. Candidates, approvals and release provenance carry
+  `model_identity` and `evidence_sha256` per candidate; approval re-verifies the evidence. This makes tampering detectable, not
+  impossible: nothing authenticates the runner. Real-library `_commit_hash` behaviour stays NOT VALIDATED.

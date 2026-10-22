@@ -119,3 +119,8 @@ Closing the final eight findings (CPU/synthetic evidence only):
 - Section 8/9: IMPLEMENTED cache-aware regeneration after rejection, durable attempt budget, exclusive journal ownership, per-store submission namespace, and per-task GPU readiness gating on every execute path. Real ComfyUI/LTX NOT VALIDATED.
 - Sections 4.3/6: IMPLEMENTED trusted-root, link-free, exclusive reference imports.
 - Sections 5.3/5.4/7: IMPLEMENTED verified/unverified model identity through candidate, approval and release provenance. IndicF5/IndicTrans2 NOT VALIDATED.
+
+Seven safety corrections after the Codex re-review (CPU/synthetic evidence only):
+- Section 8/9: IMPLEMENTED OS-enforced journal ownership (two-process tests), closure-based cache-aware regeneration, journal-persisted retry cap, location-bound store identity with explicit adoption, task-boundary GPU readiness. Real ComfyUI cache behaviour and T4 measurements NOT VALIDATED.
+- Sections 4.3/6: IMPLEMENTED directory-pinned exclusive reference creation (junction race tests ran; symlink tests skipped on this host).
+- Sections 5.3/7: IMPLEMENTED per-candidate, content-addressed model-run evidence through approval and release. IndicF5/IndicTrans2 and `_commit_hash` NOT VALIDATED.

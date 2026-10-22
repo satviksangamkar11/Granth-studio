@@ -1,0 +1,8 @@
+{
+  "source_commit": "10c007d2566a2e110bcc008dc8c95293bdd64cfa",
+  "suite": "310 passed, 2 skipped",
+  "junit": "benchmarks/cpu_final_seven.xml",
+  "junit_sha256": "d00104f9a84e2f48fca809b1309378d6ae2786f8ae89123f9408353c12b15278",
+  "architecture_sha256": "decd0af573e7b0c882d9dc5e8c98788bcecedd924a31dfc264ec1f883404f7c1",
+  "scope": "CPU/synthetic only"
+}
