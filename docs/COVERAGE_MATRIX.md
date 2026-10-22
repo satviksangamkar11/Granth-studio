@@ -113,3 +113,9 @@ Final integration audit (H1–H7, M8–M10), CPU/synthetic evidence only:
   attempt identity, never while a job may be active (H3). Real ComfyUI/LTX NOT VALIDATED.
 - Section 15 pilot: IMPLEMENTED dependency closure after assembly (H2). Runner model/revision enforcement (M10) tested
   with fake libraries only; IndicF5/IndicTrans2 NOT VALIDATED.
+
+Closing the final eight findings (CPU/synthetic evidence only):
+- Section 10: IMPLEMENTED whole-placement rule for cutaways that carry the sole credit for a required action (per language, also on resume).
+- Section 8/9: IMPLEMENTED cache-aware regeneration after rejection, durable attempt budget, exclusive journal ownership, per-store submission namespace, and per-task GPU readiness gating on every execute path. Real ComfyUI/LTX NOT VALIDATED.
+- Sections 4.3/6: IMPLEMENTED trusted-root, link-free, exclusive reference imports.
+- Sections 5.3/5.4/7: IMPLEMENTED verified/unverified model identity through candidate, approval and release provenance. IndicF5/IndicTrans2 NOT VALIDATED.

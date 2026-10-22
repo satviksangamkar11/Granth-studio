@@ -211,3 +211,19 @@ Full CPU suite at source revision `5f8152d`: **279 passed, 2 skipped** (the syml
 
 Remaining external limitations: the real IndicF5/IndicTrans2/ComfyUI/LTX/lip-sync runtimes were not run; the M10
 evidence field (`_commit_hash`) is verified only against fake libraries.
+
+## Closing the final eight audit findings (base `6998608`)
+
+CPU/synthetic evidence only; frozen architecture SHA-256 `decd0af5…f7c1` unchanged. Source commit `8688853`:
+**295 passed, 2 skipped**. JUnit `benchmarks/cpu_final_eight.xml`, receipt `benchmarks/cpu_final_eight_receipt.json`.
+
+1. **Trimmed cutaways** `episodes.trimmed_required_actions`: a cutaway that is the only credit for a required action must be placed whole, checked per language at assembly and on resume (`source_duration_s` in the edit plan).
+2. **Rejected-output cache** `comfy.generation_seed`: after a rejection the sampler seed is offset by the rejection count and recorded; an identical rejected graph is refused (ComfyUI caches by node inputs, not prompt id).
+3. **Durable budget** `comfy.execute(max_attempts)` counts POSTs in the journal; exhaustion refuses until `comfy reset-budget --reviewer --confirm`. Polling/reconcile never spend it.
+4. **Ownership** `comfy.owned`: O_EXCL lock file around the decision+POST; a lock older than 300 s is moved aside, and an owner that died after intent leaves state `submitting`, which still forces reconcile.
+5. **Namespace** `comfy.store_namespace`: per-store id in tokens and `extra_data`; reconcile only matches its own namespace.
+6. **GPU readiness** `runtime.gate_gpu_tasks` on `run`, `session` (aborts), `refs generate` and `pilot run`; unready or CPU-only runs turn GPU tasks into `not_validated`; LTX preflight also checks source pins.
+7. **Reference paths** `integrity.create_new_file`/`reject_link_components`: anchored to the artifact root, no link/junction components, O_EXCL destination, link-count check.
+8. **Model provenance** `runners.identity_block`: `model_identity` (verified/unverified) from runner → candidate → approval → release provenance; mismatch rejected, missing evidence stays `unverified`. Real-library `_commit_hash` behaviour remains unvalidated.
+
+Skipped: symlink-creation test when unprivileged and one media-tool-dependent case (see JUnit).
