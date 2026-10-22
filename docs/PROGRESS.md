@@ -256,3 +256,12 @@ JUnit `benchmarks/cpu_final_seven.xml`, receipt `benchmarks/cpu_final_seven_rece
   identity, outputs hashes) under `artifacts/evidence/model_runs`. Candidates, approvals and release provenance carry
   `model_identity` and `evidence_sha256` per candidate; approval re-verifies the evidence. This makes tampering detectable, not
   impossible: nothing authenticates the runner. Real-library `_commit_hash` behaviour stays NOT VALIDATED.
+
+## Round 2 after the seven-fix acceptance review (base `46f1ab2`)
+
+Source commit `6b0b999`: **315 passed, 3 skipped** (two symlink-creation tests, plus a POSIX-only parent-swap sentinel test that cannot run on this Windows host, so POSIX behaviour remains untested). JUnit `benchmarks/cpu_final_round2.xml`, receipt `benchmarks/cpu_final_round2_receipt.json`.
+
+- F7: POSIX length/validation/cleanup now use the open descriptor and pinned parent (no pathname after creation).
+- F2: freshness ignores the save node's own fields; seed inputs are read from upstream nodes only.
+- F5: BASE plain-text namespaces migrate in place; adoption keeps `submission_namespace` so an uncertain submission is still found.
+- F8: approval recomputes the candidate text hash; evidence also binds request inputs (speech request/text hash, translation Marathi hash); release re-verifies evidence for generated audio and model-candidate translations.
