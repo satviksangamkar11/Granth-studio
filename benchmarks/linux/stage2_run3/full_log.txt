@@ -1,0 +1,13 @@
+................................s........s.............................. [ 22%]
+........................................................................ [ 44%]
+........................................................................ [ 67%]
+........................................................................ [ 89%]
+.................................                                        [100%]
+---- generated xml file: /kaggle/working/linux_cpu_evidence/junit_full.xml -----
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_claude_findings.py:306: case-insensitive paths are a Windows property
+SKIPPED [1] tests/test_claude_findings.py:385: Windows junctions require Windows
+319 passed, 2 skipped in 1366.36s (0:22:46)
+......                                                                   [100%]
+- generated xml file: /kaggle/working/linux_cpu_evidence/junit_supplementary.xml -
+6 passed in 0.81s

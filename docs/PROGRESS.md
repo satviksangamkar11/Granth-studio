@@ -324,3 +324,11 @@ ComfyUI port could be accepted -> port must be free, launched process must stay 
 computes and validates it before any clone/download and also requires `LTX_EXPECTED_COMMIT`. Others: converter now refuses unconsumed/misdirected UI wires and wired-widget mismatches; verifier rejects
 negative slots and judges the seed on the output's dependency path; the upload reply must echo the requested name; a resumed identical run is accepted. Also from source reading: LTXV runs fp32 on a T4
 (research section 5), so `precision` accepts fp16|bf16|fp32 and the first test records `fp32` as expected; ComfyUI-LTXVideo is no longer installed as a node pack.
+
+## Stage 2 final (pre-download) status — code commit `0860a32df877adc57d7712648c001ce3f147140a`
+
+- Windows CPU suite: **390 passed, 4 skipped** (`benchmarks/cpu_stage2d.xml`). Linux CPU run on Kaggle (kernel version 4, baseline `f8d5d02` + harness at this commit): **LINUX_CPU_PASS_ON_KAGGLE**,
+  319 passed / 2 Windows-only skips, 10/10 required POSIX tests, **6/6 supplementary** including `port_owner.py` against the real Linux /proc (`benchmarks/linux/stage2_run3/`).
+- Fresh Kaggle bundle published: private dataset `sangeetasangamkar/granthstudio-cpu-baseline`, branch tip `0860a32df877adc57d7712648c001ce3f147140a`, bundle SHA-256 `0da9607e…49df10` (538 708 bytes). It is a snapshot at that commit; this docs/evidence commit is not in it and the bundle must not be rebuilt before the run.
+- Codex: Stage 2 narrow reviews FAIL -> fixes -> PASS WITH ISSUES; final delta check: SAFE FOR THE FIRST T4 TEST = yes (one low, non-blocking note on `port_owner.py` exit codes for unreadable /proc tables).
+- Nothing downloaded; no GPU use; the LTXV licence has not been accepted by a human; all real capabilities remain NOT VALIDATED.

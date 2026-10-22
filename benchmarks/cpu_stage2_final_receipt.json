@@ -1,0 +1,17 @@
+{
+  "code_commit": "0860a32df877adc57d7712648c001ce3f147140a",
+  "windows_cpu_suite": "390 passed, 4 skipped",
+  "junit": "benchmarks/cpu_stage2d.xml",
+  "junit_sha256": "8e144ddc56af874211b32be12ad68210c15485b4a9c182a2c65e665e1dc5fdc9",
+  "linux_kaggle_run": "LINUX_CPU_PASS_ON_KAGGLE (baseline f8d5d02 + harness at the code commit): 319 passed, 2 Windows-only skips, 10/10 required POSIX, 6/6 supplementary incl. port_owner on real /proc",
+  "linux_zip": "benchmarks/linux/stage2_run3/linux_cpu_evidence.zip",
+  "linux_zip_sha256": "895da9e5232a23a2fa62ecc4be4ae78726c6fce7d22f6ee87e213c77dc53e11a",
+  "bundle": {
+    "dataset": "sangeetasangamkar/granthstudio-cpu-baseline (private)",
+    "branch_tip": "0860a32df877adc57d7712648c001ce3f147140a",
+    "bundle_sha256": "0da9607e19e0dfdf259699880e7889cb8a82810a0bd3508b81567a88a249df10",
+    "bytes": 538708
+  },
+  "codex": "narrow reviews of 5077465..ecd231d (FAIL, 8 findings), 48c9111 (FAIL after specific fixes), 26b7261 (PASS WITH ISSUES), 0860a32 delta (PASS WITH ISSUES, safe for first T4 test: yes)",
+  "scope": "CPU/fake-server/Linux CPU only; no GPU, model, real ComfyUI; nothing downloaded"
+}
