@@ -26,7 +26,14 @@ def ready_runtime(project, tmp_path, **resources):
                             "min_session_remaining_s": 600, **resources}
     runtime["storage"] = {"provider": "local_dir", "path": str(tmp_path / "durable")}
     runtime["python_packages"] = {"pytest": importlib.metadata.version("pytest")}
+    runtime["sources"] = {**runtime["sources"], "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40}
     return runtime
+
+
+def pinned_models(project):
+    models = load_models(project)
+    models["ltx"]["runtime"] = {**(models["ltx"].get("runtime") or {}), "comfyui_commit": "a" * 40, "node_pack_commit": "b" * 40}
+    return models
 
 
 def test_gpu_status_parses_nvidia_smi_and_absence_is_not_measured():
@@ -49,7 +56,7 @@ def test_shipped_runtime_config_is_not_gpu_ready(project):
 def test_preflight_passes_only_with_measured_minimums(project, tmp_path, monkeypatch):
     monkeypatch.setenv("GRANTHSTUDIO_SESSION_DEADLINE", "2999-01-01T00:00:00+00:00")
     runtime = ready_runtime(project, tmp_path)
-    models = load_models(project)
+    models = pinned_models(project)
     assert preflight(project, models, runtime, T4, 16000)["gpu_ready"] is True
     low = preflight(project, models, runtime, [{**T4[0], "memory_free_mb": 1000.0}], 16000)
     assert low["gpu_ready"] is False and low["checks"]["free_vram"]["status"] == "fail"
@@ -162,3 +169,16 @@ def test_session_refuses_without_storage_and_exports_after_run(approved_project,
     assert main(["--root", root, "session", "1", "--cpu-only"]) in (2, 3)
     manifest = json.loads((tmp_path / "durable" / "artifacts" / "export_manifest.json").read_text())
     assert any(name.startswith("runs/") for name in manifest["files"])
+
+
+def test_source_pin_mismatch_blocks_gpu_readiness(project, tmp_path, monkeypatch):
+    monkeypatch.setenv("GRANTHSTUDIO_SESSION_DEADLINE", "2999-01-01T00:00:00+00:00")
+    runtime, models = ready_runtime(project, tmp_path), pinned_models(project)
+    assert preflight(project, models, runtime, T4, 16000)["gpu_ready"] is True
+    runtime["sources"]["node_pack_commit"] = "c" * 40
+    report = preflight(project, models, runtime, T4, 16000)
+    assert report["checks"]["sources"]["status"] == "fail" and report["gpu_ready"] is False
+    with pytest.raises(IntegrationUnavailable, match="sources.*node_pack_commit"):
+        require_gpu_ready(report)
+    models["ltx"]["runtime"] = None  # unrecorded pins are not "ready" either
+    assert preflight(project, models, ready_runtime(project, tmp_path), T4, 16000)["gpu_ready"] is False

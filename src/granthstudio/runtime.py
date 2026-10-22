@@ -23,7 +23,7 @@ from .errors import ConfigError, IntegrationUnavailable, TaskFailed
 from .integrity import atomic_write_json, contained_path, read_json, sha256_file
 from .schemas import validate_document
 
-GPU_CHECKS = ("gpu", "free_vram", "ram", "disk", "session", "python_packages", "storage", "workers")
+GPU_CHECKS = ("gpu", "free_vram", "ram", "disk", "session", "python_packages", "storage", "workers", "sources")
 DEADLINE_ENV = "GRANTHSTUDIO_SESSION_DEADLINE"
 
 
@@ -159,8 +159,8 @@ def preflight(project: Project, models: dict[str, Any], runtime: dict[str, Any],
 
 def require_gpu_ready(report: dict[str, Any]) -> None:
     if not report["gpu_ready"]:
-        failing = {k: v["status"] for k, v in report["checks"].items()
-                   if k in GPU_CHECKS and v["status"] != "pass"}
+        failing = {k: v["status"] + (f" ({v['detail']})" if k == "sources" and v.get("detail") else "")
+                   for k, v in report["checks"].items() if k in GPU_CHECKS and v["status"] != "pass"}
         raise IntegrationUnavailable(f"GPU preflight not passed: {failing}: NOT VALIDATED")
 
 
