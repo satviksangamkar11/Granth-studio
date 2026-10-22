@@ -89,6 +89,13 @@ required_nodes:
   - {class: StringToFloatList, provider: kjnodes, status: verified_in_source}
   - {class: FloatToSigmas, provider: kjnodes, status: verified_in_source}
   - {class: VHS_VideoCombine, provider: videohelpersuite, status: verified_in_source}
+runtime_expectations:      # derived from ComfyUI source, NOT measured; the ComfyUI log excerpt in the test receipt is the evidence
+  gpu: Tesla T4 (exactly one)
+  diffusion_dtype: float32          # LTXV supports bfloat16/float32 only; a T4 has no native bf16 (docs/LTX_098_RESEARCH.md section 5)
+  vae_dtype: float32
+  text_encoder_dtype: float16
+  text_encoder_offload: automatic partial loading; the encoder is moved off the GPU before the DiT runs
+  extra_model_artifacts: none
 expected_output:
   designated_output_node_class: VHS_VideoCombine     # emits an mp4 under 'gifs' in /history; comfy.select_video accepts 'gifs'
   container: mp4

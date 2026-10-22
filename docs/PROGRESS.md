@@ -315,3 +315,12 @@ model, ComfyUI or Kaggle GPU run. All real model capabilities remain NOT VALIDAT
 - Tools: `scripts/verify_ltx_pins.py` gained API-workflow structure checks; `scripts/ltx_first_test.py` runs one Tier-1 shot through the existing pipeline;
   `scripts/kaggle/ltx_first_test.sh` is the guarded GPU command (refuses without `LTX_DOWNLOAD_APPROVED`).
 - Open: B1 (0.9.6 workflow vs 0.9.8 checkpoint), live proof of the converter, download approval (docs/LTX_098_DOWNLOAD_APPROVAL.md), O-004/O-005, T4 fit, unpinned custom-node requirements.
+
+### Stage 2 review round (Codex narrow review of `5077465..ecd231d`: FAIL, 4 blocking + 4 other findings; all 8 fixed)
+
+Blocking: (1) `ltx_first_test.py` could submit without approval/one T4/static verification -> `main()` now enforces `LTX_DOWNLOAD_APPROVED`, exactly one Tesla T4, no `--skip-static-verify`,
+a valid session deadline; (2) dirty pinned checkouts were used before the cleanliness check -> every clone is checked clean immediately, before any install or launch; (3) an unrelated server on the
+ComfyUI port could be accepted -> port must be free, launched process must stay alive, argv marker checked when reported; (4) the documented command lacked the session deadline -> the script
+computes and validates it before any clone/download and also requires `LTX_EXPECTED_COMMIT`. Others: converter now refuses unconsumed/misdirected UI wires and wired-widget mismatches; verifier rejects
+negative slots and judges the seed on the output's dependency path; the upload reply must echo the requested name; a resumed identical run is accepted. Also from source reading: LTXV runs fp32 on a T4
+(research section 5), so `precision` accepts fp16|bf16|fp32 and the first test records `fp32` as expected; ComfyUI-LTXVideo is no longer installed as a node pack.

@@ -598,3 +598,15 @@ def test_upload_image_stages_content_addressed_names_and_exact_bytes(comfy, tmp_
     assert backend(comfy).upload_image(other) != name                      # a changed image never reuses a name
     with pytest.raises(TaskFailed, match="unsupported image type"):
         backend(comfy).upload_image(tmp_path / "x.exe")
+
+
+@pytest.mark.parametrize("reply", [{"name": "unrelated.png", "subfolder": "", "type": "input"}, {"name": "X", "subfolder": "sub", "type": "input"},
+                                   {"name": "X", "subfolder": "", "type": "temp"}, {"subfolder": "", "type": "input"}, ["not", "a", "dict"]])
+def test_upload_reply_that_differs_from_the_request_is_refused(comfy, tmp_path, monkeypatch, reply):
+    image = tmp_path / "a.png"; image.write_bytes(b"png-ish")
+    wanted = backend(comfy).upload_image(image)                             # the honest fake reply is accepted
+    b = backend(comfy)
+    answer = json.dumps(reply if not isinstance(reply, dict) or reply.get("name") != "X" else {**reply, "name": wanted})
+    monkeypatch.setattr(b, "_request", lambda *a, **k: answer.encode())
+    with pytest.raises(TaskFailed, match="did not stage"):
+        b.upload_image(image)

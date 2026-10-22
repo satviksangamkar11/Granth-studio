@@ -336,9 +336,10 @@ class ComfyBackend:
                      + crlf + b"Content-Type: application/octet-stream" + crlf + crlf + data + crlf)
         parts.append(f"--{boundary}--".encode() + crlf)
         answer = json.loads(self._request("POST", "/upload/image", b"".join(parts), f"multipart/form-data; boundary={boundary}"))
-        if answer.get("type") != "input" or not answer.get("name"):
-            raise TaskFailed(f"ComfyUI did not stage {name} in its input folder: {answer}")
-        return f"{answer['subfolder']}/{answer['name']}" if answer.get("subfolder") else answer["name"]
+        if not (isinstance(answer, dict) and answer.get("type") == "input" and answer.get("name") == name
+                and answer.get("subfolder", "") in ("", None)):
+            raise TaskFailed(f"ComfyUI did not stage {name} at the root of its input folder as requested: {answer}")   # never trust a renamed reply
+        return name
 
     def system_stats(self) -> dict[str, Any]:
         return json.loads(self._request("GET", "/system_stats"))

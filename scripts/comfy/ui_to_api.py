@@ -81,9 +81,21 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
             raise ConversionError(f"node {node_id}: no signature for class {node['type']}")
         values = list(node.get("widgets_values") or [])
         wired = {}
-        for slot in node.get("inputs", []):
-            if slot.get("link") is not None:
-                wired[slot["name"]] = slot["link"]
+        for index, slot in enumerate(node.get("inputs", [])):
+            link_id = slot.get("link")
+            if link_id is None:
+                continue
+            if link_id not in links:
+                raise ConversionError(f"node {node_id} input {slot['name']}: link {link_id} is not declared")
+            _, src, src_slot, dst, dst_slot, _ = links[link_id]
+            if str(dst) != node_id or dst_slot != index:
+                raise ConversionError(f"node {node_id} input {slot['name']}: link {link_id} ends at node {dst} slot {dst_slot}, not here (slot {index})")
+            source = next((n for n in ui["nodes"] if str(n["id"]) == str(src)), None)
+            if source is None or source["type"] in UI_ONLY:
+                raise ConversionError(f"node {node_id} input {slot['name']}: link {link_id} comes from a UI-only or missing node")
+            if src_slot >= len(source.get("outputs", [])):
+                raise ConversionError(f"node {node_id} input {slot['name']}: link {link_id} uses output slot {src_slot} that node {src} lacks")
+            wired[slot["name"]] = (str(src), src_slot)
         inputs: dict[str, Any] = {}
         cursor = 0
         plan = list(sig["inputs"])
@@ -92,14 +104,11 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
             entry = plan[index]
             index += 1
             if entry["kind"] == "link":
-                link_id = wired.get(entry["name"])
-                if link_id is None:
-                    continue                        # optional and unconnected
-                _, src, src_slot, dst, _, _ = links[link_id]
-                if str(src) not in nodes:
-                    raise ConversionError(f"node {node_id} input {entry['name']}: link {link_id} comes from a UI-only node")
-                inputs[entry["name"]] = [str(src), src_slot]
-                continue
+                if entry["name"] in wired:
+                    inputs[entry["name"]] = list(wired.pop(entry["name"]))
+                continue                            # optional and unconnected
+            if entry["name"] in wired:
+                raise ConversionError(f"node {node_id} {node['type']}: input {entry['name']} is wired in the UI but the signature treats it as a widget")
             if cursor < len(values):
                 inputs[entry["name"]] = values[cursor]
                 cursor += 1
@@ -112,6 +121,8 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
                 report.append(f"DEFAULTED node {node_id} {node['type']}.{entry['name']} = {entry['default']!r} (not stored in the UI file)")
             else:
                 raise ConversionError(f"node {node_id} {node['type']}: no stored value for widget {entry['name']}")
+        if wired:
+            raise ConversionError(f"node {node_id} {node['type']}: UI connection(s) {sorted(wired)} match no signature input (a wrong name would drop a wire)")
         leftover = len(values) - cursor
         if leftover != sig.get("ui_trailing", 0):
             raise ConversionError(f"node {node_id} {node['type']}: {leftover} unexplained widget value(s), signature allows {sig.get('ui_trailing', 0)}")

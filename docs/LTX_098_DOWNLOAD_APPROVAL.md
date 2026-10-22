@@ -13,6 +13,8 @@ Total download ≈ **16.1 GB** of weights plus four small git checkouts. No othe
 | 1 | `ltxv-2b-0.9.8-distilled.safetensors` | `Lightricks/LTX-Video` @ `8984fa25007f376c1a299016d0957a37a2f797bb` | 6 340 744 492 (6.3 GB) | `76aa8c4786af752fa6f951947129d5290c3c6c0b2fadcadea6b5e114ae2cad8f` | `ComfyUI/models/checkpoints/` | **LTXV Open Weights License 0.X** (Lightricks): commercial use free below US$10 M annual revenue, otherwise a paid agreement; use restrictions pass to downstream users; disclose machine-generated content |
 | 2 | `t5xxl_fp16.safetensors` | `comfyanonymous/flux_text_encoders` @ `6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5` | 9 787 841 024 (9.8 GB) | `6e480b09fae049a72d2a8c5fbccb8d3e92febeb233bbe9dfe7256958a9167635` | `ComfyUI/models/text_encoders/` | Apache-2.0 (HF metadata) |
 
+Confirmed a third time on 2026-10-23 by HTTP `HEAD` on the pinned `resolve/<revision>/<file>` URLs (no body downloaded): `X-Repo-Commit` equals the pinned revision, `X-Linked-Size` and `X-Linked-ETag` (the SHA-256) equal the table for both files.
+
 The VAE is **embedded in file 1** (the official workflow reads it from the checkpoint loader); there is no VAE download.
 
 ## B. Code (git, pinned by full commit, verified after checkout)
@@ -27,28 +29,35 @@ The VAE is **embedded in file 1** (the official workflow reads it from the check
 Python requirements of these four packs are **not version-pinned** by their sources; the script records `pip freeze` with the evidence.
 GPL-3.0 components are used as separate processes/nodes on a rented notebook; no redistribution is planned (legal review is the owner's call).
 
-## C. Conditions of this approval
+## C. Conditions of this approval (as amended by the owner's "approve with edits" decision)
 
-1. Run only after `LINUX_CPU_PASS_ON_KAGGLE` is accepted (done for the baseline) and on **one Tesla T4** (the script checks).
-2. The workflow is a **candidate**: the 0.9.6-named checkpoint in the official example is substituted by the 0.9.8 file. This is the
-   one recorded, unverified assumption (B1); the run itself is its test. A decoded clip still does not validate the capability.
-3. Step 6 of the script rebuilds the API workflow from the official file and the live `/object_info`; anything other than IDENTICAL
-   to the committed candidate aborts before inference.
-4. FLF stays disabled; no recovery/retry test in this run; only a synthetic test-pattern image and the synthetic project; no research approval.
-5. Estimated GPU time: unknown (B13). Weights alone take a large share of a session; budget one full session and expect to rerun.
+1. **Reviewed code only.** The GPU command pins the GranthStudio commit (`LTX_EXPECTED_COMMIT`); it must equal the commit that passed the narrow Codex
+   review of Stage 2 and is contained in the refreshed Kaggle bundle (BUNDLE_INFO.json `branch_tip`). A different or dirty checkout is refused.
+2. **The responsible human accepts the LTXV Open Weights License 0.X** (and has read the ComfyUI-LTXVideo LICENSE) before section E is signed; the script has no way to check this.
+3. Everything that can be refused is refused before the first clone or download (approval, commit, clean tree, session deadline, ffmpeg, 40 GB disk, one Tesla T4, free port).
+4. The workflow is a **candidate**: the 0.9.6-named checkpoint in the official example is substituted by the 0.9.8 file. This is a compatibility experiment (B1), not an
+   official configuration; the model card lists no workflow for the 2B 0.9.8 distilled model. A decoded clip still does not validate the capability.
+5. **Precision (T4):** expected fp32 diffusion model and fp32 VAE, fp16 text encoder with automatic offload (research section 5). Recorded in the receipt together with a
+   ComfyUI log excerpt and an nvidia-smi VRAM trace. A hard out-of-memory is a FAIL, not a reason to change flags silently.
+6. Step 6 of the script rebuilds the API workflow from the official file and the live `/object_info`; anything other than IDENTICAL aborts before inference.
+7. FLF stays disabled; no batch or production rendering; only a synthetic test-pattern image and the synthetic project; no research approval; no Granth scenes.
+8. **After the first decoded clip** (a separate, later step, not in this script): one controlled output-rejection test must show the real sampler executing again with a
+   changed effective seed, plus recovery evidence.
+9. Estimated GPU time: unknown (B13); weights and fp32 sampling both take real time. Plan one full session and expect to rerun.
 
 ## D. Exact command for the first Kaggle T4 compatibility test
 
-Kaggle notebook: accelerator **GPU T4 x1**, Internet **On**, dataset `granthstudio-cpu-baseline` attached (or any clone of this branch).
+Kaggle notebook: accelerator **GPU T4 x1**, Internet **On**, the refreshed dataset `granthstudio-cpu-baseline` attached. `<SHA>` is the reviewed commit printed in
+`BUNDLE_INFO.json` (`branch_tip`) and recorded in `docs/PROGRESS.md`.
 
 ```bash
 cd /kaggle/working && git clone -q -b sprint/remaining-pipeline /kaggle/input/granthstudio-cpu-baseline/granthstudio.bundle granthstudio
 cd granthstudio && pip install -q pyyaml jsonschema pytest
-LTX_DOWNLOAD_APPROVED="<approver name>" bash scripts/kaggle/ltx_first_test.sh
+LTX_DOWNLOAD_APPROVED="<approver name>" LTX_EXPECTED_COMMIT="<SHA>" SESSION_MINUTES=240 bash scripts/kaggle/ltx_first_test.sh
 ```
 
-Evidence: `/kaggle/working/ltx_first_test_evidence.tgz` (receipt, pin report, live node inventory, rebuilt workflow, converter report, ComfyUI log,
-pip freeze, nvidia-smi before/after, the clip). Verdicts: `PASS` (one clip decoded through the pipeline, capability still unvalidated),
+Evidence: `/kaggle/working/ltx_first_test_evidence.tgz` (receipt, pin report, live node inventory, rebuilt workflow, converter report, ComfyUI log and launch arguments,
+pip freeze, nvidia-smi before/after, VRAM trace, the journal, the clip). Verdicts: `PASS` (one clip decoded through the pipeline, capability still unvalidated),
 `FAIL` (task failed or wrong dimensions), `NOT_VALIDATED` (pipeline refused, e.g. unready host), `NOT_RUN` (a precondition failed before any request).
 
 ## E. Approval
@@ -56,3 +65,4 @@ pip freeze, nvidia-smi before/after, the clip). Verdicts: `PASS` (one clip decod
 | Decision | Name | Date |
 |---|---|---|
 | Approve downloads A and B as listed, and a Kaggle T4 session to run section D (yes/no, with edits) | | |
+| LTXV Open Weights License 0.X read and accepted by the responsible person | | |

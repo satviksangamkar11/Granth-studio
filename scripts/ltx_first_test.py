@@ -51,8 +51,11 @@ def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa:
     from tests.conftest import FIXED_TIME, make_project
 
     root = args.workdir / "project"
-    project = make_project(root)
-    approve(project, 1, "synthetic-ltx-first-test", FIXED_TIME)       # synthetic fixture research only; never Granth content
+    if (root / "config" / "project.yaml").is_file():                   # rerun in the same workdir: keep the project (and its receipts) as it is
+        project = load_project(root)
+    else:
+        project = make_project(root)
+        approve(project, 1, "synthetic-ltx-first-test", FIXED_TIME)   # synthetic fixture research only; never Granth content
     template = root / "workflows" / "comfyui" / "ltx_i2v_098.json"
     template.write_bytes((ROOT / pins["workflow"]["api_candidate"]).read_bytes())   # project-local copy; the shipped stub stays a stub
     checkpoint = next(f for f in pins["files"] if f["role"].startswith("ltx_checkpoint"))
@@ -61,7 +64,7 @@ def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa:
     ckpt_sha = sha256_file(ckpt_path)                                    # hashed from the real bytes, never copied from the pins
     models = load_models(project)
     models["comfyui"]["base_url"] = args.comfy_url
-    models["ltx"].update(checkpoint_file=checkpoint["name"], checkpoint_sha256=ckpt_sha, precision="fp16",
+    models["ltx"].update(checkpoint_file=checkpoint["name"], checkpoint_sha256=ckpt_sha, precision=args.precision,
                          capabilities={"i2v": "unvalidated", "flf": "disabled"})   # FLF stays off; i2v stays unvalidated
     models["ltx"]["workflow_templates"] = {"i2v": "workflows/comfyui/ltx_i2v_098.json", "flf": "workflows/comfyui/ltx_flf_098.json"}
     models["ltx"]["runtime"] = {
@@ -69,7 +72,7 @@ def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa:
                   "text_encoder": {"path": str(enc_path), "sha256": sha256_file(enc_path)}},
         "comfyui_commit": git_head(args.source["comfyui"]) if "comfyui" in args.source else pins["sources"]["comfyui"]["commit"],
         "node_pack_commit": git_head(args.source["ltxvideo_nodes"]) if "ltxvideo_nodes" in args.source else pins["sources"]["ltxvideo_nodes"]["commit"],
-        "gpu": "T4", "precision": "fp16", "width": args.width, "height": args.height}
+        "gpu": "T4", "precision": args.precision, "width": args.width, "height": args.height}
     dump_yaml(root / "config" / "models.yaml", models)
     runtime = yaml.safe_load((root / "config" / "runtime.yaml").read_text(encoding="utf-8"))
     runtime["sources"].update(comfyui_commit=models["ltx"]["runtime"]["comfyui_commit"], node_pack_commit=models["ltx"]["runtime"]["node_pack_commit"],
@@ -115,7 +118,7 @@ def static_verification(args: argparse.Namespace, workflow_source: Path | None, 
     return {"command": cmd, "exit": done.returncode, "output": done.stdout[-6000:]}
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--workdir", required=True, type=Path)
     parser.add_argument("--comfy-url", default="http://127.0.0.1:8188")
@@ -125,31 +128,85 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--source", action="append", default=[], metavar="NAME=PATH", help=f"git checkouts: {', '.join(SOURCES)}")
     parser.add_argument("--node-inventory", type=Path, help="saved /object_info of the running server")
     parser.add_argument("--official-workflow", type=Path, help="the official ui workflow file inside the LTXVideo checkout")
+    parser.add_argument("--comfy-log", type=Path, help="ComfyUI's log; dtype/offload lines are copied into the receipt")
     parser.add_argument("--width", type=int, default=768)
     parser.add_argument("--height", type=int, default=512)
+    parser.add_argument("--precision", default="fp32", choices=["fp16", "bf16", "fp32"],
+                        help="EXPECTED working precision recorded in the config. On a T4 ComfyUI picks fp32 for LTXV (bf16/fp32 only, no native bf16); the log is the evidence")
     parser.add_argument("--min-free-vram-mb", type=float, default=10000)
     parser.add_argument("--min-ram-mb", type=float, default=12000)
     parser.add_argument("--min-disk-gb", type=float, default=30)
     parser.add_argument("--min-session-s", type=float, default=1800)
-    parser.add_argument("--skip-static-verify", action="store_true", help="CPU plumbing tests only: the verdict can then never be PASS")
+    parser.add_argument("--skip-static-verify", action="store_true", help="CPU plumbing tests only (never accepted together with --execute by main())")
     parser.add_argument("--execute", action="store_true", help="really submit to ComfyUI (GPU); without it only prepare and print the plan")
-    args = parser.parse_args(argv)
+    return parser
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    args = build_parser().parse_args(argv)
     args.source = {k: Path(v) for k, v in (item.split("=", 1) for item in args.source)}
-    models_dir = args.models_dir
-    args.checkpoint_path = args.checkpoint_path or models_dir / "models" / "checkpoints" / "ltxv-2b-0.9.8-distilled.safetensors"
-    args.text_encoder_path = args.text_encoder_path or models_dir / "models" / "text_encoders" / "t5xxl_fp16.safetensors"
+    args.checkpoint_path = args.checkpoint_path or args.models_dir / "models" / "checkpoints" / "ltxv-2b-0.9.8-distilled.safetensors"
+    args.text_encoder_path = args.text_encoder_path or args.models_dir / "models" / "text_encoders" / "t5xxl_fp16.safetensors"
+    return args
+
+
+def execution_gate_problems(args: argparse.Namespace) -> list[str]:
+    """Refusals that apply to every real submission, whichever way this file is started."""
+    import os
+    problems = []
+    if not os.environ.get("LTX_DOWNLOAD_APPROVED", "").strip():
+        problems.append("LTX_DOWNLOAD_APPROVED is not set (the signed docs/LTX_098_DOWNLOAD_APPROVAL.md section E)")
+    if args.skip_static_verify:
+        problems.append("--skip-static-verify cannot be combined with --execute")
+    from granthstudio.runtime import gpu_status, session_remaining_s
+    gpus = gpu_status()
+    if gpus is None or len(gpus) != 1 or "Tesla T4" not in gpus[0]["name"]:
+        problems.append(f"exactly one Tesla T4 is required, saw {[g['name'] for g in gpus] if gpus else gpus}")
+    try:
+        remaining = session_remaining_s()
+    except Exception as exc:                       # an unparsable deadline is a refusal, not a crash
+        remaining = None
+        problems.append(f"invalid GRANTHSTUDIO_SESSION_DEADLINE: {exc}")
+    if remaining is None or remaining < args.min_session_s:
+        problems.append(f"GRANTHSTUDIO_SESSION_DEADLINE is missing/invalid or leaves {remaining} s (< {args.min_session_s})")
+    return problems
+
+
+def comfy_log_excerpt(path: Path | None, limit: int = 120) -> list[str]:
+    if path is None or not path.is_file():
+        return []
+    keys = ("dtype", "vram", "device", "offload", "loaded", "lowvram", "cast", "memory")
+    return [line.rstrip()[:240] for line in path.read_text(encoding="utf-8", errors="replace").splitlines()
+            if any(k in line.lower() for k in keys)][:limit]
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    return _run(args, enforce_gates=args.execute)
+
+
+def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
+    """Everything after argument parsing. ``enforce_gates=False`` exists only so CPU plumbing tests can drive a fake server; main() always
+    enforces the gates for --execute."""
     args.workdir.mkdir(parents=True, exist_ok=True)
     pins = yaml.safe_load((ROOT / "config" / "ltx_098_pins.yaml").read_text(encoding="utf-8"))
     receipt: dict = {"schema_version": 1, "kind": "ltx_first_i2v_test", "started": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                      "harness_commit": git_head(ROOT), "pins_status": pins["status"], "shot": SHOT,
+                     "approved_by": __import__("os").environ.get("LTX_DOWNLOAD_APPROVED", ""),
+                     "expected_precision": args.precision,
                      "note": "A PASS means one clip decoded through the existing pipeline. The i2v capability stays 'unvalidated' until a human reviews the clip."}
 
     def finish(verdict: str, reason: str) -> int:
-        receipt.update(verdict=verdict, reason=reason, finished=datetime.now(timezone.utc).isoformat(timespec="seconds"))
+        receipt.update(verdict=verdict, reason=reason, finished=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                       comfyui_log_excerpt=comfy_log_excerpt(args.comfy_log))
         (args.workdir / "test_receipt.json").write_text(json.dumps(receipt, indent=2, default=str), encoding="utf-8")
         print(f"VERDICT: {verdict} - {reason}\nreceipt: {args.workdir / 'test_receipt.json'}")
         return 0 if verdict == "PASS" else 1
 
+    if enforce_gates:
+        problems = execution_gate_problems(args)
+        if problems:
+            return finish("NOT_RUN", "execution gate: " + "; ".join(problems))
     for path in (args.checkpoint_path, args.text_encoder_path):
         if not path.is_file():
             return finish("NOT_RUN", f"missing file {path} (downloads need the signed approval manifest)")
@@ -165,7 +222,7 @@ def main(argv: list[str] | None = None) -> int:
             return finish("NOT_RUN", f"static pin verification not acceptable: {why}")
     from granthstudio.config import load_models
     from granthstudio.pipeline import episode_store, load_bundle, plan_tasks
-    from granthstudio.runtime import gate_gpu_tasks, gpu_status, load_runtime, preflight, ram_available_mb, write_run_receipt  # noqa: F401
+    from granthstudio.runtime import gate_gpu_tasks, gpu_status, load_runtime, preflight, ram_available_mb
     from granthstudio.scheduler import Scheduler
 
     models = load_models(project)
@@ -185,7 +242,7 @@ def main(argv: list[str] | None = None) -> int:
     receipt["preflight"] = report
     receipt["inputs"] = {"checkpoint_sha256": models["ltx"]["checkpoint_sha256"], "text_encoder_sha256": models["ltx"]["runtime"]["files"]["text_encoder"]["sha256"],
                          "comfyui_commit": models["ltx"]["runtime"]["comfyui_commit"], "node_pack_commit": models["ltx"]["runtime"]["node_pack_commit"],
-                         "width": args.width, "height": args.height, "frames": 49, "fps": 24}
+                         "width": args.width, "height": args.height, "frames": 49, "fps": 24, "precision_expected": args.precision}
     if not args.execute:
         return finish("NOT_RUN", f"dry run (no --execute); preflight gpu_ready={report['gpu_ready']}")
     gate_gpu_tasks(selected, report)
@@ -200,8 +257,9 @@ def main(argv: list[str] | None = None) -> int:
     receipt["journal"] = json.loads(journal.read_text(encoding="utf-8")) if journal.is_file() else None
     if result.status == "not_validated":
         return finish("NOT_VALIDATED", result.detail)
-    if result.status != "complete":
+    if result.status not in ("complete", "resumed"):             # 'resumed' = a verified receipt from an earlier identical run was reused
         return finish("FAIL", f"{result.status}: {result.detail}")
+    receipt["reused_earlier_output"] = result.status == "resumed"
     from granthstudio.ffmpeg import probe
     info = probe(directory / "clip.mp4")
     receipt["clip"] = {"sha256": sha256_file(directory / "clip.mp4"), "width": info.width, "height": info.height,

@@ -214,6 +214,8 @@ def check_api_workflow(pins: dict[str, Any], path: Path | None, signatures: dict
                 outputs = signatures.get(target["class_type"], {}).get("outputs") if target else None
                 if target is None:
                     problems.append(f"{node_id}.{name} -> missing node {value[0]}")
+                elif not isinstance(value[1], int) or isinstance(value[1], bool) or value[1] < 0:
+                    problems.append(f"{node_id}.{name} -> {value[0]} slot {value[1]!r} is not a non-negative integer")
                 elif outputs is not None and value[1] >= len(outputs):
                     problems.append(f"{node_id}.{name} -> {value[0]} slot {value[1]} (class has {len(outputs)} outputs)")
     out.append(result("api:links", MISMATCH if problems else PASS, "; ".join(problems[:5]) or "every link resolves to an existing node and output slot"))
@@ -230,8 +232,18 @@ def check_api_workflow(pins: dict[str, Any], path: Path | None, signatures: dict
     used = set(re.findall(r"\{\{([A-Z][A-Z0-9_]*)\}\}", text))
     out.append(result("api:placeholders", PASS if used == ADAPTER_PLACEHOLDERS else MISMATCH,
                       f"workflow uses {sorted(used)}; the adapter supplies {sorted(ADAPTER_PLACEHOLDERS)}"))
-    seeds = [(i, k) for i, n in graph.items() for k in ("seed", "noise_seed") if k in n["inputs"]]
-    out.append(result("api:seed_on_generation_path", PASS if seeds else MISMATCH, f"seed inputs: {seeds}"))
+    reachable, stack = set(), [str(doc.get("_output_node"))]
+    while stack:                                    # only nodes the designated output actually depends on count
+        node_id = stack.pop()
+        if node_id in reachable or node_id not in graph:
+            continue
+        reachable.add(node_id)
+        stack += [v[0] for v in graph[node_id]["inputs"].values() if isinstance(v, list) and len(v) == 2 and isinstance(v[0], str)]
+    seeds = [(i, k) for i, n in graph.items() if i in reachable and i != str(doc.get("_output_node"))
+             for k in ("seed", "noise_seed") if k in n["inputs"]]
+    out.append(result("api:seed_on_generation_path", PASS if seeds else MISMATCH,
+                      f"seed inputs on the output's dependency path: {seeds}; all seed-like nodes: "
+                      f"{[(i, k) for i, n in graph.items() for k in ('seed', 'noise_seed') if k in n['inputs']]}"))
     return out
 
 

@@ -67,13 +67,28 @@ From `LTXVImgToVideo` in ComfyUI core: `length` has `min 9, step 8`; latent fram
 multiple-of-32 size; it only checks list membership (see blocker B5). FPS: the official example uses 24, equal to `FPS = 24` in
 `pipeline.py`. The rule is from reading source, not from a run.
 
-## 5. Expected T4 limits (estimates, not measurements)
+## 5. T4 precision and memory plan (read from ComfyUI `2f74e17` source; nothing measured)
 
-- Checkpoint fp16 file is 6.3 GB; the T5-XXL fp16 encoder is 9.8 GB. A Kaggle T4 has ~15 GB VRAM and ~29 GB host RAM, so
-  ComfyUI must offload the encoder; expect a long first-load time. fp8 files exist (2B fp8 4.46 GB) but T4 has no native fp8
-  and their use here is unevaluated; the repo's `precision: fp16` is consistent with the fp16 file.
-- 768×512×97 frames on a T4 is untested; peak VRAM, seconds per clip and flat-output (FP16 decode) risk are exactly what
-  the first GPU run must measure. Kaggle sessions are time-limited; downloads of ~16 GB happen inside that budget.
+- **The diffusion model will not run in fp16.** `supported_models.LTXV.supported_inference_dtypes = [bfloat16, float32]` (no fp16 entry). A T4
+  (compute capability 7.5) has no native bf16, and `model_management.should_use_bf16` is False below capability 8. In `unet_dtype()` the first
+  pass finds nothing; the second pass (manual cast) picks bf16 only if `torch.cuda.is_bf16_supported()` AND the weights in fp32 would not fit
+  (`model_params * 4 > maximum_vram_for_weights`, about 12 GiB on a 15 GB card); otherwise **float32**. For a ~2B-parameter DiT that means fp32
+  weights of roughly 7-11 GB. The shipped `precision: fp16` therefore does not describe what happens on a T4; the schema now allows
+  `fp16|bf16|fp32`, the first-test project records `fp32` as the *expected* value, and the ComfyUI log excerpt in the receipt is the evidence.
+- **VAE:** the LTXV VAE's `working_dtypes = [bfloat16, float32]`; on a T4 `vae_dtype()` falls to **float32** (no flag needed). The "flat output from an
+  fp16 decode" risk in the architecture is thus avoided by construction, but the flat-output check stays on.
+- **Text encoder:** `text_encoder_dtype()` is fp16; `t5xxl_fp16.safetensors` (9.8 GB) goes to the GPU at encode time when `model_size * 1.2` fits in free
+  memory (a fresh 15 GB card), then ComfyUI's model manager offloads it to host RAM to make room for the DiT (`NORMAL_VRAM`: partial loading;
+  `minimum_inference_memory` about 1.2 GiB). The two models therefore never need to be resident together; host RAM (~29 GB on Kaggle) must hold the encoder.
+- **Speed:** fp32 on a T4 (~8 TFLOPS) is far slower than fp16 would be; 8 distilled steps at 768x512, 49 frames is expected to be slow but finite.
+  This is an estimate, not a measurement. If the DiT does not fit, ComfyUI streams weights (slower); a hard out-of-memory is a FAIL with evidence.
+- **Not equivalent to Lightricks' own inference config:** their 2B 0.9.8 config uses multi-scale generation, the spatial upscaler and bf16. The ComfyUI
+  low-level path used here is single-stage, no upscaler, and (on a T4) fp32. Quality equivalence is not claimed.
+- **Extra artifacts:** none. The T5 tokenizer files are in the ComfyUI repo (`comfy/text_encoders/t5_tokenizer`), the VAE is in the checkpoint,
+  `LTXVPreprocess`/VHS/KJNodes load no models. ComfyUI-LTXVideo is used only as the source of the workflow file and is not installed as a node pack
+  (its `requirements.txt` would add `diffusers`, `transformers[timm]`, `ninja`). Verified only by reading source; the run log would show any download attempt.
+- **Abort rules, enforced before any submission:** unmet source pin, missing/mismatched hash, class absent from the live `/object_info`, converter
+  output different from the committed candidate, fewer free VRAM/RAM/disk than the floors, not exactly one Tesla T4, no valid session deadline.
 
 ## 6. Licences (summaries, not legal advice)
 

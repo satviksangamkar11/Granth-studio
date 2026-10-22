@@ -77,7 +77,7 @@ def test_overrides_must_name_real_inputs_and_link_from_ui_only_nodes_is_refused(
     ui = copy.deepcopy(UI)
     ui["links"].append([999, 76, 0, 82, 0, "IMAGE"])                         # a link whose source is a Note
     next(n for n in ui["nodes"] if n["id"] == 82)["inputs"][0]["link"] = 999
-    with pytest.raises(conv.ConversionError, match="UI-only node"):
+    with pytest.raises(conv.ConversionError, match="UI-only or missing node"):
         conv.convert(ui, sigs())
 
 
@@ -132,3 +132,30 @@ def test_the_candidate_loads_through_the_real_adapter_helpers(tmp_path):
     assert generation_evidence(prefix, template.output_node)["fingerprint"] == one["fingerprint"]   # the save node does not count
     with pytest.raises(Exception, match="unresolved placeholders"):
         render_graph(template, {k: v for k, v in values.items() if k != "SEED"})
+
+
+def test_a_wrong_signature_name_cannot_silently_drop_a_wire():
+    bad = copy.deepcopy(sigs())
+    bad["CFGGuider"]["inputs"][0]["name"] = "mdl"                        # 'model' is wired in the UI file
+    with pytest.raises(conv.ConversionError, match=r"UI connection\(s\) \['model'\] match no signature input"):
+        conv.convert(UI, bad)
+
+
+def test_a_wired_input_the_signature_calls_a_widget_is_refused_not_defaulted():
+    bad = copy.deepcopy(sigs())
+    entry = next(e for e in bad["LTXVImgToVideo"]["inputs"] if e["name"] == "image")
+    entry["kind"] = "widget"
+    with pytest.raises(conv.ConversionError, match="wired in the UI but the signature treats it as a widget"):
+        conv.convert(UI, bad)
+
+
+@pytest.mark.parametrize("mutate,message", [
+    (lambda ui: ui["links"][[l[0] for l in ui["links"]].index(87)].__setitem__(4, 0), "ends at node 8 slot 0, not here"),
+    (lambda ui: ui["links"][[l[0] for l in ui["links"]].index(87)].__setitem__(3, 95), "ends at node 95"),
+    (lambda ui: ui["links"][[l[0] for l in ui["links"]].index(87)].__setitem__(2, 9), "output slot 9 that node 44 lacks"),
+    (lambda ui: next(n for n in ui["nodes"] if n["id"] == 8)["inputs"][0].update(link=12345), "not declared"),
+])
+def test_inconsistent_link_endpoints_are_refused(mutate, message):
+    ui = copy.deepcopy(UI); mutate(ui)
+    with pytest.raises(conv.ConversionError, match=message):
+        conv.convert(ui, sigs())

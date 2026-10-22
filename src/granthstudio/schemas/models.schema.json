@@ -64,7 +64,12 @@
           ]
         },
         "precision": {
-          "const": "fp16"
+          "enum": [
+            "fp16",
+            "bf16",
+            "fp32"
+          ],
+          "description": "intended working precision; the shipped default is fp16, but ComfyUI runs LTXV in fp32 on a T4 (see docs/LTX_098_RESEARCH.md section 5)"
         },
         "workflow_templates": {
           "type": "object",
@@ -211,7 +216,11 @@
               "const": "T4"
             },
             "precision": {
-              "const": "fp16"
+              "enum": [
+                "fp16",
+                "bf16",
+                "fp32"
+              ]
             },
             "width": {
               "type": "integer",

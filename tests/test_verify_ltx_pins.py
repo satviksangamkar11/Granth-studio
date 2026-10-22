@@ -170,6 +170,9 @@ def test_api_workflow_mutations_are_caught(tmp_path):
     assert mutated(lambda d: d["102"]["inputs"].update(noise_seed=45))["api:placeholders"] == vp.MISMATCH      # SEED no longer wired
     assert mutated(lambda d: d["102"]["inputs"].pop("noise_seed"))["api:seed_on_generation_path"] == vp.MISMATCH
     assert mutated(lambda d: d.update({"500": {"class_type": "Surprise", "inputs": {}}}))["api:node_classes"] == vp.MISMATCH
+    assert mutated(lambda d: d["99"]["inputs"].update(model=["44", -1]))["api:links"] == vp.MISMATCH            # negative slot
+    assert mutated(lambda d: d["99"]["inputs"].update(model=["44", True]))["api:links"] == vp.MISMATCH          # bool is not a slot
+    assert mutated(lambda d: d["101"]["inputs"].pop("noise"))["api:seed_on_generation_path"] == vp.MISMATCH    # RandomNoise left unconnected
     assert api_checks(None)["api_workflow"] == vp.UNVERIFIED and api_checks(tmp_path / "nope.json")["api_workflow"] == vp.MISSING
 
 
