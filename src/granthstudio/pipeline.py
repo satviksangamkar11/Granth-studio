@@ -16,7 +16,7 @@ from .comfy import ComfyBackend, ensure_validated, load_template, render_graph, 
 from .config import Project, load_models, require_capability
 from .episodes import compile_episode
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
-from .ffmpeg import assemble, assemble_audio, hold_clip, probe, still_motion_clip, validate_audio, validate_video
+from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, validate_audio, validate_video
 from .integrity import atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
@@ -175,10 +175,11 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
         cursor = 0.0
         for index, shot in enumerate(bundle.compiled["shots"]):
             clip = scheduler.task_dir(shot_tasks[shot["shot_id"]]) / "clip.mp4"
-            duration = probe(clip).duration_s
+            info = probe(clip)
+            duration = info.video_duration_s if info.video_duration_s is not None else info.duration_s
             speech = sum(timings[line]["duration_s"] for line in shot["dialogue_ids"])
             span = math.ceil(max(duration, shot["duration_s"], speech) * FPS - 1e-6) / FPS
-            if span - duration > 1 / FPS and not shot.get("coverage"):
+            if span - duration > 1e-6 and not shot.get("coverage"):
                 raise GateFailure(f"{shot['shot_id']}: extra speech needs reviewed final-frame coverage")
             edit = work / f"edit_{index:04d}.mp4"
             hold_clip(clip, edit, span)
@@ -209,7 +210,7 @@ def _verify_assembly(bundle, lang, directory):
     duration = plan["duration_s"]
     if not math.isfinite(duration) or duration <= 0:
         raise TaskFailed("invalid editorial duration")
-    if abs(validate_audio(directory / "voice.wav") - duration) > 1 / FPS:
+    if abs(validate_audio(directory / "voice.wav") - duration) > audio_video_tolerance(probe(directory / "voice.wav")):
         raise TaskFailed("voice duration differs from editorial timeline")
     if (directory / f"{stem}.srt").read_text(encoding="utf-8") != srt_text(plan["cues"]):
         raise TaskFailed("subtitles differ from measured cue placements")
@@ -315,6 +316,12 @@ def production_problems(bundle):
         if pilot_plan.get("adhyay") != 1:
             raise GateFailure("approved pilot chapter must be Adhyay 1")
         plan_pilot(pilot_plan)
+        if bundle.adhyay == 1:
+            current_pilot = bundle.compiled
+        else:
+            current_pilot = load_bundle(bundle.project, bundle.models, 1).compiled
+        if sha256_obj(pilot_plan) != sha256_obj(current_pilot):
+            raise GateFailure("approved pilot plan differs from the current compiled pilot manifest")
         if approval["flf_decision"] not in ("go", "no_go"):
             raise GateFailure("a separate human FLF GO/NO-GO is required")
         if approval["flf_decision"] == "no_go":
@@ -355,8 +362,19 @@ def production_problems(bundle):
         if sha256_file(path) != recovery["sha256"]:
             raise GateFailure("recovery evidence changed")
         evidence = read_json(path)
-        if evidence.get("passed") is not True or not evidence.get("reviewed_by"):
-            raise GateFailure("interrupt/recovery evidence has not been accepted")
+        validate_document("recovery_evidence", evidence)
+        if evidence["pilot_plan_sha256"] != pilot["sha256"]:
+            raise GateFailure("recovery evidence belongs to another pilot plan")
+        clean, resumed = evidence["clean_outputs"], evidence["resumed_outputs"]
+        if set(clean) != set(resumed):
+            raise GateFailure("clean/resumed recovery output sets differ")
+        for name in clean:
+            for record in (clean[name], resumed[name]):
+                output = contained_path(bundle.project.artifacts_dir, record["path"])
+                if sha256_file(output) != record["sha256"]:
+                    raise GateFailure(f"recovery output hash mismatch: {name}")
+            if clean[name]["sha256"] != resumed[name]["sha256"]:
+                raise GateFailure(f"clean/resumed recovery hashes differ: {name}")
         return []
     except (GranthError, OSError, ValueError, KeyError, TypeError) as exc:
         return [str(exc)]

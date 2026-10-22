@@ -8,6 +8,7 @@ Automated checks catch detectable discrepancies only (frozen section 5.2).
 
 from __future__ import annotations
 
+import math
 import re
 from typing import Any
 
@@ -151,8 +152,9 @@ def srt_text(entries: list[dict[str, Any]]) -> str:
         if duration is None:
             raise GateFailure(f"{entry['dialogue_id']}: audio duration not measured; subtitles cannot be timed")
         start = entry.get("start_s", cursor)
-        if duration <= 0 or start < cursor:
+        if not math.isfinite(duration) or not math.isfinite(start) or duration <= 0 or start < cursor - 1e-9:
             raise GateFailure("subtitle duration must be positive and cues must not overlap")
+        start = max(start, cursor)  # Clamp sub-nanosecond floating-point noise, never real overlap.
         end = start + duration
         cues.append(f"{index}\n{_timestamp(start)} --> {_timestamp(end)}\n{entry['text']}\n")
         cursor = end

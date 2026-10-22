@@ -69,3 +69,18 @@ LTX, ComfyUI graphs, IndicF5, IndicTrans2, SDXL, visual style, voice rights, sem
 accuracy, Kaggle runtime constraints and persistent external storage remain unvalidated
 or absent. No model inference, research approval, GPU execution or production GO was
 performed by the CPU correction work.
+
+
+## D1-D7 evidence compatibility
+
+After a definitive HTTP 4xx rejection, correct the graph/configuration before retrying;
+the failed journal is retryable. A timeout/transport/server failure still requires
+polling or explicit reconciliation and must not be treated as proof of rejection.
+
+Rebuild pilot approvals after changes to the current compiled Adhyay 1 pilot. Recovery
+proof must include actual clean/resumed output paths and hashes under artifact storage,
+as documented in `IMPLEMENTATION_SPEC.md`. Old flag-only proof is intentionally invalid.
+Do not create replacement approval records without the required human review.
+
+Current correction verification: `benchmarks/claude_d_focused.xml`,
+`benchmarks/claude_d_cpu.xml`, and `benchmarks/claude_d_receipt.json`.

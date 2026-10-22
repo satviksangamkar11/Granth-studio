@@ -1,0 +1,139 @@
+{
+  "baseline_tests": 96,
+  "cli_checks": [
+    {
+      "arguments": [
+        "validate"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "config, models, quality gates and canon: valid"
+    },
+    {
+      "arguments": [
+        "plan",
+        "1"
+      ],
+      "exit_code": 2,
+      "stderr": "ResearchNotApproved: adhyay 1: no source receipt (not approved)",
+      "stdout": ""
+    },
+    {
+      "arguments": [
+        "run",
+        "1",
+        "--execute"
+      ],
+      "exit_code": 2,
+      "stderr": "ResearchNotApproved: adhyay 1: no source receipt (not approved)",
+      "stdout": ""
+    }
+  ],
+  "client_date": "2026-10-22",
+  "defects_addressed": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7"
+  ],
+  "focused_counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 26
+  },
+  "full_counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 1,
+    "tests": 119
+  },
+  "full_suite_runs": 1,
+  "gpu_or_model_execution": false,
+  "junit_sha256": {
+    "benchmarks/claude_d_cpu.xml": "87492b66fe73193dba8656cfd5bfcc808a9c99487ffd6de501fb1f3dc45c80f7",
+    "benchmarks/claude_d_focused.xml": "bc1f530a8e4ca1d6c02538a9f089c8421b53c66dad8f7f14753af2d176efb607"
+  },
+  "kind": "claude_D1_D7_cpu_verification",
+  "new_regression_cases": 23,
+  "parent_commit": "a85e070147bc759ad890b86c39c4fff81a469ce6",
+  "recorded_at_utc": "2026-10-22T07:51:16.255307+00:00",
+  "recovery_properties": {
+    "hi_clean_sha256": "999b8e134bc0e5a1ce7716720c36efe1463e0da8142d0a12dd0075db598fcc10",
+    "hi_recovered_sha256": "999b8e134bc0e5a1ce7716720c36efe1463e0da8142d0a12dd0075db598fcc10",
+    "mr_clean_sha256": "5715c11ced85f368d8bbdd6815c3a1722b08ddf496f7f190044a272725a60fd5",
+    "mr_recovered_sha256": "5715c11ced85f368d8bbdd6815c3a1722b08ddf496f7f190044a272725a60fd5",
+    "real_process_media_recovery": "passed"
+  },
+  "research_or_production_approval": false,
+  "schema_version": 1,
+  "skipped": [
+    {
+      "reason": "symlinks unavailable on this host",
+      "test": "test_f11_symlink_escape_is_rejected"
+    }
+  ],
+  "source_files": {
+    "canon/characters.yaml": "e167426b220c02a939792bcc9b5016024ef9287d054b685933e9fd4fedca9a10",
+    "canon/locations.yaml": "a432a50de52cf47b977d1c568d86e9fdc611d227226da2748fb23bcb19d162c1",
+    "canon/props.yaml": "dc269bf50efd49f00b8ea764f2f2f990ed150020ebe3bc0e9b4c95f4e71f8bfc",
+    "canon/terminology.yaml": "2b2be98faa22e5c87f58beef1e7d3e4a2cc50110115a7345b66c0faa87417d51",
+    "config/models.yaml": "5b17fda512c2aebbf28bbf3f2cfb953807d4aa72faf08404014d96a984194be3",
+    "config/project.yaml": "e693bea9919cdedff758e030ee56683252f8d430ca498302fc4b184bd71a50d4",
+    "config/quality_gates.yaml": "d7bec4b9dcc3298a0f98e5b551aa8d2a4601e221ac6d35da466fb2d19baf179d",
+    "docs/ARCHITECTURE_V3_1.FREEZE.json": "19710ee13d9a7f58d723cdf9604ddef734c867bc96c248fd0c3a691c2bd38f32",
+    "docs/ARCHITECTURE_V3_1.md": "decd0af573e7b0c882d9dc5e8c98788bcecedd924a31dfc264ec1f883404f7c1",
+    "docs/CLAUDE_REVIEW_D1_D7.md": "c936d047e872e46047344110eafcbd5ddf48824c58a2f2d7e3b59682dd4dfd86",
+    "docs/COVERAGE_MATRIX.md": "82f693345b66342c40100de756ffbdf66c01bef973607b7836ba43c182100219",
+    "docs/DECISIONS.md": "7d0e5a8489e025fbd98a567a689c2ee8a42ec256b96c75ae734c20633654b873",
+    "docs/IMPLEMENTATION_PLAN.md": "0f076ecb97fff141d0b872b774e23abd2e05be1903e1da4be324b1eb779fdf2b",
+    "docs/IMPLEMENTATION_SPEC.md": "9c1724162d31a4bf4e26ae64b1dba778006d0170cf614d8394e189db35b5c612",
+    "docs/OPERATOR.md": "40094fb519cd4d05c4a4a81f666caae08d8c120ac998e10667915a135c6a4a83",
+    "docs/PROGRESS.md": "44c9585c78743876ecb88f520e17f56d732194e0babaf4f2e48300a783104f48",
+    "docs/SPEC_SECTIONS_11_12_14.md": "27e4bd9c5d50fa7d9f4f74d1150d14ac9df0bd3957b6c73678b68e7bc9b05932",
+    "docs/TASK_CONTRACT.md": "4b523308a4a1a519f6403fce571e7793d22f63a4ae6f96e8eaa2c96fcfc2e29b",
+    "src/granthstudio/__init__.py": "219865d76e0b94cded980a19993643442024511f67c015e4e23225f99f00da92",
+    "src/granthstudio/__main__.py": "e0930aeba5a3e2e2d94ca6c5fac4f72c0c4eb2be9bba283becf98e909091471c",
+    "src/granthstudio/canon.py": "819ff68996f8ce0bb589fbca6d8789200abce1d3b1fa41f6a7b81177f4de3720",
+    "src/granthstudio/cli.py": "81e456aa8c3aa31099c7a7d11669bad068a93d7769e97f96eb87d8201c15e52c",
+    "src/granthstudio/comfy.py": "3c45563721146d4c6e78d844750affcf884aea895a236c332766b6e8f37cc6eb",
+    "src/granthstudio/config.py": "5f3bb6c93cca30f4a03084efef2e08c2c97342284d6e0e1fc7830670081f3de4",
+    "src/granthstudio/episodes.py": "49900b02ba408109af6652f7c53ab529ad552a4aa88658fa206b64072d0782ed",
+    "src/granthstudio/errors.py": "249fd4d60228ab5b632e88d550b1bb18d8d8cc8d9e93d1cd6a769545c5164c63",
+    "src/granthstudio/ffmpeg.py": "bacbc34674e45bd4b18f2cadb7155fe4b15c8fddc8f02b37eb763b8c1374f7b1",
+    "src/granthstudio/integrity.py": "98ebf816e905aece95583be7829bf8ffcc4f374a9ad7bb744307655252ca6e9d",
+    "src/granthstudio/pilot.py": "33769a73413faf86c7155e881bc62e78e837435e7c32b94c3f725f167801fd13",
+    "src/granthstudio/pipeline.py": "12a8e6e22956e88609efd3670918559040c1f55c256a463456ad6e9b360ee00c",
+    "src/granthstudio/qa.py": "836c3f2e3b7becd0caf4ad6374daf59b4f7492c2dda8424281e2b65cc1b027f5",
+    "src/granthstudio/research.py": "b0c21a76c6cf3ed4dc1022e5375ea6b9508fc7f627a1412642cf8b624e31303a",
+    "src/granthstudio/scheduler.py": "f6b7e5d1dd92929a6c41632d7a5f132c5f3647bc551122de833bf693193b8092",
+    "src/granthstudio/schemas.py": "81fff4efd77dac481d409a3a9497c6a0812efaf4f5ffa452ab7593afa77cc0b2",
+    "src/granthstudio/schemas/benchmark_receipt.schema.json": "de32b0d83f991aa5f7287843cae0b187311208866a0876cd136a25594253ead4",
+    "src/granthstudio/schemas/canon.schema.json": "459c5c5384fea65f6dd6f1e212f5eb0bebe924238edcf1324fcf055f41c75640",
+    "src/granthstudio/schemas/episode_manifest.schema.json": "adab8a9c2e6640bcbf0cf3df457eafc77663c468dd3dd77a4223d1b744f1c915",
+    "src/granthstudio/schemas/models.schema.json": "0f232f155a96c3559c4e11ec136e9567b7f01dc4523df8f0391b974fd86b3013",
+    "src/granthstudio/schemas/production_approval.schema.json": "ee97a729c69179c766b99962fd8c5c8cb7f7d935c52071654e3ee47ef148edd9",
+    "src/granthstudio/schemas/project.schema.json": "764a00a1e11c0c11f1cb08a33d7e09569e03b18b68de7c6faf0e58aeaed57369",
+    "src/granthstudio/schemas/quality_gates.schema.json": "eb47dc855f843c99b82765262336ce9ac2ada9afbba234d93cfb6ce8939e1bce",
+    "src/granthstudio/schemas/recovery_evidence.schema.json": "8eb9fe17784422617f9c0c4875881d671bf731509910a7d200140499c8a5e1d0",
+    "src/granthstudio/schemas/research.schema.json": "9f51b49af66d94aa40d1db276c3a6c091883a3bd32e08a0a8a48c3c6e5e6272b",
+    "src/granthstudio/schemas/source_receipt.schema.json": "c63cd204f11fa8be7f068224cab9b8642e560f1b7bdb16b9a168ed5129980be1",
+    "src/granthstudio/schemas/task_receipt.schema.json": "94c798ffbf7b6a28e02749ff507df32cb31fba4c462b1f4c77e4a5420a96f25f",
+    "src/granthstudio/schemas/timeline.schema.json": "540ae1ed4f2f1e83d1eb61d960a952d6590581fa3b545eafa4c22fc24a8d6e0e",
+    "src/granthstudio/timelines.py": "d289bac822a9412dcb25a5c14f1e029f347b09608fd38ffe198b9ece0cf6b33b",
+    "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/conftest.py": "b1637df9759bab357852b0bf4803b53fc9218d131bd02aa3e646f85fb183639f",
+    "tests/test_claude_findings.py": "b65f4021f80bb2d02360eabf128cc77f75d7ce571c99291b4db09a37b3ff8ea5",
+    "tests/test_foundations.py": "16ef7e385494128a5b5aedc44698db7805c6eb6b1359b1d55ada4d9d5d31964f",
+    "tests/test_governance.py": "0ec9c0064b1c77888c70872ee20aaab140a1b11c1a5680782c175437056bf5eb",
+    "tests/test_media_comfy_pilot.py": "b305491783f29ac5aa6c41b8941349fbbce998fc79b3b020b6b9c60809eee9a4",
+    "tests/test_pipeline.py": "ad4bf4e39a3c28f481e3fc955bf71e94726a09c722098fa49b23f7db34ddbe52",
+    "tests/test_review_regressions.py": "c309c49e235b3cedaf3679cfa0996984a915a5c6296246c1b8963e6f2e49bb24",
+    "tests/test_timelines_and_scheduler.py": "ea6841b93456d54fbcb6c9f1fcbe4a964f6f7691bee91cacdb76442593d03cdc",
+    "workflows/comfyui/ltx_flf_098.json": "78d10f2afcde263dae89316a14ccb096331efc87e68ca6c7bf597a0a804fd201",
+    "workflows/comfyui/ltx_i2v_098.json": "064abbf5bcca33afc8bd19189de7be6d8f90610634caa11ea2d4e350ce5239ce"
+  }
+}

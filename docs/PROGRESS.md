@@ -84,3 +84,31 @@ Actual curated research approval, human Hindi/speech acceptance, SDXL/style/refe
 sheets, IndicTrans2/IndicF5, real LTX/ComfyUI validation, calibrated pilot acceptance,
 voice licences, resource preflight and persistent Kaggle storage remain deferred.
 CPU correction evidence is not a production readiness claim.
+
+
+## Claude D1-D7 correction round — 2026-10-22
+
+- User authorized Codex as sole author and authorized committing this round.
+- Parent: `a85e070147bc759ad890b86c39c4fff81a469ce6` (receipt-verified, previously reviewed F01-F12 baseline).
+- D1: definitive HTTP 4xx failures leave retryable journals; ambiguous network failures
+  remain pending. D2: SRT floating-point overlap tolerance is 1 ns, with forward clamping.
+- D3: approved pilot plan binds to the current compiled Adhyay 1 manifest. D4: recovery
+  proof pins and rehashes actual matching clean/resumed outputs and the pilot plan.
+- D5: GateFailure stops on its first attempt. D6: AV comparison uses measured stream
+  timing and a two-sample allowance (2 ms fallback), never a blanket video frame.
+- D7: whitespace-only coverage reviewer names fail schema validation.
+- Added a real Windows junction-containment test; existing symlink test remains intact.
+- Added 23 parameterized regression cases. The existing positive FLF NO-GO
+  policy test retains its assertions; only its invalid legacy fixtures were migrated to
+  current compiled pilot data and actual synthetic recovery files for the stricter gate.
+- Focused run: 26 passed. Full CPU suite, run once:
+  **118 passed, 1 skipped** (119 total).
+- Full media recovery test again verifies both recovered final video hashes against clean
+  runs. JUnit stores those hashes. Windows junction test ran; symlink creation is skipped
+  on this host, with the precise reason preserved in the evidence receipt.
+- Repository `validate`: exit 0. `plan 1` and `run 1 --execute`: exit 2 for missing approved
+  research, preserving refusal behavior without starting production.
+- Evidence: `benchmarks/claude_d_focused.xml`, `benchmarks/claude_d_cpu.xml`, and
+  `benchmarks/claude_d_receipt.json`. Frozen files and real research remain untouched.
+- No dependency install, model download, Kaggle/GPU execution or research/production GO.
+- Next: independent read-only Claude review per `docs/CLAUDE_REVIEW_D1_D7.md`.

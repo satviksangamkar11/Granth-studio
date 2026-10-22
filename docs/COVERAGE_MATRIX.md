@@ -59,3 +59,13 @@ evidence absent; MISSING = no implementation. CPU evidence is synthetic, not pro
 See `benchmarks/cpu_review_fixes.xml` and `benchmarks/cpu_review_fixes_receipt.json`.
 All research, names, review records, tones and model pins in tests are synthetic.
 No claim of completed GPU/model/semantic production validation follows from CPU passes.
+
+
+## Follow-up D1-D7 verification
+
+Definitive HTTP rejection/retry handling, SRT arithmetic tolerance, current pilot-plan
+binding, actual clean/resumed recovery hashes, immediate gate failure, measured AV
+synchronization and nonblank coverage reviewers are IMPLEMENTED with CPU regressions.
+Windows junction containment has a dedicated test; unsupported symlink hosts still skip
+only the separate symlink test. External runtime/semantic/production status is unchanged.
+Evidence: `benchmarks/claude_d_receipt.json` and its focused/full JUnit receipts.

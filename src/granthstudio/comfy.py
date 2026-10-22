@@ -107,6 +107,11 @@ class ComfyBackend:
         try:
             with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
                 return response.read()
+        except urllib.error.HTTPError as exc:
+            if 400 <= exc.code < 500:
+                raise TaskFailed(f"ComfyUI HTTP {exc.code} rejected {method} {path}: {exc.reason}") from exc
+            # A server error does not establish whether a submitted job was accepted.
+            raise IntegrationUnavailable(f"ComfyUI HTTP {exc.code} at {self.base_url}: {exc.reason}") from exc
         except (urllib.error.URLError, OSError) as exc:
             raise IntegrationUnavailable(f"ComfyUI unreachable at {self.base_url}: {exc}") from exc
 

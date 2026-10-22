@@ -100,3 +100,31 @@ and production must contain no Tier 2 shots. Failed/retry GPU time still counts.
 
 No actual approval, acceptance budget or model validation was supplied by these fixes.
 Current model generation and real production remain gated.
+
+
+## Claude audit corrections D1-D7 (2026-10-22)
+
+- HTTP 4xx is a definitive ComfyUI rejection (`TaskFailed`) and leaves a retryable failed
+  journal. Transport errors, timeouts and HTTP 5xx retain ambiguous submission handling.
+- SRT overlap comparison permits only 1e-9 seconds of arithmetic noise, clamped forward;
+  genuine overlaps remain blocked and timestamps retain millisecond rounding.
+- The approved pilot-plan file must equal the current compiled Adhyay 1 manifest, not
+  merely carry a valid self-hash. For another production chapter, the current approved
+  Adhyay 1 inputs are reloaded/compiled. Changed A-F assignments invalidate approval.
+- Recovery evidence now follows `recovery_evidence.schema.json`: `schema_version: 1`,
+  `passed: true`, nonblank `reviewed_by`, `pilot_plan_sha256`, `clean_outputs`, and
+  `resumed_outputs`. Each output map requires `mr_video` and `hi_video`; additional
+  outputs may be included but the sets must match. Values are `{path, sha256}`, with paths
+  relative to the configured artifacts directory. Every file is rehashed; corresponding
+  clean/resumed hashes must match. A pass flag alone or stale/missing output is refused.
+- `GateFailure` fails immediately, without rendering retries or a NOT VALIDATED label.
+- AV checks prefer `duration_ts * time_base` (then stream duration) over rounded container
+  duration. Synchronization tolerance is two audio samples; missing stream timing/rate
+  falls back to a 2 ms metadata allowance. This replaces the blanket 1/24-second margin.
+  No `-shortest` or speech trimming is introduced. Coverage extensions still need review,
+  and primary actions cannot be shortened by a frame-sized tolerance.
+- Coverage reviewers must contain a non-whitespace character.
+- A Windows junction escape is tested independently of the existing symlink test.
+
+These are CPU-tested enforcement corrections. Real GPU, ComfyUI/model execution,
+historical/semantic correctness, research approval and production GO remain deferred.

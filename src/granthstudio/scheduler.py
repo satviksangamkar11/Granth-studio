@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
-from .errors import CapabilityDisabled, ConfigError, GranthError, IntegrationUnavailable, JobPending, TaskFailed
+from .errors import CapabilityDisabled, ConfigError, GateFailure, GranthError, IntegrationUnavailable, JobPending, TaskFailed
 from .integrity import atomic_write_json, contained_path, read_json, sha256_file, sha256_obj
 from .schemas import validate_document
 
@@ -178,6 +178,9 @@ class Scheduler:
             except JobPending as exc:
                 shutil.rmtree(work, ignore_errors=True)
                 return TaskResult(task.stage, task.name, task_id, "pending", attempt, str(exc))
+            except GateFailure as exc:
+                shutil.rmtree(work, ignore_errors=True)
+                return TaskResult(task.stage, task.name, task_id, "failed", attempt, str(exc))
             except NOT_RETRYABLE as exc:
                 shutil.rmtree(work, ignore_errors=True)
                 return TaskResult(task.stage, task.name, task_id, "not_validated", attempt, str(exc))

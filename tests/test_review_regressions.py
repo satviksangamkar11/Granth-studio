@@ -501,13 +501,14 @@ def test_f10_authorization_contract_allows_explicit_flf_no_go(approved_project, 
     """Isolated policy test; fake runtime evidence here is never real GPU validation."""
     from types import SimpleNamespace
     import granthstudio.pipeline as pipeline
-    current = bundle(approved_project)
+    from tests.test_claude_findings import prepare_current_pilot, synthetic_recovery
+    current = prepare_current_pilot(approved_project)
     current.models["ltx"]["capabilities"]["flf"] = "disabled"
     # The actual source configuration remains unvalidated. This unit test isolates policy.
     monkeypatch.setattr(pipeline, "_ltx_preflight", lambda *_: SimpleNamespace(version="synthetic-graph"))
     monkeypatch.setattr(pipeline, "require_capability", lambda *_: {"runtime_sha256": "a" * 64})
     pilot_path = approved_project.benchmarks_dir / "synthetic-pilot.json"
-    atomic_write_json(pilot_path, synthetic_pilot(current.compiled))
+    atomic_write_json(pilot_path, load_bundle(approved_project, current.models, 1).compiled)
     refs = []
     for label, capability in zip("ABCDEF", ("tier0", "i2v", "flf", "i2v", "i2v", "assembly")):
         receipt = {"schema_version": 1, "capability": capability, "shot": label, "checkpoint_sha256": None,
@@ -519,13 +520,13 @@ def test_f10_authorization_contract_allows_explicit_flf_no_go(approved_project, 
         atomic_write_json(path, receipt)
         refs.append({"path": path.name, "sha256": sha256_file(path)})
     recovery_path = approved_project.benchmarks_dir / "synthetic-recovery.json"
-    atomic_write_json(recovery_path, {"passed": True, "reviewed_by": "synthetic-test-only"})
-    approval = {"schema_version": 1, "adhyay": 1, "approved": True, "reviewed_by": "synthetic-test-only",
+    atomic_write_json(recovery_path, synthetic_recovery(approved_project, sha256_file(pilot_path)))
+    approval = {"schema_version": 1, "adhyay": current.adhyay, "approved": True, "reviewed_by": "synthetic-test-only",
         "input_sha256": sha256_obj(pipeline.snapshot(current)), "pilot_receipts": refs,
         "pilot_plan": {"path": pilot_path.name, "sha256": sha256_file(pilot_path)},
         "recovery_evidence": {"path": recovery_path.name, "sha256": sha256_file(recovery_path)},
         "minimum_accepted_sec_per_gpu_hour": 1, "flf_decision": "no_go"}
-    path = approved_project.root / "approvals" / "adhyay_01.json"
+    path = approved_project.root / "approvals" / f"adhyay_{current.adhyay:02d}.json"
     atomic_write_json(path, approval)
     assert production_problems(current) == []
     # Stale GO and relabelled evidence must still fail.

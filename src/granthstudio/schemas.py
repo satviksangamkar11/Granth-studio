@@ -23,6 +23,7 @@ KNOWN = (
     "benchmark_receipt",
     "task_receipt",
     "production_approval",
+    "recovery_evidence",
 )
 
 

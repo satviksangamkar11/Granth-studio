@@ -24,3 +24,16 @@ Acceptance evidence:
 
 Real model/runtime/pilot acceptance remains deferred and must not be inferred from CPU
 test passes. See `COVERAGE_MATRIX.md` for remaining partial, stub and missing components.
+
+
+## Current round: Claude D1-D7 corrections (2026-10-22)
+
+The user explicitly assigned Codex sole authorship, CPU test execution and committing
+this correction round. The earlier no-commit restriction is superseded for this task.
+Claude is the subsequent independent read-only reviewer. Preserve the frozen architecture,
+original F01-F12 protections and real research; no Kaggle, GPU, models, frameworks or agents.
+
+Required checks: focused regressions, one full CPU run, repository validation, diff and
+accidental-file review, saved evidence/progress, complete correction commit, then stop.
+The formerly uncommitted reviewed F01-F12 work is recorded as parent commit
+`a85e070147bc759ad890b86c39c4fff81a469ce6` to keep this correction diff independent.

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "recovery_evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "passed",
+    "reviewed_by",
+    "pilot_plan_sha256",
+    "clean_outputs",
+    "resumed_outputs"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "passed": {
+      "const": true
+    },
+    "reviewed_by": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "pilot_plan_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "clean_outputs": {
+      "type": "object",
+      "required": [
+        "mr_video",
+        "hi_video"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "resumed_outputs": {
+      "type": "object",
+      "required": [
+        "mr_video",
+        "hi_video"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  }
+}
