@@ -286,3 +286,17 @@ accelerator None, internet off, dataset `granthstudio-cpu-baseline`) ran the acc
 - Architecture SHA-256 equals the frozen value. Evidence: `benchmarks/linux/` (receipt, environment, JUnit, log, zip).
 - Limits: the session ran as root, so permission-based refusals were not exercised; Kaggle version 1 of the notebook failed in its first cell
   (an unguarded `nvidia-smi` call, fixed in `454734f`) and is not a test result. This does not validate any GPU, model, ComfyUI or LTX behaviour.
+
+### Linux CPU verification, run 2 with the corrected harness (executed 2026-10-23, Kaggle kernel version 3)
+
+Supersedes run 1 (kept in `benchmarks/linux/run1_superseded/`), which used a harness that ignored pytest exit codes and accepted a reduced
+collection (Codex findings, fixed in `1e563e1`). Code under test: the accepted baseline `f8d5d02f609a68806e8272617d1e04c98cf6040c`
+(detached); harness: bundle tip `1e563e1`. Receipt verdict **LINUX_CPU_PASS_ON_KAGGLE**.
+
+- Pytest exit codes: full suite 0, supplementary 0. Collected 321 of the expected 321 baseline tests; 319 passed, 0 failed, 0 errors, 2 skipped
+  (the Windows-only case-variant and Windows-junction tests).
+- Required POSIX tests 10/10 passed, supplementary POSIX checks 5/5 passed, none skipped.
+- Host: Linux 6.18.48, Python 3.13.15, ffmpeg 6.1.1, CPU only, root (uid 0). Architecture SHA-256 equals the frozen value; every artifact hash in the
+  receipt matches the files and the zip (`benchmarks/linux/`).
+- Rerun safety is covered by a unit test that executes the notebook's setup cell twice; this Kaggle run was a fresh kernel, not a second Run All.
+- Not validated: any GPU, model, ComfyUI or LTX behaviour.

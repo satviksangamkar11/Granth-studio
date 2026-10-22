@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "environment": {
-    "utc": "2026-10-22T17:37:35+00:00",
+    "utc": "2026-10-22T18:15:48+00:00",
     "looks_like_kaggle": true,
     "kaggle_env": {
       "KAGGLE_KERNEL_RUN_TYPE": "Batch",
@@ -10,7 +10,7 @@
     "platform": "Linux-6.18.48+-x86_64-with-glibc2.39",
     "system": "Linux",
     "machine": "x86_64",
-    "kernel": "Linux b0845a911f31 6.18.48+ #1 SMP Sun Sep 27 17:32:16 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+    "kernel": "Linux 9200dd75f05f 6.18.48+ #1 SMP Sun Sep 27 17:32:16 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
     "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
     "python_executable": "/usr/bin/python3",
     "uid": 0,
@@ -23,11 +23,11 @@
       "ffprobe version 6.1.1-3ubuntu5 Copyright (c) 2007-2023 the FFmpeg developers"
     ],
     "gpu_visible": "no nvidia-smi (CPU session)",
-    "filesystem": "Filesystem     Type 1K-blocks  Used Available Use% Mounted on\n/dev/loop2     ext4  20466256  4460  20445412   1% /kaggle/working",
-    "memory": "total        used        free      shared  buff/cache   available\nMem:           32099        1128       26983           1        4443       30970\nSwap:              0           0           0"
+    "filesystem": "Filesystem     Type 1K-blocks  Used Available Use% Mounted on\n/dev/loop2     ext4  20466256  4668  20445204   1% /kaggle/working",
+    "memory": "total        used        free      shared  buff/cache   available\nMem:           32099        1147       26964           1        4443       30951\nSwap:              0           0           0"
   },
   "baseline_expected": "f8d5d02f609a68806e8272617d1e04c98cf6040c",
-  "harness_commit": "942932def2b772c5cc9b8ec4caa49f0d49b223ea",
+  "harness_commit": "1e563e1ccec4c42b2009e490426daa5aa9108b60",
   "scope": "CPU only; no GPU, model or ComfyUI was used",
   "source_commit": "f8d5d02f609a68806e8272617d1e04c98cf6040c",
   "architecture_sha256": "decd0af573e7b0c882d9dc5e8c98788bcecedd924a31dfc264ec1f883404f7c1",
@@ -42,6 +42,12 @@
       "error": 0,
       "skipped": 2
     },
+    "exit_codes": {
+      "full": 0,
+      "supplementary": 0
+    },
+    "collected": 321,
+    "expected_collected": 321,
     "required": {
       "tests/test_ltx_integration.py::test_live_owner_is_never_displaced_by_a_second_real_process": "passed",
       "tests/test_ltx_integration.py::test_owner_crash_before_and_after_post_is_recoverable_without_duplicates": "passed",
@@ -935,9 +941,9 @@
   ],
   "verdict": "LINUX_CPU_PASS_ON_KAGGLE",
   "artifacts": {
-    "environment.json": "fe5e363860143277d7be89bcdb18d91fe176466d42afe5facc3c9f827aec9b26",
-    "full_log.txt": "f87c09752d6fa8f7acebe72e59e8bf89ba5de141c884bc1dea10d5dbe2ba1838",
-    "junit_full.xml": "cb01d840fb49b47a2d93ed76ba36888488299ac17b90ff9802f5ff33310a6806",
-    "junit_supplementary.xml": "a28c93c159b9ade0b1cd49aaba09d53890a0d25fb639b87c7290d67118b5c470"
+    "environment.json": "ab56e14090fae917c18f0e485d2c1880ed96f7553dfba57dd5574f0f0a0240e0",
+    "full_log.txt": "c3450db0af02c2532c5e6bb0d37b297b93b33471eed954008197b5898a79737a",
+    "junit_full.xml": "ff663b7da62751d4902c63ea3e4d24376af00aad6b713d1246672c879d83f1e4",
+    "junit_supplementary.xml": "fa9163111ddf31043192b587957f39ce7143f2c6d6d684d01921c159617678ba"
   }
 }
