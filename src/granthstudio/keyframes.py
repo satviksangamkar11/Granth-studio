@@ -162,8 +162,34 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
         "prompt": prompt, "negative_prompt": style["negative_prompt"] if style else "", "seed": _seed(visual_id),
         "style": {"style_id": style["style_id"], "version": style["version"]} if style else None,
         "references": references, "missing_references": missing, **_common(models)}
+    if role == "end":  # frozen 7 Tier 2: derive the end image from the start image (start hashes unchanged)
+        request["derived_from"] = _derived_from(compiled, canon, registry, models, shots)
+        if request["derived_from"]["sha256"] is None:
+            missing.append(f"start_image:{request['derived_from']['visual_id']}")
     request["request_sha256"] = sha256_obj(request)
     return request
+
+
+def _derived_from(compiled, canon, registry, models, shots) -> dict[str, Any]:
+    starts = sorted({s["visual_id"] for s in shots})
+    if len(starts) != 1:
+        raise GateFailure(f"end visual {shots[0]['end_visual_id']} must derive from exactly one start visual, found {starts}")
+    visual = next(v for v in compiled["visuals"] if v["visual_id"] == starts[0])
+    if visual["source"] == "file":
+        return {"visual_id": starts[0], "kind": "file", "path": visual["path"], "sha256": visual["sha256"]}
+    start = keyframe_request(compiled, canon, registry, models, starts[0])
+    found = [a for a in approved_assets(registry, kind="keyframe", visual_id=starts[0])
+             if a.get("request_sha256") == start["request_sha256"]]
+    return {"visual_id": starts[0], "kind": "keyframe", "path": found[-1]["path"] if found else None,
+            "sha256": found[-1]["sha256"] if found else None}
+
+
+def derived_file(project: Project, derived: dict[str, Any]) -> Path:
+    root = project.artifacts_dir / "visuals" if derived["kind"] == "file" else references_root(project)
+    path = contained_path(root, derived["path"])
+    if not path.is_file() or sha256_file(path) != derived["sha256"]:
+        raise GateFailure(f"start image {derived['visual_id']} changed or is missing")
+    return path
 
 
 def sheet_request(canon: Canon, registry: dict[str, Any], models: dict[str, Any], canon_id: str, view: str) -> dict[str, Any]:
@@ -203,7 +229,7 @@ def sheet_requests(canon: Canon, registry: dict[str, Any], models: dict[str, Any
 
 # ---------------------------------------------------------------- SDXL adapter
 
-def sdxl_preflight(project: Project, models: dict[str, Any]):
+def sdxl_preflight(project: Project, models: dict[str, Any], request: dict[str, Any] | None = None):
     """Every selection must be explicit, pinned and locally verified before any SDXL job."""
     sdxl = models.get("sdxl")
     if not sdxl or sdxl["status"] != "validated":
@@ -216,9 +242,14 @@ def sdxl_preflight(project: Project, models: dict[str, Any]):
     path = Path(sdxl["checkpoint_path"])
     if not path.is_absolute() or not path.is_file() or sha256_file(path) != sdxl["checkpoint_sha256"]:
         raise IntegrationUnavailable("SDXL checkpoint file/hash mismatch: NOT VALIDATED")
-    template = load_template(contained_path(project.root, sdxl["workflow_template"]))
+    end = bool(request and request.get("role") == "end")
+    name = sdxl.get("edit_workflow_template") if end else sdxl["workflow_template"]
+    if not name:
+        raise IntegrationUnavailable("SDXL end-frame derivation workflow not selected: NOT VALIDATED")
+    template = load_template(contained_path(project.root, name))
     if template.status != "validated" or not template.output_node:
-        raise IntegrationUnavailable(f"SDXL workflow status is '{template.status}': NOT VALIDATED")
+        what = "end-frame derivation workflow" if end else "workflow"
+        raise IntegrationUnavailable(f"SDXL {what} status is '{template.status}': NOT VALIDATED")
     if sdxl["checkpoint_file"] not in template.text:
         raise ConfigError(f"SDXL workflow {template.name} does not load the pinned checkpoint {sdxl['checkpoint_file']}")
     return template
@@ -229,6 +260,8 @@ def require_references(request: dict[str, Any], models: dict[str, Any]) -> None:
     problems = []
     if request["style"] is None:
         problems.append("no approved style")
+    if request.get("role") == "end" and not (request.get("derived_from") or {}).get("sha256"):
+        problems.append("no approved start image to derive from")
     if request["missing_references"]:
         problems.append(f"missing approved references {request['missing_references']}")
     slots = models["sdxl"]["identity_conditioning"]["reference_slots"]
@@ -240,11 +273,13 @@ def require_references(request: dict[str, Any], models: dict[str, Any]) -> None:
 
 def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, Any], journal: Path, work: Path) -> dict[str, str]:
     """Run one request through ComfyUI and leave keyframe.png, request.json and metrics.json in work."""
-    template = sdxl_preflight(project, models)
+    template = sdxl_preflight(project, models, request)
     require_references(request, models)
     slots = models["sdxl"]["identity_conditioning"]["reference_slots"]
     values = {"PROMPT": request["prompt"], "NEGATIVE_PROMPT": request["negative_prompt"], "SEED": request["seed"],
               "WIDTH": request["width"], "HEIGHT": request["height"]}
+    if request.get("role") == "end":
+        values["START_IMAGE"] = str(derived_file(project, request["derived_from"]))
     for index in range(1, slots + 1):
         ref = request["references"][index - 1] if index <= len(request["references"]) else None
         values[f"REFERENCE_IMAGE_{index}"] = str(approved_file(project, ref)) if ref else ""

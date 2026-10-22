@@ -1,0 +1,4 @@
+{
+  "_status": "unvalidated",
+  "_note": "NOT VALIDATED. No end-frame editing/inpainting workflow is selected (frozen section 7 Tier 2: derive the end image from the same composition). Replace with the API-format graph exported from ComfyUI, set _output_node to the image save node, then set _status to validated only after a real decoded image. Placeholders: START_IMAGE, PROMPT, NEGATIVE_PROMPT, SEED, WIDTH, HEIGHT, REFERENCE_IMAGE_1..REFERENCE_IMAGE_<reference_slots>."
+}

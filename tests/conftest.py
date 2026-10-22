@@ -59,7 +59,7 @@ def make_project(root: Path) -> Project:
         shutil.copyfile(REPO / "config" / name, root / "config" / name)
     template_dir = root / "workflows" / "comfyui"
     template_dir.mkdir(parents=True, exist_ok=True)
-    for name in ("ltx_i2v_098.json", "ltx_flf_098.json", "sdxl_keyframe.json"):
+    for name in ("ltx_i2v_098.json", "ltx_flf_098.json", "sdxl_keyframe.json", "sdxl_endframe.json"):
         (template_dir / name).write_text('{"_status": "unvalidated"}', encoding="utf-8")
 
     _dump(root / "canon" / "characters.yaml", {

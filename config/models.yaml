@@ -25,6 +25,7 @@ sdxl:
   checkpoint_sha256: null
   checkpoint_path: null
   workflow_template: workflows/comfyui/sdxl_keyframe.json
+  edit_workflow_template: workflows/comfyui/sdxl_endframe.json   # end-frame derivation (frozen 7 Tier 2); null = not selected
   identity_conditioning:
     method: null          # "none" is an explicit choice; null means not decided
     reference_slots: 0    # reference images the workflow accepts (REFERENCE_IMAGE_1..N)
