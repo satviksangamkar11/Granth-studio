@@ -83,6 +83,36 @@ def render_graph(template: WorkflowTemplate, values: dict[str, str]) -> dict[str
     return {key: value for key, value in graph.items() if not key.startswith("_")}
 
 
+def node_types(graph: dict[str, Any]) -> set[str]:
+    return {node["class_type"] for key, node in graph.items() if not key.startswith("_")}
+
+
+_WEIGHT_NAME = re.compile(r'"([^"\\]+\.(?:safetensors|ckpt|pt|pth|gguf))"')
+
+
+def check_checkpoint_binding(template: WorkflowTemplate, checkpoint_file: str) -> None:
+    """The graph must load the pinned checkpoint by exact file name and no other LTX weights,
+    so an LTX-2 (or any other) graph cannot be substituted for the pinned 0.9.8 workflow."""
+    names = set(_WEIGHT_NAME.findall(template.text))
+    if checkpoint_file not in names:
+        raise ConfigError(f"workflow {template.name} does not load the pinned checkpoint {checkpoint_file}")
+    others = sorted(n for n in names - {checkpoint_file} if "ltx" in n.lower())
+    if others:
+        raise ConfigError(f"workflow {template.name} references other LTX weights {others}")
+
+
+def execution_seconds(history_entry: dict[str, Any]) -> float | None:
+    """Server-side execution time from ComfyUI status messages, when the server reports them."""
+    stamps = {}
+    for message in history_entry.get("status", {}).get("messages", []):
+        if isinstance(message, list) and len(message) == 2 and isinstance(message[1], dict):
+            stamps[message[0]] = message[1].get("timestamp")
+    start, end = stamps.get("execution_start"), stamps.get("execution_success")
+    if isinstance(start, (int, float)) and isinstance(end, (int, float)):
+        return (end - start) / 1000
+    return None
+
+
 def collect_outputs(history_entry: dict[str, Any]) -> list[dict[str, Any]]:
     found: list[dict[str, Any]] = []
     for _node_id, node in sorted(history_entry.get("outputs", {}).items()):
@@ -117,16 +147,48 @@ class ComfyBackend:
         except (urllib.error.URLError, OSError) as exc:
             raise IntegrationUnavailable(f"ComfyUI unreachable at {self.base_url}: {exc}") from exc
 
-    def submit(self, graph: dict[str, Any]) -> str:
-        body = json.dumps({"prompt": graph, "client_id": CLIENT_ID}).encode("utf-8")
+    def system_stats(self) -> dict[str, Any]:
+        return json.loads(self._request("GET", "/system_stats"))
+
+    def object_info(self) -> dict[str, Any]:
+        return json.loads(self._request("GET", "/object_info"))
+
+    def require_nodes(self, graph: dict[str, Any]) -> None:
+        missing = sorted(node_types(graph) - set(self.object_info()))
+        if missing:
+            raise IntegrationUnavailable(f"ComfyUI at {self.base_url} lacks required nodes {missing}: NOT VALIDATED")
+
+    def locate(self, prompt_id: str | None = None, token: str | None = None) -> tuple[str, str, dict | None] | None:
+        """Find a job in the queue or history by prompt id or by the job token sent at submission."""
+        def matches(item):
+            extra = item[3] if len(item) > 3 and isinstance(item[3], dict) else {}
+            return (prompt_id is not None and item[1] == prompt_id) or (
+                token is not None and extra.get("granthstudio_job") == token)
+        queue = json.loads(self._request("GET", "/queue"))
+        for where in ("queue_running", "queue_pending"):
+            for item in queue.get(where, []):
+                if matches(item):
+                    return where.removeprefix("queue_"), str(item[1]), None
+        for pid, entry in json.loads(self._request("GET", "/history")).items():
+            if matches(entry.get("prompt", [None, pid])):
+                return "history", pid, entry
+        return None
+
+    def submit(self, graph: dict[str, Any], token: str | None = None) -> str:
+        payload = {"prompt": graph, "client_id": CLIENT_ID}
+        if token is not None:
+            payload["extra_data"] = {"granthstudio_job": token}
+        body = json.dumps(payload).encode("utf-8")
         data = json.loads(self._request("POST", "/prompt", body))
         if "prompt_id" not in data:
             raise TaskFailed(f"ComfyUI rejected the prompt: {data}")
         return str(data["prompt_id"])
 
-    def wait(self, prompt_id: str) -> dict[str, Any]:
+    def wait(self, prompt_id: str, sampler=None) -> dict[str, Any]:
         deadline = time.monotonic() + self.max_wait_s
         while time.monotonic() < deadline:
+            if sampler is not None:
+                sampler()
             history = json.loads(self._request("GET", f"/history/{prompt_id}"))
             if prompt_id in history:
                 entry = history[prompt_id]
@@ -143,28 +205,32 @@ class ComfyBackend:
         dest.write_bytes(self._request("GET", f"/view?{query}"))
 
 
-    def execute(self, graph: dict[str, Any], journal: Path) -> dict[str, Any]:
+    def execute(self, graph: dict[str, Any], journal: Path, sampler=None) -> dict[str, Any]:
         """Persist intent before POST; an ambiguous submission must be reconciled, never repeated."""
         identity = {"base_url": self.base_url, "graph_sha256": sha256_obj(graph)}
         state = read_json(journal) if journal.exists() else None
         if state and any(state.get(k) != v for k, v in identity.items()):
             raise JobPending("submission journal belongs to different runtime/graph")
         if state and state.get("state") == "submitting":
-            raise JobPending("submission outcome unknown; reconcile with ComfyUI before another POST")
+            raise JobPending("submission outcome unknown; run 'comfy reconcile' before another POST")
+        if state and state.get("state") == "cancelled":
+            raise JobPending("job was cancelled; run 'comfy reconcile' to confirm it stopped before resubmitting")
         if not state or state.get("state") == "failed":
-            state = {**identity, "state": "submitting"}
+            attempt = (state or {}).get("attempt", 0) + 1
+            token = sha256_obj({**identity, "journal": journal.name, "attempt": attempt})
+            state = {**identity, "state": "submitting", "job_token": token, "attempt": attempt}
             atomic_write_json(journal, state)
             try:
-                prompt_id = self.submit(graph)
+                prompt_id = self.submit(graph, token)
             except IntegrationUnavailable as exc:
                 raise JobPending("submission outcome unknown; retained journal for reconciliation") from exc
             except TaskFailed:
-                atomic_write_json(journal, {**identity, "state": "failed"})
+                atomic_write_json(journal, {**state, "state": "failed"})
                 raise
-            state = {**identity, "state": "submitted", "prompt_id": prompt_id}
+            state = {**state, "state": "submitted", "prompt_id": prompt_id}
             atomic_write_json(journal, state)
         try:
-            return self.wait(state["prompt_id"])
+            return self.wait(state["prompt_id"], sampler) if sampler else self.wait(state["prompt_id"])
         except IntegrationUnavailable as exc:
             raise JobPending("connection lost; retain prompt and resume polling") from exc
         except TaskFailed:
@@ -179,3 +245,43 @@ def select_video(history: dict[str, Any], output_node: str) -> dict[str, Any]:
     if len(candidates) != 1:
         raise TaskFailed("designated output node must produce exactly one MP4")
     return candidates[0]
+
+
+def reconcile(backend: ComfyBackend, journal: Path, declare_lost: bool = False) -> dict[str, Any]:
+    """Resolve an unknown or cancelled submission from the server's own queue and history.
+
+    A job that cannot be found is only marked failed (resubmittable) when the operator
+    declares it lost, because a cleared history would otherwise cause a duplicate GPU job.
+    """
+    state = read_json(journal)
+    if state["state"] == "submitting":
+        found = backend.locate(token=state.get("job_token")) if state.get("job_token") else None
+        if found:
+            state = {**state, "state": "submitted", "prompt_id": found[1]}
+        elif declare_lost:
+            state = {**state, "state": "failed", "declared_lost": True}
+        else:
+            raise JobPending("submission not found in queue or history; confirm on the server, then use --declare-lost")
+    elif state["state"] == "cancelled":
+        found = backend.locate(prompt_id=state["prompt_id"])
+        if found and found[0] in ("running", "pending"):
+            raise JobPending(f"cancelled prompt {state['prompt_id']} is still {found[0]}")
+        succeeded = found is not None and found[2].get("status", {}).get("status_str") == "success"
+        state = {**state, "state": "submitted" if succeeded else "failed"}
+    atomic_write_json(journal, state)
+    return state
+
+
+def cancel(backend: ComfyBackend, journal: Path) -> dict[str, Any]:
+    """Operator cancellation: remove a queued prompt, or interrupt it only when it is the running one."""
+    state = read_json(journal)
+    if state["state"] != "submitted":
+        raise ConfigError(f"only a submitted job can be cancelled (journal state {state['state']!r}); reconcile first")
+    found = backend.locate(prompt_id=state["prompt_id"])
+    if found and found[0] == "pending":
+        backend._request("POST", "/queue", json.dumps({"delete": [state["prompt_id"]]}).encode("utf-8"))
+    elif found and found[0] == "running":
+        backend._request("POST", "/interrupt", json.dumps({"prompt_id": state["prompt_id"]}).encode("utf-8"))
+    state = {**state, "state": "cancelled"}
+    atomic_write_json(journal, state)
+    return state

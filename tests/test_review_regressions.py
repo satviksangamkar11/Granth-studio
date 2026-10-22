@@ -220,7 +220,7 @@ def test_f08_timeout_and_restart_reuse_prompt_id(tmp_path):
     class Backend(ComfyBackend):
         submissions = 0
         polls = 0
-        def submit(self, graph): self.submissions += 1; return "prompt-one"
+        def submit(self, graph, token=None): self.submissions += 1; return "prompt-one"
         def wait(self, prompt_id):
             assert prompt_id == "prompt-one"
             self.polls += 1
@@ -235,7 +235,7 @@ def test_f08_timeout_and_restart_reuse_prompt_id(tmp_path):
 def test_f08_ambiguous_submission_never_posts_twice(tmp_path):
     class Backend(ComfyBackend):
         submissions = 0
-        def submit(self, graph):
+        def submit(self, graph, token=None):
             self.submissions += 1
             raise IntegrationUnavailable("response lost after server accepted POST")
     backend = Backend("http://synthetic.invalid")

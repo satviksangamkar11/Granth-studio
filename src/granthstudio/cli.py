@@ -195,6 +195,61 @@ def cmd_session(args: argparse.Namespace) -> int:
         print(f"exported artifacts to {storage.root / args.export_name}")
 
 
+def _journal(project, args):
+    """The durable submission journal of one LTX shot task in the episode store."""
+    bundle = load_bundle(project, load_models(project), args.adhyay)
+    scheduler = Scheduler(episode_store(project, args.adhyay))
+    task = next((t for t in plan_tasks(bundle, scheduler) if t.name == args.shot), None)
+    if task is None or task.stage not in ("tier1", "tier2"):
+        raise ConfigError(f"{args.shot} is not an LTX shot task in adhyay {args.adhyay}")
+    path = scheduler.store / "pending" / f"{task.task_id()}.json"
+    if not path.is_file():
+        raise ConfigError(f"no submission journal for {args.shot}")
+    return bundle, path
+
+
+def cmd_comfy_inspect(args: argparse.Namespace) -> int:
+    """Server and workflow compatibility: required nodes and the pinned checkpoint binding."""
+    from .comfy import ComfyBackend, check_checkpoint_binding, load_template, node_types
+    from .integrity import contained_path
+    project = _project(args)
+    models = load_models(project)
+    backend = ComfyBackend(models["comfyui"]["base_url"])
+    available = set(backend.object_info())
+    report = {"system_stats": backend.system_stats(), "workflows": {}}
+    for capability, relative in models["ltx"]["workflow_templates"].items():
+        template = load_template(contained_path(project.root, relative))
+        entry = {"status": template.status, "version": template.version}
+        try:
+            graph = json.loads(template.text)
+            entry["missing_nodes"] = sorted(node_types(graph) - available)
+            check_checkpoint_binding(template, models["ltx"]["checkpoint_file"])
+            entry["checkpoint_binding"] = "ok"
+        except (ConfigError, KeyError, TypeError, ValueError) as exc:
+            entry["checkpoint_binding"] = f"NOT VALIDATED: {exc}"
+        report["workflows"][capability] = entry
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    ok = all(w["status"] == "validated" and not w.get("missing_nodes") and w["checkpoint_binding"] == "ok"
+             for w in report["workflows"].values())
+    return EXIT_OK if ok else EXIT_NOT_VALIDATED
+
+
+def cmd_comfy_reconcile(args: argparse.Namespace) -> int:
+    from .comfy import ComfyBackend, reconcile
+    bundle, path = _journal(_project(args), args)
+    state = reconcile(ComfyBackend(bundle.models["comfyui"]["base_url"]), path, args.declare_lost)
+    print(f"{args.shot}: journal state {state['state']}")
+    return EXIT_OK
+
+
+def cmd_comfy_cancel(args: argparse.Namespace) -> int:
+    from .comfy import ComfyBackend, cancel
+    bundle, path = _journal(_project(args), args)
+    state = cancel(ComfyBackend(bundle.models["comfyui"]["base_url"]), path)
+    print(f"{args.shot}: cancellation requested for prompt {state['prompt_id']}; run 'comfy reconcile' next")
+    return EXIT_OK
+
+
 def cmd_runtime_preflight(args: argparse.Namespace) -> int:
     project = _project(args)
     report = preflight(project, load_models(project), load_runtime(project), gpu_status(), ram_available_mb())
@@ -362,6 +417,19 @@ def build_parser() -> argparse.ArgumentParser:
     boot.add_argument("--workdir", type=Path, default=Path("/kaggle/working"))
     boot.add_argument("--execute", action="store_true")
     boot.set_defaults(handler=cmd_runtime_bootstrap)
+
+    comfy = commands.add_parser("comfy", help="ComfyUI server compatibility and job control")
+    comfy_actions = comfy.add_subparsers(dest="action", required=True)
+    comfy_actions.add_parser("inspect", help="required nodes, workflow status and checkpoint binding").set_defaults(
+        handler=cmd_comfy_inspect)
+    for name, handler in (("reconcile", cmd_comfy_reconcile), ("cancel", cmd_comfy_cancel)):
+        sub_cmd = comfy_actions.add_parser(name, help=f"{name} one LTX shot's ComfyUI job")
+        sub_cmd.add_argument("adhyay", type=int)
+        sub_cmd.add_argument("shot")
+        if name == "reconcile":
+            sub_cmd.add_argument("--declare-lost", action="store_true",
+                                 help="operator confirmed the job is not on the server; allow resubmission")
+        sub_cmd.set_defaults(handler=handler)
 
     ffprobe = commands.add_parser("ffprobe", help="probe a media file")
     ffprobe.add_argument("file", type=Path)

@@ -9,12 +9,14 @@ import json
 import math
 import os
 import shutil
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from .canon import Canon, load_canon
-from .comfy import ComfyBackend, ensure_validated, load_template, render_graph, select_video
+from .comfy import (ComfyBackend, check_checkpoint_binding, ensure_validated, execution_seconds, load_template,
+                    render_graph, select_video)
 from .config import Project, load_models, require_capability
 from .episodes import compile_episode
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
@@ -23,6 +25,7 @@ from .integrity import atomic_write_bytes, atomic_write_json, contained_path, re
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
+from .runtime import gpu_status
 from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
@@ -147,22 +150,60 @@ def _ltx_preflight(bundle, capability):
     template = load_template(contained_path(bundle.project.root, bundle.models["ltx"]["workflow_templates"][capability]))
     require_capability(bundle.models, capability, bundle.project.benchmarks_dir, template.version)
     ensure_validated(template)
+    check_checkpoint_binding(template, bundle.models["ltx"]["checkpoint_file"])
     return template
+
+def validate_ltx_inputs(models, shot, image):
+    """Interface checks only. The exact LTX 0.9.8 frame/resolution rule is still O-003:
+    frames must be in the pinned list, and size/FPS come from the pinned runtime."""
+    ltx = models["ltx"]
+    if shot["frames"] not in ltx["frame_counts"]:
+        raise TaskFailed(f"{shot['shot_id']}: frames {shot['frames']} not in pinned frame_counts")
+    runtime = ltx.get("runtime") or {}
+    if not runtime.get("width") or not runtime.get("height"):
+        raise IntegrationUnavailable("LTX runtime width/height are not pinned: NOT VALIDATED")
+    info = probe(image)
+    if not info.width or not info.height:
+        raise TaskFailed(f"{image.name}: start image is not decodable")
+    return {"frames": shot["frames"], "fps": FPS, "width": runtime["width"], "height": runtime["height"],
+            "start_image": {"width": info.width, "height": info.height, "sha256": sha256_file(image)},
+            "frame_rule": "pinned list only; exact rule open (O-003)"}
+
 
 def _ltx_run(bundle, shot, visual, capability, journal):
     visuals = {v["visual_id"]: v for v in bundle.compiled["visuals"]}
     def run(work):
         template = _ltx_preflight(bundle, capability)
-        runtime = bundle.models["ltx"]["runtime"]
-        values = {"START_IMAGE": str(_visual_file(bundle, visual)), "MOTION_PROMPT": shot["motion_prompt"],
+        start = _visual_file(bundle, visual)
+        inputs = validate_ltx_inputs(bundle.models, shot, start)
+        values = {"START_IMAGE": str(start), "MOTION_PROMPT": shot["motion_prompt"],
                   "FRAMES": shot["frames"], "SEED": _seed(shot["shot_id"]), "FPS": FPS,
-                  "WIDTH": runtime["width"], "HEIGHT": runtime["height"]}
+                  "WIDTH": inputs["width"], "HEIGHT": inputs["height"]}
         if capability == "flf":
             values["END_IMAGE"] = str(_visual_file(bundle, visuals[shot["end_visual_id"]]))
         backend = ComfyBackend(bundle.models["comfyui"]["base_url"])
-        history = backend.execute(render_graph(template, values), journal)
+        graph = render_graph(template, values)
+        backend.require_nodes(graph)
+        stats = backend.system_stats()
+        peak = []
+        def sample():
+            gpus = gpu_status()
+            if gpus:
+                peak.append(gpus[0]["memory_used_mb"])
+        started = time.monotonic()
+        history = backend.execute(graph, journal, sample)
+        wall = time.monotonic() - started
         backend.fetch(select_video(history, template.output_node), work / "clip.mp4")
-        return {"clip": "clip.mp4"}
+        atomic_write_json(work / "metrics.json", {
+            "schema_version": 1, "capability": capability, "shot_id": shot["shot_id"],
+            "prompt_id": read_json(journal)["prompt_id"], "workflow_version": template.version,
+            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs,
+            "execution_s": {"value": execution_seconds(history), "kind": "measured by ComfyUI status messages"},
+            "wall_s": {"value": wall, "kind": "measured in this session only (excludes earlier sessions)"},
+            "peak_vram_mb": {"value": max(peak) if peak else None,
+                             "kind": "sampled with nvidia-smi at each poll; lower bound of the true peak"},
+            "gpu_count": 1, "system_stats": stats})
+        return {"clip": "clip.mp4", "metrics": "metrics.json"}
     return run
 
 def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
