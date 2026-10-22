@@ -50,8 +50,10 @@ Facts that matter for the repository's adapter:
 Verified in ComfyUI source (`comfy_extras/nodes_lt.py` and `nodes_custom_sampler.py` at the pinned commit):
 `LTXVImgToVideo`, `LTXVConditioning`, `LTXVPreprocess`, `SamplerCustomAdvanced`, `KSamplerSelect`, `CFGGuider`, `RandomNoise`.
 Assumed core, not checked: `CheckpointLoaderSimple`, `CLIPLoader`, `CLIPTextEncode`, `LoadImage`, `VAEDecode`.
-Third-party: `VHS_VideoCombine` (VideoHelperSuite, GPL-3.0, needs ffmpeg); `StringToFloatList` (defined in KJNodes at
-`main`, GPL-3.0). **`FloatToSigmas` was not found** in `nodes_custom_sampler.py`, and no source was identified for it.
+Third-party: `VHS_VideoCombine` (VideoHelperSuite, GPL-3.0, needs ffmpeg). `StringToFloatList` and `FloatToSigmas` are both
+registered by ComfyUI-KJNodes at the pinned commit (`__init__.py` `NODE_CONFIG` entries read on 2026-10-22; they are absent from
+ComfyUI core's `nodes_custom_sampler.py`). `StringToFloatList` takes one `string` input (multiline); the `FloatToSigmas` class body and its
+input names were **not** read, so its API-format inputs are still unknown.
 The pins file records these statuses honestly; the real answer comes from `/object_info` on a running server, which the verify
 script compares class by class.
 
@@ -89,7 +91,7 @@ multiple-of-32 size; it only checks list membership (see blocker B5). FPS: the o
 | ID | Question / blocker | Needed to resolve |
 |---|---|---|
 | B1 | Is the 2B **0.9.8** distilled checkpoint compatible with the 0.9.6-2B workflow graph unchanged? | A real run, or Lightricks' statement; no official 2B 0.9.8 low-level workflow found |
-| B2 | Source of `FloatToSigmas`; KJNodes version that has `StringToFloatList` at the pinned date | `/object_info` from the installed server; inspect KJNodes at the pinned commit |
+| B2 | `FloatToSigmas` provider is KJNodes (registered at the pinned commit), but its input names and the output slot semantics are unread | read the class in KJNodes at the pinned commit and compare with `/object_info` |
 | B3 | UI-format workflow must become API-format with every widget value in the right slot | Export from a running ComfyUI with these nodes installed (or convert mechanically using `/object_info`); do not hand-write |
 | B4 | `LoadImage` needs an uploaded/input-folder image name; adapter passes a path | Adapter change (upload via `/upload/image` or copy into the input folder) — a code change not made here |
 | B5 | Adapter does not enforce 8n+1 or multiple-of-32 sizes; `config` `ltx.runtime.width/height` unset; test fixtures use 160×120 | Small validation change after the first run confirms the rule |

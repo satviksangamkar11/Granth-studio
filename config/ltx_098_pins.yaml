@@ -36,7 +36,7 @@ sources:
     repo: https://github.com/kijai/ComfyUI-KJNodes
     commit: ad37ce656c13e9abea002b46e3a89be3dba32355        # 2025-07-16, newest before 2025-07-17; PROPOSED only
     license: GPL-3.0
-    evidence: "defines StringToFloatList at main (fetch tool); FloatToSigmas provider NOT found (see required_nodes)"
+    evidence: "at this commit __init__.py NODE_CONFIG registers StringToFloatList and FloatToSigmas (fetch tool); StringToFloatList INPUT_TYPES: string (STRING, multiline); FloatToSigmas class body and input names NOT read"
 workflow:
   repo: https://github.com/Lightricks/ComfyUI-LTXVideo
   commit: 36fdaf500b3cd6f7fa8b2dfec36e984746e630a2
@@ -79,8 +79,8 @@ required_nodes:
   - {class: KSamplerSelect, provider: core, status: verified_in_source}
   - {class: CFGGuider, provider: core, status: verified_in_source}
   - {class: RandomNoise, provider: core, status: verified_in_source}
-  - {class: StringToFloatList, provider: kjnodes, status: seen_in_kjnodes_main_only}
-  - {class: FloatToSigmas, provider: UNKNOWN, status: unverified}
+  - {class: StringToFloatList, provider: kjnodes, status: registered_in_kjnodes_at_pinned_commit}
+  - {class: FloatToSigmas, provider: kjnodes, status: registered_in_kjnodes_node_config_at_pinned_commit}
   - {class: VHS_VideoCombine, provider: videohelpersuite, status: assumed}
 expected_output:
   designated_output_node_class: VHS_VideoCombine     # emits an mp4 under 'gifs' in /history; comfy.select_video accepts 'gifs'

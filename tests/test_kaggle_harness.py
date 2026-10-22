@@ -32,26 +32,63 @@ def test_parse_junit_outcomes(tmp_path):
                    "tests/test_a.py::test_skip": "skipped", "tests/test_a.py::test_err": "error"}
 
 
-def test_pass_needs_posix_all_required_passed_and_supplementary():
-    required = ["t::a", "t::b"]
-    full = rows(**{"t::a": "passed", "t::b": "passed", "t::c": "skipped"})
-    supp = rows(**{"s::x": "passed"})
-    good = lv.evaluate(full, supp, required, posix=True, kaggle=True)
-    assert good["verdict"] == "LINUX_CPU_PASS_ON_KAGGLE" and good["skipped"][0]["id"] == "t::c"
-    assert lv.evaluate(full, supp, required, posix=True, kaggle=False)["verdict"] == "LINUX_CPU_PASS_NON_KAGGLE_HOST"
-    assert lv.evaluate(full, supp, required, posix=False, kaggle=False)["verdict"] == "INCOMPLETE_NOT_LINUX"   # never a Linux PASS
+REQ = ["t::a", "t::b"]
+SUPP = ["s::x", "s::y"]
+OK_CODES = {"full": 0, "supplementary": 0}
 
 
-@pytest.mark.parametrize("full,supp", [
-    ({"t::a": "passed", "t::b": "skipped"}, {"s::x": "passed"}),         # a required POSIX test was skipped
-    ({"t::a": "passed"}, {"s::x": "passed"}),                            # a required test was not collected
-    ({"t::a": "passed", "t::b": "passed", "t::c": "failed"}, {"s::x": "passed"}),
-    ({"t::a": "passed", "t::b": "passed"}, {"s::x": "failed"}),
-    ({"t::a": "passed", "t::b": "passed"}, {}),                          # supplementary produced nothing
+def evaluate(full, supp, **overrides):
+    args = dict(required=REQ, posix=True, kaggle=True, exit_codes=OK_CODES, supp_required=SUPP, expected_total=3)
+    args.update(overrides)
+    return lv.evaluate(full, supp, **args)
+
+
+GOOD_FULL = rows(**{"t::a": "passed", "t::b": "passed", "t::c": "skipped"})
+GOOD_SUPP = rows(**{"s::x": "passed", "s::y": "passed"})
+
+
+def test_pass_needs_posix_exit_codes_complete_collection_and_every_required_test():
+    good = evaluate(GOOD_FULL, GOOD_SUPP)
+    assert good["verdict"] == "LINUX_CPU_PASS_ON_KAGGLE" and good["skipped"][0]["id"] == "t::c" and good["collected"] == 3
+    assert evaluate(GOOD_FULL, GOOD_SUPP, kaggle=False)["verdict"] == "LINUX_CPU_PASS_NON_KAGGLE_HOST"
+    assert evaluate(GOOD_FULL, GOOD_SUPP, posix=False)["verdict"] == "INCOMPLETE_NOT_LINUX"      # never a Linux PASS
+
+
+@pytest.mark.parametrize("name,kwargs", [
+    ("required skipped", dict(full=rows(**{"t::a": "passed", "t::b": "skipped", "t::c": "passed"}))),
+    ("required missing", dict(full=rows(**{"t::a": "passed", "t::c": "passed", "t::d": "passed"}))),
+    ("a failure", dict(full=rows(**{"t::a": "passed", "t::b": "passed", "t::c": "failed"}))),
+    ("supplementary failed", dict(supp=rows(**{"s::x": "passed", "s::y": "failed"}))),
+    ("supplementary test missing", dict(supp=rows(**{"s::x": "passed"}))),                         # reduced collection
+    ("no supplementary at all", dict(supp=[])),
+    ("unexpected extra supplementary", dict(supp=rows(**{"s::x": "passed", "s::y": "passed", "s::z": "passed"}))),
+    ("full suite exit code 1 despite passing JUnit", dict(exit_codes={"full": 1, "supplementary": 0})),
+    ("supplementary exit code 1 despite passing JUnit", dict(exit_codes={"full": 0, "supplementary": 1})),
+    ("filtered collection", dict(full=rows(**{"t::a": "passed", "t::b": "passed"}))),               # 2 collected, 3 expected
+    ("duplicate ids", dict(full=rows(**{"t::a": "passed", "t::b": "passed"}) + rows(**{"t::a": "passed"}))),
 ])
-def test_any_gap_is_a_failure(full, supp):
-    out = lv.evaluate(rows(**full), rows(**supp), ["t::a", "t::b"], posix=True, kaggle=True)
-    assert out["verdict"] == "LINUX_CPU_FAIL" and out["problems"]
+def test_any_gap_is_a_failure(name, kwargs):
+    full = kwargs.pop("full", GOOD_FULL); supp = kwargs.pop("supp", GOOD_SUPP)
+    out = evaluate(full, supp, **kwargs)
+    assert out["verdict"] == "LINUX_CPU_FAIL" and out["problems"], name
+
+
+def test_the_ten_required_baseline_results_alone_do_not_pass():
+    """Codex finding: replaying only the required results plus one supplementary pass must not reach PASS."""
+    full = rows(**{rid: "passed" for rid in lv.REQUIRED})
+    supp = rows(**{lv.SUPPLEMENTARY[0]: "passed"})
+    out = lv.evaluate(full, supp, lv.REQUIRED, True, True, OK_CODES, lv.SUPPLEMENTARY, lv.EXPECTED_BASELINE_TESTS)
+    assert out["verdict"] == "LINUX_CPU_FAIL"
+    assert any("collected 10 tests" in p for p in out["problems"]) and any("supplementary test" in p for p in out["problems"])
+
+
+def test_supplementary_ids_match_the_harness_file_and_total_matches_the_recorded_baseline_run():
+    import re
+    text = (REPO / "scripts" / "kaggle" / "posix_primitives_tests.py").read_text(encoding="utf-8")
+    assert sorted(re.findall(r"^def (test_\w+)\(", text, re.M)) == sorted(i.split("::")[1] for i in lv.SUPPLEMENTARY)
+    recorded = lv.parse_junit(REPO / "benchmarks" / "linux" / "junit_full.xml")      # the real Kaggle run of f8d5d02
+    assert len(recorded) == lv.EXPECTED_BASELINE_TESTS == 321
+    assert all(r["id"] in {x["id"] for x in recorded} for r in rows(**{i: "x" for i in lv.REQUIRED}))
 
 
 def test_required_ids_exist_in_the_baseline_test_files():

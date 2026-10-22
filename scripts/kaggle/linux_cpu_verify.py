@@ -37,6 +37,19 @@ REQUIRED = [
 ]
 
 
+# The five supplementary tests in posix_primitives_tests.py: all must run and pass.
+SUPPLEMENTARY = [
+    "harness/posix_primitives_tests.py::test_fcntl_flock_backs_the_journal_lock",
+    "harness/posix_primitives_tests.py::test_dir_fd_primitives_exist_for_reference_creation",
+    "harness/posix_primitives_tests.py::test_flock_excludes_a_second_real_process",
+    "harness/posix_primitives_tests.py::test_symlink_creation_is_possible_and_refused_by_reference_import",
+    "harness/posix_primitives_tests.py::test_dangling_symlink_at_the_destination_is_not_followed",
+]
+# Every test in the accepted baseline (318 passed + 3 skipped on Windows = 321 collected). A smaller collection means
+# something filtered or truncated the run, which can never be a PASS.
+EXPECTED_BASELINE_TESTS = 321
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -95,26 +108,36 @@ def parse_junit(path: Path) -> list[dict]:
     return rows
 
 
-def evaluate(full: list[dict], supplementary: list[dict], required: list[str], posix: bool, kaggle: bool) -> dict:
+def evaluate(full: list[dict], supplementary: list[dict], required: list[str], posix: bool, kaggle: bool,
+             exit_codes: dict, supp_required: list[str], expected_total: int) -> dict:
+    """No default arguments on purpose: every gate must be supplied by the caller."""
     by_id = {r["id"]: r for r in full}
     counts = {k: sum(1 for r in full if r["outcome"] == k) for k in ("passed", "failed", "error", "skipped")}
     required_status = {rid: by_id.get(rid, {"outcome": "not_collected"})["outcome"] for rid in required}
     supp = {r["id"]: r["outcome"] for r in supplementary}
+    supp_status = {tid: supp.get(tid, "not_collected") for tid in supp_required}
     problems = []
+    for name, code in exit_codes.items():
+        if code != 0:
+            problems.append(f"pytest ({name}) exited with code {code}")
+    if len(full) != expected_total:
+        problems.append(f"full suite collected {len(full)} tests, the accepted baseline has {expected_total}")
+    if len(by_id) != len(full):
+        problems.append("duplicate test ids in the JUnit data")
     if counts["failed"] or counts["error"]:
         problems.append(f"{counts['failed']} failed, {counts['error']} errors in the full suite")
     problems += [f"required test {rid} was {st}" for rid, st in required_status.items() if st != "passed"]
-    problems += [f"supplementary test {tid} was {st}" for tid, st in supp.items() if st != "passed"]
-    if not supplementary:
-        problems.append("supplementary POSIX tests produced no results")
+    problems += [f"supplementary test {tid} was {st}" for tid, st in supp_status.items() if st != "passed"]
+    problems += [f"unexpected supplementary test {tid}" for tid in supp if tid not in supp_required]
     if not posix:
         verdict = "INCOMPLETE_NOT_LINUX"
     elif problems:
         verdict = "LINUX_CPU_FAIL"
     else:
         verdict = "LINUX_CPU_PASS_ON_KAGGLE" if kaggle else "LINUX_CPU_PASS_NON_KAGGLE_HOST"
-    return {"verdict": verdict, "problems": problems, "counts": counts, "required": required_status,
-            "supplementary": supp, "skipped": [{"id": r["id"], "reason": r["detail"]} for r in full if r["outcome"] == "skipped"]}
+    return {"verdict": verdict, "problems": problems, "counts": counts, "exit_codes": exit_codes, "collected": len(full),
+            "expected_collected": expected_total, "required": required_status, "supplementary": supp_status,
+            "skipped": [{"id": r["id"], "reason": r["detail"]} for r in full if r["outcome"] == "skipped"]}
 
 
 def ensure_dependencies(log: Path) -> list[str]:
@@ -171,18 +194,21 @@ def main(argv: list[str] | None = None) -> int:
         receipt["dependencies_installed_by_this_run"] = ensure_dependencies(log)
     except SystemExit as exc:
         return finish("NOT_RUN_DEPENDENCIES", str(exc))
-    env = {**os.environ, "PYTHONPATH": str(args.repo / "src"), "PYTHONDONTWRITEBYTECODE": "1"}
+    env = {k: v for k, v in os.environ.items() if k != "PYTEST_ADDOPTS"}      # inherited options could filter the run
+    env.update(PYTHONPATH=str(args.repo / "src"), PYTHONDONTWRITEBYTECODE="1")
     for name in ("junit_full.xml", "junit_supplementary.xml"):
         (out / name).unlink(missing_ok=True)
-    sh([sys.executable, "-m", "pytest", "-q", "-rs", "-p", "no:cacheprovider", f"--junitxml={out / 'junit_full.xml'}"], args.repo, env, log)
+    flags = ["-q", "-rs", "-p", "no:cacheprovider", "-o", "addopts="]            # no ini/env selection, no cache
+    exit_codes = {"full": sh([sys.executable, "-m", "pytest", *flags, "tests", f"--junitxml={out / 'junit_full.xml'}"], args.repo, env, log)}
     supp_file = args.harness_dir / "posix_primitives_tests.py"
-    sh([sys.executable, "-m", "pytest", "-q", "-rs", "-p", "no:cacheprovider", str(supp_file), f"--junitxml={out / 'junit_supplementary.xml'}"],
-       args.repo, env, log)
+    exit_codes["supplementary"] = sh([sys.executable, "-m", "pytest", *flags, str(supp_file),
+                                      f"--junitxml={out / 'junit_supplementary.xml'}"], args.repo, env, log)
     if not (out / "junit_full.xml").is_file():
         return finish("LINUX_CPU_FAIL", "the full suite produced no JUnit file; see full_log.txt")
     full = parse_junit(out / "junit_full.xml")
     supp = parse_junit(out / "junit_supplementary.xml") if (out / "junit_supplementary.xml").is_file() else []
-    receipt["evaluation"] = evaluate(full, supp, REQUIRED, os.name == "posix", env_info["looks_like_kaggle"])
+    receipt["evaluation"] = evaluate(full, supp, REQUIRED, os.name == "posix", env_info["looks_like_kaggle"], exit_codes,
+                                     SUPPLEMENTARY, EXPECTED_BASELINE_TESTS)
     receipt["pip_freeze"] = output([sys.executable, "-m", "pip", "freeze"]).splitlines()
     verdict = receipt["evaluation"]["verdict"]
     return finish(verdict, "; ".join(receipt["evaluation"]["problems"][:5]))

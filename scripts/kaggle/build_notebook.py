@@ -26,7 +26,9 @@ def run(*cmd, cwd=None):
     print("$", " ".join(cmd), "->", done.returncode); print((done.stdout + done.stderr).strip()[-1500:])
     assert done.returncode == 0
     return done.stdout.strip()
-shutil.rmtree(f"{WORK}/harness_repo", ignore_errors=True); shutil.rmtree(f"{WORK}/granthstudio", ignore_errors=True)
+for stale in ("harness_repo", "harness", "granthstudio", "linux_cpu_evidence"):   # safe to Run All repeatedly
+    shutil.rmtree(f"{WORK}/{stale}", ignore_errors=True)
+os.path.exists(f"{WORK}/linux_cpu_evidence.zip") and os.remove(f"{WORK}/linux_cpu_evidence.zip")
 run("git", "clone", "-q", "-b", "sprint/remaining-pipeline", BUNDLE, f"{WORK}/harness_repo")                 # branch tip: contains the harness scripts
 HARNESS_SHA = run("git", "rev-parse", "HEAD", cwd=f"{WORK}/harness_repo")
 shutil.copytree(f"{WORK}/harness_repo/scripts/kaggle", f"{WORK}/harness")   # copy before the code under test is checked out
