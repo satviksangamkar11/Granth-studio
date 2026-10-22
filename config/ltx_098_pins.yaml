@@ -94,7 +94,7 @@ runtime_expectations:      # derived from ComfyUI source, NOT measured; the Comf
   diffusion_dtype: float32          # LTXV supports bfloat16/float32 only; a T4 has no native bf16 (docs/LTX_098_RESEARCH.md section 5)
   vae_dtype: float32
   text_encoder_dtype: float16
-  text_encoder_offload: automatic partial loading; the encoder is moved off the GPU before the DiT runs
+  text_encoder_offload: expected automatic partial loading with the encoder moved off the GPU before the DiT runs (overlap is possible; unmeasured)
   extra_model_artifacts: none
 expected_output:
   designated_output_node_class: VHS_VideoCombine     # emits an mp4 under 'gifs' in /history; comfy.select_video accepts 'gifs'

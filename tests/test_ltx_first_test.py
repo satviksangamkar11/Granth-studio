@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+from pathlib import Path
 import subprocess
 import sys
 
@@ -137,8 +138,10 @@ def test_gpu_script_is_syntactically_valid_and_refuses_before_any_network_step(t
     text = script.read_text(encoding="utf-8")
     assert text.index("LTX_DOWNLOAD_APPROVED:?") < text.index("== 0. refusals") < text.index("== 1. GPU") < text.index("git clone") < text.index("curl -L")
     assert text.index("local modifications: refusing") < text.index("pip install") < text.index("main.py")      # clean-tree check precedes any install or launch
-    assert text.index("something already serves port") < text.index("main.py") and "kill -0 $COMFY_PID" in text
-    assert "custom_nodes/ComfyUI-LTXVideo" not in text.replace("$W/ComfyUI-LTXVideo-src", "")                 # LTXVideo is never installed as a node pack
+    assert text.index("something already listens on port") < text.index("main.py") and "kill -0 $COMFY_PID" in text
+    assert 'PORT="$(python -c' in text and "8188" not in text and '"${LAUNCH[@]}"' in text and "$LAUNCH " not in text.replace("${LAUNCH[@]}", "")   # fresh port, argument array
+    assert text.index("kill $VRAM_PID 2>/dev/null || true; wait") < text.index("tar czf")                     # tracer stopped before archiving
+    assert 'clone ltxvideo_nodes "$W/ComfyUI-LTXVideo-src"' in text and 'clone ltxvideo_nodes "$COMFY' not in text   # source only, never a node pack
 
 
 def test_pin_paths_used_by_the_gpu_script_resolve():
@@ -200,3 +203,48 @@ def test_expected_precision_is_recorded_not_assumed_to_be_fp16(host):
     assert models["precision"] == models["runtime"]["precision"] == receipt["inputs"]["precision_expected"] == "fp32"
     code, receipt = run(host, "--precision", "bf16")
     assert receipt["inputs"]["precision_expected"] == "bf16"
+
+
+@pytest.mark.skipif(not have_tool("bash") or not have_tool("git") or not have_tool("ffmpeg"), reason="bash/git/ffmpeg missing")
+def test_gpu_script_refuses_a_legacy_installed_ltxvideo_pack_before_any_clone_or_install(tmp_path):
+    """Behavioural: a clean clone at an expected commit, a fake single T4, and a leftover custom_nodes/ComfyUI-LTXVideo."""
+    import os, shutil
+    clone = tmp_path / "repo"
+    subprocess.run(["git", "clone", "-q", str(REPO), str(clone)], check=True, capture_output=True)
+    for rel in ("scripts/kaggle/ltx_first_test.sh", "config/ltx_098_pins.yaml"):          # test the working-tree script, committed inside the clone
+        shutil.copyfile(REPO / rel, clone / rel)
+    for cmd in (["config", "user.email", "t@t"], ["config", "user.name", "t"], ["add", "-A"], ["commit", "-qm", "test copy", "--allow-empty"]):
+        subprocess.run(["git", "-C", str(clone), *cmd], check=True, capture_output=True)
+    head = subprocess.run(["git", "-C", str(clone), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    # functions in BASH_ENV shadow the real tools for the non-interactive script (a PATH shim would lose to MSYS's own /usr/bin on Windows)
+    shims = tmp_path / "shims.sh"
+    py = Path(sys.executable).as_posix()
+    shims.write_text(chr(10).join(["nvidia-smi() { echo 'GPU 0: Tesla T4 (UUID: GPU-synthetic)'; }",
+                                   "df() { echo Avail; echo 500G; }", f'python() {{ "{py}" "$@"; }}', ""]), encoding="utf-8")
+    work = tmp_path / "w"
+    (work / "ComfyUI" / "custom_nodes" / "ComfyUI-LTXVideo").mkdir(parents=True)
+    env = {**os.environ, "BASH_ENV": str(shims), "W": str(work),
+           "LTX_DOWNLOAD_APPROVED": "tester", "LTX_EXPECTED_COMMIT": head, "SESSION_MINUTES": "60"}
+    done = subprocess.run(["bash", str(clone / "scripts" / "kaggle" / "ltx_first_test.sh")], capture_output=True, text=True, env=env, timeout=120)
+    assert done.returncode == 4 and "legacy" in done.stdout and "installs no LTXVideo node pack" in done.stdout, (done.stdout, done.stderr)
+    assert "session deadline:" in done.stdout and "ComfyUI will use the fresh port" in done.stdout    # every earlier refusal was passed
+    assert not (work / "ComfyUI" / ".git").exists() and not (work / "ComfyUI-LTXVideo-src").exists()    # nothing was cloned
+    assert not (work / "ltx_first_test_evidence" / "pip_freeze.txt").exists()                           # nothing was installed
+
+
+@pytest.mark.skipif(not have_tool("bash"), reason="bash missing")
+def test_the_scripts_port_probe_line_refuses_an_occupied_port_and_allows_a_free_one():
+    import socket
+    line = next(l for l in (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8").splitlines()
+                if l.startswith("python -c") and "connect_ex" in l)
+    srv = socket.socket(); srv.bind(("127.0.0.1", 0)); srv.listen(1)
+    taken = srv.getsockname()[1]
+    py = Path(sys.executable).as_posix()
+    def probe(port):
+        script = f'python() {{ "{py}" "$@"; }}; PORT={port}; {line}; echo "reached-$?"'
+        return subprocess.run(["bash", "-c", script], capture_output=True, text=True, timeout=30)
+    occupied = probe(taken)
+    assert "something already listens" in occupied.stdout and occupied.returncode == 2          # the script exits 2 here
+    srv.close()
+    free = probe(taken)                                                                           # the same port, now closed
+    assert "something already listens" not in free.stdout and "reached-1" in free.stdout

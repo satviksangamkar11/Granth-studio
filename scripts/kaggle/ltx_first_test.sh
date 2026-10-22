@@ -15,7 +15,8 @@ set -euo pipefail
 : "${LTX_EXPECTED_COMMIT:?set LTX_EXPECTED_COMMIT to the reviewed GranthStudio commit (full sha)}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 W="${W:-/kaggle/working}"; COMFY="$W/ComfyUI"; OUT="$W/ltx_first_test_evidence"; PINS="$REPO/config/ltx_098_pins.yaml"
-PORT=8188; SESSION_MINUTES="${SESSION_MINUTES:-240}"
+SESSION_MINUTES="${SESSION_MINUTES:-240}"
+PORT="$(python -c "import socket;s=socket.socket();s.bind(('127.0.0.1',0));print(s.getsockname()[1]);s.close()")"   # a fresh port: no other server can already own it
 mkdir -p "$OUT"; exec > >(tee "$OUT/run_log.txt") 2>&1
 echo "approved by: $LTX_DOWNLOAD_APPROVED | $(date -u +%FT%TZ)"
 
@@ -28,7 +29,8 @@ GRANTHSTUDIO_SESSION_DEADLINE="$(python -c "from datetime import datetime,timede
 export GRANTHSTUDIO_SESSION_DEADLINE; echo "session deadline: $GRANTHSTUDIO_SESSION_DEADLINE"
 command -v ffmpeg >/dev/null || { echo "ffmpeg is required (VideoHelperSuite encodes the mp4 with it)"; exit 2; }
 mkdir -p "$W"; FREE_GB=$(df -BG --output=avail "$W" | tail -1 | tr -dc 0-9); [ "$FREE_GB" -ge 40 ] || { echo "only ${FREE_GB} GB free in $W, need 40"; exit 2; }
-if curl -sf "http://127.0.0.1:$PORT/system_stats" >/dev/null 2>&1; then echo "something already serves port $PORT: refusing to use an unknown ComfyUI"; exit 2; fi
+python -c "import socket,sys;s=socket.socket();s.settimeout(1);sys.exit(0 if s.connect_ex(('127.0.0.1',$PORT)) == 0 else 1)" && { echo "something already listens on port $PORT: refusing"; exit 2; }
+echo "ComfyUI will use the fresh port $PORT"
 
 pin() { python - "$PINS" "$1" <<'EOF'
 import sys, yaml
@@ -53,6 +55,7 @@ clone() { # name dir  (checked out at the pinned commit and required to be CLEAN
   [ -z "$(git -C "$2" status --porcelain)" ] || { echo "$1 has local modifications: refusing to run unverified code"; exit 4; }
 }
 echo "== 2. pinned sources (ComfyUI-LTXVideo is only the SOURCE of the official workflow file: it is NOT installed into custom_nodes)"
+[ ! -e "$COMFY/custom_nodes/ComfyUI-LTXVideo" ] || { echo "legacy $COMFY/custom_nodes/ComfyUI-LTXVideo exists; this plan installs no LTXVideo node pack: remove it (or use a fresh workspace)"; exit 4; }
 clone comfyui "$COMFY"
 clone videohelpersuite "$COMFY/custom_nodes/ComfyUI-VideoHelperSuite"
 clone kjnodes "$COMFY/custom_nodes/ComfyUI-KJNodes"
@@ -74,10 +77,11 @@ fetch() { # index
 fetch 0; fetch 1
 
 echo "== 5. start ComfyUI (arguments recorded; no precision flags: the dtype ComfyUI chooses for a T4 is part of the evidence)"
-LAUNCH="python main.py --listen 127.0.0.1 --port $PORT --disable-auto-launch --output-directory $OUT/comfy_output"; echo "$LAUNCH" > "$OUT/comfyui_launch.txt"
+LAUNCH=(python main.py --listen 127.0.0.1 --port "$PORT" --disable-auto-launch --output-directory "$OUT/comfy_output")
+printf '%q ' "${LAUNCH[@]}" > "$OUT/comfyui_launch.txt"
 nvidia-smi --query-gpu=timestamp,memory.used,memory.total,utilization.gpu --format=csv -l 2 > "$OUT/vram_trace.csv" 2>/dev/null &
 VRAM_PID=$!
-cd "$COMFY"; $LAUNCH > "$OUT/comfyui.log" 2>&1 &
+cd "$COMFY"; "${LAUNCH[@]}" > "$OUT/comfyui.log" 2>&1 &
 COMFY_PID=$!; cd "$REPO"
 trap 'kill $VRAM_PID 2>/dev/null || true; kill $COMFY_PID 2>/dev/null || true' EXIT
 READY=0
@@ -86,7 +90,10 @@ for _ in $(seq 1 120); do
   if curl -sf "http://127.0.0.1:$PORT/system_stats" > "$OUT/system_stats.json"; then READY=1; break; fi; sleep 5
 done
 [ "$READY" = 1 ] || { echo "ComfyUI did not come up; see comfyui.log"; exit 5; }
-# the port was free before launch and our process is alive; if the server reports its argv it must carry our unique output directory
+if command -v ss >/dev/null; then
+  ss -ltnp "sport = :$PORT" 2>/dev/null | grep -q "pid=$COMFY_PID," || { echo "the listener on port $PORT does not belong to the ComfyUI process this script launched"; exit 5; }
+fi
+# the port was fresh and free before launch, our process is alive, and (where ss exists) it owns the listener; if the server reports its argv it must carry our unique output directory
 if grep -q '"argv"' "$OUT/system_stats.json"; then
   grep -q "$OUT/comfy_output" "$OUT/system_stats.json" || { echo "the server on port $PORT is not the ComfyUI this script launched"; exit 5; }
 else
@@ -102,7 +109,7 @@ python "$REPO/scripts/comfy/ui_to_api.py" compare "$OUT/rebuilt_api_workflow.jso
 
 echo "== 7. first test through the existing pipeline"
 set +e
-python "$REPO/scripts/ltx_first_test.py" --execute --workdir "$W/ltx_first_test" --models-dir "$COMFY" --precision fp32 \
+python "$REPO/scripts/ltx_first_test.py" --execute --workdir "$W/ltx_first_test" --models-dir "$COMFY" --precision fp32 --comfy-url "http://127.0.0.1:$PORT" \
   --official-workflow "$OFFICIAL" --node-inventory "$OUT/object_info.json" --comfy-log "$OUT/comfyui.log" \
   --source comfyui="$COMFY" --source ltxvideo_nodes="$W/ComfyUI-LTXVideo-src" \
   --source videohelpersuite="$COMFY/custom_nodes/ComfyUI-VideoHelperSuite" --source kjnodes="$COMFY/custom_nodes/ComfyUI-KJNodes"
@@ -112,6 +119,7 @@ cp "$W/ltx_first_test/test_receipt.json" "$W/ltx_first_test/pin_report.json" "$O
 cp "$W"/ltx_first_test/project/artifacts/tasks/adhyay_01/tier1/*/clip.mp4 "$OUT/clip.mp4" 2>/dev/null || true
 cp "$W"/ltx_first_test/project/artifacts/tasks/adhyay_01/pending/*.json "$OUT/" 2>/dev/null || true
 nvidia-smi > "$OUT/nvidia_smi_after.txt" || true
+kill $VRAM_PID 2>/dev/null || true; wait $VRAM_PID 2>/dev/null || true       # a stable trace before archiving
 (cd "$W" && tar czf ltx_first_test_evidence.tgz ltx_first_test_evidence)
 echo "first-test exit status $STATUS; evidence: $W/ltx_first_test_evidence.tgz"
 exit $STATUS

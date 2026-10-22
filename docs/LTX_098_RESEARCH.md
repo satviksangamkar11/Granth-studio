@@ -76,10 +76,10 @@ multiple-of-32 size; it only checks list membership (see blocker B5). FPS: the o
   weights of roughly 7-11 GB. The shipped `precision: fp16` therefore does not describe what happens on a T4; the schema now allows
   `fp16|bf16|fp32`, the first-test project records `fp32` as the *expected* value, and the ComfyUI log excerpt in the receipt is the evidence.
 - **VAE:** the LTXV VAE's `working_dtypes = [bfloat16, float32]`; on a T4 `vae_dtype()` falls to **float32** (no flag needed). The "flat output from an
-  fp16 decode" risk in the architecture is thus avoided by construction, but the flat-output check stays on.
+  fp16 decode" risk in the architecture is therefore *expected* not to arise (the VAE is expected to decode in fp32); this is a source-derived expectation, the log must confirm it, and the flat-output check stays on.
 - **Text encoder:** `text_encoder_dtype()` is fp16; `t5xxl_fp16.safetensors` (9.8 GB) goes to the GPU at encode time when `model_size * 1.2` fits in free
-  memory (a fresh 15 GB card), then ComfyUI's model manager offloads it to host RAM to make room for the DiT (`NORMAL_VRAM`: partial loading;
-  `minimum_inference_memory` about 1.2 GiB). The two models therefore never need to be resident together; host RAM (~29 GB on Kaggle) must hold the encoder.
+  memory (a fresh 15 GB card), then ComfyUI's model manager is expected to offload it to host RAM to make room for the DiT (`NORMAL_VRAM`: partial loading;
+  `minimum_inference_memory` about 1.2 GiB). The two models are not expected to need to be resident together, but overlap or partial offload is possible and unmeasured; host RAM (~29 GB on Kaggle) must hold the encoder.
 - **Speed:** fp32 on a T4 (~8 TFLOPS) is far slower than fp16 would be; 8 distilled steps at 768x512, 49 frames is expected to be slow but finite.
   This is an estimate, not a measurement. If the DiT does not fit, ComfyUI streams weights (slower); a hard out-of-memory is a FAIL with evidence.
 - **Not equivalent to Lightricks' own inference config:** their 2B 0.9.8 config uses multi-scale generation, the spatial upscaler and bf16. The ComfyUI

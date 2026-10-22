@@ -159,3 +159,16 @@ def test_inconsistent_link_endpoints_are_refused(mutate, message):
     ui = copy.deepcopy(UI); mutate(ui)
     with pytest.raises(conv.ConversionError, match=message):
         conv.convert(ui, sigs())
+
+
+def test_negative_source_slot_and_two_linked_inputs_with_one_name_are_refused():
+    ui = copy.deepcopy(UI)
+    ui["links"][[l[0] for l in ui["links"]].index(87)][2] = -1
+    with pytest.raises(conv.ConversionError, match="output slot -1"):
+        conv.convert(ui, sigs())
+    ui = copy.deepcopy(UI)
+    node = next(n for n in ui["nodes"] if n["id"] == 98)
+    node["inputs"][0]["link"] = 251; node["inputs"][1]["link"] = 251        # both float_list entries linked
+    ui["links"][[l[0] for l in ui["links"]].index(251)][4] = 1
+    with pytest.raises(conv.ConversionError):
+        conv.convert(ui, sigs())

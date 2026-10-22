@@ -8,6 +8,8 @@ recipe (workflows/comfyui/source/*.recipe.yaml) and reported as OVERRIDE, so not
   build   --recipe R [--ui FILE] [--object-info FILE] [--out FILE]   convert and write the API workflow
   compare A B                                                        exit 0 only if two API graphs are identical (underscore keys ignored)
 
+Known limit: an input that the UI converted from a widget into a connection is refused (the signature calls it a widget), never guessed.
+
 Run `build` on the GPU host with the official file and the server's /object_info, then `compare` the result with the committed
 candidate: equal means the candidate is what the real file and the real node definitions produce.
 """
@@ -93,8 +95,10 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
             source = next((n for n in ui["nodes"] if str(n["id"]) == str(src)), None)
             if source is None or source["type"] in UI_ONLY:
                 raise ConversionError(f"node {node_id} input {slot['name']}: link {link_id} comes from a UI-only or missing node")
-            if src_slot >= len(source.get("outputs", [])):
+            if not isinstance(src_slot, int) or src_slot < 0 or src_slot >= len(source.get("outputs", [])):
                 raise ConversionError(f"node {node_id} input {slot['name']}: link {link_id} uses output slot {src_slot} that node {src} lacks")
+            if slot["name"] in wired:
+                raise ConversionError(f"node {node_id}: two linked inputs are both named {slot['name']!r}; cannot tell which one the API input is")
             wired[slot["name"]] = (str(src), src_slot)
         inputs: dict[str, Any] = {}
         cursor = 0
