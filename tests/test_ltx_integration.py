@@ -450,3 +450,27 @@ def test_generation_evidence_is_durable_and_recovery_keeps_the_attempt(comfy, tm
     comfy.finish("p1"); backend(comfy).execute(seeded(5), journal, output_node="2")
     reject_output(journal, "bad")
     assert read_json(journal)["rejected_fingerprints"] == [entry["fingerprint"]]
+
+
+def test_established_cap_cannot_be_bypassed_by_omitting_or_raising_it(comfy, tmp_path):
+    from granthstudio.comfy import reset_budget
+    from granthstudio.errors import GateFailure
+    journal = tmp_path / "job.json"
+    comfy.auto_outputs = {"2": {}}; comfy.auto_status = "error"
+    for n in range(2):
+        with pytest.raises(TaskFailed):
+            backend(comfy).execute(seeded(n), journal, max_attempts=2, output_node="2")
+    assert read_json(journal)["max_attempts"] == 2
+    for supplied in (None, 2, 50):                                   # reconstructed backend: omitted / same / raised
+        with pytest.raises(GateFailure, match="budget exhausted"):
+            backend(comfy).execute(seeded(10 + (supplied or 0)), journal, max_attempts=supplied, output_node="2")
+    assert len(comfy.posts) == 2
+    reset_budget(journal, "synthetic-test-only")                     # the only way to spend more
+    with pytest.raises(TaskFailed):
+        backend(comfy).execute(seeded(77), journal, max_attempts=50, output_node="2")
+    assert len(comfy.posts) == 3 and read_json(journal)["max_attempts"] == 2   # cap stayed 2 even though 50 was passed
+    with pytest.raises(TaskFailed):
+        backend(comfy).execute(seeded(78), journal, output_node="2")
+    with pytest.raises(GateFailure):
+        backend(comfy).execute(seeded(79), journal, output_node="2")
+    assert len(comfy.posts) == 4

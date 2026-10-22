@@ -382,15 +382,17 @@ class ComfyBackend:
                                           "would reuse cached node outputs; the seed input on the path to the designated "
                                           "output must change (comfy.generation_seed)")
                 attempt = (state or {}).get("attempt", 0) + 1
-                if max_attempts is not None and attempt - (state or {}).get("attempt_base", 0) > max_attempts:
-                    raise GateFailure(f"generation budget exhausted: {max_attempts} attempt(s) already submitted for "
+                caps = [c for c in ((state or {}).get("max_attempts"), max_attempts) if c is not None]
+                cap = min(caps) if caps else None      # the journal's established cap is authoritative; callers can only tighten
+                if cap is not None and attempt - (state or {}).get("attempt_base", 0) > cap:
+                    raise GateFailure(f"generation budget exhausted: {cap} attempt(s) already submitted for "
                                       f"{journal.name}; an authorized reset (comfy reset-budget) is required")
                 token = sha256_obj({"base_url": self.base_url, "graph_sha256": graph_sha, "journal": journal.name,
                                     "attempt": attempt, "namespace": namespace})
                 carry = {k: state[k] for k in ("rejections", "rejected_fingerprints", "attempt_base", "budget_resets",
                                                "history") if state and k in state}
                 state = {**carry, "base_url": self.base_url, "graph_sha256": graph_sha, "namespace": namespace,
-                         "state": "submitting", "job_token": token, "attempt": attempt,
+                         **({"max_attempts": cap} if cap is not None else {}), "state": "submitting", "job_token": token, "attempt": attempt,
                          "history": [*carry.get("history", []), {"attempt": attempt, "job_token": token,
                                                                  "graph_sha256": graph_sha, "generation": generation or {},
                                                                  "fingerprint": evidence["fingerprint"],
