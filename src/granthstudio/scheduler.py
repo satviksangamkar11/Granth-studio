@@ -15,7 +15,7 @@ from .errors import CapabilityDisabled, ConfigError, GateFailure, GranthError, I
 from .integrity import atomic_write_json, contained_path, read_json, sha256_file, sha256_obj
 from .schemas import validate_document
 
-STAGE_ORDER = ("audio", "keyframe", "tier0", "tier1", "tier2", "assembly")
+STAGE_ORDER = ("audio", "keyframe", "tier0", "tier1", "tier2", "lipsync", "assembly")
 RECEIPT = "task_receipt.json"
 RUN_LOG = "run_log.jsonl"
 NOT_RETRYABLE = (CapabilityDisabled, IntegrationUnavailable)

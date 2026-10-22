@@ -47,7 +47,7 @@ def make_project(root: Path) -> Project:
             "frame_counts": [49, 65, 81, 89, 97, 121],
             "capabilities": {"i2v": "unvalidated", "flf": "unvalidated"},
         },
-        **{k: v for k, v in yaml.safe_load((REPO / "config" / "models.yaml").read_text(encoding="utf-8")).items() if k in ("sdxl", "translation", "speech", "asr", "diagnostics")},
+        **{k: v for k, v in yaml.safe_load((REPO / "config" / "models.yaml").read_text(encoding="utf-8")).items() if k in ("sdxl", "translation", "speech", "asr", "lipsync", "diagnostics")},
     })
     _dump(root / "config" / "quality_gates.yaml", {
         "schema_version": 1,

@@ -21,6 +21,7 @@ from .config import Project, load_models, require_capability, verify_benchmark_r
 from .episodes import compile_episode
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
 from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, validate_audio, validate_video
+from .lipsync import plan_lipsync
 from .keyframes import (approved_keyframe, keyframe_request, load_registry, require_references, sdxl_generate,
                         sdxl_preflight)
 from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, normalize_text, read_json, sha256_bytes,
@@ -247,7 +248,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
         return {"clip": "clip.mp4", "metrics": "metrics.json"}
     return run
 
-def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
+def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks=None):
     timeline = bundle.timelines[lang]
     stem = f"adhyay_{bundle.adhyay:02d}_{LANGUAGE_NAME[lang]}"
     def run(work):
@@ -258,7 +259,8 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
         clips, segments, cues, edits = [], [], [], []
         cursor = 0.0
         for index, shot in enumerate(bundle.compiled["shots"]):
-            clip = scheduler.task_dir(shot_tasks[shot["shot_id"]]) / "clip.mp4"
+            lip = (lipsync_tasks or {}).get(shot["shot_id"])  # declared lip-sync for this language: never the shared clip
+            clip = scheduler.task_dir(lip) / "lipsync.mp4" if lip else scheduler.task_dir(shot_tasks[shot["shot_id"]]) / "clip.mp4"
             info = probe(clip)
             duration = info.video_duration_s if info.video_duration_s is not None else info.duration_s
             speech = sum(timings[line]["duration_s"] for line in shot["dialogue_ids"])
@@ -279,10 +281,10 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
                 offset += item["duration_s"]
             if span - offset > 0.000001:
                 segments.append((None, span - offset))
-            marker = clip.parent / "fallback.json"
+            marker = clip.parent / "fallback.json"  # absent in a lip-sync task directory
             edits.append({"shot_id": shot["shot_id"], "start_s": cursor, "duration_s": span,
                           "source_sha256": sha256_file(clip), "primary_action_duration_s": duration,
-                          "clip_source": "fallback_tier0" if marker.is_file() else "rendered",
+                          "clip_source": "lipsync" if lip else "fallback_tier0" if marker.is_file() else "rendered",
                           **({"fallback": read_json(marker)} if marker.is_file() else {})})
             cursor += span
         assemble_audio(segments, work / "voice.wav")
@@ -295,6 +297,7 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler):
             "video_sha256": sha256_file(work / f"{stem}.mp4"), "subtitles_sha256": sha256_file(work / f"{stem}.srt"),
             "voice_sha256": sha256_file(work / "voice.wav"), "edit_plan_sha256": sha256_file(work / "edit_plan.json"),
             "fallback_shots": [e["shot_id"] for e in edits if e["clip_source"] == "fallback_tier0"],
+            "lipsync_shots": [e["shot_id"] for e in edits if e["clip_source"] == "lipsync"],
             "lines": [{"dialogue_id": line, "text_sha256": sha256_obj(normalize_text(entries[line]["text"])),
                        "audio_sha256": timings[line]["sha256"], "audio": timings[line]["provenance"],
                        "translation": entries[line].get("alignment", {}).get("source")}
@@ -393,11 +396,13 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             task.run = _ltx_run(bundle, shot, visual, capability, scheduler.store / "pending" / f"{task.task_id()}.json")
         shot_tasks[shot["shot_id"]] = task
         tasks.append(task)
+    lipsync_tasks = plan_lipsync(bundle, scheduler, audio, shot_tasks, require_current)
+    tasks += [t for per_lang in lipsync_tasks.values() for t in per_lang.values()]
     for lang in ("mr", "hi"):
-        deps = (audio[lang].task_id(), *(t.task_id() for t in shot_tasks.values()))
+        deps = (audio[lang].task_id(), *(t.task_id() for t in shot_tasks.values()), *(t.task_id() for t in lipsync_tasks[lang].values()))
         task = Task("assembly", f"assemble_{lang}", {"language": lang, "timeline": sha256_obj(bundle.timelines[lang]),
                     "edit_rules": sha256_obj([{k: s[k] for k in ("shot_id", "duration_s", "dialogue_ids", "coverage")} for s in compiled["shots"]])},
-                    ASSEMBLY_VERSION, _assembly_run(bundle, lang, shot_tasks, audio[lang], scheduler),
+                    ASSEMBLY_VERSION, _assembly_run(bundle, lang, shot_tasks, audio[lang], scheduler, lipsync_tasks[lang]),
                     depends_on=deps, preflight=lambda: require_current(bundle),
                     verify=lambda directory, lang=lang: _verify_assembly(bundle, lang, directory))
         tasks.append(task)

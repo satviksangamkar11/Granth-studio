@@ -110,6 +110,8 @@ def compile_episode(
                     raise CanonReferenceError(f"{shot_id}: dialogue {line_id} is not in research scene {scene['research_scene']}")
                 if line["speaker"] not in scene["characters"]:
                     raise CanonReferenceError(f"{line_id}: speaker {line['speaker']} is not in scene {scene['scene_id']}")
+            if shot.get("lip_sync") is not None and not shot["dialogue_ids"]:
+                raise GateFailure(f"{shot_id}: lip_sync needs a shot with dialogue (visible speech); dialogue_ids is empty")
             kind = TIER_KIND[shot["tier"]]
             if kind == "still":
                 if "frames" in shot or "end_visual_id" in shot:
@@ -154,6 +156,7 @@ def compile_episode(
                     "lighting": scene.get("lighting", "unspecified"),
                     "artistic_flags": list(scene.get("artistic_flags", [])),
                     "coverage": shot.get("coverage"),
+                    "lip_sync": shot.get("lip_sync"),
                     "fallback": shot.get("fallback"),
                     "pilot_shot": label,
                 }
