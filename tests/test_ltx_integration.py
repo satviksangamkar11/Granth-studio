@@ -27,7 +27,7 @@ class FakeComfy:
         self.posts, self.interrupts, self.queue_deletes = [], [], []
         self.running, self.pending, self.history, self.nodes = [], [], {}, {"SyntheticLoader", "SyntheticSave"}
         self.forget_history = False
-        self.cache, self.executions, self.cache_hits = set(), 0, 0   # ComfyUI caches node outputs by node inputs
+        self.node_cache, self.executions, self.cache_hits, self.sampler_runs = set(), 0, 0, 0   # node-level, dependency-aware cache
         self.auto_outputs = None   # when set, every POST /prompt finishes at once with these outputs
         self.auto_status = "success"   # ComfyUI status_str of those auto-finished jobs ("error" simulates a failed render)
         self.view_bytes = b""      # body served by /view
@@ -43,9 +43,7 @@ class FakeComfy:
                 body = json.loads(self.rfile.read(int(self.headers["Content-Length"])) or b"{}")
                 if self.path == "/prompt":
                     pid = f"p{len(outer.posts) + 1}"; outer.posts.append(body)
-                    key = json.dumps(body["prompt"], sort_keys=True)   # extra_data / prompt_id are NOT part of the cache key
-                    if key in outer.cache: outer.cache_hits += 1
-                    else: outer.cache.add(key); outer.executions += 1
+                    outer.run_prompt(body["prompt"])   # extra_data / prompt_id are NOT part of any cache key
                     outer.running.append([0, pid, body["prompt"], body.get("extra_data", {}), []])
                     if outer.auto_outputs is not None:
                         outer.finish(pid, status=outer.auto_status)
@@ -75,6 +73,32 @@ class FakeComfy:
         self.server = HTTPServer(("127.0.0.1", 0), Handler)
         self.url = f"http://127.0.0.1:{self.server.server_port}"
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
+
+    def run_prompt(self, prompt):
+        """ComfyUI semantics: only nodes the output depends on run, and a node's cache key is its class plus its
+        inputs with upstream links replaced by the upstream node's own key. Disconnected nodes never run."""
+        nodes = {i: n for i, n in prompt.items() if isinstance(n, dict)}
+        outputs = [i for i, n in nodes.items() if str(n.get("class_type", "")).endswith("Save")] or list(nodes)
+        keys = {}
+        def key(i):
+            if i not in keys:
+                ins = {k: (["@", key(v[0]), v[1]] if isinstance(v, list) and len(v) == 2 and v[0] in nodes else v)
+                       for k, v in nodes[i].get("inputs", {}).items()}
+                keys[i] = json.dumps([nodes[i]["class_type"], ins], sort_keys=True)
+            return keys[i]
+        needed, stack = set(), list(outputs)
+        while stack:
+            i = stack.pop()
+            if i in needed: continue
+            needed.add(i)
+            stack += [v[0] for v in nodes[i].get("inputs", {}).values() if isinstance(v, list) and len(v) == 2 and v[0] in nodes]
+        fresh = [i for i in needed if key(i) not in self.node_cache]
+        self.node_cache.update(key(i) for i in fresh)
+        if fresh:
+            self.executions += 1
+            self.sampler_runs += sum(1 for i in fresh if "seed" in nodes[i].get("inputs", {}))
+        else:
+            self.cache_hits += 1
 
     def finish(self, pid, status="success", ts=(1000, 4500)):
         item = next(i for i in self.running if i[1] == pid); self.running.remove(item)
@@ -213,6 +237,13 @@ def test_input_validation_interface(approved_project, tmp_path):
 
 
 def seeded(seed):
+    """Loader -> Sampler(seed) -> Save: the seed sits on the path to the designated output."""
+    return {"1": GRAPH["1"], "3": {"class_type": "SyntheticSampler", "inputs": {"model": ["1", 0], "seed": seed}},
+            "2": {"class_type": "SyntheticSave", "inputs": {"images": ["3", 0]}}}
+
+
+def disconnected(seed):
+    """The seed varies but on a node the output does not depend on (a stray SEED placeholder)."""
     return {**GRAPH, "3": {"class_type": "SyntheticSampler", "inputs": {"seed": seed}}}
 
 
@@ -221,27 +252,28 @@ def test_rejected_output_forces_fresh_generation_valid_output_does_not(comfy, tm
     from granthstudio.errors import GateFailure
     b = backend(comfy); journal = tmp_path / "job.json"
     with pytest.raises(JobPending):
-        b.execute(seeded(generation_seed(journal, 7)), journal)   # polling uncertain: prompt id preserved
+        b.execute(seeded(generation_seed(journal, 7)), journal, output_node="2")   # polling uncertain: prompt id preserved
     assert reject_output(journal, "nope") is False and read_json(journal)["state"] == "submitted"
     with pytest.raises(JobPending):
-        b.execute(seeded(generation_seed(journal, 7)), journal)
+        b.execute(seeded(generation_seed(journal, 7)), journal, output_node="2")
     assert len(comfy.posts) == 1 and comfy.executions == 1      # no duplicate generation while possibly active
     comfy.finish("p1")
-    b.execute(seeded(7), journal)
+    b.execute(seeded(7), journal, output_node="2")
     assert read_json(journal)["state"] == "completed"
-    b.execute(seeded(7), journal)
+    b.execute(seeded(7), journal, output_node="2")
     assert len(comfy.posts) == 1                                # valid completed output: never resubmitted
     assert reject_output(journal, "flat video") is True
     assert read_json(journal)["state"] == "rejected"            # durable across an interruption
-    with pytest.raises(GateFailure, match="identical graph inputs"):
-        backend(comfy).execute(seeded(7), journal)              # same inputs would be served from ComfyUI's cache
+    with pytest.raises(GateFailure, match="same generation inputs"):
+        backend(comfy).execute(seeded(7), journal, output_node="2")              # same inputs would be served from ComfyUI's cache
     assert len(comfy.posts) == 1
     seed = generation_seed(journal, 7)
     assert seed == 8
     with pytest.raises(JobPending):
-        backend(comfy).execute(seeded(seed), journal, generation={"seed": seed, "seed_offset": 1})
+        backend(comfy).execute(seeded(seed), journal, output_node="2", generation={"seed": seed, "seed_offset": 1})
     state = read_json(journal)
     assert len(comfy.posts) == 2 and comfy.executions == 2 and comfy.cache_hits == 0   # genuinely new generation
+    assert comfy.sampler_runs == 2                              # the sampler itself re-ran; it was not served from cache
     assert state["attempt"] == 2 and state["prompt_id"] == "p2" and state["rejections"][0]["reason"] == "flat video"
     assert [h["generation"] for h in state["history"]] == [{}, {"seed": 8, "seed_offset": 1}]
     assert state["history"][0]["graph_sha256"] != state["history"][1]["graph_sha256"]
@@ -254,7 +286,7 @@ def test_scheduler_resubmits_after_media_rejection_only(comfy, tmp_path):
     comfy.auto_outputs = {"2": {"videos": [{"filename": "a.mp4"}]}}
     b = backend(comfy); journal = tmp_path / "pending" / "t.json"; seen = []
     def run(work):
-        b.execute(seeded(generation_seed(journal, 1)), journal); (work / "out.txt").write_text("x"); return {"out": "out.txt"}
+        b.execute(seeded(generation_seed(journal, 1)), journal, output_node="2"); (work / "out.txt").write_text("x"); return {"out": "out.txt"}
     def verify(directory):
         seen.append(len(comfy.posts))
         if len(seen) == 1:
@@ -272,22 +304,22 @@ def test_attempt_budget_survives_restart_and_polling_does_not_consume_it(comfy, 
     comfy.auto_outputs = {"2": {}}; comfy.auto_status = "error"
     for n in range(3):
         with pytest.raises(TaskFailed):
-            backend(comfy).execute(seeded(n), journal, max_attempts=3)   # a "restarted" backend each time
+            backend(comfy).execute(seeded(n), journal, output_node="2", max_attempts=3)   # a "restarted" backend each time
     assert len(comfy.posts) == 3 and read_json(journal)["attempt"] == 3
     with pytest.raises(GateFailure, match="budget exhausted"):
-        backend(comfy).execute(seeded(99), journal, max_attempts=3)
+        backend(comfy).execute(seeded(99), journal, output_node="2", max_attempts=3)
     assert len(comfy.posts) == 3
     with pytest.raises(ConfigError):
         reset_budget(journal, " ")
     reset_budget(journal, "synthetic-test-only")
     with pytest.raises(TaskFailed):
-        backend(comfy).execute(seeded(100), journal, max_attempts=3)
+        backend(comfy).execute(seeded(100), journal, output_node="2", max_attempts=3)
     assert len(comfy.posts) == 4 and read_json(journal)["budget_resets"][0]["by"] == "synthetic-test-only"
     # an outstanding job is polled/recovered any number of times without spending budget
     comfy.auto_outputs = None; other = tmp_path / "other.json"
     for _ in range(5):
         with pytest.raises(JobPending):
-            backend(comfy).execute(seeded(1), other, max_attempts=1)
+            backend(comfy).execute(seeded(1), other, output_node="2", max_attempts=1)
     assert len(comfy.posts) == 5 and read_json(other)["attempt"] == 1
 
 
@@ -381,3 +413,40 @@ def test_store_namespaces_keep_tokens_and_reconciliation_apart(comfy, tmp_path):
     with pytest.raises(JobPending, match="not found"):
         reconcile(backend(comfy), lost)                          # must not adopt A's prompt
     assert store_namespace(b_) == read_json(b_)["namespace"]     # restart reuses the persisted namespace
+
+
+def test_disconnected_seed_does_not_satisfy_the_freshness_gate(comfy, tmp_path):
+    from granthstudio.comfy import generation_evidence, reject_output
+    from granthstudio.errors import GateFailure
+    assert generation_evidence(disconnected(1), "2")["fingerprint"] == generation_evidence(disconnected(2), "2")["fingerprint"]
+    assert generation_evidence(seeded(1), "2")["fingerprint"] != generation_evidence(seeded(2), "2")["fingerprint"]
+    assert generation_evidence(seeded(1), "2")["seed_inputs"] == [{"node": "3", "input": "seed", "value": 1}]
+    journal = tmp_path / "job.json"
+    with pytest.raises(JobPending):
+        backend(comfy).execute(disconnected(1), journal, output_node="2")
+    comfy.finish("p1")
+    backend(comfy).execute(disconnected(1), journal, output_node="2")
+    assert reject_output(journal, "flat") is True
+    with pytest.raises(GateFailure, match="no seed input on the path"):       # whole graph differs, closure does not
+        backend(comfy).execute(disconnected(2), journal, output_node="2")
+    assert len(comfy.posts) == 1
+    # and the fake really would have served it from cache, proving the gate is what protects the GPU
+    comfy.run_prompt(disconnected(2)); assert comfy.cache_hits == 1 and comfy.sampler_runs == 0
+
+
+def test_generation_evidence_is_durable_and_recovery_keeps_the_attempt(comfy, tmp_path):
+    from granthstudio.comfy import generation_seed, reject_output
+    journal = tmp_path / "job.json"
+    seed = generation_seed(journal, 5)
+    with pytest.raises(JobPending):
+        backend(comfy).execute(seeded(seed), journal, output_node="2", generation={"seed": seed, "seed_offset": 0})
+    first = read_json(journal)
+    with pytest.raises(JobPending):                                  # restart while uncertain: same attempt, no new POST
+        backend(comfy).execute(seeded(generation_seed(journal, 5)), journal, output_node="2")
+    assert read_json(journal)["job_token"] == first["job_token"] and len(comfy.posts) == 1
+    entry = first["history"][0]
+    assert entry["scope"] == "output_closure" and entry["seed_inputs"] == [{"node": "3", "input": "seed", "value": 5}]
+    assert entry["fingerprint"] and entry["generation"] == {"seed": 5, "seed_offset": 0}
+    comfy.finish("p1"); backend(comfy).execute(seeded(5), journal, output_node="2")
+    reject_output(journal, "bad")
+    assert read_json(journal)["rejected_fingerprints"] == [entry["fingerprint"]]

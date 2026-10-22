@@ -99,6 +99,39 @@ def owned(journal: Path, wait_s: float | None = None):
         os.close(fd)
 
 
+SEED_INPUTS = ("seed", "noise_seed")
+
+
+def generation_closure(graph: dict[str, Any], output_node: str) -> dict[str, dict[str, Any]]:
+    """The nodes the designated output depends on, transitively (ComfyUI executes and caches exactly these)."""
+    if output_node not in graph:
+        raise ConfigError(f"designated output node {output_node!r} is not in the submitted graph")
+    seen: dict[str, dict[str, Any]] = {}
+    stack = [output_node]
+    while stack:
+        node_id = stack.pop()
+        if node_id in seen or not isinstance(graph.get(node_id), dict):
+            continue
+        seen[node_id] = graph[node_id]
+        for value in (graph[node_id].get("inputs") or {}).values():
+            if isinstance(value, list) and len(value) == 2 and isinstance(value[0], str):
+                stack.append(value[0])
+    return seen
+
+
+def generation_evidence(graph: dict[str, Any], output_node: str | None) -> dict[str, Any]:
+    """Cache-relevant identity of a submission: a hash of the upstream closure of the designated output only,
+    plus the integer seed inputs found on that path. Nodes outside the closure (a disconnected SEED placeholder,
+    unrelated graph fields) cannot change it. Without a designated output the whole graph is used."""
+    if output_node is None:
+        return {"fingerprint": sha256_obj(graph), "seed_inputs": [], "scope": "whole_graph"}
+    closure = generation_closure(graph, output_node)
+    seeds = [{"node": node_id, "input": name, "value": node["inputs"][name]} for node_id, node in sorted(closure.items())
+             for name in SEED_INPUTS if isinstance((node.get("inputs") or {}).get(name), int)
+             and not isinstance(node["inputs"][name], bool)]
+    return {"fingerprint": sha256_obj({k: closure[k] for k in sorted(closure)}), "seed_inputs": seeds, "scope": "output_closure"}
+
+
 def generation_seed(journal: Path, base_seed: int) -> int:
     """Seed for the next generation. ComfyUI caches node outputs by class and inputs, so a new prompt_id or
     extra_data does not force fresh inference; after each definitively rejected render the sampler seed input is
@@ -319,12 +352,13 @@ class ComfyBackend:
 
 
     def execute(self, graph: dict[str, Any], journal: Path, sampler=None, max_attempts: int | None = None,
-                generation: dict[str, Any] | None = None) -> dict[str, Any]:
+                generation: dict[str, Any] | None = None, output_node: str | None = None) -> dict[str, Any]:
         """Persist intent before POST under exclusive journal ownership; an ambiguous submission must be
         reconciled, never repeated. ``max_attempts`` is a durable budget of generations (POSTs) for this journal;
         polling or reconciling an existing prompt never consumes it. ``generation`` (e.g. the seed used) is
         recorded with the attempt."""
         namespace, graph_sha = store_namespace(journal), sha256_obj(graph)
+        evidence = generation_evidence(graph, output_node)
         with owned(journal):
             state = read_json(journal) if journal.exists() else None
             if state and (state.get("base_url") != self.base_url or state.get("namespace", namespace) != namespace):
@@ -339,21 +373,29 @@ class ComfyBackend:
             if not state or state.get("state") in ("failed", "rejected"):
                 # failed: definitive submission/execution failure. rejected: the render completed but its media
                 # was judged invalid; its output (and ComfyUI's cached node outputs for it) must not be reused.
-                if state and graph_sha in state.get("rejected_graph_sha256s", []):
-                    raise GateFailure("a rejected render cannot be resubmitted with identical graph inputs: ComfyUI "
-                                      "would reuse its execution cache; vary the generation seed (comfy.generation_seed)")
+                if state and state.get("state") == "rejected":
+                    if output_node is not None and not evidence["seed_inputs"]:
+                        raise GateFailure("the workflow has no seed input on the path to its designated output, so a retry "
+                                          "cannot be shown to differ from the rejected render")
+                    if evidence["fingerprint"] in state.get("rejected_fingerprints", []):
+                        raise GateFailure("a rejected render cannot be resubmitted with the same generation inputs: ComfyUI "
+                                          "would reuse cached node outputs; the seed input on the path to the designated "
+                                          "output must change (comfy.generation_seed)")
                 attempt = (state or {}).get("attempt", 0) + 1
                 if max_attempts is not None and attempt - (state or {}).get("attempt_base", 0) > max_attempts:
                     raise GateFailure(f"generation budget exhausted: {max_attempts} attempt(s) already submitted for "
                                       f"{journal.name}; an authorized reset (comfy reset-budget) is required")
                 token = sha256_obj({"base_url": self.base_url, "graph_sha256": graph_sha, "journal": journal.name,
                                     "attempt": attempt, "namespace": namespace})
-                carry = {k: state[k] for k in ("rejections", "rejected_graph_sha256s", "attempt_base", "budget_resets",
+                carry = {k: state[k] for k in ("rejections", "rejected_fingerprints", "attempt_base", "budget_resets",
                                                "history") if state and k in state}
                 state = {**carry, "base_url": self.base_url, "graph_sha256": graph_sha, "namespace": namespace,
                          "state": "submitting", "job_token": token, "attempt": attempt,
                          "history": [*carry.get("history", []), {"attempt": attempt, "job_token": token,
-                                                                 "graph_sha256": graph_sha, "generation": generation or {}}]}
+                                                                 "graph_sha256": graph_sha, "generation": generation or {},
+                                                                 "fingerprint": evidence["fingerprint"],
+                                                                 "seed_inputs": evidence["seed_inputs"],
+                                                                 "scope": evidence["scope"]}]}
                 atomic_write_json(journal, state)
                 try:
                     prompt_id = self.submit(graph, token, namespace)
@@ -393,10 +435,11 @@ def reject_output(journal: Path, reason: str) -> bool:
         state = read_json(journal)
         if state.get("state") != "completed":
             return False
+        fingerprint = state["history"][-1]["fingerprint"]
         rejection = {"attempt": state["attempt"], "prompt_id": state["prompt_id"], "reason": reason[:500],
-                     "graph_sha256": state["graph_sha256"]}
+                     "graph_sha256": state["graph_sha256"], "fingerprint": fingerprint}
         atomic_write_json(journal, {**state, "state": "rejected", "rejections": [*state.get("rejections", []), rejection],
-                                    "rejected_graph_sha256s": [*state.get("rejected_graph_sha256s", []), state["graph_sha256"]]})
+                                    "rejected_fingerprints": [*state.get("rejected_fingerprints", []), fingerprint]})
     return True
 
 

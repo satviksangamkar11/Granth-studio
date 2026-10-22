@@ -251,7 +251,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
                 peak.append(gpus[0]["memory_used_mb"])
                 gpu_names[:] = [gpus[0]["name"]]
         started = time.monotonic()
-        history = backend.execute(graph, journal, sample, max_attempts=MAX_ATTEMPTS, generation={
+        history = backend.execute(graph, journal, sample, max_attempts=MAX_ATTEMPTS, output_node=template.output_node, generation={
             "seed": values["SEED"], "base_seed": _seed(shot["shot_id"]), "seed_offset": values["SEED"] - _seed(shot["shot_id"])})
         wall = time.monotonic() - started
         backend.fetch(select_video(history, template.output_node), work / "clip.mp4")
@@ -259,7 +259,9 @@ def _ltx_run(bundle, shot, visual, capability, journal):
             "schema_version": 1, "capability": capability, "shot_id": shot["shot_id"],
             "prompt_id": read_json(journal)["prompt_id"], "workflow_version": template.version,
             "generation": {"seed": values["SEED"], "seed_offset": values["SEED"] - _seed(shot["shot_id"]),
-                           "attempt": read_json(journal)["attempt"]},
+                           "attempt": read_json(journal)["attempt"],
+                           "fingerprint": read_json(journal)["history"][-1]["fingerprint"],
+                           "seed_inputs": read_json(journal)["history"][-1]["seed_inputs"]},
             "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs,
             "runtime_sha256": verify_benchmark_runtime(bundle.models, capability, template.version),
             "gpu": gpu_names[0] if gpu_names else None,

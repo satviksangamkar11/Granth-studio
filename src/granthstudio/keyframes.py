@@ -291,7 +291,7 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
     graph = render_graph(template, values)
     backend.require_nodes(graph)
     backend.require_model_files(graph)
-    history = backend.execute(graph, journal, max_attempts=3, generation={
+    history = backend.execute(graph, journal, max_attempts=3, output_node=template.output_node, generation={
         "seed": values["SEED"], "seed_offset": values["SEED"] - request["seed"]})
     backend.fetch(select_image(history, template.output_node), work / "keyframe.png")
     info = probe(work / "keyframe.png")
