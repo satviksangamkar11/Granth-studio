@@ -46,6 +46,13 @@ workflow:
   format: comfyui_ui            # UI format (nodes/links arrays); the repo's adapter needs API format (class_type/inputs)
   checkpoint_named_in_workflow: ltxv-2b-0.9.6-distilled-04-25.safetensors   # NOT the 0.9.8 file
   checkpoint_substitution_verified: false
+  checkpoint_substitution_evidence: >-
+    No official 2B-0.9.8 low-level workflow exists at this commit (model card: 2B 0.9.8 distilled has no workflow). Source evidence FOR
+    the same loader path: the official 13B-distilled workflows at this commit load their checkpoint with the same CheckpointLoaderSimple +
+    CLIPLoader(t5xxl_fp16, type ltxv) + KSamplerSelect(euler_ancestral) + the same 8-step sigma string (and name 0.9.7/0.9.8 files).
+    This is circumstantial; only a real run can verify it.
+  api_candidate: workflows/comfyui/ltx_i2v_098.candidate.json
+  recipe: workflows/comfyui/source/ltx_i2v_098.recipe.yaml
   evidence: "contents API (two reads agree on sha and size); node/link inventory read via fetch tool"
 files:
   - name: ltxv-2b-0.9.8-distilled.safetensors
@@ -64,14 +71,14 @@ files:
     source: https://huggingface.co/comfyanonymous/flux_text_encoders/blob/6af2a98e3f615bdfa612fbd85da93d1ed5f69ef5/t5xxl_fp16.safetensors
     license: apache-2.0
     evidence: "HF tree API oid and the raw LFS pointer file agree (two reads)"
-  # No separate VAE file: the official workflow takes its VAE from CheckpointLoaderSimple (output slot 2).
+  # No separate VAE file: the official workflow takes its VAE from CheckpointLoaderSimple (output slot 2); models.yaml uses ltx.runtime.files.vae: null.
 required_nodes:
   # class: provider. 'core' = ComfyUI itself; status says what has actually been verified.
-  - {class: CheckpointLoaderSimple, provider: core, status: assumed}
-  - {class: CLIPLoader, provider: core, status: assumed}
-  - {class: CLIPTextEncode, provider: core, status: assumed}
-  - {class: LoadImage, provider: core, status: assumed}
-  - {class: VAEDecode, provider: core, status: assumed}
+  - {class: CheckpointLoaderSimple, provider: core, status: verified_in_source}
+  - {class: CLIPLoader, provider: core, status: verified_in_source}
+  - {class: CLIPTextEncode, provider: core, status: verified_in_source}
+  - {class: LoadImage, provider: core, status: verified_in_source}
+  - {class: VAEDecode, provider: core, status: verified_in_source}
   - {class: LTXVImgToVideo, provider: core, status: verified_in_source}
   - {class: LTXVConditioning, provider: core, status: verified_in_source}
   - {class: LTXVPreprocess, provider: core, status: verified_in_source}
@@ -79,9 +86,9 @@ required_nodes:
   - {class: KSamplerSelect, provider: core, status: verified_in_source}
   - {class: CFGGuider, provider: core, status: verified_in_source}
   - {class: RandomNoise, provider: core, status: verified_in_source}
-  - {class: StringToFloatList, provider: kjnodes, status: registered_in_kjnodes_at_pinned_commit}
-  - {class: FloatToSigmas, provider: kjnodes, status: registered_in_kjnodes_node_config_at_pinned_commit}
-  - {class: VHS_VideoCombine, provider: videohelpersuite, status: assumed}
+  - {class: StringToFloatList, provider: kjnodes, status: verified_in_source}
+  - {class: FloatToSigmas, provider: kjnodes, status: verified_in_source}
+  - {class: VHS_VideoCombine, provider: videohelpersuite, status: verified_in_source}
 expected_output:
   designated_output_node_class: VHS_VideoCombine     # emits an mp4 under 'gifs' in /history; comfy.select_video accepts 'gifs'
   container: mp4

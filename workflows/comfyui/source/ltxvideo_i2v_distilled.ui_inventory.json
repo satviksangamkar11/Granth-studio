@@ -1,0 +1,671 @@
+{
+ "_provenance": {
+  "what": "RECONSTRUCTED node/link/widget inventory of the official ComfyUI-LTXVideo example, NOT the official file's bytes",
+  "official_file": "Lightricks/ComfyUI-LTXVideo @ 36fdaf500b3cd6f7fa8b2dfec36e984746e630a2 example_workflows/low_level/ltxvideo-i2v-distilled.json (git blob 2260170f4ebacb077b938302b825e6e5a97b1290, 18595 bytes)",
+  "read_on": "2026-10-22 through a summarising fetch tool: 18 nodes, 21 links, widgets_values as listed there",
+  "known_gaps": [
+   "the two CLIPTextEncode prompt strings exceeded the tool's 125-character quote limit and are placeholders",
+   "positions, sizes, colours and the VHS videopreview params are not reproduced"
+  ],
+  "how_it_is_checked": "scripts/comfy/ui_to_api.py --official <the real file> --compare-with-candidate on the GPU host"
+ },
+ "nodes": [
+  {
+   "id": 38,
+   "type": "CLIPLoader",
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      74,
+      75
+     ]
+    }
+   ],
+   "widgets_values": [
+    "t5xxl_fp16.safetensors",
+    "ltxv",
+    "default"
+   ]
+  },
+  {
+   "id": 8,
+   "type": "VAEDecode",
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 255
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 87
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      261
+     ]
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 103,
+   "type": "VHS_VideoCombine",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 261
+    },
+    {
+     "name": "audio",
+     "type": "AUDIO",
+     "link": null
+    },
+    {
+     "name": "meta_batch",
+     "type": "VHS_BatchManager",
+     "link": null
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Filenames",
+     "type": "VHS_FILENAMES",
+     "links": null
+    }
+   ],
+   "widgets_values": [
+    24,
+    0,
+    "ltxv",
+    "video/h264-mp4",
+    "yuv420p",
+    20,
+    false,
+    false,
+    false,
+    true,
+    {
+     "hidden": false,
+     "paused": false,
+     "params": {}
+    }
+   ]
+  },
+  {
+   "id": 82,
+   "type": "LTXVPreprocess",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 226
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output_image",
+     "type": "IMAGE",
+     "links": [
+      248
+     ]
+    }
+   ],
+   "widgets_values": [
+    38
+   ]
+  },
+  {
+   "id": 7,
+   "type": "CLIPTextEncode",
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 75
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      240
+     ]
+    }
+   ],
+   "widgets_values": [
+    "<official negative prompt: longer than the 125-character read limit, not reproduced>"
+   ]
+  },
+  {
+   "id": 78,
+   "type": "LoadImage",
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      226
+     ]
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": null
+    }
+   ],
+   "widgets_values": [
+    "fox.jpg",
+    "image",
+    ""
+   ]
+  },
+  {
+   "id": 6,
+   "type": "CLIPTextEncode",
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 74
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      239
+     ]
+    }
+   ],
+   "widgets_values": [
+    "<official positive prompt: longer than the 125-character read limit, not reproduced>"
+   ]
+  },
+  {
+   "id": 76,
+   "type": "Note",
+   "inputs": [],
+   "outputs": [],
+   "widgets_values": [
+    "While LTXV-2b model prefers long descriptive prompts, this version supports experimentation with broader prompting styles."
+   ]
+  },
+  {
+   "id": 69,
+   "type": "LTXVConditioning",
+   "inputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 245
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 246
+    }
+   ],
+   "outputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      256
+     ]
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      257
+     ]
+    }
+   ],
+   "widgets_values": [
+    24.000000000000004
+   ]
+  },
+  {
+   "id": 101,
+   "type": "SamplerCustomAdvanced",
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 260
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 252
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 253
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 268
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 259
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": []
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": [
+      255
+     ]
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 95,
+   "type": "LTXVImgToVideo",
+   "inputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 239
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 240
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 250
+    },
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 248
+    }
+   ],
+   "outputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      245
+     ]
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      246
+     ]
+    },
+    {
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      259
+     ]
+    }
+   ],
+   "widgets_values": [
+    768,
+    512,
+    97,
+    1
+   ]
+  },
+  {
+   "id": 100,
+   "type": "StringToFloatList",
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "FLOAT",
+     "type": "FLOAT",
+     "links": [
+      251
+     ]
+    }
+   ],
+   "widgets_values": [
+    "1.0000, 0.9937, 0.9875, 0.9812, 0.9750, 0.9094, 0.7250, 0.4219, 0.0"
+   ]
+  },
+  {
+   "id": 105,
+   "type": "Note",
+   "inputs": [],
+   "outputs": [],
+   "widgets_values": [
+    "Distilled model expects the following sigma schedule (see StringToFloatList). Euler_ancestral is the recommended default sampler."
+   ]
+  },
+  {
+   "id": 97,
+   "type": "KSamplerSelect",
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      253
+     ]
+    }
+   ],
+   "widgets_values": [
+    "euler_ancestral"
+   ]
+  },
+  {
+   "id": 99,
+   "type": "CFGGuider",
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 258
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 256
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 257
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      252
+     ]
+    }
+   ],
+   "widgets_values": [
+    1
+   ]
+  },
+  {
+   "id": 102,
+   "type": "RandomNoise",
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      260
+     ]
+    }
+   ],
+   "widgets_values": [
+    45,
+    "fixed"
+   ]
+  },
+  {
+   "id": 98,
+   "type": "FloatToSigmas",
+   "inputs": [
+    {
+     "name": "float_list",
+     "type": "FLOAT",
+     "link": null
+    },
+    {
+     "name": "float_list",
+     "type": "FLOAT",
+     "link": 251
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      268
+     ]
+    }
+   ],
+   "widgets_values": [
+    0
+   ]
+  },
+  {
+   "id": 44,
+   "type": "CheckpointLoaderSimple",
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      258
+     ]
+    },
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": null
+    },
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      87,
+      250
+     ]
+    }
+   ],
+   "widgets_values": [
+    "ltxv-2b-0.9.6-distilled-04-25.safetensors"
+   ]
+  }
+ ],
+ "links": [
+  [
+   74,
+   38,
+   0,
+   6,
+   0,
+   "CLIP"
+  ],
+  [
+   75,
+   38,
+   0,
+   7,
+   0,
+   "CLIP"
+  ],
+  [
+   87,
+   44,
+   2,
+   8,
+   1,
+   "VAE"
+  ],
+  [
+   226,
+   78,
+   0,
+   82,
+   0,
+   "IMAGE"
+  ],
+  [
+   239,
+   6,
+   0,
+   95,
+   0,
+   "CONDITIONING"
+  ],
+  [
+   240,
+   7,
+   0,
+   95,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   245,
+   95,
+   0,
+   69,
+   0,
+   "CONDITIONING"
+  ],
+  [
+   246,
+   95,
+   1,
+   69,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   248,
+   82,
+   0,
+   95,
+   3,
+   "IMAGE"
+  ],
+  [
+   250,
+   44,
+   2,
+   95,
+   2,
+   "VAE"
+  ],
+  [
+   251,
+   100,
+   0,
+   98,
+   1,
+   "FLOAT"
+  ],
+  [
+   252,
+   99,
+   0,
+   101,
+   1,
+   "GUIDER"
+  ],
+  [
+   253,
+   97,
+   0,
+   101,
+   2,
+   "SAMPLER"
+  ],
+  [
+   255,
+   101,
+   1,
+   8,
+   0,
+   "LATENT"
+  ],
+  [
+   256,
+   69,
+   0,
+   99,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   257,
+   69,
+   1,
+   99,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   258,
+   44,
+   0,
+   99,
+   0,
+   "MODEL"
+  ],
+  [
+   259,
+   95,
+   2,
+   101,
+   4,
+   "LATENT"
+  ],
+  [
+   260,
+   102,
+   0,
+   101,
+   0,
+   "NOISE"
+  ],
+  [
+   261,
+   8,
+   0,
+   103,
+   0,
+   "IMAGE"
+  ],
+  [
+   268,
+   98,
+   0,
+   101,
+   3,
+   "SIGMAS"
+  ]
+ ],
+ "version": 0.4
+}

@@ -1,0 +1,99 @@
+# Input signatures of the nodes in the official LTX 0.9.8-era low-level I2V workflow, read from source at the pinned commits
+# (docs/LTX_098_RESEARCH.md section 1). Used by ui_to_api.py when no live /object_info is available.
+#
+# kind: link    -> filled from the UI workflow's link whose input name matches
+# kind: widget  -> filled from widgets_values in the listed order; `default` is used (and reported) when the UI file predates the input
+# control_after_generate: true -> the UI stores one extra value right after this widget; dropped
+# ui_trailing: N -> N UI-only values (preview/upload widgets) after the last widget; dropped
+#
+# CONFIDENCE: every entry was read through a summarising fetch tool, so the real proof is `ui_to_api.py --object-info <saved
+# /object_info> --compare`, which rebuilds the signatures from the running server and must give an identical graph.
+ComfyUI_2f74e17:
+  CheckpointLoaderSimple:
+    source: "ComfyUI 2f74e17 nodes.py"
+    inputs: [{name: ckpt_name, kind: widget}]
+    outputs: [MODEL, CLIP, VAE]
+  CLIPLoader:
+    source: "ComfyUI 2f74e17 nodes.py (device is optional; the official UI file stores it)"
+    inputs: [{name: clip_name, kind: widget}, {name: type, kind: widget}, {name: device, kind: widget}]
+    outputs: [CLIP]
+  CLIPTextEncode:
+    source: "ComfyUI 2f74e17 nodes.py"
+    inputs: [{name: text, kind: widget}, {name: clip, kind: link}]
+    outputs: [CONDITIONING]
+  LoadImage:
+    source: "ComfyUI 2f74e17 nodes.py (image is a combo of names in the server input folder)"
+    inputs: [{name: image, kind: widget}]
+    ui_trailing: 2          # 'image' upload-widget value and the empty string seen in the official file
+    outputs: [IMAGE, MASK]
+  VAEDecode:
+    source: "ComfyUI 2f74e17 nodes.py"
+    inputs: [{name: samples, kind: link}, {name: vae, kind: link}]
+    outputs: [IMAGE]
+  LTXVPreprocess:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_lt.py"
+    inputs: [{name: image, kind: link}, {name: img_compression, kind: widget}]
+    outputs: [IMAGE]
+  LTXVImgToVideo:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_lt.py (strength was added after the official UI file was saved: 4 stored widgets, 5 inputs)"
+    inputs:
+      - {name: positive, kind: link}
+      - {name: negative, kind: link}
+      - {name: vae, kind: link}
+      - {name: image, kind: link}
+      - {name: width, kind: widget}
+      - {name: height, kind: widget}
+      - {name: length, kind: widget}
+      - {name: batch_size, kind: widget}
+      - {name: strength, kind: widget, default: 1.0}
+    outputs: [positive, negative, latent]
+  LTXVConditioning:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_lt.py"
+    inputs: [{name: positive, kind: link}, {name: negative, kind: link}, {name: frame_rate, kind: widget}]
+    outputs: [positive, negative]
+  RandomNoise:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_custom_sampler.py"
+    inputs: [{name: noise_seed, kind: widget, control_after_generate: true}]
+    outputs: [NOISE]
+  CFGGuider:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_custom_sampler.py"
+    inputs: [{name: model, kind: link}, {name: positive, kind: link}, {name: negative, kind: link}, {name: cfg, kind: widget}]
+    outputs: [GUIDER]
+  KSamplerSelect:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_custom_sampler.py"
+    inputs: [{name: sampler_name, kind: widget}]
+    outputs: [SAMPLER]
+  SamplerCustomAdvanced:
+    source: "ComfyUI 2f74e17 comfy_extras/nodes_custom_sampler.py"
+    inputs: [{name: noise, kind: link}, {name: guider, kind: link}, {name: sampler, kind: link}, {name: sigmas, kind: link},
+             {name: latent_image, kind: link}]
+    outputs: [output, denoised_output]
+KJNodes_ad37ce6:
+  StringToFloatList:
+    source: "ComfyUI-KJNodes ad37ce6 nodes/nodes.py (string: STRING multiline, default '1, 2, 3')"
+    inputs: [{name: string, kind: widget}]
+    outputs: [FLOAT]
+  FloatToSigmas:
+    source: "ComfyUI-KJNodes ad37ce6 nodes/curve_nodes.py (float_list: FLOAT forceInput -> a link; returns SIGMAS)"
+    inputs: [{name: float_list, kind: link}]
+    ui_trailing: 1          # the official UI file stores one stale widget value [0]
+    outputs: [SIGMAS]
+VideoHelperSuite_9e963ff:
+  VHS_VideoCombine:
+    source: "ComfyUI-VideoHelperSuite 9e963ff videohelpersuite/nodes.py + video_formats/h264-mp4.json (pix_fmt, crf, save_metadata, trim_to_audio come from the format file)"
+    inputs:
+      - {name: images, kind: link}
+      - {name: frame_rate, kind: widget}
+      - {name: loop_count, kind: widget}
+      - {name: filename_prefix, kind: widget}
+      - {name: format, kind: widget}
+      - {name: pix_fmt, kind: widget}
+      - {name: crf, kind: widget}
+      - {name: save_metadata, kind: widget}
+      - {name: trim_to_audio, kind: widget}
+      - {name: pingpong, kind: widget}
+      - {name: save_output, kind: widget}
+    ui_trailing: 1          # the 'videopreview' UI widget
+    outputs: [Filenames]
+    output_node: true
+    ui_output_key: gifs

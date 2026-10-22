@@ -1,0 +1,21 @@
+# Recipe for workflows/comfyui/ltx_i2v_098.candidate.json (built by scripts/comfy/ui_to_api.py).
+# Only the overrides below differ from the official ComfyUI-LTXVideo example; each is deliberate and printed as OVERRIDE by the converter.
+ui_file: workflows/comfyui/source/ltxvideo_i2v_distilled.ui_inventory.json   # reconstruction; on the GPU host pass the official file with --ui
+output_node: "103"        # VHS_VideoCombine: emits the mp4 under ui key 'gifs', which comfy.select_video accepts
+note: >-
+  CANDIDATE, NOT VALIDATED. Official low-level distilled I2V graph (ComfyUI-LTXVideo 36fdaf5) with the 0.9.8 2B distilled checkpoint
+  SUBSTITUTED for the example's ltxv-2b-0.9.6-distilled-04-25.safetensors (compatibility unverified until a real run).
+  Placeholders: START_IMAGE (a name staged in ComfyUI's input folder), MOTION_PROMPT, WIDTH, HEIGHT, FRAMES, FPS, SEED.
+overrides:
+  "78.image": "{{START_IMAGE}}"
+  "6.text": "{{MOTION_PROMPT}}"
+  # GranthStudio's own negative prompt: the official one is longer than the 125-character read limit and was not reproduced.
+  "7.text": "low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, blurry, jittery, watermark, text, logo"
+  "95.width": "{{WIDTH}}"
+  "95.height": "{{HEIGHT}}"
+  "95.length": "{{FRAMES}}"
+  "69.frame_rate": "{{FPS}}"
+  "103.frame_rate": "{{FPS}}"
+  "102.noise_seed": "{{SEED}}"
+  "44.ckpt_name": "ltxv-2b-0.9.8-distilled.safetensors"
+  "103.filename_prefix": "granthstudio_ltx_i2v"

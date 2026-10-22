@@ -136,5 +136,38 @@ def test_shipped_pins_are_consistent_and_never_pass_without_local_evidence():
     assert all(n >= rule["min_frames"] and (n - 1) % rule["frame_step"] == 0 for n in (49, 65, 81, 89, 97, 121))
     assert vp.main(["--models-yaml", str(REPO / "config" / "models.yaml")]) == 2        # config matches, but nothing local is proven
     results, _ = vp.run(vp.argparse.Namespace(pins=str(REPO / "config" / "ltx_098_pins.yaml"), source=[], models_dir=None,
-                                               workflow=None, node_inventory=None, models_yaml=None))
+                                               workflow=None, node_inventory=None, models_yaml=None,
+                                               api_workflow=None, signatures=str(REPO / "scripts" / "comfy" / "node_signatures.yaml")))
     assert vp.PASS not in {r["status"] for r in results}
+
+
+CANDIDATE = REPO / "workflows" / "comfyui" / "ltx_i2v_098.candidate.json"
+
+
+def api_checks(path, pins=None):
+    pins = pins or yaml.safe_load((REPO / "config" / "ltx_098_pins.yaml").read_text(encoding="utf-8"))
+    return statuses(vp.check_api_workflow(pins, path, vp.flat_signatures(str(REPO / "scripts" / "comfy" / "node_signatures.yaml"))))
+
+
+def test_shipped_candidate_workflow_passes_every_structural_check():
+    got = api_checks(CANDIDATE)
+    assert set(got.values()) == {vp.PASS}, got
+    assert {"api:node_classes", "api:links", "api:output_node", "api:checkpoint_name", "api:model_files",
+            "api:placeholders", "api:seed_on_generation_path"} <= set(got)
+
+
+def test_api_workflow_mutations_are_caught(tmp_path):
+    base = json.loads(CANDIDATE.read_text(encoding="utf-8"))
+    def mutated(mutate):
+        doc = json.loads(json.dumps(base)); mutate(doc)
+        path = tmp_path / "m.json"; path.write_text(json.dumps(doc), encoding="utf-8")
+        return api_checks(path)
+    assert mutated(lambda d: d["99"]["inputs"].update(model=["999", 0]))["api:links"] == vp.MISMATCH            # dangling node
+    assert mutated(lambda d: d["99"]["inputs"].update(model=["44", 7]))["api:links"] == vp.MISMATCH             # impossible slot
+    assert mutated(lambda d: d["44"]["inputs"].update(ckpt_name="ltxv-2b-0.9.6-distilled-04-25.safetensors"))["api:checkpoint_name"] == vp.MISMATCH
+    assert mutated(lambda d: d["38"]["inputs"].update(clip_name="other_encoder.safetensors"))["api:model_files"] == vp.MISMATCH
+    assert mutated(lambda d: d.update(_output_node="8"))["api:output_node"] == vp.MISMATCH
+    assert mutated(lambda d: d["102"]["inputs"].update(noise_seed=45))["api:placeholders"] == vp.MISMATCH      # SEED no longer wired
+    assert mutated(lambda d: d["102"]["inputs"].pop("noise_seed"))["api:seed_on_generation_path"] == vp.MISMATCH
+    assert mutated(lambda d: d.update({"500": {"class_type": "Surprise", "inputs": {}}}))["api:node_classes"] == vp.MISMATCH
+    assert api_checks(None)["api_workflow"] == vp.UNVERIFIED and api_checks(tmp_path / "nope.json")["api_workflow"] == vp.MISSING

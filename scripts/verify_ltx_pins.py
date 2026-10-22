@@ -175,6 +175,61 @@ def check_workflow(pins: dict[str, Any], path: Path | None) -> list[dict[str, st
     return out
 
 
+ADAPTER_PLACEHOLDERS = {"START_IMAGE", "MOTION_PROMPT", "WIDTH", "HEIGHT", "FRAMES", "FPS", "SEED"}   # what pipeline._ltx_run supplies
+
+
+def check_api_workflow(pins: dict[str, Any], path: Path | None, signatures: dict[str, Any]) -> list[dict[str, str]]:
+    """Structure of an API-format workflow (the form comfy.py submits): classes, links, slots, checkpoint, placeholders, output node."""
+    if path is None:
+        return [result("api_workflow", UNVERIFIED, "no --api-workflow given")]
+    if not path.is_file():
+        return [result("api_workflow", MISSING, f"{path} not found")]
+    import re
+    text = path.read_text(encoding="utf-8")
+    try:
+        doc = json.loads(text)
+    except ValueError as exc:
+        return [result("api_workflow:structure", MISMATCH, f"not JSON: {exc}")]
+    graph = {k: v for k, v in doc.items() if not k.startswith("_")}
+    out = []
+    known = {n["class"] for n in pins["required_nodes"]}
+    classes = {n.get("class_type") for n in graph.values()}
+    wrong = sorted(c for c in classes if c not in known)
+    unused = sorted(known - classes)
+    out.append(result("api:node_classes", MISMATCH if wrong or unused else PASS,
+                      f"not pinned: {wrong}; pinned but absent: {unused}" if wrong or unused else f"{len(graph)} nodes, classes equal the pinned list"))
+    problems = []
+    for node_id, node in graph.items():
+        if not isinstance(node.get("inputs"), dict):
+            problems.append(f"node {node_id} has no inputs object")
+            continue
+        for name, value in node["inputs"].items():
+            if isinstance(value, list) and len(value) == 2 and isinstance(value[0], str):
+                target = graph.get(value[0])
+                outputs = signatures.get(target["class_type"], {}).get("outputs") if target else None
+                if target is None:
+                    problems.append(f"{node_id}.{name} -> missing node {value[0]}")
+                elif outputs is not None and value[1] >= len(outputs):
+                    problems.append(f"{node_id}.{name} -> {value[0]} slot {value[1]} (class has {len(outputs)} outputs)")
+    out.append(result("api:links", MISMATCH if problems else PASS, "; ".join(problems[:5]) or "every link resolves to an existing node and output slot"))
+    expected = pins["expected_output"]
+    node = graph.get(str(doc.get("_output_node")))
+    out.append(result("api:output_node", PASS if node and node["class_type"] == expected["designated_output_node_class"] else MISMATCH,
+                      f"_output_node {doc.get('_output_node')!r} is {node and node['class_type']} (pinned {expected['designated_output_node_class']})"))
+    checkpoint = next(f["name"] for f in pins["files"] if f["role"].startswith("ltx_checkpoint"))
+    loaders = [n["inputs"].get("ckpt_name") for n in graph.values() if n.get("class_type") == "CheckpointLoaderSimple"]
+    out.append(result("api:checkpoint_name", PASS if loaders == [checkpoint] else MISMATCH, f"CheckpointLoaderSimple loads {loaders}; pinned {checkpoint}"))
+    names = {v for n in graph.values() for v in n["inputs"].values() if isinstance(v, str) and v.endswith(".safetensors")}
+    pinned = {f["name"] for f in pins["files"]}
+    out.append(result("api:model_files", PASS if names <= pinned else MISMATCH, f"workflow names {sorted(names)}; unpinned: {sorted(names - pinned)}"))
+    used = set(re.findall(r"\{\{([A-Z][A-Z0-9_]*)\}\}", text))
+    out.append(result("api:placeholders", PASS if used == ADAPTER_PLACEHOLDERS else MISMATCH,
+                      f"workflow uses {sorted(used)}; the adapter supplies {sorted(ADAPTER_PLACEHOLDERS)}"))
+    seeds = [(i, k) for i, n in graph.items() for k in ("seed", "noise_seed") if k in n["inputs"]]
+    out.append(result("api:seed_on_generation_path", PASS if seeds else MISMATCH, f"seed inputs: {seeds}"))
+    return out
+
+
 def check_config(pins: dict[str, Any], models_yaml: Path | None) -> list[dict[str, str]]:
     rule = pins["frame_rule"]
     if models_yaml is None:
@@ -194,6 +249,13 @@ def check_config(pins: dict[str, Any], models_yaml: Path | None) -> list[dict[st
     return out
 
 
+def flat_signatures(path: str) -> dict[str, Any]:
+    flat: dict[str, Any] = {}
+    for group in yaml.safe_load(Path(path).read_text(encoding="utf-8")).values():
+        flat.update(group)
+    return flat
+
+
 def run(args: argparse.Namespace) -> tuple[list[dict[str, str]], int]:
     pins = yaml.safe_load(Path(args.pins).read_text(encoding="utf-8"))
     given = dict(item.split("=", 1) for item in args.source)
@@ -203,6 +265,7 @@ def run(args: argparse.Namespace) -> tuple[list[dict[str, str]], int]:
         *check_files(pins, Path(args.models_dir) if args.models_dir else None),
         *check_nodes(pins, inventory),
         *check_workflow(pins, Path(args.workflow) if args.workflow else None),
+        *check_api_workflow(pins, Path(args.api_workflow) if args.api_workflow else None, flat_signatures(args.signatures)),
         *check_config(pins, Path(args.models_yaml) if args.models_yaml else None),
     ]
     statuses = {r["status"] for r in results}
@@ -217,6 +280,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--models-dir", help="ComfyUI root (or a flat folder) holding the pinned model files")
     parser.add_argument("--workflow", help="local copy of the official workflow JSON")
     parser.add_argument("--node-inventory", help="JSON saved from ComfyUI /object_info (or a list of class names)")
+    parser.add_argument("--api-workflow", help="the API-format workflow that comfy.py would submit (e.g. the candidate template)")
+    parser.add_argument("--signatures", default=str(ROOT / "scripts" / "comfy" / "node_signatures.yaml"))
     parser.add_argument("--models-yaml", help="config/models.yaml to compare with the pins (CONFIG only, not proof)")
     parser.add_argument("--json", help="write the machine-readable report here")
     args = parser.parse_args(argv)
