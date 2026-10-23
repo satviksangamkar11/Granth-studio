@@ -272,7 +272,10 @@ def test_the_sweep_size_is_configurable_and_validated_in_the_script_and_notebook
     import os
     script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
     assert '--sweep-seeds "$SWEEP_SEEDS" --sweep-cfgs "$SWEEP_CFGS"' in script
-    for env, message in ((("SWEEP_SEEDS", "7"),), "SWEEP_SEEDS must be 1..6"), ((("SWEEP_CFGS", "6.5;x"),), "SWEEP_CFGS must be"):
+    cases = [([("SWEEP_SEEDS", "7")], "SWEEP_SEEDS must be 1..6"), ([("SWEEP_CFGS", "6.5;x")], "SWEEP_CFGS must be"),
+             ([("SWEEP_CFGS", "0")], "distinct values in 1..15"), ([("SWEEP_CFGS", "7,7")], "distinct values"),
+             ([("SWEEP_SEEDS", "6"), ("SWEEP_CFGS", "1,2,3,4")], "at most 16 images")]
+    for env, message in cases:
         done = subprocess.run(["bash", str(REPO / "scripts" / "kaggle" / "sdxl_first_test.sh")], env={**os.environ, **dict(env), "VISUAL": "vis_s1_kf"}, capture_output=True, text=True, timeout=60)
         assert done.returncode == 2 and message in done.stdout
     notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))

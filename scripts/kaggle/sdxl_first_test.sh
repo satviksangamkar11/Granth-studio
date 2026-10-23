@@ -22,6 +22,7 @@ case "$STYLE_SWEEP" in 0|1) ;; *) echo "STYLE_SWEEP must be 0 or 1"; exit 2;; es
 SWEEP_SEEDS="${SWEEP_SEEDS:-4}"; SWEEP_CFGS="${SWEEP_CFGS:-6.5,9.0}"
 case "$SWEEP_SEEDS" in [1-6]) ;; *) echo "SWEEP_SEEDS must be 1..6"; exit 2;; esac
 [[ "$SWEEP_CFGS" =~ ^[0-9]+(\.[0-9]+)?(,[0-9]+(\.[0-9]+)?){0,3}$ ]] || { echo "SWEEP_CFGS must be 1-4 comma separated numbers"; exit 2; }
+python -c 'import sys; c=[float(x) for x in sys.argv[1].split(",")]; sys.exit(0 if len(set(c))==len(c) and all(1<=x<=15 for x in c) and len(c)*int(sys.argv[2])<=16 else 1)' "$SWEEP_CFGS" "$SWEEP_SEEDS"   || { echo "SWEEP_CFGS must be distinct values in 1..15 and SWEEP_SEEDS x cfgs at most 16 images"; exit 2; }
 SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]; then SWEEP_ARGS=(--style-sweep --sweep-seeds "$SWEEP_SEEDS" --sweep-cfgs "$SWEEP_CFGS"); fi
 export PIP_CACHE_DIR="$W/cache/pip" HF_HOME="$W/cache/hf" TORCH_HOME="$W/cache/torch" TMPDIR="$W/cache/tmp"
 PUBLISHED=0

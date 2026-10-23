@@ -125,8 +125,9 @@ def designs() -> list[dict]:
 # interpretation recorded in docs/pilot/CHARACTER_DESIGN_SHEET.md. Owner review PENDING.
 VISUAL_DESCRIPTIONS = {
     1: ("A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, "
-        "sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he lifts a few grains of "
-        "rice from them. A clay pipe and a gourd water vessel rest beside him. Calm face, gaze lowered to the tip of his nose. Bright daylight."),
+        "sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he holds a small "
+        "hand-made clay pipe in one hand and lifts a few grains of rice from the plates with the other. A gourd water vessel rests beside him. Calm face, "
+        "gaze lowered to the tip of his nose. Bright daylight."),
     2: ("On a dusty road of a nineteenth-century Indian village, two townsmen stop and watch in amazement: one in a white dhoti, long coat and cloth turban, "
         "the other in a plain dhoti, shoulder cloth and cloth cap. Before a house, a young man nearly unclothed except for an old torn vest sits calmly among "
         "scattered used leaf plates. The man in the turban steps forward humbly to speak to him. Bright daylight."),

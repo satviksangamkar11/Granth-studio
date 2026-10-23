@@ -110,3 +110,14 @@ def test_the_committed_pilot_files_are_what_the_generator_produces_and_carry_the
     for name in names:
         assert (fresh / name).read_bytes().replace(b"\r\n", b"\n") == (committed / name).read_bytes().replace(b"\r\n", b"\n"), name
     assert (committed / "canon" / "style.yaml").read_bytes().replace(b"\r\n", b"\n") == (REPO / "canon" / "style.yaml").read_bytes().replace(b"\r\n", b"\n")     # a copy, never a second style
+
+
+def test_image_descriptions_refuse_aliases_possessives_other_scenes_names_and_research_labels_on_word_boundaries(pilot):
+    from granthstudio.canon import load_canon
+    canon = load_canon(pilot)
+    assert kf.description_problems(canon, "Gajanan sits by Devidas's house.") == ["names ['Devidas', 'Gajanan']"]          # alias, possessive, a character not in the scene
+    assert kf.description_problems(canon, "A man sits. Source detail: he eats. Lighting: day_outdoor (ovi 92)")[0].startswith("carries research bookkeeping")
+    assert kf.description_problems(canon, "A townsman in loose pants and a cloth cap watches the young man.") == []            # "Pant" is not inside "pants"
+    for description in bp.VISUAL_DESCRIPTIONS.values():                                                                     # the pilot's own descriptions are clean
+        assert kf.description_problems(canon, description) == []
+    assert "clay pipe in one hand" in bp.VISUAL_DESCRIPTIONS[1]                                                               # research: the chilam is in his hand

@@ -143,6 +143,19 @@ def _template_version(style: dict[str, Any] | None) -> str:
     return FROZEN_TEMPLATE_VERSION if style and "content_sha256" in style else PROMPT_TEMPLATE_VERSION
 
 
+BOOKKEEPING = (r"source\s+detail", r"artistic\s+interpretation", r"\bovi\b", r"\b[a-z0-9]+_[a-z0-9_]+\b", r"\bprovisional\b", r"\bcanon\b")
+
+
+def description_problems(canon: Canon, description: str) -> list[str]:
+    """Proper names (canonical names and aliases of every character and location in canon, possessives included) and research bookkeeping
+    (labels, ids such as day_outdoor or chr_x, ovi references) found in an image description. Matching is on word boundaries, case-insensitive."""
+    names = sorted({name for entry_id, entry in canon.entries.items() if canon.kinds[entry_id] in ("characters", "locations")
+                    for name in (entry["canonical_name"], *entry.get("aliases", [])) if name.strip()
+                    and re.search(rf"(?<!\w){re.escape(name.strip())}(?!\w)", description, re.IGNORECASE)})
+    labels = sorted({m.group(0) for pattern in BOOKKEEPING for m in re.finditer(pattern, description, re.IGNORECASE)})
+    return ([f"names {names}"] if names else []) + ([f"carries research bookkeeping {labels}"] if labels else [])
+
+
 def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str, Any],
                      models: dict[str, Any], visual_id: str) -> dict[str, Any]:
     """Deterministic request for one keyframe: only approved research facts, canon names and
@@ -173,9 +186,9 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
     if description and style and "content_sha256" in style:
         # The image sees only what is visible: research labels, provenance notes and proper names stay in this request's metadata, never in the
         # text conditioning (names pull the model toward unrelated learned imagery, labels dilute the frozen style words).
-        named = sorted(canon.entries[i]["canonical_name"] for i in [*characters, *locations] if canon.entries[i]["canonical_name"].lower() in description.lower())
-        if named:
-            raise ConfigError(f"{visual_id}: the visual description names {named}; describe what is visible instead (names stay in the metadata)")
+        problems = description_problems(canon, description)
+        if problems:
+            raise ConfigError(f"{visual_id}: the visual description {'; '.join(problems)}; describe only what is visible (names and research labels stay in the metadata)")
         prompt, template_version = compose(style, description.strip()), VISUAL_TEMPLATE_VERSION
     else:
         prompt, template_version = None, _template_version(style)
