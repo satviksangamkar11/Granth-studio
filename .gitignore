@@ -61,3 +61,7 @@ __pycache__/
 !docs/evidence/sdxl_scenes/s1_refset_d1c67762/scene1_keyframe_with_refs.png
 !docs/evidence/sdxl_scenes/s2_refset_d1c67762/scene2_keyframe_with_4_refs.png
 !docs/evidence/sdxl_scenes/optionA_2afe0fdc/three_scenes_optionA.png
+!docs/evidence/sdxl_scenes/style_anchor_16d48472/three_scenes_style_anchor.png
+!docs/evidence/sdxl_scenes/style_anchor_16d48472/scene1_keyframe.png
+!docs/evidence/sdxl_scenes/style_anchor_16d48472/scene2_keyframe.png
+!docs/evidence/sdxl_scenes/style_anchor_16d48472/scene3_keyframe.png

@@ -118,3 +118,11 @@ Conclusion: global IP-Adapter references cannot compose several people; the scen
 
 For the pilot videos: identity_conditioning method `style_anchor` (workflows/comfyui/sdxl_ipadapter_style_anchor.candidate.json): ONE IP-Adapter slot, weight_type "style transfer", fed by the owner's location plate (config/pilot_sdxl_pins.yaml style_anchor, weight 0.8). The scene text decides who appears and where. All identity references stay recorded in each request but are not conditioned on, so character likeness across scenes comes from the written descriptions only (known limitation, accepted by the owner for the pilot).
 Agreed follow-up AFTER the pilot videos: regional per-character references (IPAdapterAdvanced attn_mask, one region per person from a simple per-shot layout) plus the style anchor.
+
+## 11. Style-anchor runs (commit 16d48472, all three scenes, identical settings)
+
+Graph verified from the PNG metadata for all three: exactly one IPAdapterAdvanced, weight 0.8, weight_type "style transfer", image = the owner's location plate; sampler model = the adapter output. (The receipt field `reference_count` counts the references recorded in the request, 2/4/5, not the images conditioned on.) Evidence: `docs/evidence/sdxl_scenes/style_anchor_16d48472/`.
+- Style: the three keyframes share one look (brown contours, flat matte colour, aged paper, sage/ochre/terracotta). Homogeneous, and closer to frozen v1 than every earlier run.
+- Composition follows the text better: Scene 2 has the house with its doorway, the village road and two townsmen; Scene 3 has two seated men with plates before a doorway wall.
+- Still wrong: Scene 1 shows an adult with a beard, a forehead mark, a necklace and patterned cloth, not a young man in a white loincloth; Scene 2 has no young man among the leaf plates and the townsmen sit instead of standing; Scene 3 has no householder with a sacred thread and no young man eating; characters do not match from scene to scene (expected without identity conditioning); a small pseudo-signature in Scene 1.
+Human review NOT_DONE.
