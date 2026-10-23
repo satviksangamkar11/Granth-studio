@@ -186,6 +186,11 @@ def test_a_remote_or_odd_endpoint_is_refused_and_every_custom_node_entry_includi
 def test_scene_3_first_generates_provisional_sheets_for_the_characters_without_a_reference_then_uses_all_five_references(host, monkeypatch, tmp_path):
     server, models, work, _ = host
     different_image_per_submission(monkeypatch, server, tmp_path)
+    from granthstudio import keyframes as kf
+    flags, gate_calls = [], []
+    real_generate, real_gate = kf.sdxl_generate, kf.require_host_ready
+    monkeypatch.setattr(kf, "sdxl_generate", lambda *a, check_host=True, **k: (flags.append(check_host), real_generate(*a, check_host=check_host, **k))[1])
+    monkeypatch.setattr(kf, "require_host_ready", lambda *a, **k: (gate_calls.append(len(server.posts)), real_gate(*a, **k))[1])
     code, receipt = run(host, "--execute", "--visual", "vis_s3_kf")
     assert receipt["verdict"] == "PASS", receipt["reason"]
     assert receipt["missing_before_sheets"] == ["chr_bankatlal", "chr_damodarpant", "chr_devidas"]
@@ -197,3 +202,5 @@ def test_scene_3_first_generates_provisional_sheets_for_the_characters_without_a
     assert not any(n["class_type"] in ("IPAdapterAdvanced", "LoadImage") for graph in sheets for n in graph.values())      # sheets come from the design prompts alone
     assert sum(1 for n in with_ref.values() if n["class_type"] == "IPAdapterAdvanced") == 5
     assert len(receipt["request"]["references"]) == 5 and receipt["request"]["missing_references"] == []
+    assert flags == [True, False, False, False, False]                                              # the full host gate is asked for the first generation only
+    assert gate_calls == [0]                                                                        # ... exactly once, before anything was submitted

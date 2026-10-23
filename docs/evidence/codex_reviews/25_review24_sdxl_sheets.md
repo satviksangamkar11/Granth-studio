@@ -1,0 +1,5 @@
+**MAJOR — [tests/test_sdxl_first_test.py:186](D:/aai%20work/granthstudio/tests/test_sdxl_first_test.py:186): the test does not detect repeated or skipped gates.** The fixture reports constant free VRAM and never counts host-gate calls. Changing every generation to `check_host=True` or `False` would still satisfy its assertions. Required correction: assert `[True, False, False, False, False]` for the five generation calls and verify the full host gate executes exactly once, before the first submission.
+
+Code inspection otherwise supports the requested behavior: non-character missing entries stop execution; failed sheet generation returns before importing or approving that sheet; provenance identifies provisional SDXL output and non-text appearance; the control retains prompt/seed without references; scene 3 uses all five slots. The test detects omitted sheet submissions.
+
+Tests were read, not executed. Resolve the gate-test gap before authorizing the pinned SDXL GPU run.
