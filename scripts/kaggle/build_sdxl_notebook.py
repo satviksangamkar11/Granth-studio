@@ -31,6 +31,10 @@ assert 30 <= SESSION_MINUTES <= 720"""),
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout or "NO GPU VISIBLE: stop here")
 gpus = subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout
 assert gpus.count("Tesla T4") == 2, f"expected exactly two Tesla T4, saw: {gpus!r}"
+idle = subprocess.run(["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"], capture_output=True, text=True).stdout.split()
+assert len(idle) == 2 and all(float(v) < 800 for v in idle), f"both GPUs must be idle, memory used: {idle}"
+ram_mb = next(int(line.split()[1]) / 1024 for line in open("/proc/meminfo") if line.startswith("MemAvailable:"))
+assert ram_mb >= 24000, f"only {ram_mb:.0f} MiB RAM available, need 24000"
 assert shutil.which("ffmpeg"), "ffmpeg is required"
 os.makedirs("/kaggle/temp/sdxl", exist_ok=True)
 assert shutil.disk_usage("/kaggle/temp/sdxl").free > 40e9, "less than 40 GB free on the scratch disk"

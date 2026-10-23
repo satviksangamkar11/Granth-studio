@@ -72,10 +72,9 @@ echo "== 2. pinned sources: ComfyUI and ComfyUI_IPAdapter_plus"
 clone "$(pin "$LTXPINS" sources.comfyui.repo)" "$(pin "$PINS" comfyui.commit)" "$COMFY"
 clone "$(pin "$PINS" custom_nodes.0.repo)" "$(pin "$PINS" custom_nodes.0.commit)" "$COMFY/custom_nodes/ComfyUI_IPAdapter_plus"
 # ONLY the approved node pack may be present: ComfyUI imports every folder of custom_nodes at startup, so an extra pack could run or override classes
-for entry in "$COMFY"/custom_nodes/* "$COMFY"/custom_nodes/.[!.]*; do
-  [ -e "$entry" ] || continue
+while IFS= read -r -d '' entry; do   # find lists EVERY entry, including names that start with one or two dots
   case "$(basename "$entry")" in ComfyUI_IPAdapter_plus|__pycache__|websocket_image_save.py|example_node.py.example|.gitignore) ;; *) echo "unapproved entry in custom_nodes: $entry: refusing"; exit 4;; esac
-done
+done < <(find "$COMFY/custom_nodes" -mindepth 1 -maxdepth 1 -print0)
 
 echo "== 3. python requirements (recorded below)"
 [ -f "$COMFY/requirements.txt" ] && pip install -q -r "$COMFY/requirements.txt"

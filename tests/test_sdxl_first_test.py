@@ -168,3 +168,15 @@ def test_a_workdir_that_already_holds_a_project_is_refused_so_approvals_never_to
     first_code, first = run(host)
     again_code, again = run(host)
     assert again["verdict"] == "NOT_RUN" and "fresh --workdir is required" in again["reason"]
+
+
+def test_a_remote_or_odd_endpoint_is_refused_and_every_custom_node_entry_including_dot_names_is_listed(host):
+    server, models, work, reference = host
+    for url in ("http://remote-host:8188", "https://127.0.0.1:8188", "http://127.0.0.1:8188/api", "http://127.0.0.1"):
+        args = sx.build_parser().parse_args(["--workdir", str(work), "--models-dir", str(models), "--comfy-url", url, "--reference-image", str(reference), "--worker-pid", "1", "--gpu-index", "0", "--execute"])
+        assert any("must be http://127.0.0.1:<port>" in p for p in sx.execution_extra_problems(args)), url
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert "find \"$COMFY/custom_nodes\" -mindepth 1 -maxdepth 1 -print0" in script and ".[!.]*" not in script
+    notebook = (REPO / "scripts" / "kaggle" / "build_sdxl_notebook.py").read_text(encoding="utf-8")
+    install = notebook.index('"install", "-q"')
+    assert notebook.index("MemAvailable") < install and notebook.index("memory.used") < install

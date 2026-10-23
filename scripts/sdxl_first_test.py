@@ -185,7 +185,11 @@ def execution_extra_problems(args: argparse.Namespace) -> list[str]:
     if args.worker_pid is None or args.gpu_index is None:
         problems.append("--worker-pid and --gpu-index are required: the worker's ownership of the port and its CUDA isolation are verified here")
     else:
-        port = args.comfy_url.rsplit(":", 1)[-1].strip("/")
+        from urllib.parse import urlsplit
+        parts = urlsplit(args.comfy_url)
+        if parts.scheme != "http" or parts.hostname not in ("127.0.0.1", "localhost") or parts.port is None or parts.path not in ("", "/"):
+            problems.append(f"--comfy-url {args.comfy_url} must be http://127.0.0.1:<port>: the proof below is about this machine's worker, never a remote server")
+        port = str(parts.port or "")
         owner = sp.run([sys.executable, str(ROOT / "scripts" / "kaggle" / "port_owner.py"), str(args.worker_pid), port], capture_output=True, text=True)
         if owner.returncode != 0:
             problems.append(f"worker pid {args.worker_pid} does not own the listener on port {port}: {(owner.stdout + owner.stderr).strip()[:160]}")
