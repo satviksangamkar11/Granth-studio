@@ -1,0 +1,5 @@
+**MINOR — [scripts/sdxl_first_test.py:222](/D:/aai%20work/granthstudio/scripts/sdxl_first_test.py:222):** A failed FFmpeg process with empty stderr (for example, SIGKILL) sets `sheet_error=""`. The truthiness checks then record a contact sheet and return `EXPERIMENT_COMPLETE` despite failure. Check `returncode` directly and supply a nonempty fallback error.
+
+Otherwise, the prior findings are closed: receipt and stage verdict distinguish experiments; downstream PASS gates require exact `PASS`; offline validation preserves the original verdict; `_experiment` is safely stripped from submitted graphs; reference clearing affects sweep request copies only; one-image and duplicate-cfg handling are correct.
+
+**No blocking issue remains for authorizing a pinned SDXL GPU run at `399e0a3e820d7d57f94adf30afdd22583a0d01bf`.** Static review only; no tests, GPU, network, downloads, or file modifications.

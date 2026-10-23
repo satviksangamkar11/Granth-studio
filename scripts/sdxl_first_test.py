@@ -219,10 +219,10 @@ def sweep(args, project, models, request, kf, out, receipt, finish):
                                "".join(f"[{i}:v]scale=-1:360[v{i}];" for i in range(len(files))) + "".join(f"[v{i}]" for i in range(len(files))) + f"xstack=inputs={len(files)}:layout="
                                + "|".join(f"{(i % cols) * 540}_{(i // cols) * 360}" for i in range(len(files))), "-frames:v", "1", str(sheet)],
                               capture_output=True, text=True, timeout=180)
-        sheet_error = None if done.returncode == 0 else done.stderr[-300:]
-    receipt["sweep_contact_sheet"] = {"file": None if sheet_error else sheet.name, "error": sheet_error, "rows": [f"cfg {c}" for c in cfgs], "columns": [f"seed offset {i}" for i in range(args.sweep_seeds)]}
+        sheet_error = None if done.returncode == 0 else (done.stderr[-300:] or f"ffmpeg exited with status {done.returncode}")
+    receipt["sweep_contact_sheet"] = {"file": None if sheet_error is not None else sheet.name, "error": sheet_error, "rows": [f"cfg {c}" for c in cfgs], "columns": [f"seed offset {i}" for i in range(args.sweep_seeds)]}
     receipt["experiment_note"] = "EXPERIMENT: nothing here validates SDXL, a workflow or a style; the owner judges the images"
-    if sheet_error:
+    if sheet_error is not None:
         return finish("FAIL", f"sweep images generated but the contact sheet failed: {sheet_error}")
     return finish("EXPERIMENT_COMPLETE", "style-sweep images generated (experiment, not a validation); the human picks which setting keeps the frozen style")
 
