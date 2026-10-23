@@ -31,6 +31,9 @@ class Task:
     depends_on: tuple[str, ...] = ()
     max_attempts: int = 1
     preflight: Callable[[], None] | None = field(default=None, repr=False)
+    # Checked after the run, before sealing. Defaults to ``preflight``; GPU tasks that keep their own ComfyUI server (and its loaded models) resident
+    # must pass a postflight WITHOUT the free-VRAM gate, otherwise their own finished render makes the host look "not ready" (Kaggle gpu0, attempt 4).
+    postflight: Callable[[], None] | None = field(default=None, repr=False)
     verify: Callable[[Path], None] | None = field(default=None, repr=False)
     # Frozen section 9: a declared, human-reviewed fallback (e.g. Tier 0) used only after every render
     # attempt genuinely failed. Never used for NOT VALIDATED, pending or gate-failed tasks.
@@ -183,8 +186,9 @@ class Scheduler:
             try:
                 try:
                     files = task.run(work)
-                    if task.preflight:
-                        task.preflight()
+                    after = task.postflight or task.preflight
+                    if after:
+                        after()
                     if task.verify:
                         task.verify(work)
                 except TaskFailed as exc:

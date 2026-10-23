@@ -318,8 +318,9 @@ def cmd_refs_status(args: argparse.Namespace) -> int:
     project = _project(args)
     canon, models = _canon_models(project)
     registry = keyframes.load_registry(project, canon)
-    style = registry["style"]
-    print(f"style: {'none' if style is None else style['style_id'] + ' v' + str(style['version']) + ' ' + style['status']}")
+    style = registry.get("frozen_style") or registry["style"]
+    sealed = f" sha256 {style['content_sha256'][:12]}" if style and "content_sha256" in style else ""
+    print(f"style: {'none' if style is None else style['style_id'] + ' v' + str(style['version']) + ' ' + style['status'] + sealed}")
     print(f"sdxl: {(models.get('sdxl') or {}).get('status', 'not configured')} (NOT VALIDATED unless 'validated' after a real run)")
     for asset in registry["assets"]:
         print(f"{asset['asset_id']:<34} v{asset['version']:<3} {asset['kind']:<16} {asset['status']:<9} {asset['sha256'][:12]}")

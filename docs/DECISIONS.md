@@ -37,3 +37,10 @@ Each entry: ID, date, status (APPROVED / PROPOSED / OPEN), source, decision. Onl
 The user explicitly authorized Codex code edits and CPU tests after the independent audit.
 No frozen-core revision, research approval, model compatibility decision, acceptance budget
 or production GO was supplied by that authorization.
+
+## Owner decision 2026-10-23: provisional global art style (art-style part of O-006 only)
+
+The owner froze `devotional_gouache_1950s_v1` (canon/style.yaml, sealed by `content_sha256`) as the project-wide look for all current pilot and mini-film work, identical for Marathi and Hindi.
+Prompts compose as {prefix} {shot_description} {suffix} (src/granthstudio/keyframes.py; the request said `runner.py`, which does not exist in this repository, so the composition lives where every SDXL prompt is built).
+Style id and hash are recorded in keyframe requests, `metrics.json`, task inputs (keyframe, LTX shots, both assembly tasks) and the production snapshot, so a change cannot happen silently. A second style in `visual_assets.yaml` is refused.
+Not decided here: the SDXL checkpoint, the identity-conditioning method (rest of O-006) and any character design. Characters stay provisional; SDXL stays NOT VALIDATED.

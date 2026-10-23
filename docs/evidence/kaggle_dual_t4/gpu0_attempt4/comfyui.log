@@ -1,0 +1,46 @@
+Setting output directory to: /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/output
+Setting input directory to: /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/input
+Setting user directory to: /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/user
+Checkpoint files will always be loaded safely.
+Total VRAM 14912 MB, total RAM 32099 MB
+pytorch version: 2.11.0+cu128
+Set vram state to: NORMAL_VRAM
+Device: cuda:0 Tesla T4 : cudaMallocAsync
+Using pytorch attention
+Python version: 3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]
+ComfyUI version: 0.3.47
+Setting temp directory to: /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/temp/temp
+ComfyUI frontend version: 1.23.4
+[Prompt Server] web root: /usr/local/lib/python3.13/dist-packages/comfyui_frontend_package/static
+
+Import times for custom nodes:
+   0.0 seconds: /kaggle/temp/ltx/ComfyUI/custom_nodes/websocket_image_save.py
+   0.3 seconds: /kaggle/temp/ltx/ComfyUI/custom_nodes/ComfyUI-KJNodes
+   1.3 seconds: /kaggle/temp/ltx/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite
+
+setup plugin alembic.autogenerate.schemas
+setup plugin alembic.autogenerate.tables
+setup plugin alembic.autogenerate.types
+setup plugin alembic.autogenerate.constraints
+setup plugin alembic.autogenerate.defaults
+setup plugin alembic.autogenerate.comments
+setup plugin alembic.ext.checkconstraint_byname
+Failed to initialize database. Please ensure you have installed the latest requirements. If the error persists, please report this as in future the database will be required: (sqlite3.OperationalError) unable to open database file
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Starting server
+
+To see the GUI go to: http://127.0.0.1:43355
+got prompt
+model weight dtype torch.float32, manual cast: None
+model_type FLUX
+VAE load device: cuda:0, offload device: cpu, dtype: torch.float32
+no CLIP/text encoder weights in checkpoint, the text encoder model will not be loaded.
+Requested to load MochiTEModel_
+loaded completely 9.5367431640625e+25 9083.38671875 True
+CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cuda:0, dtype: torch.float16
+Requested to load VideoVAE
+loaded completely 5250.487496185303 4756.450138092041 True
+Requested to load LTXV
+loaded completely 8443.887451934814 7335.80517578125 True
+  0%|          | 0/8 [00:00<?, ?it/s] 12%|█▎        | 1/8 [00:03<00:24,  3.44s/it] 25%|██▌       | 2/8 [00:06<00:20,  3.44s/it] 38%|███▊      | 3/8 [00:10<00:17,  3.45s/it] 50%|█████     | 4/8 [00:13<00:13,  3.46s/it] 62%|██████▎   | 5/8 [00:17<00:10,  3.48s/it] 75%|███████▌  | 6/8 [00:20<00:07,  3.52s/it] 88%|████████▊ | 7/8 [00:24<00:03,  3.55s/it]100%|██████████| 8/8 [00:28<00:00,  3.60s/it]100%|██████████| 8/8 [00:28<00:00,  3.53s/it]
+Prompt executed in 114.28 seconds

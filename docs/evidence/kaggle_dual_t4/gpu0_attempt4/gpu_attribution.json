@@ -1,0 +1,32 @@
+{
+  "notes": [],
+  "cards": {
+    "GPU-5ee11fb5-a8f7-865d-c5ae-b9f0539cfee1": {
+      "index": 0,
+      "first": 0.0,
+      "peak": 14873.0
+    },
+    "GPU-7e55ff31-f388-b410-7ad1-befda9c389dd": {
+      "index": 1,
+      "first": 0.0,
+      "peak": 0.0
+    }
+  },
+  "compute_apps": {
+    "GPU-5ee11fb5-a8f7-865d-c5ae-b9f0539cfee1": [
+      303
+    ]
+  },
+  "workers": {
+    "0": {
+      "pid": 303,
+      "active": true
+    },
+    "1": {
+      "pid": 0,
+      "active": false
+    }
+  },
+  "problems": [],
+  "ok": true
+}

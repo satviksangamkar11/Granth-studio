@@ -1,0 +1,44 @@
+{
+  "gpus": [
+    {
+      "index": 0,
+      "uuid": "GPU-5ee11fb5-a8f7-865d-c5ae-b9f0539cfee1",
+      "name": "Tesla T4",
+      "memory_total_mb": 15360.0,
+      "memory_used_mb": 0.0
+    },
+    {
+      "index": 1,
+      "uuid": "GPU-7e55ff31-f388-b410-7ad1-befda9c389dd",
+      "name": "Tesla T4",
+      "memory_total_mb": 15360.0,
+      "memory_used_mb": 0.0
+    }
+  ],
+  "torch": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "available": true,
+    "count": 2,
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      }
+    ]
+  },
+  "ram_available_mb": 30752.2890625,
+  "disk_free_gb": 1126.14162432,
+  "problems": [],
+  "ok": true
+}

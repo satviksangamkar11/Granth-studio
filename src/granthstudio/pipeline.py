@@ -30,6 +30,7 @@ from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
 from .runtime import gpu_status, require_host_ready, require_source_pins
+from .style import identity as style_identity, load_style
 from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
@@ -73,6 +74,7 @@ def snapshot(bundle: Bundle) -> dict:
     return {"compiled": sha256_obj(bundle.compiled), "models": sha256_obj(bundle.models),
             "research_sha256": bundle.compiled["research_sha256"], "research_version": bundle.compiled["research_version"],
             "canon_sha256": bundle.canon.digest(),
+            "style": style_identity(load_style(bundle.project)),
             "timelines": {lang: sha256_obj(timeline) for lang, timeline in bundle.timelines.items()}}
 
 def require_current(bundle: Bundle) -> None:
@@ -89,9 +91,9 @@ def _keyframe_request(bundle, visual_id):
     registry = load_registry(bundle.project, bundle.canon)
     return keyframe_request(bundle.compiled, bundle.canon, registry, bundle.models, visual_id), registry
 
-def _keyframe_preflight(bundle, visual_id):
+def _keyframe_preflight(bundle, visual_id, check_host=True):
     request, _ = _keyframe_request(bundle, visual_id)
-    sdxl_preflight(bundle.project, bundle.models, request)
+    sdxl_preflight(bundle.project, bundle.models, request, check_host=check_host)
     require_references(request, bundle.models)
 
 def _keyframe_run(bundle, visual_id, journal):
@@ -301,7 +303,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
                            "attempt": read_json(journal)["attempt"],
                            "fingerprint": read_json(journal)["history"][-1]["fingerprint"],
                            "seed_inputs": read_json(journal)["history"][-1]["seed_inputs"]},
-            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs,
+            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs, "style": style_identity(load_style(bundle.project)),
             "runtime_sha256": verify_benchmark_runtime(bundle.models, capability, template.version),
             "gpu": gpu_names[0] if gpu_names else None, "gpu_index": gpu_indices[0] if gpu_indices else None,
             "execution_s": {"value": execution_seconds(history), "kind": "measured by ComfyUI status messages"},
@@ -432,6 +434,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     compiled = bundle.compiled
     visuals = {v["visual_id"]: v for v in compiled["visuals"]}
     tasks, audio, keyframes, shot_tasks = [], {}, {}, {}
+    frozen = style_identity(load_style(bundle.project))
+    style_input = {"style": f"{frozen['style_id']}@{frozen['version']}:{frozen['sha256']}"} if frozen else {}   # one style for every shot and both languages
     for lang in ("mr", "hi"):
         def audio_preflight(lang=lang):
             require_current(bundle)
@@ -448,11 +452,12 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
         if visual["source"] == "keyframe":
             request = requests[vid]
             keyframes[vid] = Task("keyframe", f"keyframe_{vid}", {"visual": sha256_obj(visual),
-                "source": compiled["research_sha256"], "canon": compiled["canon_sha256"],
+                "source": compiled["research_sha256"], "canon": compiled["canon_sha256"], **style_input,
                 "request": request["request_sha256"], "sdxl": sha256_obj(bundle.models.get("sdxl"))},
                 KEYFRAME_VERSION, lambda work: {}, max_attempts=1,
                 depends_on=(keyframes[request["derived_from"]["visual_id"]].task_id(),) if derived(vid) else (),
                 preflight=lambda vid=vid: (require_current(bundle), _keyframe_preflight(bundle, vid)),
+                postflight=lambda vid=vid: (require_current(bundle), _keyframe_preflight(bundle, vid, check_host=False)),
                 verify=lambda directory, vid=vid: _verify_keyframe(bundle, vid, directory))
             keyframes[vid].journal = scheduler.store / "pending" / f"{keyframes[vid].task_id()}.json"
             keyframes[vid].run = _keyframe_run(bundle, vid, keyframes[vid].journal)
@@ -474,6 +479,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             stage, version, run = ("tier1" if capability == "i2v" else "tier2"), template.version, _not_validated("pending LTX task")
             duration = shot["frames"] / FPS
             inputs["model"] = sha256_obj(bundle.models["ltx"])
+            inputs.update(style_input)
             inputs["server"] = bundle.models["comfyui"]["base_url"]
             if shot["tier"] == 2:
                 end = visuals[shot["end_visual_id"]]
@@ -487,10 +493,17 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             _visual_file(bundle, visual)
             if shot["tier"] == 2:
                 _visual_file(bundle, visuals[shot["end_visual_id"]])
+        def postflight(shot=shot, visual=visual, capability=capability):
+            require_current(bundle)             # same state checks as preflight, minus the free-VRAM gate: our ComfyUI keeps its models loaded
+            if capability:
+                _ltx_preflight(bundle, capability)
+            _visual_file(bundle, visual)
+            if shot["tier"] == 2:
+                _visual_file(bundle, visuals[shot["end_visual_id"]])
         if shot.get("fallback"):
             inputs["fallback"] = sha256_obj(shot["fallback"])
         task = Task(stage, shot["shot_id"], inputs, version, run, depends_on=tuple(deps), max_attempts=MAX_ATTEMPTS,
-                    preflight=preflight, verify=lambda directory, duration=duration, ltx=bool(capability): _verify_clip(
+                    preflight=preflight, postflight=postflight if capability else None, verify=lambda directory, duration=duration, ltx=bool(capability): _verify_clip(
                         directory, duration, bundle.project if ltx else None))
         if shot.get("fallback"):  # frozen 9: Tier 0 stand-in, only after real failed renders, recorded in the receipt
             task.fallback = _tier0_run(bundle, {**shot, "duration_s": duration}, visual)
@@ -505,7 +518,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     for lang in ("mr", "hi"):
         deps = (audio[lang].task_id(), *(t.task_id() for t in shot_tasks.values()), *(t.task_id() for t in lipsync_tasks[lang].values()))
         task = Task("assembly", f"assemble_{lang}", {"language": lang, "timeline": sha256_obj(bundle.timelines[lang]),
-                    "edit_rules": sha256_obj([{k: s[k] for k in ("shot_id", "duration_s", "dialogue_ids", "coverage")} for s in compiled["shots"]])},
+                    "edit_rules": sha256_obj([{k: s[k] for k in ("shot_id", "duration_s", "dialogue_ids", "coverage")} for s in compiled["shots"]]), **style_input},
                     ASSEMBLY_VERSION, _assembly_run(bundle, lang, shot_tasks, audio[lang], scheduler, lipsync_tasks[lang]),
                     depends_on=deps, preflight=lambda: require_current(bundle),
                     verify=lambda directory, lang=lang: _verify_assembly(bundle, lang, directory))

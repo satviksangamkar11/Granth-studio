@@ -20,10 +20,12 @@ from .errors import ConfigError, GateFailure, IntegrationUnavailable, TaskFailed
 from .ffmpeg import probe
 from .runtime import require_host_ready
 from .scheduler import Scheduler, Task
+from .style import compose, identity as style_identity, load_style
 from .integrity import create_new_file, reject_link_components, atomic_write_bytes, atomic_write_json, contained_path, read_json, sha256_bytes, sha256_file, sha256_obj
 from .schemas import validate_document
 
 PROMPT_TEMPLATE_VERSION = "keyframe-prompt-v1"
+FROZEN_TEMPLATE_VERSION = "keyframe-prompt-v2-frozen-style"   # prefix + scene + suffix from canon/style.yaml
 SHEET_VIEWS = ("front", "three_quarter", "profile", "full_body")
 REFERENCE_DIR = "references"
 ASSET_ID = re.compile(r"^ref_[a-z0-9_]+$")
@@ -41,10 +43,15 @@ def references_root(project: Project) -> Path:
 
 def load_registry(project: Project, canon: Canon | None = None) -> dict[str, Any]:
     path = registry_path(project)
+    frozen = load_style(project)                                  # canon/style.yaml: refuses unsealed edits
     if not path.is_file():
-        return dict(EMPTY_REGISTRY)
+        return {**EMPTY_REGISTRY, **({"frozen_style": frozen} if frozen else {})}
     registry = load_yaml(path)
     validate_document("visual_assets", registry)
+    if frozen:
+        if registry["style"] is not None:
+            raise ConfigError("visual_assets.yaml defines a style while canon/style.yaml is frozen: two styles would be silent style drift; remove one")
+        registry["frozen_style"] = frozen
     seen: set[tuple[str, int]] = set()
     for asset in registry["assets"]:
         key = (asset["asset_id"], asset["version"])
@@ -71,6 +78,7 @@ def load_registry(project: Project, canon: Canon | None = None) -> dict[str, Any
 
 
 def save_registry(project: Project, registry: dict[str, Any]) -> None:
+    registry = {k: v for k, v in registry.items() if k != "frozen_style"}      # the frozen style lives in canon/style.yaml only
     validate_document("visual_assets", registry)
     text = yaml.safe_dump(registry, allow_unicode=True, sort_keys=False)
     atomic_write_bytes(registry_path(project), text.encode("utf-8"))
@@ -95,8 +103,18 @@ def _design(registry: dict[str, Any], canon_id: str) -> dict[str, Any] | None:
 
 
 def _style(registry: dict[str, Any]) -> dict[str, Any] | None:
+    if registry.get("frozen_style"):
+        return registry["frozen_style"]
     style = registry["style"]
     return style if style and style["status"] == "approved" else None
+
+
+def _style_ref(style: dict[str, Any] | None) -> dict[str, Any] | None:
+    if style is None:
+        return None
+    if "content_sha256" in style:                                 # frozen: id, version and content hash
+        return style_identity(style)
+    return {"style_id": style["style_id"], "version": style["version"]}
 
 
 def _seed(key: str) -> int:
@@ -115,7 +133,13 @@ def _common(models: dict[str, Any]) -> dict[str, Any]:
 
 
 def _prompt(style: dict[str, Any] | None, parts: list[str]) -> str:
+    if style and "content_sha256" in style:                       # frozen style: prefix + scene description + suffix
+        return compose(style, ". ".join(p for p in parts if p))
     return ". ".join([style["prompt_prefix"] if style else "", *parts]).strip(". ")
+
+
+def _template_version(style: dict[str, Any] | None) -> str:
+    return FROZEN_TEMPLATE_VERSION if style and "content_sha256" in style else PROMPT_TEMPLATE_VERSION
 
 
 def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str, Any],
@@ -157,13 +181,13 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
         found = approved_assets(registry, kind="location", canon_id=loc)
         (references.append(_ref(found[0])) if found else missing.append(loc))
     request = {
-        "template_version": PROMPT_TEMPLATE_VERSION, "asset_kind": "keyframe", "visual_id": visual_id, "role": role,
+        "template_version": _template_version(style), "asset_kind": "keyframe", "visual_id": visual_id, "role": role,
         "view": role, "asset_id": "ref_kf_" + visual_id.removeprefix("vis_"), "characters": characters,
         "locations": locations, "props": props, "lighting": lightings, "action_ids": action_ids,
         "source_fact_ids": [f["id"] for f in wanted], "artistic_fact_ids": sorted(artistic_ids),
         "artistic_flags": sorted({f for s in shots for f in s["artistic_flags"]}),
         "prompt": prompt, "negative_prompt": style["negative_prompt"] if style else "", "seed": _seed(visual_id),
-        "style": {"style_id": style["style_id"], "version": style["version"]} if style else None,
+        "style": _style_ref(style),
         "references": references, "missing_references": missing, **_common(models)}
     if role == "end":  # frozen 7 Tier 2: derive the end image from the start image (start hashes unchanged)
         request["derived_from"] = _derived_from(compiled, canon, registry, models, shots)
@@ -208,13 +232,13 @@ def sheet_request(canon: Canon, registry: dict[str, Any], models: dict[str, Any]
         front = [a for a in approved_assets(registry, kind=kind, canon_id=canon_id) if a["view"] == "front"]
         (references.append(_ref(front[0])) if front else missing.append(f"front:{canon_id}"))
     request = {
-        "template_version": PROMPT_TEMPLATE_VERSION, "asset_kind": kind, "canon_id": canon_id, "view": view,
+        "template_version": _template_version(style), "asset_kind": kind, "canon_id": canon_id, "view": view,
         "asset_id": f"ref_{canon_id}_{view}", "prompt": _prompt(style, [
             f"{entry['canonical_name']}, {view.replace('_', ' ')} view" if kind == "character_sheet" else entry["canonical_name"],
             design["prompt"] if design else ""]),
         "design_artistic": design["artistic"] if design else None, "design_source_refs": design["source_refs"] if design else [],
         "negative_prompt": style["negative_prompt"] if style else "", "seed": _seed(f"{canon_id}:{view}"),
-        "style": {"style_id": style["style_id"], "version": style["version"]} if style else None,
+        "style": _style_ref(style),
         "references": references, "missing_references": missing, **_common(models)}
     request["request_sha256"] = sha256_obj(request)
     return request
@@ -232,7 +256,7 @@ def sheet_requests(canon: Canon, registry: dict[str, Any], models: dict[str, Any
 
 # ---------------------------------------------------------------- SDXL adapter
 
-def sdxl_preflight(project: Project, models: dict[str, Any], request: dict[str, Any] | None = None):
+def sdxl_preflight(project: Project, models: dict[str, Any], request: dict[str, Any] | None = None, check_host: bool = True):
     """Every selection must be explicit, pinned and locally verified before any SDXL job."""
     sdxl = models.get("sdxl")
     if not sdxl or sdxl["status"] != "validated":
@@ -255,7 +279,8 @@ def sdxl_preflight(project: Project, models: dict[str, Any], request: dict[str, 
         raise IntegrationUnavailable(f"SDXL {what} status is '{template.status}': NOT VALIDATED")
     if sdxl["checkpoint_file"] not in template.text:
         raise ConfigError(f"SDXL workflow {template.name} does not load the pinned checkpoint {sdxl['checkpoint_file']}")
-    require_host_ready(project, models)    # this is the GPU task boundary: no SDXL job on an unready host
+    if check_host:                          # the GPU task boundary: no SDXL job on an unready host (not re-asked after the run: our own server holds the VRAM)
+        require_host_ready(project, models)
     return template
 
 
@@ -278,6 +303,9 @@ def require_references(request: dict[str, Any], models: dict[str, Any]) -> None:
 def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, Any], journal: Path, work: Path) -> dict[str, str]:
     """Run one request through ComfyUI and leave keyframe.png, request.json and metrics.json in work."""
     template = sdxl_preflight(project, models, request)
+    frozen = load_style(project)
+    if frozen and request["style"] != style_identity(frozen):
+        raise GateFailure(f"{request['asset_id']}: request was built under style {request['style']}, the project style is {style_identity(frozen)}: per-shot style drift refused")
     require_references(request, models)
     slots = models["sdxl"]["identity_conditioning"]["reference_slots"]
     values = {"PROMPT": request["prompt"], "NEGATIVE_PROMPT": request["negative_prompt"], "SEED": generation_seed(journal, request["seed"]),
@@ -300,7 +328,7 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
     atomic_write_json(work / "request.json", request)
     atomic_write_json(work / "metrics.json", {"schema_version": 1, "prompt_id": read_json(journal)["prompt_id"],
         "request_sha256": request["request_sha256"], "checkpoint_sha256": models["sdxl"]["checkpoint_sha256"],
-        "workflow_version": template.version})
+        "workflow_version": template.version, "style": request["style"]})
     return {"image": "keyframe.png", "request": "request.json", "metrics": "metrics.json"}
 
 

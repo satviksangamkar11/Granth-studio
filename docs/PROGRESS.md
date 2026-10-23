@@ -374,3 +374,19 @@ Codex re-review (06_dual_t4_rereview.md): no blocking issue; one MINOR (stale te
 - Worker 0: `pid 303 owns a listener on port 55325`; ComfyUI reported exactly one device, `cuda:0 Tesla T4 : cudaMallocAsync`, matching physical GPU 0. (The exec fix worked.)
 - Refused: `ConversionError: node 103 VHS_VideoCombine: 5 unexplained widget value(s)`. Cause: the REAL official workflow file (blob 2260170f, verified) stores VideoHelperSuite widgets as `{name: value}`; our committed positional "ui_inventory" had hidden that. The converter correctly aborted rather than guess.
 - Fix: converter accepts name-keyed widget values (unknown keys refused; only `videopreview` is UI-only). Checked offline against the real official file + the live /object_info from this very Kaggle server: rebuilt graph is IDENTICAL to the committed candidate. New regression test in tests/test_ui_to_api.py. Log: docs/evidence/kaggle_dual_t4/gpu0_attempt3_converter_refused.txt. Still no inference, no VRAM used.
+
+## Frozen provisional style (owner decision 2026-10-23)
+- `canon/style.yaml` (`devotional_gouache_1950s_v1`, v1, frozen, sealed) + `src/granthstudio/style.py`; keyframes compose prefix + scene + suffix; id and sha256 in requests, metrics, task inputs, snapshot; conflicting registry style, unsealed edit or request built under another style are refused. `tests/test_style.py` (8 tests).
+- No `runner.py` exists in this repo; wired into keyframes.py/pipeline.py instead. Characters still provisional; SDXL checkpoint and identity conditioning still undecided, SDXL NOT VALIDATED.
+
+## Kaggle dual-T4 attempt 4 (v4, pinned fce4e21): FIRST REAL LTX GENERATION ON GPU 0; harness verdict NOT_VALIDATED (post-run check bug), not PASS
+Evidence: docs/evidence/kaggle_dual_t4/gpu0_attempt4/ (receipt, attribution, journal, traces, ComfyUI log, the clip and its last frame image).
+- Host: GPU 0 `GPU-5ee11fb5-a8f7-865d-c5ae-b9f0539cfee1`, GPU 1 `GPU-7e55ff31…`, both Tesla T4 15360 MiB idle at start; torch 2.11.0+cu128; ComfyUI 0.3.47 (pinned commit); worker 0 pid 303 owned its listener; ComfyUI saw exactly one device `cuda:0 Tesla T4 : cudaMallocAsync`.
+- Live compatibility: rebuilt API workflow from the official file + live /object_info is IDENTICAL to the committed candidate (0.9.6 -> 0.9.8 checkpoint override recorded).
+- Precision as logged by ComfyUI: diffusion model `torch.float32` (manual cast none), VAE `torch.float32`, text encoder `torch.float16`; LTXV loaded completely (7.3 GB), VideoVAE 4.8 GB, T5 9.1 GB (offloaded between stages). Matches the source-derived expectation (T4 has no native bf16).
+- Prompt executed in 114.28 s (8 steps, ~3.44 s/it). Scheduler wall clock 345 s (cold model loading from disk before the first VRAM rise at 05:29:21). Sampled peak memory.used on GPU 0: 14 873 MiB (lower bound of the true peak; allocator-cached). GPU 1 stayed at 0 MiB with no compute app: attribution ok (pid 303 only on GPU 0).
+- Output: `granthstudio_ltx_i2v_00001.mp4`, h264, 768x512, 49 frames, 24 fps, 2.04 s; journal state `completed`, one submission (attempt 1, seed 1732128765, noise_seed on the sampler path).
+- Why NOT_VALIDATED: after the run the scheduler repeated the PRE-run preflight, which includes `free_vram >= 10000`; ComfyUI still held ~14.8 GB, so the finished render was discarded as "GPU preflight not passed: free_vram". Fix: `Task.postflight` (state checks without the free-VRAM gate) for LTX and SDXL tasks; regression test reproduces the bug and the fix. No clip decoding was performed by the harness for this attempt, so nothing here is a PASS. Capability stays NOT VALIDATED; a human has not reviewed the clip.
+- Also seen: ComfyUI logged a non-fatal sqlite "unable to open database file" warning (user DB), no effect on the run.
+
+- CPU suite at this checkpoint: 457 passed, 4 skipped (Windows, 617 s); `granthstudio validate` clean.

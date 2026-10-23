@@ -431,3 +431,31 @@ def test_gpu_script_invalidates_old_success_before_it_can_refuse_for_missing_var
 def test_gpu_script_workers_are_exec_replaced_so_the_recorded_pid_owns_the_listener():
     text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
     assert 'CUDA_VISIBLE_DEVICES="$n" exec "${launch[@]}"' in text      # Kaggle attempt 2: a subshell pid does not own the socket and the proof (rightly) refused
+
+
+def test_a_finished_render_is_sealed_even_though_our_own_comfyui_now_holds_the_vram(host, monkeypatch):
+    """Kaggle gpu0 attempt 4: the clip was generated, then the post-run preflight saw ~14.8 GB used (ComfyUI keeps its models loaded) and discarded it."""
+    server = host[0]
+    busy = [{**T4[0], "memory_free_mb": 300.0, "memory_used_mb": 14800.0}]
+    for module in ("runtime", "pipeline"):
+        monkeypatch.setattr(f"granthstudio.{module}.gpu_status", lambda: busy if server.posts else T4)
+    code, receipt = run(host, "--execute")
+    assert [r["status"] for r in receipt["results"]] == ["complete"], receipt["results"]
+    assert receipt["clip"]["width"] == 768 and len(server.posts) == 1
+
+
+def test_scheduler_uses_the_postflight_after_the_run_and_the_preflight_before_it(tmp_path):
+    from granthstudio.scheduler import Scheduler, Task
+    calls = []
+    def run_it(work):
+        (work / "out.txt").write_text("x", encoding="utf-8"); return {"out": "out.txt"}
+    def pre():
+        calls.append("pre")
+    def post():
+        calls.append("post")
+    task = Task("tier0", "t", {"a": "b"}, "v1", run_it, preflight=pre, postflight=post)
+    result = Scheduler(tmp_path / "store").run([task])[0]
+    assert result.status == "complete" and calls == ["pre", "post"]
+    calls.clear()
+    plain = Task("tier0", "u", {"a": "b"}, "v1", run_it, preflight=pre)           # no postflight: the preflight is repeated, as before
+    assert Scheduler(tmp_path / "store2").run([plain])[0].status == "complete" and calls == ["pre", "pre"]
