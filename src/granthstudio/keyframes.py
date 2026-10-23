@@ -26,6 +26,7 @@ from .schemas import validate_document
 
 PROMPT_TEMPLATE_VERSION = "keyframe-prompt-v1"
 FROZEN_TEMPLATE_VERSION = "keyframe-prompt-v2-frozen-style"   # prefix + scene + suffix from canon/style.yaml
+VIDEO_SAFE_TEMPLATE_VERSION = "keyframe-prompt-v3-video-safe"  # prefix + scene + approved lighting phrase + suffix, full-bleed
 SHEET_VIEWS = ("front", "three_quarter", "profile", "full_body")
 REFERENCE_DIR = "references"
 ASSET_ID = re.compile(r"^ref_[a-z0-9_]+$")
@@ -132,13 +133,19 @@ def _common(models: dict[str, Any]) -> dict[str, Any]:
             "identity_method": (sdxl.get("identity_conditioning") or {}).get("method")}
 
 
-def _prompt(style: dict[str, Any] | None, parts: list[str]) -> str:
-    if style and "content_sha256" in style:                       # frozen style: prefix + scene description + suffix
-        return compose(style, ". ".join(p for p in parts if p))
+def _video_safe(style: dict[str, Any] | None) -> bool:
+    return bool(style and "lighting_phrases" in style)
+
+
+def _prompt(style: dict[str, Any] | None, parts: list[str], lighting_bucket: str | None = None) -> str:
+    if style and "content_sha256" in style:                       # frozen style: prefix + scene description (+ approved lighting phrase) + suffix
+        return compose(style, ". ".join(p for p in parts if p), lighting_bucket)
     return ". ".join([style["prompt_prefix"] if style else "", *parts]).strip(". ")
 
 
 def _template_version(style: dict[str, Any] | None) -> str:
+    if _video_safe(style):
+        return VIDEO_SAFE_TEMPLATE_VERSION
     return FROZEN_TEMPLATE_VERSION if style and "content_sha256" in style else PROMPT_TEMPLATE_VERSION
 
 
@@ -168,11 +175,16 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
     style = _style(registry)
     names = lambda ids: ", ".join(canon.entries[i]["canonical_name"] for i in ids)
     designs = [d for i in [*characters, *locations, *props] if (d := _design(registry, i))]
+    lighting_bucket = None
+    if _video_safe(style):                                        # one approved lighting bucket per keyframe, taken from the manifest enum: never free text
+        if len(lightings) != 1:
+            raise GateFailure(f"visual {visual_id} is shared by shots with different lighting {lightings}: a video-safe keyframe needs exactly one lighting bucket")
+        lighting_bucket = lightings[0]
     prompt = _prompt(style, [
         f"Characters: {names(characters)}" if characters else "", f"Location: {names(locations)}",
-        f"Props: {names(props)}" if props else "", f"Lighting: {', '.join(lightings)}",
+        f"Props: {names(props)}" if props else "", f"Lighting: {', '.join(lightings)}" if lighting_bucket is None else "",
         *[f"{canon.entries[d['canon_id']]['canonical_name']}: {d['prompt']}" for d in designs],
-        *[f"{'Artistic interpretation' if f['artistic'] else 'Source detail'}: {f['text']}" for f in wanted]])
+        *[f"{'Artistic interpretation' if f['artistic'] else 'Source detail'}: {f['text']}" for f in wanted]], lighting_bucket)
     references, missing = [], []
     for char in characters:
         sheets = sorted(approved_assets(registry, kind="character_sheet", canon_id=char), key=_view_rank)
@@ -187,7 +199,7 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
         "source_fact_ids": [f["id"] for f in wanted], "artistic_fact_ids": sorted(artistic_ids),
         "artistic_flags": sorted({f for s in shots for f in s["artistic_flags"]}),
         "prompt": prompt, "negative_prompt": style["negative_prompt"] if style else "", "seed": _seed(visual_id),
-        "style": _style_ref(style),
+        "style": _style_ref(style), **({"lighting_bucket": lighting_bucket, "full_bleed": True} if lighting_bucket is not None else {}),
         "references": references, "missing_references": missing, **_common(models)}
     if role == "end":  # frozen 7 Tier 2: derive the end image from the start image (start hashes unchanged)
         request["derived_from"] = _derived_from(compiled, canon, registry, models, shots)
@@ -235,7 +247,7 @@ def sheet_request(canon: Canon, registry: dict[str, Any], models: dict[str, Any]
         "template_version": _template_version(style), "asset_kind": kind, "canon_id": canon_id, "view": view,
         "asset_id": f"ref_{canon_id}_{view}", "prompt": _prompt(style, [
             f"{entry['canonical_name']}, {view.replace('_', ' ')} view" if kind == "character_sheet" else entry["canonical_name"],
-            design["prompt"] if design else ""]),
+            design["prompt"] if design else ""], "unspecified" if _video_safe(style) else None),
         "design_artistic": design["artistic"] if design else None, "design_source_refs": design["source_refs"] if design else [],
         "negative_prompt": style["negative_prompt"] if style else "", "seed": _seed(f"{canon_id}:{view}"),
         "style": _style_ref(style),

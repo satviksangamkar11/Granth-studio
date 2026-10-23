@@ -25,8 +25,25 @@ NEGATIVE = ("photorealistic, 3D render, CGI, digital painting gloss, airbrushed 
             "oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks.")
 
 
-def install_style(project, reseal=True, **changes):
-    document = yaml.safe_load(REAL.read_text(encoding="utf-8"))
+V1, V2 = "devotional_gouache_1950s_v1", "devotional_gouache_1950s_v2"
+V1_SEAL = "2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1"      # the owner-frozen v1: never changes
+
+
+def shipped_root():
+    return yaml.safe_load(REAL.read_text(encoding="utf-8"))
+
+
+def shipped(style_id=V1):
+    return next(d for d in shipped_root()["versions"] if d["style_id"] == style_id)
+
+
+def write_root(project, root):
+    (project.canon_dir / "style.yaml").write_text(yaml.safe_dump(root, allow_unicode=True, sort_keys=False, width=10000), encoding="utf-8")
+
+
+def install_style(project, reseal=True, target=V1, **changes):
+    root = shipped_root()
+    document = next(d for d in root["versions"] if d["style_id"] == target)
     for key, value in changes.items():
         if isinstance(value, dict) and isinstance(document.get(key), dict):
             document[key] = {**document[key], **value}
@@ -34,7 +51,19 @@ def install_style(project, reseal=True, **changes):
             document[key] = value
     if reseal:
         document["content_sha256"] = st.seal(document)
-    (project.canon_dir / "style.yaml").write_text(yaml.safe_dump(document, allow_unicode=True, sort_keys=False, width=10000), encoding="utf-8")
+    write_root(project, root)
+
+
+def activate_v2(project, **changes):
+    """Simulate the owner's approval of the proposed video-safe version (synthetic approver): frozen, approved, re-sealed, made active."""
+    root = shipped_root()
+    document = next(d for d in root["versions"] if d["style_id"] == V2)
+    document.update(status="frozen", approved_by="synthetic-test-only", approved_on="2026-10-24")
+    for key, value in changes.items():
+        document[key] = {**document[key], **value} if isinstance(value, dict) and isinstance(document.get(key), dict) else value
+    document["content_sha256"] = st.seal(document)
+    root["active"] = V2
+    write_root(project, root)
 
 
 def frozen_project(project):
@@ -44,7 +73,10 @@ def frozen_project(project):
 
 
 def test_the_shipped_style_is_exactly_the_one_the_owner_froze():
-    document = yaml.safe_load(REAL.read_text(encoding="utf-8"))
+    root = shipped_root()
+    assert root["active"] == V1 and [d["style_id"] for d in root["versions"]] == [V1, V2]
+    document = shipped(V1)
+    assert document["content_sha256"] == V1_SEAL and st.seal(document) == V1_SEAL                      # the original frozen version and its hash are preserved
     assert (document["style_id"], document["status"], document["version"]) == ("devotional_gouache_1950s_v1", "frozen", 1)
     assert (document["scope"], document["approved_by"], str(document["approved_on"])) == ("global", "Satvik Sangamkar", "2026-10-23")
     positive = document["positive_style"]
@@ -60,8 +92,7 @@ def test_prompt_is_prefix_then_scene_then_suffix_and_negative_is_unchanged(kf_pr
     middle = request["prompt"][len(PREFIX) + 1:-(len(SUFFIX) + 1)]
     assert request["prompt"] == f"{PREFIX} {middle} {SUFFIX}" and middle.startswith("Characters: ")        # {prefix} {shot_description} {suffix}
     assert request["negative_prompt"] == NEGATIVE and request["template_version"] == kf.FROZEN_TEMPLATE_VERSION
-    document = yaml.safe_load(REAL.read_text(encoding="utf-8"))
-    assert request["style"] == {"style_id": "devotional_gouache_1950s_v1", "version": 1, "sha256": document["content_sha256"]}
+    assert request["style"] == {"style_id": "devotional_gouache_1950s_v1", "version": 1, "sha256": V1_SEAL}
 
 
 def test_every_request_of_the_project_carries_the_same_style(kf_project):
@@ -82,7 +113,7 @@ def test_an_unsealed_edit_or_a_non_frozen_status_is_refused(kf_project):
     with pytest.raises(ConfigError, match="style drift refused"):
         st.load_style(kf_project)
     install_style(kf_project, status="draft")
-    with pytest.raises(ConfigError, match="status 'frozen'"):
+    with pytest.raises(ConfigError, match="status 'frozen' or 'proposed'"):
         st.load_style(kf_project)
     install_style(kf_project, positive_style={"combined": "something else"})
     with pytest.raises(ConfigError, match="combined"):
@@ -97,7 +128,7 @@ def test_an_unsealed_edit_or_a_non_frozen_status_is_refused(kf_project):
     with pytest.raises(ConfigError, match="who approved"):
         st.load_style(kf_project)
     install_style(kf_project, runner_prompt_rule={"final_prompt_template": "{prefix}, {shot_description}, {suffix}"})
-    with pytest.raises(ConfigError, match="prefix_middle_suffix"):
+    with pytest.raises(ConfigError, match="unknown runner_prompt_rule"):
         st.load_style(kf_project)
 
 
@@ -126,7 +157,7 @@ def test_changing_the_style_changes_the_production_snapshot_and_task_ids_and_bot
     assert carriers and all("style" in t.inputs for t in carriers)
     assembly = {t.name: t.inputs["style"] for t in tasks if t.stage == "assembly"}
     assert assembly["assemble_mr"] == assembly["assemble_hi"] and assembly["assemble_mr"].startswith("devotional_gouache_1950s_v1@1:")
-    install_style(kf_project, version=2, style_id="devotional_gouache_1950s_v2")   # a deliberate new, re-sealed style version
+    activate_v2(kf_project)                                        # a deliberate new, approved and re-sealed style version
     changed = load_bundle(kf_project, load_models(kf_project), 1)
     assert snapshot(changed) != before_snapshot                    # in-flight work notices the new style instead of drifting
     assert {t.task_id() for t in plan_tasks(changed, Scheduler(kf_project.artifacts_dir / "tasks" / "adhyay_01"))
@@ -157,7 +188,7 @@ def test_a_style_change_after_the_bundle_was_loaded_is_caught_by_require_current
     frozen_project(kf_project)
     bundle = load_bundle(kf_project, load_models(kf_project), 1)
     require_current(bundle)                                                   # unchanged: fine
-    install_style(kf_project, version=2, style_id="devotional_gouache_1950s_v2")
+    activate_v2(kf_project)
     with pytest.raises(GateFailure, match="snapshot changed"):
         require_current(bundle)                                               # the live style differs from the identity captured at load
     assert bundle.style["style_id"] == "devotional_gouache_1950s_v1"

@@ -1,34 +1,100 @@
-# Global visual style baseline, locked by the owner (Satvik Sangamkar, 2026-10-23). Art-style part of O-006 only: no SDXL checkpoint or identity conditioning is chosen here.
-# content_sha256 seals every field except notes; an edit without re-sealing, or a change that keeps the style_id/version, is refused at load time (src/granthstudio/style.py).
-style_id: devotional_gouache_1950s_v1
-version: 1
-status: frozen
-scope: global
-approved_by: Satvik Sangamkar
-approved_on: '2026-10-23'
-positive_style:
-  prefix: 1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes,
-  suffix: warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.
-  combined: 1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.
-negative_style: photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks.
-runner_prompt_rule:
-  mode: prefix_middle_suffix
-  middle_placeholder: <shot description>
-  final_prompt_template: '{prefix} {shot_description} {suffix}'
-enforcement:
-  lock_style_globally: true
-  allow_per_shot_override: false
-  use_same_style_for_marathi_and_hindi: true
-  require_negative_prompt: true
-  forbid_text_in_image: true
-  forbid_watermarks: true
-receipt_binding:
-  record_style_id: true
-  record_style_version: true
-  record_style_hash: true
-notes:
-- Freeze this as the global visual style baseline.
-- Characters, locations and props may remain provisional for now.
-- This style must be applied uniformly across storyboard, keyframes, images and video generation prompts.
-- Any future style change must create a new style_id/version and require explicit approval.
-content_sha256: 2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1
+# Global visual style canon. ONE file, immutable sealed versions, exactly one ACTIVE and FROZEN (`active`).
+# devotional_gouache_1950s_v1 was frozen by the owner (Satvik Sangamkar, 2026-10-23) and is never edited; its seal is pinned in tests.
+# devotional_gouache_1950s_v2 (video-safe: full-bleed keyframes, lighting buckets, static border at final assembly) is PROPOSED until the owner approves it.
+# Art-style part of O-006 only: no SDXL checkpoint or identity conditioning is chosen here. Loader and sealing rules: src/granthstudio/style.py.
+schema_version: 2
+active: devotional_gouache_1950s_v1
+versions:
+- style_id: devotional_gouache_1950s_v1
+  version: 1
+  status: frozen
+  scope: global
+  approved_by: Satvik Sangamkar
+  approved_on: '2026-10-23'
+  positive_style:
+    prefix: 1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes,
+    suffix: warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.
+    combined: 1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.
+  negative_style: photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks.
+  runner_prompt_rule:
+    mode: prefix_middle_suffix
+    middle_placeholder: <shot description>
+    final_prompt_template: '{prefix} {shot_description} {suffix}'
+  enforcement:
+    lock_style_globally: true
+    allow_per_shot_override: false
+    use_same_style_for_marathi_and_hindi: true
+    require_negative_prompt: true
+    forbid_text_in_image: true
+    forbid_watermarks: true
+  receipt_binding:
+    record_style_id: true
+    record_style_version: true
+    record_style_hash: true
+  notes:
+  - Freeze this as the global visual style baseline.
+  - Characters, locations and props may remain provisional for now.
+  - This style must be applied uniformly across storyboard, keyframes, images and video generation prompts.
+  - Any future style change must create a new style_id/version and require explicit approval.
+  content_sha256: 2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1
+- style_id: devotional_gouache_1950s_v2
+  version: 2
+  status: proposed
+  scope: global
+  approved_by: null
+  approved_on: null
+  supersedes: devotional_gouache_1950s_v1
+  supersedes_sha256: 2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1
+  positive_style:
+    prefix: 1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes,
+    suffix: warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, muted sage green and deep indigo reserved for dusk and night shadows, subtle paper grain texture, clean traditional graphic composition, full-bleed painting running to all four edges of the frame, no border, no frame, no mount, text-free, no labels, no watermarks.
+    combined: 1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, muted sage green and deep indigo reserved for dusk and night shadows, subtle paper grain texture, clean traditional graphic composition, full-bleed painting running to all four edges of the frame, no border, no frame, no mount, text-free, no labels, no watermarks.
+  negative_style: photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks, border, frame, picture mount, drop shadow, vignette.
+  runner_prompt_rule:
+    mode: prefix_middle_lighting_suffix
+    middle_placeholder: <shot description>
+    lighting_placeholder: <approved lighting bucket phrase>
+    final_prompt_template: '{prefix} {shot_description} {lighting} {suffix}'
+  lighting_buckets:
+    day_outdoor: soft natural daylight with warm ochre light and gentle shadows
+    day_indoor: soft diffused interior daylight through open doorways, warm earth tones
+    dusk: warm dusk glow with a terracotta sky and deep indigo shadows
+    night: night scene lit by moonlight and small warm lamp flames, deep indigo shadows
+    lamplight: warm flickering oil-lamp light, deep indigo shadows beyond the lamp glow
+    unspecified: ''
+  border:
+    overlay_path: canon/overlays/vintage_double_line_border_1080p.png
+    overlay_sha256: 0992144c04a3ce6548b5bbebaf1acee3c13689af5115a9c61b2f003c45bb899e
+    width: 1920
+    height: 1080
+    format: RGBA PNG, transparent centre, two sepia-brown lines (outer 6 px at a 36 px inset, inner 3 px at a 52 px inset)
+    applied_at: final_visual_assembly
+    applied_after:
+    - ltx_motion
+    - lipsync
+    - language_dependent_visual_transformations
+    scaling: overlay is scaled to the assembled video size with FFmpeg scale flags=bicubic (alpha preserved); the receipt records the size and any aspect mismatch
+    subtitle_safe_inset_px_at_1080p: 64
+  enforcement:
+    lock_style_globally: true
+    allow_per_shot_override: false
+    use_same_style_for_marathi_and_hindi: true
+    require_negative_prompt: true
+    forbid_text_in_image: true
+    forbid_watermarks: true
+    keyframes_full_bleed: true
+    border_baked_into_generated_images: false
+    allow_free_text_lighting: false
+    lighting_from_manifest_enum_only: true
+  receipt_binding:
+    record_style_id: true
+    record_style_version: true
+    record_style_hash: true
+    record_lighting_bucket: true
+    record_overlay_sha256: true
+  notes:
+  - 'PROPOSED, not approved: the lighting phrases and the border overlay are drafts for the owner to review.'
+  - Keeps the gouache, egg tempera, ivory cardstock, sepia contour and earthy mineral palette of v1; deep indigo is allowed for dusk and night shadows only.
+  - Keyframes are full-bleed; the static double-line border is applied once, at final FFmpeg assembly, after motion and lip-sync.
+  - 'To approve: set status frozen, approved_by and approved_on, re-seal content_sha256 (granthstudio.style.seal), then change `active` to this style_id. v1 is never edited.'
+  content_sha256: 2f0a954a94cd3574d9f83ee49056426e5b9107a534c745ff46da1b79a56e0227

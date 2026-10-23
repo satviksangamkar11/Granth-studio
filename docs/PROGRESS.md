@@ -420,3 +420,8 @@ Codex also said: safe for a fresh gpu0 execution; offline validation of attempt 
 
 ## Codex re-check 12 (docs/evidence/codex_reviews/12_review11_recheck.md): no blocking issue; a fresh painted gpu0 run may proceed. One minor (.gitignore exceptions by file name) fixed here.
 - Candidate-bound suite: docs/evidence/cpu_tests/55ca9f1_suite.xml = full suite on 55ca9f1, 481 tests, 0 failures, 0 errors, 4 skipped (649 s). This checkpoint commit adds only that evidence, the review file and the .gitignore tightening.
+
+## Video-safe style v2 prepared as PROPOSED (branch style-v2-proposal)
+- canon/style.yaml now holds sealed versions with one `active` frozen id: v1 (unchanged, seal pinned by a test) and the proposed v2; `src/granthstudio/style.py` validates every version, refuses unsealed edits, an altered earlier version, an unapproved active version, free-text lighting. No second style file.
+- keyframes.py: full-bleed v3 prompt template, one lighting bucket per keyframe; pipeline.py: lighting in task identities, overlay hash in the style tag, `_border_for_assembly`, border receipt + verification; ffmpeg.py: `assemble(..., overlay=)`, `border_samples`. Overlay asset + generator committed. Tests: tests/test_video_safe_style.py (9), tests/test_style.py (updated, 11).
+- Not exercised: a real SDXL keyframe in v2, a 3:2 overlay, burned-in subtitles. v2 remains PROPOSED.

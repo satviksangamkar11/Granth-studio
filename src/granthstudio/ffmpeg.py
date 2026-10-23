@@ -130,7 +130,8 @@ def still_motion_clip(image: Path, out: Path, duration_s: float, fps: int = 24, 
     )
 
 
-def assemble(clips: list[Path], out: Path, audio: Path | None = None) -> None:
+def assemble(clips: list[Path], out: Path, audio: Path | None = None, overlay: Path | None = None) -> None:
+    """Concatenate clips (+ audio). With ``overlay`` the static RGBA border is composited ONCE over the finished picture: scaled to the clip size with bicubic scaling, alpha kept."""
     if not clips:
         raise TaskFailed("no clips to assemble")
     if audio is not None:
@@ -146,10 +147,18 @@ def assemble(clips: list[Path], out: Path, audio: Path | None = None) -> None:
         listing.write_text("".join(f"file '{name}'\n" for name in escaped), encoding="utf-8")
         command = [_tool("ffmpeg"), "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(listing)]
         if audio is not None:
+            command += ["-i", str(audio)]
+        if overlay is not None:
+            first = probe(clips[0])
+            command += ["-loop", "1", "-i", str(overlay), "-filter_complex",
+                        f"[{2 if audio is not None else 1}:v]scale={first.width}:{first.height}:flags=bicubic,format=rgba[border];"
+                        "[0:v][border]overlay=0:0:shortest=1,format=yuv420p[v]", "-map", "[v]"]
+        elif audio is not None:
+            command += ["-map", "0:v:0"]
+        if audio is not None:
             # MP4 edit lists use the movie timescale (default 1/1000 s), which would cut the
             # recorded audio length to whole milliseconds; use the audio rate so it stays exact.
-            command += ["-i", str(audio), "-map", "0:v:0", "-map", "1:a:0", "-c:a", "aac",
-                        "-movie_timescale", str(audio_info.audio_sample_rate or 24000)]
+            command += ["-map", "1:a:0", "-c:a", "aac", "-movie_timescale", str(audio_info.audio_sample_rate or 24000)]
         command += ["-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(out)]
         _run(command)
 
@@ -224,3 +233,28 @@ def assemble_audio(segments: list[tuple[Path | None, float]], out: Path) -> None
         filters.append("".join(f"[a{i}]" for i in range(len(filters))) + f"concat=n={len(filters)}:v=0:a=1[out]")
         command += ["-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "pcm_s16le", str(out)]
         _run(command)
+
+
+OVERLAY_LINE_RGB = (91, 58, 31)          # canon/overlays/vintage_double_line_border_1080p.png: both lines are this opaque sepia
+
+
+def border_samples(video: Path, overlay_size: tuple[int, int] = (1920, 1080), tolerance: int = 45) -> dict:
+    """Read the outer border line from the first and the last frame of an assembled video (a left-edge and a top-edge pixel, scaled from the 1080p overlay).
+    Shows that the static border is present, and identical at both ends, whatever the picture does behind it."""
+    info = probe(video)
+    width, height = info.width, info.height
+    spots = {"left": (round(39 * width / overlay_size[0]), height // 2), "top": (width // 2, round(39 * height / overlay_size[1]))}
+    result: dict = {"size": [width, height], "samples": {}, "ok": True}
+    for label, extra in (("first", []), ("last", ["-sseof", "-0.05"])):
+        for name, (x, y) in spots.items():
+            done = subprocess.run([_tool("ffmpeg"), "-v", "error", *extra, "-i", str(video), "-vf", f"format=rgb24,crop=1:1:{x}:{y}", "-frames:v", "1", "-f", "rawvideo", "-"],
+                                  capture_output=True)
+            rgb = tuple(done.stdout[:3]) if done.returncode == 0 and len(done.stdout) >= 3 else None
+            result["samples"][f"{label}_{name}"] = rgb
+            if rgb is None or any(abs(a - b) > tolerance for a, b in zip(rgb, OVERLAY_LINE_RGB)):
+                result["ok"] = False
+    first_last = [(result["samples"][f"first_{n}"], result["samples"][f"last_{n}"]) for n in spots]
+    luma = lambda rgb: 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]       # luma is not chroma-subsampled: the stable part of a thin line in yuv420p
+    if any(a is None or b is None or abs(luma(a) - luma(b)) > 24 for a, b in first_last):
+        result["ok"] = False
+    return result

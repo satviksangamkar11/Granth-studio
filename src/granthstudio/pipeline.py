@@ -20,7 +20,7 @@ from .comfy import (ComfyBackend, check_checkpoint_binding, generation_seed, ens
 from .config import Project, load_models, ltx_dimension_problems, require_capability, verify_benchmark_runtime
 from .episodes import compile_episode, trimmed_required_actions, unplaced_required_actions
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
-from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
+from .ffmpeg import border_samples, assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
 from .lipsync import plan_lipsync
 from .keyframes import (approved_keyframe, keyframe_request, load_registry, require_references, sdxl_generate,
                         sdxl_preflight)
@@ -30,7 +30,7 @@ from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
 from .runtime import gpu_status, require_host_ready, require_source_pins
-from .style import identity as style_identity, load_style
+from .style import identity as style_identity, load_style, overlay_file, style_tag
 from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
 from .timelines import check_timelines, load_timeline, srt_text
@@ -304,7 +304,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
                            "attempt": read_json(journal)["attempt"],
                            "fingerprint": read_json(journal)["history"][-1]["fingerprint"],
                            "seed_inputs": read_json(journal)["history"][-1]["seed_inputs"]},
-            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs, "style": bundle.style,
+            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs, "style": bundle.style, "lighting_bucket": shot["lighting"],
             "runtime_sha256": verify_benchmark_runtime(bundle.models, capability, template.version),
             "gpu": gpu_names[0] if gpu_names else None, "gpu_index": gpu_indices[0] if gpu_indices else None,
             "execution_s": {"value": execution_seconds(history), "kind": "measured by ComfyUI status messages"},
@@ -314,6 +314,16 @@ def _ltx_run(bundle, shot, visual, capability, journal):
             "gpu_count": 1, "system_stats": stats})
         return {"clip": "clip.mp4", "metrics": "metrics.json"}
     return run
+
+def _border_for_assembly(bundle):
+    """(overlay path, facts) for a video-safe style, else (None, None). The live style must still be the one this bundle captured, and the overlay must match its pinned SHA-256."""
+    if not bundle.style or "overlay_sha256" not in bundle.style:
+        return None, None
+    style = load_style(bundle.project)
+    if style_identity(style) != bundle.style:
+        raise GateFailure("the style changed after this bundle was loaded: refusing to apply a border from another style")
+    return overlay_file(bundle.project, style), dict(style["border"])
+
 
 def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks=None):
     timeline = bundle.timelines[lang]
@@ -379,11 +389,20 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
             raise GateFailure("cutaway trimming could remove required approved actions: " + "; ".join(trimmed))
         assemble_audio(segments, work / "voice.wav")
         atomic_write_bytes(work / f"{stem}.srt", srt_text(cues).encode("utf-8"))
-        assemble(clips, work / f"{stem}.mp4", work / "voice.wav")
+        overlay, border = _border_for_assembly(bundle)            # the static border is applied ONCE, here, after motion and any language-dependent lip-sync
+        assemble(clips, work / f"{stem}.mp4", work / "voice.wav", overlay=overlay)
+        border_receipt = None
+        if border:
+            size = probe(work / f"{stem}.mp4")
+            border_receipt = {"overlay_path": border["overlay_path"], "overlay_sha256": border["overlay_sha256"], "overlay_size": [border["width"], border["height"]],
+                              "scaled_to": [size.width, size.height], "aspect_mismatch": abs(size.width / size.height - border["width"] / border["height"]) > 0.01,
+                              "applied_at": border["applied_at"], "applied_after": border["applied_after"], "scaling": "ffmpeg scale flags=bicubic, alpha kept",
+                              "edge_samples": border_samples(work / f"{stem}.mp4", (border["width"], border["height"]))}
         atomic_write_json(work / "edit_plan.json", {"language": lang, "duration_s": cursor, "shots": edits, "cues": cues})
         atomic_write_json(work / "provenance.json", {
             "schema_version": 1, "language": lang, "adhyay": bundle.adhyay,
-            "research_sha256": bundle.compiled["research_sha256"],
+            "research_sha256": bundle.compiled["research_sha256"], "style": bundle.style, "border": border_receipt,
+            "lighting_buckets": {shot["shot_id"]: shot["lighting"] for shot in bundle.compiled["shots"]},
             "video_sha256": sha256_file(work / f"{stem}.mp4"), "subtitles_sha256": sha256_file(work / f"{stem}.srt"),
             "voice_sha256": sha256_file(work / "voice.wav"), "edit_plan_sha256": sha256_file(work / "edit_plan.json"),
             "fallback_shots": [e["shot_id"] for e in edits if e["clip_source"] == "fallback_tier0"],
@@ -427,6 +446,15 @@ def _verify_assembly(bundle, lang, directory):
             raise TaskFailed("editorial cue differs from approved script")
     if plan["cues"] and max(c["start_s"] + c["measured_duration_s"] for c in plan["cues"]) > duration + 0.001:
         raise TaskFailed("speech/subtitles extend past release")
+    provenance = read_json(directory / "provenance.json")
+    if provenance.get("style") != bundle.style:
+        raise TaskFailed("release was assembled under another style than the current production snapshot")
+    if bundle.style and "overlay_sha256" in bundle.style:
+        border = provenance.get("border") or {}
+        if border.get("overlay_sha256") != bundle.style["overlay_sha256"] or not (border.get("edge_samples") or {}).get("ok"):
+            raise TaskFailed("the approved border overlay is not recorded as applied, or its edge samples did not match")
+        if not border_samples(directory / f"{stem}.mp4")["ok"]:
+            raise TaskFailed("the static border is not present and stable in the assembled video")
     problems = validate_video(directory / f"{stem}.mp4", duration, tolerance_s=1 / FPS, require_audio=True)
     if problems:
         raise TaskFailed("; ".join(problems))
@@ -436,7 +464,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     visuals = {v["visual_id"]: v for v in compiled["visuals"]}
     tasks, audio, keyframes, shot_tasks = [], {}, {}, {}
     frozen = bundle.style
-    style_input = {"style": f"{frozen['style_id']}@{frozen['version']}:{frozen['sha256']}"} if frozen else {}   # one style for every shot and both languages
+    style_input = {"style": style_tag(frozen)} if frozen else {}    # one style (and, video-safe, one overlay hash) for every shot and both languages
+    video_safe = bool(frozen and "overlay_sha256" in frozen)
     for lang in ("mr", "hi"):
         def audio_preflight(lang=lang):
             require_current(bundle)
@@ -454,6 +483,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             request = requests[vid]
             keyframes[vid] = Task("keyframe", f"keyframe_{vid}", {"visual": sha256_obj(visual),
                 "source": compiled["research_sha256"], "canon": compiled["canon_sha256"], **style_input,
+                **({"lighting": requests[vid]["lighting_bucket"]} if "lighting_bucket" in requests[vid] else {}),
                 "request": request["request_sha256"], "sdxl": sha256_obj(bundle.models.get("sdxl"))},
                 KEYFRAME_VERSION, lambda work: {}, max_attempts=1,
                 depends_on=(keyframes[request["derived_from"]["visual_id"]].task_id(),) if derived(vid) else (),
@@ -481,6 +511,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
             duration = shot["frames"] / FPS
             inputs["model"] = sha256_obj(bundle.models["ltx"])
             inputs.update(style_input)
+            if video_safe:
+                inputs["lighting"] = shot["lighting"]
             inputs["server"] = bundle.models["comfyui"]["base_url"]
             if shot["tier"] == 2:
                 end = visuals[shot["end_visual_id"]]
