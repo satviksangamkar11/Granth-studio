@@ -31,7 +31,7 @@ OUTPUTS = {"CheckpointLoaderSimple": 3, "VAELoader": 1, "CLIPVisionLoader": 1, "
 
 
 def test_pins_are_complete_and_not_approved():
-    assert PINS["status"] == "pinned_not_approved" and PINS["approved_by"] is None and PINS["style"] == "devotional_gouache_1950s_v1"
+    assert PINS["status"] == "pinned_download_authorized_by_owner_instruction" and "Satvik Sangamkar" in PINS["approved_by"] and PINS["style"] == "devotional_gouache_1950s_v1"
     for item in PINS["files"]:
         assert re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) and re.fullmatch(r"[0-9a-f]{40}", item["revision"]) and item["size_bytes"] > 0 and item["dest_dir"].startswith("models/")
     assert [i["role"] for i in PINS["files"]] == ["sdxl_checkpoint", "ip_adapter", "clip_vision", "vae_fp16_fix"]
@@ -53,17 +53,26 @@ def test_filenames_in_the_graph_are_exactly_the_pinned_files_and_enums_are_legal
     names = {i["name"] for i in PINS["files"]}
     used = {NODES["4"]["inputs"]["ckpt_name"], NODES["10"]["inputs"]["vae_name"], NODES["11"]["inputs"]["clip_name"], NODES["12"]["inputs"]["ipadapter_file"]}
     assert used == names
-    ip = NODES["14"]["inputs"]
-    assert ip["weight_type"] in WEIGHT_TYPES and ip["combine_embeds"] in COMBINE and ip["embeds_scaling"] in SCALING and 0 <= ip["start_at"] <= ip["end_at"] <= 1
-    assert NODES["3"]["inputs"]["model"] == ["14", 0]                                       # the sampler uses the IP-Adapter-patched model, not the raw checkpoint
+    for slot in range(1, 6):
+        ip = NODES[str(30 + slot)]["inputs"]
+        assert ip["weight_type"] in WEIGHT_TYPES and ip["combine_embeds"] in COMBINE and ip["embeds_scaling"] in SCALING and 0 <= ip["start_at"] <= ip["end_at"] <= 1
+        assert ip["model"] == (["4", 0] if slot == 1 else [str(30 + slot - 1), 0]) and NODES[str(30 + slot)]["_meta"]["slot"] == slot == NODES[str(20 + slot)]["_meta"]["slot"]
+    assert NODES["3"]["inputs"]["model"] == ["35", 0]                                       # the sampler uses the last IP-Adapter-patched model, not the raw checkpoint
 
 
 def test_placeholders_match_the_adapter_contract_and_render_with_the_existing_helper(tmp_path):
     template = load_template(GRAPH_PATH)
     assert template.status == "unvalidated"
-    assert set(re.findall(r"\{\{([A-Z_0-9]+)\}\}", template.text)) == {"PROMPT", "NEGATIVE_PROMPT", "SEED", "WIDTH", "HEIGHT", "REFERENCE_IMAGE_1"}
-    graph = render_graph(template, {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 7, "WIDTH": 1216, "HEIGHT": 832, "REFERENCE_IMAGE_1": "ref.png"})
-    assert graph["5"]["inputs"]["width"] == 1216 and graph["3"]["inputs"]["seed"] == 7 and graph["13"]["inputs"]["image"] == "ref.png"
+    assert set(re.findall(r"\{\{([A-Z_0-9]+)\}\}", template.text)) == {"PROMPT", "NEGATIVE_PROMPT", "SEED", "WIDTH", "HEIGHT", *(f"REFERENCE_IMAGE_{i}" for i in range(1, 6))}
+    base = {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 7, "WIDTH": 1216, "HEIGHT": 832, **{f"REFERENCE_IMAGE_{i}": "" for i in range(1, 6)}}
+    graph = render_graph(template, {**base, "REFERENCE_IMAGE_1": "ref.png", "REFERENCE_IMAGE_2": "loc.png"})
+    assert graph["5"]["inputs"]["width"] == 1216 and graph["3"]["inputs"]["seed"] == 7 and graph["21"]["inputs"]["image"] == "ref.png" and graph["22"]["inputs"]["image"] == "loc.png"
+    assert set(graph) >= {"31", "32"} and not set(graph) & {"23", "24", "25", "33", "34", "35"}      # unused slots are gone
+    assert graph["3"]["inputs"]["model"] == ["32", 0] and graph["32"]["inputs"]["model"] == ["31", 0]  # the chain is reconnected through the removed nodes
+    none = render_graph(template, base)
+    assert none["3"]["inputs"]["model"] == ["4", 0] and not any(n.get("class_type") in ("IPAdapterAdvanced", "LoadImage") for n in none.values())   # no reference: plain checkpoint
+    full = render_graph(template, {**base, **{f"REFERENCE_IMAGE_{i}": f"r{i}.png" for i in range(1, 6)}})
+    assert full["3"]["inputs"]["model"] == ["35", 0] and len(full) == len(NODES)
     from granthstudio.comfy import ensure_validated
     with pytest.raises(IntegrationUnavailable):
         ensure_validated(template)                                                        # an unvalidated template can never be used for a real job

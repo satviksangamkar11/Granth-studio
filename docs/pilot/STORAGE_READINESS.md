@@ -1,4 +1,4 @@
-# Storage readiness (2026-10-23): C: is full, D: is nearly full. Nothing was deleted or moved.
+# Storage readiness (2026-10-23): C: was full, D: is nearly full. INITIAL ASSESSMENT first (nothing deleted at that point); the scoped cleanup that followed is recorded at the end.
 
 Measured: C: 292 GB total, 0.24 GB free; D: 9.6 GB free. Tests and git need free space on C: (the temp directory); an earlier full-suite run failed 14 tests with "GPU preflight not passed: disk fail" for this reason, and git-bash briefly failed to fork.
 

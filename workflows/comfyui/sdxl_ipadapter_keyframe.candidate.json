@@ -1,12 +1,12 @@
 {
   "_status": "unvalidated",
   "_output_node": "9",
-  "_note": "NOT VALIDATED. Candidate SDXL + IP-Adapter Plus graph for the pilot keyframes, written from the node source at the pinned commits (cubiq/ComfyUI_IPAdapter_plus a0f451a5, ComfyUI 2f74e179). Placeholders: PROMPT, NEGATIVE_PROMPT, SEED, WIDTH, HEIGHT, REFERENCE_IMAGE_1. Sampler settings and the IP-Adapter weight are first guesses that the minimal inference test records and the human reviewer judges; they are not tuned values.",
+  "_note": "NOT VALIDATED. Candidate SDXL + IP-Adapter Plus graph for the pilot keyframes, written from the node source at the pinned commits (cubiq/ComfyUI_IPAdapter_plus a0f451a5, ComfyUI 2f74e179). Placeholders: PROMPT, NEGATIVE_PROMPT, SEED, WIDTH, HEIGHT, REFERENCE_IMAGE_1..5. Nodes with _meta.slot = i exist once per reference slot and are removed (model chain reconnected) when the request has fewer than i references. Sampler settings and the IP-Adapter weight (0.6 per slot, same for characters and location) are first guesses that the minimal inference test records and the human reviewer judges; they are not tuned values.",
   "3": {
     "class_type": "KSampler",
     "inputs": {
       "model": [
-        "14",
+        "35",
         0
       ],
       "seed": "{{SEED}}",
@@ -104,13 +104,61 @@
       "ipadapter_file": "ip-adapter-plus_sdxl_vit-h.safetensors"
     }
   },
-  "13": {
+  "21": {
+    "_meta": {
+      "title": "reference image 1",
+      "slot": 1
+    },
     "class_type": "LoadImage",
     "inputs": {
       "image": "{{REFERENCE_IMAGE_1}}"
     }
   },
-  "14": {
+  "22": {
+    "_meta": {
+      "title": "reference image 2",
+      "slot": 2
+    },
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "{{REFERENCE_IMAGE_2}}"
+    }
+  },
+  "23": {
+    "_meta": {
+      "title": "reference image 3",
+      "slot": 3
+    },
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "{{REFERENCE_IMAGE_3}}"
+    }
+  },
+  "24": {
+    "_meta": {
+      "title": "reference image 4",
+      "slot": 4
+    },
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "{{REFERENCE_IMAGE_4}}"
+    }
+  },
+  "25": {
+    "_meta": {
+      "title": "reference image 5",
+      "slot": 5
+    },
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "{{REFERENCE_IMAGE_5}}"
+    }
+  },
+  "31": {
+    "_meta": {
+      "title": "IP-Adapter slot 1",
+      "slot": 1
+    },
     "class_type": "IPAdapterAdvanced",
     "inputs": {
       "model": [
@@ -122,10 +170,134 @@
         0
       ],
       "image": [
-        "13",
+        "21",
         0
       ],
-      "weight": 0.8,
+      "weight": 0.6,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0.0,
+      "end_at": 1.0,
+      "embeds_scaling": "V only",
+      "clip_vision": [
+        "11",
+        0
+      ]
+    }
+  },
+  "32": {
+    "_meta": {
+      "title": "IP-Adapter slot 2",
+      "slot": 2
+    },
+    "class_type": "IPAdapterAdvanced",
+    "inputs": {
+      "model": [
+        "31",
+        0
+      ],
+      "ipadapter": [
+        "12",
+        0
+      ],
+      "image": [
+        "22",
+        0
+      ],
+      "weight": 0.6,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0.0,
+      "end_at": 1.0,
+      "embeds_scaling": "V only",
+      "clip_vision": [
+        "11",
+        0
+      ]
+    }
+  },
+  "33": {
+    "_meta": {
+      "title": "IP-Adapter slot 3",
+      "slot": 3
+    },
+    "class_type": "IPAdapterAdvanced",
+    "inputs": {
+      "model": [
+        "32",
+        0
+      ],
+      "ipadapter": [
+        "12",
+        0
+      ],
+      "image": [
+        "23",
+        0
+      ],
+      "weight": 0.6,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0.0,
+      "end_at": 1.0,
+      "embeds_scaling": "V only",
+      "clip_vision": [
+        "11",
+        0
+      ]
+    }
+  },
+  "34": {
+    "_meta": {
+      "title": "IP-Adapter slot 4",
+      "slot": 4
+    },
+    "class_type": "IPAdapterAdvanced",
+    "inputs": {
+      "model": [
+        "33",
+        0
+      ],
+      "ipadapter": [
+        "12",
+        0
+      ],
+      "image": [
+        "24",
+        0
+      ],
+      "weight": 0.6,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0.0,
+      "end_at": 1.0,
+      "embeds_scaling": "V only",
+      "clip_vision": [
+        "11",
+        0
+      ]
+    }
+  },
+  "35": {
+    "_meta": {
+      "title": "IP-Adapter slot 5",
+      "slot": 5
+    },
+    "class_type": "IPAdapterAdvanced",
+    "inputs": {
+      "model": [
+        "34",
+        0
+      ],
+      "ipadapter": [
+        "12",
+        0
+      ],
+      "image": [
+        "25",
+        0
+      ],
+      "weight": 0.6,
       "weight_type": "linear",
       "combine_embeds": "concat",
       "start_at": 0.0,

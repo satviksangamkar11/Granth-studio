@@ -82,6 +82,13 @@ def compile_episode(
         canon.require(scene["location"], "locations")
         for char_id in scene["characters"]:
             canon.require(char_id, "characters")
+        for char_id in scene["characters"]:                       # a voice-only speaker must not be an actor: he would be drawn without any identity reference
+            entry = canon.entries[char_id]
+            if entry.get("voice_only"):
+                names = {entry["canonical_name"].lower(), *(a.lower() for a in entry.get("aliases", []))}
+                for fact in [*source_scene["actions"], *source_scene.get("visual_details", [])]:
+                    if any(name and name in fact["text"].lower() for name in names):
+                        raise GateFailure(f"{char_id} is voice-only (never drawn) but approved {fact['id']} shows him: remove voice_only or the visible action")
         action_facts = {fact["id"]: fact for fact in source_scene["actions"]}
         if len(action_facts) != len(source_scene["actions"]):
             raise ConfigError("duplicate approved action ID")

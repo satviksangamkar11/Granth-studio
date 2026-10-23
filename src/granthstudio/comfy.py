@@ -239,7 +239,29 @@ def render_graph(template: WorkflowTemplate, values: dict[str, str]) -> dict[str
             return {k: substitute(v) for k, v in value.items()}
         return value
     graph = substitute(json.loads(template.text))
-    return {key: value for key, value in graph.items() if not key.startswith("_")}
+    graph = {key: value for key, value in graph.items() if not key.startswith("_")}
+    return _prune_unused_slots(graph, values)
+
+
+def _prune_unused_slots(graph: dict[str, Any], values: dict[str, str]) -> dict[str, Any]:
+    """Reference-slot nodes (``_meta.slot`` = i) exist once per identity-conditioning slot; slots without a reference image are removed and the model chain is
+    reconnected through them, so a request with two references runs a two-slot graph and one with none runs the plain checkpoint."""
+    used = sum(1 for key, value in values.items() if key.startswith("REFERENCE_IMAGE_") and value)
+    removed = {nid: node for nid, node in graph.items() if isinstance((node.get("_meta") or {}).get("slot"), int) and node["_meta"]["slot"] > used}
+    if not removed:
+        return graph
+
+    def resolve(link):
+        while isinstance(link, list) and link and link[0] in removed:
+            passthrough = removed[link[0]]["inputs"].get("model")
+            if passthrough is None:
+                raise ConfigError(f"node {link[0]} belongs to an unused reference slot but is wired into the graph")
+            link = passthrough
+        return link
+    kept = {nid: node for nid, node in graph.items() if nid not in removed}
+    for node in kept.values():
+        node["inputs"] = {name: resolve(value) for name, value in node["inputs"].items()}
+    return kept
 
 
 def node_types(graph: dict[str, Any]) -> set[str]:

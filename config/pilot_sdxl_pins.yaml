@@ -1,9 +1,9 @@
 # Pins for the pilot's native SDXL keyframe stage (read from the Hugging Face / GitHub APIs on 2026-10-23).
-# STATUS: pinned, NOT downloaded, NOT approved. Model selection is not licence acceptance: the named approver must accept
-# each licence personally and sign the download approval (same procedure as docs/LTX_098_DOWNLOAD_APPROVAL.md section E)
-# before any file below is fetched. Hashes are the LFS SHA-256 values reported by the Hugging Face API.
-status: pinned_not_approved
-approved_by: null          # named human; stays null until the download approval is signed
+# STATUS: pinned; NOT downloaded yet; download AUTHORIZED by the owner's chat instruction (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md), who skipped the licence-review step and carries compliance.
+# The assistant did not review or accept any licence on his behalf. Every GPU run still needs the exact-commit authorization.
+# Hashes are the LFS SHA-256 values reported by the Hugging Face API; every download is verified against them and any mismatch aborts.
+status: pinned_download_authorized_by_owner_instruction
+approved_by: "Satvik Sangamkar (chat instruction 2026-10-23, see docs/pilot/SDXL_DOWNLOAD_APPROVAL.md; licences not individually reviewed)"
 style: devotional_gouache_1950s_v1   # frozen style v1 (hash 2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1)
 comfyui:
   repo: https://github.com/comfyanonymous/ComfyUI
@@ -52,6 +52,6 @@ files:
 workflow:
   api_candidate: workflows/comfyui/sdxl_ipadapter_keyframe.candidate.json
   output_node: "9"
-  reference_slots: 1
+  reference_slots: 5
   size: [1216, 832]        # SDXL-native 3:2 area; the pilot's LTX stage runs 768x512 (same aspect)
   note: node inputs below are read from the node pack's source at the pinned commit and must be re-checked against the live /object_info before the status can leave "unvalidated"

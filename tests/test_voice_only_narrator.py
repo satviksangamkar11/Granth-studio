@@ -62,3 +62,16 @@ def test_without_the_flag_the_same_character_is_drawn_exactly_as_before(project)
     assert all(NARRATOR in shot["characters"] for shot in bundle.compiled["shots"])
     registry = kf.load_registry(project, bundle.canon)
     assert any(r.get("canon_id") == NARRATOR for r in kf.sheet_requests(bundle.canon, registry, bundle.models))
+
+
+def test_a_voice_only_character_named_in_a_visible_action_is_refused(project):
+    import pytest
+    from granthstudio.errors import GateFailure
+    add_narrator(project)
+    research = project.research_dir / "adhyay_01" / "research.yaml"
+    doc = load_yaml(research)
+    doc["scenes"][0]["actions"][0]["text"] = "SYNTH-NARRATOR slight head turn"                   # the narrator would now be an actor
+    research.write_text(yaml.safe_dump(doc, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    approve(project, 1, "synthetic-tester", FIXED_TIME)
+    with pytest.raises(GateFailure, match="voice-only"):
+        load_bundle(project, load_models(project), 1)

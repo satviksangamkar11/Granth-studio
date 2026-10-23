@@ -13,7 +13,7 @@ Kaggle environment seen in earlier runs: Python 3.13.15, torch 2.11.0+cu128, two
 | fp16-safe SDXL VAE (recommended on T4, avoids fp16 NaN) `sdxl.vae.safetensors` | repo `madebyollin/sdxl-vae-fp16-fix` @ `207b116dae70ace3637169f1ddd2434b91b3a8cd`; sha256 `235745af8d86bf4a4c1b5b4f529868b37019a10f7c0b2e79ad0abca3a22bc6e1` | 334 641 162 B | MIT | alternative: run the base VAE in fp32 (slower, VRAM) |
 | ComfyUI node pack `cubiq/ComfyUI_IPAdapter_plus` | latest commit `a0f451a5113cf9becb0847b92884cb10cbdec0ef` (2025-04-14, "wording"; the repo announced "maintenance mode" two commits earlier) | source | GPL-3.0 | compatibility with ComfyUI v0.3.47 is TO VERIFY; GPL-3.0 applies to the node pack only (used as a tool, not shipped in an output) |
 | ComfyUI core | existing pin `2f74e17975696d829af455845c584574bbc85774` | | GPL-3.0 | unchanged |
-Total download about 10.65 GB (scratch disk). Not decided here: no LoRA (as instructed); the ComfyUI API graph for SDXL + IP-Adapter does not exist yet (`workflows/comfyui/sdxl_keyframe.json` is an empty stub) and must be built and validated on Kaggle; Gemini images enter only as provisional identity/style reference inputs and never count as SDXL validation.
+Total download about 10.65 GB (scratch disk). Not decided here: no LoRA (as instructed); a candidate API graph now exists (`workflows/comfyui/sdxl_ipadapter_keyframe.candidate.json`, UNVALIDATED; `sdxl_keyframe.json` remains an empty stub) and must be validated on Kaggle; Gemini images enter only as provisional identity/style reference inputs and never count as SDXL validation.
 
 ## C. Translation, speech, recognition, alignment
 | Item | Pin (VERIFIED) | Size | Licence | Access |

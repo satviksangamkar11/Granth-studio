@@ -24,6 +24,10 @@ def pilot(tmp_path):
     return load_project(root)
 
 
+def approve_canon_at_run_time(project):
+    bp.approve_provisional_canon(project, "synthetic-tester")
+
+
 def review_hindi_synthetically(project):
     """What the named human reviewer's sign-off would add; here a synthetic reviewer so the compiler can be exercised."""
     path = project.episodes_dir / "adhyay_01" / "hi.yaml"
@@ -33,13 +37,24 @@ def review_hindi_synthetically(project):
     _dump(path, document)
 
 
+def test_the_shipped_pilot_files_carry_no_approvals_and_every_file_says_it_is_provisional(pilot):
+    for name in ("characters", "locations", "props", "terminology"):
+        assert {e["status"] for e in load_yaml(pilot.canon_dir / f"{name}.yaml")["entries"]} == {"pending"}
+    for path in [*pilot.research_dir.rglob("*.yaml"), *pilot.episodes_dir.rglob("*.yaml"), *pilot.canon_dir.glob("[cpl]*.yaml")]:
+        assert path.read_text(encoding="utf-8").startswith("# PROVISIONAL PILOT TEST FILE"), path
+    research = (pilot.research_dir / "adhyay_01" / "research.yaml").read_text(encoding="utf-8")
+    assert "printed page 10-11; PDF page 5-6" in research                                    # ovi 90 spans two pages
+
+
 def test_hindi_review_is_a_real_gate_the_shipped_pilot_files_do_not_pass(pilot):
+    approve_canon_at_run_time(pilot)
     approve(pilot, 1, "synthetic-tester", FIXED_TIME)
     with pytest.raises(GateFailure, match="Hindi semantic review is not approved"):
         load_bundle(pilot, load_models(pilot), 1)
 
 
 def test_the_pilot_compiles_with_three_scenes_nine_shots_and_the_narrator_never_drawn(pilot):
+    approve_canon_at_run_time(pilot)
     review_hindi_synthetically(pilot)
     approve(pilot, 1, "synthetic-tester", FIXED_TIME)
     bundle = load_bundle(pilot, load_models(pilot), 1)
@@ -67,6 +82,7 @@ def test_every_required_action_has_a_source_reference_and_a_shot(pilot):
 
 
 def test_the_task_plan_has_native_keyframes_three_ltx_shots_and_both_languages_and_keyframe_prompts_use_style_v1(pilot):
+    approve_canon_at_run_time(pilot)
     review_hindi_synthetically(pilot)
     approve(pilot, 1, "synthetic-tester", FIXED_TIME)
     models = load_models(pilot)
