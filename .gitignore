@@ -59,3 +59,4 @@ __pycache__/
 !assets/pilot_refs/set_v1/*.jpg
 !docs/evidence/sdxl_scenes/s1_refset_d1c67762/scene1_refset_labeled.png
 !docs/evidence/sdxl_scenes/s1_refset_d1c67762/scene1_keyframe_with_refs.png
+!docs/evidence/sdxl_scenes/s2_refset_d1c67762/scene2_keyframe_with_4_refs.png

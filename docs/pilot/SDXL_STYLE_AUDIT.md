@@ -96,3 +96,11 @@ Setup: Scene 1, reference-free (graph verified from the PNG metadata: checkpoint
 What improved (both seeds): the medium changed from photograph to painting, and the age from elderly to young. That is strong evidence that the name and research text in the old middle, not the frozen style text, produced the photographs.
 Still missing against frozen v1 and the description: no double-line border; no torn vest (both wear a draped white cloth); the clay pipe and gourd are not clearly drawn; the leaf plates read as leaves or bowls; seed+1 adds a sacred thread and a red forehead mark that the text does not give. The face and costume differ between the two seeds (expected without references).
 Verdict: reference-free style is much closer but not a STYLE PASS. Human review NOT_DONE. Next variable to test, alone: one owner-supplied style-matched reference per character (pilot_refs/set_v1), at the current adapter settings, without changing the prompt.
+
+## 8. Reference set v1 runs (commit d1c67762, owner set assets/pilot_refs/set_v1, IP-Adapter weight 0.6 per reference, linear, whole schedule)
+
+- Scene 1 (2 references: Maharaj, location): harness PASS. The style follows the owner set closely (brown contours, flat matte colour, aged stained paper). Character matches the reference. Lost: the house/doorway, most leaf plates, the clay pipe and gourd; no double-line border.
+- Scene 2 (4 references, --lowvram): harness PASS but VISUAL FAIL. One figure (a mix of the townsmen references) on a blank paper sheet, no road, no second townsman, no young man, broken anatomy. With 4 x 0.6 the references overpower the text and copy the references' layout (single figure on plain paper).
+- Scene 3 (5 references, --lowvram): FAIL, CUDA out of memory in the VAE decode after sampling finished (the fp32 VAE decode, tiled fallback included, did not fit next to five loaded IP-Adapter applications). Log tail in docs/evidence/sdxl_scenes/s3_refset_d1c67762/.
+
+Cause: IP-Adapter applies every reference to the whole image; it cannot tie a reference to one person. The total reference strength grows with the number of references (1.2 in Scene 1, 2.4 in Scene 2) and takes over composition. Human review NOT_DONE.

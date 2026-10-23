@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "kind": "sdxl_first_keyframe_test",
+  "started": "2026-10-23T16:33:10+00:00",
+  "harness_commit": "d1c67762d6f1a31e85e2ecef9c5b56fbc52159c0",
+  "approved_by": "Satvik Sangamkar",
+  "authorization_record": "docs/pilot/SDXL_DOWNLOAD_APPROVAL.md",
+  "pins": "config/pilot_sdxl_pins.yaml",
+  "visual": "vis_s3_kf",
+  "gpu_index": 0,
+  "workdir": "/kaggle/temp/sdxl/sdxl_work_vis_s3_kf",
+  "comfy_url": "http://127.0.0.1:48225",
+  "worker_pid": 291,
+  "cuda_visible_devices_of_worker": "0",
+  "style": "devotional_gouache_1950s_v1",
+  "reference_image": {
+    "path": "/kaggle/working/granthstudio/assets/ltx_test_inputs/painted_courtyard_01/04_ltx_start_768x512.png",
+    "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83",
+    "role": "PROVISIONAL external identity/style reference (not an SDXL output)"
+  },
+  "note": "A PASS means technically valid images through the existing pipeline. Style fidelity and identity are judged by a human; the reference never validates SDXL itself.",
+  "file_check": {
+    "problems": [],
+    "pinned": [
+      {
+        "name": "sd_xl_base_1.0.safetensors",
+        "sha256": "31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b",
+        "size_bytes": 6938078334,
+        "revision": "462165984030d82259a11f4367a4eed129e94a7b"
+      },
+      {
+        "name": "ip-adapter-plus_sdxl_vit-h.safetensors",
+        "sha256": "3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581",
+        "size_bytes": 847517512,
+        "revision": "018e402774aeeddd60609b4ecdb7e298259dc729"
+      },
+      {
+        "name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+        "sha256": "6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030",
+        "size_bytes": 2528373448,
+        "revision": "018e402774aeeddd60609b4ecdb7e298259dc729"
+      },
+      {
+        "name": "sdxl.vae.safetensors",
+        "sha256": "235745af8d86bf4a4c1b5b4f529868b37019a10f7c0b2e79ad0abca3a22bc6e1",
+        "size_bytes": 334641162,
+        "revision": "207b116dae70ace3637169f1ddd2434b91b3a8cd"
+      }
+    ]
+  },
+  "provisional_approvals": "research, canon and the two reference assets approved at run time for the provisional technical test by 'Satvik Sangamkar' (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md))",
+  "reference_set": {
+    "set_id": "pilot_refs_set_v1",
+    "manifest_sha256": "0d5f9bd5a806164fad23edbc548c5df0658a195943b24f6b9181a6363c94263b",
+    "items": {
+      "chr_gajanan_maharaj": {
+        "file": "maharaj.jpg",
+        "sha256": "35c1b0b1aaae1983c97e4bc099eafe1005523c1c3f9c43bab73ee97c7dca8dfe",
+        "view": "front"
+      },
+      "chr_devidas": {
+        "file": "devidas.jpg",
+        "sha256": "96d1b2bee473518d2eb52be3dc93de777e15ebdd70996a7a2e79ef562b06e4dc",
+        "view": "front"
+      },
+      "chr_bankatlal": {
+        "file": "bankatlal.jpg",
+        "sha256": "52b5d262b06dea4ca5060e4c06d38c031bc0598e9c5de815c4f1449a7ec8eca1",
+        "view": "front"
+      },
+      "chr_damodarpant": {
+        "file": "damodarpant.jpg",
+        "sha256": "f86b0f10d69e36cbd4809f869a820b1b808b4b3483aeaf09808c45c0150aa3a5",
+        "view": "front"
+      },
+      "loc_devidas_house_road": {
+        "file": "location.jpg",
+        "sha256": "c98a5bc9675d1e5edfbdd8cdc161fbd8e7064e0387ecccd3654126a181705dc8",
+        "view": "establishing"
+      }
+    }
+  },
+  "reference_assets": [
+    {
+      "asset_id": "ref_chr_bankatlal_front",
+      "version": 1,
+      "sha256": "52b5d262b06dea4ca5060e4c06d38c031bc0598e9c5de815c4f1449a7ec8eca1",
+      "view": "front",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference set pilot_refs_set_v1, owner-supplied, not SDXL output, not canon)"
+    },
+    {
+      "asset_id": "ref_chr_damodarpant_front",
+      "version": 1,
+      "sha256": "f86b0f10d69e36cbd4809f869a820b1b808b4b3483aeaf09808c45c0150aa3a5",
+      "view": "front",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference set pilot_refs_set_v1, owner-supplied, not SDXL output, not canon)"
+    },
+    {
+      "asset_id": "ref_chr_devidas_front",
+      "version": 1,
+      "sha256": "96d1b2bee473518d2eb52be3dc93de777e15ebdd70996a7a2e79ef562b06e4dc",
+      "view": "front",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference set pilot_refs_set_v1, owner-supplied, not SDXL output, not canon)"
+    },
+    {
+      "asset_id": "ref_chr_gajanan_maharaj_front",
+      "version": 1,
+      "sha256": "35c1b0b1aaae1983c97e4bc099eafe1005523c1c3f9c43bab73ee97c7dca8dfe",
+      "view": "front",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference set pilot_refs_set_v1, owner-supplied, not SDXL output, not canon)"
+    },
+    {
+      "asset_id": "ref_loc_devidas_house_road",
+      "version": 1,
+      "sha256": "c98a5bc9675d1e5edfbdd8cdc161fbd8e7064e0387ecccd3654126a181705dc8",
+      "view": "establishing",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference set pilot_refs_set_v1, owner-supplied, not SDXL output, not canon)"
+    }
+  ],
+  "request": {
+    "asset_id": "ref_kf_s3_kf",
+    "visual_id": "vis_s3_kf",
+    "role": "start",
+    "characters": [
+      "chr_bankatlal",
+      "chr_damodarpant",
+      "chr_devidas",
+      "chr_gajanan_maharaj"
+    ],
+    "locations": [
+      "loc_devidas_house_road"
+    ],
+    "props": [
+      "prp_leaf_plates",
+      "prp_sweet_dishes_plate"
+    ],
+    "lighting": [
+      "day_outdoor"
+    ],
+    "seed": 499344391,
+    "width": 1216,
+    "height": 832,
+    "style": {
+      "style_id": "devotional_gouache_1950s_v1",
+      "version": 1,
+      "sha256": "2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1"
+    },
+    "template_version": "keyframe-prompt-v3-visual-description",
+    "missing_references": [],
+    "request_sha256": "fd44fcbb55616218247dc127c336f003893767af630400a0f675bf2b91ca88d7",
+    "prompt": "1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, At the doorway of a village house, a householder in a white dhoti and shoulder cloth with a sacred thread sets a large plate of sweet dishes before a young man nearly unclothed, wearing only a white loincloth, who sits calmly on the ground and eats. Two townsmen, one in a long coat and cloth turban, the other in a dhoti and cloth cap, stand nearby watching with respect. Bright daylight. warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.",
+    "negative_prompt": "photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks.",
+    "references": [
+      {
+        "asset_id": "ref_chr_bankatlal_front",
+        "sha256": "52b5d262b06dea4ca5060e4c06d38c031bc0598e9c5de815c4f1449a7ec8eca1"
+      },
+      {
+        "asset_id": "ref_chr_damodarpant_front",
+        "sha256": "f86b0f10d69e36cbd4809f869a820b1b808b4b3483aeaf09808c45c0150aa3a5"
+      },
+      {
+        "asset_id": "ref_chr_devidas_front",
+        "sha256": "96d1b2bee473518d2eb52be3dc93de777e15ebdd70996a7a2e79ef562b06e4dc"
+      },
+      {
+        "asset_id": "ref_chr_gajanan_maharaj_front",
+        "sha256": "35c1b0b1aaae1983c97e4bc099eafe1005523c1c3f9c43bab73ee97c7dca8dfe"
+      },
+      {
+        "asset_id": "ref_loc_devidas_house_road",
+        "sha256": "c98a5bc9675d1e5edfbdd8cdc161fbd8e7064e0387ecccd3654126a181705dc8"
+      }
+    ]
+  },
+  "missing_before_sheets": [],
+  "preflight": {
+    "schema_version": 1,
+    "measured_at": "2026-10-23T16:34:00+00:00",
+    "gpu_ready": true,
+    "checks": {
+      "gpu": {
+        "status": "pass",
+        "measured": [
+          "Tesla T4"
+        ],
+        "required": "T4",
+        "detail": "single-GPU default uses GPU 0"
+      },
+      "free_vram": {
+        "status": "pass",
+        "measured": 14807.0,
+        "required": 10000,
+        "detail": ""
+      },
+      "ram": {
+        "status": "pass",
+        "measured": 29994.30859375,
+        "required": 12000,
+        "detail": ""
+      },
+      "disk": {
+        "status": "pass",
+        "measured": 1114.919100416,
+        "required": 30,
+        "detail": ""
+      },
+      "session": {
+        "status": "pass",
+        "measured": 14168.940233,
+        "required": 1800,
+        "detail": ""
+      },
+      "python_packages": {
+        "status": "pass",
+        "measured": {
+          "jsonschema": "4.26.0",
+          "pyyaml": "6.0.3"
+        },
+        "required": {
+          "pyyaml": "6.0.3",
+          "jsonschema": "4.26.0"
+        },
+        "detail": ""
+      },
+      "python": {
+        "status": "info",
+        "measured": "3.13.15",
+        "required": ">=3.12 (pyproject)",
+        "detail": ""
+      },
+      "storage": {
+        "status": "pass",
+        "measured": "/kaggle/temp/sdxl/sdxl_work_vis_s3_kf/durable",
+        "required": null,
+        "detail": ""
+      },
+      "workers": {
+        "status": "pass",
+        "measured": "single",
+        "required": "single",
+        "detail": ""
+      },
+      "sources": {
+        "status": "pass",
+        "measured": {
+          "comfyui_repo": "https://github.com/comfyanonymous/ComfyUI",
+          "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+          "node_pack_repo": "https://github.com/cubiq/ComfyUI_IPAdapter_plus",
+          "node_pack_commit": "a0f451a5113cf9becb0847b92884cb10cbdec0ef"
+        },
+        "required": {
+          "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+          "node_pack_commit": "a0f451a5113cf9becb0847b92884cb10cbdec0ef"
+        },
+        "detail": ""
+      }
+    }
+  },
+  "live_check": {
+    "ok": true,
+    "node_classes": [
+      "CLIPTextEncode",
+      "CLIPVisionLoader",
+      "CheckpointLoaderSimple",
+      "EmptyLatentImage",
+      "IPAdapterAdvanced",
+      "IPAdapterModelLoader",
+      "KSampler",
+      "LoadImage",
+      "SaveImage",
+      "VAEDecode",
+      "VAELoader"
+    ]
+  },
+  "exec_started": "2026-10-23T16:34:00.131+00:00",
+  "bootstrapped_sheets": {},
+  "out_of_memory": true,
+  "results": {
+    "with_reference": {
+      "error": "TaskFailed: ComfyUI execution error for prompt 21012a56-9820-4f33-a331-49cbd9489f15"
+    }
+  },
+  "verdict": "FAIL",
+  "reason": "CUDA out of memory; not retried. with_reference: ComfyUI execution error for prompt 21012a56-9820-4f33-a331-49cbd9489f15",
+  "finished": "2026-10-23T16:35:48+00:00",
+  "comfyui_log_excerpt": [
+    "Checkpoint files will always be loaded safely.",
+    "Total VRAM 14912 MB, total RAM 32099 MB",
+    "Set vram state to: LOW_VRAM",
+    "Device: cuda:0 Tesla T4 : cudaMallocAsync",
+    "VAE load device: cuda:0, offload device: cpu, dtype: torch.float32",
+    "model weight dtype torch.float16, manual cast: None",
+    "VAE load device: cuda:0, offload device: cpu, dtype: torch.float32",
+    "loaded completely 9.5367431640625e+25 1560.802734375 True",
+    "CLIP/text encoder model load device: cpu, offload device: cpu, current: cpu, dtype: torch.float16",
+    "loaded completely 9.5367431640625e+25 1208.09814453125 True",
+    "loaded partially 1405.0601356506347 1405.059814453125 0",
+    "0 models unloaded.",
+    "loaded partially 128.0 127.99989318847656 0",
+    "Warning: Ran out of memory when regular VAE decoding, retrying with tiled VAE decoding.",
+    "!!! Exception during processing !!! Allocation on device 0 would exceed allowed memory. (out of memory)",
+    "Device limit            : 14.56 GiB",
+    "PyTorch limit (set by user-supplied memory fraction)",
+    "    out = self.process_output(self.first_stage_model.decode(samples, **vae_options).to(self.output_device).float())",
+    "    return self.forward_comfy_cast_weights(*args, **kwargs)",
+    "  File \"/kaggle/temp/sdxl/ComfyUI/comfy/ops.py\", line 108, in forward_comfy_cast_weights",
+    "torch.OutOfMemoryError: Allocation on device 0 would exceed allowed memory. (out of memory)",
+    "Device limit            : 14.56 GiB",
+    "PyTorch limit (set by user-supplied memory fraction)",
+    "    (comfy.utils.tiled_scale(samples, decode_fn, tile_x // 2, tile_y * 2, overlap, upscale_amount = self.upscale_ratio, output_device=self.output_device, pbar = pbar) +",
+    "    return tiled_scale_multidim(samples, function, (tile_y, tile_x), overlap=overlap, upscale_amount=upscale_amount, out_channels=out_channels, output_device=output_device, pbar=pbar)",
+    "    ps = function(s_in).to(output_device)",
+    "    decode_fn = lambda a: self.first_stage_model.decode(a.to(self.vae_dtype).to(self.device)).float()",
+    "    return self.forward_comfy_cast_weights(*args, **kwargs)",
+    "  File \"/kaggle/temp/sdxl/ComfyUI/comfy/ops.py\", line 108, in forward_comfy_cast_weights",
+    "torch.OutOfMemoryError: Allocation on device 0 would exceed allowed memory. (out of memory)",
+    "Device limit            : 14.56 GiB",
+    "PyTorch limit (set by user-supplied memory fraction)",
+    "Got an OOM, unloading all loaded models."
+  ]
+}
