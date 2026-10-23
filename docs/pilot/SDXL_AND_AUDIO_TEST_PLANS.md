@@ -23,3 +23,6 @@ Nothing on a GPU. CPU-only: the static tests above, the audio probe's unit test,
 
 ## A2 first execution result (2026-10-23, kernel granthstudio-audio-translate, commit 4eec586e)
 FAIL at import: IndicTransToolkit 1.1.1 needs `transformers.tokenization_utils.PreTrainedTokenizerBase`, which the unpinned install (transformers 5.x on Python 3.13) no longer provides. The model was not reached. Next attempt pins transformers==4.49.0 and IndicTransToolkit==1.1.1; no code of the toolkit is patched. Still NOT VALIDATED.
+
+## A2 second execution (2026-10-23, commit b4dd57aa, kernel version 8): harness PASS, quality NOT accepted
+IndicTrans2 ran at revision 24d73292 (identity verified) on all six ovis; evidence: docs/evidence/audio_translate/run1_b4dd57aa/. PASS = the model ran. Reading the six lines against the Marathi, the model output is NOT usable as final Hindi: d_0001 renders "पत्रावळी" as "पर्चे" (leaflets) and loses the sentence structure; d_0002 fails the protected-term check (परब्रह्म); d_0005 changes the subject to first person ("मैंने"); d_0006 inverts the meaning ("वह हैरान रह गई" for Bankatlal's admission of error). The assistant's Hindi drafts stay the working text and need the human Hindi review. The model stays a candidate generator only; nothing is validated, human review NOT_DONE.

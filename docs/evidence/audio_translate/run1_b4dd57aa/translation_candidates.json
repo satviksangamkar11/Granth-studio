@@ -1,0 +1,86 @@
+{
+  "adhyay": 1,
+  "candidates": [
+    {
+      "candidate_sha256": "648535603828f33e619c9c995f814cc27b3f3b8700a82d1da178c31adec6867c",
+      "dialogue_id": "d_0001",
+      "evidence_sha256": "0ae422ed8b8afb2882b72e5235efa9c7e15fa39b23d86589165b206689491fdc",
+      "generated_at": "2026-10-23T13:07:52+00:00",
+      "model_identity": {
+        "model": "ai4bharat/indictrans2-indic-indic-1B",
+        "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+        "status": "verified"
+      },
+      "mr_sha256": "42f98d2c8283ca6bb1e5e1687a14aeddd34c67661069fa2659b0298396eba697",
+      "text": "सड़कों पर तितर-बितर हो रहे पर्चे। घर के सामने तितर-बितर किए जा रहे थे। वे थे देवीदास विप्र के।"
+    },
+    {
+      "candidate_sha256": "f403be45ba9b0330b12d617cbb84e5ff86368f0bb180d54599247b2c47ad4478",
+      "dialogue_id": "d_0002",
+      "evidence_sha256": "0ae422ed8b8afb2882b72e5235efa9c7e15fa39b23d86589165b206689491fdc",
+      "generated_at": "2026-10-23T13:07:52+00:00",
+      "model_identity": {
+        "model": "ai4bharat/indictrans2-indic-indic-1B",
+        "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+        "status": "verified"
+      },
+      "mr_sha256": "bb0977727d8b0567b94fde5d6f4cf9653376a2d1c474c84345212c928ea90066",
+      "text": "आँखों में ठंड लग रही है। वह अपना मुँह हिलाता है। यही उसका उद्देश्य है। अन्न ब्रह्म को बताएँ।"
+    },
+    {
+      "candidate_sha256": "131c60475eafe70ef70f46ba5670ccb96079dc299f35e4256ec709b85f73d0f6",
+      "dialogue_id": "d_0003",
+      "evidence_sha256": "0ae422ed8b8afb2882b72e5235efa9c7e15fa39b23d86589165b206689491fdc",
+      "generated_at": "2026-10-23T13:07:52+00:00",
+      "model_identity": {
+        "model": "ai4bharat/indictrans2-indic-indic-1B",
+        "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+        "status": "verified"
+      },
+      "mr_sha256": "081ac0b807d3e2669e68dc2e953f894bfd49730331b3044a39697a3248853d39",
+      "text": "बंकटलाल अग्रवाल। वह सड़क पर चल रहा था। उसने यह देखा। अपने प्यार के साथ।"
+    },
+    {
+      "candidate_sha256": "f17b6824005e65431267c415972e9a2691d633694051b11612f335f3cded0700",
+      "dialogue_id": "d_0004",
+      "evidence_sha256": "0ae422ed8b8afb2882b72e5235efa9c7e15fa39b23d86589165b206689491fdc",
+      "generated_at": "2026-10-23T13:07:52+00:00",
+      "model_identity": {
+        "model": "ai4bharat/indictrans2-indic-indic-1B",
+        "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+        "status": "verified"
+      },
+      "mr_sha256": "a42e6ebbb65ea4ace2683fede7ef9b21810d01e75b0d932e180a0714b144496a",
+      "text": "इन पत्रों की खोज न करें। मुझे नहीं पता कि क्यों। हमें भूख लगेगी। फिर भी हम भोजन की व्यवस्था करेंगे।"
+    },
+    {
+      "candidate_sha256": "e9ac2f6c24329f1651b066479155f7089b4e4850594cf17dda0c5b367eb2259e",
+      "dialogue_id": "d_0005",
+      "evidence_sha256": "0ae422ed8b8afb2882b72e5235efa9c7e15fa39b23d86589165b206689491fdc",
+      "generated_at": "2026-10-23T13:07:52+00:00",
+      "model_identity": {
+        "model": "ai4bharat/indictrans2-indic-indic-1B",
+        "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+        "status": "verified"
+      },
+      "mr_sha256": "3faf975994eac66e176277fdadb7fd69f2832434953c448ed80e60e7a1ec0186",
+      "text": "देवीदास ने ऐसा ही किया। पकौड़ों से भरा हुआ। मैंने दरवाजा खोलकर स्वामी के सामने बर्तन लाए।"
+    },
+    {
+      "candidate_sha256": "9e1b6cd5d9b2940e163faf95cffa8484f539616bc016990f31b7d8a033f529a8",
+      "dialogue_id": "d_0006",
+      "evidence_sha256": "0ae422ed8b8afb2882b72e5235efa9c7e15fa39b23d86589165b206689491fdc",
+      "generated_at": "2026-10-23T13:07:52+00:00",
+      "model_identity": {
+        "model": "ai4bharat/indictrans2-indic-indic-1B",
+        "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+        "status": "verified"
+      },
+      "mr_sha256": "aea706c81ddfd45431947f401957c61e2f792841d866620dcbf4829c92dc3704",
+      "text": "उसे देख कर वह दंग रह गया। उसे पूछने पर उसने कहा, \"यह तो पागल है।\" वह हैरान रह गई।"
+    }
+  ],
+  "model": "ai4bharat/indictrans2-indic-indic-1B",
+  "revision": "24d732922a0a91d0998d5568e3af37b7a21cd705",
+  "schema_version": 1
+}
