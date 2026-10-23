@@ -1,0 +1,198 @@
+{
+  "_status": "unvalidated",
+  "_output_node": "103",
+  "_note": "CANDIDATE, NOT VALIDATED. Official low-level distilled I2V graph (ComfyUI-LTXVideo 36fdaf5) with the 0.9.8 2B distilled checkpoint SUBSTITUTED for the example's ltxv-2b-0.9.6-distilled-04-25.safetensors (compatibility unverified until a real run). Placeholders: START_IMAGE (a name staged in ComfyUI's input folder), MOTION_PROMPT, WIDTH, HEIGHT, FRAMES, FPS, SEED.",
+  "_recipe": "ltx_i2v_098.recipe.yaml",
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "{{MOTION_PROMPT}}",
+      "clip": [
+        "38",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "low quality, worst quality, deformed, distorted, disfigured, motion smear, motion artifacts, blurry, jittery, watermark, text, logo",
+      "clip": [
+        "38",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "101",
+        1
+      ],
+      "vae": [
+        "44",
+        2
+      ]
+    }
+  },
+  "38": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "t5xxl_fp16.safetensors",
+      "type": "ltxv",
+      "device": "default"
+    }
+  },
+  "44": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "ltxv-2b-0.9.8-distilled.safetensors"
+    }
+  },
+  "69": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "95",
+        0
+      ],
+      "negative": [
+        "95",
+        1
+      ],
+      "frame_rate": "{{FPS}}"
+    }
+  },
+  "78": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "{{START_IMAGE}}"
+    }
+  },
+  "82": {
+    "class_type": "LTXVPreprocess",
+    "inputs": {
+      "image": [
+        "78",
+        0
+      ],
+      "img_compression": 38
+    }
+  },
+  "95": {
+    "class_type": "LTXVImgToVideo",
+    "inputs": {
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "vae": [
+        "44",
+        2
+      ],
+      "image": [
+        "82",
+        0
+      ],
+      "width": "{{WIDTH}}",
+      "height": "{{HEIGHT}}",
+      "length": "{{FRAMES}}",
+      "batch_size": 1,
+      "strength": 1.0
+    }
+  },
+  "97": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler_ancestral"
+    }
+  },
+  "98": {
+    "class_type": "FloatToSigmas",
+    "inputs": {
+      "float_list": [
+        "100",
+        0
+      ]
+    }
+  },
+  "99": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "model": [
+        "44",
+        0
+      ],
+      "positive": [
+        "69",
+        0
+      ],
+      "negative": [
+        "69",
+        1
+      ],
+      "cfg": 1
+    }
+  },
+  "100": {
+    "class_type": "StringToFloatList",
+    "inputs": {
+      "string": "1.0000, 0.9937, 0.9875, 0.9812, 0.9750, 0.9094, 0.7250, 0.4219, 0.0"
+    }
+  },
+  "101": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "102",
+        0
+      ],
+      "guider": [
+        "99",
+        0
+      ],
+      "sampler": [
+        "97",
+        0
+      ],
+      "sigmas": [
+        "98",
+        0
+      ],
+      "latent_image": [
+        "95",
+        2
+      ]
+    }
+  },
+  "102": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": "{{SEED}}"
+    }
+  },
+  "103": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "frame_rate": "{{FPS}}",
+      "loop_count": 0,
+      "filename_prefix": "granthstudio_ltx_i2v",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 20,
+      "save_metadata": false,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true
+    }
+  }
+}

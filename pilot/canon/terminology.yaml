@@ -1,0 +1,14 @@
+schema_version: 1
+kind: terminology
+entries:
+- id: term_parabrahma
+  canonical_name: परब्रह्म
+  aliases: []
+  status: approved
+  evidence:
+  - ovi 94
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+  protected: true
+  hi_allowed:
+  - परब्रह्म
+identity_decisions: []

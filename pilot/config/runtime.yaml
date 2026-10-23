@@ -1,0 +1,33 @@
+schema_version: 1
+# Kaggle runtime infrastructure (frozen section 8). Every null is an unmade decision:
+# a GPU run refuses until it is set from real measurements or an explicit choice.
+resources:
+  # Minimums checked before a GPU batch. Set from the first measured T4 run (O-004).
+  min_free_vram_mb: null
+  min_ram_mb: null
+  min_disk_gb: null
+  min_session_remaining_s: null
+storage:
+  # Durable artifact storage outside Kaggle (O-008). No provider is chosen yet.
+  # "local_dir" = a mounted directory that survives the Kaggle session.
+  provider: null
+  path: null
+workers:
+  # Single GPU by default (D-009). "requested" is refused: concurrent dual-T4 execution is
+  # not implemented until a benchmark justifies it (frozen section 8).
+  dual_t4: disabled
+sources:
+  # Git sources for bootstrap, pinned by full commit. Must equal models.yaml ltx.runtime commits.
+  comfyui_repo: null
+  comfyui_commit: null
+  node_pack_repo: null
+  node_pack_commit: null
+# Python packages that must be installed at these exact versions on the GPU host.
+python_packages: {}
+# Weights to fetch on the GPU host: {name, url, dest, sha256}. sha256 is pinned from the
+# official file; a null pin downloads in record mode only and never validates anything.
+downloads: []
+checks:
+  # Frozen section 8 numerical-stability proxy: a generated clip or keyframe in which every
+  # frame is one flat colour is treated as a failed (e.g. FP16 decode) output.
+  reject_flat_output: true

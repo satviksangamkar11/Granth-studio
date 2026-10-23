@@ -1,0 +1,126 @@
+schema_version: 1
+episode_id: ep01
+adhyay: 1
+research_version: 1
+visuals:
+- visual_id: vis_s1_kf
+  source: keyframe
+  path: kf/vis_s1_kf.png
+  sha256: null
+- visual_id: vis_s2_kf
+  source: keyframe
+  path: kf/vis_s2_kf.png
+  sha256: null
+- visual_id: vis_s3_kf
+  source: keyframe
+  path: kf/vis_s3_kf.png
+  sha256: null
+scenes:
+- scene_id: a01_s01
+  research_scene: a01_s01
+  location: loc_devidas_house_road
+  characters:
+  - chr_gajanan_maharaj
+  - chr_narrator
+  props:
+  - prp_leaf_plates
+  - prp_gourd_vessel
+  - prp_clay_chilam
+  lighting: day_outdoor
+  shots:
+  - shot_id: a01_s01_sh01
+    tier: 0
+    visual_id: vis_s1_kf
+    duration_s: 6.0
+    dialogue_ids:
+    - d_0001
+    action_ids:
+    - act_s1_sit
+  - shot_id: a01_s01_sh02
+    tier: 1
+    visual_id: vis_s1_kf
+    duration_s: 2.04
+    dialogue_ids: []
+    action_ids:
+    - act_s1_pick
+    frames: 49
+  - shot_id: a01_s01_sh03
+    tier: 0
+    visual_id: vis_s1_kf
+    duration_s: 6.5
+    dialogue_ids:
+    - d_0002
+    action_ids: []
+- scene_id: a01_s02
+  research_scene: a01_s02
+  location: loc_devidas_house_road
+  characters:
+  - chr_gajanan_maharaj
+  - chr_bankatlal
+  - chr_damodarpant
+  - chr_narrator
+  props:
+  - prp_leaf_plates
+  lighting: day_outdoor
+  shots:
+  - shot_id: a01_s02_sh01
+    tier: 0
+    visual_id: vis_s2_kf
+    duration_s: 5.5
+    dialogue_ids:
+    - d_0003
+    action_ids:
+    - act_s2_watch
+  - shot_id: a01_s02_sh02
+    tier: 1
+    visual_id: vis_s2_kf
+    duration_s: 2.04
+    dialogue_ids: []
+    action_ids:
+    - act_s2_ask
+    frames: 49
+  - shot_id: a01_s02_sh03
+    tier: 0
+    visual_id: vis_s2_kf
+    duration_s: 6.5
+    dialogue_ids:
+    - d_0004
+    action_ids: []
+- scene_id: a01_s03
+  research_scene: a01_s03
+  location: loc_devidas_house_road
+  characters:
+  - chr_gajanan_maharaj
+  - chr_devidas
+  - chr_bankatlal
+  - chr_damodarpant
+  - chr_narrator
+  props:
+  - prp_sweet_dishes_plate
+  - prp_leaf_plates
+  lighting: day_outdoor
+  shots:
+  - shot_id: a01_s03_sh01
+    tier: 0
+    visual_id: vis_s3_kf
+    duration_s: 5.0
+    dialogue_ids:
+    - d_0005
+    action_ids:
+    - act_s3_place
+  - shot_id: a01_s03_sh02
+    tier: 1
+    visual_id: vis_s3_kf
+    duration_s: 2.04
+    dialogue_ids: []
+    action_ids:
+    - act_s3_eat
+    frames: 49
+  - shot_id: a01_s03_sh03
+    tier: 0
+    visual_id: vis_s3_kf
+    duration_s: 6.5
+    dialogue_ids:
+    - d_0006
+    action_ids:
+    - act_s3_admit

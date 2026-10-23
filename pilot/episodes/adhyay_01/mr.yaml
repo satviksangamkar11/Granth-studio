@@ -1,0 +1,28 @@
+schema_version: 1
+language: mr
+adhyay: 1
+entries:
+- dialogue_id: d_0001
+  shot_id: a01_s01_sh01
+  speaker: chr_narrator
+  text: उष्ट्या पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या
+- dialogue_id: d_0002
+  shot_id: a01_s01_sh03
+  speaker: chr_narrator
+  text: शीत पडल्या दृष्टीप्रत । तें मुखी उचलुनी घालीत । हे करण्याचा हाच हेत । अन्न परब्रह्म कळवावया
+- dialogue_id: d_0003
+  shot_id: a01_s02_sh01
+  speaker: chr_narrator
+  text: बंकटलाल आगरवाला । होता रस्त्यानें चालला । त्याने हा प्रकार पाहिला । आपल्या त्या स्नेह्यासह
+- dialogue_id: d_0004
+  shot_id: a01_s02_sh03
+  speaker: chr_narrator
+  text: ह्या पत्रावळीच्या शोधना । कां हो करितां कळेना । क्षुधा असेल आपणां । तरी तरतूद करूं अन्नाची
+- dialogue_id: d_0005
+  shot_id: a01_s03_sh01
+  speaker: chr_narrator
+  text: देविदासें तैसें केलें । पक्कान्नांनीं भरलेले । पात्र आणून ठेविलें । द्वारासमोर स्वामींपुढे
+- dialogue_id: d_0006
+  shot_id: a01_s03_sh03
+  speaker: chr_narrator
+  text: बंकटलाल तें पाहून । पंताशी करी भाषण । ह्या वेडा म्हणालो आपण । ती नि:संशय झाली चुकी

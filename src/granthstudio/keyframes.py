@@ -247,7 +247,7 @@ def sheet_request(canon: Canon, registry: dict[str, Any], models: dict[str, Any]
 def sheet_requests(canon: Canon, registry: dict[str, Any], models: dict[str, Any]) -> list[dict[str, Any]]:
     requests = []
     for entry_id, entry in sorted(canon.entries.items()):
-        if canon.kinds[entry_id] == "characters" and entry["status"] == "approved":
+        if canon.kinds[entry_id] == "characters" and entry["status"] == "approved" and not entry.get("voice_only"):
             requests += [sheet_request(canon, registry, models, entry_id, v) for v in SHEET_VIEWS]
         elif canon.kinds[entry_id] == "locations" and entry["status"] == "approved":
             requests.append(sheet_request(canon, registry, models, entry_id, "establishing"))

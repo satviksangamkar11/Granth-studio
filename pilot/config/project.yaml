@@ -1,0 +1,7 @@
+schema_version: 1
+artifacts_dir: ../../granthstudio-artifacts-pilot
+research_dir: research
+canon_dir: canon
+episodes_dir: episodes
+benchmarks_dir: benchmarks
+timezone: Asia/Calcutta

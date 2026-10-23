@@ -1,0 +1,4 @@
+{
+  "_status": "unvalidated",
+  "_note": "NOT VALIDATED. Replace with the node graph exported from ComfyUI on the pinned ComfyUI-LTXVideo commit for checkpoint ltxv-2b-0.9.8-distilled.safetensors, then set _status to validated after a real decoded clip. Placeholders: START_IMAGE, MOTION_PROMPT, FRAMES, SEED, FPS."
+}

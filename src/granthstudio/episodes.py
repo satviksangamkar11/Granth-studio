@@ -172,7 +172,7 @@ def compile_episode(
                     "dialogue_ids": list(shot["dialogue_ids"]),
                     "research_scene": dict(source_scene),
                     "location": scene["location"],
-                    "characters": list(scene["characters"]),
+                    "characters": [c for c in scene["characters"] if not canon.entries[c].get("voice_only")],   # a voice-only speaker (the narrator) is never drawn
                     "props": list(scene.get("props", [])),
                     "lighting": scene.get("lighting", "unspecified"),
                     "artistic_flags": list(scene.get("artistic_flags", [])),

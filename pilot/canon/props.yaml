@@ -1,0 +1,36 @@
+schema_version: 1
+kind: props
+entries:
+- id: prp_leaf_plates
+  canonical_name: Used leaf plates
+  aliases:
+  - पत्रावळी
+  status: approved
+  evidence:
+  - ovi 87
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: prp_gourd_vessel
+  canonical_name: Gourd water vessel
+  aliases:
+  - भोपळा
+  status: approved
+  evidence:
+  - ovi 89
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: prp_clay_chilam
+  canonical_name: Clay chilam
+  aliases:
+  - चिलीम
+  status: approved
+  evidence:
+  - ovi 90
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: prp_sweet_dishes_plate
+  canonical_name: Plate of sweet dishes
+  aliases:
+  - पक्कान्न
+  status: approved
+  evidence:
+  - ovi 114
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+identity_decisions: []

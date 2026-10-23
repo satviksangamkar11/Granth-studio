@@ -1,0 +1,12 @@
+schema_version: 1
+kind: locations
+entries:
+- id: loc_devidas_house_road
+  canonical_name: The road in front of Devidas's house
+  aliases:
+  - रस्ता
+  status: approved
+  evidence:
+  - Adhyay 1 ovi 87
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+identity_decisions: []

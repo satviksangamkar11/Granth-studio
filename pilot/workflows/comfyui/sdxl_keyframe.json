@@ -1,0 +1,4 @@
+{
+  "_status": "unvalidated",
+  "_note": "NOT VALIDATED. No SDXL checkpoint or identity-conditioning method is selected (O-006). Replace with the API-format graph exported from ComfyUI for the chosen checkpoint, set _output_node to the image save node, then set _status to validated only after a real decoded image. Placeholders: PROMPT, NEGATIVE_PROMPT, SEED, WIDTH, HEIGHT, REFERENCE_IMAGE_1..REFERENCE_IMAGE_<reference_slots>."
+}

@@ -1,0 +1,84 @@
+schema_version: 1
+# Model pins. checkpoint_sha256 is null until the official file is downloaded on the pinned
+# runtime and hashed; while null, every LTX capability is refused (NOT VALIDATED).
+comfyui:
+  base_url: "http://127.0.0.1:8188"
+ltx:
+  family: LTX-Video
+  version: "0.9.8"
+  variant: 2b-distilled
+  checkpoint_file: ltxv-2b-0.9.8-distilled.safetensors
+  checkpoint_sha256: null
+  precision: fp16
+  workflow_templates:
+    i2v: workflows/comfyui/ltx_i2v_098.json
+    flf: workflows/comfyui/ltx_flf_098.json
+  # Example frame counts from the frozen plan. The exact rule is still OPEN (decision O-003).
+  frame_counts: [49, 65, 81, 89, 97, 121]
+  capabilities:
+    i2v: unvalidated
+    flf: unvalidated
+# SDXL keyframes (frozen sections 4.4 and 6). Nothing is selected (O-006): every null is a
+# decision the user must make. Keyframe generation refuses until all are set and validated.
+sdxl:
+  checkpoint_file: null
+  checkpoint_sha256: null
+  checkpoint_path: null
+  workflow_template: workflows/comfyui/sdxl_keyframe.json
+  edit_workflow_template: workflows/comfyui/sdxl_endframe.json   # end-frame derivation (frozen 7 Tier 2); null = not selected
+  identity_conditioning:
+    method: null          # "none" is an explicit choice; null means not decided
+    reference_slots: 0    # reference images the workflow accepts (REFERENCE_IMAGE_1..N)
+  width: null
+  height: null
+  status: unvalidated
+# Translation, speech and ASR run as external commands (argv list, no shell) that read one JSON
+# object on stdin and print one JSON object on stdout; see src/granthstudio/runners.py. Models and
+# revisions are not chosen (O-007) and no runner has ever been executed: all are NOT VALIDATED.
+translation:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 3600
+speech:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800
+asr:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800
+# Optional lip-sync (frozen sections 10 and 13): a separate Marathi/Hindi render for essential
+# visible-speech close-ups. Payload {video_path, audio_path, language, out_path}; the runner writes an mp4.
+# Usable only when validated AND validated_style_id, validated_style_version and validated_style_sha256 (digest of
+# style_id, version, prompt_prefix, negative_prompt; see lipsync.style_identity) equal the approved style now.
+lipsync:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  validated_style_id: null
+  validated_style_version: null
+  validated_style_sha256: null
+  timeout_s: 3600
+# Model-based QA diagnostics (face embedding, CLIP style, object presence, anachronism). Optional and
+# never enforced; same JSON-over-stdio contract. Not configured: those diagnostics log not_computed.
+diagnostics:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800
+# Optional word-level forced aligner (frozen 5.4): {"audio_path","text","language"} ->
+# {"words":[{"word","start_s","end_s"}]}. Data only; subtitles stay sentence/phrase level.
+aligner:
+  status: unvalidated
+  command: null
+  model: null
+  revision: null
+  timeout_s: 1800

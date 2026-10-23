@@ -1,0 +1,165 @@
+schema_version: 1
+adhyay: 1
+open_questions: []
+overview: 'PILOT TEST ONLY: three consecutive moments of Adhyay 1 (ovi 84-121) narrated by six verbatim ovis. PILOT TEST ONLY (provisional, owner''s creative confirmation 2026-10-23); not Granth canon'
+scenes:
+- scene_id: a01_s01
+  source_refs:
+  - Adhyay 1 ovi 87 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 88 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 89 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 90 (printed page 10-11; PDF page 5)
+  - Adhyay 1 ovi 91 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 92 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 93 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 94 (printed page 11; PDF page 6)
+  location: loc_devidas_house_road
+  characters:
+  - chr_gajanan_maharaj
+  - chr_narrator
+  props:
+  - prp_leaf_plates
+  - prp_gourd_vessel
+  - prp_clay_chilam
+  description: Used leaf plates lie on the road in front of Devidas's house; Gajanan Maharaj sits there and picks up grains of rice (ovi 87-94).
+  actions:
+  - id: act_s1_sit
+    text: Gajanan Maharaj sits on the road in front of Devidas's house among the thrown leaf plates
+    source_refs:
+    - Adhyay 1 ovi 87 (printed page 10; PDF page 5)
+    - Adhyay 1 ovi 88 (printed page 10; PDF page 5)
+    - Adhyay 1 ovi 93 (printed page 11; PDF page 6)
+    artistic: false
+  - id: act_s1_pick
+    text: He picks leftover grains of rice from the leaf plates and puts them in his mouth
+    source_refs:
+    - Adhyay 1 ovi 93 (printed page 11; PDF page 6)
+    - Adhyay 1 ovi 94 (printed page 11; PDF page 6)
+    artistic: false
+  visual_details:
+  - id: det_s1_vest
+    text: He wears an old vest of worn cloth; he has a gourd for drinking water and a hand-made clay chilam in his hand
+    source_refs:
+    - Adhyay 1 ovi 88 (printed page 10; PDF page 5)
+    - Adhyay 1 ovi 89 (printed page 10; PDF page 5)
+    - Adhyay 1 ovi 90 (printed page 10-11; PDF page 5)
+    artistic: false
+  - id: det_s1_gaze
+    text: His gaze rests steadily on the tip of his nose and his expression is calm
+    source_refs:
+    - Adhyay 1 ovi 91 (printed page 11; PDF page 6)
+    artistic: false
+  - id: det_s1_frame
+    text: Shown seated and framed from the waist up, a modest composition
+    source_refs:
+    - Adhyay 1 ovi 92 (printed page 11; PDF page 6)
+    artistic: true
+  continuity: []
+  dialogue:
+  - id: d_0001
+    speaker: chr_narrator
+    text: उष्ट्या पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या
+    source_ref: Adhyay 1 ovi 87 (printed page 10; PDF page 5)
+  - id: d_0002
+    speaker: chr_narrator
+    text: शीत पडल्या दृष्टीप्रत । तें मुखी उचलुनी घालीत । हे करण्याचा हाच हेत । अन्न परब्रह्म कळवावया
+    source_ref: Adhyay 1 ovi 94 (printed page 11; PDF page 6)
+- scene_id: a01_s02
+  source_refs:
+  - Adhyay 1 ovi 108 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 109 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 110 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 87 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 93 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 97 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 98 (printed page 11; PDF page 6)
+  location: loc_devidas_house_road
+  characters:
+  - chr_gajanan_maharaj
+  - chr_bankatlal
+  - chr_damodarpant
+  - chr_narrator
+  props:
+  - prp_leaf_plates
+  description: Bankatlal Agarwal and Damodarpant Kulkarni see him, think him mad, and Bankatlal asks him why he searches the plates (ovi 97-110).
+  actions:
+  - id: act_s2_watch
+    text: Bankatlal Agarwal and his friend Damodarpant Kulkarni, walking along the road, see Gajanan Maharaj searching the leaf plates
+    source_refs:
+    - Adhyay 1 ovi 97 (printed page 11; PDF page 6)
+    - Adhyay 1 ovi 98 (printed page 11; PDF page 6)
+    artistic: false
+  - id: act_s2_ask
+    text: Bankatlal steps forward and respectfully asks him why he searches the leaf plates; Maharaj gives no answer and only looks at them both
+    source_refs:
+    - Adhyay 1 ovi 108 (printed page 11; PDF page 6)
+    - Adhyay 1 ovi 109 (printed page 11; PDF page 6)
+    - Adhyay 1 ovi 110 (printed page 11; PDF page 6)
+    artistic: false
+  visual_details:
+  - id: det_s2_plates
+    text: Leaf plates lie on the road around him
+    source_refs:
+    - Adhyay 1 ovi 87 (printed page 10; PDF page 5)
+    - Adhyay 1 ovi 93 (printed page 11; PDF page 6)
+    artistic: false
+  continuity: []
+  dialogue:
+  - id: d_0003
+    speaker: chr_narrator
+    text: बंकटलाल आगरवाला । होता रस्त्यानें चालला । त्याने हा प्रकार पाहिला । आपल्या त्या स्नेह्यासह
+    source_ref: Adhyay 1 ovi 97 (printed page 11; PDF page 6)
+  - id: d_0004
+    speaker: chr_narrator
+    text: ह्या पत्रावळीच्या शोधना । कां हो करितां कळेना । क्षुधा असेल आपणां । तरी तरतूद करूं अन्नाची
+    source_ref: Adhyay 1 ovi 109 (printed page 11; PDF page 6)
+- scene_id: a01_s03
+  source_refs:
+  - Adhyay 1 ovi 114 (printed page 12; PDF page 7)
+  - Adhyay 1 ovi 115 (printed page 12; PDF page 7)
+  - Adhyay 1 ovi 118 (printed page 12; PDF page 7)
+  - Adhyay 1 ovi 119 (printed page 12; PDF page 7)
+  location: loc_devidas_house_road
+  characters:
+  - chr_gajanan_maharaj
+  - chr_devidas
+  - chr_bankatlal
+  - chr_damodarpant
+  - chr_narrator
+  props:
+  - prp_sweet_dishes_plate
+  - prp_leaf_plates
+  description: Devidas sets a plate of sweet dishes before him, he eats, and Bankatlal admits to Pant that calling him mad was a mistake (ovi 114-121).
+  actions:
+  - id: act_s3_place
+    text: Devidas brings a plate filled with sweet dishes and sets it down at the door in front of Maharaj
+    source_refs:
+    - Adhyay 1 ovi 114 (printed page 12; PDF page 7)
+    artistic: false
+  - id: act_s3_eat
+    text: Maharaj sits down to the plate and eats, mixing all the dishes into one
+    source_refs:
+    - Adhyay 1 ovi 115 (printed page 12; PDF page 7)
+    - Adhyay 1 ovi 118 (printed page 12; PDF page 7)
+    artistic: false
+  - id: act_s3_admit
+    text: Bankatlal tells Pant that calling him mad was undoubtedly a mistake
+    source_refs:
+    - Adhyay 1 ovi 119 (printed page 12; PDF page 7)
+    artistic: false
+  visual_details:
+  - id: det_s3_midday
+    text: It is midday
+    source_refs:
+    - Adhyay 1 ovi 118 (printed page 12; PDF page 7)
+    artistic: false
+  continuity: []
+  dialogue:
+  - id: d_0005
+    speaker: chr_narrator
+    text: देविदासें तैसें केलें । पक्कान्नांनीं भरलेले । पात्र आणून ठेविलें । द्वारासमोर स्वामींपुढे
+    source_ref: Adhyay 1 ovi 114 (printed page 12; PDF page 7)
+  - id: d_0006
+    speaker: chr_narrator
+    text: बंकटलाल तें पाहून । पंताशी करी भाषण । ह्या वेडा म्हणालो आपण । ती नि:संशय झाली चुकी
+    source_ref: Adhyay 1 ovi 119 (printed page 12; PDF page 7)

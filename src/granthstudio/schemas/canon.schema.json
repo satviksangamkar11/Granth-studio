@@ -107,6 +107,10 @@
           "items": {
             "type": "string"
           }
+        },
+        "voice_only": {
+          "type": "boolean",
+          "description": "A speaker who is heard but never drawn (for example the narrating author): kept in the scene cast so speech is attributed to him, left out of every picture prompt, reference sheet and visual character list."
         }
       }
     }

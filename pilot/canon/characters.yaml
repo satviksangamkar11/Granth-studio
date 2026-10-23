@@ -1,0 +1,52 @@
+schema_version: 1
+kind: characters
+entries:
+- id: chr_gajanan_maharaj
+  canonical_name: Shri Gajanan Maharaj
+  aliases:
+  - Gajanan
+  - गजानन
+  - समर्थ
+  status: approved
+  evidence:
+  - Adhyay 1 ovi 88-92, 111
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: chr_devidas
+  canonical_name: Devidas Paturkar
+  aliases:
+  - Devidas
+  - देविदास
+  status: approved
+  evidence:
+  - Adhyay 1 ovi 84-87
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: chr_bankatlal
+  canonical_name: Bankatlal Agarwal
+  aliases:
+  - Bankatlal
+  - बंकटलाल
+  status: approved
+  evidence:
+  - Adhyay 1 ovi 97
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: chr_damodarpant
+  canonical_name: Damodarpant Kulkarni
+  aliases:
+  - Damodarpant
+  - दामोदरपंत
+  - Pant
+  - पंत
+  status: approved
+  evidence:
+  - Adhyay 1 ovi 98
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+- id: chr_narrator
+  canonical_name: Narrator (the author, voice only)
+  aliases:
+  - Narrator
+  status: approved
+  evidence:
+  - the verses are narration
+  - PILOT TEST ONLY (provisional, owner's creative confirmation 2026-10-23); not Granth canon
+  voice_only: true
+identity_decisions: []
