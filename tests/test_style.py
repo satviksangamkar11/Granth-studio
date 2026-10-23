@@ -150,3 +150,26 @@ def test_a_shot_cannot_carry_its_own_style_the_manifest_schema_refuses_unknown_f
     tampered["scenes"][0]["shots"][0]["style"] = "my_own_look"
     with pytest.raises(Exception):
         validate_document("episode_manifest", tampered)
+
+
+def test_a_style_change_after_the_bundle_was_loaded_is_caught_by_require_current(kf_project):
+    from granthstudio.pipeline import require_current
+    frozen_project(kf_project)
+    bundle = load_bundle(kf_project, load_models(kf_project), 1)
+    require_current(bundle)                                                   # unchanged: fine
+    install_style(kf_project, version=2, style_id="devotional_gouache_1950s_v2")
+    with pytest.raises(GateFailure, match="snapshot changed"):
+        require_current(bundle)                                               # the live style differs from the identity captured at load
+    assert bundle.style["style_id"] == "devotional_gouache_1950s_v1"
+
+
+def test_sheet_tasks_check_state_without_the_host_gate_after_a_render(kf_project, monkeypatch):
+    frozen_project(kf_project)
+    bundle = load_bundle(kf_project, load_models(kf_project), 1)
+    scheduler = Scheduler(kf_project.artifacts_dir / "tasks" / "references")
+    tasks = kf.sheet_tasks(kf_project, bundle.canon, load_models(kf_project), scheduler)
+    assert tasks and all(t.postflight is not None for t in tasks)
+    calls = []
+    monkeypatch.setattr(kf, "require_host_ready", lambda *a, **k: calls.append("host"))
+    tasks[0].preflight(); assert calls == ["host"]
+    calls.clear(); tasks[0].postflight(); assert calls == []                  # no resource gate after the render

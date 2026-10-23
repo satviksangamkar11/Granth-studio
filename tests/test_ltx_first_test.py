@@ -455,7 +455,56 @@ def test_scheduler_uses_the_postflight_after_the_run_and_the_preflight_before_it
         calls.append("post")
     task = Task("tier0", "t", {"a": "b"}, "v1", run_it, preflight=pre, postflight=post)
     result = Scheduler(tmp_path / "store").run([task])[0]
-    assert result.status == "complete" and calls == ["pre", "post"]
+    assert result.status == "complete" and calls == ["post", "pre", "post"]      # state check, resources before NEW execution, state check after the run
     calls.clear()
     plain = Task("tier0", "u", {"a": "b"}, "v1", run_it, preflight=pre)           # no postflight: the preflight is repeated, as before
     assert Scheduler(tmp_path / "store2").run([plain])[0].status == "complete" and calls == ["pre", "pre"]
+
+
+def test_a_verified_receipt_is_reused_while_our_server_holds_the_vram_but_new_execution_still_needs_resources(tmp_path):
+    from granthstudio.errors import IntegrationUnavailable
+    from granthstudio.scheduler import Scheduler, Task
+    state = {"busy": False, "ran": 0, "pre": 0}
+    def run_it(work):
+        state["ran"] += 1
+        (work / "out.txt").write_text("x", encoding="utf-8"); return {"out": "out.txt"}
+    def pre():
+        state["pre"] += 1
+        if state["busy"]:
+            raise IntegrationUnavailable("GPU preflight not passed: {'free_vram': 'fail'}: NOT VALIDATED")
+    make = lambda: Task("tier0", "t", {"a": "b"}, "v1", run_it, preflight=pre, postflight=lambda: None)
+    store = Scheduler(tmp_path / "store")
+    assert store.run([make()])[0].status == "complete"
+    state["busy"] = True                                                       # our resident ComfyUI now holds the card
+    assert Scheduler(tmp_path / "store").run([make()])[0].status == "resumed"  # verified receipt: state check only
+    assert Scheduler(tmp_path / "store").status([make()])[0].status == "complete"
+    (tmp_path / "store" / "tier0").joinpath(make().task_id()).joinpath("out.txt").write_text("changed", encoding="utf-8")   # receipt no longer verifies
+    again = Scheduler(tmp_path / "store").run([make()])[0]
+    assert again.status == "not_validated" and state["ran"] == 1               # NEW execution is still refused on a busy host
+
+
+def test_a_completed_cpu_fallback_is_not_discarded_by_a_resident_gpu_server(tmp_path):
+    from granthstudio.errors import TaskFailed
+    from granthstudio.errors import IntegrationUnavailable
+    from granthstudio.scheduler import Scheduler, Task
+    def failing(work):
+        raise TaskFailed("render failed")
+    def fallback(work):
+        (work / "out.txt").write_text("stand-in", encoding="utf-8"); return {"out": "out.txt"}
+    def pre():
+        raise IntegrationUnavailable("free_vram fail")
+    task = Task("tier0", "t", {"a": "b"}, "v1", failing, preflight=lambda: None, postflight=lambda: None, max_attempts=1)
+    task.fallback, task.fallback_info = fallback, {"mode": "tier0"}
+    assert "FALLBACK" in Scheduler(tmp_path / "s").run([task])[0].detail
+    task2 = Task("tier0", "u", {"a": "b"}, "v1", failing, preflight=pre, postflight=lambda: None, max_attempts=1)
+    task2.fallback, task2.fallback_info = fallback, {"mode": "tier0"}
+    task2.preflight = lambda: None
+    assert Scheduler(tmp_path / "s2").run([task2])[0].status == "complete"
+
+
+def test_reference_sheet_tasks_have_a_state_only_postflight(tmp_path):
+    from tests.test_keyframes import comfy as _c  # noqa: F401
+    import inspect
+    from granthstudio import keyframes
+    source = inspect.getsource(keyframes.sheet_tasks)
+    assert "postflight=lambda request=request: check(request, False)" in source and "check_host=check_host" in source

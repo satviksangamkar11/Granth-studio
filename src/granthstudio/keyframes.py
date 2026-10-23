@@ -451,8 +451,8 @@ def sheet_tasks(project: Project, canon: Canon, models: dict[str, Any], schedule
                 a["status"] == "approved" or a.get("request_sha256") == request["request_sha256"])
                for a in registry["assets"]):
             continue  # already approved, or already generated for exactly this request
-        def preflight(request=request):
-            sdxl_preflight(project, models)
+        def check(request=request, check_host=True):
+            sdxl_preflight(project, models, check_host=check_host)
             fresh = next(r for r in sheet_requests(canon, load_registry(project, canon), models)
                          if r["asset_id"] == request["asset_id"])
             if fresh["request_sha256"] != request["request_sha256"]:
@@ -466,7 +466,8 @@ def sheet_tasks(project: Project, canon: Canon, models: dict[str, Any], schedule
                 raise TaskFailed(f"{request['asset_id']}: decoded size differs from the request")
         task = Task("keyframe", f"sheet_{request['asset_id']}", {"request": request["request_sha256"],
                     "sdxl": sha256_obj(models.get("sdxl"))}, "reference-sheet-v1", lambda work: {},
-                    max_attempts=1, preflight=preflight, verify=verify)
+                    max_attempts=1, preflight=lambda request=request: check(request, True),
+                    postflight=lambda request=request: check(request, False), verify=verify)
         journal = scheduler.store / "pending" / f"{task.task_id()}.json"
         task.journal = journal
         task.run = lambda work, request=request, journal=journal: sdxl_generate(project, models, request, journal, work)

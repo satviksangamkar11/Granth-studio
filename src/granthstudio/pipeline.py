@@ -53,6 +53,7 @@ class Bundle:
     compiled: dict[str, Any]
     timelines: dict[str, dict[str, Any]]
     benchmark: bool = False  # pilot only: may run LTX capabilities that are not validated yet
+    style: dict[str, Any] | None = None  # style identity captured when the bundle was loaded: later edits must be seen by require_current
 
 def load_bundle(project: Project, models: dict[str, Any], adhyay: int, benchmark: bool = False) -> Bundle:
     canon = load_canon(project)
@@ -65,7 +66,7 @@ def load_bundle(project: Project, models: dict[str, Any], adhyay: int, benchmark
     problems = check_timelines(canon, compiled, research, timelines["mr"], timelines["hi"])
     if problems:
         raise GateFailure("timeline gate failed: " + "; ".join(problems))
-    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark)
+    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark, style_identity(load_style(project)))
 
 def episode_store(project: Project, adhyay: int) -> Path:
     return project.artifacts_dir / "tasks" / f"adhyay_{adhyay:02d}"
@@ -74,7 +75,7 @@ def snapshot(bundle: Bundle) -> dict:
     return {"compiled": sha256_obj(bundle.compiled), "models": sha256_obj(bundle.models),
             "research_sha256": bundle.compiled["research_sha256"], "research_version": bundle.compiled["research_version"],
             "canon_sha256": bundle.canon.digest(),
-            "style": style_identity(load_style(bundle.project)),
+            "style": bundle.style,
             "timelines": {lang: sha256_obj(timeline) for lang, timeline in bundle.timelines.items()}}
 
 def require_current(bundle: Bundle) -> None:
@@ -303,7 +304,7 @@ def _ltx_run(bundle, shot, visual, capability, journal):
                            "attempt": read_json(journal)["attempt"],
                            "fingerprint": read_json(journal)["history"][-1]["fingerprint"],
                            "seed_inputs": read_json(journal)["history"][-1]["seed_inputs"]},
-            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs, "style": style_identity(load_style(bundle.project)),
+            "checkpoint_sha256": bundle.models["ltx"]["checkpoint_sha256"], "inputs": inputs, "style": bundle.style,
             "runtime_sha256": verify_benchmark_runtime(bundle.models, capability, template.version),
             "gpu": gpu_names[0] if gpu_names else None, "gpu_index": gpu_indices[0] if gpu_indices else None,
             "execution_s": {"value": execution_seconds(history), "kind": "measured by ComfyUI status messages"},
@@ -434,7 +435,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     compiled = bundle.compiled
     visuals = {v["visual_id"]: v for v in compiled["visuals"]}
     tasks, audio, keyframes, shot_tasks = [], {}, {}, {}
-    frozen = style_identity(load_style(bundle.project))
+    frozen = bundle.style
     style_input = {"style": f"{frozen['style_id']}@{frozen['version']}:{frozen['sha256']}"} if frozen else {}   # one style for every shot and both languages
     for lang in ("mr", "hi"):
         def audio_preflight(lang=lang):

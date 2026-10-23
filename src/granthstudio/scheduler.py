@@ -123,8 +123,9 @@ class Scheduler:
         for task in tasks:
             ok = False
             try:
-                if task.preflight:
-                    task.preflight()
+                state = task.postflight or task.preflight        # a status report asks about state, never about free resources
+                if state:
+                    state()
                 ok = all(dep in done for dep in task.depends_on) and self._valid_receipt(self.task_dir(task), task) is not None
             except (GranthError, OSError, ValueError):
                 pass
@@ -156,12 +157,15 @@ class Scheduler:
                 elif any(dep not in done for dep in task.depends_on):
                     result = TaskResult(task.stage, task.name, task_id, "blocked", 0, "upstream task not complete")
                 else:
-                    if task.preflight:
-                        task.preflight()
+                    state = task.postflight or task.preflight         # state checks first: a resident server's VRAM must not block reusing a verified receipt
+                    if state:
+                        state()
                     directory = self.task_dir(task)
                     if self._valid_receipt(directory, task) is not None:
                         result = TaskResult(task.stage, task.name, task_id, "resumed", 0, "verified receipt reused")
                     else:
+                        if task.postflight and task.preflight:
+                            task.preflight()                             # full resource readiness only before NEW execution
                         if directory.exists():
                             shutil.rmtree(directory)
                         result = self._execute(task, task_id, directory)
@@ -225,8 +229,9 @@ class Scheduler:
             atomic_write_json(work / "fallback.json", {"schema_version": 1, **(task.fallback_info or {}),
                                                        "failed_attempts": history})
             files["fallback"] = "fallback.json"
-            if task.preflight:
-                task.preflight()
+            after = task.postflight or task.preflight           # the stand-in is CPU work: state checks only, a resident GPU server must not discard it
+            if after:
+                after()
             if task.verify:
                 task.verify(work)
             self._seal(task, task_id, work, files, task.max_attempts, [*history, {"attempt": "fallback", "outcome": "complete"}])
