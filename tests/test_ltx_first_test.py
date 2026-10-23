@@ -640,3 +640,28 @@ def test_a_failed_frame_extraction_cannot_be_covered_by_a_stale_preview(tmp_path
     monkeypatch.setattr(ft, "_ssim", lambda a, b: 0.99)
     report = ft.visual_diagnostics(tmp_path / "no.mp4", outdir, None)
     assert not (outdir / "frame_00.png").exists() and report["contact_sheet"] is None and not (outdir / "contact_sheet.png").exists()
+
+
+def test_port_owner_with_an_address_ignores_listeners_on_other_addresses_and_needs_the_pid_to_hold_all(tmp_path):
+    import importlib.util as iu
+    nl = chr(10)
+    spec = iu.spec_from_file_location("port_owner2", REPO / "scripts" / "kaggle" / "port_owner.py")
+    po = iu.module_from_spec(spec); spec.loader.exec_module(po)
+    proc = tmp_path / "proc"; (proc / "net").mkdir(parents=True)
+    header = "  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode"
+    v4 = lambda addr, port, inode: f"   0: {addr}:{port:04X} 00000000:0000 0A 00000000:00000000 00:00000000 00000000  1000        0 {inode} 1 0000000000000000 100 0 0 10 0"
+    v6 = lambda addr, port, inode: f"   0: {addr}:{port:04X} 00000000000000000000000000000000:0000 0A 00000000:00000000 00:00000000 00000000  1000        0 {inode} 1 0000000000000000 100 0 0 10 0"
+    (proc / "net" / "tcp").write_text(nl.join([header, v4("0100007F", 8190, 111)]), encoding="utf-8")
+    (proc / "net" / "tcp6").write_text(nl.join([header, v6("00000000000000000000000001000000", 8190, 222)]), encoding="utf-8")        # ::1 on the same port: another process
+    assert po.listening_inodes(proc, 8190) == {"111", "222"}                                    # legacy behaviour: any listener on the port
+    assert po.listening_inodes(proc, 8190, "127.0.0.1") == {"111"}                              # ::1 can never serve 127.0.0.1
+    for pid in (10, 20):
+        (proc / str(pid) / "fd").mkdir(parents=True)
+    try:
+        os.symlink("socket:[111]", proc / "10" / "fd" / "3"); os.symlink("socket:[222]", proc / "20" / "fd" / "3")
+    except OSError:
+        pytest.skip("symlinks unavailable (the logic is exercised by the Linux run)")
+    assert po.main(["10", "8190", "--proc-root", str(proc), "--address", "127.0.0.1"]) == 0
+    assert po.main(["20", "8190", "--proc-root", str(proc), "--address", "127.0.0.1"]) == 1     # the ::1 listener's owner does not own 127.0.0.1:8190
+    (proc / "net" / "tcp").write_text(nl.join([header, v4("0100007F", 8190, 111), v4("00000000", 8190, 333)]), encoding="utf-8")    # plus a wildcard listener someone else holds
+    assert po.main(["10", "8190", "--proc-root", str(proc), "--address", "127.0.0.1"]) == 1     # pid 10 must hold ALL listeners that can serve the address

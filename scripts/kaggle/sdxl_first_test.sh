@@ -72,9 +72,10 @@ echo "== 2. pinned sources: ComfyUI and ComfyUI_IPAdapter_plus"
 clone "$(pin "$LTXPINS" sources.comfyui.repo)" "$(pin "$PINS" comfyui.commit)" "$COMFY"
 clone "$(pin "$PINS" custom_nodes.0.repo)" "$(pin "$PINS" custom_nodes.0.commit)" "$COMFY/custom_nodes/ComfyUI_IPAdapter_plus"
 # ONLY the approved node pack may be present: ComfyUI imports every folder of custom_nodes at startup, so an extra pack could run or override classes
+find "$COMFY/custom_nodes" -mindepth 1 -maxdepth 1 -print0 > "$OUT/custom_nodes.list" || { echo "cannot list $COMFY/custom_nodes: refusing"; exit 4; }
 while IFS= read -r -d '' entry; do   # find lists EVERY entry, including names that start with one or two dots
   case "$(basename "$entry")" in ComfyUI_IPAdapter_plus|__pycache__|websocket_image_save.py|example_node.py.example|.gitignore) ;; *) echo "unapproved entry in custom_nodes: $entry: refusing"; exit 4;; esac
-done < <(find "$COMFY/custom_nodes" -mindepth 1 -maxdepth 1 -print0)
+done < "$OUT/custom_nodes.list"
 
 echo "== 3. python requirements (recorded below)"
 [ -f "$COMFY/requirements.txt" ] && pip install -q -r "$COMFY/requirements.txt"
@@ -125,7 +126,7 @@ for _ in $(seq 1 120); do
   if curl -sf "http://127.0.0.1:$PORT/system_stats" > "$D/system_stats.json"; then READY=1; break; fi; sleep 5
 done
 [ "$READY" = 1 ] || { echo "worker did not come up; see $D/comfyui.log"; exit 5; }
-python "$REPO/scripts/kaggle/port_owner.py" "$WPID" "$PORT" || { echo "cannot prove the answering server is our worker"; exit 5; }
+python "$REPO/scripts/kaggle/port_owner.py" "$WPID" "$PORT" --address 127.0.0.1 || { echo "cannot prove the answering server is our worker"; exit 5; }
 tr '\0' '\n' < "/proc/$WPID/environ" | grep -qx "CUDA_VISIBLE_DEVICES=0" || { echo "worker does not run with CUDA_VISIBLE_DEVICES=0"; exit 5; }
 curl -sf "http://127.0.0.1:$PORT/object_info" > "$D/object_info.json"
 python - "$D/system_stats.json" "$OUT/host_check.json" "$D/worker_evidence.json" "$WPID" <<'EOF'

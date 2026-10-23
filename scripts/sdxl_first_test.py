@@ -186,11 +186,17 @@ def execution_extra_problems(args: argparse.Namespace) -> list[str]:
         problems.append("--worker-pid and --gpu-index are required: the worker's ownership of the port and its CUDA isolation are verified here")
     else:
         from urllib.parse import urlsplit
-        parts = urlsplit(args.comfy_url)
-        if parts.scheme != "http" or parts.hostname not in ("127.0.0.1", "localhost") or parts.port is None or parts.path not in ("", "/"):
-            problems.append(f"--comfy-url {args.comfy_url} must be http://127.0.0.1:<port>: the proof below is about this machine's worker, never a remote server")
-        port = str(parts.port or "")
-        owner = sp.run([sys.executable, str(ROOT / "scripts" / "kaggle" / "port_owner.py"), str(args.worker_pid), port], capture_output=True, text=True)
+        port = ""
+        try:
+            parts = urlsplit(args.comfy_url)
+            numeric = parts.port
+            if (parts.scheme != "http" or parts.hostname != "127.0.0.1" or parts.username is not None or parts.password is not None or numeric is None
+                    or not 1 <= numeric <= 65535 or parts.path not in ("", "/") or parts.query or parts.fragment):
+                raise ValueError("unsupported endpoint")
+            port = str(numeric)
+        except ValueError:
+            problems.append(f"--comfy-url {args.comfy_url} must be exactly http://127.0.0.1:<port 1-65535>: the proof below is about this machine's worker, never a remote server")
+        owner = sp.run([sys.executable, str(ROOT / "scripts" / "kaggle" / "port_owner.py"), str(args.worker_pid), port or "0", "--address", "127.0.0.1"], capture_output=True, text=True)
         if owner.returncode != 0:
             problems.append(f"worker pid {args.worker_pid} does not own the listener on port {port}: {(owner.stdout + owner.stderr).strip()[:160]}")
         try:
