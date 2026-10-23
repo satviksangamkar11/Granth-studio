@@ -390,3 +390,17 @@ Evidence: docs/evidence/kaggle_dual_t4/gpu0_attempt4/ (receipt, attribution, jou
 - Also seen: ComfyUI logged a non-fatal sqlite "unable to open database file" warning (user DB), no effect on the run.
 
 - CPU suite at this checkpoint: 457 passed, 4 skipped (Windows, 617 s); `granthstudio validate` clean.
+
+## Codex review 09 (90c59cd..56a6fd9, docs/evidence/codex_reviews/09_postrun_style_review.md): FAIL, three defects fixed in f78d051
+1. HIGH style change escaped require_current (both snapshots reloaded the live style): the bundle now captures the style identity at load (`Bundle.style`) and snapshots compare that. Test: tests/test_style.py.
+2. MEDIUM reference-sheet SDXL tasks had no postflight: added (state checks, no resource gate).
+3. MEDIUM resume/fallback: `Scheduler.run/status` do the state check (postflight or preflight) first, the resource preflight only before NEW execution; the CPU fallback seal uses the state check. Tests in tests/test_ltx_first_test.py.
+Codex also said: safe for a fresh gpu0 execution; offline validation of attempt 4 is possible without regeneration; the earlier "457 passed" line had no candidate-bound JUnit. Candidate-bound JUnit is now saved in docs/evidence/cpu_tests/.
+
+## Attempt 4 retrospective OFFLINE validation (separate record; the original NOT_VALIDATED verdict is unchanged)
+`scripts/kaggle/offline_validate_gpu_evidence.py` (tests: tests/test_offline_validator.py) -> docs/evidence/kaggle_dual_t4/gpu0_attempt4/retrospective_offline_validation.json, hash-bound to the clip, receipt, journal and attribution file.
+- Confirmed offline: decodes cleanly; h264 768x512, 49 frames, 24 fps, 2.04 s; one completed submission with the sampler seed on the generation path; GPU 0 did the work, GPU 1 untouched.
+- NOT ok: the picture jumps between frame 0 and frame 1 (mean luma step 90 on a 0-255 scale). Frame 0 is the synthetic colour-bar start image; frames 1-48 are a different, text-like "TV collage" that never returns to the start image (frames_0_12_24_36_48.png). So the model ran, but the clip does NOT animate the start image: a visual/semantic problem that numeric checks cannot excuse. Possible causes to investigate before any claim (not yet tested): an out-of-distribution synthetic start image, the image-conditioning strength/wiring of the converted workflow, the motion prompt, fp32 path on T4. Needs human review; LTX I2V is not validated and this is evidence against calling it so.
+
+- Candidate-bound CPU evidence: docs/evidence/cpu_tests/f78d051_suite.xml = full suite on commit f78d051 (466 tests, 0 failures, 0 errors, 4 skipped, 629 s). Later commits add only the offline validator, its tests and docs.
+- Likely cause of the attempt-4 drift, read offline from the executed prompt in the ComfyUI PNG: the positive prompt was only "slight head turn" on a synthetic colour-bar start image; the graph wiring (LoadImage -> LTXVPreprocess -> LTXVImgToVideo strength 1.0 -> sampler latent) matches the official workflow. Hypothesis only, untested: next gpu0 run = one painted start image with a descriptive caption prompt, everything else unchanged.
