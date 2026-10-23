@@ -20,3 +20,6 @@ Prepared: `scripts/kaggle/audio_deps_probe.py` (reports which audio packages imp
 
 ## What can run right now without any approval
 Nothing on a GPU. CPU-only: the static tests above, the audio probe's unit test, and review of the source-approval sheet.
+
+## A2 first execution result (2026-10-23, kernel granthstudio-audio-translate, commit 4eec586e)
+FAIL at import: IndicTransToolkit 1.1.1 needs `transformers.tokenization_utils.PreTrainedTokenizerBase`, which the unpinned install (transformers 5.x on Python 3.13) no longer provides. The model was not reached. Next attempt pins transformers==4.49.0 and IndicTransToolkit==1.1.1; no code of the toolkit is patched. Still NOT VALIDATED.

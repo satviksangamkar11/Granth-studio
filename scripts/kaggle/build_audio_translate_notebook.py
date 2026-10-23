@@ -33,7 +33,9 @@ assert not os.environ.get("HF_TOKEN"), "HF_TOKEN must not be in the environment 
 SAFE = ("PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "LD_LIBRARY_PATH", "LIBRARY_PATH", "CUDA_VISIBLE_DEVICES", "CUDA_HOME", "CUDA_PATH", "NVIDIA_VISIBLE_DEVICES", "NVIDIA_DRIVER_CAPABILITIES")
 env = {k: v for k, v in os.environ.items() if k in SAFE}        # an explicit allowlist: no credential of any name reaches pip or the model run
 env["PIP_CACHE_DIR"] = f"{TMP}/pip"
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest", "transformers", "sentencepiece", "sacremoses", "IndicTransToolkit"], check=True, env=env)"""),
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest", "transformers==4.49.0", "sentencepiece", "sacremoses", "IndicTransToolkit==1.1.1"], check=True, env=env)
+import importlib.metadata as md
+print({name: md.version(name) for name in ("transformers", "tokenizers", "torch", "IndicTransToolkit")})"""),
     ("code", """try:
     from kaggle_secrets import UserSecretsClient
     HF_TOKEN = UserSecretsClient().get_secret("HF_TOKEN")
