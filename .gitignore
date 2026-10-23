@@ -65,3 +65,6 @@ __pycache__/
 !docs/evidence/sdxl_scenes/style_anchor_16d48472/scene1_keyframe.png
 !docs/evidence/sdxl_scenes/style_anchor_16d48472/scene2_keyframe.png
 !docs/evidence/sdxl_scenes/style_anchor_16d48472/scene3_keyframe.png
+!assets/pilot_ltx_inputs/s1_style_anchor/04_ltx_start_768x512.png
+!assets/pilot_ltx_inputs/s2_style_anchor/04_ltx_start_768x512.png
+!assets/pilot_ltx_inputs/s3_style_anchor/04_ltx_start_768x512.png
