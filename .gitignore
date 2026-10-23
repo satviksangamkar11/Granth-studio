@@ -50,3 +50,6 @@ __pycache__/
 !docs/evidence/kaggle_dual_t4/gpu0_attempt6_camera_lock/camera_analysis/aligned_frame_36_UNRELIABLE_ALIGNMENT.png
 !docs/evidence/kaggle_dual_t4/gpu0_attempt6_camera_lock/camera_analysis/aligned_frame_48_UNRELIABLE_ALIGNMENT.png
 !docs/pilot/evidence/ovi112_113_printed_page_11.png
+!docs/evidence/sdxl_scenes/s3_oom_c9ee672b/sheet_chr_bankatlal_front.png
+!docs/evidence/sdxl_scenes/s3_oom_c9ee672b/sheet_chr_damodarpant_front.png
+!docs/evidence/sdxl_scenes/s3_oom_c9ee672b/sheet_chr_devidas_front.png
