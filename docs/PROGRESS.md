@@ -459,3 +459,5 @@ Stale success invalidation and a final stage verdict in the shell script; the Py
 
 ## Codex re-check 18: one major + two minors fixed
 `port_owner.py --address 127.0.0.1` binds the ownership proof to the exact destination: only IPv4 127.0.0.1/0.0.0.0 and :: / v4-mapped listeners can serve it, a listener on ::1 never matches, and the pid must hold ALL listeners that can serve the address; the SDXL harness and script use it, `--comfy-url` must be exactly http://127.0.0.1:<1-65535> (no localhost, userinfo, IPv6, path; malformed URLs give a NOT_RUN receipt); `find` failure in the node inventory is now an explicit refusal (the list is written to a file first).
+
+## Codex re-check 19: no BLOCKER or MAJOR; the one minor (empty `?` / `#` in the endpoint) fixed. Review chain 16-19 closed.

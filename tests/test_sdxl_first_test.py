@@ -173,7 +173,7 @@ def test_a_workdir_that_already_holds_a_project_is_refused_so_approvals_never_to
 def test_a_remote_or_odd_endpoint_is_refused_and_every_custom_node_entry_including_dot_names_is_listed(host):
     server, models, work, reference = host
     for url in ("http://remote-host:8188", "https://127.0.0.1:8188", "http://127.0.0.1:8188/api", "http://127.0.0.1", "http://localhost:8188", "http://user@127.0.0.1:8188", "http://[::1:8188",
-                "http://127.0.0.1:65536", "http://127.0.0.1:0", "http://[::1]:8188"):
+                "http://127.0.0.1:65536", "http://127.0.0.1:0", "http://[::1]:8188", "http://127.0.0.1:8188?", "http://127.0.0.1:8188#"):
         args = sx.build_parser().parse_args(["--workdir", str(work), "--models-dir", str(models), "--comfy-url", url, "--reference-image", str(reference), "--worker-pid", "1", "--gpu-index", "0", "--execute"])
         assert any("must be exactly http://127.0.0.1:" in p for p in sx.execution_extra_problems(args)), url
     script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")

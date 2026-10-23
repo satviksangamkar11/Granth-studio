@@ -191,7 +191,7 @@ def execution_extra_problems(args: argparse.Namespace) -> list[str]:
             parts = urlsplit(args.comfy_url)
             numeric = parts.port
             if (parts.scheme != "http" or parts.hostname != "127.0.0.1" or parts.username is not None or parts.password is not None or numeric is None
-                    or not 1 <= numeric <= 65535 or parts.path not in ("", "/") or parts.query or parts.fragment):
+                    or not 1 <= numeric <= 65535 or parts.path not in ("", "/") or "?" in args.comfy_url or "#" in args.comfy_url):
                 raise ValueError("unsupported endpoint")
             port = str(numeric)
         except ValueError:
