@@ -1,0 +1,8 @@
+{
+  "stage": "gpu0",
+  "verdict": "PASS",
+  "commit": "81de10ddb32a8e01170f16b3f10ac07c9c6617b4",
+  "receipts": {
+    "/kaggle/temp/ltx/ltx_gpu0/test_receipt.json": "4f1dc15ec0e33b577f377d890d423e517ace1e4392bebfd41a33a49d65dee584"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "size": [
+    1152,
+    768
+  ],
+  "fps": 24,
+  "audio": null,
+  "shots": [
+    {
+      "shot_id": "a01_s01_sh01",
+      "start_s": 0.0,
+      "duration_s": 6.0,
+      "planned_duration_s": 6.0,
+      "kind": "tier0_still_motion",
+      "image": "docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene1_keyframe.png",
+      "image_sha256": "377efb9d3f00c34782ec45df18cf2866489d7fb75fdc7ebd388f343cbf65f4d1"
+    },
+    {
+      "shot_id": "a01_s01_sh02",
+      "start_s": 6.0,
+      "duration_s": 2.042,
+      "planned_duration_s": 2.04,
+      "kind": "ltx_i2v",
+      "clip": "D:\\kaggle_upload\\out_L1\\ltx_evidence_gpu0\\clip_gpu0.mp4",
+      "clip_sha256": "72fd0b4dbc411ac78d8eaa687ce9b5ba67711d457e878dbafdb7c809602d984b"
+    },
+    {
+      "shot_id": "a01_s01_sh03",
+      "start_s": 8.042,
+      "duration_s": 6.5,
+      "planned_duration_s": 6.5,
+      "kind": "tier0_still_motion",
+      "image": "docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene1_keyframe.png",
+      "image_sha256": "377efb9d3f00c34782ec45df18cf2866489d7fb75fdc7ebd388f343cbf65f4d1"
+    },
+    {
+      "shot_id": "a01_s02_sh01",
+      "start_s": 14.542,
+      "duration_s": 5.5,
+      "planned_duration_s": 5.5,
+      "kind": "tier0_still_motion",
+      "image": "docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene2_keyframe.png",
+      "image_sha256": "38bf2df852e3bbf5727a916e3f4dda245ee4d78e6701b8a7cdd431b5c2a9ba70"
+    },
+    {
+      "shot_id": "a01_s02_sh02",
+      "start_s": 20.042,
+      "duration_s": 2.042,
+      "planned_duration_s": 2.04,
+      "kind": "ltx_i2v",
+      "clip": "D:\\kaggle_upload\\out_L2\\ltx_evidence_gpu0\\clip_gpu0.mp4",
+      "clip_sha256": "6b63834687121b90fc8881fb5b3cf89d1434e63c6e7ec251872dc02de5f1cd92"
+    },
+    {
+      "shot_id": "a01_s02_sh03",
+      "start_s": 22.083,
+      "duration_s": 6.5,
+      "planned_duration_s": 6.5,
+      "kind": "tier0_still_motion",
+      "image": "docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene2_keyframe.png",
+      "image_sha256": "38bf2df852e3bbf5727a916e3f4dda245ee4d78e6701b8a7cdd431b5c2a9ba70"
+    },
+    {
+      "shot_id": "a01_s03_sh01",
+      "start_s": 28.583,
+      "duration_s": 5.0,
+      "planned_duration_s": 5.0,
+      "kind": "tier0_still_motion",
+      "image": "docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene3_keyframe.png",
+      "image_sha256": "a009e7e284a0bf31ceff3a26f192856a91cdeac06b37343800d560655cb8d464"
+    },
+    {
+      "shot_id": "a01_s03_sh02",
+      "start_s": 33.583,
+      "duration_s": 2.042,
+      "planned_duration_s": 2.04,
+      "kind": "ltx_i2v",
+      "clip": "D:\\kaggle_upload\\out_L3\\ltx_evidence_gpu0\\clip_gpu0.mp4",
+      "clip_sha256": "e10421bf7b8072070b6fff640d33f098bd14f5e71cf9a2fb2b060544090ec2ba"
+    },
+    {
+      "shot_id": "a01_s03_sh03",
+      "start_s": 35.625,
+      "duration_s": 6.5,
+      "planned_duration_s": 6.5,
+      "kind": "tier0_still_motion",
+      "image": "docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene3_keyframe.png",
+      "image_sha256": "a009e7e284a0bf31ceff3a26f192856a91cdeac06b37343800d560655cb8d464"
+    }
+  ],
+  "video": "pilot_silent_preview.mp4",
+  "video_sha256": "5f6950b85c90cae962b528a10a1c43ca02c5182b96ab92677879357cc89e4251",
+  "duration_s": 42.125,
+  "width": 1152,
+  "height": 768,
+  "note": "SILENT PREVIEW of a provisional technical test: no narration audio (IndicF5 waits for the narrator's recording and consent); subtitles use planned shot timings; Hindi lines are drafts (review PENDING); human review NOT_DONE."
+}

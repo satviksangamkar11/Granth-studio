@@ -68,3 +68,11 @@ __pycache__/
 !assets/pilot_ltx_inputs/s1_style_anchor/04_ltx_start_768x512.png
 !assets/pilot_ltx_inputs/s2_style_anchor/04_ltx_start_768x512.png
 !assets/pilot_ltx_inputs/s3_style_anchor/04_ltx_start_768x512.png
+!docs/evidence/pilot_video/ltx_s1_81de10dd/clip.mp4
+!docs/evidence/pilot_video/ltx_s1_81de10dd/frames_0_24_48.png
+!docs/evidence/pilot_video/ltx_s2_81de10dd/clip.mp4
+!docs/evidence/pilot_video/ltx_s2_81de10dd/frames_0_24_48.png
+!docs/evidence/pilot_video/ltx_s3_81de10dd/clip.mp4
+!docs/evidence/pilot_video/ltx_s3_81de10dd/frames_0_24_48.png
+!docs/evidence/pilot_video/silent_preview_v1/pilot_silent_preview.mp4
+!docs/evidence/pilot_video/silent_preview_v1/frames_strip.png
