@@ -35,7 +35,9 @@ assert 30 <= SESSION_MINUTES <= 720"""),
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout or "NO GPU VISIBLE: stop here")
 bundles = glob.glob("/kaggle/input/**/granthstudio.bundle", recursive=True)
 assert bundles, "attach the granthstudio-cpu-baseline dataset"
-WORK = "/kaggle/working"
+WORK = "/kaggle/working"                      # small: the repo checkout and the published evidence (20 GB limit)
+TMP = "/kaggle/temp/ltx"                      # large scratch disk: ComfyUI, 16 GB of weights, projects
+os.makedirs(TMP, exist_ok=True)
 shutil.rmtree(f"{WORK}/granthstudio", ignore_errors=True)
 subprocess.run(["git", "clone", "-q", "-b", "sprint/remaining-pipeline", bundles[0], f"{WORK}/granthstudio"], check=True)
 head = subprocess.run(["git", "-C", f"{WORK}/granthstudio", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
@@ -43,7 +45,7 @@ print("bundle HEAD:", head)
 assert head == EXPECTED_COMMIT, f"the attached bundle is at {head}, not the reviewed {EXPECTED_COMMIT}: refusing"
 assert not subprocess.run(["git", "-C", f"{WORK}/granthstudio", "status", "--porcelain"], capture_output=True, text=True).stdout, "dirty checkout"
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest"], check=True)"""),
-    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "STAGE": STAGE, "W": WORK}
+    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "STAGE": STAGE, "W": TMP, "EVIDENCE_DEST": WORK}
 process = subprocess.Popen(["bash", f"{WORK}/granthstudio/scripts/kaggle/ltx_first_test.sh"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
     print(line, end="")
@@ -52,7 +54,7 @@ print("script exit status:", exit_code)"""),
     ("code", """import json
 receipts = {"gpu0": "ltx_gpu0/test_receipt.json", "gpu1": "ltx_gpu1/test_receipt.json", "retry": "ltx_gpu0/retry_receipt.json"}
 for label in ([STAGE] if STAGE != "concurrent" else ["conc0", "conc1"]):
-    path = f"{WORK}/" + receipts.get(label, f"ltx_{label}/test_receipt.json")
+    path = f"{TMP}/" + receipts.get(label, f"ltx_{label}/test_receipt.json")
     if os.path.exists(path):
         r = json.load(open(path))
         print(label, "VERDICT:", r["verdict"], "-", r["reason"])
@@ -60,7 +62,7 @@ for label in ([STAGE] if STAGE != "concurrent" else ["conc0", "conc1"]):
         print("  peak VRAM / generation:", (r.get("metrics") or {}).get("peak_vram_mb"), (r.get("metrics") or {}).get("generation"))
     else:
         print(label, "no receipt: the script stopped before the test (see the output above)")
-evidence = f"{WORK}/ltx_evidence_{STAGE}.tgz"
+evidence = f"{WORK}/ltx_evidence_{STAGE}.tgz"      # published copy
 print("evidence bundle:", evidence, os.path.exists(evidence))"""),
 ]
 

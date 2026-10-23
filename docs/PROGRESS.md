@@ -359,3 +359,7 @@ this clip is only a technical prerequisite.
 4. MAJOR missing process telemetry weakened attribution: sampler writes #OK/#FAIL markers; no successful sample or any failure -> problem; the memory-only fallback also needs verified per-worker isolation evidence (`worker_evidence.json`).
 
 Codex re-review (06_dual_t4_rereview.md): no blocking issue; one MINOR (stale telemetry across reruns) fixed by truncating traces per invocation.
+
+## First Kaggle dual-T4 attempt (2026-10-23, kernel sangeetasangamkar/granthstudio-ltx-dual-t4 v1, bundle tip 9755413): REFUSED before any download
+- The script refused at step 0: `/kaggle/working` has only 20 GB free (need 40). Nothing was cloned or downloaded; no GPU work ran. Log: docs/evidence/kaggle_dual_t4/gpu0_attempt1_refused_disk.txt.
+- Fix: the heavy workspace now lives on `/kaggle/temp/ltx` (notebook `TMP`); only the small evidence is published to `/kaggle/working` (`EVIDENCE_DEST`, `publish()` also runs on early refusal).

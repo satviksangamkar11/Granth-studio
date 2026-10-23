@@ -1,0 +1,4 @@
+stage gpu0 | approved by: Satvik Sangamkar | 2026-10-23T04:08:24Z
+== 0. refusals that need no network
+session deadline: 2026-10-23T08:08:24+00:00
+only 20 GB free in /kaggle/working, need 40

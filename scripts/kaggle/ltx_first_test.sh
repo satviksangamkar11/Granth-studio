@@ -25,7 +25,9 @@ case "$STAGE" in gpu0|gpu1|concurrent|retry) ;; *) echo "STAGE must be gpu0, gpu
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 W="${W:-/kaggle/working}"; COMFY="$W/ComfyUI"; OUT="$W/ltx_evidence_$STAGE"; PINS="$REPO/config/ltx_098_pins.yaml"
 SESSION_MINUTES="${SESSION_MINUTES:-240}"
-mkdir -p "$OUT"; rm -f "$OUT/stage_verdict.json"; exec > >(tee "$OUT/run_log.txt") 2>&1
+# Kaggle's /kaggle/working holds only 20 GB: the heavy workspace W lives on the big scratch disk and only the (small) evidence is published to EVIDENCE_DEST.
+publish() { [ -z "${EVIDENCE_DEST:-}" ] || { mkdir -p "$EVIDENCE_DEST/ltx_evidence_$STAGE" && cp -r "$OUT/." "$EVIDENCE_DEST/ltx_evidence_$STAGE/"; } 2>/dev/null || true; }
+mkdir -p "$OUT"; trap publish EXIT; rm -f "$OUT/stage_verdict.json"; exec > >(tee "$OUT/run_log.txt") 2>&1
 echo "stage $STAGE | approved by: $LTX_DOWNLOAD_APPROVED | $(date -u +%FT%TZ)"
 
 echo "== 0. refusals that need no network"
@@ -130,7 +132,7 @@ APPS_PID=$!
 RAM_PID=$!
 declare -A WPID
 cleanup() { for p in $VRAM_PID $APPS_PID $RAM_PID "${WPID[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null || true; done; }
-trap cleanup EXIT
+trap 'cleanup; publish' EXIT
 
 start_worker() { # index port : one ComfyUI process that can see ONLY that physical card, with its own directories
   local n="$1" port="$2" d="$OUT/worker$1"
@@ -234,7 +236,8 @@ json.dump({"stage": stage, "verdict": "PASS", "commit": commit,
            "receipts": {p: hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}}, open(out, "w"), indent=2)
 EOF
 fi
-cleanup; trap - EXIT; sleep 1
+cleanup; trap publish EXIT; sleep 1
 (cd "$W" && tar czf "ltx_evidence_$STAGE.tgz" "ltx_evidence_$STAGE")
+[ -z "${EVIDENCE_DEST:-}" ] || cp "$W/ltx_evidence_$STAGE.tgz" "$EVIDENCE_DEST/" 2>/dev/null || true
 echo "stage $STAGE exit status $STATUS; evidence: $W/ltx_evidence_$STAGE.tgz"
 exit $STATUS
