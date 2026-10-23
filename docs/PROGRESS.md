@@ -463,3 +463,8 @@ Stale success invalidation and a final stage verdict in the shell script; the Py
 ## Codex re-check 19: no BLOCKER or MAJOR; the one minor (empty `?` / `#` in the endpoint) fixed. Review chain 16-19 closed.
 
 ## Final candidate for the first SDXL keyframe run: bc8db85. Full CPU suite 505 passed, 5 skipped (the 5th skip is the Windows-only symlink variant of the address-bound port-ownership test; the address matching itself is asserted before the skip, the symlink part runs on Kaggle's Linux), 0 failures (docs/evidence/cpu_tests/sdxl_cleared_bc8db85.xml). Codex chain 16-19 closed (no blocker or major). Kaggle account switched to satviksangamkar54321 by renaming token files (contents never read; the first account's token is access_token.sangeetasangamkar.bak) for this run.
+
+## 2026-10-23 pilot decisions (owner)
+- IndicTrans2: execution PASS, translation quality FAIL. The assistant's Hindi drafts remain the provisional working text; original model outputs preserved as evidence; Hindi human review PENDING (`docs/pilot/HINDI_REVIEW_SHEET.md`). d_0006 model output must never enter a soundtrack.
+- SDXL scenes 2 and 3: GO under all existing gates (exact commit + bundle hash authorization still required per run). Secondary characters (Devidas, Bankatlal, Damodarpant) had no reference sheets: the harness now generates provisional SDXL sheets from their frozen-style design prompts (artistic, appearance not in the text) and approves them at run time under the owner's provisional instruction before the keyframe.
+- Audio: IndicF5 is the next blocker; recording checklist and unsigned consent form in `docs/pilot/VOICE_REFERENCE_CHECKLIST_AND_CONSENT.md`.

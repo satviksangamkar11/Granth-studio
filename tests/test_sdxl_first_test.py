@@ -181,3 +181,19 @@ def test_a_remote_or_odd_endpoint_is_refused_and_every_custom_node_entry_includi
     notebook = (REPO / "scripts" / "kaggle" / "build_sdxl_notebook.py").read_text(encoding="utf-8")
     install = notebook.index('"install", "-q"')
     assert notebook.index("MemAvailable") < install and notebook.index("memory.used") < install
+
+
+def test_scene_3_first_generates_provisional_sheets_for_the_characters_without_a_reference_then_uses_all_five_references(host, monkeypatch, tmp_path):
+    server, models, work, _ = host
+    different_image_per_submission(monkeypatch, server, tmp_path)
+    code, receipt = run(host, "--execute", "--visual", "vis_s3_kf")
+    assert receipt["verdict"] == "PASS", receipt["reason"]
+    assert receipt["missing_before_sheets"] == ["chr_bankatlal", "chr_damodarpant", "chr_devidas"]
+    assert set(receipt["bootstrapped_sheets"]) == {"chr_bankatlal", "chr_damodarpant", "chr_devidas"}
+    assert all("PROVISIONAL" in s["asset"]["approved_by"] and "appearance not given in the text" in s["asset"]["approved_by"] for s in receipt["bootstrapped_sheets"].values())
+    assert len(server.posts) == 5                                                                   # three sheets, the keyframe with references, the control
+    graphs = [post["prompt"] if "prompt" in post else post for post in server.posts]
+    sheets, with_ref, control = graphs[:3], graphs[3], graphs[4]
+    assert not any(n["class_type"] in ("IPAdapterAdvanced", "LoadImage") for graph in sheets for n in graph.values())      # sheets come from the design prompts alone
+    assert sum(1 for n in with_ref.values() if n["class_type"] == "IPAdapterAdvanced") == 5
+    assert len(receipt["request"]["references"]) == 5 and receipt["request"]["missing_references"] == []

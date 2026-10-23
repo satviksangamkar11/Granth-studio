@@ -265,8 +265,10 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     receipt["request"] = {k: request[k] for k in ("asset_id", "visual_id", "role", "characters", "locations", "props", "lighting", "seed", "width", "height", "style", "template_version",
                                                   "missing_references", "request_sha256")}
     receipt["request"].update(prompt=request["prompt"], negative_prompt=request["negative_prompt"], references=[{"asset_id": r["asset_id"], "sha256": r["sha256"]} for r in request["references"]])
-    if request["missing_references"]:
+    secondary = [m for m in request["missing_references"] if m.startswith("chr_")]          # characters without a reference sheet yet: provisional sheets are generated below, from their frozen-style designs
+    if [m for m in request["missing_references"] if m not in secondary]:
         return finish("NOT_RUN", f"missing approved references {request['missing_references']}")
+    receipt["missing_before_sheets"] = secondary
     report = preflight(project, models, load_runtime(project), gpu_status(), ram_available_mb())
     receipt["preflight"] = report
     if not args.execute:
@@ -290,6 +292,37 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     results = {}
     began = time.monotonic()
     receipt["exec_started"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+    gate = True                                                                                   # the full host gate guards the FIRST generation of this run only; later ones follow on our own resident server
+    sheets = {}
+    sheet_reviewer = f"{approver or 'synthetic-tester'} ({OWNER_NOTE}; PROVISIONAL: SDXL-generated from the assistant-drafted design prompt, appearance not given in the text; technical test only)"
+    for cid in secondary:
+        sreq = kf.sheet_request(canon, kf.load_registry(project, canon), models, cid, "front")
+        work = args.workdir / f"work_sheet_{cid}"
+        shutil.rmtree(work, ignore_errors=True)
+        work.mkdir(parents=True)
+        journal = project.artifacts_dir / "tasks" / "pending" / f"sheet_{cid}.json"
+        journal.parent.mkdir(parents=True, exist_ok=True)
+        started = time.monotonic()
+        try:
+            kf.sdxl_generate(project, models, sreq, journal, work, check_host=gate)
+        except GranthError as exc:
+            receipt["out_of_memory"] = bool(lt.oom_markers(args.comfy_log, str(exc)))
+            sheets[cid] = {"error": f"{type(exc).__name__}: {exc}"}
+            receipt["bootstrapped_sheets"] = sheets
+            return finish("FAIL", f"sheet {cid}: {exc}")
+        gate = False
+        image = out / f"sheet_{cid}_front.png"
+        shutil.copyfile(work / "keyframe.png", image)
+        asset = kf.import_asset(project, canon, sreq["asset_id"], "character_sheet", cid, None, "front", image)
+        record = kf.approve_asset(project, canon, sreq["asset_id"], asset["version"], sheet_reviewer)
+        sheets[cid] = {"image": image.name, "sha256": lt.sha256_file(image), "wall_s": round(time.monotonic() - started, 1), "request_sha256": sreq["request_sha256"],
+                       "prompt": sreq["prompt"], "asset": {k: record[k] for k in ("asset_id", "version", "sha256", "view", "status", "approved_by")}}
+    receipt["bootstrapped_sheets"] = sheets
+    if secondary:
+        request = kf.keyframe_request(compiled, canon, kf.load_registry(project, canon), models, args.visual)
+        receipt["request"].update(references=[{"asset_id": r["asset_id"], "sha256": r["sha256"]} for r in request["references"]], missing_references=request["missing_references"], request_sha256=request["request_sha256"])
+        if request["missing_references"]:
+            return finish("FAIL", f"references still missing after the provisional sheets: {request['missing_references']}")
     runs = [("with_reference", request)]
     if not args.skip_control:
         control = {**request, "references": [], "asset_id": request["asset_id"] + "_noref"}
@@ -303,13 +336,14 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         journal.parent.mkdir(parents=True, exist_ok=True)
         started = time.monotonic()
         try:
-            kf.sdxl_generate(project, models, req, journal, work, check_host=(label == "with_reference"))   # full gate before the first image only
+            kf.sdxl_generate(project, models, req, journal, work, check_host=gate)   # full gate before the first image of the run only
         except GranthError as exc:
             oom = lt.oom_markers(args.comfy_log, str(exc))
             receipt["out_of_memory"] = bool(oom)
             results[label] = {"error": f"{type(exc).__name__}: {exc}"}
             receipt["results"] = results
             return finish("FAIL", ("CUDA out of memory; not retried. " if oom else "") + f"{label}: {exc}")
+        gate = False
         image = out / f"{label}.png"
         shutil.copyfile(work / "keyframe.png", image)
         metrics = read_json(work / "metrics.json")
