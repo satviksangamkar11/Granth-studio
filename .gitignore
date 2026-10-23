@@ -57,3 +57,5 @@ __pycache__/
 !docs/evidence/sdxl_style_audit/scene1_reference_effect_labeled.png
 !docs/evidence/sdxl_style_audit/ab_prompt_v2_vs_v3_labeled.png
 !assets/pilot_refs/set_v1/*.jpg
+!docs/evidence/sdxl_scenes/s1_refset_d1c67762/scene1_refset_labeled.png
+!docs/evidence/sdxl_scenes/s1_refset_d1c67762/scene1_keyframe_with_refs.png
