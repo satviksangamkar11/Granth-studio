@@ -75,8 +75,16 @@ def contaminated(text: str) -> bool:
     return bool(re.search(r"hf_[A-Za-z0-9]{20,}", text)) or (len(token) >= 8 and token in text)
 
 
-def git(*args: str) -> str:
-    return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True, text=True).stdout.strip()
+def redact(text: str) -> str:
+    token = os.environ.get("HF_TOKEN", "").strip()
+    text = re.sub(r"hf_[A-Za-z0-9]{20,}", "***", text)
+    return text.replace(token, "***") if len(token) >= 8 else text
+
+
+def git(*args: str) -> str | None:
+    """None when git itself fails: a failed status must never read as a clean tree."""
+    done = subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True, text=True)
+    return done.stdout.strip() if done.returncode == 0 else None
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -86,6 +94,7 @@ def main(argv: list[str] | None = None) -> int:
                "note": "PROVISIONAL TECHNICAL TEST. A PASS means the model ran; Hindi quality is for the human reviewer. Human review: NOT_DONE."}
 
     def finish(verdict: str, reason: str) -> int:
+        reason = redact(reason)
         receipt.update(verdict=verdict, reason=reason, finished=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         text = json.dumps(receipt, ensure_ascii=False, indent=2)
         if contaminated(text):
@@ -99,7 +108,8 @@ def main(argv: list[str] | None = None) -> int:
         return finish("NOT_RUN", "--execute not given")
     head = git("rev-parse", "HEAD")
     receipt["commit"] = head
-    if not args.expected_commit or head != args.expected_commit or git("status", "--porcelain"):
+    dirty = git("status", "--porcelain")
+    if not args.expected_commit or head is None or dirty is None or head != args.expected_commit or dirty:
         return finish("NOT_RUN", f"checkout is not the clean expected commit (HEAD {head}, expected {args.expected_commit})")
     try:
         project, models = prepare(args.workdir)
@@ -107,7 +117,16 @@ def main(argv: list[str] | None = None) -> int:
         return finish("NOT_RUN", str(exc))
     from granthstudio import translation as tr
     from granthstudio.canon import load_canon
-    from granthstudio.errors import GranthError
+    from granthstudio.errors import GranthError, TaskFailed
+    real_run_json = tr.run_json
+
+    def guarded(section, payload):
+        result = real_run_json(section, payload)
+        if contaminated(json.dumps(result, ensure_ascii=False)):
+            raise TaskFailed("a token-like string came back from the runner: nothing was written")
+        return result
+
+    tr.run_json = guarded                                                  # the runner's answer is checked before translation.py writes anything to disk
     began = time.monotonic()
     try:
         todo = tr.generate_candidates(project, models, 1, execute=True)

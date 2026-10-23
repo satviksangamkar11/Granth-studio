@@ -30,7 +30,8 @@ subprocess.run(["git", "clone", "-q", "-b", "sprint/remaining-pipeline", bundles
 head = subprocess.run(["git", "-C", f"{WORK}/granthstudio", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
 assert head == EXPECTED_COMMIT, f"bundle is at {head}, not the reviewed {EXPECTED_COMMIT}: refusing"
 assert not os.environ.get("HF_TOKEN"), "HF_TOKEN must not be in the environment while packages are installed"
-env = {k: v for k, v in os.environ.items() if "TOKEN" not in k.upper() and "SECRET" not in k.upper()}
+SAFE = ("PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "LD_LIBRARY_PATH", "CUDA_VISIBLE_DEVICES")
+env = {k: v for k, v in os.environ.items() if k in SAFE or k.startswith(("NVIDIA", "CUDA"))}        # an explicit allowlist: no credential of any name reaches pip or the model run
 env["PIP_CACHE_DIR"] = f"{TMP}/pip"
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest", "transformers", "sentencepiece", "sacremoses", "IndicTransToolkit"], check=True, env=env)"""),
     ("code", """try:
@@ -43,7 +44,7 @@ os.environ["HF_TOKEN"] = HF_TOKEN.strip()
 del HF_TOKEN
 out = f"{WORK}/audio_translate_evidence"
 shutil.rmtree(out, ignore_errors=True)
-run_env = {**os.environ, "HF_HOME": f"{TMP}/hf", "PYTHONPATH": f"{WORK}/granthstudio/src"}
+run_env = {**env, "HF_TOKEN": os.environ["HF_TOKEN"], "HF_HOME": f"{TMP}/hf", "PYTHONPATH": f"{WORK}/granthstudio/src"}
 process = subprocess.Popen([sys.executable, f"{WORK}/granthstudio/scripts/audio_translate_test.py", "--execute", "--expected-commit", EXPECTED_COMMIT, "--workdir", f"{TMP}/work", "--out", out],
                            env=run_env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
@@ -51,9 +52,9 @@ for line in process.stdout:
 print("exit status:", process.wait())"""),
     ("code", """import json
 secret = os.environ["HF_TOKEN"].encode()
-leaked = [p for p in glob.glob(f"{out}/**/*", recursive=True) if os.path.isfile(p) and secret in open(p, "rb").read()]
+leaked = [p for p in glob.glob(f"{out}/**/*", recursive=True) + glob.glob(f"{TMP}/work/**/*", recursive=True) if os.path.isfile(p) and secret in open(p, "rb").read()]
 if leaked:
-    shutil.rmtree(out, ignore_errors=True)
+    shutil.rmtree(out, ignore_errors=True); shutil.rmtree(f"{TMP}/work", ignore_errors=True)
     raise SystemExit("token found in the evidence: evidence deleted, nothing shown")
 receipt = json.load(open(f"{out}/translate_receipt.json", encoding="utf-8"))
 print("VERDICT:", receipt["verdict"], "-", receipt["reason"])

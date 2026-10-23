@@ -92,3 +92,19 @@ def test_the_notebook_parses_installs_before_the_secret_exists_and_never_stores_
     assert not re.search(r"hf_[A-Za-z0-9]{20,}", text)
     assert text.index("pip") < text.index("get_secret") and text.index("clone") < text.index("get_secret")
     assert "must not be in the environment while packages are installed" in text and "--expected-commit" in text
+
+
+def test_a_leaking_runner_writes_nothing_and_prints_nothing_secret_and_a_failing_git_refuses(tmp_path, monkeypatch, capsys):
+    at = load()
+    stub = tmp_path / "leaky.py"
+    stub.write_text(STUB.replace('"हिंदी " + t[:10]', '"hf_" + "C" * 30'), encoding="utf-8")
+    monkeypatch.setattr(at, "RUNNER", stub)
+    monkeypatch.setattr(at, "git", fake_git())
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 1
+    assert "C" * 30 not in capsys.readouterr().out
+    assert not list((tmp_path / "w").rglob("translation_candidates.json"))                      # never reached the workdir either
+    monkeypatch.setattr(at, "git", lambda *a: None)
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w9"), "--out", str(tmp_path / "o9")]) == 1
+    assert not (tmp_path / "w9").exists()
+    text = (REPO / "notebooks" / "kaggle_audio_translate_test.ipynb").read_text(encoding="utf-8")
+    assert "SAFE = (" in text and "TOKEN\" not in k.upper()" not in text
