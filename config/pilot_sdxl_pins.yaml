@@ -1,0 +1,57 @@
+# Pins for the pilot's native SDXL keyframe stage (read from the Hugging Face / GitHub APIs on 2026-10-23).
+# STATUS: pinned, NOT downloaded, NOT approved. Model selection is not licence acceptance: the named approver must accept
+# each licence personally and sign the download approval (same procedure as docs/LTX_098_DOWNLOAD_APPROVAL.md section E)
+# before any file below is fetched. Hashes are the LFS SHA-256 values reported by the Hugging Face API.
+status: pinned_not_approved
+approved_by: null          # named human; stays null until the download approval is signed
+style: devotional_gouache_1950s_v1   # frozen style v1 (hash 2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1)
+comfyui:
+  repo: https://github.com/comfyanonymous/ComfyUI
+  commit: 2f74e17975696d829af455845c584574bbc85774      # unchanged LTX pin (v0.3.47)
+custom_nodes:
+  - name: ComfyUI_IPAdapter_plus
+    repo: https://github.com/cubiq/ComfyUI_IPAdapter_plus
+    commit: a0f451a5113cf9becb0847b92884cb10cbdec0ef    # 2025-04-14; the repo declares maintenance mode
+    licence: GPL-3.0     # approved by the owner as a technical choice for internal pilot evaluation only (not for distributing a combined package)
+    compatibility_with_comfyui_0_3_47: unverified        # must pass the live /object_info check before use
+files:
+  - role: sdxl_checkpoint
+    name: sd_xl_base_1.0.safetensors
+    repo: stabilityai/stable-diffusion-xl-base-1.0
+    revision: 462165984030d82259a11f4367a4eed129e94a7b
+    dest_dir: models/checkpoints
+    sha256: 31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b
+    size_bytes: 6938078334
+    licence: CreativeML Open RAIL++-M
+  - role: ip_adapter
+    name: ip-adapter-plus_sdxl_vit-h.safetensors
+    repo: h94/IP-Adapter
+    revision: 018e402774aeeddd60609b4ecdb7e298259dc729
+    path_in_repo: sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors
+    dest_dir: models/ipadapter
+    sha256: 3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581
+    size_bytes: 847517512
+    licence: Apache-2.0
+  - role: clip_vision
+    name: CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors      # renamed on download, as the node pack's README requires
+    repo: h94/IP-Adapter
+    revision: 018e402774aeeddd60609b4ecdb7e298259dc729
+    path_in_repo: models/image_encoder/model.safetensors
+    dest_dir: models/clip_vision
+    sha256: 6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030
+    size_bytes: 2528373448
+    licence: MIT (model files of laion/CLIP-ViT-H-14-laion2B-s32B-b79K)
+  - role: vae_fp16_fix
+    name: sdxl.vae.safetensors
+    repo: madebyollin/sdxl-vae-fp16-fix
+    revision: 207b116dae70ace3637169f1ddd2434b91b3a8cd
+    dest_dir: models/vae
+    sha256: 235745af8d86bf4a4c1b5b4f529868b37019a10f7c0b2e79ad0abca3a22bc6e1
+    size_bytes: 334641162
+    licence: MIT
+workflow:
+  api_candidate: workflows/comfyui/sdxl_ipadapter_keyframe.candidate.json
+  output_node: "9"
+  reference_slots: 1
+  size: [1216, 832]        # SDXL-native 3:2 area; the pilot's LTX stage runs 768x512 (same aspect)
+  note: node inputs below are read from the node pack's source at the pinned commit and must be re-checked against the live /object_info before the status can leave "unvalidated"
