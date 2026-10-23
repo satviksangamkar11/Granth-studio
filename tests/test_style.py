@@ -229,3 +229,15 @@ def test_a_template_that_asks_for_a_reference_weight_needs_the_configured_total(
     from granthstudio.errors import IntegrationUnavailable
     with pytest.raises(IntegrationUnavailable, match="total_reference_weight"):
         kf.sdxl_generate(kf_project, models, request, tmp_path / "j.json", tmp_path)
+
+
+def test_a_style_anchor_that_shares_its_image_with_a_character_reference_is_refused_before_submission(kf_project, comfy, tmp_path):
+    from granthstudio.errors import IntegrationUnavailable
+    request = request_for(kf_project)
+    location = next(r for r in request["references"] if r["canon_id"].startswith("loc_"))
+    character = next(r for r in request["references"] if r["canon_id"].startswith("chr_"))
+    request.update(identity_method="style_anchor", style_anchor_canon_id=location["canon_id"], style_anchor_weight=0.8)
+    location["sha256"] = character["sha256"]                                                        # the anchor would carry a character's image
+    with pytest.raises(IntegrationUnavailable, match="same image as another reference"):
+        kf.sdxl_generate(kf_project, load_models(kf_project), request, tmp_path / "j.json", tmp_path)
+    assert comfy.posts == []
