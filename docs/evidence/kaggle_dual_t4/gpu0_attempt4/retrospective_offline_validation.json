@@ -1,6 +1,6 @@
 {
   "kind": "offline_retrospective_validation",
-  "validated_at": "2026-10-23T06:02:43+00:00",
+  "validated_at": "2026-10-23T06:26:41+00:00",
   "original_harness_verdict": "NOT_VALIDATED",
   "original_harness_reason": "GPU preflight not passed: {'free_vram': 'fail'}: NOT VALIDATED",
   "original_verdict_unchanged": true,
@@ -22,11 +22,23 @@
     "attempt": 1,
     "prompt_id": "25a001a7-a1ef-4d97-b310-4eafceaeb0da"
   },
-  "bound_sha256": {
-    "granthstudio_ltx_i2v_00001.mp4": "fd86b6a7bc8e9d050eaafcd239f9a58cf32cfdb3f7e83039def1ea390bd21d5a",
-    "ltx_gpu0_test_receipt.json": "48df820b34b467a374b96414a33bd919924b2190c14934d7284c3812c1d1dd0f",
-    "journal_gpu0.json": "2d16353466a2aaa9e8dc62067218ab10b78c99057d6aa9b07ebc2d16f0596510",
-    "gpu_attribution.json": "a60c41f6876ba38e73478f4e0092a0f153d373aa32181535e0d74544c3771363"
+  "bound_inputs": {
+    "clip": {
+      "path": "docs\\evidence\\kaggle_dual_t4\\gpu0_attempt4\\granthstudio_ltx_i2v_00001.mp4",
+      "sha256": "fd86b6a7bc8e9d050eaafcd239f9a58cf32cfdb3f7e83039def1ea390bd21d5a"
+    },
+    "receipt": {
+      "path": "docs\\evidence\\kaggle_dual_t4\\gpu0_attempt4\\ltx_gpu0_test_receipt.json",
+      "sha256": "48df820b34b467a374b96414a33bd919924b2190c14934d7284c3812c1d1dd0f"
+    },
+    "journal": {
+      "path": "docs\\evidence\\kaggle_dual_t4\\gpu0_attempt4\\journal_gpu0.json",
+      "sha256": "2d16353466a2aaa9e8dc62067218ab10b78c99057d6aa9b07ebc2d16f0596510"
+    },
+    "attribution": {
+      "path": "docs\\evidence\\kaggle_dual_t4\\gpu0_attempt4\\gpu_attribution.json",
+      "sha256": "a60c41f6876ba38e73478f4e0092a0f153d373aa32181535e0d74544c3771363"
+    }
   },
   "not_covered": [
     "human visual / semantic review (none done)",

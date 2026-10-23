@@ -89,12 +89,15 @@ def main(argv: list[str] | None = None) -> int:
         parser.add_argument(f"--{name}", required=True, type=Path)
     parser.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
+    inputs = {"clip": args.clip, "receipt": args.receipt, "journal": args.journal, "attribution": args.attribution}
+    if args.out is not None and args.out.resolve() in {path.resolve() for path in inputs.values()}:
+        parser.error(f"--out {args.out} is one of the evidence inputs: the original evidence is never overwritten")
     receipt, journal, attribution = (json.loads(p.read_text(encoding="utf-8")) for p in (args.receipt, args.journal, args.attribution))
     problems, facts = validate(args.clip, receipt, journal, attribution)
     report = {"kind": "offline_retrospective_validation", "validated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "original_harness_verdict": receipt.get("verdict"), "original_harness_reason": receipt.get("reason"),
               "original_verdict_unchanged": True, "offline_checks_ok": not problems, "problems": problems, "facts": facts,
-              "bound_sha256": {p.name: sha256(p) for p in (args.clip, args.receipt, args.journal, args.attribution)},
+              "bound_inputs": {role: {"path": str(path), "sha256": sha256(path)} for role, path in inputs.items()},
               "not_covered": ["human visual / semantic review (none done)", "crash recovery and interrupted-submission behaviour", "fresh retry execution",
                               "dual-worker concurrent operation", "visual quality: the start image may not be carried into the later frames (see problems)", "that the harness itself would accept this output (needs a fresh run with the post-run fix)"]}
     if args.out:

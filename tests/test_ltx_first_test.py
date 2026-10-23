@@ -2,6 +2,7 @@
 the weights are a few synthetic bytes, and a run with --skip-static-verify can never produce PASS."""
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import os
@@ -508,3 +509,68 @@ def test_reference_sheet_tasks_have_a_state_only_postflight(tmp_path):
     from granthstudio import keyframes
     source = inspect.getsource(keyframes.sheet_tasks)
     assert "postflight=lambda request=request: check(request, False)" in source and "check_host=check_host" in source
+
+
+def painted_inputs(tmp_path):
+    """A smooth synthetic 'painting' (never real art) plus its descriptive prompt files."""
+    still = tmp_path / "start.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "gradients=size=768x512:rate=24:speed=0.05:seed=3", "-frames:v", "1", str(still)], check=True, timeout=60)
+    prompt = tmp_path / "prompt.txt"; prompt.write_text("A calm figure stands in a courtyard." + chr(10) + "The camera remains stationary." + chr(10), encoding="utf-8")
+    negative = tmp_path / "negative.txt"; negative.write_text("text, watermark" + chr(10), encoding="utf-8")
+    return still, prompt, negative
+
+
+def set_server_clip(server, tmp_path, source):
+    clip = tmp_path / "server_clip2.mp4"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", source, "-frames:v", "49", "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(clip)], check=True, timeout=60)
+    server.view_bytes = clip.read_bytes()
+
+
+def test_a_supplied_painting_and_prompt_replace_only_the_input_and_its_text(host, tmp_path):
+    server, _, work = host
+    still, prompt, negative = painted_inputs(tmp_path)
+    set_server_clip(server, tmp_path, "gradients=size=768x512:rate=24:speed=0.05:seed=3")
+    code, receipt = run(host, "--execute", "--start-image", str(still), "--prompt-file", str(prompt), "--negative-prompt-file", str(negative))
+    assert [r["status"] for r in receipt["results"]] == ["complete"], receipt["results"]
+    assert receipt["start_image"]["sha256"] == hashlib.sha256(still.read_bytes()).hexdigest() and (receipt["start_image"]["width"], receipt["start_image"]["height"]) == (768, 512)
+    assert [hashlib.sha256(data).hexdigest() for data in server.uploads.values()] == [receipt["start_image"]["sha256"]]      # staged through upload_image, exact bytes
+    graph = server.posts[0]["prompt"] if isinstance(server.posts[0], dict) and "prompt" in server.posts[0] else server.posts[0]
+    assert graph["6"]["inputs"]["text"] == "A calm figure stands in a courtyard." + chr(10) + "The camera remains stationary."
+    assert graph["95"]["inputs"]["strength"] == 1.0 and graph["95"]["inputs"]["width"] == 768 and graph["102"]["inputs"]["noise_seed"] == 1732128765   # workflow, size and seed unchanged
+    assert receipt["text_conditioning"]["negative_applied"] is False and receipt["text_conditioning"]["negative_recorded"] == "text, watermark"
+    assert receipt["conditioning"]["CFGGuider"]["cfg"] == 1 and receipt["metrics"]["style"]["style_id"] == "devotional_gouache_1950s_v1"
+    diag = receipt["visual_diagnostics"]
+    assert diag["drift_suspected"] is False and diag["human_visual_review"] == "NOT_DONE" and (work / "preview" / diag["contact_sheet"]).is_file()
+    assert all((work / "preview" / f"frame_{n:02d}.png").is_file() for n in diag["sample_frames"])
+
+
+def test_a_clip_that_leaves_its_start_image_is_reported_as_a_fail_not_a_pass(host, tmp_path):
+    server, _, _ = host
+    still, prompt, negative = painted_inputs(tmp_path)
+    parts = []
+    for name, source in (("first", "gradients=size=768x512:rate=24:speed=0.05:seed=3"), ("second", "testsrc2=size=768x512:rate=24")):
+        part = tmp_path / f"{name}.mp4"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", source, "-frames:v", "25", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(part)], check=True, timeout=60)
+        parts.append(part)
+    listing = tmp_path / "l.txt"; listing.write_text("".join(f"file '{p.as_posix()}'" + chr(10) for p in parts), encoding="utf-8")
+    cut = tmp_path / "cut.mp4"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(listing), "-frames:v", "49", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(cut)], check=True, timeout=60)
+    server.view_bytes = cut.read_bytes()                                           # a clip that jumps away from the supplied start image
+    code, receipt = run(host, "--execute", "--start-image", str(still), "--prompt-file", str(prompt))
+    assert code == 1 and receipt["verdict"] == "FAIL" and "visual drift suspected" in receipt["reason"]
+    assert receipt["visual_diagnostics"]["drift_suspected"] is True
+
+
+def test_start_image_and_prompt_file_must_be_given_together(tmp_path):
+    still, prompt, _ = painted_inputs(tmp_path)
+    with pytest.raises(SystemExit):
+        ft.parse_args(["--workdir", str(tmp_path / "w"), "--models-dir", str(tmp_path), "--start-image", str(still)])
+    with pytest.raises(SystemExit):
+        ft.parse_args(["--workdir", str(tmp_path / "w"), "--models-dir", str(tmp_path), "--prompt-file", str(prompt)])
+
+
+def test_gpu_script_checks_the_painted_input_before_any_network_step_and_exports_previews():
+    text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
+    assert text.index("PAINTED_INPUT is missing") < text.index("git clone") and text.index("PAINTED_INPUT is missing") < text.index("== 1. host")
+    assert '"${PAINTED_ARGS[@]}"' in text and "preview_$d" in text and "start_image_$d.png" in text
+    assert (REPO / "assets" / "ltx_test_inputs" / "painted_courtyard_01" / "04_ltx_start_768x512.png").is_file()

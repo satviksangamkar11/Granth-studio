@@ -71,6 +71,30 @@ def make_variant_b(project) -> None:
     dump_yaml(manifest_path, manifest)
 
 
+def use_painted_start(project, args: argparse.Namespace) -> None:
+    """Replace ONLY the synthetic start image and its text conditioning with the supplied painting and prompt. Runs BEFORE the synthetic research approval."""
+    import shutil
+    from granthstudio.config import dump_yaml, load_yaml
+    from granthstudio.integrity import sha256_file as digest
+    prompt = args.prompt_file.read_text(encoding="utf-8").strip()
+    research_path = project.research_dir / "adhyay_01" / "research.yaml"
+    research = load_yaml(research_path)
+    research["scenes"][0]["actions"][0]["text"] = prompt
+    dump_yaml(research_path, research)
+    manifest_path = project.episodes_dir / "adhyay_01" / "manifest.yaml"
+    manifest = load_yaml(manifest_path)
+    for shot in manifest["scenes"][0]["shots"]:
+        if shot.get("motion_prompt"):
+            shot["motion_prompt"] = prompt
+    visual = project.artifacts_dir / "visuals" / "vis" / "room.png"
+    shutil.copyfile(args.start_image, visual)
+    manifest["visuals"][0]["sha256"] = digest(visual)
+    dump_yaml(manifest_path, manifest)
+    style_source = ROOT / "canon" / "style.yaml"
+    if style_source.is_file():                                   # the frozen project style governs this test's task identities and receipts
+        shutil.copyfile(style_source, project.canon_dir / "style.yaml")
+
+
 def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa: F821
     from granthstudio.config import dump_yaml, load_models, load_project
     from granthstudio.research import approve
@@ -83,6 +107,8 @@ def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa:
         project = make_project(root)
         if args.variant == "b":
             make_variant_b(project)
+        if args.start_image:
+            use_painted_start(project, args)
         approve(project, 1, "synthetic-ltx-first-test", FIXED_TIME)   # synthetic fixture research only; never Granth content
     template = root / "workflows" / "comfyui" / "ltx_i2v_098.json"
     template.write_bytes((ROOT / pins["workflow"]["api_candidate"]).read_bytes())   # project-local copy; the shipped stub stays a stub
@@ -167,6 +193,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-session-s", type=float, default=1800)
     parser.add_argument("--gpu-index", type=int, choices=[0, 1], help="PHYSICAL index of the one T4 this worker owns (required with --execute)")
     parser.add_argument("--variant", choices=["a", "b"], default="a", help="which synthetic shot: a = head-turn on a test pattern, b = camera push-in on another pattern")
+    parser.add_argument("--start-image", type=Path, help="painted start image (PNG) used INSTEAD of the synthetic test pattern; hashed and recorded")
+    parser.add_argument("--prompt-file", type=Path, help="descriptive positive text conditioning for the shot (with --start-image)")
+    parser.add_argument("--negative-prompt-file", type=Path, help="recorded in the receipt; NOT applied while the workflow runs at cfg 1 (the workflow is deliberately unchanged)")
     parser.add_argument("--other-gpu-idle-mb", type=float, default=800, help="the OTHER card must show at most this much memory in use at start (isolation)")
     parser.add_argument("--allow-other-gpu-busy", action="store_true", help="concurrent stage: the other card is another worker's, so do not require it idle")
     parser.add_argument("--worker-pid", type=int, help="pid of the ComfyUI process this worker talks to (recorded in the receipt)")
@@ -179,11 +208,70 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if bool(args.start_image) != bool(args.prompt_file):
+        parser.error("--start-image and --prompt-file go together: the painting and its descriptive text are the ONLY things that change")
+    for name in ("start_image", "prompt_file", "negative_prompt_file"):
+        path = getattr(args, name)
+        if path is not None and not path.is_file():
+            parser.error(f"--{name.replace('_', '-')} {path} is not a file")
     args.source = {k: Path(v) for k, v in (item.split("=", 1) for item in args.source)}
     args.checkpoint_path = args.checkpoint_path or args.models_dir / "models" / "checkpoints" / "ltxv-2b-0.9.8-distilled.safetensors"
     args.text_encoder_path = args.text_encoder_path or args.models_dir / "models" / "text_encoders" / "t5xxl_fp16.safetensors"
     return args
+
+
+SAMPLE_FRAMES = (0, 1, 12, 24, 36, 48)
+# Automatic drift screen for a supplied painting (a screen for a human, never an acceptance): similarity to frame 0 and the largest luma step between frames.
+MIN_SSIM_FRAME_1, MIN_SSIM_LAST, MAX_LUMA_STEP = 0.60, 0.30, 40.0
+
+
+def _ffmpeg(*cmd: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["ffmpeg", "-y", "-v", "error", *cmd], capture_output=True, text=True, timeout=300)
+
+
+def _ssim(a: Path, b: Path) -> float | None:
+    done = subprocess.run(["ffmpeg", "-v", "info", "-i", str(a), "-i", str(b), "-lavfi", "ssim", "-f", "null", "-"], capture_output=True, text=True, timeout=120)
+    import re
+    found = re.findall(r"SSIM .*All:([0-9.]+)", done.stderr)
+    return float(found[-1]) if found else None
+
+
+def visual_diagnostics(clip: Path, outdir: Path, start_image: Path | None) -> dict:
+    """Frames 0, 1, 12, 24, 36, 48 as PNGs and a contact sheet, plus similarity numbers. Evidence for a human reviewer; it accepts nothing."""
+    import re
+    outdir.mkdir(parents=True, exist_ok=True)
+    report: dict = {"sample_frames": list(SAMPLE_FRAMES), "contact_sheet": None, "ssim_vs_frame_0": {}, "ssim_frame_0_vs_input": None, "max_luma_step": None,
+                    "thresholds": {"min_ssim_frame_1": MIN_SSIM_FRAME_1, "min_ssim_last": MIN_SSIM_LAST, "max_luma_step": MAX_LUMA_STEP},
+                    "drift_suspected": None, "human_visual_review": "NOT_DONE"}
+    pick = "+".join(f"eq(n,{n})" for n in SAMPLE_FRAMES)
+    for n in SAMPLE_FRAMES:
+        _ffmpeg("-i", str(clip), "-vf", f"select='eq(n,{n})'", "-frames:v", "1", str(outdir / f"frame_{n:02d}.png"))
+    sheet = _ffmpeg("-i", str(clip), "-vf", f"select='{pick}',scale=384:-1,tile={len(SAMPLE_FRAMES)}x1", "-frames:v", "1", str(outdir / "contact_sheet.png"))
+    report["contact_sheet"] = "contact_sheet.png" if sheet.returncode == 0 else None
+    first = outdir / "frame_00.png"
+    if first.is_file():
+        for n in SAMPLE_FRAMES[1:]:
+            frame = outdir / f"frame_{n:02d}.png"
+            report["ssim_vs_frame_0"][str(n)] = _ssim(first, frame) if frame.is_file() else None
+        if start_image is not None:
+            report["ssim_frame_0_vs_input"] = _ssim(first, start_image)
+    stats = subprocess.run(["ffmpeg", "-v", "error", "-i", str(clip), "-vf", "signalstats,metadata=print:file=-", "-an", "-f", "null", "-"], capture_output=True, text=True, timeout=300).stdout
+    steps = [float(v) for v in re.findall(r"signalstats[.]YDIF=([0-9.]+)", stats)]
+    report["max_luma_step"] = max(steps) if steps else None
+    ssim = report["ssim_vs_frame_0"]
+    if report["max_luma_step"] is not None and ssim.get("1") is not None and ssim.get("48") is not None:
+        report["drift_suspected"] = bool(report["max_luma_step"] > MAX_LUMA_STEP or ssim["1"] < MIN_SSIM_FRAME_1 or ssim["48"] < MIN_SSIM_LAST)
+    return report
+
+
+def conditioning_from_workflow(pins: dict) -> dict:
+    """The image-conditioning and sampling parameters of the (unchanged) workflow candidate, for the receipt."""
+    graph = json.loads((ROOT / pins["workflow"]["api_candidate"]).read_text(encoding="utf-8"))
+    pick = lambda node, *keys: {k: graph[node]["inputs"][k] for k in keys}
+    return {"workflow": pins["workflow"]["api_candidate"], "LTXVImgToVideo": pick("95", "strength", "batch_size"), "LTXVPreprocess": pick("82", "img_compression"),
+            "CFGGuider": pick("99", "cfg"), "sampler": pick("97", "sampler_name"), "sigmas": graph["100"]["inputs"]["string"], "checkpoint": graph["44"]["inputs"]["ckpt_name"]}
 
 
 def physical_gpus() -> list[dict] | None:
@@ -363,6 +451,18 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         if not path.is_file():
             return finish("NOT_RUN", f"missing file {path} (downloads need the signed approval manifest)")
     project = prepare_project(args, pins)
+    receipt["conditioning"] = conditioning_from_workflow(pins)
+    if args.start_image:
+        from granthstudio.ffmpeg import probe as probe_image
+        shown = probe_image(args.start_image)
+        negative = args.negative_prompt_file.read_text(encoding="utf-8").strip() if args.negative_prompt_file else None
+        positive = args.prompt_file.read_text(encoding="utf-8").strip()
+        receipt["start_image"] = {"path": str(args.start_image), "sha256": sha256_file(args.start_image), "width": shown.width, "height": shown.height,
+                                  "staged_as": "project visual vis/room.png, uploaded by the existing upload_image step"}
+        receipt["text_conditioning"] = {"positive": positive, "positive_sha256": hashlib.sha256(positive.encode("utf-8")).hexdigest(), "negative_recorded": negative,
+                                        "negative_applied": False, "negative_note": "the workflow runs CFGGuider at cfg 1, where negative conditioning has no effect; the workflow was deliberately not changed",
+                                        "style_prefix_suffix_added": False,
+                                        "style": {"style_id": "devotional_gouache_1950s_v1", "applied_via": "identity in task inputs/receipts; the supplied text already carries the style wording"}}
     if args.skip_static_verify:
         receipt["static_verification"] = {"exit": None, "note": "SKIPPED by flag: this run can never be a PASS"}
     else:
@@ -432,6 +532,11 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         receipt["comfy_execution"] = _history_execution_window(args.comfy_url, receipt["journal"]["prompt_id"])
     if (info.width, info.height) != (args.width, args.height):
         return finish("FAIL", f"decoded clip is {info.width}x{info.height}, requested {args.width}x{args.height}")
+    receipt["visual_diagnostics"] = visual_diagnostics(directory / "clip.mp4", args.workdir / "preview", args.start_image)
+    if args.start_image and receipt["visual_diagnostics"]["drift_suspected"] is not False:
+        diag = receipt["visual_diagnostics"]
+        return finish("FAIL", f"visual drift suspected (or not measurable): SSIM vs frame 0 {diag['ssim_vs_frame_0']}, max luma step {diag['max_luma_step']}; "
+                              "see preview/contact_sheet.png; a decoded MP4 is not a visual PASS")
     if receipt["static_verification"]["exit"] is None:
         return finish("NOT_RUN", "clip decoded, but static verification was skipped, so this cannot be a PASS")
     return finish("PASS", "one clip decoded through the existing pipeline; the capability remains unvalidated pending human review")

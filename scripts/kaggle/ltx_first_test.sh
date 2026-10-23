@@ -47,6 +47,10 @@ echo "stage $STAGE | approved by: $LTX_DOWNLOAD_APPROVED | $(date -u +%FT%TZ)"
 echo "== 0. refusals that need no network"
 [ "$(git -C "$REPO" rev-parse HEAD)" = "$LTX_EXPECTED_COMMIT" ] || { echo "GranthStudio is at $(git -C "$REPO" rev-parse HEAD), expected $LTX_EXPECTED_COMMIT"; exit 2; }
 [ -z "$(git -C "$REPO" status --porcelain)" ] || { echo "the GranthStudio checkout has local modifications"; exit 2; }
+if [ -n "${PAINTED_INPUT:-}" ]; then   # refused before any network step
+  case "$STAGE" in gpu0|retry) ;; *) echo "PAINTED_INPUT is only defined for the gpu0 and retry stages"; exit 2;; esac
+  for f in 04_ltx_start_768x512.png prompt.txt negative_prompt.txt; do [ -f "$REPO/$PAINTED_INPUT/$f" ] || { echo "PAINTED_INPUT is missing $REPO/$PAINTED_INPUT/$f"; exit 2; }; done
+fi
 case "$SESSION_MINUTES" in ''|*[!0-9]*) echo "SESSION_MINUTES must be an integer"; exit 2;; esac
 { [ "$SESSION_MINUTES" -ge 30 ] && [ "$SESSION_MINUTES" -le 720 ]; } || { echo "SESSION_MINUTES must be 30..720"; exit 2; }
 GRANTHSTUDIO_SESSION_DEADLINE="$(python -c "from datetime import datetime,timedelta,timezone;print((datetime.now(timezone.utc)+timedelta(minutes=$SESSION_MINUTES)).isoformat(timespec='seconds'))")"
@@ -186,6 +190,14 @@ rebuild_check() { # worker : the converter must reproduce the committed candidat
          --object-info "$OUT/worker$1/object_info.json" --out "$OUT/worker$1/rebuilt_api_workflow.json" | tee "$OUT/worker$1/converter_report.txt"
   python "$REPO/scripts/comfy/ui_to_api.py" compare "$OUT/worker$1/rebuilt_api_workflow.json" "$REPO/$(pin workflow.api_candidate)"
 }
+# Optional painted test input (relative to the repo): ONLY the start image and its descriptive text change; the workflow, size, frames, fps and seed stay as they were.
+PAINTED_ARGS=()
+if [ -n "${PAINTED_INPUT:-}" ]; then
+  case "$STAGE" in gpu0|retry) ;; *) echo "PAINTED_INPUT is only defined for the gpu0 and retry stages"; exit 2;; esac
+  PD="$REPO/$PAINTED_INPUT"
+  for f in 04_ltx_start_768x512.png prompt.txt negative_prompt.txt; do [ -f "$PD/$f" ] || { echo "PAINTED_INPUT is missing $PD/$f"; exit 2; }; done
+  PAINTED_ARGS=(--start-image "$PD/04_ltx_start_768x512.png" --prompt-file "$PD/prompt.txt" --negative-prompt-file "$PD/negative_prompt.txt")
+fi
 client() { # index variant workdir extra-args... : GranthStudio's existing pipeline against that worker only
   local n="$1" variant="$2" workdir="$3"; shift 3
   local port=$PORT0; [ "$n" = 1 ] && port=$PORT1
@@ -193,7 +205,7 @@ client() { # index variant workdir extra-args... : GranthStudio's existing pipel
     --comfy-url "http://127.0.0.1:$port" --worker-pid "${WPID[$n]}" --cuda-visible-devices "$n" --comfy-log "$OUT/worker$n/comfyui.log" \
     --official-workflow "$OFFICIAL" --node-inventory "$OUT/worker$n/object_info.json" \
     --source comfyui="$COMFY" --source ltxvideo_nodes="$W/ComfyUI-LTXVideo-src" \
-    --source videohelpersuite="$COMFY/custom_nodes/ComfyUI-VideoHelperSuite" --source kjnodes="$COMFY/custom_nodes/ComfyUI-KJNodes" "$@"
+    --source videohelpersuite="$COMFY/custom_nodes/ComfyUI-VideoHelperSuite" --source kjnodes="$COMFY/custom_nodes/ComfyUI-KJNodes" "${PAINTED_ARGS[@]}" "$@"
 }
 
 STATUS=0
@@ -239,6 +251,8 @@ done
 for d in gpu0 gpu1 conc0 conc1; do
   cp "$W"/ltx_$d/project/artifacts/tasks/adhyay_01/tier1/*/clip.mp4 "$OUT/clip_$d.mp4" 2>/dev/null || true
   cp "$W"/ltx_$d/project/artifacts/tasks/adhyay_01/pending/*.json "$OUT/journal_$d.json" 2>/dev/null || true
+  [ -d "$W/ltx_$d/preview" ] && cp -r "$W/ltx_$d/preview" "$OUT/preview_$d" 2>/dev/null || true               # frames 0,1,12,24,36,48 + contact sheet
+  cp "$W"/ltx_$d/project/artifacts/visuals/vis/room.png "$OUT/start_image_$d.png" 2>/dev/null || true
 done
 nvidia-smi > "$OUT/nvidia_smi_after.txt" || true
 if [ "$STATUS" = 0 ]; then
