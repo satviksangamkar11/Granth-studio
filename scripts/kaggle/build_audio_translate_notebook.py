@@ -30,8 +30,8 @@ subprocess.run(["git", "clone", "-q", "-b", "sprint/remaining-pipeline", bundles
 head = subprocess.run(["git", "-C", f"{WORK}/granthstudio", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
 assert head == EXPECTED_COMMIT, f"bundle is at {head}, not the reviewed {EXPECTED_COMMIT}: refusing"
 assert not os.environ.get("HF_TOKEN"), "HF_TOKEN must not be in the environment while packages are installed"
-SAFE = ("PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "LD_LIBRARY_PATH", "CUDA_VISIBLE_DEVICES")
-env = {k: v for k, v in os.environ.items() if k in SAFE or k.startswith(("NVIDIA", "CUDA"))}        # an explicit allowlist: no credential of any name reaches pip or the model run
+SAFE = ("PATH", "HOME", "LANG", "LC_ALL", "TMPDIR", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "LD_LIBRARY_PATH", "LIBRARY_PATH", "CUDA_VISIBLE_DEVICES", "CUDA_HOME", "CUDA_PATH", "NVIDIA_VISIBLE_DEVICES", "NVIDIA_DRIVER_CAPABILITIES")
+env = {k: v for k, v in os.environ.items() if k in SAFE}        # an explicit allowlist: no credential of any name reaches pip or the model run
 env["PIP_CACHE_DIR"] = f"{TMP}/pip"
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest", "transformers", "sentencepiece", "sacremoses", "IndicTransToolkit"], check=True, env=env)"""),
     ("code", """try:

@@ -108,3 +108,16 @@ def test_a_leaking_runner_writes_nothing_and_prints_nothing_secret_and_a_failing
     assert not (tmp_path / "w9").exists()
     text = (REPO / "notebooks" / "kaggle_audio_translate_test.ipynb").read_text(encoding="utf-8")
     assert "SAFE = (" in text and "TOKEN\" not in k.upper()" not in text
+
+
+def test_runner_stderr_is_scrubbed_before_it_is_cut_and_the_env_allowlist_is_enumerated(tmp_path, monkeypatch, capsys):
+    at = load()
+    stub = tmp_path / "noisy.py"
+    stub.write_text("import sys\nsys.stderr.write('hf_' + 'D' * 30 + '!' * 480)\nsys.exit(3)\n", encoding="utf-8")
+    monkeypatch.setattr(at, "RUNNER", stub)
+    monkeypatch.setattr(at, "git", fake_git())
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 1
+    out = capsys.readouterr().out + (tmp_path / "o" / "translate_receipt.json").read_text(encoding="utf-8")
+    assert "D" * 8 not in out and "runner exited 3" in out
+    text = (REPO / "notebooks" / "kaggle_audio_translate_test.ipynb").read_text(encoding="utf-8")
+    assert 'startswith(' not in text.split("SAFE")[1].split("env[")[0]

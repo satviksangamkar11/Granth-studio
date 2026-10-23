@@ -27,6 +27,15 @@ def require_runner(models: dict[str, Any], key: str, label: str) -> dict[str, An
     return section
 
 
+def _scrub(text: str) -> str:
+    """Hugging Face tokens (hf_...) and the HF_TOKEN value, removed from runner diagnostics."""
+    import os
+    import re
+    text = re.sub(r"hf_[A-Za-z0-9]{8,}", "***", text)
+    token = os.environ.get("HF_TOKEN", "").strip()
+    return text.replace(token, "***") if len(token) >= 8 else text
+
+
 def run_json(section: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
     try:
         done = subprocess.run(section["command"], input=json.dumps(payload), capture_output=True, text=True,
@@ -36,7 +45,7 @@ def run_json(section: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]
     except subprocess.TimeoutExpired as exc:
         raise TaskFailed(f"runner exceeded {section['timeout_s']} s") from exc
     if done.returncode != 0:
-        raise TaskFailed(f"runner exited {done.returncode}: {done.stderr.strip()[-500:]}")
+        raise TaskFailed(f"runner exited {done.returncode}: {_scrub(done.stderr).strip()[-500:]}")   # scrubbed BEFORE it is cut: a cut can never leave a token fragment
     try:
         result = json.loads(done.stdout)
     except json.JSONDecodeError as exc:
