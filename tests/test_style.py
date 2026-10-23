@@ -188,3 +188,29 @@ def test_sheet_tasks_check_state_without_the_host_gate_after_a_render(kf_project
     monkeypatch.setattr(kf, "require_host_ready", lambda *a, **k: calls.append("host"))
     tasks[0].preflight(); assert calls == ["host"]
     calls.clear(); tasks[0].postflight(); assert calls == []                  # no resource gate after the render
+
+
+def test_a_visual_description_becomes_the_whole_middle_of_the_frozen_prompt_and_may_not_name_anyone(kf_project):
+    from granthstudio.config import load_yaml
+    from granthstudio.integrity import atomic_write_json
+    frozen_project(kf_project)
+    before = request_for(kf_project)
+    assert before["template_version"] == "keyframe-prompt-v2-frozen-style" and before["visual_description"] is None     # no description: earlier behaviour
+    path = kf_project.episodes_dir / "adhyay_01" / "manifest.yaml"
+    manifest = load_yaml(path)
+    description = "A calm young man sits on a dusty road among scattered leaf plates. Bright daylight."
+    next(v for v in manifest["visuals"] if v["visual_id"] == "vis_kf")["description"] = description
+    atomic_write_json(path, manifest)
+    request = request_for(kf_project)
+    style = st.load_style(kf_project)
+    assert request["prompt"] == st.compose(style, description) and request["template_version"] == "keyframe-prompt-v3-visual-description"
+    assert request["characters"] == before["characters"] and request["references"] == before["references"]                  # identities and references stay in the metadata
+    assert request["request_sha256"] != before["request_sha256"]
+    named = load_yaml(path)
+    name = before["characters"] and next(iter(before["characters"]))
+    from granthstudio.canon import load_canon
+    canonical = load_canon(kf_project).entries[name]["canonical_name"]
+    next(v for v in named["visuals"] if v["visual_id"] == "vis_kf")["description"] = f"{canonical} sits on the road."
+    atomic_write_json(path, named)
+    with pytest.raises(ConfigError, match="names"):
+        request_for(kf_project)

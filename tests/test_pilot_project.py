@@ -94,7 +94,11 @@ def test_the_task_plan_has_native_keyframes_three_ltx_shots_and_both_languages_a
     registry = kf.load_registry(pilot, bundle.canon)
     request = kf.keyframe_request(bundle.compiled, bundle.canon, registry, models, "vis_s2_kf")
     assert request["style"]["style_id"] == "devotional_gouache_1950s_v1" and "Narrator" not in request["prompt"]
-    assert "Bankatlal Agarwal" in request["prompt"] and "Damodarpant Kulkarni" in request["prompt"] and request["prompt"].startswith("1950s vintage Indian devotional book illustration")
+    assert request["characters"] == ["chr_bankatlal", "chr_damodarpant", "chr_gajanan_maharaj", "chr_narrator"] or "chr_bankatlal" in request["characters"]   # identities stay in the metadata
+    assert request["template_version"] == "keyframe-prompt-v3-visual-description" and request["prompt"].startswith("1950s vintage Indian devotional book illustration")
+    assert not any(name in request["prompt"] for name in ("Bankatlal", "Damodarpant", "Gajanan", "Devidas", "Source detail", "day_outdoor", "Artistic interpretation"))
+    for visual in bundle.compiled["visuals"]:                                                     # every pilot keyframe has its own short image description
+        assert 200 <= len(visual["description"]) <= 900
     assert {t.stage for t in tasks if t.name.startswith("sheet_")} == set()                       # reference sheets are a separate task list
 
 

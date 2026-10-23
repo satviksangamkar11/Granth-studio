@@ -9,14 +9,22 @@ visuals:
   source: keyframe
   path: kf/vis_s1_kf.png
   sha256: null
+  description: A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, sits calmly on a dusty village road in
+    front of a house, framed from the waist up. Used leaf plates lie scattered before him; he lifts a few grains of rice from them. A clay pipe and a gourd water vessel rest beside him. Calm face, gaze
+    lowered to the tip of his nose. Bright daylight.
 - visual_id: vis_s2_kf
   source: keyframe
   path: kf/vis_s2_kf.png
   sha256: null
+  description: 'On a dusty road of a nineteenth-century Indian village, two townsmen stop and watch in amazement: one in a white dhoti, long coat and cloth turban, the other in a plain dhoti, shoulder cloth
+    and cloth cap. Before a house, a young man nearly unclothed except for an old torn vest sits calmly among scattered used leaf plates. The man in the turban steps forward humbly to speak to him. Bright
+    daylight.'
 - visual_id: vis_s3_kf
   source: keyframe
   path: kf/vis_s3_kf.png
   sha256: null
+  description: At the doorway of a village house, a householder in a white dhoti and shoulder cloth with a sacred thread sets a large plate of sweet dishes before a young man nearly unclothed except for
+    an old torn vest, who sits calmly on the ground and eats. Two townsmen, one in a long coat and cloth turban, the other in a dhoti and cloth cap, stand nearby watching with respect. Bright daylight.
 scenes:
 - scene_id: a01_s01
   research_scene: a01_s01

@@ -120,6 +120,22 @@ def designs() -> list[dict]:
     ]
 
 
+# What each keyframe SHOWS, in plain visible terms, written from the approved scene facts and the designs (frozen canon: Adhyay 1 ovi 86-119).
+# No proper names, research labels or provenance notes: those stay in the request metadata. Clothing of the three townsmen is the artistic
+# interpretation recorded in docs/pilot/CHARACTER_DESIGN_SHEET.md. Owner review PENDING.
+VISUAL_DESCRIPTIONS = {
+    1: ("A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, "
+        "sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he lifts a few grains of "
+        "rice from them. A clay pipe and a gourd water vessel rest beside him. Calm face, gaze lowered to the tip of his nose. Bright daylight."),
+    2: ("On a dusty road of a nineteenth-century Indian village, two townsmen stop and watch in amazement: one in a white dhoti, long coat and cloth turban, "
+        "the other in a plain dhoti, shoulder cloth and cloth cap. Before a house, a young man nearly unclothed except for an old torn vest sits calmly among "
+        "scattered used leaf plates. The man in the turban steps forward humbly to speak to him. Bright daylight."),
+    3: ("At the doorway of a village house, a householder in a white dhoti and shoulder cloth with a sacred thread sets a large plate of sweet dishes before "
+        "a young man nearly unclothed except for an old torn vest, who sits calmly on the ground and eats. Two townsmen, one in a long coat and cloth turban, "
+        "the other in a dhoti and cloth cap, stand nearby watching with respect. Bright daylight."),
+}
+
+
 def manifest() -> dict:
     def shot(sid, tier, vid, duration, dialogue, actions, **extra):
         item = {"shot_id": sid, "tier": tier, "visual_id": vid, "duration_s": duration, "dialogue_ids": dialogue, "action_ids": actions, **extra}
@@ -130,7 +146,7 @@ def manifest() -> dict:
         return {"scene_id": f"a01_s0{n}", "research_scene": f"a01_s0{n}", "location": "loc_devidas_house_road", "characters": chars, "props": props, "lighting": "day_outdoor", "shots": shots}
     m, d, b, p = "chr_gajanan_maharaj", "chr_devidas", "chr_bankatlal", "chr_damodarpant"
     return {"schema_version": 1, "episode_id": "ep01", "adhyay": 1, "research_version": 1,
-            "visuals": [{"visual_id": f"vis_s{n}_kf", "source": "keyframe", "path": f"kf/vis_s{n}_kf.png", "sha256": None} for n in (1, 2, 3)],
+            "visuals": [{"visual_id": f"vis_s{n}_kf", "source": "keyframe", "path": f"kf/vis_s{n}_kf.png", "sha256": None, "description": VISUAL_DESCRIPTIONS[n]} for n in (1, 2, 3)],
             "scenes": [
                 sc(1, [m, NARRATOR], ["prp_leaf_plates", "prp_gourd_vessel", "prp_clay_chilam"], [
                     shot("a01_s01_sh01", 0, "vis_s1_kf", 6.0, ["d_0001"], ["act_s1_sit"]),

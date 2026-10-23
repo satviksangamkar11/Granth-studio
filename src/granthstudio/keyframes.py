@@ -26,6 +26,7 @@ from .schemas import validate_document
 
 PROMPT_TEMPLATE_VERSION = "keyframe-prompt-v1"
 FROZEN_TEMPLATE_VERSION = "keyframe-prompt-v2-frozen-style"   # prefix + scene + suffix from canon/style.yaml
+VISUAL_TEMPLATE_VERSION = "keyframe-prompt-v3-visual-description"   # frozen prefix + the visual's own short image description + frozen suffix
 SHEET_VIEWS = ("front", "three_quarter", "profile", "full_body")
 REFERENCE_DIR = "references"
 ASSET_ID = re.compile(r"^ref_[a-z0-9_]+$")
@@ -168,7 +169,17 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
     style = _style(registry)
     names = lambda ids: ", ".join(canon.entries[i]["canonical_name"] for i in ids)
     designs = [d for i in [*characters, *locations, *props] if (d := _design(registry, i))]
-    prompt = _prompt(style, [
+    description = next((v.get("description") for v in compiled["visuals"] if v["visual_id"] == visual_id), None)
+    if description and style and "content_sha256" in style:
+        # The image sees only what is visible: research labels, provenance notes and proper names stay in this request's metadata, never in the
+        # text conditioning (names pull the model toward unrelated learned imagery, labels dilute the frozen style words).
+        named = sorted(canon.entries[i]["canonical_name"] for i in [*characters, *locations] if canon.entries[i]["canonical_name"].lower() in description.lower())
+        if named:
+            raise ConfigError(f"{visual_id}: the visual description names {named}; describe what is visible instead (names stay in the metadata)")
+        prompt, template_version = compose(style, description.strip()), VISUAL_TEMPLATE_VERSION
+    else:
+        prompt, template_version = None, _template_version(style)
+    prompt = prompt or _prompt(style, [
         f"Characters: {names(characters)}" if characters else "", f"Location: {names(locations)}",
         f"Props: {names(props)}" if props else "", f"Lighting: {', '.join(lightings)}",
         *[f"{canon.entries[d['canon_id']]['canonical_name']}: {d['prompt']}" for d in designs],
@@ -181,7 +192,7 @@ def keyframe_request(compiled: dict[str, Any], canon: Canon, registry: dict[str,
         found = approved_assets(registry, kind="location", canon_id=loc)
         (references.append(_ref(found[0])) if found else missing.append(loc))
     request = {
-        "template_version": _template_version(style), "asset_kind": "keyframe", "visual_id": visual_id, "role": role,
+        "template_version": template_version, "asset_kind": "keyframe", "visual_id": visual_id, "role": role, "visual_description": description,
         "view": role, "asset_id": "ref_kf_" + visual_id.removeprefix("vis_"), "characters": characters,
         "locations": locations, "props": props, "lighting": lightings, "action_ids": action_ids,
         "source_fact_ids": [f["id"] for f in wanted], "artistic_fact_ids": sorted(artistic_ids),

@@ -84,6 +84,12 @@
               "pattern": "^[0-9a-f]{64}$"
             }
           ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 900,
+          "description": "Image-visible scene description used as the middle of the frozen prompt: what is seen, no names, labels or provenance"
         }
       }
     },

@@ -19,7 +19,10 @@ COMFY_LOWVRAM="${COMFY_LOWVRAM:-0}"      # 1 = start ComfyUI with --lowvram (sce
 case "$COMFY_LOWVRAM" in 0|1) ;; *) echo "COMFY_LOWVRAM must be 0 or 1"; exit 2;; esac
 STYLE_SWEEP="${STYLE_SWEEP:-0}"          # 1 = EXPERIMENT: reference-free style sweep (4 seeds x cfg 6.5 and 9.0) instead of the normal keyframe test
 case "$STYLE_SWEEP" in 0|1) ;; *) echo "STYLE_SWEEP must be 0 or 1"; exit 2;; esac
-SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]; then SWEEP_ARGS=(--style-sweep --sweep-seeds 4 --sweep-cfgs 6.5,9.0); fi
+SWEEP_SEEDS="${SWEEP_SEEDS:-4}"; SWEEP_CFGS="${SWEEP_CFGS:-6.5,9.0}"
+case "$SWEEP_SEEDS" in [1-6]) ;; *) echo "SWEEP_SEEDS must be 1..6"; exit 2;; esac
+[[ "$SWEEP_CFGS" =~ ^[0-9]+(\.[0-9]+)?(,[0-9]+(\.[0-9]+)?){0,3}$ ]] || { echo "SWEEP_CFGS must be 1-4 comma separated numbers"; exit 2; }
+SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]; then SWEEP_ARGS=(--style-sweep --sweep-seeds "$SWEEP_SEEDS" --sweep-cfgs "$SWEEP_CFGS"); fi
 export PIP_CACHE_DIR="$W/cache/pip" HF_HOME="$W/cache/hf" TORCH_HOME="$W/cache/torch" TMPDIR="$W/cache/tmp"
 PUBLISHED=0
 publish() { # once, at exit: stop logging (tee flushed), archive, replace any earlier published copy

@@ -64,8 +64,9 @@ def test_dry_run_builds_the_request_from_the_pilot_project_with_the_frozen_style
     code, receipt = run(host)
     assert code == 1 and receipt["verdict"] == "NOT_RUN" and "dry run" in receipt["reason"] and host[0].posts == []
     request = receipt["request"]
-    assert request["style"]["style_id"] == "devotional_gouache_1950s_v1" and request["template_version"] == "keyframe-prompt-v2-frozen-style"
-    assert request["prompt"].startswith("1950s vintage Indian devotional book illustration") and "Narrator" not in request["prompt"] and "Gajanan Maharaj" in request["prompt"]
+    assert request["style"]["style_id"] == "devotional_gouache_1950s_v1" and request["template_version"] == "keyframe-prompt-v3-visual-description"
+    assert request["prompt"].startswith("1950s vintage Indian devotional book illustration") and "Narrator" not in request["prompt"] and "Gajanan" not in request["prompt"]
+    assert request["characters"] == ["chr_gajanan_maharaj"] and "a young man in the prime of youth" in request["prompt"].lower()
     assert [r["asset_id"] for r in request["references"]] == ["ref_chr_gajanan_maharaj_front", "ref_loc_devidas_house_road"] and request["missing_references"] == []
     assert all("PROVISIONAL external reference" in a["approved_by"] and "Satvik Sangamkar" in a["approved_by"] for a in receipt["reference_assets"])
     assert receipt["reference_image"]["role"].startswith("PROVISIONAL external") and "docs/pilot/SDXL_DOWNLOAD_APPROVAL.md" in receipt["authorization_record"]
@@ -265,3 +266,15 @@ def test_sweep_edge_cases_one_image_duplicate_cfgs_and_a_scene_whose_characters_
 def test_a_repeated_cfg_value_is_refused(tmp_path, host):
     code, receipt = run(host, "--execute", "--style-sweep", "--sweep-cfgs", "7,7")
     assert code == 1 and receipt["verdict"] == "NOT_RUN" and "repeat" in receipt["reason"] and host[0].posts == []
+
+
+def test_the_sweep_size_is_configurable_and_validated_in_the_script_and_notebook():
+    import os
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert '--sweep-seeds "$SWEEP_SEEDS" --sweep-cfgs "$SWEEP_CFGS"' in script
+    for env, message in ((("SWEEP_SEEDS", "7"),), "SWEEP_SEEDS must be 1..6"), ((("SWEEP_CFGS", "6.5;x"),), "SWEEP_CFGS must be"):
+        done = subprocess.run(["bash", str(REPO / "scripts" / "kaggle" / "sdxl_first_test.sh")], env={**os.environ, **dict(env), "VISUAL": "vis_s1_kf"}, capture_output=True, text=True, timeout=60)
+        assert done.returncode == 2 and message in done.stdout
+    notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
+    source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+    assert "SWEEP_SEEDS = 4" in source and '"SWEEP_CFGS": SWEEP_CFGS' in source
