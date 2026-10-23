@@ -1,6 +1,6 @@
 {
   "kind": "offline_camera_motion_analysis",
-  "clip": "still.mp4",
+  "clip": "D:\\kaggle_upload\\overlay_work\\still.mp4",
   "clip_sha256": "b360de17ad885af6bca38e6468b2df8e33b12d96a80ced3bd079de41eb3449dc",
   "thresholds": {
     "min_inliers": 25,

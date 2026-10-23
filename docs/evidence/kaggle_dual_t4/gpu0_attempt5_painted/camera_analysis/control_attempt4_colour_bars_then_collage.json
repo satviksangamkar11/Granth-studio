@@ -1,0 +1,110 @@
+{
+  "kind": "offline_camera_motion_analysis",
+  "clip": "docs\\evidence\\kaggle_dual_t4\\gpu0_attempt4\\granthstudio_ltx_i2v_00001.mp4",
+  "clip_sha256": "fd86b6a7bc8e9d050eaafcd239f9a58cf32cfdb3f7e83039def1ea390bd21d5a",
+  "thresholds": {
+    "min_inliers": 25,
+    "min_inlier_ratio": 0.35,
+    "motion_scale": 0.04,
+    "motion_shift_fraction": 0.03,
+    "recovered_ssim": 0.55,
+    "drift_ssim": 0.4
+  },
+  "original_harness_verdict_untouched": true,
+  "frames": {
+    "12": {
+      "raw_ssim_vs_frame_0": 0.4338,
+      "alignment": {
+        "reliable": false,
+        "inliers": 6,
+        "matches": 111,
+        "inlier_ratio": 0.054,
+        "scale_frame_to_reference": 0.0189,
+        "rotation_deg": -96.372,
+        "shift_px": [
+          654.1,
+          257.0
+        ],
+        "shift_fraction_of_width": [
+          0.8517,
+          0.502
+        ]
+      },
+      "motion_compensated_ssim": null,
+      "covered_fraction": null,
+      "unreliable_alignment_compensated_ssim_NOT_USED": null,
+      "verdict": "INCONCLUSIVE"
+    },
+    "24": {
+      "raw_ssim_vs_frame_0": 0.4346,
+      "alignment": {
+        "reliable": false,
+        "inliers": 6,
+        "matches": 111,
+        "inlier_ratio": 0.054,
+        "scale_frame_to_reference": 0.0127,
+        "rotation_deg": -169.036,
+        "shift_px": [
+          672.2,
+          188.3
+        ],
+        "shift_fraction_of_width": [
+          0.8753,
+          0.3677
+        ]
+      },
+      "motion_compensated_ssim": null,
+      "covered_fraction": null,
+      "unreliable_alignment_compensated_ssim_NOT_USED": null,
+      "verdict": "INCONCLUSIVE"
+    },
+    "36": {
+      "raw_ssim_vs_frame_0": 0.434,
+      "alignment": {
+        "reliable": false,
+        "inliers": 6,
+        "matches": 97,
+        "inlier_ratio": 0.062,
+        "scale_frame_to_reference": 0.0692,
+        "rotation_deg": -22.519,
+        "shift_px": [
+          622.5,
+          243.7
+        ],
+        "shift_fraction_of_width": [
+          0.8106,
+          0.476
+        ]
+      },
+      "motion_compensated_ssim": null,
+      "covered_fraction": null,
+      "unreliable_alignment_compensated_ssim_NOT_USED": null,
+      "verdict": "INCONCLUSIVE"
+    },
+    "48": {
+      "raw_ssim_vs_frame_0": 0.4344,
+      "alignment": {
+        "reliable": false,
+        "inliers": 5,
+        "matches": 104,
+        "inlier_ratio": 0.048,
+        "scale_frame_to_reference": 0.0167,
+        "rotation_deg": -88.812,
+        "shift_px": [
+          653.6,
+          255.5
+        ],
+        "shift_fraction_of_width": [
+          0.8511,
+          0.4991
+        ]
+      },
+      "motion_compensated_ssim": null,
+      "covered_fraction": null,
+      "unreliable_alignment_compensated_ssim_NOT_USED": null,
+      "verdict": "INCONCLUSIVE"
+    }
+  },
+  "summary": "INCONCLUSIVE",
+  "note": "Camera movement is estimated from background feature matches with one global similarity transform; a moving subject or parallax from a real push-in makes the compensated score a lower bound. Visual examples: aligned_frame_NN.png = reference | frame | warped frame | absolute difference. Human review is still required."
+}

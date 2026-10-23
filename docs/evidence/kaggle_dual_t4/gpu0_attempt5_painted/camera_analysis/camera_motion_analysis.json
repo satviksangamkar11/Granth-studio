@@ -30,7 +30,7 @@
           -0.0706
         ]
       },
-      "motion_compensated_ssim": 0.4171,
+      "motion_compensated_ssim": 0.4224,
       "covered_fraction": 0.854,
       "verdict": "INCONCLUSIVE"
     },
@@ -54,7 +54,7 @@
       },
       "motion_compensated_ssim": null,
       "covered_fraction": null,
-      "unreliable_alignment_compensated_ssim_NOT_USED": 0.3218,
+      "unreliable_alignment_compensated_ssim_NOT_USED": 0.3237,
       "verdict": "INCONCLUSIVE"
     },
     "36": {
@@ -77,7 +77,7 @@
       },
       "motion_compensated_ssim": null,
       "covered_fraction": null,
-      "unreliable_alignment_compensated_ssim_NOT_USED": 0.2802,
+      "unreliable_alignment_compensated_ssim_NOT_USED": 0.2805,
       "verdict": "INCONCLUSIVE"
     },
     "48": {
@@ -100,7 +100,7 @@
       },
       "motion_compensated_ssim": null,
       "covered_fraction": null,
-      "unreliable_alignment_compensated_ssim_NOT_USED": 0.2217,
+      "unreliable_alignment_compensated_ssim_NOT_USED": 0.2312,
       "verdict": "INCONCLUSIVE"
     }
   },

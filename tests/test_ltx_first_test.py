@@ -611,3 +611,24 @@ def test_the_prompt_variant_is_a_plain_file_name_checked_before_any_network_step
     text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
     assert text.index("PAINTED_PROMPT must be a plain file name") < text.index("git clone") and '${PAINTED_PROMPT:-prompt.txt}' in text
     assert (REPO / "assets" / "ltx_test_inputs" / "painted_courtyard_01" / "prompt_camera_lock.txt").read_text(encoding="utf-8").startswith("A single continuous locked-off tripod shot")
+
+
+def test_the_camera_analysis_never_overwrites_evidence_other_than_its_own_report(tmp_path):
+    spec = importlib.util.spec_from_file_location("camera_motion_analysis", REPO / "scripts" / "kaggle" / "camera_motion_analysis.py")
+    cm = importlib.util.module_from_spec(spec); spec.loader.exec_module(cm)
+    receipt = tmp_path / "test_receipt.json"; receipt.write_text(json.dumps({"verdict": "FAIL"}), encoding="utf-8")
+    clip = tmp_path / "c.mp4"; clip.write_bytes(b"x")
+    with pytest.raises(SystemExit):
+        cm.main([str(clip), "--out-dir", str(tmp_path / "o"), "--json", str(receipt)])           # a harness receipt: refused before anything runs
+    assert json.loads(receipt.read_text(encoding="utf-8")) == {"verdict": "FAIL"}
+    with pytest.raises(SystemExit):
+        cm.main([str(clip), "--out-dir", str(tmp_path / "o"), "--json", str(clip)])              # the clip itself
+
+
+def test_a_failed_frame_extraction_cannot_be_covered_by_a_stale_preview(tmp_path, monkeypatch):
+    outdir = tmp_path / "p"; outdir.mkdir()
+    (outdir / "frame_00.png").write_bytes(b"stale"); (outdir / "contact_sheet.png").write_bytes(b"stale")
+    monkeypatch.setattr(ft, "_ffmpeg", lambda *a: subprocess.CompletedProcess(a, 1, "", "boom"))
+    monkeypatch.setattr(ft, "_ssim", lambda a, b: 0.99)
+    report = ft.visual_diagnostics(tmp_path / "no.mp4", outdir, None)
+    assert not (outdir / "frame_00.png").exists() and report["contact_sheet"] is None and not (outdir / "contact_sheet.png").exists()

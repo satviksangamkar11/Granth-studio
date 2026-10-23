@@ -1,6 +1,6 @@
 {
   "kind": "offline_camera_motion_analysis",
-  "clip": "zoom.mp4",
+  "clip": "D:\\kaggle_upload\\overlay_work\\zoom.mp4",
   "clip_sha256": "6e5b0eee48f3b3c2ed5ab1f9dff3a2705232a49152f1d4ea75b222c29aa6632e",
   "thresholds": {
     "min_inliers": 25,

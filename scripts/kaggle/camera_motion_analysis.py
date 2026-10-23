@@ -77,7 +77,7 @@ def estimate(cv2, np, reference, frame) -> dict:
 
 
 def compensated(cv2, np, ssim, reference, frame, estimate_: dict) -> dict:
-    """SSIM between the reference and the frame warped onto it, restricted to the pixels the warped frame really covers."""
+    """SSIM between the reference and the frame warped onto it, averaged ONLY over pixels whose whole SSIM window lies inside the area the warped frame really covers."""
     matrix = np.float32(estimate_["matrix"])
     height, width = reference.shape[:2]
     warped = cv2.warpAffine(frame, matrix, (width, height), flags=cv2.INTER_LINEAR, borderValue=0)
@@ -88,7 +88,12 @@ def compensated(cv2, np, ssim, reference, frame, estimate_: dict) -> dict:
     r0, r1, c0, c1 = rows.min(), rows.max() + 1, cols.min(), cols.max() + 1
     gray = lambda image: cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     a, b = gray(reference)[r0:r1, c0:c1], gray(warped)[r0:r1, c0:c1]
-    return {"warped": warped, "ssim": round(float(ssim(a, b, data_range=255)), 4), "covered_fraction": round(float(coverage.mean()), 3)}
+    _, ssim_map = ssim(a, b, data_range=255, full=True)
+    window = 7                                         # skimage's default window: a pixel counts only if its whole window is covered (no black corners leak in)
+    inside = cv2.erode(coverage[r0:r1, c0:c1].astype(np.uint8), np.ones((window, window), np.uint8), borderValue=0) > 0
+    if not inside.any():
+        return {"warped": warped, "ssim": None, "covered_fraction": round(float(coverage.mean()), 3)}
+    return {"warped": warped, "ssim": round(float(ssim_map[inside].mean()), 4), "covered_fraction": round(float(coverage.mean()), 3)}
 
 
 def verdict(raw: float, est: dict, comp: float | None) -> str:
@@ -153,6 +158,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.json is not None and args.json.resolve() == args.clip.resolve():
         parser.error("--json would overwrite the clip")
+    if args.json is not None and args.json.exists():       # only this tool's own earlier report may be replaced: never a receipt, journal or any other evidence file
+        try:
+            previous = json.loads(args.json.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            previous = None
+        if not (isinstance(previous, dict) and previous.get("kind") == "offline_camera_motion_analysis"):
+            parser.error(f"--json {args.json} exists and is not an earlier camera_motion_analysis report: the original evidence is never overwritten")
     report = analyse(args.clip, args.out_dir, args.frames, args.input_image)
     text = json.dumps(report, indent=2)
     if args.json:
