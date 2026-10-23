@@ -363,3 +363,8 @@ Codex re-review (06_dual_t4_rereview.md): no blocking issue; one MINOR (stale te
 ## First Kaggle dual-T4 attempt (2026-10-23, kernel sangeetasangamkar/granthstudio-ltx-dual-t4 v1, bundle tip 9755413): REFUSED before any download
 - The script refused at step 0: `/kaggle/working` has only 20 GB free (need 40). Nothing was cloned or downloaded; no GPU work ran. Log: docs/evidence/kaggle_dual_t4/gpu0_attempt1_refused_disk.txt.
 - Fix: the heavy workspace now lives on `/kaggle/temp/ltx` (notebook `TMP`); only the small evidence is published to `/kaggle/working` (`EVIDENCE_DEST`, `publish()` also runs on early refusal).
+
+## Kaggle dual-T4 attempt 2 (kernel granthstudio-ltx-dual-t4 v2, pinned 30f6277): refused at worker start, safely
+- Host check passed (2x Tesla T4, torch 2.11.0+cu128, 30.7 GB RAM). Both weights downloaded and the full SHA-256 of each verified OK (ltxv-2b-0.9.8-distilled 6047 MB, t5xxl_fp16 9334 MB). ComfyUI started on its random port.
+- Refused: `pid 302 does NOT own a listener on port 59039`. Cause: `$!` was the launching subshell, not the python process. The /proc ownership proof did its job; no inference ran, no GPU memory was used.
+- Fix: launch the worker with `exec` so the recorded pid is the ComfyUI process. Log: docs/evidence/kaggle_dual_t4/gpu0_attempt2_pid_proof_refused.txt. ComfyUI also logged a non-fatal sqlite "unable to open database file" warning (user-directory DB), noted, not acted on.

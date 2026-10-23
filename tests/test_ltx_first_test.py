@@ -426,3 +426,8 @@ def test_gpu_script_invalidates_old_success_before_it_can_refuse_for_missing_var
     text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
     assert text.index('"$W/ltx_evidence_$STAGE/stage_verdict.json"') < text.index("LTX_DOWNLOAD_APPROVED:?") < text.index("== 0. refusals")
     assert text.index("rm -rf \"$EVIDENCE_DEST/ltx_evidence_$STAGE\" \"$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz\"\n") < text.index("LTX_DOWNLOAD_APPROVED:?")
+
+
+def test_gpu_script_workers_are_exec_replaced_so_the_recorded_pid_owns_the_listener():
+    text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
+    assert 'CUDA_VISIBLE_DEVICES="$n" exec "${launch[@]}"' in text      # Kaggle attempt 2: a subshell pid does not own the socket and the proof (rightly) refused

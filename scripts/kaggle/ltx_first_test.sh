@@ -154,7 +154,7 @@ start_worker() { # index port : one ComfyUI process that can see ONLY that physi
   local launch=(python main.py --listen 127.0.0.1 --port "$port" --disable-auto-launch --output-directory "$d/output" --temp-directory "$d/temp"
                 --input-directory "$d/input" --user-directory "$d/user")
   printf 'CUDA_VISIBLE_DEVICES=%s ' "$n" > "$d/launch.txt"; printf '%q ' "${launch[@]}" >> "$d/launch.txt"
-  ( cd "$COMFY" && CUDA_VISIBLE_DEVICES="$n" "${launch[@]}" > "$d/comfyui.log" 2>&1 ) &
+  ( cd "$COMFY" && CUDA_VISIBLE_DEVICES="$n" exec "${launch[@]}" > "$d/comfyui.log" 2>&1 ) &   # exec: $! is the python process itself, which the /proc listener proof needs
   WPID[$n]=$!
   local ready=0
   for _ in $(seq 1 120); do
