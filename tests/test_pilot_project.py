@@ -80,3 +80,13 @@ def test_the_task_plan_has_native_keyframes_three_ltx_shots_and_both_languages_a
     assert request["style"]["style_id"] == "devotional_gouache_1950s_v1" and "Narrator" not in request["prompt"]
     assert "Bankatlal Agarwal" in request["prompt"] and "Damodarpant Kulkarni" in request["prompt"] and request["prompt"].startswith("1950s vintage Indian devotional book illustration")
     assert {t.stage for t in tasks if t.name.startswith("sheet_")} == set()                       # reference sheets are a separate task list
+
+
+def test_the_committed_pilot_files_are_what_the_generator_produces_and_carry_the_one_frozen_style_unchanged(tmp_path):
+    fresh = bp.build(tmp_path / "fresh")
+    committed = REPO / "pilot"
+    names = sorted(p.relative_to(fresh).as_posix() for p in fresh.rglob("*") if p.is_file())
+    assert names == sorted(p.relative_to(committed).as_posix() for p in committed.rglob("*") if p.is_file())
+    for name in names:
+        assert (fresh / name).read_bytes().replace(b"\r\n", b"\n") == (committed / name).read_bytes().replace(b"\r\n", b"\n"), name
+    assert (committed / "canon" / "style.yaml").read_bytes().replace(b"\r\n", b"\n") == (REPO / "canon" / "style.yaml").read_bytes().replace(b"\r\n", b"\n")     # a copy, never a second style
