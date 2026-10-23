@@ -120,4 +120,6 @@ def test_image_descriptions_refuse_aliases_possessives_other_scenes_names_and_re
     assert kf.description_problems(canon, "A townsman in loose pants and a cloth cap watches the young man.") == []            # "Pant" is not inside "pants"
     for description in bp.VISUAL_DESCRIPTIONS.values():                                                                     # the pilot's own descriptions are clean
         assert kf.description_problems(canon, description) == []
-    assert "clay pipe in one hand" in bp.VISUAL_DESCRIPTIONS[1]                                                               # research: the chilam is in his hand
+    assert "clay pipe in one hand" in bp.VISUAL_DESCRIPTIONS[1]
+    assert kf.description_problems(canon, "A provisional wooden shelter stands by the road.") == []                         # an ordinary visible word is not bookkeeping
+    assert kf.description_problems(canon, "अविगजानन") == [] and kf.description_problems(canon, "गजानन बसले") == ["names ['गजानन']"]   # Devanagari marks are not boundaries                                                               # research: the chilam is in his hand

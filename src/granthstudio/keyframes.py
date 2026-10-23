@@ -143,7 +143,7 @@ def _template_version(style: dict[str, Any] | None) -> str:
     return FROZEN_TEMPLATE_VERSION if style and "content_sha256" in style else PROMPT_TEMPLATE_VERSION
 
 
-BOOKKEEPING = (r"source\s+detail", r"artistic\s+interpretation", r"\bovi\b", r"\b[a-z0-9]+_[a-z0-9_]+\b", r"\bprovisional\b", r"\bcanon\b")
+BOOKKEEPING = (r"source\s+detail", r"artistic\s+interpretation", r"\bovi\b", r"\b[a-z0-9]+_[a-z0-9_]+\b", r"\bcanon\b")
 
 
 def description_problems(canon: Canon, description: str) -> list[str]:
@@ -151,7 +151,7 @@ def description_problems(canon: Canon, description: str) -> list[str]:
     (labels, ids such as day_outdoor or chr_x, ovi references) found in an image description. Matching is on word boundaries, case-insensitive."""
     names = sorted({name for entry_id, entry in canon.entries.items() if canon.kinds[entry_id] in ("characters", "locations")
                     for name in (entry["canonical_name"], *entry.get("aliases", [])) if name.strip()
-                    and re.search(rf"(?<!\w){re.escape(name.strip())}(?!\w)", description, re.IGNORECASE)})
+                    and re.search(rf"(?<![\w\u0900-\u097F]){re.escape(name.strip())}(?![\w\u0900-\u097F])", description, re.IGNORECASE)})
     labels = sorted({m.group(0) for pattern in BOOKKEEPING for m in re.finditer(pattern, description, re.IGNORECASE)})
     return ([f"names {names}"] if names else []) + ([f"carries research bookkeeping {labels}"] if labels else [])
 
