@@ -341,6 +341,8 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
             return finish("NOT_RUN", "execution gate: " + "; ".join(problems))
     if not args.reference_image.is_file():
         return finish("NOT_RUN", f"reference image {args.reference_image} is missing")
+    if args.style_anchor and not args.reference_set:
+        return finish("NOT_RUN", "--style-anchor needs --reference-set: the single legacy painting is registered as both a character and the location and must never be the style anchor")
     problems = verify_files(args.models_dir)
     receipt["file_check"] = {"problems": problems, "pinned": [{"name": i["name"], "sha256": i["sha256"], "size_bytes": i["size_bytes"], "revision": i["revision"]} for i in PINS["files"]]}
     if problems:

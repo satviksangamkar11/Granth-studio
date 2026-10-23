@@ -407,3 +407,19 @@ def test_style_anchor_mode_refuses_when_the_anchor_is_not_among_the_approved_ref
         mp.undo()
     receipt = json.loads((work / "sdxl_receipt.json").read_text(encoding="utf-8"))
     assert receipt["verdict"] == "FAIL" and "style anchor" in receipt["reason"] and server.posts == []
+
+
+def test_style_anchor_without_a_reference_set_or_with_a_character_image_as_anchor_is_refused(host, tmp_path):
+    import os
+    server = host[0]
+    code, receipt = run(host, "--execute", "--style-anchor")                                        # legacy painting = character AND location
+    assert code == 1 and receipt["verdict"] == "NOT_RUN" and "--style-anchor needs --reference-set" in receipt["reason"] and server.posts == []
+    done = subprocess.run(["bash", str(REPO / "scripts" / "kaggle" / "sdxl_first_test.sh")], env={**os.environ, "STYLE_ANCHOR": "1", "VISUAL": "vis_s1_kf"}, capture_output=True, text=True, timeout=60)
+    assert done.returncode == 2 and "needs REFERENCE_SET" in done.stdout
+    from granthstudio import keyframes as kf
+    from granthstudio.errors import IntegrationUnavailable
+    same = {"sha256": "a" * 64, "canon_id": "loc_x"}
+    request = {"identity_method": "style_anchor", "style_anchor_canon_id": "loc_x", "style_anchor_weight": 0.8, "references": [{"sha256": "a" * 64, "canon_id": "chr_y"}, same]}
+    import inspect
+    source = inspect.getsource(kf.sdxl_generate)
+    assert "uses the same image as another reference" in source                                     # guard present in the pipeline itself

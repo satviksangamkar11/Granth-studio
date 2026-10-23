@@ -347,6 +347,8 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
         anchor = next((r for r in request["references"] if r.get("canon_id") == anchor_id), None)
         if request["references"] and (anchor is None or not request.get("style_anchor_weight")):
             raise IntegrationUnavailable(f"style anchor {anchor_id!r} is not among this request's approved references or has no weight: NOT VALIDATED")
+        if anchor and any(r["sha256"] == anchor["sha256"] for r in request["references"] if r is not anchor):
+            raise IntegrationUnavailable(f"style anchor {anchor_id!r} uses the same image as another reference (a character image would leak identity into the style slot): NOT VALIDATED")
         graph_refs = [anchor] if anchor else []
     for index in range(1, slots + 1):
         ref = graph_refs[index - 1] if index <= len(graph_refs) else None
