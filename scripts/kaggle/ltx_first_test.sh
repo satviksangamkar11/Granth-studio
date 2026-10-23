@@ -49,7 +49,8 @@ echo "== 0. refusals that need no network"
 [ -z "$(git -C "$REPO" status --porcelain)" ] || { echo "the GranthStudio checkout has local modifications"; exit 2; }
 if [ -n "${PAINTED_INPUT:-}" ]; then   # refused before any network step
   case "$STAGE" in gpu0|retry) ;; *) echo "PAINTED_INPUT is only defined for the gpu0 and retry stages"; exit 2;; esac
-  for f in 04_ltx_start_768x512.png prompt.txt negative_prompt.txt; do [ -f "$REPO/$PAINTED_INPUT/$f" ] || { echo "PAINTED_INPUT is missing $REPO/$PAINTED_INPUT/$f"; exit 2; }; done
+  case "${PAINTED_PROMPT:-prompt.txt}" in */*|*..*) echo "PAINTED_PROMPT must be a plain file name inside PAINTED_INPUT"; exit 2;; esac
+  for f in 04_ltx_start_768x512.png "${PAINTED_PROMPT:-prompt.txt}" negative_prompt.txt; do [ -f "$REPO/$PAINTED_INPUT/$f" ] || { echo "PAINTED_INPUT is missing $REPO/$PAINTED_INPUT/$f"; exit 2; }; done
 fi
 case "$SESSION_MINUTES" in ''|*[!0-9]*) echo "SESSION_MINUTES must be an integer"; exit 2;; esac
 { [ "$SESSION_MINUTES" -ge 30 ] && [ "$SESSION_MINUTES" -le 720 ]; } || { echo "SESSION_MINUTES must be 30..720"; exit 2; }
@@ -196,7 +197,7 @@ if [ -n "${PAINTED_INPUT:-}" ]; then
   case "$STAGE" in gpu0|retry) ;; *) echo "PAINTED_INPUT is only defined for the gpu0 and retry stages"; exit 2;; esac
   PD="$REPO/$PAINTED_INPUT"
   for f in 04_ltx_start_768x512.png prompt.txt negative_prompt.txt; do [ -f "$PD/$f" ] || { echo "PAINTED_INPUT is missing $PD/$f"; exit 2; }; done
-  PAINTED_ARGS=(--start-image "$PD/04_ltx_start_768x512.png" --prompt-file "$PD/prompt.txt" --negative-prompt-file "$PD/negative_prompt.txt")
+  PAINTED_ARGS=(--start-image "$PD/04_ltx_start_768x512.png" --prompt-file "$PD/${PAINTED_PROMPT:-prompt.txt}" --negative-prompt-file "$PD/negative_prompt.txt")
 fi
 client() { # index variant workdir extra-args... : GranthStudio's existing pipeline against that worker only
   local n="$1" variant="$2" workdir="$3"; shift 3

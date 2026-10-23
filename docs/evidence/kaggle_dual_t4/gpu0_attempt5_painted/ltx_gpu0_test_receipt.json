@@ -1,0 +1,391 @@
+{
+  "schema_version": 1,
+  "kind": "ltx_first_i2v_test",
+  "started": "2026-10-23T07:02:17+00:00",
+  "harness_commit": "d6b9c6fa437fb9fc95f2a6d65beefde8515b417c",
+  "pins_status": "PROPOSED_NOT_APPROVED",
+  "shot": "a01_s01_sh02",
+  "approved_by": "Satvik Sangamkar",
+  "expected_precision": "fp32",
+  "variant": "a",
+  "gpu_index": 0,
+  "workdir": "/kaggle/temp/ltx/ltx_gpu0",
+  "cuda_visible_devices_of_worker": "0",
+  "worker_pid": 304,
+  "comfy_url": "http://127.0.0.1:52745",
+  "physical_gpus_at_start": [
+    {
+      "index": 0,
+      "uuid": "GPU-9fca5c71-6dca-a3a9-d386-16350dbee9de",
+      "name": "Tesla T4",
+      "memory_total_mb": 15360.0,
+      "memory_used_mb": 105.0
+    },
+    {
+      "index": 1,
+      "uuid": "GPU-006ca999-0ba6-cc60-748c-fef529f0a997",
+      "name": "Tesla T4",
+      "memory_total_mb": 15360.0,
+      "memory_used_mb": 0.0
+    }
+  ],
+  "note": "A PASS means one clip decoded through the existing pipeline. The i2v capability stays 'unvalidated' until a human reviews the clip.",
+  "conditioning": {
+    "workflow": "workflows/comfyui/ltx_i2v_098.candidate.json",
+    "LTXVImgToVideo": {
+      "strength": 1.0,
+      "batch_size": 1
+    },
+    "LTXVPreprocess": {
+      "img_compression": 38
+    },
+    "CFGGuider": {
+      "cfg": 1
+    },
+    "sampler": {
+      "sampler_name": "euler_ancestral"
+    },
+    "sigmas": "1.0000, 0.9937, 0.9875, 0.9812, 0.9750, 0.9094, 0.7250, 0.4219, 0.0",
+    "checkpoint": "ltxv-2b-0.9.8-distilled.safetensors"
+  },
+  "start_image": {
+    "path": "/kaggle/working/granthstudio/assets/ltx_test_inputs/painted_courtyard_01/04_ltx_start_768x512.png",
+    "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83",
+    "width": 768,
+    "height": 512,
+    "staged_as": "project visual vis/room.png, uploaded by the existing upload_image step"
+  },
+  "text_conditioning": {
+    "positive": "A traditional Indian village temple courtyard painted in the style of a 1950s vintage Indian devotional book illustration, with opaque gouache and egg tempera, matte ivory paper texture, soft sepia contours and warm natural mineral pigments.\nA calm Indian spiritual figure wearing a simple off-white dhoti and shawl stands peacefully in the courtyard. His face, hairstyle, clothing and body proportions remain exactly consistent with the supplied image.\nThe figure makes a very subtle natural head movement and gently breathes. His shawl moves slightly in a soft breeze, and nearby banyan leaves sway delicately.\nThe camera remains completely stationary. Preserve the original temple, architecture, background, character identity, spatial layout, lighting, colors and hand-painted illustration style.\nContinuous single shot, gentle natural motion, no scene changes, no new characters, no transformations.",
+    "positive_sha256": "d67b0802a75d3386cc45e040bcded67ebf207c1db9a554bc136badccf9911124",
+    "negative_recorded": "photorealistic, CGI, 3D render, glossy digital painting, modern photography, neon colors, character morphing, changing faces, altered clothing, new objects, scene transitions, camera cuts, distorted anatomy, flickering backgrounds, text, typography, signatures, watermarks.",
+    "negative_applied": false,
+    "negative_note": "the workflow runs CFGGuider at cfg 1, where negative conditioning has no effect; the workflow was deliberately not changed",
+    "style_prefix_suffix_added": false,
+    "normalization": "surrounding whitespace stripped, internal text and newlines unchanged",
+    "style": {
+      "style_id": "devotional_gouache_1950s_v1",
+      "applied_via": "identity in task inputs/receipts; the supplied text already carries the style wording"
+    }
+  },
+  "static_verification": {
+    "command": [
+      "/usr/bin/python3",
+      "/kaggle/working/granthstudio/scripts/verify_ltx_pins.py",
+      "--models-dir",
+      "/kaggle/temp/ltx/ComfyUI",
+      "--api-workflow",
+      "/kaggle/working/granthstudio/workflows/comfyui/ltx_i2v_098.candidate.json",
+      "--models-yaml",
+      "/kaggle/temp/ltx/ltx_gpu0/project/config/models.yaml",
+      "--json",
+      "/kaggle/temp/ltx/ltx_gpu0/pin_report.json",
+      "--source",
+      "comfyui=/kaggle/temp/ltx/ComfyUI",
+      "--source",
+      "ltxvideo_nodes=/kaggle/temp/ltx/ComfyUI-LTXVideo-src",
+      "--source",
+      "videohelpersuite=/kaggle/temp/ltx/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite",
+      "--source",
+      "kjnodes=/kaggle/temp/ltx/ComfyUI/custom_nodes/ComfyUI-KJNodes",
+      "--workflow",
+      "/kaggle/temp/ltx/ComfyUI-LTXVideo-src/example_workflows/low_level/ltxvideo-i2v-distilled.json",
+      "--node-inventory",
+      "/kaggle/temp/ltx/ltx_evidence_gpu0/worker0/object_info.json"
+    ],
+    "exit": 2,
+    "output": "PASS       LOCAL  source:comfyui                               HEAD 2f74e17975696d829af455845c584574bbc85774 clean\nPASS       LOCAL  source:ltxvideo_nodes                        HEAD 36fdaf500b3cd6f7fa8b2dfec36e984746e630a2 clean\nPASS       LOCAL  source:videohelpersuite                      HEAD 9e963ff5ed0b69e588ee3d965711766b0f3cf829 clean\nPASS       LOCAL  source:kjnodes                               HEAD ad37ce656c13e9abea002b46e3a89be3dba32355 clean\nPASS       LOCAL  file:ltxv-2b-0.9.8-distilled.safetensors     sha256 76aa8c4786af752fa6f951947129d5290c3c6c0b2fadcadea6b5e114ae2cad8f\nPASS       LOCAL  file:t5xxl_fp16.safetensors                  sha256 6e480b09fae049a72d2a8c5fbccb8d3e92febeb233bbe9dfe7256958a9167635\nPASS       LOCAL  node:CheckpointLoaderSimple                  present in the supplied inventory\nPASS       LOCAL  node:CLIPLoader                              present in the supplied inventory\nPASS       LOCAL  node:CLIPTextEncode                          present in the supplied inventory\nPASS       LOCAL  node:LoadImage                               present in the supplied inventory\nPASS       LOCAL  node:VAEDecode                               present in the supplied inventory\nPASS       LOCAL  node:LTXVImgToVideo                          present in the supplied inventory\nPASS       LOCAL  node:LTXVConditioning                        present in the supplied inventory\nPASS       LOCAL  node:LTXVPreprocess                          present in the supplied inventory\nPASS       LOCAL  node:SamplerCustomAdvanced                   present in the supplied inventory\nPASS       LOCAL  node:KSamplerSelect                          present in the supplied inventory\nPASS       LOCAL  node:CFGGuider                               present in the supplied inventory\nPASS       LOCAL  node:RandomNoise                             present in the supplied inventory\nPASS       LOCAL  node:StringToFloatList                       present in the supplied inventory\nPASS       LOCAL  node:FloatToSigmas                           present in the supplied inventory\nPASS       LOCAL  node:VHS_VideoCombine                        present in the supplied inventory\nPASS       LOCAL  workflow:identity                            git blob 2260170f4ebacb077b938302b825e6e5a97b1290, 18595 bytes (pinned 2260170f4ebacb077b938302b825e6e5a97b1290, 18595)\nPASS       LOCAL  workflow:links                               21 links resolve\nPASS       LOCAL  workflow:node_classes                        workflow classes equal the pinned list\nUNVERIFIED LOCAL  workflow:model_names                         the official file names ltxv-2b-0.9.6-distilled-04-25.safetensors, not the pinned checkpoint: the substitution is recorded but NOT verified (a real run is the test)\nPASS       LOCAL  api:node_classes                             16 nodes, classes equal the pinned list\nPASS       LOCAL  api:links                                    every link resolves to an existing node and output slot\nPASS       LOCAL  api:output_node                              _output_node '103' is VHS_VideoCombine (pinned VHS_VideoCombine)\nPASS       LOCAL  api:checkpoint_name                          CheckpointLoaderSimple loads ['ltxv-2b-0.9.8-distilled.safetensors']; pinned ltxv-2b-0.9.8-distilled.safetensors\nPASS       LOCAL  api:model_files                              workflow names ['ltxv-2b-0.9.8-distilled.safetensors', 't5xxl_fp16.safetensors']; unpinned: []\nPASS       LOCAL  api:placeholders                             workflow uses ['FPS', 'FRAMES', 'HEIGHT', 'MOTION_PROMPT', 'SEED', 'START_IMAGE', 'WIDTH']; the adapter supplies ['FPS', 'FRAMES', 'HEIGHT', 'MOTION_PROMPT', 'SEED', 'START_IMAGE', 'WIDTH']\nPASS       LOCAL  api:seed_on_generation_path                  seed inputs on the output's dependency path: [('102', 'noise_seed')]; all seed-like nodes: [('102', 'noise_seed')]\nPASS       CONFIG config:frame_counts                          all of [49, 65, 81, 89, 97, 121] satisfy 8n+1\nPASS       CONFIG config:checkpoint_file                       models.yaml ltxv-2b-0.9.8-distilled.safetensors vs pinned ltxv-2b-0.9.8-distilled.safetensors\nPASS       CONFIG config:checkpoint_sha256                     configured value compared with the pin; a configured hash is not proof the file exists\n\nexit 2: no failures, but UNVERIFIED checks remain\n",
+    "accepted": true,
+    "why": "only tolerated UNVERIFIED items remain: ['workflow:model_names']"
+  },
+  "attempts_allowed_per_task": 1,
+  "preflight": {
+    "schema_version": 1,
+    "measured_at": "2026-10-23T07:04:35+00:00",
+    "gpu_ready": true,
+    "checks": {
+      "gpu": {
+        "status": "pass",
+        "measured": [
+          "Tesla T4"
+        ],
+        "required": "T4",
+        "detail": "single-GPU default uses GPU 0"
+      },
+      "free_vram": {
+        "status": "pass",
+        "measured": 14807.0,
+        "required": 10000,
+        "detail": ""
+      },
+      "ram": {
+        "status": "pass",
+        "measured": 30127.83203125,
+        "required": 12000,
+        "detail": ""
+      },
+      "disk": {
+        "status": "pass",
+        "measured": 1109.364047872,
+        "required": 30,
+        "detail": ""
+      },
+      "session": {
+        "status": "pass",
+        "measured": 13990.853215,
+        "required": 1800,
+        "detail": ""
+      },
+      "python_packages": {
+        "status": "pass",
+        "measured": {
+          "jsonschema": "4.26.0",
+          "pyyaml": "6.0.3"
+        },
+        "required": {
+          "pyyaml": "6.0.3",
+          "jsonschema": "4.26.0"
+        },
+        "detail": ""
+      },
+      "python": {
+        "status": "info",
+        "measured": "3.13.15",
+        "required": ">=3.12 (pyproject)",
+        "detail": ""
+      },
+      "storage": {
+        "status": "pass",
+        "measured": "/kaggle/temp/ltx/ltx_gpu0/durable",
+        "required": null,
+        "detail": ""
+      },
+      "workers": {
+        "status": "pass",
+        "measured": "single",
+        "required": "single",
+        "detail": ""
+      },
+      "sources": {
+        "status": "pass",
+        "measured": {
+          "comfyui_repo": "https://github.com/comfyanonymous/ComfyUI",
+          "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+          "node_pack_repo": "https://github.com/Lightricks/ComfyUI-LTXVideo",
+          "node_pack_commit": "36fdaf500b3cd6f7fa8b2dfec36e984746e630a2"
+        },
+        "required": {
+          "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+          "node_pack_commit": "36fdaf500b3cd6f7fa8b2dfec36e984746e630a2"
+        },
+        "detail": ""
+      }
+    }
+  },
+  "inputs": {
+    "checkpoint_sha256": "76aa8c4786af752fa6f951947129d5290c3c6c0b2fadcadea6b5e114ae2cad8f",
+    "text_encoder_sha256": "6e480b09fae049a72d2a8c5fbccb8d3e92febeb233bbe9dfe7256958a9167635",
+    "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+    "node_pack_commit": "36fdaf500b3cd6f7fa8b2dfec36e984746e630a2",
+    "width": 768,
+    "height": 512,
+    "frames": 49,
+    "fps": 24,
+    "precision_expected": "fp32"
+  },
+  "exec_started": "2026-10-23T07:04:35.148+00:00",
+  "exec_finished": "2026-10-23T07:11:15.674+00:00",
+  "wall_s": 400.5,
+  "results": [
+    {
+      "stage": "tier1",
+      "name": "a01_s01_sh02",
+      "task_id": "31ca188bd0f5e28aebf1",
+      "status": "complete",
+      "attempts": 1,
+      "detail": "ok",
+      "elapsed_s": 400.525
+    }
+  ],
+  "journal": {
+    "attempt": 1,
+    "base_url": "http://127.0.0.1:52745",
+    "graph_sha256": "93dc2f80de576b4d12e6484c5c8251d8f22af8b11f8d4d824fde3a28a57ca187",
+    "history": [
+      {
+        "attempt": 1,
+        "fingerprint": "4a5753dc6da4b417f32b363cd5bbdfc4177b4727a15159e644e38d9fe2c79932",
+        "generation": {
+          "base_seed": 1732128765,
+          "seed": 1732128765,
+          "seed_offset": 0
+        },
+        "graph_sha256": "93dc2f80de576b4d12e6484c5c8251d8f22af8b11f8d4d824fde3a28a57ca187",
+        "job_token": "d1ccf1f40ae5eae96049b395d5c82530f10d5563622ef8f10726b2bc6cad5376",
+        "scope": "output_closure",
+        "seed_inputs": [
+          {
+            "input": "noise_seed",
+            "node": "102",
+            "value": 1732128765
+          }
+        ]
+      }
+    ],
+    "job_token": "d1ccf1f40ae5eae96049b395d5c82530f10d5563622ef8f10726b2bc6cad5376",
+    "max_attempts": 3,
+    "namespace": "a0322117ffbc4877aef21fa5a82d9472",
+    "prompt_id": "049c1369-453b-4880-b14e-946b807f8d57",
+    "state": "completed",
+    "submission_namespace": "a0322117ffbc4877aef21fa5a82d9472"
+  },
+  "reused_earlier_output": false,
+  "clip": {
+    "sha256": "d0d6a804df98743ef1a277a673cc374904b8eda3792d9917f8d7b9a397f834d4",
+    "width": 768,
+    "height": 512,
+    "duration_s": 2.0416666666666665
+  },
+  "metrics": {
+    "capability": "i2v",
+    "checkpoint_sha256": "76aa8c4786af752fa6f951947129d5290c3c6c0b2fadcadea6b5e114ae2cad8f",
+    "execution_s": {
+      "kind": "measured by ComfyUI status messages",
+      "value": 107.675
+    },
+    "generation": {
+      "attempt": 1,
+      "fingerprint": "4a5753dc6da4b417f32b363cd5bbdfc4177b4727a15159e644e38d9fe2c79932",
+      "seed": 1732128765,
+      "seed_inputs": [
+        {
+          "input": "noise_seed",
+          "node": "102",
+          "value": 1732128765
+        }
+      ],
+      "seed_offset": 0
+    },
+    "gpu": "Tesla T4",
+    "gpu_count": 1,
+    "gpu_index": 0,
+    "inputs": {
+      "fps": 24,
+      "frame_rule": "8n+1 frames, width/height multiples of 32 (config.ltx_dimension_problems), plus the pinned list",
+      "frames": 49,
+      "height": 512,
+      "start_image": {
+        "height": 512,
+        "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83",
+        "width": 768
+      },
+      "width": 768
+    },
+    "peak_vram_mb": {
+      "kind": "sampled with nvidia-smi at each poll; lower bound of the true peak",
+      "value": 14905.0
+    },
+    "prompt_id": "049c1369-453b-4880-b14e-946b807f8d57",
+    "runtime_sha256": "e4d566b921894d8957db52bbcc3e42e7af547e3d93ea7a0c3a0bbec3b3ea82fb",
+    "schema_version": 1,
+    "shot_id": "a01_s01_sh02",
+    "style": {
+      "sha256": "2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1",
+      "style_id": "devotional_gouache_1950s_v1",
+      "version": 1
+    },
+    "system_stats": {
+      "devices": [
+        {
+          "index": 0,
+          "name": "cuda:0 Tesla T4 : cudaMallocAsync",
+          "torch_vram_free": 0,
+          "torch_vram_total": 0,
+          "type": "cuda",
+          "vram_free": 15526068224,
+          "vram_total": 15636037632
+        }
+      ],
+      "system": {
+        "argv": [
+          "main.py",
+          "--listen",
+          "127.0.0.1",
+          "--port",
+          "52745",
+          "--disable-auto-launch",
+          "--output-directory",
+          "/kaggle/temp/ltx/ltx_evidence_gpu0/worker0/output",
+          "--temp-directory",
+          "/kaggle/temp/ltx/ltx_evidence_gpu0/worker0/temp",
+          "--input-directory",
+          "/kaggle/temp/ltx/ltx_evidence_gpu0/worker0/input",
+          "--user-directory",
+          "/kaggle/temp/ltx/ltx_evidence_gpu0/worker0/user"
+        ],
+        "comfyui_version": "0.3.47",
+        "embedded_python": false,
+        "os": "posix",
+        "python_version": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+        "pytorch_version": "2.11.0+cu128",
+        "ram_free": 31657619456,
+        "ram_total": 33658318848,
+        "required_frontend_version": "1.23.4"
+      }
+    },
+    "wall_s": {
+      "kind": "measured in this session only (excludes earlier sessions)",
+      "value": 108.30688624899994
+    },
+    "workflow_version": "477951fdde845a65050e264dde76b6851f56ae547e7225ccaac94fa3c93b5ddc"
+  },
+  "comfy_execution": {
+    "prompt_id": "049c1369-453b-4880-b14e-946b807f8d57",
+    "start_ms": 1792739255893,
+    "end_ms": 1792739363568
+  },
+  "visual_diagnostics": {
+    "sample_frames": [
+      0,
+      1,
+      12,
+      24,
+      36,
+      48
+    ],
+    "contact_sheet": "contact_sheet.png",
+    "ssim_vs_frame_0": {
+      "1": 0.578934,
+      "12": 0.173246,
+      "24": 0.165645,
+      "36": 0.165287,
+      "48": 0.174519
+    },
+    "ssim_frame_0_vs_input": 0.712029,
+    "max_luma_step": 19.5571,
+    "thresholds": {
+      "min_ssim_frame_1": 0.6,
+      "min_ssim_last": 0.3,
+      "max_luma_step": 40.0,
+      "min_ssim_frame_0_vs_input": 0.5
+    },
+    "drift_suspected": true,
+    "human_visual_review": "NOT_DONE"
+  },
+  "verdict": "FAIL",
+  "reason": "visual drift suspected (or not measurable): SSIM vs frame 0 {'1': 0.578934, '12': 0.173246, '24': 0.165645, '36': 0.165287, '48': 0.174519}, max luma step 19.5571; see preview/contact_sheet.png; a decoded MP4 is not a visual PASS",
+  "finished": "2026-10-23T07:11:19+00:00",
+  "comfyui_log_excerpt": [
+    "Checkpoint files will always be loaded safely.",
+    "Total VRAM 14912 MB, total RAM 32099 MB",
+    "Set vram state to: NORMAL_VRAM",
+    "Device: cuda:0 Tesla T4 : cudaMallocAsync",
+    "model weight dtype torch.float32, manual cast: None",
+    "VAE load device: cuda:0, offload device: cpu, dtype: torch.float32",
+    "no CLIP/text encoder weights in checkpoint, the text encoder model will not be loaded.",
+    "loaded completely 9.5367431640625e+25 9083.38671875 True",
+    "CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cuda:0, dtype: torch.float16",
+    "loaded completely 5250.487496185303 4756.450138092041 True",
+    "loaded completely 8443.887451934814 7335.80517578125 True"
+  ]
+}

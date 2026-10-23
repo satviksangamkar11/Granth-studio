@@ -24,6 +24,7 @@ and stops (no retry) on a CUDA out-of-memory error."""),
 APPROVER = ""            # the name that signed section E and accepted the licence (not a placeholder, not an assistant)
 EXPECTED_COMMIT = ""     # the reviewed GranthStudio commit (BUNDLE_INFO.json branch_tip), 40 hex characters
 PAINTED_INPUT = ""       # optional: repo folder of a painted start image + prompt (gpu0/retry only); empty = the synthetic test pattern
+PAINTED_PROMPT = "prompt.txt"   # which prompt file of PAINTED_INPUT to use (a plain file name)
 STAGE = "gpu0"           # gpu0 (always first) -> gpu1 -> concurrent -> retry; later stages need earlier PASS receipts
 SESSION_MINUTES = 240    # a maximum, not a target
 # ----------------------------------------------------------------------------------------------------------------
@@ -47,7 +48,7 @@ assert head == EXPECTED_COMMIT, f"the attached bundle is at {head}, not the revi
 assert not subprocess.run(["git", "-C", f"{WORK}/granthstudio", "status", "--porcelain"], capture_output=True, text=True).stdout, "dirty checkout"
 os.makedirs(f"{TMP}/cache/pip", exist_ok=True)
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest"], check=True, env={**os.environ, "PIP_CACHE_DIR": f"{TMP}/cache/pip"})"""),
-    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "STAGE": STAGE, "PAINTED_INPUT": PAINTED_INPUT, "W": TMP, "EVIDENCE_DEST": WORK}
+    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "STAGE": STAGE, "PAINTED_INPUT": PAINTED_INPUT, "PAINTED_PROMPT": PAINTED_PROMPT, "W": TMP, "EVIDENCE_DEST": WORK}
 process = subprocess.Popen(["bash", f"{WORK}/granthstudio/scripts/kaggle/ltx_first_test.sh"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
     print(line, end="")
