@@ -204,3 +204,19 @@ def test_scene_3_first_generates_provisional_sheets_for_the_characters_without_a
     assert len(receipt["request"]["references"]) == 5 and receipt["request"]["missing_references"] == []
     assert flags == [True, False, False, False, False]                                              # the full host gate is asked for the first generation only
     assert gate_calls == [0]                                                                        # ... exactly once, before anything was submitted
+
+
+def test_low_vram_is_an_explicit_opt_in_validated_recorded_and_never_the_default():
+    import os
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert 'COMFY_LOWVRAM="${COMFY_LOWVRAM:-0}"' in script and "COMFY_LOWVRAM must be 0 or 1" in script
+    assert script.index('if [ "$COMFY_LOWVRAM" = 1 ]; then LAUNCH+=(--lowvram); fi') < script.index("printf 'CUDA_VISIBLE_DEVICES=0 '")      # the flag is part of what launch.txt records
+    base = next(line for line in script.splitlines() if line.startswith("LAUNCH=("))
+    assert "--lowvram" not in base and script.count("--lowvram") == 2
+    for value in ("2", "yes"):
+        done = subprocess.run(["bash", str(REPO / "scripts" / "kaggle" / "sdxl_first_test.sh")], env={**os.environ, "COMFY_LOWVRAM": value, "VISUAL": "vis_s1_kf"},
+                              capture_output=True, text=True, timeout=60)
+        assert done.returncode == 2 and "COMFY_LOWVRAM must be 0 or 1" in done.stdout
+    notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
+    source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+    assert "LOW_VRAM = False" in source and '"COMFY_LOWVRAM": "1" if LOW_VRAM else "0"' in source

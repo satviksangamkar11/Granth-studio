@@ -21,12 +21,14 @@ APPROVER = ""            # the owner's name, as in docs/pilot/SDXL_DOWNLOAD_APPR
 EXPECTED_COMMIT = ""     # the reviewed GranthStudio commit (BUNDLE_INFO.json branch_tip), 40 hex characters
 VISUAL = "vis_s1_kf"     # vis_s1_kf first; vis_s2_kf and vis_s3_kf only after the first keyframe has been reviewed
 SESSION_MINUTES = 240    # a maximum, not a target
+LOW_VRAM = False         # True for vis_s2_kf and vis_s3_kf (4-5 IP-Adapter references): ComfyUI --lowvram
 # ----------------------------------------------------------------------------------------------------------------
 import re
 assert APPROVER.strip(), "fill APPROVER with the owner's name"
 assert re.fullmatch(r"[0-9a-f]{40}", EXPECTED_COMMIT), "EXPECTED_COMMIT must be the full 40-character commit sha"
 assert VISUAL in ("vis_s1_kf", "vis_s2_kf", "vis_s3_kf")
-assert 30 <= SESSION_MINUTES <= 720"""),
+assert 30 <= SESSION_MINUTES <= 720
+assert isinstance(LOW_VRAM, bool)"""),
     ("code", """import glob, os, shutil, subprocess, sys
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout or "NO GPU VISIBLE: stop here")
 gpus = subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout
@@ -51,7 +53,7 @@ assert head == EXPECTED_COMMIT, f"the attached bundle is at {head}, not the revi
 assert not subprocess.run(["git", "-C", f"{WORK}/granthstudio", "status", "--porcelain"], capture_output=True, text=True).stdout, "dirty checkout"
 os.makedirs(f"{TMP}/cache/pip", exist_ok=True)
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest"], check=True, env={**os.environ, "PIP_CACHE_DIR": f"{TMP}/cache/pip"})"""),
-    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "VISUAL": VISUAL, "W": TMP, "EVIDENCE_DEST": WORK}
+    ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "VISUAL": VISUAL, "COMFY_LOWVRAM": "1" if LOW_VRAM else "0", "W": TMP, "EVIDENCE_DEST": WORK}
 process = subprocess.Popen(["bash", f"{WORK}/granthstudio/scripts/kaggle/sdxl_first_test.sh"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
     print(line, end="")
