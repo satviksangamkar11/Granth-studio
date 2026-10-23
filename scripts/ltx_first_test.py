@@ -95,6 +95,27 @@ def use_painted_start(project, args: argparse.Namespace) -> None:
         shutil.copyfile(style_source, project.canon_dir / "style.yaml")
 
 
+def painted_mismatches(project, args: argparse.Namespace) -> list[str]:
+    """A reused workdir keeps its old project: refuse unless it really holds the supplied image and prompt (otherwise the receipt would describe inputs that were never used)."""
+    from granthstudio.config import load_yaml
+    from granthstudio.integrity import sha256_file as digest
+    problems = []
+    visual = project.artifacts_dir / "visuals" / "vis" / "room.png"
+    if not visual.is_file() or digest(visual) != digest(args.start_image):
+        problems.append("the project's start image differs from --start-image")
+    prompt = args.prompt_file.read_text(encoding="utf-8").strip()
+    manifest = load_yaml(project.episodes_dir / "adhyay_01" / "manifest.yaml")
+    if any(shot.get("motion_prompt") not in (None, prompt) for shot in manifest["scenes"][0]["shots"]):
+        problems.append("the project's shot prompt differs from --prompt-file")
+    research = load_yaml(project.research_dir / "adhyay_01" / "research.yaml")
+    if research["scenes"][0]["actions"][0]["text"] != prompt:
+        problems.append("the project's approved action text differs from --prompt-file")
+    style = ROOT / "canon" / "style.yaml"
+    if style.is_file() and (not (project.canon_dir / "style.yaml").is_file() or digest(project.canon_dir / "style.yaml") != digest(style)):
+        problems.append("the project does not carry the current frozen canon/style.yaml")
+    return problems
+
+
 def prepare_project(args: argparse.Namespace, pins: dict) -> "Project":  # noqa: F821
     from granthstudio.config import dump_yaml, load_models, load_project
     from granthstudio.research import approve
@@ -224,7 +245,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 SAMPLE_FRAMES = (0, 1, 12, 24, 36, 48)
 # Automatic drift screen for a supplied painting (a screen for a human, never an acceptance): similarity to frame 0 and the largest luma step between frames.
-MIN_SSIM_FRAME_1, MIN_SSIM_LAST, MAX_LUMA_STEP = 0.60, 0.30, 40.0
+MIN_SSIM_FRAME_1, MIN_SSIM_LAST, MAX_LUMA_STEP, MIN_SSIM_INPUT = 0.60, 0.30, 40.0, 0.50
 
 
 def _ffmpeg(*cmd: str) -> subprocess.CompletedProcess:
@@ -243,7 +264,7 @@ def visual_diagnostics(clip: Path, outdir: Path, start_image: Path | None) -> di
     import re
     outdir.mkdir(parents=True, exist_ok=True)
     report: dict = {"sample_frames": list(SAMPLE_FRAMES), "contact_sheet": None, "ssim_vs_frame_0": {}, "ssim_frame_0_vs_input": None, "max_luma_step": None,
-                    "thresholds": {"min_ssim_frame_1": MIN_SSIM_FRAME_1, "min_ssim_last": MIN_SSIM_LAST, "max_luma_step": MAX_LUMA_STEP},
+                    "thresholds": {"min_ssim_frame_1": MIN_SSIM_FRAME_1, "min_ssim_last": MIN_SSIM_LAST, "max_luma_step": MAX_LUMA_STEP, "min_ssim_frame_0_vs_input": MIN_SSIM_INPUT},
                     "drift_suspected": None, "human_visual_review": "NOT_DONE"}
     pick = "+".join(f"eq(n,{n})" for n in SAMPLE_FRAMES)
     for n in SAMPLE_FRAMES:
@@ -263,6 +284,9 @@ def visual_diagnostics(clip: Path, outdir: Path, start_image: Path | None) -> di
     ssim = report["ssim_vs_frame_0"]
     if report["max_luma_step"] is not None and ssim.get("1") is not None and ssim.get("48") is not None:
         report["drift_suspected"] = bool(report["max_luma_step"] > MAX_LUMA_STEP or ssim["1"] < MIN_SSIM_FRAME_1 or ssim["48"] < MIN_SSIM_LAST)
+        if start_image is not None:        # a stable clip of something ELSE must not clear the screen: frame 0 has to match the supplied image (and be measurable)
+            seen = report["ssim_frame_0_vs_input"]
+            report["drift_suspected"] = bool(report["drift_suspected"] or seen is None or seen < MIN_SSIM_INPUT)
     return report
 
 
@@ -406,6 +430,9 @@ def _retry_test(args, receipt, finish, scheduler, selected, models) -> int:
     }
     info = probe(scheduler.task_dir(task) / "clip.mp4")
     checks["decodes_at_requested_size"] = (info.width, info.height) == (args.width, args.height)
+    receipt["visual_diagnostics"] = visual_diagnostics(scheduler.task_dir(task) / "clip.mp4", args.workdir / "preview_retry", args.start_image)
+    if args.start_image:                                 # a supplied painting must also stay recognisable after the retry
+        checks["visual_screen_not_suspect"] = receipt["visual_diagnostics"]["drift_suspected"] is False
     receipt["retry_checks"] = checks
     receipt["cached_nodes_reported"] = cached
     failed = sorted(k for k, ok in checks.items() if not ok)
@@ -453,6 +480,9 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     project = prepare_project(args, pins)
     receipt["conditioning"] = conditioning_from_workflow(pins)
     if args.start_image:
+        mismatches = painted_mismatches(project, args)
+        if mismatches:
+            return finish("NOT_RUN", "reused workdir does not match the supplied inputs: " + "; ".join(mismatches) + " (use a fresh --workdir)")
         from granthstudio.ffmpeg import probe as probe_image
         shown = probe_image(args.start_image)
         negative = args.negative_prompt_file.read_text(encoding="utf-8").strip() if args.negative_prompt_file else None
@@ -461,7 +491,7 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
                                   "staged_as": "project visual vis/room.png, uploaded by the existing upload_image step"}
         receipt["text_conditioning"] = {"positive": positive, "positive_sha256": hashlib.sha256(positive.encode("utf-8")).hexdigest(), "negative_recorded": negative,
                                         "negative_applied": False, "negative_note": "the workflow runs CFGGuider at cfg 1, where negative conditioning has no effect; the workflow was deliberately not changed",
-                                        "style_prefix_suffix_added": False,
+                                        "style_prefix_suffix_added": False, "normalization": "surrounding whitespace stripped, internal text and newlines unchanged",
                                         "style": {"style_id": "devotional_gouache_1950s_v1", "applied_via": "identity in task inputs/receipts; the supplied text already carries the style wording"}}
     if args.skip_static_verify:
         receipt["static_verification"] = {"exit": None, "note": "SKIPPED by flag: this run can never be a PASS"}

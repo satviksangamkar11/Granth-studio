@@ -574,3 +574,34 @@ def test_gpu_script_checks_the_painted_input_before_any_network_step_and_exports
     assert text.index("PAINTED_INPUT is missing") < text.index("git clone") and text.index("PAINTED_INPUT is missing") < text.index("== 1. host")
     assert '"${PAINTED_ARGS[@]}"' in text and "preview_$d" in text and "start_image_$d.png" in text
     assert (REPO / "assets" / "ltx_test_inputs" / "painted_courtyard_01" / "04_ltx_start_768x512.png").is_file()
+
+
+def test_a_reused_workdir_that_holds_other_inputs_is_refused_not_misdescribed(host, tmp_path):
+    first = run(host)                                             # dry run prepares the synthetic project in this workdir
+    still, prompt, _ = painted_inputs(tmp_path)
+    code, receipt = run(host, "--execute", "--start-image", str(still), "--prompt-file", str(prompt))
+    assert receipt["verdict"] == "NOT_RUN" and "reused workdir does not match" in receipt["reason"] and host[0].posts == []
+
+
+def test_a_stable_clip_of_something_else_does_not_clear_the_screen(tmp_path, monkeypatch):
+    clip = tmp_path / "c.mp4"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "gradients=size=768x512:rate=24:speed=0.05:seed=3", "-frames:v", "49", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(clip)], check=True, timeout=60)
+    inputs = tmp_path / "in.png"; inputs.write_bytes(b"x")
+    values = {"inner": 1.0, "input": 0.0}
+    monkeypatch.setattr(ft, "_ssim", lambda a, b: values["input"] if b == inputs else values["inner"])
+    assert ft.visual_diagnostics(clip, tmp_path / "p1", inputs)["drift_suspected"] is True       # frames agree with each other, not with the supplied image
+    values["input"] = 0.9
+    assert ft.visual_diagnostics(clip, tmp_path / "p2", inputs)["drift_suspected"] is False
+    values["input"] = None
+    assert ft.visual_diagnostics(clip, tmp_path / "p3", inputs)["drift_suspected"] is True       # not measurable counts as suspect
+
+
+def test_the_painted_retry_writes_its_own_previews_and_is_screened(host, tmp_path):
+    server, _, work = host
+    still, prompt, _ = painted_inputs(tmp_path)
+    set_server_clip(server, tmp_path, "gradients=size=768x512:rate=24:speed=0.05:seed=3")
+    args = ["--start-image", str(still), "--prompt-file", str(prompt)]
+    code, first = run(host, "--execute", *args)
+    assert [r["status"] for r in first["results"]] == ["complete"]
+    code, retry = run(host, "--execute", "--retry-test", *args)
+    assert retry["retry_checks"]["visual_screen_not_suspect"] is True and (work / "preview_retry" / "contact_sheet.png").is_file()

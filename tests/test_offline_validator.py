@@ -65,3 +65,18 @@ def test_the_output_path_may_not_alias_an_input_and_hash_bindings_are_keyed_by_r
     assert ov.main([*base, "--out", str(out)]) == 0
     bound = json.loads(out.read_text(encoding="utf-8"))["bound_inputs"]
     assert set(bound) == {"clip", "receipt", "journal", "attribution"} and bound["receipt"]["sha256"] != bound["journal"]["sha256"]   # same basename, two bindings
+
+
+def test_a_hard_linked_output_cannot_overwrite_the_evidence(tmp_path):
+    import json, os
+    clip = make(tmp_path / "ok.mp4", "gradients=size=64x64:rate=24:speed=0.05:seed=7")
+    receipt = tmp_path / "r.json"; journal = tmp_path / "j.json"; attribution = tmp_path / "a.json"
+    receipt.write_text(json.dumps(RECEIPT), encoding="utf-8"); journal.write_text(json.dumps(JOURNAL), encoding="utf-8"); attribution.write_text(json.dumps({"ok": True}), encoding="utf-8")
+    alias = tmp_path / "alias.json"
+    try:
+        os.link(receipt, alias)
+    except OSError:
+        pytest.skip("hard links unavailable")
+    with pytest.raises(SystemExit):
+        ov.main([str(tmp_path), "--clip", str(clip), "--receipt", str(receipt), "--journal", str(journal), "--attribution", str(attribution), "--out", str(alias)])
+    assert json.loads(receipt.read_text(encoding="utf-8")) == RECEIPT

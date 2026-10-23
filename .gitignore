@@ -21,7 +21,7 @@ __pycache__/
 # agent worktrees
 .claude/
 
-# Small, hash-bound exceptions: committed evidence frames/clips and the painted test inputs the GPU harness needs inside the git bundle
-!docs/evidence/**/*.png
-!docs/evidence/**/*.mp4
-!assets/ltx_test_inputs/**/*.png
+# Small, hash-bound exceptions, listed one by one (add a line when a new evidence clip is meant to be committed)
+!docs/evidence/kaggle_dual_t4/gpu0_attempt4/*.png
+!docs/evidence/kaggle_dual_t4/gpu0_attempt4/*.mp4
+!assets/ltx_test_inputs/painted_courtyard_01/04_ltx_start_768x512.png

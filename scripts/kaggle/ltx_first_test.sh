@@ -252,6 +252,7 @@ for d in gpu0 gpu1 conc0 conc1; do
   cp "$W"/ltx_$d/project/artifacts/tasks/adhyay_01/tier1/*/clip.mp4 "$OUT/clip_$d.mp4" 2>/dev/null || true
   cp "$W"/ltx_$d/project/artifacts/tasks/adhyay_01/pending/*.json "$OUT/journal_$d.json" 2>/dev/null || true
   [ -d "$W/ltx_$d/preview" ] && cp -r "$W/ltx_$d/preview" "$OUT/preview_$d" 2>/dev/null || true               # frames 0,1,12,24,36,48 + contact sheet
+  [ -d "$W/ltx_$d/preview_retry" ] && cp -r "$W/ltx_$d/preview_retry" "$OUT/preview_retry_$d" 2>/dev/null || true
   cp "$W"/ltx_$d/project/artifacts/visuals/vis/room.png "$OUT/start_image_$d.png" 2>/dev/null || true
 done
 nvidia-smi > "$OUT/nvidia_smi_after.txt" || true

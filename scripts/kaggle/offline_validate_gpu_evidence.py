@@ -90,7 +90,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     inputs = {"clip": args.clip, "receipt": args.receipt, "journal": args.journal, "attribution": args.attribution}
-    if args.out is not None and args.out.resolve() in {path.resolve() for path in inputs.values()}:
+    if args.out is not None and (args.out.resolve() in {path.resolve() for path in inputs.values()}
+                                 or (args.out.exists() and any(args.out.samefile(path) for path in inputs.values()))):
         parser.error(f"--out {args.out} is one of the evidence inputs: the original evidence is never overwritten")
     receipt, journal, attribution = (json.loads(p.read_text(encoding="utf-8")) for p in (args.receipt, args.journal, args.attribution))
     problems, facts = validate(args.clip, receipt, journal, attribution)
