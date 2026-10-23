@@ -103,6 +103,20 @@ def canon_files() -> dict[str, dict]:
     }
 
 
+def designs() -> list[dict]:
+    """Appearance prompts for the provisional test: ONLY what the text says, or a plainly artistic interpretation (artistic: true). The assistant drafted them; the owner reviews them."""
+    def design(canon_id, prompt, ovis, artistic):
+        return {"canon_id": canon_id, "prompt": prompt, "source_refs": [ref(o) for o in ovis] or [PROVISIONAL], "artistic": artistic}
+    return [
+        design("chr_gajanan_maharaj", "a young man in the prime of youth with a radiant complexion, strong upper arms and neck and a broad chest, wearing only an old worn vest, "
+               "seated calmly with a steady, inward gaze at the tip of the nose, shown seated and framed from the waist up", [88, 91, 111], True),
+        design("chr_devidas", "a devout Brahmin householder of the village in a plain dhoti and shoulder cloth (appearance is not given in the text)", [84, 85], True),
+        design("chr_bankatlal", "a local man of the village walking along the road in everyday dress of the period (appearance is not given in the text)", [97], True),
+        design("chr_damodarpant", "a local man of the village, a friend of Bankatlal, in everyday dress of the period (appearance is not given in the text)", [98], True),
+        design("loc_devidas_house_road", "a village road in front of a house, midday sun, used leaf plates on the ground (the rest of the setting is an artistic interpretation)", [87, 118], True),
+    ]
+
+
 def manifest() -> dict:
     def shot(sid, tier, vid, duration, dialogue, actions, **extra):
         item = {"shot_id": sid, "tier": tier, "visual_id": vid, "duration_s": duration, "dialogue_ids": dialogue, "action_ids": actions, **extra}
@@ -173,7 +187,7 @@ def build(out: Path) -> Path:
     for name, document in canon_files().items():
         write(out / "canon" / f"{name}.yaml", document)
     shutil.copyfile(ROOT / "canon" / "style.yaml", out / "canon" / "style.yaml")                         # the frozen style v1 file, unchanged
-    write(out / "canon" / "visual_assets.yaml", {"schema_version": 1, "style": None, "designs": [], "assets": []})
+    write(out / "canon" / "visual_assets.yaml", {"schema_version": 1, "style": None, "designs": designs(), "assets": []})
     write(out / "research" / "adhyay_01" / "research.yaml", research())
     write(out / "episodes" / "adhyay_01" / "manifest.yaml", manifest())
     for language, document in timelines().items():

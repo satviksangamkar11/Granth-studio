@@ -2,5 +2,35 @@
 # Marathi = the assistant's transcription from the page images (to be proofread); Hindi = assistant draft. See docs/pilot/SOURCE_APPROVAL_SHEET.md (unsigned).
 schema_version: 1
 style: null
-designs: []
+designs:
+- canon_id: chr_gajanan_maharaj
+  prompt: a young man in the prime of youth with a radiant complexion, strong upper arms and neck and a broad chest, wearing only an old worn vest, seated calmly with a steady, inward gaze at the tip of
+    the nose, shown seated and framed from the waist up
+  source_refs:
+  - Adhyay 1 ovi 88 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 91 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 111 (printed page 11; PDF page 6)
+  artistic: true
+- canon_id: chr_devidas
+  prompt: a devout Brahmin householder of the village in a plain dhoti and shoulder cloth (appearance is not given in the text)
+  source_refs:
+  - Adhyay 1 ovi 84 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 85 (printed page 10; PDF page 5)
+  artistic: true
+- canon_id: chr_bankatlal
+  prompt: a local man of the village walking along the road in everyday dress of the period (appearance is not given in the text)
+  source_refs:
+  - Adhyay 1 ovi 97 (printed page 11; PDF page 6)
+  artistic: true
+- canon_id: chr_damodarpant
+  prompt: a local man of the village, a friend of Bankatlal, in everyday dress of the period (appearance is not given in the text)
+  source_refs:
+  - Adhyay 1 ovi 98 (printed page 11; PDF page 6)
+  artistic: true
+- canon_id: loc_devidas_house_road
+  prompt: a village road in front of a house, midday sun, used leaf plates on the ground (the rest of the setting is an artistic interpretation)
+  source_refs:
+  - Adhyay 1 ovi 87 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 118 (printed page 12; PDF page 7)
+  artistic: true
 assets: []
