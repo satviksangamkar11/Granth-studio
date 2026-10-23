@@ -303,7 +303,7 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         journal.parent.mkdir(parents=True, exist_ok=True)
         started = time.monotonic()
         try:
-            kf.sdxl_generate(project, models, req, journal, work)
+            kf.sdxl_generate(project, models, req, journal, work, check_host=(label == "with_reference"))   # full gate before the first image only
         except GranthError as exc:
             oom = lt.oom_markers(args.comfy_log, str(exc))
             receipt["out_of_memory"] = bool(oom)

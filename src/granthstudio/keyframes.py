@@ -300,9 +300,10 @@ def require_references(request: dict[str, Any], models: dict[str, Any]) -> None:
         raise GateFailure(f"{request['asset_id']}: " + "; ".join(problems))
 
 
-def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, Any], journal: Path, work: Path) -> dict[str, str]:
-    """Run one request through ComfyUI and leave keyframe.png, request.json and metrics.json in work."""
-    template = sdxl_preflight(project, models, request)
+def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, Any], journal: Path, work: Path, check_host: bool = True) -> dict[str, str]:
+    """Run one request through ComfyUI and leave keyframe.png, request.json and metrics.json in work.
+    check_host=False only for a later image of a batch whose first image passed the full gate: our own resident server now holds the VRAM."""
+    template = sdxl_preflight(project, models, request, check_host=check_host)
     frozen = load_style(project)
     if frozen and request["style"] != style_identity(frozen):
         raise GateFailure(f"{request['asset_id']}: request was built under style {request['style']}, the project style is {style_identity(frozen)}: per-shot style drift refused")

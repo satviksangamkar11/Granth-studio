@@ -141,6 +141,21 @@ def test_generation_refuses_a_request_built_under_another_style(kf_project, comf
         kf.sdxl_generate(kf_project, load_models(kf_project), request, tmp_path / "j.json", tmp_path)
 
 
+def test_sdxl_generate_asks_for_the_host_gate_by_default_and_a_later_batch_image_may_skip_it(kf_project, comfy, tmp_path, monkeypatch):
+    from granthstudio.errors import IntegrationUnavailable
+    frozen_project(kf_project)
+    request = request_for(kf_project)
+    request["style"] = {"style_id": "devotional_gouache_1950s_v1", "version": 1, "sha256": "0" * 64}      # stops right after the preflight
+    def busy(project, models):
+        raise IntegrationUnavailable("free_vram fail")
+    monkeypatch.setattr(kf, "require_host_ready", busy)
+    models = load_models(kf_project)
+    with pytest.raises(IntegrationUnavailable, match="free_vram"):
+        kf.sdxl_generate(kf_project, models, request, tmp_path / "j.json", tmp_path)
+    with pytest.raises(GateFailure, match="style drift refused"):                 # gate skipped: got past the preflight
+        kf.sdxl_generate(kf_project, models, request, tmp_path / "j.json", tmp_path, check_host=False)
+
+
 def test_a_shot_cannot_carry_its_own_style_the_manifest_schema_refuses_unknown_fields(kf_project):
     from granthstudio.schemas import validate_document
     import copy
