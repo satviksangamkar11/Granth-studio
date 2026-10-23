@@ -347,7 +347,7 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
         total = request.get("total_reference_weight")
         if request["references"] and not total:
             raise IntegrationUnavailable("SDXL identity_conditioning.total_reference_weight is not set: NOT VALIDATED")
-        values["REFERENCE_WEIGHT"] = round(total / len(request["references"]), 4) if request["references"] else 0.0
+        values["REFERENCE_WEIGHT"] = total / len(request["references"]) if request["references"] else 0.0
     backend = ComfyBackend(models["comfyui"]["base_url"])
     graph = render_graph(template, values)
     backend.require_nodes(graph)

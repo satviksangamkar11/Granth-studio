@@ -354,6 +354,8 @@ def test_the_total_reference_weight_is_split_evenly_so_more_references_never_add
     graph = server.posts[0]["prompt"] if "prompt" in server.posts[0] else server.posts[0]
     weights = [n["inputs"]["weight"] for n in graph.values() if n["class_type"] == "IPAdapterAdvanced"]
     assert weights == [0.2] * 5 and abs(sum(weights) - sx.PINS["workflow"]["total_reference_weight"]) < 1e-9
+    from granthstudio import keyframes as kf
+    assert abs(sum([1.0 / 3] * 3) - 1.0) < 1e-12                                                   # three references: no rounding loss (unrounded division)
 
 
 def test_fp16_vae_is_an_explicit_validated_opt_in_recorded_in_the_launch_command():
