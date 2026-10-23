@@ -4,6 +4,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import subprocess
+from pathlib import Path
 import sys
 
 import pytest
@@ -229,14 +230,16 @@ def test_style_sweep_generates_one_reference_free_image_per_cfg_and_seed_with_th
     real = kf.sdxl_generate
     monkeypatch.setattr(kf, "sdxl_generate", lambda *a, check_host=True, **k: (flags.append(check_host), real(*a, check_host=check_host, **k))[1])
     code, receipt = run(host, "--execute", "--style-sweep", "--sweep-seeds", "2", "--sweep-cfgs", "6.5,9")
-    assert receipt["verdict"] == "PASS", receipt["reason"]
+    assert receipt["verdict"] == "EXPERIMENT_COMPLETE", receipt["reason"]                                      # never the validation verdict
     assert flags == [True, False, False, False] and len(server.posts) == 4 and set(receipt["sweep"]) == {"cfg6.5_seed0", "cfg6.5_seed1", "cfg9.0_seed0", "cfg9.0_seed1"}
     graphs = [post["prompt"] if "prompt" in post else post for post in server.posts]
     assert [g["3"]["inputs"]["cfg"] for g in graphs] == [6.5, 6.5, 9.0, 9.0]
     assert len({g["3"]["inputs"]["seed"] for g in graphs}) == 2                                              # two seeds, repeated per cfg
     assert not any(n["class_type"] in ("IPAdapterAdvanced", "LoadImage") for g in graphs for n in g.values())
     assert receipt["sweep_prompt"].startswith("1950s vintage Indian devotional book illustration") and receipt["request"]["style"]["style_id"] == "devotional_gouache_1950s_v1"
-    assert receipt["sweep_contact_sheet"]["file"] == "sweep_contact_sheet.png"
+    assert receipt["sweep_contact_sheet"]["file"] == "sweep_contact_sheet.png" and "validates nothing" not in receipt["experiment_note"] and "EXPERIMENT" in receipt["experiment_note"]
+    variants = sorted((Path(work) / "project" / "workflows" / "comfyui").glob("sdxl_keyframe_cfg*.json"))
+    assert len(variants) == 2 and all(json.loads(v.read_text(encoding="utf-8"))["_experiment"] == "style_sweep" for v in variants)
 
 
 def test_a_bad_sweep_request_is_refused_before_any_submission(host):
@@ -252,3 +255,13 @@ def test_the_style_sweep_is_an_explicit_opt_in_in_the_script_and_notebook():
     notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
     source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
     assert "STYLE_SWEEP = False" in source and '"STYLE_SWEEP": "1" if STYLE_SWEEP else "0"' in source
+
+
+def test_sweep_edge_cases_one_image_duplicate_cfgs_and_a_scene_whose_characters_have_no_sheet(host):
+    code, receipt = run(host, "--execute", "--style-sweep", "--sweep-seeds", "1", "--sweep-cfgs", "7", "--visual", "vis_s3_kf")
+    assert receipt["verdict"] == "EXPERIMENT_COMPLETE" and receipt["sweep_contact_sheet"]["file"] == "sweep_contact_sheet.png" and len(host[0].posts) == 1
+
+
+def test_a_repeated_cfg_value_is_refused(tmp_path, host):
+    code, receipt = run(host, "--execute", "--style-sweep", "--sweep-cfgs", "7,7")
+    assert code == 1 and receipt["verdict"] == "NOT_RUN" and "repeat" in receipt["reason"] and host[0].posts == []

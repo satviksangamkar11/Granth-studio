@@ -169,10 +169,10 @@ cp "$WORK"/project/canon/visual_assets.yaml "$OUT/visual_assets.yaml" 2>/dev/nul
 nvidia-smi > "$OUT/nvidia_smi_after.txt" || true
 rm -f "$OUT/stage_verdict.json"
 if [ "$STATUS" = 0 ] && [ -f "$WORK/sdxl_receipt.json" ]; then   # a final verdict exists only after the client PASS and the per-card attribution both succeeded
-  python - "$OUT/stage_verdict.json" "$LTX_EXPECTED_COMMIT" "$STAGE" "$WORK/sdxl_receipt.json" <<'EOF'
+  python - "$OUT/stage_verdict.json" "$LTX_EXPECTED_COMMIT" "$STAGE" "$WORK/sdxl_receipt.json" "$STYLE_SWEEP" <<'EOF'
 import hashlib, json, sys
-out, commit, stage, receipt = sys.argv[1:]
-json.dump({"stage": stage, "verdict": "PASS", "commit": commit, "receipts": {receipt: hashlib.sha256(open(receipt, "rb").read()).hexdigest()}}, open(out, "w"), indent=2)
+out, commit, stage, receipt, sweep = sys.argv[1:]
+json.dump({"stage": stage, "verdict": "EXPERIMENT_COMPLETE" if sweep == "1" else "PASS", "commit": commit, "receipts": {receipt: hashlib.sha256(open(receipt, "rb").read()).hexdigest()}}, open(out, "w"), indent=2)
 EOF
 fi
 cleanup; sleep 1

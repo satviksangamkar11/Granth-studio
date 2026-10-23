@@ -171,6 +171,8 @@ def sweep(args, project, models, request, kf, out, receipt, finish):
         cfgs = [float(c) for c in args.sweep_cfgs.split(",") if c.strip()]
     except ValueError:
         return finish("NOT_RUN", f"--sweep-cfgs must be comma separated numbers, got {args.sweep_cfgs!r}")
+    if len(set(cfgs)) != len(cfgs):
+        return finish("NOT_RUN", "--sweep-cfgs must not repeat a value")
     if not cfgs or not 1 <= args.sweep_seeds <= 6 or any(not 1.0 <= c <= 15.0 for c in cfgs) or len(cfgs) * args.sweep_seeds > 16:
         return finish("NOT_RUN", "sweep must have 1-6 seeds, cfg values in 1..15 and at most 16 images")
     base = json.loads((project.root / "workflows" / "comfyui" / "sdxl_keyframe.json").read_text(encoding="utf-8"))
@@ -178,12 +180,13 @@ def sweep(args, project, models, request, kf, out, receipt, finish):
     for cfg in cfgs:
         variant = json.loads(json.dumps(base))
         variant["3"]["inputs"]["cfg"] = cfg
+        variant["_experiment"] = "style_sweep"                                                         # machine-readable: this is not the validation workflow
         variant["_note"] = f"RUN-ONLY style-sweep copy of the validation workflow with KSampler cfg={cfg}; experiment, not a validated workflow"
         name = f"workflows/comfyui/sdxl_keyframe_cfg{cfg}.json"
         (project.root / name).write_text(json.dumps(variant, indent=2), encoding="utf-8")
         models["sdxl"]["workflow_template"] = name
         for index in range(args.sweep_seeds):
-            req = {**request, "references": [], "asset_id": f"{request['asset_id']}_sweep_cfg{cfg}_s{index}", "seed": request["seed"] + index}
+            req = {**request, "references": [], "missing_references": [], "asset_id": f"{request['asset_id']}_sweep_cfg{cfg}_s{index}", "seed": request["seed"] + index}
             req["request_sha256"] = hashlib.sha256(json.dumps({k: v for k, v in req.items() if k != "request_sha256"}, sort_keys=True, default=str).encode()).hexdigest()
             label = f"cfg{cfg}_seed{index}"
             work = args.workdir / f"work_{label}"
@@ -205,14 +208,23 @@ def sweep(args, project, models, request, kf, out, receipt, finish):
             results[label] = {"image": image.name, "sha256": lt.sha256_file(image), "cfg": cfg, "seed": req["seed"], "wall_s": round(time.monotonic() - started, 1)}
     receipt["sweep"] = results
     receipt["sweep_prompt"] = request["prompt"]
-    cols = len(cfgs) and args.sweep_seeds
+    cols = args.sweep_seeds
     files = [str(out / v["image"]) for v in results.values()]
-    done = subprocess.run(["ffmpeg", "-y", "-v", "error", *sum((["-i", f] for f in files), []), "-filter_complex",
-                           "".join(f"[{i}:v]scale=-1:360[v{i}];" for i in range(len(files))) + "".join(f"[v{i}]" for i in range(len(files))) + f"xstack=inputs={len(files)}:layout="
-                           + "|".join(f"{(i % cols) * 540}_{(i // cols) * 360}" for i in range(len(files))), "-frames:v", "1", str(out / "sweep_contact_sheet.png")],
-                          capture_output=True, text=True, timeout=180)
-    receipt["sweep_contact_sheet"] = {"file": "sweep_contact_sheet.png" if done.returncode == 0 else None, "rows": [f"cfg {c}" for c in cfgs], "columns": [f"seed offset {i}" for i in range(args.sweep_seeds)]}
-    return finish("PASS", "style-sweep images generated (experiment); the human picks which setting keeps the frozen style")
+    sheet = out / "sweep_contact_sheet.png"
+    if len(files) == 1:
+        shutil.copyfile(files[0], sheet)
+        sheet_error = None
+    else:
+        done = subprocess.run(["ffmpeg", "-y", "-v", "error", *sum((["-i", f] for f in files), []), "-filter_complex",
+                               "".join(f"[{i}:v]scale=-1:360[v{i}];" for i in range(len(files))) + "".join(f"[v{i}]" for i in range(len(files))) + f"xstack=inputs={len(files)}:layout="
+                               + "|".join(f"{(i % cols) * 540}_{(i // cols) * 360}" for i in range(len(files))), "-frames:v", "1", str(sheet)],
+                              capture_output=True, text=True, timeout=180)
+        sheet_error = None if done.returncode == 0 else done.stderr[-300:]
+    receipt["sweep_contact_sheet"] = {"file": None if sheet_error else sheet.name, "error": sheet_error, "rows": [f"cfg {c}" for c in cfgs], "columns": [f"seed offset {i}" for i in range(args.sweep_seeds)]}
+    receipt["experiment_note"] = "EXPERIMENT: nothing here validates SDXL, a workflow or a style; the owner judges the images"
+    if sheet_error:
+        return finish("FAIL", f"sweep images generated but the contact sheet failed: {sheet_error}")
+    return finish("EXPERIMENT_COMPLETE", "style-sweep images generated (experiment, not a validation); the human picks which setting keeps the frozen style")
 
 
 def execution_extra_problems(args: argparse.Namespace) -> list[str]:
@@ -284,7 +296,7 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         receipt.update(verdict=verdict, reason=reason, finished=datetime.now(timezone.utc).isoformat(timespec="seconds"), comfyui_log_excerpt=lt.comfy_log_excerpt(args.comfy_log))
         (args.workdir / "sdxl_receipt.json").write_text(json.dumps(receipt, indent=2, default=str), encoding="utf-8")
         print(f"VERDICT: {verdict} - {reason}\nreceipt: {args.workdir / 'sdxl_receipt.json'}")
-        return 0 if verdict == "PASS" else 1
+        return 0 if verdict in ("PASS", "EXPERIMENT_COMPLETE") else 1
 
     if enforce_gates:
         problems = lt.execution_gate_problems(argparse.Namespace(skip_static_verify=False, gpu_index=args.gpu_index, allow_other_gpu_busy=args.allow_other_gpu_busy,
