@@ -253,10 +253,13 @@ def _ffmpeg(*cmd: str) -> subprocess.CompletedProcess:
 
 
 def _ssim(a: Path, b: Path) -> float | None:
-    done = subprocess.run(["ffmpeg", "-v", "info", "-i", str(a), "-i", str(b), "-lavfi", "ssim", "-f", "null", "-"], capture_output=True, text=True, timeout=120)
     import re
-    found = re.findall(r"SSIM .*All:([0-9.]+)", done.stderr)
-    return float(found[-1]) if found else None
+    for _ in range(2):                    # one more try: a measurement lost to a busy host must not look like drift
+        done = subprocess.run(["ffmpeg", "-v", "info", "-i", str(a), "-i", str(b), "-lavfi", "ssim", "-f", "null", "-"], capture_output=True, text=True, timeout=300)
+        found = re.findall(r"SSIM .*All:([0-9.]+)", done.stderr)
+        if found:
+            return float(found[-1])
+    return None
 
 
 def visual_diagnostics(clip: Path, outdir: Path, start_image: Path | None) -> dict:
@@ -268,7 +271,10 @@ def visual_diagnostics(clip: Path, outdir: Path, start_image: Path | None) -> di
                     "drift_suspected": None, "human_visual_review": "NOT_DONE"}
     pick = "+".join(f"eq(n,{n})" for n in SAMPLE_FRAMES)
     for n in SAMPLE_FRAMES:
-        _ffmpeg("-i", str(clip), "-vf", f"select='eq(n,{n})'", "-frames:v", "1", str(outdir / f"frame_{n:02d}.png"))
+        for _ in range(2):
+            _ffmpeg("-i", str(clip), "-vf", f"select='eq(n,{n})'", "-frames:v", "1", str(outdir / f"frame_{n:02d}.png"))
+            if (outdir / f"frame_{n:02d}.png").is_file():
+                break
     sheet = _ffmpeg("-i", str(clip), "-vf", f"select='{pick}',scale=384:-1,tile={len(SAMPLE_FRAMES)}x1", "-frames:v", "1", str(outdir / "contact_sheet.png"))
     report["contact_sheet"] = "contact_sheet.png" if sheet.returncode == 0 else None
     first = outdir / "frame_00.png"

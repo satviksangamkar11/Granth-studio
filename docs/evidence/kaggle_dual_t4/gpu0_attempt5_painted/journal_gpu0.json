@@ -1,0 +1,32 @@
+{
+  "attempt": 1,
+  "base_url": "http://127.0.0.1:52745",
+  "graph_sha256": "93dc2f80de576b4d12e6484c5c8251d8f22af8b11f8d4d824fde3a28a57ca187",
+  "history": [
+    {
+      "attempt": 1,
+      "fingerprint": "4a5753dc6da4b417f32b363cd5bbdfc4177b4727a15159e644e38d9fe2c79932",
+      "generation": {
+        "base_seed": 1732128765,
+        "seed": 1732128765,
+        "seed_offset": 0
+      },
+      "graph_sha256": "93dc2f80de576b4d12e6484c5c8251d8f22af8b11f8d4d824fde3a28a57ca187",
+      "job_token": "d1ccf1f40ae5eae96049b395d5c82530f10d5563622ef8f10726b2bc6cad5376",
+      "scope": "output_closure",
+      "seed_inputs": [
+        {
+          "input": "noise_seed",
+          "node": "102",
+          "value": 1732128765
+        }
+      ]
+    }
+  ],
+  "job_token": "d1ccf1f40ae5eae96049b395d5c82530f10d5563622ef8f10726b2bc6cad5376",
+  "max_attempts": 3,
+  "namespace": "a0322117ffbc4877aef21fa5a82d9472",
+  "prompt_id": "049c1369-453b-4880-b14e-946b807f8d57",
+  "state": "completed",
+  "submission_namespace": "a0322117ffbc4877aef21fa5a82d9472"
+}

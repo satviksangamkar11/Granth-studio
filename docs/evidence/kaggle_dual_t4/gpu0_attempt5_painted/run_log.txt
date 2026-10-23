@@ -1,0 +1,228 @@
+stage gpu0 | approved by: Satvik Sangamkar | 2026-10-23T06:57:46Z
+== 0. refusals that need no network
+session deadline: 2026-10-23T10:57:46+00:00
+ports (random once per workspace, then reused): worker0  52745, worker1 44867
+== 1. host: exactly two idle Tesla T4 (indices 0 and 1), PyTorch sees two sm_75 devices, RAM and disk
+GPU 0: Tesla T4 (UUID: GPU-9fca5c71-6dca-a3a9-d386-16350dbee9de)
+GPU 1: Tesla T4 (UUID: GPU-006ca999-0ba6-cc60-748c-fef529f0a997)
+{
+  "gpus": [
+    {
+      "index": 0,
+      "uuid": "GPU-9fca5c71-6dca-a3a9-d386-16350dbee9de",
+      "name": "Tesla T4",
+      "memory_total_mb": 15360.0,
+      "memory_used_mb": 0.0
+    },
+    {
+      "index": 1,
+      "uuid": "GPU-006ca999-0ba6-cc60-748c-fef529f0a997",
+      "name": "Tesla T4",
+      "memory_total_mb": 15360.0,
+      "memory_used_mb": 0.0
+    }
+  ],
+  "torch": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "available": true,
+    "count": 2,
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      }
+    ]
+  },
+  "ram_available_mb": 30830.734375,
+  "disk_free_gb": 1126.141620224,
+  "problems": [],
+  "ok": true
+}
+== 2. pinned sources (ComfyUI-LTXVideo is only the SOURCE of the official workflow file: it is NOT installed into custom_nodes)
+== 3. python requirements of the code that actually runs (versions are NOT pinned by the sources; recorded below)
+== 4. weights (pinned revisions, complete SHA-256 verified every stage)
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   956  100   956    0     0   6131      0 --:--:-- --:--:-- --:--:--  6167
+
+  4 6047M    4  245M    0     0   125M      0  0:00:48  0:00:01  0:00:47  192M
+  7 6047M    7  436M    0     0   147M      0  0:00:40  0:00:02  0:00:38  192M
+ 10 6047M   10  646M    0     0   163M      0  0:00:36  0:00:03  0:00:33  198M
+ 13 6047M   13  845M    0     0   170M      0  0:00:35  0:00:04  0:00:31  198M
+ 17 6047M   17 1066M    0     0   178M      0  0:00:33  0:00:05  0:00:28  202M
+ 20 6047M   20 1269M    0     0   182M      0  0:00:33  0:00:06  0:00:27  204M
+ 23 6047M   23 1448M    0     0   182M      0  0:00:33  0:00:07  0:00:26  202M
+ 26 6047M   26 1598M    0     0   178M      0  0:00:33  0:00:08  0:00:25  190M
+ 29 6047M   29 1763M    0     0   177M      0  0:00:34  0:00:09  0:00:25  183M
+ 32 6047M   32 1944M    0     0   177M      0  0:00:34  0:00:10  0:00:24  175M
+ 35 6047M   35 2116M    0     0   177M      0  0:00:34  0:00:11  0:00:23  169M
+ 38 6047M   38 2309M    0     0   178M      0  0:00:33  0:00:12  0:00:21  172M
+ 39 6047M   39 2370M    0     0   152M      0  0:00:39  0:00:15  0:00:24  117M
+ 40 6047M   40 2464M    0     0   154M      0  0:00:39  0:00:15  0:00:24  116M
+ 43 6047M   43 2644M    0     0   155M      0  0:00:38  0:00:16  0:00:22  116M
+ 46 6047M   46 2822M    0     0   157M      0  0:00:38  0:00:17  0:00:21  117M
+ 47 6047M   47 2887M    0     0   148M      0  0:00:40  0:00:19  0:00:21 89.3M
+ 49 6047M   49 2979M    0     0   149M      0  0:00:40  0:00:19  0:00:21  137M
+ 52 6047M   52 3148M    0     0   150M      0  0:00:40  0:00:20  0:00:20  136M
+ 55 6047M   55 3337M    0     0   152M      0  0:00:39  0:00:21  0:00:18  138M
+ 58 6047M   58 3535M    0     0   154M      0  0:00:39  0:00:22  0:00:17  142M
+ 60 6047M   60 3632M    0     0   135M      0  0:00:44  0:00:26  0:00:18  101M
+ 60 6047M   60 3684M    0     0   136M      0  0:00:44  0:00:26  0:00:18  100M
+ 64 6047M   64 3894M    0     0   139M      0  0:00:43  0:00:27  0:00:16  106M
+ 67 6047M   67 4090M    0     0   141M      0  0:00:42  0:00:28  0:00:14  107M
+ 71 6047M   71 4297M    0     0   143M      0  0:00:42  0:00:29  0:00:13  108M
+ 74 6047M   74 4511M    0     0   145M      0  0:00:41  0:00:30  0:00:11  208M
+ 77 6047M   77 4713M    0     0   147M      0  0:00:40  0:00:31  0:00:09  205M
+ 81 6047M   81 4916M    0     0   149M      0  0:00:40  0:00:32  0:00:08  204M
+ 84 6047M   84 5126M    0     0   150M      0  0:00:40  0:00:33  0:00:07  207M
+ 88 6047M   88 5334M    0     0   152M      0  0:00:39  0:00:34  0:00:05  207M
+ 91 6047M   91 5538M    0     0   154M      0  0:00:39  0:00:35  0:00:04  205M
+ 94 6047M   94 5740M    0     0   155M      0  0:00:38  0:00:36  0:00:02  205M
+/kaggle/temp/ltx/ComfyUI/models/checkpoints/ltxv-2b-0.9.8-distilled.safetensors: OK
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   936  100   936    0     0   6274      0 --:--:-- --:--:-- --:--:--  6281
+
+  2 9334M    2  195M    0     0   108M      0  0:01:26  0:00:01  0:01:25  180M
+  4 9334M    4  391M    0     0   139M      0  0:01:06  0:00:02  0:01:04  188M
+  6 9334M    6  583M    0     0   153M      0  0:01:00  0:00:03  0:00:57  189M
+  8 9334M    8  774M    0     0   160M      0  0:00:58  0:00:04  0:00:54  188M
+  8 9334M    8  783M    0     0   134M      0  0:01:09  0:00:05  0:01:04  152M
+  8 9334M    8  790M    0     0   116M      0  0:01:20  0:00:06  0:01:14  119M
+  8 9334M    8  804M    0     0   102M      0  0:01:30  0:00:07  0:01:23 82.0M
+  8 9334M    8  828M    0     0  94.1M      0  0:01:39  0:00:08  0:01:31 48.9M
+  9 9334M    9  847M    0     0  86.2M      0  0:01:48  0:00:09  0:01:39 14.7M
+  9 9334M    9  860M    0     0  79.5M      0  0:01:57  0:00:10  0:01:47 15.5M
+  9 9334M    9  873M    0     0  73.9M      0  0:02:06  0:00:11  0:01:55 16.4M
+  9 9334M    9  886M    0     0  69.2M      0  0:02:14  0:00:12  0:02:02 16.5M
+ 10 9334M   10  978M    0     0  70.8M      0  0:02:11  0:00:13  0:01:58 29.9M
+ 11 9334M   11 1033M    0     0  69.7M      0  0:02:13  0:00:14  0:01:59 37.3M
+ 11 9334M   11 1045M    0     0  66.1M      0  0:02:21  0:00:15  0:02:06 37.0M
+ 11 9334M   11 1057M    0     0  62.9M      0  0:02:28  0:00:16  0:02:12 36.9M
+ 11 9334M   11 1068M    0     0  59.8M      0  0:02:35  0:00:17  0:02:18 36.1M
+ 11 9334M   11 1075M    0     0  57.1M      0  0:02:43  0:00:18  0:02:25 19.3M
+ 11 9334M   11 1103M    0     0  55.7M      0  0:02:47  0:00:19  0:02:28 14.0M
+ 13 9334M   13 1221M    0     0  58.7M      0  0:02:38  0:00:20  0:02:18 35.1M
+ 13 9334M   13 1234M    0     0  56.6M      0  0:02:44  0:00:21  0:02:23 35.4M
+ 13 9334M   13 1250M    0     0  54.8M      0  0:02:50  0:00:22  0:02:28 36.6M
+ 13 9334M   13 1266M    0     0  53.1M      0  0:02:55  0:00:23  0:02:32 38.2M
+ 13 9334M   13 1278M    0     0  51.5M      0  0:03:01  0:00:24  0:02:37 34.9M
+ 14 9334M   14 1374M    0     0  53.2M      0  0:02:55  0:00:25  0:02:30 30.5M
+ 15 9334M   15 1400M    0     0  52.2M      0  0:02:58  0:00:26  0:02:32 33.2M
+ 15 9334M   15 1408M    0     0  50.6M      0  0:03:04  0:00:27  0:02:37 31.5M
+ 15 9334M   15 1420M    0     0  49.2M      0  0:03:09  0:00:28  0:02:41 30.8M
+ 15 9334M   15 1429M    0     0  47.9M      0  0:03:14  0:00:29  0:02:45 29.9M
+ 15 9334M   15 1441M    0     0  46.7M      0  0:03:19  0:00:30  0:02:49 13.3M
+ 15 9334M   15 1458M    0     0  45.8M      0  0:03:23  0:00:31  0:02:52 11.5M
+ 16 9334M   16 1540M    0     0  46.9M      0  0:03:18  0:00:32  0:02:46 26.3M
+ 18 9334M   18 1749M    0     0  51.7M      0  0:03:00  0:00:33  0:02:27 65.8M
+ 20 9334M   20 1937M    0     0  55.6M      0  0:02:47  0:00:34  0:02:13  102M
+ 22 9334M   22 2132M    0     0  59.5M      0  0:02:36  0:00:35  0:02:01  138M
+ 25 9334M   25 2334M    0     0  63.4M      0  0:02:27  0:00:36  0:01:51  175M
+ 27 9334M   27 2538M    0     0  67.1M      0  0:02:18  0:00:37  0:01:41  199M
+ 29 9334M   29 2734M    0     0  70.4M      0  0:02:12  0:00:38  0:01:34  197M
+ 31 9334M   31 2918M    0     0  73.1M      0  0:02:07  0:00:39  0:01:28  192M
+ 33 9334M   33 3104M    0     0  76.0M      0  0:02:02  0:00:40  0:01:22  194M
+ 35 9334M   35 3309M    0     0  79.1M      0  0:01:57  0:00:41  0:01:16  195M
+ 37 9334M   37 3514M    0     0  82.1M      0  0:01:53  0:00:42  0:01:11  195M
+ 39 9334M   39 3718M    0     0  84.8M      0  0:01:49  0:00:43  0:01:06  196M
+ 41 9334M   41 3903M    0     0  87.1M      0  0:01:47  0:00:44  0:01:03  200M
+ 43 9334M   43 4106M    0     0  89.6M      0  0:01:44  0:00:45  0:00:59  200M
+ 46 9334M   46 4312M    0     0  92.1M      0  0:01:41  0:00:46  0:00:55  200M
+ 48 9334M   48 4511M    0     0  94.3M      0  0:01:38  0:00:47  0:00:51  199M
+ 50 9334M   50 4715M    0     0  96.6M      0  0:01:36  0:00:48  0:00:48  199M
+ 52 9334M   52 4923M    0     0  98.8M      0  0:01:34  0:00:49  0:00:45  204M
+ 54 9334M   54 5125M    0     0   100M      0  0:01:32  0:00:50  0:00:42  203M
+ 56 9334M   56 5318M    0     0   102M      0  0:01:30  0:00:51  0:00:39  201M
+ 59 9334M   59 5516M    0     0   104M      0  0:01:29  0:00:52  0:00:37  200M
+ 61 9334M   61 5708M    0     0   106M      0  0:01:27  0:00:53  0:00:34  198M
+ 61 9334M   61 5766M    0     0  99.4M      0  0:01:33  0:00:57  0:00:36  102M
+ 63 9334M   63 5933M    0     0   100M      0  0:01:32  0:00:58  0:00:34  101M
+ 65 9334M   65 6138M    0     0   102M      0  0:01:30  0:00:59  0:00:31  102M
+ 67 9334M   67 6334M    0     0   104M      0  0:01:29  0:01:00  0:00:29  102M
+ 70 9334M   70 6534M    0     0   105M      0  0:01:28  0:01:01  0:00:27  103M
+ 72 9334M   72 6736M    0     0   107M      0  0:01:27  0:01:02  0:00:25  201M
+ 74 9334M   74 6948M    0     0   108M      0  0:01:25  0:01:03  0:00:22  202M
+ 76 9334M   76 7143M    0     0   110M      0  0:01:24  0:01:04  0:00:20  201M
+ 78 9334M   78 7362M    0     0   111M      0  0:01:23  0:01:05  0:00:18  205M
+ 81 9334M   81 7576M    0     0   110M      0  0:01:24  0:01:08  0:00:16  154M
+ 81 9334M   81 7625M    0     0   110M      0  0:01:24  0:01:08  0:00:16  148M
+ 83 9334M   83 7822M    0     0   112M      0  0:01:23  0:01:09  0:00:14  145M
+ 85 9334M   85 8016M    0     0   113M      0  0:01:22  0:01:10  0:00:12  145M
+ 87 9334M   87 8196M    0     0   109M      0  0:01:25  0:01:14  0:00:11 93.6M
+ 88 9334M   88 8221M    0     0   109M      0  0:01:24  0:01:14  0:00:10  103M
+ 89 9334M   89 8390M    0     0   110M      0  0:01:24  0:01:15  0:00:09  109M
+ 91 9334M   91 8524M    0     0   110M      0  0:01:24  0:01:16  0:00:08  100M
+ 93 9334M   93 8714M    0     0   111M      0  0:01:23  0:01:17  0:00:06 98.0M
+ 95 9334M   95 8885M    0     0   112M      0  0:01:22  0:01:18  0:00:04  168M
+ 97 9334M   97 9088M    0     0   113M      0  0:01:21  0:01:19  0:00:02  173M
+ 99 9334M   99 9290M    0     0   114M      0  0:01:21  0:01:20  0:00:01  179M
+/kaggle/temp/ltx/ComfyUI/models/text_encoders/t5xxl_fp16.safetensors: OK
+== 5. traces: VRAM of BOTH cards, compute apps per card, host RAM
+== 6. worker 0 (GPU 1 stays idle)
+pid 304 owns a listener on port 52745 (listening inodes: ['58235'])
+worker 0: ComfyUI sees one device 'cuda:0 Tesla T4 : cudaMallocAsync', matching physical GPU 0 (GPU-9fca5c71-6dca-a3a9-d386-16350dbee9de)
+== 7. live compatibility
+signatures: live /object_info object_info.json; 16 nodes, 49 inputs
+DEFAULTED node 95 LTXVImgToVideo.strength = 1.0 (not stored in the UI file)
+OVERRIDE node 78 LoadImage.image: 'fox.jpg' -> '{{START_IMAGE}}'
+OVERRIDE node 6 CLIPTextEncode.text: 'A red fox moving gracefully, its russet ' -> '{{MOTION_PROMPT}}'
+OVERRIDE node 7 CLIPTextEncode.text: 'low quality, worst quality, deformed, di' -> 'low quality, worst quality, deformed, distorted, disfigured,'
+OVERRIDE node 95 LTXVImgToVideo.width: '768' -> '{{WIDTH}}'
+OVERRIDE node 95 LTXVImgToVideo.height: '512' -> '{{HEIGHT}}'
+OVERRIDE node 95 LTXVImgToVideo.length: '97' -> '{{FRAMES}}'
+OVERRIDE node 69 LTXVConditioning.frame_rate: '24.000000000000004' -> '{{FPS}}'
+OVERRIDE node 103 VHS_VideoCombine.frame_rate: '24' -> '{{FPS}}'
+OVERRIDE node 102 RandomNoise.noise_seed: '45' -> '{{SEED}}'
+OVERRIDE node 44 CheckpointLoaderSimple.ckpt_name: 'ltxv-2b-0.9.6-distilled-04-25.safetensor' -> 'ltxv-2b-0.9.8-distilled.safetensors'
+OVERRIDE node 103 VHS_VideoCombine.filename_prefix: 'ltxv' -> 'granthstudio_ltx_i2v'
+IDENTICAL
+== 8. one synthetic I2V shot on GPU 0
+plan: [('tier1', 'a01_s01_sh02')]
+VERDICT: FAIL - visual drift suspected (or not measurable): SSIM vs frame 0 {'1': 0.578934, '12': 0.173246, '24': 0.165645, '36': 0.165287, '48': 0.174519}, max luma step 19.5571; see preview/contact_sheet.png; a decoded MP4 is not a visual PASS
+receipt: /kaggle/temp/ltx/ltx_gpu0/test_receipt.json
+== 9. which physical card did the work, and did the other stay untouched
+{
+  "notes": [],
+  "cards": {
+    "GPU-9fca5c71-6dca-a3a9-d386-16350dbee9de": {
+      "index": 0,
+      "first": 0.0,
+      "peak": 14905.0
+    },
+    "GPU-006ca999-0ba6-cc60-748c-fef529f0a997": {
+      "index": 1,
+      "first": 0.0,
+      "peak": 0.0
+    }
+  },
+  "compute_apps": {
+    "GPU-9fca5c71-6dca-a3a9-d386-16350dbee9de": [
+      304
+    ]
+  },
+  "workers": {
+    "0": {
+      "pid": 304,
+      "active": true
+    },
+    "1": {
+      "pid": 0,
+      "active": false
+    }
+  },
+  "problems": [],
+  "ok": true
+}
+stage gpu0 exit status 1; evidence: /kaggle/temp/ltx/ltx_evidence_gpu0.tgz (archived at exit)
