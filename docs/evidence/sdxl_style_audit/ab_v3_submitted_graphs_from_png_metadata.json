@@ -1,0 +1,120 @@
+{
+ "granthstudio_sdxl_00001_.png": {
+  "classes": [
+   "CLIPTextEncode",
+   "CLIPVisionLoader",
+   "CheckpointLoaderSimple",
+   "EmptyLatentImage",
+   "IPAdapterModelLoader",
+   "KSampler",
+   "SaveImage",
+   "VAEDecode",
+   "VAELoader"
+  ],
+  "text_nodes": {
+   "6": "1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he holds a small hand-made clay pipe in one hand and lifts a few grains of rice from the plates with the other. A gourd water vessel rests beside him. Calm face, gaze lowered to the tip of his nose. Bright daylight. warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.",
+   "7": "photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks."
+  },
+  "sampler": {
+   "seed": 1408754645,
+   "steps": 30,
+   "cfg": 6.5,
+   "sampler_name": "dpmpp_2m",
+   "scheduler": "karras",
+   "denoise": 1.0
+  },
+  "sampler_links": {
+   "model": [
+    "4",
+    0
+   ],
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "7",
+    0
+   ],
+   "latent_image": [
+    "5",
+    0
+   ]
+  },
+  "encoders": {
+   "6": {
+    "clip": [
+     "4",
+     1
+    ],
+    "class": "CLIPTextEncode"
+   },
+   "7": {
+    "clip": [
+     "4",
+     1
+    ],
+    "class": "CLIPTextEncode"
+   }
+  }
+ },
+ "granthstudio_sdxl_00002_.png": {
+  "classes": [
+   "CLIPTextEncode",
+   "CLIPVisionLoader",
+   "CheckpointLoaderSimple",
+   "EmptyLatentImage",
+   "IPAdapterModelLoader",
+   "KSampler",
+   "SaveImage",
+   "VAEDecode",
+   "VAELoader"
+  ],
+  "text_nodes": {
+   "6": "1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he holds a small hand-made clay pipe in one hand and lifts a few grains of rice from the plates with the other. A gourd water vessel rests beside him. Calm face, gaze lowered to the tip of his nose. Bright daylight. warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.",
+   "7": "photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks."
+  },
+  "sampler": {
+   "seed": 1408754646,
+   "steps": 30,
+   "cfg": 6.5,
+   "sampler_name": "dpmpp_2m",
+   "scheduler": "karras",
+   "denoise": 1.0
+  },
+  "sampler_links": {
+   "model": [
+    "4",
+    0
+   ],
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "7",
+    0
+   ],
+   "latent_image": [
+    "5",
+    0
+   ]
+  },
+  "encoders": {
+   "6": {
+    "clip": [
+     "4",
+     1
+    ],
+    "class": "CLIPTextEncode"
+   },
+   "7": {
+    "clip": [
+     "4",
+     1
+    ],
+    "class": "CLIPTextEncode"
+   }
+  }
+ }
+}

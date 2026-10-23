@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "kind": "sdxl_first_keyframe_test",
+  "started": "2026-10-23T15:38:56+00:00",
+  "harness_commit": "67ee0d962e6a9b61a54335fbfaa7ffb19c2b100b",
+  "approved_by": "Satvik Sangamkar",
+  "authorization_record": "docs/pilot/SDXL_DOWNLOAD_APPROVAL.md",
+  "pins": "config/pilot_sdxl_pins.yaml",
+  "visual": "vis_s1_kf",
+  "gpu_index": 0,
+  "workdir": "/kaggle/temp/sdxl/sdxl_work_vis_s1_kf",
+  "comfy_url": "http://127.0.0.1:50445",
+  "worker_pid": 293,
+  "cuda_visible_devices_of_worker": "0",
+  "style": "devotional_gouache_1950s_v1",
+  "reference_image": {
+    "path": "/kaggle/working/granthstudio/assets/ltx_test_inputs/painted_courtyard_01/04_ltx_start_768x512.png",
+    "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83",
+    "role": "PROVISIONAL external identity/style reference (not an SDXL output)"
+  },
+  "note": "A PASS means technically valid images through the existing pipeline. Style fidelity and identity are judged by a human; the reference never validates SDXL itself.",
+  "file_check": {
+    "problems": [],
+    "pinned": [
+      {
+        "name": "sd_xl_base_1.0.safetensors",
+        "sha256": "31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b",
+        "size_bytes": 6938078334,
+        "revision": "462165984030d82259a11f4367a4eed129e94a7b"
+      },
+      {
+        "name": "ip-adapter-plus_sdxl_vit-h.safetensors",
+        "sha256": "3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581",
+        "size_bytes": 847517512,
+        "revision": "018e402774aeeddd60609b4ecdb7e298259dc729"
+      },
+      {
+        "name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+        "sha256": "6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030",
+        "size_bytes": 2528373448,
+        "revision": "018e402774aeeddd60609b4ecdb7e298259dc729"
+      },
+      {
+        "name": "sdxl.vae.safetensors",
+        "sha256": "235745af8d86bf4a4c1b5b4f529868b37019a10f7c0b2e79ad0abca3a22bc6e1",
+        "size_bytes": 334641162,
+        "revision": "207b116dae70ace3637169f1ddd2434b91b3a8cd"
+      }
+    ]
+  },
+  "provisional_approvals": "research, canon and the two reference assets approved at run time for the provisional technical test by 'Satvik Sangamkar' (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md))",
+  "reference_assets": [
+    {
+      "asset_id": "ref_chr_gajanan_maharaj_front",
+      "version": 1,
+      "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83",
+      "view": "front",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference, Gemini Nano Banana painting)"
+    },
+    {
+      "asset_id": "ref_loc_devidas_house_road",
+      "version": 1,
+      "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83",
+      "view": "establishing",
+      "status": "approved",
+      "approved_by": "Satvik Sangamkar (provisional technical test; owner instruction 2026-10-23 (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md); PROVISIONAL external reference, Gemini Nano Banana painting)"
+    }
+  ],
+  "request": {
+    "asset_id": "ref_kf_s1_kf",
+    "visual_id": "vis_s1_kf",
+    "role": "start",
+    "characters": [
+      "chr_gajanan_maharaj"
+    ],
+    "locations": [
+      "loc_devidas_house_road"
+    ],
+    "props": [
+      "prp_clay_chilam",
+      "prp_gourd_vessel",
+      "prp_leaf_plates"
+    ],
+    "lighting": [
+      "day_outdoor"
+    ],
+    "seed": 1408754645,
+    "width": 1216,
+    "height": 832,
+    "style": {
+      "style_id": "devotional_gouache_1950s_v1",
+      "version": 1,
+      "sha256": "2346c837e05b202ac04f21fc0b1f02a49dfebda4f6617703026a19ef2deac3d1"
+    },
+    "template_version": "keyframe-prompt-v3-visual-description",
+    "missing_references": [],
+    "request_sha256": "ec1890dcac3f74993e20f6d597682823acf1397a68e4d6becb22a4d0d6773f15",
+    "prompt": "1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he holds a small hand-made clay pipe in one hand and lifts a few grains of rice from the plates with the other. A gourd water vessel rests beside him. Calm face, gaze lowered to the tip of his nose. Bright daylight. warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.",
+    "negative_prompt": "photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks.",
+    "references": [
+      {
+        "asset_id": "ref_chr_gajanan_maharaj_front",
+        "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83"
+      },
+      {
+        "asset_id": "ref_loc_devidas_house_road",
+        "sha256": "775b9805424c5c7987ea0041d3c2b3dd5d3103defb6ce5eedfe2f9cbc75bdf83"
+      }
+    ]
+  },
+  "missing_before_sheets": [],
+  "preflight": {
+    "schema_version": 1,
+    "measured_at": "2026-10-23T15:39:45+00:00",
+    "gpu_ready": true,
+    "checks": {
+      "gpu": {
+        "status": "pass",
+        "measured": [
+          "Tesla T4"
+        ],
+        "required": "T4",
+        "detail": "single-GPU default uses GPU 0"
+      },
+      "free_vram": {
+        "status": "pass",
+        "measured": 14807.0,
+        "required": 10000,
+        "detail": ""
+      },
+      "ram": {
+        "status": "pass",
+        "measured": 30009.98828125,
+        "required": 12000,
+        "detail": ""
+      },
+      "disk": {
+        "status": "pass",
+        "measured": 1114.912464896,
+        "required": 30,
+        "detail": ""
+      },
+      "session": {
+        "status": "pass",
+        "measured": 14136.810443,
+        "required": 1800,
+        "detail": ""
+      },
+      "python_packages": {
+        "status": "pass",
+        "measured": {
+          "jsonschema": "4.26.0",
+          "pyyaml": "6.0.3"
+        },
+        "required": {
+          "pyyaml": "6.0.3",
+          "jsonschema": "4.26.0"
+        },
+        "detail": ""
+      },
+      "python": {
+        "status": "info",
+        "measured": "3.13.15",
+        "required": ">=3.12 (pyproject)",
+        "detail": ""
+      },
+      "storage": {
+        "status": "pass",
+        "measured": "/kaggle/temp/sdxl/sdxl_work_vis_s1_kf/durable",
+        "required": null,
+        "detail": ""
+      },
+      "workers": {
+        "status": "pass",
+        "measured": "single",
+        "required": "single",
+        "detail": ""
+      },
+      "sources": {
+        "status": "pass",
+        "measured": {
+          "comfyui_repo": "https://github.com/comfyanonymous/ComfyUI",
+          "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+          "node_pack_repo": "https://github.com/cubiq/ComfyUI_IPAdapter_plus",
+          "node_pack_commit": "a0f451a5113cf9becb0847b92884cb10cbdec0ef"
+        },
+        "required": {
+          "comfyui_commit": "2f74e17975696d829af455845c584574bbc85774",
+          "node_pack_commit": "a0f451a5113cf9becb0847b92884cb10cbdec0ef"
+        },
+        "detail": ""
+      }
+    }
+  },
+  "live_check": {
+    "ok": true,
+    "node_classes": [
+      "CLIPTextEncode",
+      "CLIPVisionLoader",
+      "CheckpointLoaderSimple",
+      "EmptyLatentImage",
+      "IPAdapterAdvanced",
+      "IPAdapterModelLoader",
+      "KSampler",
+      "LoadImage",
+      "SaveImage",
+      "VAEDecode",
+      "VAELoader"
+    ]
+  },
+  "exec_started": "2026-10-23T15:39:45.261+00:00",
+  "sweep": {
+    "cfg6.5_seed0": {
+      "image": "sweep_cfg6.5_seed0.png",
+      "sha256": "c3c2b2ad732c936936640a31b00bf5d89eeb10d5b28ff44550ec11848041348c",
+      "cfg": 6.5,
+      "seed": 1408754645,
+      "wall_s": 54.2
+    },
+    "cfg6.5_seed1": {
+      "image": "sweep_cfg6.5_seed1.png",
+      "sha256": "95e66e8a62a71c2d4cb5f2ae2d6c8221c171f736364e18f36afcda5029a2d881",
+      "cfg": 6.5,
+      "seed": 1408754646,
+      "wall_s": 44.6
+    }
+  },
+  "sweep_prompt": "1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he holds a small hand-made clay pipe in one hand and lifts a few grains of rice from the plates with the other. A gourd water vessel rests beside him. Calm face, gaze lowered to the tip of his nose. Bright daylight. warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.",
+  "sweep_contact_sheet": {
+    "file": "sweep_contact_sheet.png",
+    "error": null,
+    "rows": [
+      "cfg 6.5"
+    ],
+    "columns": [
+      "seed offset 0",
+      "seed offset 1"
+    ]
+  },
+  "experiment_note": "EXPERIMENT: nothing here validates SDXL, a workflow or a style; the owner judges the images",
+  "verdict": "EXPERIMENT_COMPLETE",
+  "reason": "style-sweep images generated (experiment, not a validation); the human picks which setting keeps the frozen style",
+  "finished": "2026-10-23T15:41:24+00:00",
+  "comfyui_log_excerpt": [
+    "Checkpoint files will always be loaded safely.",
+    "Total VRAM 14912 MB, total RAM 32099 MB",
+    "Set vram state to: NORMAL_VRAM",
+    "Device: cuda:0 Tesla T4 : cudaMallocAsync",
+    "VAE load device: cuda:0, offload device: cpu, dtype: torch.float32",
+    "model weight dtype torch.float16, manual cast: None",
+    "VAE load device: cuda:0, offload device: cpu, dtype: torch.float32",
+    "loaded completely 9.5367431640625e+25 1560.802734375 True",
+    "CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cuda:0, dtype: torch.float16",
+    "loaded completely 11971.68463973999 4897.0483474731445 True",
+    "loaded completely 362.0428924560547 319.11416244506836 True"
+  ]
+}

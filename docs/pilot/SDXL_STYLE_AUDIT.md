@@ -83,3 +83,16 @@ Status: correction 2 and 3 implemented as prompt template v3 (`keyframe-prompt-v
 5. Only if that still fails: a style anchor (one owner-approved frozen-style image as an IP-Adapter style reference for every image) or the optional style LoRA (architecture 4.3). Both are bigger decisions for the owner.
 
 Items 2 and 3 change how `keyframe_request` writes the scene description (a new prompt-template version). The frozen prefix/suffix/negative stay exactly as sealed.
+
+## 7. Result of the matched-seed A/B (commit 67ee0d96, kernel version 4, 2 new images)
+
+Setup: Scene 1, reference-free (graph verified from the PNG metadata: checkpoint wired straight to the KSampler; no IPAdapterAdvanced or LoadImage node; the unconnected IP-Adapter/CLIP-vision loaders stay in the graph and do nothing), cfg 6.5, dpmpp_2m/karras/30 steps, seeds 1408754645 and 1408754646, the same as baseline images cfg6.5/seed+0 and seed+1. Only the middle description changed (template v3, about 200 tokens in total instead of 360). Evidence: `ab_prompt_v2_vs_v3_labeled.png`, `ab_v3_submitted_graphs_from_png_metadata.json`, `ab_v3_png_sha256.txt`.
+
+| | Baseline v2 (same seed) | New v3 |
+|---|---|---|
+| seed+0 | sepia photograph, elderly bearded man | painted illustration, young man, aged paper, sage/ochre/umber palette, soft brown contours, flat-ish colour |
+| seed+1 | sepia photograph, elderly man | painted illustration, young man, aged paper, same palette; small faint mark lower right |
+
+What improved (both seeds): the medium changed from photograph to painting, and the age from elderly to young. That is strong evidence that the name and research text in the old middle, not the frozen style text, produced the photographs.
+Still missing against frozen v1 and the description: no double-line border; no torn vest (both wear a draped white cloth); the clay pipe and gourd are not clearly drawn; the leaf plates read as leaves or bowls; seed+1 adds a sacred thread and a red forehead mark that the text does not give. The face and costume differ between the two seeds (expected without references).
+Verdict: reference-free style is much closer but not a STYLE PASS. Human review NOT_DONE. Next variable to test, alone: one owner-supplied style-matched reference per character (pilot_refs/set_v1), at the current adapter settings, without changing the prompt.

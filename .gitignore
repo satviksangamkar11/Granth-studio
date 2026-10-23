@@ -55,3 +55,4 @@ __pycache__/
 !docs/evidence/sdxl_scenes/s3_oom_c9ee672b/sheet_chr_devidas_front.png
 !docs/evidence/sdxl_style_audit/sweep_labeled_contact_sheet.png
 !docs/evidence/sdxl_style_audit/scene1_reference_effect_labeled.png
+!docs/evidence/sdxl_style_audit/ab_prompt_v2_vs_v3_labeled.png
