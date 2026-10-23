@@ -605,3 +605,9 @@ def test_the_painted_retry_writes_its_own_previews_and_is_screened(host, tmp_pat
     assert [r["status"] for r in first["results"]] == ["complete"]
     code, retry = run(host, "--execute", "--retry-test", *args)
     assert retry["retry_checks"]["visual_screen_not_suspect"] is True and (work / "preview_retry" / "contact_sheet.png").is_file()
+
+
+def test_the_prompt_variant_is_a_plain_file_name_checked_before_any_network_step():
+    text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
+    assert text.index("PAINTED_PROMPT must be a plain file name") < text.index("git clone") and '${PAINTED_PROMPT:-prompt.txt}' in text
+    assert (REPO / "assets" / "ltx_test_inputs" / "painted_courtyard_01" / "prompt_camera_lock.txt").read_text(encoding="utf-8").startswith("A single continuous locked-off tripod shot")

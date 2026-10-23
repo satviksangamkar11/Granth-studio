@@ -420,3 +420,7 @@ Codex also said: safe for a fresh gpu0 execution; offline validation of attempt 
 
 ## Codex re-check 12 (docs/evidence/codex_reviews/12_review11_recheck.md): no blocking issue; a fresh painted gpu0 run may proceed. One minor (.gitignore exceptions by file name) fixed here.
 - Candidate-bound suite: docs/evidence/cpu_tests/55ca9f1_suite.xml = full suite on 55ca9f1, 481 tests, 0 failures, 0 errors, 4 skipped (649 s). This checkpoint commit adds only that evidence, the review file and the .gitignore tightening.
+
+## Painted gpu0 attempt 5 (kernel v5, pinned d6b9c6f): harness FAIL kept; scheduler complete (post-run fix confirmed on hardware)
+Evidence: docs/evidence/kaggle_dual_t4/gpu0_attempt5_painted/ (REPORT.md, receipt, journal, attribution, traces, clip, contact sheet, frames 0/48, camera_analysis/). The drift screen failed (SSIM vs frame 0 0.58 -> 0.17); the offline camera-motion analysis is INCONCLUSIVE by preset thresholds, but synthetic calibration and the aligned examples show the raw collapse is what a ~1.04x-1.2x push-in produces, with the scene preserved and part of the difference not explained by camera motion. The prompt asked for a stationary camera; LTX pushed in.
+Next experiment (not yet run, needs explicit pin authorization): assets/ltx_test_inputs/painted_courtyard_01/prompt_camera_lock.txt (owner's camera-lock prompt, 195 words; the pinned ComfyUI LTXV tokenizer has max_length 99999999, so nothing is truncated), PAINTED_PROMPT=prompt_camera_lock.txt; everything else identical.
