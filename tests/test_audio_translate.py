@@ -1,3 +1,4 @@
+import ast
 import importlib.util
 import json
 import re
@@ -15,6 +16,13 @@ def load():
     return module
 
 
+COMMIT = "c" * 40
+
+
+def fake_git(dirty=""):
+    return lambda *a: dirty if a[0] == "status" else COMMIT
+
+
 STUB = '''import json, sys
 p = json.load(sys.stdin)
 print(json.dumps({"translations": ["हिंदी " + t[:10] for t in p["texts"]], "verified": {"model": p["model"], "revision": p["revision"]}}, ensure_ascii=True))
@@ -26,14 +34,15 @@ def test_the_harness_runs_the_existing_translation_path_and_records_a_receipt_wi
     stub = tmp_path / "stub_runner.py"
     stub.write_text(STUB, encoding="utf-8")
     monkeypatch.setattr(at, "RUNNER", stub)
+    monkeypatch.setattr(at, "git", fake_git())
     monkeypatch.setenv("HF_TOKEN", "hf_" + "A" * 30)
     assert at.main(["--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 1                    # no --execute: nothing runs
     assert json.loads((tmp_path / "o" / "translate_receipt.json").read_text(encoding="utf-8"))["verdict"] == "NOT_RUN"
-    assert at.main(["--execute", "--workdir", str(tmp_path / "w2"), "--out", str(tmp_path / "o2")]) == 0
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w2"), "--out", str(tmp_path / "o2")]) == 0
     receipt = json.loads((tmp_path / "o2" / "translate_receipt.json").read_text(encoding="utf-8"))
     assert receipt["verdict"] == "PASS" and len(receipt["lines"]) == 6 and all(r["candidate"] and r["assistant_hindi_draft"] for r in receipt["lines"])
     assert receipt["revision"] == at.REVISION and "hf_" + "A" * 30 not in json.dumps(receipt)
-    assert at.main(["--execute", "--workdir", str(tmp_path / "w2"), "--out", str(tmp_path / "o3")]) == 1      # a used workdir is refused
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w2"), "--out", str(tmp_path / "o3")]) == 1      # a used workdir is refused
 
 
 def test_a_wrong_identity_from_the_runner_fails_the_stage(tmp_path, monkeypatch):
@@ -41,11 +50,45 @@ def test_a_wrong_identity_from_the_runner_fails_the_stage(tmp_path, monkeypatch)
     stub = tmp_path / "bad_runner.py"
     stub.write_text(STUB.replace('p["revision"]}}', '"0" * 40}}'), encoding="utf-8")
     monkeypatch.setattr(at, "RUNNER", stub)
-    assert at.main(["--execute", "--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 1
+    monkeypatch.setattr(at, "git", fake_git())
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 1
     assert json.loads((tmp_path / "o" / "translate_receipt.json").read_text(encoding="utf-8"))["verdict"] == "FAIL"
 
 
-def test_the_notebook_takes_the_token_only_from_the_kaggle_secret_and_never_stores_it():
+def test_a_dirty_wrong_or_missing_commit_and_an_in_repo_workdir_are_refused_and_nothing_validated_reaches_disk(tmp_path, monkeypatch):
+    at = load()
+    stub = tmp_path / "stub_runner.py"
+    stub.write_text(STUB, encoding="utf-8")
+    monkeypatch.setattr(at, "RUNNER", stub)
+    for dirty, commit in (("M x", COMMIT), ("", "d" * 40), ("", None)):
+        monkeypatch.setattr(at, "git", fake_git(dirty))
+        argv = ["--execute", "--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")] + (["--expected-commit", commit] if commit else [])
+        assert at.main(argv) == 1
+        assert json.loads((tmp_path / "o" / "translate_receipt.json").read_text(encoding="utf-8"))["verdict"] == "NOT_RUN"
+    monkeypatch.setattr(at, "git", fake_git())
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(REPO / "_never"), "--out", str(tmp_path / "o")]) == 1
+    assert not (REPO / "_never").exists()
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "ok"), "--out", str(tmp_path / "o")]) == 0
+    assert "status: unvalidated" in (tmp_path / "ok" / "project" / "config" / "models.yaml").read_text(encoding="utf-8").split("translation:")[1].split("speech:")[0]
+
+
+def test_a_token_in_a_candidate_withholds_the_evidence_and_fails(tmp_path, monkeypatch):
+    at = load()
+    stub = tmp_path / "leaky.py"
+    stub.write_text(STUB.replace('"हिंदी " + t[:10]', '"hf_" + "B" * 30'), encoding="utf-8")
+    monkeypatch.setattr(at, "RUNNER", stub)
+    monkeypatch.setattr(at, "git", fake_git())
+    assert at.main(["--execute", "--expected-commit", COMMIT, "--workdir", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 1
+    assert not (tmp_path / "o" / "translation_candidates.json").exists()
+    assert "B" * 30 not in (tmp_path / "o" / "translate_receipt.json").read_text(encoding="utf-8")
+
+
+def test_the_notebook_parses_installs_before_the_secret_exists_and_never_stores_the_token():
     text = (REPO / "notebooks" / "kaggle_audio_translate_test.ipynb").read_text(encoding="utf-8")
-    assert 'get_secret(\\"HF_TOKEN\\")' in text and not re.search(r"hf_[A-Za-z0-9]{20,}", text)
-    assert text.index("get_secret") < text.index("clone")                                         # the secret is checked before anything is cloned or installed
+    cells = json.loads(text)["cells"]
+    for cell in cells:
+        if cell["cell_type"] == "code":
+            ast.parse("".join(cell["source"]))
+    assert not re.search(r"hf_[A-Za-z0-9]{20,}", text)
+    assert text.index("pip") < text.index("get_secret") and text.index("clone") < text.index("get_secret")
+    assert "must not be in the environment while packages are installed" in text and "--expected-commit" in text

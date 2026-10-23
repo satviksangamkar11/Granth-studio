@@ -13,8 +13,9 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 import re
-import shutil
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -46,13 +47,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--workdir", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--expected-commit", help="refuse to run unless the checkout is exactly this clean commit (required with --execute)")
     return parser
 
 
 def prepare(workdir: Path):
-    from granthstudio.config import dump_yaml, load_models, load_project
+    """Build the pilot project and the run-only models dict (translation 'validated' lives in memory only, never on disk)."""
+    from granthstudio.config import load_models, load_project
     if (workdir / "project").exists():
         raise RuntimeError("the workdir already holds a project: a fresh --workdir is required")
+    if workdir.resolve().is_relative_to(ROOT.resolve()):
+        raise RuntimeError("the workdir must be outside the repository")
     root = bp.build(workdir / "project")
     artifacts = workdir / "artifacts"
     artifacts.mkdir(parents=True, exist_ok=True)
@@ -62,8 +67,16 @@ def prepare(workdir: Path):
     project = load_project(root)
     models = load_models(project)
     models["translation"].update(status="validated", command=[sys.executable, str(RUNNER)], model=MODEL, revision=REVISION, timeout_s=3000)
-    dump_yaml(root / "config" / "models.yaml", models)
-    return load_project(root)
+    return project, models
+
+
+def contaminated(text: str) -> bool:
+    token = os.environ.get("HF_TOKEN", "").strip()
+    return bool(re.search(r"hf_[A-Za-z0-9]{20,}", text)) or (len(token) >= 8 and token in text)
+
+
+def git(*args: str) -> str:
+    return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True, text=True).stdout.strip()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -75,23 +88,26 @@ def main(argv: list[str] | None = None) -> int:
     def finish(verdict: str, reason: str) -> int:
         receipt.update(verdict=verdict, reason=reason, finished=datetime.now(timezone.utc).isoformat(timespec="seconds"))
         text = json.dumps(receipt, ensure_ascii=False, indent=2)
-        if re.search(r"hf_[A-Za-z0-9]{20,}", text):
+        if contaminated(text):
             text = json.dumps({"verdict": "FAIL", "reason": "a token-like string reached the receipt: withheld"})
+            verdict = "FAIL"
         (args.out / "translate_receipt.json").write_text(text, encoding="utf-8")
         print(verdict, "-", reason)
         return 0 if verdict == "PASS" else 1
 
     if not args.execute:
         return finish("NOT_RUN", "--execute not given")
+    head = git("rev-parse", "HEAD")
+    receipt["commit"] = head
+    if not args.expected_commit or head != args.expected_commit or git("status", "--porcelain"):
+        return finish("NOT_RUN", f"checkout is not the clean expected commit (HEAD {head}, expected {args.expected_commit})")
     try:
-        project = prepare(args.workdir)
+        project, models = prepare(args.workdir)
     except RuntimeError as exc:
         return finish("NOT_RUN", str(exc))
     from granthstudio import translation as tr
     from granthstudio.canon import load_canon
-    from granthstudio.config import load_models
     from granthstudio.errors import GranthError
-    models = load_models(project)
     began = time.monotonic()
     try:
         todo = tr.generate_candidates(project, models, 1, execute=True)
@@ -104,15 +120,21 @@ def main(argv: list[str] | None = None) -> int:
     try:
         rows = tr.review_report(project, load_canon(project), 1)
     except GranthError as exc:
-        rows, receipt["review_error"] = [], str(exc)
+        return finish("FAIL", f"review of the candidates failed: {exc}"[:500])
     hindi = {e["dialogue_id"]: e["text"] for e in yaml.safe_load(
         (project.episodes_dir / "adhyay_01" / "hi.yaml").read_text(encoding="utf-8"))["entries"]}
     receipt["lines"] = [{**row, "assistant_hindi_draft": hindi.get(row["dialogue_id"])} for row in rows]
-    candidates = tr.candidates_path(project, 1)
-    if candidates.is_file():
-        shutil.copyfile(candidates, args.out / "translation_candidates.json")
-    if not todo or not all(row["candidate"] for row in rows):
-        return finish("FAIL", "not every line has a candidate")
+    found = tr.load_candidates(project, 1)
+    expected_ids = [f"d_{i:04d}" for i in range(1, 7)]
+    identities = [c.get("model_identity") for c in (found["candidates"] if found else [])]
+    if [r["dialogue_id"] for r in rows] != expected_ids or sorted(todo) != expected_ids or not all(r["candidate"] and r["candidate"].strip() for r in rows):
+        return finish("FAIL", "the six expected lines d_0001..d_0006 do not all have a non-empty candidate")
+    if not identities or not all(i and i.get("status") == "verified" and i.get("revision") == REVISION for i in identities):
+        return finish("FAIL", f"model identity is not verified at the pinned revision: {identities}")
+    candidates = tr.candidates_path(project, 1).read_text(encoding="utf-8")
+    if contaminated(candidates):
+        return finish("FAIL", "a token-like string reached the candidates: withheld")
+    (args.out / "translation_candidates.json").write_text(candidates, encoding="utf-8")
     return finish("PASS", "IndicTrans2 ran at the pinned revision and returned one candidate per line; Hindi correctness awaits the human reviewer")
 
 

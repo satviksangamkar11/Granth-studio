@@ -20,14 +20,6 @@ import re
 assert APPROVER.strip(), "fill APPROVER"
 assert re.fullmatch(r"[0-9a-f]{40}", EXPECTED_COMMIT), "EXPECTED_COMMIT must be the full 40-character commit sha\""""),
     ("code", """import glob, os, shutil, subprocess, sys
-try:
-    from kaggle_secrets import UserSecretsClient
-    HF_TOKEN = UserSecretsClient().get_secret("HF_TOKEN")
-except Exception as exc:
-    raise SystemExit(f"Secret HF_TOKEN is not available ({type(exc).__name__}). Add-ons > Secrets: add HF_TOKEN and tick it for this notebook, then run again.")
-assert HF_TOKEN and HF_TOKEN.strip(), "HF_TOKEN is empty"
-os.environ["HF_TOKEN"] = HF_TOKEN.strip()
-del HF_TOKEN
 WORK, TMP = "/kaggle/working", "/kaggle/temp/audio"
 os.makedirs(TMP, exist_ok=True)
 assert shutil.disk_usage(TMP).free > 20e9, "less than 20 GB free on scratch"
@@ -37,25 +29,36 @@ shutil.rmtree(f"{WORK}/granthstudio", ignore_errors=True)
 subprocess.run(["git", "clone", "-q", "-b", "sprint/remaining-pipeline", bundles[0], f"{WORK}/granthstudio"], check=True)
 head = subprocess.run(["git", "-C", f"{WORK}/granthstudio", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
 assert head == EXPECTED_COMMIT, f"bundle is at {head}, not the reviewed {EXPECTED_COMMIT}: refusing"
-assert not subprocess.run(["git", "-C", f"{WORK}/granthstudio", "status", "--porcelain"], capture_output=True, text=True).stdout, "dirty checkout"
-env = {**os.environ, "PIP_CACHE_DIR": f"{TMP}/pip"}
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest", "transformers", "sentencepiece", "sacremoses", "IndicTransToolkit"], check=True, env=env)
-print(subprocess.run([sys.executable, "-m", "pip", "freeze"], capture_output=True, text=True).stdout.count("\n"), "packages")"""),
-    ("code", """out = f"{WORK}/audio_translate_evidence"
+assert not os.environ.get("HF_TOKEN"), "HF_TOKEN must not be in the environment while packages are installed"
+env = {k: v for k, v in os.environ.items() if "TOKEN" not in k.upper() and "SECRET" not in k.upper()}
+env["PIP_CACHE_DIR"] = f"{TMP}/pip"
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest", "transformers", "sentencepiece", "sacremoses", "IndicTransToolkit"], check=True, env=env)"""),
+    ("code", """try:
+    from kaggle_secrets import UserSecretsClient
+    HF_TOKEN = UserSecretsClient().get_secret("HF_TOKEN")
+except Exception as exc:
+    raise SystemExit(f"Secret HF_TOKEN is not available ({type(exc).__name__}). Add-ons > Secrets: add HF_TOKEN and tick it for this notebook, then run again.")
+assert HF_TOKEN and len(HF_TOKEN.strip()) >= 8, "HF_TOKEN is empty"
+os.environ["HF_TOKEN"] = HF_TOKEN.strip()
+del HF_TOKEN
+out = f"{WORK}/audio_translate_evidence"
 shutil.rmtree(out, ignore_errors=True)
 run_env = {**os.environ, "HF_HOME": f"{TMP}/hf", "PYTHONPATH": f"{WORK}/granthstudio/src"}
-process = subprocess.Popen([sys.executable, f"{WORK}/granthstudio/scripts/audio_translate_test.py", "--execute", "--workdir", f"{TMP}/work", "--out", out],
+process = subprocess.Popen([sys.executable, f"{WORK}/granthstudio/scripts/audio_translate_test.py", "--execute", "--expected-commit", EXPECTED_COMMIT, "--workdir", f"{TMP}/work", "--out", out],
                            env=run_env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
     print(line.replace(os.environ["HF_TOKEN"], "***"), end="")
 print("exit status:", process.wait())"""),
     ("code", """import json
+secret = os.environ["HF_TOKEN"].encode()
+leaked = [p for p in glob.glob(f"{out}/**/*", recursive=True) if os.path.isfile(p) and secret in open(p, "rb").read()]
+if leaked:
+    shutil.rmtree(out, ignore_errors=True)
+    raise SystemExit("token found in the evidence: evidence deleted, nothing shown")
 receipt = json.load(open(f"{out}/translate_receipt.json", encoding="utf-8"))
 print("VERDICT:", receipt["verdict"], "-", receipt["reason"])
 for row in receipt.get("lines", []):
-    print(row["dialogue_id"], "\n  MR:", row["marathi"], "\n  MODEL HI:", row["candidate"], "\n  DRAFT HI:", row["assistant_hindi_draft"], "\n  checks:", row["problems"])
-leaked = [p for p in glob.glob(f"{out}/**/*", recursive=True) if os.path.isfile(p) and os.environ["HF_TOKEN"].encode() in open(p, "rb").read()]
-assert not leaked, f"token found in {leaked}: delete the evidence"
+    print(row["dialogue_id"]); print("  MR:", row["marathi"]); print("  MODEL HI:", row["candidate"]); print("  DRAFT HI:", row["assistant_hindi_draft"]); print("  checks:", row["problems"])
 print("evidence:", out)"""),
 ]
 
