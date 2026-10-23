@@ -283,7 +283,7 @@ def test_the_sweep_size_is_configurable_and_validated_in_the_script_and_notebook
     assert "SWEEP_SEEDS = 4" in source and '"SWEEP_CFGS": SWEEP_CFGS' in source
 
 
-def copy_set(tmp_path, drop=None, tamper=None, duplicate=False):
+def copy_set(tmp_path, drop=None, tamper=None, duplicate=False, alias=False, copied=False):
     import shutil
     source = REPO / "assets" / "pilot_refs" / "set_v1"
     target = tmp_path / "refset"
@@ -295,6 +295,11 @@ def copy_set(tmp_path, drop=None, tamper=None, duplicate=False):
         manifest["items"][tamper]["sha256"] = "0" * 64
     if duplicate:
         manifest["items"]["chr_damodarpant"] = dict(manifest["items"]["chr_devidas"])
+    if alias:                                                                          # the same file spelled another way
+        manifest["items"]["chr_damodarpant"] = {**manifest["items"]["chr_devidas"], "file": "./devidas.jpg"}
+    if copied:                                                                         # the same bytes under another name
+        shutil.copyfile(target / "devidas.jpg", target / "devidas_copy.jpg")
+        manifest["items"]["chr_damodarpant"] = {**manifest["items"]["chr_devidas"], "file": "devidas_copy.jpg"}
     (target / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
     return target
 
@@ -318,7 +323,8 @@ def test_a_reference_set_supplies_one_hash_checked_reference_per_character_and_s
 def test_a_bad_reference_set_is_refused_before_anything_is_submitted(host, tmp_path):
     server = host[0]
     for index, (kwargs, visual, expected) in enumerate(((dict(tamper="chr_bankatlal"), "vis_s2_kf", "sha256"), (dict(duplicate=True), "vis_s3_kf", "one image for two"),
-                                                       (dict(drop="chr_devidas"), "vis_s3_kf", "missing approved references"))):
+                                                       (dict(drop="chr_devidas"), "vis_s3_kf", "missing approved references"),
+                                                       (dict(alias=True), "vis_s3_kf", "one image for two"), (dict(copied=True), "vis_s3_kf", "one image for two"))):
         work = tmp_path / f"w{index}"
         args = sx.build_parser().parse_args(["--workdir", str(work), "--models-dir", str(host[1]), "--comfy-url", server.url, "--reference-image", str(host[3]),
                                              "--min-disk-gb", "0.001", "--execute", "--visual", visual, "--reference-set", str(copy_set(tmp_path / f"s{index}", **kwargs))])

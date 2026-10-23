@@ -1,0 +1,5 @@
+**MAJOR — [scripts/sdxl_first_test.py:173](D:/aai%20work/granthstudio/scripts/sdxl_first_test.py:173): duplicate-image protection is bypassable.** It compares filename strings only. Assign `devidas.jpg` and `./devidas.jpg` to different slots with the same correct hash: both pass containment and hash checks. Different filenames containing identical bytes also pass. Required correction: reject repeated verified SHA-256 values across slots; add alias-path and copied-image regression tests.
+
+All five committed JPEG hashes match the manifest. Inspection supports containment against escaping paths/symlinks, no generated character sheets in set mode, missing-reference refusal before submission, explicit provisional provenance, early Bash path validation, preserved default control flow, and the canon-compatible Maharaj description/name checks. JPEG handling is supported through import and the graph’s LoadImage paths.
+
+**A blocking issue remains; GPU authorization should wait for the duplicate-image correction.** Tests and live ComfyUI decoding were not run; no files, GPU, downloads, or network were used.

@@ -170,8 +170,9 @@ def import_reference_set(project, canon, set_dir: Path, approver: str) -> tuple[
     from granthstudio import keyframes as kf
     manifest_path = set_dir / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    files = [item["file"] for item in manifest["items"].values()]
-    if len(set(files)) != len(files):
+    files = [(set_dir / item["file"]).resolve() for item in manifest["items"].values()]
+    digests = [item["sha256"] for item in manifest["items"].values()]
+    if len(set(files)) != len(files) or len(set(digests)) != len(digests):        # same path spelled differently, or the same bytes under two names
         raise RuntimeError("the reference set uses one image for two canon entries")
     reviewer = f"{approver} ({OWNER_NOTE}; PROVISIONAL external reference set {manifest['set_id']}, owner-supplied, not SDXL output, not canon)"
     records = []
