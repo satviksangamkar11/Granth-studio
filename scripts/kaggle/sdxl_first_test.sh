@@ -26,8 +26,9 @@ publish() { # once, at exit: stop logging (tee flushed), archive, replace any ea
     mkdir -p "$EVIDENCE_DEST/${STAGE}_evidence" && cp -r "$OUT/." "$EVIDENCE_DEST/${STAGE}_evidence/" && cp "$W/${STAGE}_evidence.tgz" "$EVIDENCE_DEST/"
   } 2>/dev/null || true
 }
-[ -z "${EVIDENCE_DEST:-}" ] || rm -rf "$EVIDENCE_DEST/${STAGE}_evidence" "$EVIDENCE_DEST/${STAGE}_evidence.tgz"   # an earlier success must never survive a refused rerun
-rm -f "$W/${STAGE}_evidence.tgz"
+# an earlier success must never survive a refused or failed rerun: invalidate the published copy, the local evidence directory, the archive and the workdir BEFORE anything else
+[ -z "${EVIDENCE_DEST:-}" ] || rm -rf "$EVIDENCE_DEST/${STAGE}_evidence" "$EVIDENCE_DEST/${STAGE}_evidence.tgz"
+rm -rf "$W/${STAGE}_evidence" "$W/sdxl_work_$VISUAL"; rm -f "$W/${STAGE}_evidence.tgz"
 : "${LTX_DOWNLOAD_APPROVED:?set LTX_DOWNLOAD_APPROVED to the approver name (docs/pilot/SDXL_DOWNLOAD_APPROVAL.md)}"
 : "${LTX_EXPECTED_COMMIT:?set LTX_EXPECTED_COMMIT to the reviewed GranthStudio commit (full sha)}"
 mkdir -p "$OUT" "$W/cache/tmp"; trap publish EXIT; exec > >(tee "$OUT/run_log.txt") 2>&1; TEE_PID=$!
@@ -70,6 +71,11 @@ clone() { # repo commit dir : checked out at the pinned commit and required to b
 echo "== 2. pinned sources: ComfyUI and ComfyUI_IPAdapter_plus"
 clone "$(pin "$LTXPINS" sources.comfyui.repo)" "$(pin "$PINS" comfyui.commit)" "$COMFY"
 clone "$(pin "$PINS" custom_nodes.0.repo)" "$(pin "$PINS" custom_nodes.0.commit)" "$COMFY/custom_nodes/ComfyUI_IPAdapter_plus"
+# ONLY the approved node pack may be present: ComfyUI imports every folder of custom_nodes at startup, so an extra pack could run or override classes
+for entry in "$COMFY"/custom_nodes/* "$COMFY"/custom_nodes/.[!.]*; do
+  [ -e "$entry" ] || continue
+  case "$(basename "$entry")" in ComfyUI_IPAdapter_plus|__pycache__|websocket_image_save.py|example_node.py.example|.gitignore) ;; *) echo "unapproved entry in custom_nodes: $entry: refusing"; exit 4;; esac
+done
 
 echo "== 3. python requirements (recorded below)"
 [ -f "$COMFY/requirements.txt" ] && pip install -q -r "$COMFY/requirements.txt"
@@ -90,7 +96,6 @@ EOF
   echo "$sha  $dest/$name" | sha256sum -c -
 }
 for i in 0 1 2 3; do fetch "$i"; done
-mkdir -p "$COMFY/models/ipadapter"
 
 echo "== 5. traces: VRAM of both cards, compute apps, host RAM"
 : > "$OUT/vram_trace.csv"; : > "$OUT/apps_trace.csv"; : > "$OUT/ram_trace.txt"
@@ -156,6 +161,14 @@ cp "$WORK/sdxl_receipt.json" "$OUT/receipts/" 2>/dev/null || true
 cp "$WORK"/artifacts/tasks/pending/*.json "$OUT/" 2>/dev/null || true
 cp "$WORK"/project/canon/visual_assets.yaml "$OUT/visual_assets.yaml" 2>/dev/null || true
 nvidia-smi > "$OUT/nvidia_smi_after.txt" || true
+rm -f "$OUT/stage_verdict.json"
+if [ "$STATUS" = 0 ] && [ -f "$WORK/sdxl_receipt.json" ]; then   # a final verdict exists only after the client PASS and the per-card attribution both succeeded
+  python - "$OUT/stage_verdict.json" "$LTX_EXPECTED_COMMIT" "$STAGE" "$WORK/sdxl_receipt.json" <<'EOF'
+import hashlib, json, sys
+out, commit, stage, receipt = sys.argv[1:]
+json.dump({"stage": stage, "verdict": "PASS", "commit": commit, "receipts": {receipt: hashlib.sha256(open(receipt, "rb").read()).hexdigest()}}, open(out, "w"), indent=2)
+EOF
+fi
 cleanup; sleep 1
 echo "stage $STAGE exit status $STATUS; evidence: $W/${STAGE}_evidence.tgz (archived at exit)"
 exit $STATUS

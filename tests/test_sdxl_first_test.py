@@ -150,3 +150,21 @@ def test_the_pinned_download_list_matches_what_the_script_fetches():
     script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
     assert "for i in 0 1 2 3; do fetch" in script and len(sx.PINS["files"]) == 4
     assert all(("path_in_repo" in item) or item["name"] for item in sx.PINS["files"])
+
+
+def test_the_direct_entry_point_enforces_the_pins_the_clean_tree_the_node_inventory_and_worker_ownership(host, monkeypatch):
+    server, models, work, reference = host
+    (models / "custom_nodes" / "some_other_pack").mkdir(parents=True)
+    monkeypatch.delenv("LTX_EXPECTED_COMMIT", raising=False)
+    args = sx.build_parser().parse_args(["--workdir", str(work), "--models-dir", str(models), "--comfy-url", server.url, "--reference-image", str(reference), "--execute"])
+    problems = " | ".join(sx.execution_extra_problems(args))
+    assert "LTX_EXPECTED_COMMIT is not set" in problems and "not at its pinned commit" in problems                      # the fake checkouts are not the pinned ones
+    assert "unapproved entries in custom_nodes: ['some_other_pack']" in problems and "--worker-pid and --gpu-index are required" in problems
+    monkeypatch.setenv("LTX_EXPECTED_COMMIT", "0" * 40)
+    assert "expected " + "0" * 40 in " | ".join(sx.execution_extra_problems(args))
+
+
+def test_a_workdir_that_already_holds_a_project_is_refused_so_approvals_never_touch_foreign_files(host):
+    first_code, first = run(host)
+    again_code, again = run(host)
+    assert again["verdict"] == "NOT_RUN" and "fresh --workdir is required" in again["reason"]

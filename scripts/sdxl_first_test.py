@@ -91,7 +91,12 @@ def verify_files(models_dir: Path) -> list[str]:
 
 def prepare_project(args: argparse.Namespace):
     from granthstudio.config import load_models, load_project
-    root = bp.build(args.workdir / "project") if not (args.workdir / "project" / "config" / "project.yaml").is_file() else args.workdir / "project"
+    if (args.workdir / "project").exists():
+        raise RuntimeError("the workdir already holds a project: a fresh --workdir is required (run-time approvals are only ever applied to a project this run generated)")
+    root = bp.build(args.workdir / "project")
+    for name in ("research", "canon", "episodes"):                                            # approvals are written here: every one must stay inside this run's own project
+        if not (root / name).resolve().is_relative_to(args.workdir.resolve()):
+            raise RuntimeError(f"{name} directory leaves the workdir")
     artifacts = args.workdir / "artifacts"                                                    # generated media live in the run's workspace, never in the repository
     artifacts.mkdir(parents=True, exist_ok=True)
     config = yaml.safe_load((root / "config" / "project.yaml").read_text(encoding="utf-8"))
@@ -155,6 +160,45 @@ def import_references(project, canon, image: Path, approver: str) -> list[dict]:
     return records
 
 
+def execution_extra_problems(args: argparse.Namespace) -> list[str]:
+    """What the shell script also guarantees, enforced again at this entry point so a direct invocation cannot bypass it."""
+    import subprocess as sp
+    problems = []
+    expected = os.environ.get("LTX_EXPECTED_COMMIT", "").strip()
+    if not expected:
+        problems.append("LTX_EXPECTED_COMMIT is not set")
+    elif lt.git_head(ROOT) != expected:
+        problems.append(f"GranthStudio is at {lt.git_head(ROOT)}, expected {expected}")
+    if sp.run(["git", "-C", str(ROOT), "status", "--porcelain"], capture_output=True, text=True).stdout.strip():
+        problems.append("the GranthStudio checkout has local modifications")
+    pack = args.models_dir / "custom_nodes" / "ComfyUI_IPAdapter_plus"
+    for label, path, commit in (("ComfyUI", args.models_dir, PINS["comfyui"]["commit"]), ("ComfyUI_IPAdapter_plus", pack, PINS["custom_nodes"][0]["commit"])):
+        if lt.git_head(path) != commit:
+            problems.append(f"{label} is not at its pinned commit {commit}")
+        elif sp.run(["git", "-C", str(path), "status", "--porcelain"], capture_output=True, text=True).stdout.strip():
+            problems.append(f"{label} has local modifications")
+    allowed = {"ComfyUI_IPAdapter_plus", "__pycache__", "websocket_image_save.py", "example_node.py.example", ".gitignore"}
+    nodes = args.models_dir / "custom_nodes"
+    extra = sorted(entry.name for entry in nodes.iterdir() if entry.name not in allowed) if nodes.is_dir() else ["custom_nodes missing"]
+    if extra:
+        problems.append(f"unapproved entries in custom_nodes: {extra}")
+    if args.worker_pid is None or args.gpu_index is None:
+        problems.append("--worker-pid and --gpu-index are required: the worker's ownership of the port and its CUDA isolation are verified here")
+    else:
+        port = args.comfy_url.rsplit(":", 1)[-1].strip("/")
+        owner = sp.run([sys.executable, str(ROOT / "scripts" / "kaggle" / "port_owner.py"), str(args.worker_pid), port], capture_output=True, text=True)
+        if owner.returncode != 0:
+            problems.append(f"worker pid {args.worker_pid} does not own the listener on port {port}: {(owner.stdout + owner.stderr).strip()[:160]}")
+        try:
+            environ = Path(f"/proc/{args.worker_pid}/environ").read_bytes().split(bytes([0]))
+        except OSError as exc:
+            environ = []
+            problems.append(f"cannot read the worker's environment to prove its CUDA isolation: {exc}")
+        if environ and f"CUDA_VISIBLE_DEVICES={args.gpu_index}".encode() not in environ:
+            problems.append(f"the worker does not run with CUDA_VISIBLE_DEVICES={args.gpu_index}")
+    return problems
+
+
 def ssim(a: Path, b: Path) -> float | None:
     return lt._ssim(a, b)
 
@@ -182,6 +226,7 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
                                                                  other_gpu_idle_mb=args.other_gpu_idle_mb, min_session_s=args.min_session_s))
         if not approver:
             problems.append("LTX_DOWNLOAD_APPROVED (the approver's name) is not set")
+        problems += execution_extra_problems(args)
         if problems:
             return finish("NOT_RUN", "execution gate: " + "; ".join(problems))
     if not args.reference_image.is_file():
@@ -196,7 +241,10 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     from granthstudio.errors import GranthError
     from granthstudio.integrity import read_json
     from granthstudio.runtime import gate_gpu_tasks, gpu_status, load_runtime, preflight, ram_available_mb
-    project = prepare_project(args)
+    try:
+        project = prepare_project(args)
+    except RuntimeError as exc:
+        return finish("NOT_RUN", str(exc))
     canon, compiled = approvals(project, approver or "synthetic-tester")
     receipt["provisional_approvals"] = f"research, canon and the two reference assets approved at run time for the provisional technical test by '{approver}' ({OWNER_NOTE})"
     records = import_references(project, canon, args.reference_image, approver or "synthetic-tester")

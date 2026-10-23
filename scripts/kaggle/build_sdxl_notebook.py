@@ -29,6 +29,11 @@ assert VISUAL in ("vis_s1_kf", "vis_s2_kf", "vis_s3_kf")
 assert 30 <= SESSION_MINUTES <= 720"""),
     ("code", """import glob, os, shutil, subprocess, sys
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout or "NO GPU VISIBLE: stop here")
+gpus = subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout
+assert gpus.count("Tesla T4") == 2, f"expected exactly two Tesla T4, saw: {gpus!r}"
+assert shutil.which("ffmpeg"), "ffmpeg is required"
+os.makedirs("/kaggle/temp/sdxl", exist_ok=True)
+assert shutil.disk_usage("/kaggle/temp/sdxl").free > 40e9, "less than 40 GB free on the scratch disk"
 bundles = glob.glob("/kaggle/input/**/granthstudio.bundle", recursive=True)
 assert bundles, "attach the granthstudio-cpu-baseline dataset"
 WORK = "/kaggle/working"                      # small: the repo checkout and the published evidence (20 GB limit)
