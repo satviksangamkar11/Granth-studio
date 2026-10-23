@@ -420,3 +420,9 @@ def test_gpu_script_publishes_evidence_once_after_the_log_is_flushed_and_never_k
     assert "TEE_PID=$!" in text and 'wait "$TEE_PID"' in text and text.index('wait "$TEE_PID"') < text.index("tar czf")      # tee flushed before archiving
     assert text.index('rm -rf "$EVIDENCE_DEST/ltx_evidence_$STAGE" "$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz"') < text.index("== 0. refusals")   # old success invalidated first
     assert "PIP_CACHE_DIR" in text and "HF_HOME" in text and "TMPDIR" in text
+
+
+def test_gpu_script_invalidates_old_success_before_it_can_refuse_for_missing_variables():
+    text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
+    assert text.index('"$W/ltx_evidence_$STAGE/stage_verdict.json"') < text.index("LTX_DOWNLOAD_APPROVED:?") < text.index("== 0. refusals")
+    assert text.index("rm -rf \"$EVIDENCE_DEST/ltx_evidence_$STAGE\" \"$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz\"\n") < text.index("LTX_DOWNLOAD_APPROVED:?")

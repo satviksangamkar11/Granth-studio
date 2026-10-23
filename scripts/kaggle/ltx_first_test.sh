@@ -18,8 +18,6 @@
 # pipeline plus per-card attribution; the capability stays unvalidated until a human reviews the clips.
 set -euo pipefail
 
-: "${LTX_DOWNLOAD_APPROVED:?set LTX_DOWNLOAD_APPROVED to the approver name after signing docs/LTX_098_DOWNLOAD_APPROVAL.md}"
-: "${LTX_EXPECTED_COMMIT:?set LTX_EXPECTED_COMMIT to the reviewed GranthStudio commit (full sha)}"
 STAGE="${STAGE:-gpu0}"
 case "$STAGE" in gpu0|gpu1|concurrent|retry) ;; *) echo "STAGE must be gpu0, gpu1, concurrent or retry"; exit 2;; esac
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -39,7 +37,10 @@ publish() { # runs once, at exit: stop logging (so tee has flushed run_log.txt),
 }
 # an earlier invocation's success must never survive a failed or refused rerun: invalidate the published and local copies before anything else
 [ -z "${EVIDENCE_DEST:-}" ] || rm -rf "$EVIDENCE_DEST/ltx_evidence_$STAGE" "$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz"
-rm -f "$W/ltx_evidence_$STAGE.tgz"
+rm -f "$W/ltx_evidence_$STAGE.tgz" "$W/ltx_evidence_$STAGE/stage_verdict.json"
+# only now the required variables: a refusal for a missing approval must not leave an earlier PASS usable
+: "${LTX_DOWNLOAD_APPROVED:?set LTX_DOWNLOAD_APPROVED to the approver name after signing docs/LTX_098_DOWNLOAD_APPROVAL.md}"
+: "${LTX_EXPECTED_COMMIT:?set LTX_EXPECTED_COMMIT to the reviewed GranthStudio commit (full sha)}"
 mkdir -p "$OUT" "$W/cache/tmp"; trap publish EXIT; rm -f "$OUT/stage_verdict.json"; exec > >(tee "$OUT/run_log.txt") 2>&1; TEE_PID=$!
 echo "stage $STAGE | approved by: $LTX_DOWNLOAD_APPROVED | $(date -u +%FT%TZ)"
 

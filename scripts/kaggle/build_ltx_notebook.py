@@ -44,7 +44,8 @@ head = subprocess.run(["git", "-C", f"{WORK}/granthstudio", "rev-parse", "HEAD"]
 print("bundle HEAD:", head)
 assert head == EXPECTED_COMMIT, f"the attached bundle is at {head}, not the reviewed {EXPECTED_COMMIT}: refusing"
 assert not subprocess.run(["git", "-C", f"{WORK}/granthstudio", "status", "--porcelain"], capture_output=True, text=True).stdout, "dirty checkout"
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest"], check=True)"""),
+os.makedirs(f"{TMP}/cache/pip", exist_ok=True)
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyyaml", "jsonschema", "pytest"], check=True, env={**os.environ, "PIP_CACHE_DIR": f"{TMP}/cache/pip"})"""),
     ("code", """env = {**os.environ, "LTX_DOWNLOAD_APPROVED": APPROVER.strip(), "LTX_EXPECTED_COMMIT": EXPECTED_COMMIT, "SESSION_MINUTES": str(SESSION_MINUTES), "STAGE": STAGE, "W": TMP, "EVIDENCE_DEST": WORK}
 process = subprocess.Popen(["bash", f"{WORK}/granthstudio/scripts/kaggle/ltx_first_test.sh"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 for line in process.stdout:
