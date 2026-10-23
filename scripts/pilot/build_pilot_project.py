@@ -110,9 +110,12 @@ def designs() -> list[dict]:
     return [
         design("chr_gajanan_maharaj", "a young man in the prime of youth with a radiant complexion, strong upper arms and neck and a broad chest, wearing only an old worn vest, "
                "seated calmly with a steady, inward gaze at the tip of the nose, shown seated and framed from the waist up", [88, 91, 111], True),
-        design("chr_devidas", "a devout Brahmin householder of the village in a plain dhoti and shoulder cloth (appearance is not given in the text)", [84, 85], True),
-        design("chr_bankatlal", "a local man of the village walking along the road in everyday dress of the period (appearance is not given in the text)", [97], True),
-        design("chr_damodarpant", "a local man of the village, a friend of Bankatlal, in everyday dress of the period (appearance is not given in the text)", [98], True),
+        design("chr_devidas", "a devout, gentle Brahmin householder of Shegaon in a plain white dhoti and shoulder cloth, with a sacred thread and a plain forehead mark, calm dignified bearing "
+               "(only the role and manner are stated in the text; age, build, face and dress are an artistic interpretation)", [84, 85, 87], True),
+        design("chr_bankatlal", "a humble village merchant of the 1870s in a white dhoti, a long coat and a cloth turban, with an open, respectful expression "
+               "(only his surname Agarwal and his humility are stated; the trader's dress, age, build and face are an artistic interpretation)", [96, 97, 108], True),
+        design("chr_damodarpant", "a modest, attentive village record-keeper of the 1870s in a plain dhoti, a shoulder cloth and a cloth cap "
+               "(only his surname Kulkarni and his humility are stated; the clerk's dress, age, build and face are an artistic interpretation)", [97, 98, 126], True),
         design("loc_devidas_house_road", "a village road in front of a house, midday sun, used leaf plates on the ground (the rest of the setting is an artistic interpretation)", [87, 118], True),
     ]
 

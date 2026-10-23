@@ -12,20 +12,28 @@ designs:
   - Adhyay 1 ovi 111 (printed page 11; PDF page 6)
   artistic: true
 - canon_id: chr_devidas
-  prompt: a devout Brahmin householder of the village in a plain dhoti and shoulder cloth (appearance is not given in the text)
+  prompt: a devout, gentle Brahmin householder of Shegaon in a plain white dhoti and shoulder cloth, with a sacred thread and a plain forehead mark, calm dignified bearing (only the role and manner are
+    stated in the text; age, build, face and dress are an artistic interpretation)
   source_refs:
   - Adhyay 1 ovi 84 (printed page 10; PDF page 5)
   - Adhyay 1 ovi 85 (printed page 10; PDF page 5)
+  - Adhyay 1 ovi 87 (printed page 10; PDF page 5)
   artistic: true
 - canon_id: chr_bankatlal
-  prompt: a local man of the village walking along the road in everyday dress of the period (appearance is not given in the text)
+  prompt: a humble village merchant of the 1870s in a white dhoti, a long coat and a cloth turban, with an open, respectful expression (only his surname Agarwal and his humility are stated; the trader's
+    dress, age, build and face are an artistic interpretation)
   source_refs:
+  - Adhyay 1 ovi 96 (printed page 11; PDF page 6)
   - Adhyay 1 ovi 97 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 108 (printed page 11; PDF page 6)
   artistic: true
 - canon_id: chr_damodarpant
-  prompt: a local man of the village, a friend of Bankatlal, in everyday dress of the period (appearance is not given in the text)
+  prompt: a modest, attentive village record-keeper of the 1870s in a plain dhoti, a shoulder cloth and a cloth cap (only his surname Kulkarni and his humility are stated; the clerk's dress, age, build
+    and face are an artistic interpretation)
   source_refs:
+  - Adhyay 1 ovi 97 (printed page 11; PDF page 6)
   - Adhyay 1 ovi 98 (printed page 11; PDF page 6)
+  - Adhyay 1 ovi 126 (printed page 12; PDF page 7)
   artistic: true
 - canon_id: loc_devidas_house_road
   prompt: a village road in front of a house, midday sun, used leaf plates on the ground (the rest of the setting is an artistic interpretation)
