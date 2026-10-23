@@ -1,0 +1,7 @@
+READ-ONLY narrow re-check. No file modifications, GPU, downloads. Prior review: docs/evidence/codex_reviews/09_postrun_style_review.md (1 High + 2 Medium). Fixes: `git diff 56a6fd9..HEAD -- src tests` (commit f78d051 plus later docs/validator commits).
+Verify each is closed and find new defects introduced by them:
+1. Bundle.style captured at load; snapshot()/require_current compare the captured identity (src/granthstudio/pipeline.py). Any other place that still reloads the live style where the captured one is needed (plan_tasks, ltx metrics, keyframe requests, lipsync)? Can a style change between load_bundle and a task's run still slip through?
+2. Reference-sheet tasks: state-only postflight (keyframes.py sheet_tasks). Same checks as before minus the host gate?
+3. Scheduler.run/status/_run_fallback (scheduler.py): state check first (postflight or preflight), full preflight only before NEW execution; check that a task WITHOUT postflight behaves exactly as before, that no path can execute a GPU task without the full preflight, that an invalid/changed receipt is never reused, and that the fallback seal still runs verify.
+4. scripts/kaggle/offline_validate_gpu_evidence.py + tests: never alters the original verdict; hash-bound; discontinuity rule sensible.
+Report BLOCKER/MAJOR/MINOR with file:line, or state that no blocking issue remains and the next fresh gpu0 run may proceed. Concise.
