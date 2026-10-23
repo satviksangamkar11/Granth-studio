@@ -88,6 +88,9 @@ def compensated(cv2, np, ssim, reference, frame, estimate_: dict) -> dict:
     r0, r1, c0, c1 = rows.min(), rows.max() + 1, cols.min(), cols.max() + 1
     gray = lambda image: cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     a, b = gray(reference)[r0:r1, c0:c1], gray(warped)[r0:r1, c0:c1]
+    window = 7
+    if min(a.shape) < window:                          # a crop narrower than the SSIM window cannot be scored
+        return {"warped": warped, "ssim": None, "covered_fraction": round(float(coverage.mean()), 3)}
     _, ssim_map = ssim(a, b, data_range=255, full=True)
     window = 7                                         # skimage's default window: a pixel counts only if its whole window is covered (no black corners leak in)
     inside = cv2.erode(coverage[r0:r1, c0:c1].astype(np.uint8), np.ones((window, window), np.uint8), borderValue=0) > 0
