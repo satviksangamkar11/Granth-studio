@@ -437,3 +437,5 @@ Next experiment (not yet run, needs explicit pin authorization): assets/ltx_test
 
 ## Phase 1 camera-lock gpu0 run (kernel v6, pinned 840dd6a, bundle 068b32fd): ONE run, harness FAIL, prompt-only camera control failed this comparison
 Evidence docs/evidence/kaggle_dual_t4/gpu0_attempt6_camera_lock/ (REPORT.md, receipt, clip, frames 0/1/12/24/36/48, contact sheet, camera analysis, calibration, control, telemetry). Attempt 5's FAIL evidence untouched. Stopped as instructed: no gpu1, no concurrency, no further prompt rewrites, style v2 untouched.
+
+## 45-second pilot, Phase A: capability audit written (docs/PILOT_45S_READINESS.md). Blockers B1 source approval, B2 SDXL stack, B3 audio stack, B4 lip-sync, B5 depiction of Gajanan Maharaj, B6 full C: drive. Nothing implemented yet; waiting for decisions.
