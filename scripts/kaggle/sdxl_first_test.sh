@@ -17,6 +17,8 @@ W="${W:-/kaggle/working}"; COMFY="$W/ComfyUI"; OUT="$W/${STAGE}_evidence"; PINS=
 SESSION_MINUTES="${SESSION_MINUTES:-240}"
 COMFY_LOWVRAM="${COMFY_LOWVRAM:-0}"      # 1 = start ComfyUI with --lowvram (scenes with 4-5 IP-Adapter references do not fit a 15 GB T4 otherwise); recorded in worker0/launch.txt
 case "$COMFY_LOWVRAM" in 0|1) ;; *) echo "COMFY_LOWVRAM must be 0 or 1"; exit 2;; esac
+COMFY_FP16_VAE="${COMFY_FP16_VAE:-0}"    # 1 = decode with the pinned fp16-fix VAE in fp16 (--fp16-vae): the fp32 decode ran out of memory next to five references; recorded in launch.txt
+case "$COMFY_FP16_VAE" in 0|1) ;; *) echo "COMFY_FP16_VAE must be 0 or 1"; exit 2;; esac
 STYLE_SWEEP="${STYLE_SWEEP:-0}"          # 1 = EXPERIMENT: reference-free style sweep (4 seeds x cfg 6.5 and 9.0) instead of the normal keyframe test
 case "$STYLE_SWEEP" in 0|1) ;; *) echo "STYLE_SWEEP must be 0 or 1"; exit 2;; esac
 SWEEP_SEEDS="${SWEEP_SEEDS:-4}"; SWEEP_CFGS="${SWEEP_CFGS:-6.5,9.0}"
@@ -133,6 +135,7 @@ echo "== 6. worker on GPU 0 only (GPU 1 stays idle)"
 D="$OUT/worker0"; mkdir -p "$D/output" "$D/temp" "$D/input" "$D/user"
 LAUNCH=(python main.py --listen 127.0.0.1 --port "$PORT" --disable-auto-launch --output-directory "$D/output" --temp-directory "$D/temp" --input-directory "$D/input" --user-directory "$D/user")
 if [ "$COMFY_LOWVRAM" = 1 ]; then LAUNCH+=(--lowvram); fi
+if [ "$COMFY_FP16_VAE" = 1 ]; then LAUNCH+=(--fp16-vae); fi
 printf 'CUDA_VISIBLE_DEVICES=0 ' > "$D/launch.txt"; printf '%q ' "${LAUNCH[@]}" >> "$D/launch.txt"
 ( cd "$COMFY" && CUDA_VISIBLE_DEVICES=0 exec "${LAUNCH[@]}" > "$D/comfyui.log" 2>&1 ) &
 WPID=$!

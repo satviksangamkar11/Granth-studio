@@ -129,8 +129,9 @@ def _ref(asset: dict[str, Any]) -> dict[str, Any]:
 
 def _common(models: dict[str, Any]) -> dict[str, Any]:
     sdxl = models.get("sdxl") or {}
-    return {"width": sdxl.get("width"), "height": sdxl.get("height"),
-            "identity_method": (sdxl.get("identity_conditioning") or {}).get("method")}
+    conditioning = sdxl.get("identity_conditioning") or {}
+    return {"width": sdxl.get("width"), "height": sdxl.get("height"), "identity_method": conditioning.get("method"),
+            "total_reference_weight": conditioning.get("total_reference_weight")}
 
 
 def _prompt(style: dict[str, Any] | None, parts: list[str]) -> str:
@@ -340,6 +341,13 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
     for index in range(1, slots + 1):
         ref = request["references"][index - 1] if index <= len(request["references"]) else None
         values[f"REFERENCE_IMAGE_{index}"] = str(approved_file(project, ref)) if ref else ""
+    if "{{REFERENCE_WEIGHT}}" in template.text:
+        # One total strength per image, split evenly: more references never mean more total conditioning (four references at a fixed
+        # per-slot weight overpowered the scene text in the pilot, docs/pilot/SDXL_STYLE_AUDIT.md section 8).
+        total = request.get("total_reference_weight")
+        if request["references"] and not total:
+            raise IntegrationUnavailable("SDXL identity_conditioning.total_reference_weight is not set: NOT VALIDATED")
+        values["REFERENCE_WEIGHT"] = round(total / len(request["references"]), 4) if request["references"] else 0.0
     backend = ComfyBackend(models["comfyui"]["base_url"])
     graph = render_graph(template, values)
     backend.require_nodes(graph)

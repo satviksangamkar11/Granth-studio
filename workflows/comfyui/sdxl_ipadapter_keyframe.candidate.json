@@ -1,7 +1,7 @@
 {
   "_status": "unvalidated",
   "_output_node": "9",
-  "_note": "NOT VALIDATED. Candidate SDXL + IP-Adapter Plus graph for the pilot keyframes, written from the node source at the pinned commits (cubiq/ComfyUI_IPAdapter_plus a0f451a5, ComfyUI 2f74e179). Placeholders: PROMPT, NEGATIVE_PROMPT, SEED, WIDTH, HEIGHT, REFERENCE_IMAGE_1..5. Nodes with _meta.slot = i exist once per reference slot and are removed (model chain reconnected) when the request has fewer than i references. Sampler settings and the IP-Adapter weight (0.6 per slot, same for characters and location) are first guesses that the minimal inference test records and the human reviewer judges; they are not tuned values.",
+  "_note": "NOT VALIDATED. Candidate SDXL + IP-Adapter Plus graph for the pilot keyframes, written from the node source at the pinned commits (cubiq/ComfyUI_IPAdapter_plus a0f451a5, ComfyUI 2f74e179). Placeholders: PROMPT, NEGATIVE_PROMPT, SEED, WIDTH, HEIGHT, REFERENCE_IMAGE_1..5, REFERENCE_WEIGHT (per slot: the configured total reference weight divided by the number of references, so adding references never raises the total). Nodes with _meta.slot = i exist once per reference slot and are removed (model chain reconnected) when the request has fewer than i references. Sampler settings and the total reference weight (split evenly across the references) are first guesses that the minimal inference test records and the human reviewer judges; they are not tuned values.",
   "3": {
     "class_type": "KSampler",
     "inputs": {
@@ -173,7 +173,7 @@
         "21",
         0
       ],
-      "weight": 0.6,
+      "weight": "{{REFERENCE_WEIGHT}}",
       "weight_type": "linear",
       "combine_embeds": "concat",
       "start_at": 0.0,
@@ -204,7 +204,7 @@
         "22",
         0
       ],
-      "weight": 0.6,
+      "weight": "{{REFERENCE_WEIGHT}}",
       "weight_type": "linear",
       "combine_embeds": "concat",
       "start_at": 0.0,
@@ -235,7 +235,7 @@
         "23",
         0
       ],
-      "weight": 0.6,
+      "weight": "{{REFERENCE_WEIGHT}}",
       "weight_type": "linear",
       "combine_embeds": "concat",
       "start_at": 0.0,
@@ -266,7 +266,7 @@
         "24",
         0
       ],
-      "weight": 0.6,
+      "weight": "{{REFERENCE_WEIGHT}}",
       "weight_type": "linear",
       "combine_embeds": "concat",
       "start_at": 0.0,
@@ -297,7 +297,7 @@
         "25",
         0
       ],
-      "weight": 0.6,
+      "weight": "{{REFERENCE_WEIGHT}}",
       "weight_type": "linear",
       "combine_embeds": "concat",
       "start_at": 0.0,

@@ -344,3 +344,25 @@ def test_the_reference_set_option_is_validated_early_in_the_script_and_offered_i
     notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
     source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
     assert 'REFERENCE_SET = ""' in source and '"REFERENCE_SET": REFERENCE_SET' in source
+
+
+def test_the_total_reference_weight_is_split_evenly_so_more_references_never_add_strength(host, monkeypatch, tmp_path):
+    server = host[0]
+    different_image_per_submission(monkeypatch, server, tmp_path)
+    code, receipt = run(host, "--execute", "--visual", "vis_s3_kf", "--reference-set", str(copy_set(tmp_path)))
+    assert receipt["verdict"] == "PASS", receipt["reason"]
+    graph = server.posts[0]["prompt"] if "prompt" in server.posts[0] else server.posts[0]
+    weights = [n["inputs"]["weight"] for n in graph.values() if n["class_type"] == "IPAdapterAdvanced"]
+    assert weights == [0.2] * 5 and abs(sum(weights) - sx.PINS["workflow"]["total_reference_weight"]) < 1e-9
+
+
+def test_fp16_vae_is_an_explicit_validated_opt_in_recorded_in_the_launch_command():
+    import os
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert 'COMFY_FP16_VAE="${COMFY_FP16_VAE:-0}"' in script and script.index('LAUNCH+=(--fp16-vae)') < script.index("printf 'CUDA_VISIBLE_DEVICES=0 '")
+    assert "--fp16-vae" not in next(line for line in script.splitlines() if line.startswith("LAUNCH=("))
+    done = subprocess.run(["bash", str(REPO / "scripts" / "kaggle" / "sdxl_first_test.sh")], env={**os.environ, "COMFY_FP16_VAE": "yes", "VISUAL": "vis_s1_kf"}, capture_output=True, text=True, timeout=60)
+    assert done.returncode == 2 and "COMFY_FP16_VAE must be 0 or 1" in done.stdout
+    notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
+    source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+    assert "FP16_VAE = False" in source and '"COMFY_FP16_VAE": "1" if FP16_VAE else "0"' in source

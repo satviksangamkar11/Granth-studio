@@ -214,3 +214,18 @@ def test_a_visual_description_becomes_the_whole_middle_of_the_frozen_prompt_and_
     atomic_write_json(path, named)
     with pytest.raises(ConfigError, match="names"):
         request_for(kf_project)
+
+
+def test_a_template_that_asks_for_a_reference_weight_needs_the_configured_total(kf_project, comfy, tmp_path):
+    import json as _json
+    models = load_models(kf_project)
+    template_path = kf_project.root / models["sdxl"]["workflow_template"]
+    graph = _json.loads(template_path.read_text(encoding="utf-8"))
+    node = next(k for k, v in graph.items() if isinstance(v, dict) and v.get("class_type"))
+    graph[node]["inputs"]["strength_probe"] = "{{REFERENCE_WEIGHT}}"
+    template_path.write_text(_json.dumps(graph), encoding="utf-8")
+    request = request_for(kf_project)
+    assert request["references"] and request["total_reference_weight"] is None
+    from granthstudio.errors import IntegrationUnavailable
+    with pytest.raises(IntegrationUnavailable, match="total_reference_weight"):
+        kf.sdxl_generate(kf_project, models, request, tmp_path / "j.json", tmp_path)

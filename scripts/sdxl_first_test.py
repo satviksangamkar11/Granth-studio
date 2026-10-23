@@ -120,7 +120,8 @@ def prepare_project(args: argparse.Namespace):
     models["comfyui"]["base_url"] = args.comfy_url
     models["sdxl"].update(checkpoint_file=files["sdxl_checkpoint"]["name"], checkpoint_sha256=lt.sha256_file(checkpoint), checkpoint_path=str(checkpoint.resolve()),
                           workflow_template="workflows/comfyui/sdxl_keyframe.json", width=width, height=height, status="validated",
-                          identity_conditioning={"method": "ip_adapter_plus_sdxl_vit_h", "reference_slots": PINS["workflow"]["reference_slots"]})
+                          identity_conditioning={"method": "ip_adapter_plus_sdxl_vit_h", "reference_slots": PINS["workflow"]["reference_slots"],
+                                                 "total_reference_weight": PINS["workflow"]["total_reference_weight"]})
     commit = lt.git_head(args.models_dir) or PINS["comfyui"]["commit"]
     models["ltx"]["runtime"] = {"files": {"checkpoint": {"path": str(checkpoint), "sha256": models["sdxl"]["checkpoint_sha256"]}, "vae": None,
                                            "text_encoder": {"path": str(checkpoint), "sha256": models["sdxl"]["checkpoint_sha256"]}},   # schema slot only: this SDXL run uses no LTX text encoder
@@ -380,7 +381,7 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         return finish("NOT_RUN", f"GPU preflight not passed: {[k for k, v in report['checks'].items() if v['status'] not in ('pass', 'info')]}")
     # live compatibility: the graph's node classes and every loader file name must exist on THIS server before anything is submitted
     template = load_template(project.root / "workflows" / "comfyui" / "sdxl_keyframe.json")
-    probe_values = {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 1, "WIDTH": 64, "HEIGHT": 64, **{f"REFERENCE_IMAGE_{i}": "x.png" for i in range(1, 6)}}
+    probe_values = {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 1, "WIDTH": 64, "HEIGHT": 64, **{f"REFERENCE_IMAGE_{i}": "x.png" for i in range(1, 6)}, "REFERENCE_WEIGHT": 0.2}
     backend = ComfyBackend(args.comfy_url)
     try:
         probe = render_graph(template, probe_values)

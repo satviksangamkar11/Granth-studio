@@ -63,11 +63,12 @@ def test_filenames_in_the_graph_are_exactly_the_pinned_files_and_enums_are_legal
 def test_placeholders_match_the_adapter_contract_and_render_with_the_existing_helper(tmp_path):
     template = load_template(GRAPH_PATH)
     assert template.status == "unvalidated"
-    assert set(re.findall(r"\{\{([A-Z_0-9]+)\}\}", template.text)) == {"PROMPT", "NEGATIVE_PROMPT", "SEED", "WIDTH", "HEIGHT", *(f"REFERENCE_IMAGE_{i}" for i in range(1, 6))}
-    base = {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 7, "WIDTH": 1216, "HEIGHT": 832, **{f"REFERENCE_IMAGE_{i}": "" for i in range(1, 6)}}
+    assert set(re.findall(r"\{\{([A-Z_0-9]+)\}\}", template.text)) == {"PROMPT", "NEGATIVE_PROMPT", "SEED", "WIDTH", "HEIGHT", "REFERENCE_WEIGHT", *(f"REFERENCE_IMAGE_{i}" for i in range(1, 6))}
+    base = {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 7, "WIDTH": 1216, "HEIGHT": 832, "REFERENCE_WEIGHT": 0.5, **{f"REFERENCE_IMAGE_{i}": "" for i in range(1, 6)}}
     graph = render_graph(template, {**base, "REFERENCE_IMAGE_1": "ref.png", "REFERENCE_IMAGE_2": "loc.png"})
     assert graph["5"]["inputs"]["width"] == 1216 and graph["3"]["inputs"]["seed"] == 7 and graph["21"]["inputs"]["image"] == "ref.png" and graph["22"]["inputs"]["image"] == "loc.png"
     assert set(graph) >= {"31", "32"} and not set(graph) & {"23", "24", "25", "33", "34", "35"}      # unused slots are gone
+    assert graph["31"]["inputs"]["weight"] == 0.5 == graph["32"]["inputs"]["weight"]                 # the per-slot weight is a number in the graph, not a string
     assert graph["3"]["inputs"]["model"] == ["32", 0] and graph["32"]["inputs"]["model"] == ["31", 0]  # the chain is reconnected through the removed nodes
     none = render_graph(template, base)
     assert none["3"]["inputs"]["model"] == ["4", 0] and not any(n.get("class_type") in ("IPAdapterAdvanced", "LoadImage") for n in none.values())   # no reference: plain checkpoint

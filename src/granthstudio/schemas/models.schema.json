@@ -314,6 +314,15 @@
             "reference_slots": {
               "type": "integer",
               "minimum": 0
+            },
+            "total_reference_weight": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.05,
+              "maximum": 3,
+              "description": "Sum of all IP-Adapter reference weights in one image; each reference gets total / number of references"
             }
           }
         },
