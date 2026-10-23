@@ -104,3 +104,12 @@ Verdict: reference-free style is much closer but not a STYLE PASS. Human review 
 - Scene 3 (5 references, --lowvram): FAIL, CUDA out of memory in the VAE decode after sampling finished (the fp32 VAE decode, tiled fallback included, did not fit next to five loaded IP-Adapter applications). Log tail in docs/evidence/sdxl_scenes/s3_refset_d1c67762/.
 
 Cause: IP-Adapter applies every reference to the whole image; it cannot tie a reference to one person. The total reference strength grows with the number of references (1.2 in Scene 1, 2.4 in Scene 2) and takes over composition. Human review NOT_DONE.
+
+## 9. Option A runs (commit 2afe0fdc: total reference weight 1.0 split evenly, --lowvram, --fp16-vae, identical settings for all three scenes)
+
+All three runs: harness PASS, no out-of-memory (Scene 3 with 5 references now decodes). Evidence: `docs/evidence/sdxl_scenes/optionA_2afe0fdc/three_scenes_optionA.png`.
+- Style: the three reference-conditioned keyframes share one look (the owner set's brown contours, flat matte colour, aged spotted paper). Homogeneous.
+- Scene 1 (2 x 0.5): content mostly right: young man in a loincloth seated on a village road, houses behind, leaf plates. 
+- Scene 2 (4 x 0.25) and Scene 3 (5 x 0.2): content FAIL. Each shows ONE figure on blank paper, a blend of the townsmen references; no road, no second man, no Maharaj, no plate of sweets. Even at low weight, several single-figure-on-plain-paper references impose that layout.
+- The same-seed no-reference controls DO follow the multi-person scene text, but in a different, unanchored style (miniature-like, saffron robes, elderly men).
+Conclusion: global IP-Adapter references cannot compose several people; the scene text needs control of layout. Candidate fixes available in the pinned node pack (checked in the live /object_info): `weight_type: "style transfer"` (style only, not composition) and `attn_mask` (a reference limited to a region of the image). Human review NOT_DONE.
