@@ -81,7 +81,9 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
         sig = signatures.get(node["type"])
         if sig is None:
             raise ConversionError(f"node {node_id}: no signature for class {node['type']}")
-        values = list(node.get("widgets_values") or [])
+        stored = node.get("widgets_values") or []
+        named = dict(stored) if isinstance(stored, dict) else None      # VideoHelperSuite nodes store {widget name: value}, other nodes a positional list
+        values = list(stored) if named is None else []
         wired = {}
         for index, slot in enumerate(node.get("inputs", [])):
             link_id = slot.get("link")
@@ -113,7 +115,11 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
                 continue                            # optional and unconnected
             if entry["name"] in wired:
                 raise ConversionError(f"node {node_id} {node['type']}: input {entry['name']} is wired in the UI but the signature treats it as a widget")
-            if cursor < len(values):
+            if named is not None and entry["name"] in named:
+                inputs[entry["name"]] = named.pop(entry["name"])
+                if entry.get("formats"):
+                    plan[index:index] = _format_widgets(entry, inputs[entry["name"]])
+            elif named is None and cursor < len(values):
                 inputs[entry["name"]] = values[cursor]
                 cursor += 1
                 if entry.get("control_after_generate"):
@@ -127,7 +133,9 @@ def convert(ui: dict[str, Any], signatures: dict[str, dict[str, Any]], overrides
                 raise ConversionError(f"node {node_id} {node['type']}: no stored value for widget {entry['name']}")
         if wired:
             raise ConversionError(f"node {node_id} {node['type']}: UI connection(s) {sorted(wired)} match no signature input (a wrong name would drop a wire)")
-        leftover = len(values) - cursor
+        leftover = len(named) if named is not None else len(values) - cursor
+        if named is not None and set(named) - {"videopreview"}:
+            raise ConversionError(f"node {node_id} {node['type']}: stored widget value(s) {sorted(set(named) - {'videopreview'})} match no widget of the live node")
         if leftover != sig.get("ui_trailing", 0):
             raise ConversionError(f"node {node_id} {node['type']}: {leftover} unexplained widget value(s), signature allows {sig.get('ui_trailing', 0)}")
         api[node_id] = {"class_type": node["type"], "inputs": inputs}

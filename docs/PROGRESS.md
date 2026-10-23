@@ -368,3 +368,9 @@ Codex re-review (06_dual_t4_rereview.md): no blocking issue; one MINOR (stale te
 - Host check passed (2x Tesla T4, torch 2.11.0+cu128, 30.7 GB RAM). Both weights downloaded and the full SHA-256 of each verified OK (ltxv-2b-0.9.8-distilled 6047 MB, t5xxl_fp16 9334 MB). ComfyUI started on its random port.
 - Refused: `pid 302 does NOT own a listener on port 59039`. Cause: `$!` was the launching subshell, not the python process. The /proc ownership proof did its job; no inference ran, no GPU memory was used.
 - Fix: launch the worker with `exec` so the recorded pid is the ComfyUI process. Log: docs/evidence/kaggle_dual_t4/gpu0_attempt2_pid_proof_refused.txt. ComfyUI also logged a non-fatal sqlite "unable to open database file" warning (user-directory DB), noted, not acted on.
+
+## Kaggle dual-T4 attempt 3 (v3, pinned df6d018): worker proof PASSED, refused at live compatibility (step 7), no inference
+- Host: GPU 0 `GPU-65b27b0f…`, GPU 1 `GPU-72251c6c…` (Tesla T4, 15360 MiB, idle), torch 2.11.0+cu128. Both weights re-downloaded and SHA-256 OK.
+- Worker 0: `pid 303 owns a listener on port 55325`; ComfyUI reported exactly one device, `cuda:0 Tesla T4 : cudaMallocAsync`, matching physical GPU 0. (The exec fix worked.)
+- Refused: `ConversionError: node 103 VHS_VideoCombine: 5 unexplained widget value(s)`. Cause: the REAL official workflow file (blob 2260170f, verified) stores VideoHelperSuite widgets as `{name: value}`; our committed positional "ui_inventory" had hidden that. The converter correctly aborted rather than guess.
+- Fix: converter accepts name-keyed widget values (unknown keys refused; only `videopreview` is UI-only). Checked offline against the real official file + the live /object_info from this very Kaggle server: rebuilt graph is IDENTICAL to the committed candidate. New regression test in tests/test_ui_to_api.py. Log: docs/evidence/kaggle_dual_t4/gpu0_attempt3_converter_refused.txt. Still no inference, no VRAM used.

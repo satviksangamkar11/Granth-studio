@@ -176,3 +176,26 @@ def test_negative_source_slot_and_two_linked_inputs_with_one_name_are_refused():
     ui["links"][[l[0] for l in ui["links"]].index(87)][2] = True              # a JSON boolean is not a slot number
     with pytest.raises(conv.ConversionError, match="output slot True"):
         conv.convert(ui, sigs())
+
+
+def dict_form_ui():
+    """The official file stores VideoHelperSuite widgets as {name: value} (found on Kaggle: the positional inventory had hidden this)."""
+    ui = copy.deepcopy(UI)
+    node = next(n for n in ui["nodes"] if n["id"] == 103)
+    names = ["frame_rate", "loop_count", "filename_prefix", "format", "pix_fmt", "crf", "save_metadata", "trim_to_audio", "pingpong", "save_output", "videopreview"]
+    node["widgets_values"] = dict(zip(names, node["widgets_values"]))
+    return ui
+
+
+def test_dict_form_widget_values_convert_to_the_same_graph_and_unknown_keys_are_refused():
+    positional, _ = conv.convert(UI, sigs(), None)
+    named, _ = conv.convert(dict_form_ui(), sigs(), None)
+    assert named == positional
+    bad = dict_form_ui()
+    next(n for n in bad["nodes"] if n["id"] == 103)["widgets_values"]["surprise"] = 1
+    with pytest.raises(conv.ConversionError, match="match no widget"):
+        conv.convert(bad, sigs(), None)
+    missing = dict_form_ui()
+    del next(n for n in missing["nodes"] if n["id"] == 103)["widgets_values"]["crf"]
+    with pytest.raises(conv.ConversionError):
+        conv.convert(missing, sigs(), None)
