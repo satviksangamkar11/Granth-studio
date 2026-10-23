@@ -21,7 +21,10 @@ __pycache__/
 # agent worktrees
 .claude/
 
-# Small, hash-bound exceptions, listed one by one (add a line when a new evidence clip is meant to be committed)
-!docs/evidence/kaggle_dual_t4/gpu0_attempt4/*.png
-!docs/evidence/kaggle_dual_t4/gpu0_attempt4/*.mp4
+# Small, hash-bound exceptions, listed file by file (add a line when a new evidence clip or asset is meant to be committed)
+!docs/evidence/kaggle_dual_t4/gpu0_attempt4/granthstudio_ltx_i2v_00001.mp4
+!docs/evidence/kaggle_dual_t4/gpu0_attempt4/granthstudio_ltx_i2v_00001.png
+!docs/evidence/kaggle_dual_t4/gpu0_attempt4/frames_0_12_24_36_48.png
+!docs/evidence/kaggle_dual_t4/gpu0_attempt4/last_frame.png
 !assets/ltx_test_inputs/painted_courtyard_01/04_ltx_start_768x512.png
+!canon/overlays/vintage_double_line_border_1080p.png

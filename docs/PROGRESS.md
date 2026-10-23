@@ -417,3 +417,6 @@ Codex also said: safe for a fresh gpu0 execution; offline validation of attempt 
 - Suite at b6572da: 473 passed, 4 skipped (docs/evidence/cpu_tests/b6572da_suite.xml).
 - MAJOR reused workdirs recorded inputs that were never used: now refused unless the project holds the supplied image, prompt and current style (NOT_RUN). MAJOR painted retry skipped diagnostics: retry now writes `preview_retry/` and is screened. MAJOR input similarity never entered the screen: frame 0 vs the supplied image (SSIM >= 0.50, and measurable) is now part of drift_suspected.
 - MINOR "verbatim" -> documented whitespace strip; .gitignore exceptions narrowed to the named files; validator output also refused when hard-linked to an input.
+
+## Codex re-check 12 (docs/evidence/codex_reviews/12_review11_recheck.md): no blocking issue; a fresh painted gpu0 run may proceed. One minor (.gitignore exceptions by file name) fixed here.
+- Candidate-bound suite: docs/evidence/cpu_tests/55ca9f1_suite.xml = full suite on 55ca9f1, 481 tests, 0 failures, 0 errors, 4 skipped (649 s). This checkpoint commit adds only that evidence, the review file and the .gitignore tightening.
