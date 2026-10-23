@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python main.py --listen 127.0.0.1 --port 56483 --disable-auto-launch --output-directory /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/output --temp-directory /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/temp --input-directory /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/input --user-directory /kaggle/temp/ltx/ltx_evidence_gpu0/worker0/user 

@@ -434,3 +434,6 @@ Next experiment (not yet run, needs explicit pin authorization): assets/ltx_test
 - Root cause of the two intermittent painted-test failures (test_the_painted_retry..., test_a_supplied_painting...): the test fixture built the start image and the server clip from two separate runs of ffmpeg's `gradients` source, which is NOT reproducible (same seed, different bytes), so frame 0 vs the input SSIM sometimes fell below 0.5 and the drift screen correctly said "suspected". The clip is now derived from the still itself (8/8 stable). The e2e6c23 JUnit with that failure is not kept as evidence.
 
 ## Final candidate CPU evidence: docs/evidence/cpu_tests/final_candidate_6efb017.xml = full suite on 6efb017, 484 tests, 0 failures, 0 errors, 4 skipped (636 s). The commit that adds this file changes no code.
+
+## Phase 1 camera-lock gpu0 run (kernel v6, pinned 840dd6a, bundle 068b32fd): ONE run, harness FAIL, prompt-only camera control failed this comparison
+Evidence docs/evidence/kaggle_dual_t4/gpu0_attempt6_camera_lock/ (REPORT.md, receipt, clip, frames 0/1/12/24/36/48, contact sheet, camera analysis, calibration, control, telemetry). Attempt 5's FAIL evidence untouched. Stopped as instructed: no gpu1, no concurrency, no further prompt rewrites, style v2 untouched.
