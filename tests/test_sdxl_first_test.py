@@ -220,3 +220,35 @@ def test_low_vram_is_an_explicit_opt_in_validated_recorded_and_never_the_default
     notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
     source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
     assert "LOW_VRAM = False" in source and '"COMFY_LOWVRAM": "1" if LOW_VRAM else "0"' in source
+
+
+def test_style_sweep_generates_one_reference_free_image_per_cfg_and_seed_with_the_gate_once_and_the_frozen_prompt_unchanged(host, monkeypatch, tmp_path):
+    server, models, work, _ = host
+    from granthstudio import keyframes as kf
+    flags = []
+    real = kf.sdxl_generate
+    monkeypatch.setattr(kf, "sdxl_generate", lambda *a, check_host=True, **k: (flags.append(check_host), real(*a, check_host=check_host, **k))[1])
+    code, receipt = run(host, "--execute", "--style-sweep", "--sweep-seeds", "2", "--sweep-cfgs", "6.5,9")
+    assert receipt["verdict"] == "PASS", receipt["reason"]
+    assert flags == [True, False, False, False] and len(server.posts) == 4 and set(receipt["sweep"]) == {"cfg6.5_seed0", "cfg6.5_seed1", "cfg9.0_seed0", "cfg9.0_seed1"}
+    graphs = [post["prompt"] if "prompt" in post else post for post in server.posts]
+    assert [g["3"]["inputs"]["cfg"] for g in graphs] == [6.5, 6.5, 9.0, 9.0]
+    assert len({g["3"]["inputs"]["seed"] for g in graphs}) == 2                                              # two seeds, repeated per cfg
+    assert not any(n["class_type"] in ("IPAdapterAdvanced", "LoadImage") for g in graphs for n in g.values())
+    assert receipt["sweep_prompt"].startswith("1950s vintage Indian devotional book illustration") and receipt["request"]["style"]["style_id"] == "devotional_gouache_1950s_v1"
+    assert receipt["sweep_contact_sheet"]["file"] == "sweep_contact_sheet.png"
+
+
+def test_a_bad_sweep_request_is_refused_before_any_submission(host):
+    server = host[0]
+    code, receipt = run(host, "--execute", "--style-sweep", "--sweep-cfgs", "abc")
+    assert code == 1 and receipt["verdict"] == "NOT_RUN" and "--sweep-cfgs" in receipt["reason"] and server.posts == []
+
+
+def test_the_style_sweep_is_an_explicit_opt_in_in_the_script_and_notebook():
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert 'STYLE_SWEEP="${STYLE_SWEEP:-0}"' in script and "STYLE_SWEEP must be 0 or 1" in script and '"${SWEEP_ARGS[@]}"' in script
+    assert script.count("--style-sweep") == 1 and 'SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]' in script
+    notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
+    source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+    assert "STYLE_SWEEP = False" in source and '"STYLE_SWEEP": "1" if STYLE_SWEEP else "0"' in source

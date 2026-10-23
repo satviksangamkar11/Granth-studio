@@ -65,6 +65,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--other-gpu-idle-mb", type=float, default=800)
     parser.add_argument("--allow-other-gpu-busy", action="store_true")
     parser.add_argument("--skip-control", action="store_true", help="skip the no-reference control image")
+    parser.add_argument("--style-sweep", action="store_true", help="EXPERIMENT: no-reference images of the chosen visual over several seeds and KSampler cfg values (frozen style text untouched) to see which non-text setting keeps the frozen look")
+    parser.add_argument("--sweep-seeds", type=int, default=4)
+    parser.add_argument("--sweep-cfgs", default="6.5,9.0", help="comma separated KSampler cfg values")
     parser.add_argument("--execute", action="store_true")
     return parser
 
@@ -158,6 +161,58 @@ def import_references(project, canon, image: Path, approver: str) -> list[dict]:
         asset = kf.import_asset(project, canon, asset_id, kind, canon_id, None, view, image)
         records.append(kf.approve_asset(project, canon, asset_id, asset["version"], reviewer))
     return records
+
+
+def sweep(args, project, models, request, kf, out, receipt, finish):
+    """EXPERIMENT (not a validation): the same frozen-style request without references, one image per (cfg, seed). Only the KSampler cfg of a run-only copy of the workflow and the seed change."""
+    from granthstudio.errors import GranthError
+    from granthstudio.integrity import read_json
+    try:
+        cfgs = [float(c) for c in args.sweep_cfgs.split(",") if c.strip()]
+    except ValueError:
+        return finish("NOT_RUN", f"--sweep-cfgs must be comma separated numbers, got {args.sweep_cfgs!r}")
+    if not cfgs or not 1 <= args.sweep_seeds <= 6 or any(not 1.0 <= c <= 15.0 for c in cfgs) or len(cfgs) * args.sweep_seeds > 16:
+        return finish("NOT_RUN", "sweep must have 1-6 seeds, cfg values in 1..15 and at most 16 images")
+    base = json.loads((project.root / "workflows" / "comfyui" / "sdxl_keyframe.json").read_text(encoding="utf-8"))
+    results, gate = {}, True
+    for cfg in cfgs:
+        variant = json.loads(json.dumps(base))
+        variant["3"]["inputs"]["cfg"] = cfg
+        variant["_note"] = f"RUN-ONLY style-sweep copy of the validation workflow with KSampler cfg={cfg}; experiment, not a validated workflow"
+        name = f"workflows/comfyui/sdxl_keyframe_cfg{cfg}.json"
+        (project.root / name).write_text(json.dumps(variant, indent=2), encoding="utf-8")
+        models["sdxl"]["workflow_template"] = name
+        for index in range(args.sweep_seeds):
+            req = {**request, "references": [], "asset_id": f"{request['asset_id']}_sweep_cfg{cfg}_s{index}", "seed": request["seed"] + index}
+            req["request_sha256"] = hashlib.sha256(json.dumps({k: v for k, v in req.items() if k != "request_sha256"}, sort_keys=True, default=str).encode()).hexdigest()
+            label = f"cfg{cfg}_seed{index}"
+            work = args.workdir / f"work_{label}"
+            shutil.rmtree(work, ignore_errors=True)
+            work.mkdir(parents=True)
+            journal = project.artifacts_dir / "tasks" / "pending" / f"{label}.json"
+            journal.parent.mkdir(parents=True, exist_ok=True)
+            started = time.monotonic()
+            try:
+                kf.sdxl_generate(project, models, req, journal, work, check_host=gate)
+            except GranthError as exc:
+                receipt["out_of_memory"] = bool(lt.oom_markers(args.comfy_log, str(exc)))
+                results[label] = {"error": f"{type(exc).__name__}: {exc}"}
+                receipt["sweep"] = results
+                return finish("FAIL", f"{label}: {exc}")
+            gate = False
+            image = out / f"sweep_{label}.png"
+            shutil.copyfile(work / "keyframe.png", image)
+            results[label] = {"image": image.name, "sha256": lt.sha256_file(image), "cfg": cfg, "seed": req["seed"], "wall_s": round(time.monotonic() - started, 1)}
+    receipt["sweep"] = results
+    receipt["sweep_prompt"] = request["prompt"]
+    cols = len(cfgs) and args.sweep_seeds
+    files = [str(out / v["image"]) for v in results.values()]
+    done = subprocess.run(["ffmpeg", "-y", "-v", "error", *sum((["-i", f] for f in files), []), "-filter_complex",
+                           "".join(f"[{i}:v]scale=-1:360[v{i}];" for i in range(len(files))) + "".join(f"[v{i}]" for i in range(len(files))) + f"xstack=inputs={len(files)}:layout="
+                           + "|".join(f"{(i % cols) * 540}_{(i // cols) * 360}" for i in range(len(files))), "-frames:v", "1", str(out / "sweep_contact_sheet.png")],
+                          capture_output=True, text=True, timeout=180)
+    receipt["sweep_contact_sheet"] = {"file": "sweep_contact_sheet.png" if done.returncode == 0 else None, "rows": [f"cfg {c}" for c in cfgs], "columns": [f"seed offset {i}" for i in range(args.sweep_seeds)]}
+    return finish("PASS", "style-sweep images generated (experiment); the human picks which setting keeps the frozen style")
 
 
 def execution_extra_problems(args: argparse.Namespace) -> list[str]:
@@ -292,6 +347,8 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     results = {}
     began = time.monotonic()
     receipt["exec_started"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+    if args.style_sweep:
+        return sweep(args, project, models, request, kf, out, receipt, finish)
     gate = True                                                                                   # the full host gate guards the FIRST generation of this run only; later ones follow on our own resident server
     sheets = {}
     sheet_reviewer = f"{approver or 'synthetic-tester'} ({OWNER_NOTE}; PROVISIONAL: SDXL-generated from the assistant-drafted design prompt, appearance not given in the text; technical test only)"

@@ -17,6 +17,9 @@ W="${W:-/kaggle/working}"; COMFY="$W/ComfyUI"; OUT="$W/${STAGE}_evidence"; PINS=
 SESSION_MINUTES="${SESSION_MINUTES:-240}"
 COMFY_LOWVRAM="${COMFY_LOWVRAM:-0}"      # 1 = start ComfyUI with --lowvram (scenes with 4-5 IP-Adapter references do not fit a 15 GB T4 otherwise); recorded in worker0/launch.txt
 case "$COMFY_LOWVRAM" in 0|1) ;; *) echo "COMFY_LOWVRAM must be 0 or 1"; exit 2;; esac
+STYLE_SWEEP="${STYLE_SWEEP:-0}"          # 1 = EXPERIMENT: reference-free style sweep (4 seeds x cfg 6.5 and 9.0) instead of the normal keyframe test
+case "$STYLE_SWEEP" in 0|1) ;; *) echo "STYLE_SWEEP must be 0 or 1"; exit 2;; esac
+SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]; then SWEEP_ARGS=(--style-sweep --sweep-seeds 4 --sweep-cfgs 6.5,9.0); fi
 export PIP_CACHE_DIR="$W/cache/pip" HF_HOME="$W/cache/hf" TORCH_HOME="$W/cache/torch" TMPDIR="$W/cache/tmp"
 PUBLISHED=0
 publish() { # once, at exit: stop logging (tee flushed), archive, replace any earlier published copy
@@ -149,7 +152,7 @@ echo "== 7. one keyframe (with identity reference) and its no-reference control,
 STATUS=0
 set +e
 python "$REPO/scripts/sdxl_first_test.py" --execute --workdir "$W/sdxl_work_$VISUAL" --models-dir "$COMFY" --comfy-url "http://127.0.0.1:$PORT" --gpu-index 0 --visual "$VISUAL" \
-  --reference-image "$REF" --worker-pid "$WPID" --cuda-visible-devices 0 --comfy-log "$D/comfyui.log"
+  --reference-image "$REF" --worker-pid "$WPID" --cuda-visible-devices 0 --comfy-log "$D/comfyui.log" "${SWEEP_ARGS[@]}"
 STATUS=$?
 set -e
 
