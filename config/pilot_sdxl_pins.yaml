@@ -56,3 +56,7 @@ workflow:
   total_reference_weight: 1.0   # owner decision 2026-10-23 (option A): one total IP-Adapter strength per image, split evenly across its references
   size: [1216, 832]        # SDXL-native 3:2 area; the pilot's LTX stage runs 768x512 (same aspect)
   note: node inputs below are read from the node pack's source at the pinned commit and must be re-checked against the live /object_info before the status can leave "unvalidated"
+style_anchor:                 # owner decision 2026-10-23 (option 1 for the pilot): one style-only reference; regional per-character references follow after the pilot videos
+  api_candidate: workflows/comfyui/sdxl_ipadapter_style_anchor.candidate.json
+  canon_id: loc_devidas_house_road   # the owner's location plate: present in every pilot scene, carries the set's style without a person
+  weight: 0.8                        # first guess for weight_type "style transfer"; recorded in every request, judged by the owner

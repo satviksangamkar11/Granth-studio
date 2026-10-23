@@ -131,7 +131,8 @@ def _common(models: dict[str, Any]) -> dict[str, Any]:
     sdxl = models.get("sdxl") or {}
     conditioning = sdxl.get("identity_conditioning") or {}
     return {"width": sdxl.get("width"), "height": sdxl.get("height"), "identity_method": conditioning.get("method"),
-            "total_reference_weight": conditioning.get("total_reference_weight")}
+            "total_reference_weight": conditioning.get("total_reference_weight"),
+            "style_anchor_canon_id": conditioning.get("style_anchor_canon_id"), "style_anchor_weight": conditioning.get("style_anchor_weight")}
 
 
 def _prompt(style: dict[str, Any] | None, parts: list[str]) -> str:
@@ -338,16 +339,28 @@ def sdxl_generate(project: Project, models: dict[str, Any], request: dict[str, A
               "WIDTH": request["width"], "HEIGHT": request["height"]}
     if request.get("role") == "end":
         values["START_IMAGE"] = str(derived_file(project, request["derived_from"]))
+    graph_refs = request["references"]
+    if request.get("identity_method") == "style_anchor":
+        # One owner-approved anchor image conditions STYLE only; the scene text decides who appears (global identity references collapsed
+        # multi-person scenes to one figure, docs/pilot/SDXL_STYLE_AUDIT.md section 9). The identity references stay recorded in the request.
+        anchor_id = request.get("style_anchor_canon_id")
+        anchor = next((r for r in request["references"] if r.get("canon_id") == anchor_id), None)
+        if request["references"] and (anchor is None or not request.get("style_anchor_weight")):
+            raise IntegrationUnavailable(f"style anchor {anchor_id!r} is not among this request's approved references or has no weight: NOT VALIDATED")
+        graph_refs = [anchor] if anchor else []
     for index in range(1, slots + 1):
-        ref = request["references"][index - 1] if index <= len(request["references"]) else None
+        ref = graph_refs[index - 1] if index <= len(graph_refs) else None
         values[f"REFERENCE_IMAGE_{index}"] = str(approved_file(project, ref)) if ref else ""
     if "{{REFERENCE_WEIGHT}}" in template.text:
-        # One total strength per image, split evenly: more references never mean more total conditioning (four references at a fixed
-        # per-slot weight overpowered the scene text in the pilot, docs/pilot/SDXL_STYLE_AUDIT.md section 8).
-        total = request.get("total_reference_weight")
-        if request["references"] and not total:
-            raise IntegrationUnavailable("SDXL identity_conditioning.total_reference_weight is not set: NOT VALIDATED")
-        values["REFERENCE_WEIGHT"] = total / len(request["references"]) if request["references"] else 0.0
+        if request.get("identity_method") == "style_anchor":
+            values["REFERENCE_WEIGHT"] = request["style_anchor_weight"] if graph_refs else 0.0
+        else:
+            # One total strength per image, split evenly: more references never mean more total conditioning (four references at a fixed
+            # per-slot weight overpowered the scene text in the pilot, docs/pilot/SDXL_STYLE_AUDIT.md section 8).
+            total = request.get("total_reference_weight")
+            if graph_refs and not total:
+                raise IntegrationUnavailable("SDXL identity_conditioning.total_reference_weight is not set: NOT VALIDATED")
+            values["REFERENCE_WEIGHT"] = total / len(graph_refs) if graph_refs else 0.0
     backend = ComfyBackend(models["comfyui"]["base_url"])
     graph = render_graph(template, values)
     backend.require_nodes(graph)

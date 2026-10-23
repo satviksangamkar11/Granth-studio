@@ -323,6 +323,22 @@
               "minimum": 0.05,
               "maximum": 3,
               "description": "Sum of all IP-Adapter reference weights in one image; each reference gets total / number of references"
+            },
+            "style_anchor_canon_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "identity_conditioning.method 'style_anchor': the canon id whose approved reference is the one style-only anchor"
+            },
+            "style_anchor_weight": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0.05,
+              "maximum": 2,
+              "description": "IP-Adapter weight of the style anchor ('style transfer' weight type)"
             }
           }
         },

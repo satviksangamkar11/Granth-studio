@@ -113,3 +113,8 @@ All three runs: harness PASS, no out-of-memory (Scene 3 with 5 references now de
 - Scene 2 (4 x 0.25) and Scene 3 (5 x 0.2): content FAIL. Each shows ONE figure on blank paper, a blend of the townsmen references; no road, no second man, no Maharaj, no plate of sweets. Even at low weight, several single-figure-on-plain-paper references impose that layout.
 - The same-seed no-reference controls DO follow the multi-person scene text, but in a different, unanchored style (miniature-like, saffron robes, elderly men).
 Conclusion: global IP-Adapter references cannot compose several people; the scene text needs control of layout. Candidate fixes available in the pinned node pack (checked in the live /object_info): `weight_type: "style transfer"` (style only, not composition) and `attn_mask` (a reference limited to a region of the image). Human review NOT_DONE.
+
+## 10. Owner decision (2026-10-23): style anchor for the pilot, regional references afterwards
+
+For the pilot videos: identity_conditioning method `style_anchor` (workflows/comfyui/sdxl_ipadapter_style_anchor.candidate.json): ONE IP-Adapter slot, weight_type "style transfer", fed by the owner's location plate (config/pilot_sdxl_pins.yaml style_anchor, weight 0.8). The scene text decides who appears and where. All identity references stay recorded in each request but are not conditioned on, so character likeness across scenes comes from the written descriptions only (known limitation, accepted by the owner for the pilot).
+Agreed follow-up AFTER the pilot videos: regional per-character references (IPAdapterAdvanced attn_mask, one region per person from a simple per-shot layout) plus the style anchor.

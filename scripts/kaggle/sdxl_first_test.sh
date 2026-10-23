@@ -31,6 +31,9 @@ if [ -n "$REFERENCE_SET" ]; then
   [ -f "$REPO/$REFERENCE_SET/manifest.json" ] || { echo "no manifest.json in $REPO/$REFERENCE_SET: refusing before any download"; exit 2; }
 fi
 REFSET_ARGS=(); if [ -n "$REFERENCE_SET" ]; then REFSET_ARGS=(--reference-set "$REPO/$REFERENCE_SET"); fi
+STYLE_ANCHOR="${STYLE_ANCHOR:-0}"        # 1 = one style-only anchor reference instead of identity references (config/pilot_sdxl_pins.yaml style_anchor)
+case "$STYLE_ANCHOR" in 0|1) ;; *) echo "STYLE_ANCHOR must be 0 or 1"; exit 2;; esac
+if [ "$STYLE_ANCHOR" = 1 ]; then REFSET_ARGS+=(--style-anchor); fi
 SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]; then SWEEP_ARGS=(--style-sweep --sweep-seeds "$SWEEP_SEEDS" --sweep-cfgs "$SWEEP_CFGS"); fi
 export PIP_CACHE_DIR="$W/cache/pip" HF_HOME="$W/cache/hf" TORCH_HOME="$W/cache/torch" TMPDIR="$W/cache/tmp"
 PUBLISHED=0

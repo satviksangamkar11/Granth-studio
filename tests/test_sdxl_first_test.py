@@ -368,3 +368,42 @@ def test_fp16_vae_is_an_explicit_validated_opt_in_recorded_in_the_launch_command
     notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
     source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
     assert "FP16_VAE = False" in source and '"COMFY_FP16_VAE": "1" if FP16_VAE else "0"' in source
+
+
+def test_style_anchor_mode_sends_only_the_location_plate_as_a_style_only_reference_and_keeps_every_identity_reference_recorded(host, monkeypatch, tmp_path):
+    server = host[0]
+    different_image_per_submission(monkeypatch, server, tmp_path)
+    code, receipt = run(host, "--execute", "--visual", "vis_s3_kf", "--reference-set", str(copy_set(tmp_path)), "--style-anchor")
+    assert receipt["verdict"] == "PASS", receipt["reason"]
+    assert len(receipt["request"]["references"]) == 5                                                  # identities stay recorded in the request
+    graphs = [post["prompt"] if "prompt" in post else post for post in server.posts]
+    adapters = [n for n in graphs[0].values() if n["class_type"] == "IPAdapterAdvanced"]
+    images = [n["inputs"]["image"] for n in graphs[0].values() if n["class_type"] == "LoadImage"]
+    assert len(adapters) == 1 and adapters[0]["inputs"]["weight_type"] == "style transfer" and adapters[0]["inputs"]["weight"] == sx.PINS["style_anchor"]["weight"]
+    assert len(images) == 1 and "ref_loc_devidas_house_road" in images[0]                          # the location plate, never a character
+    assert graphs[0]["3"]["inputs"]["model"] == ["31", 0]
+    assert not any(n["class_type"] in ("IPAdapterAdvanced", "LoadImage") for n in graphs[1].values())   # the control is the plain checkpoint
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert "STYLE_ANCHOR must be 0 or 1" in script and script.index("STYLE_ANCHOR must be 0 or 1") < script.index("git clone")
+    notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
+    source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+    assert "STYLE_ANCHOR = False" in source and '"STYLE_ANCHOR": "1" if STYLE_ANCHOR else "0"' in source
+
+
+def test_style_anchor_mode_refuses_when_the_anchor_is_not_among_the_approved_references(host, tmp_path):
+    server = host[0]
+    work = tmp_path / "w"
+    import copy as _copy
+    pins = _copy.deepcopy(sx.PINS)
+    pins["style_anchor"]["canon_id"] = "chr_devidas"                                                   # not in scene 1's references
+    import pytest as _pytest
+    mp = _pytest.MonkeyPatch()
+    mp.setattr(sx, "PINS", {**sx.PINS, "style_anchor": pins["style_anchor"]})
+    try:
+        args = sx.build_parser().parse_args(["--workdir", str(work), "--models-dir", str(host[1]), "--comfy-url", server.url, "--reference-image", str(host[3]),
+                                             "--min-disk-gb", "0.001", "--execute", "--visual", "vis_s1_kf", "--reference-set", str(copy_set(tmp_path)), "--style-anchor"])
+        assert sx._run(args, enforce_gates=False) == 1
+    finally:
+        mp.undo()
+    receipt = json.loads((work / "sdxl_receipt.json").read_text(encoding="utf-8"))
+    assert receipt["verdict"] == "FAIL" and "style anchor" in receipt["reason"] and server.posts == []

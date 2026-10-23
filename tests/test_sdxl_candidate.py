@@ -92,3 +92,21 @@ def test_the_audio_environment_probe_reports_missing_packages_without_raising():
     report = mod.probe({"numpy": "numpy", "f5_tts": "f5-tts", "torch": "torch"}, importer=importer, version=lambda dist: "1.2.3")
     assert report["missing"] == ["f5_tts", "torch"] and report["packages"]["numpy"] == {"ok": True, "version": "1.2.3"}
     assert report["packages"]["torch"]["error"].startswith("OSError") and report["cuda"] == {"available": False, "devices": []}
+
+
+def test_the_style_anchor_candidate_has_one_style_only_slot_and_falls_back_to_the_plain_checkpoint(tmp_path):
+    path = REPO / "workflows" / "comfyui" / "sdxl_ipadapter_style_anchor.candidate.json"
+    template = load_template(path)
+    assert template.status == "unvalidated"
+    assert set(re.findall(r"\{\{([A-Z_0-9]+)\}\}", template.text)) == {"PROMPT", "NEGATIVE_PROMPT", "SEED", "WIDTH", "HEIGHT", "REFERENCE_IMAGE_1", "REFERENCE_WEIGHT"}
+    base = {"PROMPT": "p", "NEGATIVE_PROMPT": "n", "SEED": 7, "WIDTH": 1216, "HEIGHT": 832, "REFERENCE_WEIGHT": 0.8}
+    graph = render_graph(template, {**base, "REFERENCE_IMAGE_1": "anchor.png"})
+    adapters = [n for n in graph.values() if n["class_type"] == "IPAdapterAdvanced"]
+    assert len(adapters) == 1 and adapters[0]["inputs"]["weight_type"] == "style transfer" and adapters[0]["inputs"]["weight"] == 0.8 and graph["3"]["inputs"]["model"] == ["31", 0]
+    plain = render_graph(template, {**base, "REFERENCE_IMAGE_1": ""})
+    assert plain["3"]["inputs"]["model"] == ["4", 0] and not any(n["class_type"] in ("IPAdapterAdvanced", "LoadImage") for n in plain.values())
+    main = json.loads((REPO / "workflows" / "comfyui" / "sdxl_ipadapter_keyframe.candidate.json").read_text(encoding="utf-8"))
+    anchor = json.loads(path.read_text(encoding="utf-8"))
+    for node in ("3", "4", "5", "6", "7", "8", "9", "10", "11", "12"):                             # same checkpoint, sampler, VAE and loaders as the main candidate
+        expected = {k: v for k, v in main[node]["inputs"].items() if k != "model"}
+        assert {k: v for k, v in anchor[node]["inputs"].items() if k != "model"} == expected, node

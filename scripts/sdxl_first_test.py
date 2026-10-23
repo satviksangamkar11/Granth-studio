@@ -67,6 +67,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--other-gpu-idle-mb", type=float, default=800)
     parser.add_argument("--allow-other-gpu-busy", action="store_true")
     parser.add_argument("--skip-control", action="store_true", help="skip the no-reference control image")
+    parser.add_argument("--style-anchor", action="store_true", help="condition on ONE owner-approved anchor image as style only (config/pilot_sdxl_pins.yaml style_anchor); "
+                        "the scene text decides who appears; identity references stay recorded in the request")
     parser.add_argument("--style-sweep", action="store_true", help="EXPERIMENT: no-reference images of the chosen visual over several seeds and KSampler cfg values (frozen style text untouched) to see which non-text setting keeps the frozen look")
     parser.add_argument("--sweep-seeds", type=int, default=4)
     parser.add_argument("--sweep-cfgs", default="6.5,9.0", help="comma separated KSampler cfg values")
@@ -110,7 +112,7 @@ def prepare_project(args: argparse.Namespace):
     project = load_project(root)
     files = pinned_files()
     template = root / "workflows" / "comfyui" / "sdxl_keyframe.json"
-    candidate = json.loads((ROOT / PINS["workflow"]["api_candidate"]).read_text(encoding="utf-8"))
+    candidate = json.loads((ROOT / (PINS["style_anchor"]["api_candidate"] if args.style_anchor else PINS["workflow"]["api_candidate"])).read_text(encoding="utf-8"))
     candidate["_status"] = "validated"                                                       # run-only: the repository candidate stays "unvalidated"
     candidate["_note"] = "VALIDATION RUN COPY of workflows/comfyui/sdxl_ipadapter_keyframe.candidate.json; validity is decided by the human review, not by this flag"
     template.write_text(json.dumps(candidate, indent=2), encoding="utf-8")
@@ -120,8 +122,10 @@ def prepare_project(args: argparse.Namespace):
     models["comfyui"]["base_url"] = args.comfy_url
     models["sdxl"].update(checkpoint_file=files["sdxl_checkpoint"]["name"], checkpoint_sha256=lt.sha256_file(checkpoint), checkpoint_path=str(checkpoint.resolve()),
                           workflow_template="workflows/comfyui/sdxl_keyframe.json", width=width, height=height, status="validated",
-                          identity_conditioning={"method": "ip_adapter_plus_sdxl_vit_h", "reference_slots": PINS["workflow"]["reference_slots"],
-                                                 "total_reference_weight": PINS["workflow"]["total_reference_weight"]})
+                          identity_conditioning={"method": "style_anchor" if args.style_anchor else "ip_adapter_plus_sdxl_vit_h", "reference_slots": PINS["workflow"]["reference_slots"],
+                                                 "total_reference_weight": PINS["workflow"]["total_reference_weight"],
+                                                 "style_anchor_canon_id": PINS["style_anchor"]["canon_id"] if args.style_anchor else None,
+                                                 "style_anchor_weight": PINS["style_anchor"]["weight"] if args.style_anchor else None})
     commit = lt.git_head(args.models_dir) or PINS["comfyui"]["commit"]
     models["ltx"]["runtime"] = {"files": {"checkpoint": {"path": str(checkpoint), "sha256": models["sdxl"]["checkpoint_sha256"]}, "vae": None,
                                            "text_encoder": {"path": str(checkpoint), "sha256": models["sdxl"]["checkpoint_sha256"]}},   # schema slot only: this SDXL run uses no LTX text encoder
