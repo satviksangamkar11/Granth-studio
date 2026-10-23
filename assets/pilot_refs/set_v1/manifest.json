@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "set_id": "pilot_refs_set_v1",
+  "supplied_by": "Satvik Sangamkar",
+  "supplied_on": "2026-10-23",
+  "source": "owner-generated with Nano Banana (Gemini) from the frozen v1 style wording; PROVISIONAL external references, not SDXL output, not Granth canon",
+  "owner_decision": "owner instruction 2026-10-23: 'Keep it and go forward' (accepted as references for the provisional technical test, including the known risk that Devidas and Damodarpant share one body and costume template, and Maharaj shown in a white loincloth without the vest)",
+  "items": {
+    "chr_gajanan_maharaj": {
+      "file": "maharaj.jpg",
+      "sha256": "35c1b0b1aaae1983c97e4bc099eafe1005523c1c3f9c43bab73ee97c7dca8dfe",
+      "view": "front"
+    },
+    "chr_devidas": {
+      "file": "devidas.jpg",
+      "sha256": "96d1b2bee473518d2eb52be3dc93de777e15ebdd70996a7a2e79ef562b06e4dc",
+      "view": "front"
+    },
+    "chr_bankatlal": {
+      "file": "bankatlal.jpg",
+      "sha256": "52b5d262b06dea4ca5060e4c06d38c031bc0598e9c5de815c4f1449a7ec8eca1",
+      "view": "front"
+    },
+    "chr_damodarpant": {
+      "file": "damodarpant.jpg",
+      "sha256": "f86b0f10d69e36cbd4809f869a820b1b808b4b3483aeaf09808c45c0150aa3a5",
+      "view": "front"
+    },
+    "loc_devidas_house_road": {
+      "file": "location.jpg",
+      "sha256": "c98a5bc9675d1e5edfbdd8cdc161fbd8e7064e0387ecccd3654126a181705dc8",
+      "view": "establishing"
+    }
+  }
+}

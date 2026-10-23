@@ -23,6 +23,12 @@ SWEEP_SEEDS="${SWEEP_SEEDS:-4}"; SWEEP_CFGS="${SWEEP_CFGS:-6.5,9.0}"
 case "$SWEEP_SEEDS" in [1-6]) ;; *) echo "SWEEP_SEEDS must be 1..6"; exit 2;; esac
 [[ "$SWEEP_CFGS" =~ ^[0-9]+(\.[0-9]+)?(,[0-9]+(\.[0-9]+)?){0,3}$ ]] || { echo "SWEEP_CFGS must be 1-4 comma separated numbers"; exit 2; }
 python -c 'import sys; c=[float(x) for x in sys.argv[1].split(",")]; sys.exit(0 if len(set(c))==len(c) and all(1<=x<=15 for x in c) and len(c)*int(sys.argv[2])<=16 else 1)' "$SWEEP_CFGS" "$SWEEP_SEEDS"   || { echo "SWEEP_CFGS must be distinct values in 1..15 and SWEEP_SEEDS x cfgs at most 16 images"; exit 2; }
+REFERENCE_SET="${REFERENCE_SET:-}"       # optional: repository-relative directory with manifest.json (owner-supplied references), e.g. assets/pilot_refs/set_v1
+if [ -n "$REFERENCE_SET" ]; then
+  [[ "$REFERENCE_SET" =~ ^[A-Za-z0-9_][A-Za-z0-9_./-]*$ && "$REFERENCE_SET" != *..* ]] || { echo "REFERENCE_SET must be a plain repository-relative path"; exit 2; }
+  [ -f "$REPO/$REFERENCE_SET/manifest.json" ] || { echo "no manifest.json in $REPO/$REFERENCE_SET: refusing before any download"; exit 2; }
+fi
+REFSET_ARGS=(); if [ -n "$REFERENCE_SET" ]; then REFSET_ARGS=(--reference-set "$REPO/$REFERENCE_SET"); fi
 SWEEP_ARGS=(); if [ "$STYLE_SWEEP" = 1 ]; then SWEEP_ARGS=(--style-sweep --sweep-seeds "$SWEEP_SEEDS" --sweep-cfgs "$SWEEP_CFGS"); fi
 export PIP_CACHE_DIR="$W/cache/pip" HF_HOME="$W/cache/hf" TORCH_HOME="$W/cache/torch" TMPDIR="$W/cache/tmp"
 PUBLISHED=0
@@ -156,7 +162,7 @@ echo "== 7. one keyframe (with identity reference) and its no-reference control,
 STATUS=0
 set +e
 python "$REPO/scripts/sdxl_first_test.py" --execute --workdir "$W/sdxl_work_$VISUAL" --models-dir "$COMFY" --comfy-url "http://127.0.0.1:$PORT" --gpu-index 0 --visual "$VISUAL" \
-  --reference-image "$REF" --worker-pid "$WPID" --cuda-visible-devices 0 --comfy-log "$D/comfyui.log" "${SWEEP_ARGS[@]}"
+  --reference-image "$REF" --worker-pid "$WPID" --cuda-visible-devices 0 --comfy-log "$D/comfyui.log" "${SWEEP_ARGS[@]}" "${REFSET_ARGS[@]}"
 STATUS=$?
 set -e
 

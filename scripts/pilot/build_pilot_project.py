@@ -108,7 +108,8 @@ def designs() -> list[dict]:
     def design(canon_id, prompt, ovis, artistic):
         return {"canon_id": canon_id, "prompt": prompt, "source_refs": [ref(o) for o in ovis] or [PROVISIONAL], "artistic": artistic}
     return [
-        design("chr_gajanan_maharaj", "a young man in the prime of youth with a radiant complexion, strong upper arms and neck and a broad chest, wearing only an old worn vest, "
+        design("chr_gajanan_maharaj", "a young man in the prime of youth with a radiant complexion, strong upper arms and neck and a broad chest, nearly unclothed, wearing only a white loincloth "
+               "(owner choice 2026-10-23, matching the owner's reference; the text allows at most an old torn vest), "
                "seated calmly with a steady, inward gaze at the tip of the nose, shown seated and framed from the waist up", [88, 91, 111], True),
         design("chr_devidas", "a devout, gentle Brahmin householder of Shegaon in a plain white dhoti and shoulder cloth, with a sacred thread and a plain forehead mark, calm dignified bearing "
                "(only the role and manner are stated in the text; age, build, face and dress are an artistic interpretation)", [84, 85, 87], True),
@@ -122,17 +123,18 @@ def designs() -> list[dict]:
 
 # What each keyframe SHOWS, in plain visible terms, written from the approved scene facts and the designs (frozen canon: Adhyay 1 ovi 86-119).
 # No proper names, research labels or provenance notes: those stay in the request metadata. Clothing of the three townsmen is the artistic
-# interpretation recorded in docs/pilot/CHARACTER_DESIGN_SHEET.md. Owner review PENDING.
+# interpretation recorded in docs/pilot/CHARACTER_DESIGN_SHEET.md. Maharaj in a white loincloth only: owner choice 2026-10-23 matching the owner's
+# reference (assets/pilot_refs/set_v1); the text says almost naked with at most an old torn vest. Owner review PENDING.
 VISUAL_DESCRIPTIONS = {
-    1: ("A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed except for an old torn cloth vest, "
+    1: ("A young man in the prime of youth with a radiant complexion, strong upper arms and a broad chest, nearly unclothed, wearing only a white loincloth, "
         "sits calmly on a dusty village road in front of a house, framed from the waist up. Used leaf plates lie scattered before him; he holds a small "
         "hand-made clay pipe in one hand and lifts a few grains of rice from the plates with the other. A gourd water vessel rests beside him. Calm face, "
         "gaze lowered to the tip of his nose. Bright daylight."),
     2: ("On a dusty road of a nineteenth-century Indian village, two townsmen stop and watch in amazement: one in a white dhoti, long coat and cloth turban, "
-        "the other in a plain dhoti, shoulder cloth and cloth cap. Before a house, a young man nearly unclothed except for an old torn vest sits calmly among "
+        "the other in a plain dhoti, shoulder cloth and cloth cap. Before a house, a young man nearly unclothed, wearing only a white loincloth sits calmly among "
         "scattered used leaf plates. The man in the turban steps forward humbly to speak to him. Bright daylight."),
     3: ("At the doorway of a village house, a householder in a white dhoti and shoulder cloth with a sacred thread sets a large plate of sweet dishes before "
-        "a young man nearly unclothed except for an old torn vest, who sits calmly on the ground and eats. Two townsmen, one in a long coat and cloth turban, "
+        "a young man nearly unclothed, wearing only a white loincloth, who sits calmly on the ground and eats. Two townsmen, one in a long coat and cloth turban, "
         "the other in a dhoti and cloth cap, stand nearby watching with respect. Bright daylight."),
 }
 

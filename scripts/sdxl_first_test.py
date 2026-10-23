@@ -53,6 +53,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--models-dir", required=True, type=Path, help="ComfyUI root holding models/checkpoints, ipadapter, clip_vision, vae")
     parser.add_argument("--comfy-url", default="http://127.0.0.1:8188")
     parser.add_argument("--reference-image", required=True, type=Path, help="the owner's painting, used as PROVISIONAL external identity/style reference")
+    parser.add_argument("--reference-set", type=Path, help="directory with manifest.json: one owner-supplied reference per character/location (replaces --reference-image as the references; "
+                        "characters it does not cover are refused, never generated)")
     parser.add_argument("--visual", default="vis_s1_kf", help="which scene keyframe to generate (vis_s1_kf, vis_s2_kf or vis_s3_kf)")
     parser.add_argument("--gpu-index", type=int, choices=[0, 1])
     parser.add_argument("--comfy-log", type=Path)
@@ -161,6 +163,31 @@ def import_references(project, canon, image: Path, approver: str) -> list[dict]:
         asset = kf.import_asset(project, canon, asset_id, kind, canon_id, None, view, image)
         records.append(kf.approve_asset(project, canon, asset_id, asset["version"], reviewer))
     return records
+
+
+def import_reference_set(project, canon, set_dir: Path, approver: str) -> tuple[list[dict], dict]:
+    """One owner-supplied reference per canon id, from manifest.json; every file must exist inside set_dir and match its sha256."""
+    from granthstudio import keyframes as kf
+    manifest_path = set_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    files = [item["file"] for item in manifest["items"].values()]
+    if len(set(files)) != len(files):
+        raise RuntimeError("the reference set uses one image for two canon entries")
+    reviewer = f"{approver} ({OWNER_NOTE}; PROVISIONAL external reference set {manifest['set_id']}, owner-supplied, not SDXL output, not canon)"
+    records = []
+    for canon_id, item in sorted(manifest["items"].items()):
+        path = (set_dir / item["file"]).resolve()
+        if not path.is_relative_to(set_dir.resolve()) or not path.is_file():
+            raise RuntimeError(f"reference {item['file']} for {canon_id} is missing or outside the set directory")
+        if lt.sha256_file(path) != item["sha256"]:
+            raise RuntimeError(f"reference {item['file']} for {canon_id} does not match its sha256 in the manifest")
+        if canon_id not in canon.entries:
+            raise RuntimeError(f"the reference set names {canon_id}, which is not in canon")
+        kind = "location" if canon_id.startswith("loc_") else "character_sheet"
+        asset_id = f"ref_{canon_id}_{item['view']}" if kind == "character_sheet" else f"ref_{canon_id}"
+        asset = kf.import_asset(project, canon, asset_id, kind, canon_id, None, item["view"], path)
+        records.append(kf.approve_asset(project, canon, asset_id, asset["version"], reviewer))
+    return records, {"set_id": manifest["set_id"], "manifest_sha256": lt.sha256_file(manifest_path), "items": manifest["items"]}
 
 
 def sweep(args, project, models, request, kf, out, receipt, finish):
@@ -324,7 +351,15 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         return finish("NOT_RUN", str(exc))
     canon, compiled = approvals(project, approver or "synthetic-tester")
     receipt["provisional_approvals"] = f"research, canon and the two reference assets approved at run time for the provisional technical test by '{approver}' ({OWNER_NOTE})"
-    records = import_references(project, canon, args.reference_image, approver or "synthetic-tester")
+    sheet_reference = args.reference_image
+    if args.reference_set:
+        try:
+            records, receipt["reference_set"] = import_reference_set(project, canon, args.reference_set, approver or "synthetic-tester")
+        except (RuntimeError, OSError, KeyError, ValueError, GranthError) as exc:
+            return finish("NOT_RUN", f"reference set refused: {exc}")
+        sheet_reference = args.reference_set / receipt["reference_set"]["items"][MAIN_CHARACTER]["file"]
+    else:
+        records = import_references(project, canon, args.reference_image, approver or "synthetic-tester")
     receipt["reference_assets"] = [{k: r[k] for k in ("asset_id", "version", "sha256", "view", "status", "approved_by")} for r in records]
     models = load_models(project)
     registry = kf.load_registry(project, canon)
@@ -332,7 +367,7 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
     receipt["request"] = {k: request[k] for k in ("asset_id", "visual_id", "role", "characters", "locations", "props", "lighting", "seed", "width", "height", "style", "template_version",
                                                   "missing_references", "request_sha256")}
     receipt["request"].update(prompt=request["prompt"], negative_prompt=request["negative_prompt"], references=[{"asset_id": r["asset_id"], "sha256": r["sha256"]} for r in request["references"]])
-    secondary = [m for m in request["missing_references"] if m.startswith("chr_")]          # characters without a reference sheet yet: provisional sheets are generated below, from their frozen-style designs
+    secondary = [] if args.reference_set else [m for m in request["missing_references"] if m.startswith("chr_")]          # characters without a reference sheet yet: provisional sheets are generated below, from their frozen-style designs
     if [m for m in request["missing_references"] if m not in secondary]:
         return finish("NOT_RUN", f"missing approved references {request['missing_references']}")
     receipt["missing_before_sheets"] = secondary
@@ -428,15 +463,15 @@ def _run(args: argparse.Namespace, enforce_gates: bool = True) -> int:
         if (info.width, info.height) != (request["width"], request["height"]):
             return finish("FAIL", f"{label}: decoded {info.width}x{info.height}, requested {request['width']}x{request['height']}")
     sheet = out / "contact_sheet.png"
-    inputs = [args.reference_image, out / "with_reference.png"] + ([out / "no_reference_control.png"] if "no_reference_control" in results else [])
+    inputs = [sheet_reference, out / "with_reference.png"] + ([out / "no_reference_control.png"] if "no_reference_control" in results else [])
     done = subprocess.run(["ffmpeg", "-y", "-v", "error", *sum((["-i", str(p)] for p in inputs), []), "-filter_complex",
                            "".join(f"[{i}:v]scale=-1:512[v{i}];" for i in range(len(inputs))) + "".join(f"[v{i}]" for i in range(len(inputs))) + f"hstack=inputs={len(inputs)}",
                            "-frames:v", "1", str(sheet)], capture_output=True, text=True, timeout=120)
-    receipt["contact_sheet"] = {"file": sheet.name if done.returncode == 0 else None, "order": "reference painting | with reference | no-reference control"}
+    receipt["contact_sheet"] = {"file": sheet.name if done.returncode == 0 else None, "order": ("main-character reference (owner set) | with references | no-reference control" if args.reference_set else "reference painting | with reference | no-reference control")}
     if "no_reference_control" in results:
         receipt["reference_influence"] = {"ssim_with_reference_vs_control": ssim(out / "with_reference.png", out / "no_reference_control.png"),
                                           "identical_bytes": results["with_reference"]["sha256"] == results["no_reference_control"]["sha256"],
-                                          "ssim_with_reference_vs_reference_image": ssim(out / "with_reference.png", args.reference_image),
+                                          "ssim_with_reference_vs_reference_image": ssim(out / "with_reference.png", sheet_reference),
                                           "note": "numbers are evidence for the reviewer, not an acceptance; identical bytes would mean the reference had NO effect"}
         if receipt["reference_influence"]["identical_bytes"]:
             return finish("FAIL", "the reference image had no effect: the images with and without it are byte-identical")

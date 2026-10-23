@@ -11,3 +11,9 @@ Source: `D:\aai work\frozen_adhyay01_final_2026-10-22\` and `D:\aai work\frozen_
 | Narrator | voice only | never drawn | none |
 
 Maharaj's reference is the owner's painting (provisional external image). The three others have no reference painting, so the harness generates one SDXL sheet each from the prompts above in frozen style v1, approved at run time as PROVISIONAL (technical test only). The owner can replace any of them with a painting at any time; scene keyframes are then regenerated.
+
+## Update 2026-10-23: owner-supplied reference set
+The owner generated one reference per character and the location with Nano Banana from the frozen v1 wording (`assets/pilot_refs/set_v1/`, sha256 in `manifest.json`) and decided "Keep it and go forward". Recorded consequences:
+- Maharaj is shown in a white loincloth only (no vest). The text says almost naked with at most an old torn vest, so this is within the text; the scene descriptions were changed to match the reference.
+- Devidas and Damodarpant share one body, pose and costume template (only the head differs). Accepted risk: in scene 3, where both appear, they may look alike.
+- Bankatlal carries a small money pouch; Devidas has a small plain round forehead mark and a sacred thread. Artistic, not from the text.

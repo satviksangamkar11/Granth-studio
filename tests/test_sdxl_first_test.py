@@ -281,3 +281,60 @@ def test_the_sweep_size_is_configurable_and_validated_in_the_script_and_notebook
     notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
     source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
     assert "SWEEP_SEEDS = 4" in source and '"SWEEP_CFGS": SWEEP_CFGS' in source
+
+
+def copy_set(tmp_path, drop=None, tamper=None, duplicate=False):
+    import shutil
+    source = REPO / "assets" / "pilot_refs" / "set_v1"
+    target = tmp_path / "refset"
+    shutil.copytree(source, target)
+    manifest = json.loads((target / "manifest.json").read_text(encoding="utf-8"))
+    if drop:
+        manifest["items"].pop(drop)
+    if tamper:
+        manifest["items"][tamper]["sha256"] = "0" * 64
+    if duplicate:
+        manifest["items"]["chr_damodarpant"] = dict(manifest["items"]["chr_devidas"])
+    (target / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    return target
+
+
+def test_a_reference_set_supplies_one_hash_checked_reference_per_character_and_scene_3_uses_all_five_without_generating_sheets(host, monkeypatch, tmp_path):
+    server = host[0]
+    different_image_per_submission(monkeypatch, server, tmp_path)
+    code, receipt = run(host, "--execute", "--visual", "vis_s3_kf", "--reference-set", str(copy_set(tmp_path)))
+    assert receipt["verdict"] == "PASS", receipt["reason"]
+    assert receipt["bootstrapped_sheets"] == {} and receipt["reference_set"]["set_id"] == "pilot_refs_set_v1"
+    assert sorted(r["asset_id"] for r in receipt["request"]["references"]) == ["ref_chr_bankatlal_front", "ref_chr_damodarpant_front", "ref_chr_devidas_front",
+                                                                              "ref_chr_gajanan_maharaj_front", "ref_loc_devidas_house_road"]
+    manifest = json.loads((REPO / "assets" / "pilot_refs" / "set_v1" / "manifest.json").read_text(encoding="utf-8"))
+    assert {r["sha256"] for r in receipt["request"]["references"]} == {i["sha256"] for i in manifest["items"].values()}             # five different images, as hashed in the manifest
+    assert all("reference set pilot_refs_set_v1" in a["approved_by"] for a in receipt["reference_assets"])
+    graphs = [post["prompt"] if "prompt" in post else post for post in server.posts]
+    assert len(graphs) == 2 and sum(1 for n in graphs[0].values() if n["class_type"] == "IPAdapterAdvanced") == 5
+    assert "main-character reference" in receipt["contact_sheet"]["order"]
+
+
+def test_a_bad_reference_set_is_refused_before_anything_is_submitted(host, tmp_path):
+    server = host[0]
+    for index, (kwargs, visual, expected) in enumerate(((dict(tamper="chr_bankatlal"), "vis_s2_kf", "sha256"), (dict(duplicate=True), "vis_s3_kf", "one image for two"),
+                                                       (dict(drop="chr_devidas"), "vis_s3_kf", "missing approved references"))):
+        work = tmp_path / f"w{index}"
+        args = sx.build_parser().parse_args(["--workdir", str(work), "--models-dir", str(host[1]), "--comfy-url", server.url, "--reference-image", str(host[3]),
+                                             "--min-disk-gb", "0.001", "--execute", "--visual", visual, "--reference-set", str(copy_set(tmp_path / f"s{index}", **kwargs))])
+        assert sx._run(args, enforce_gates=False) == 1
+        receipt = json.loads((work / "sdxl_receipt.json").read_text(encoding="utf-8"))
+        assert receipt["verdict"] == "NOT_RUN" and expected in receipt["reason"], receipt["reason"]
+    assert server.posts == []
+
+
+def test_the_reference_set_option_is_validated_early_in_the_script_and_offered_in_the_notebook():
+    import os
+    script = (REPO / "scripts" / "kaggle" / "sdxl_first_test.sh").read_text(encoding="utf-8")
+    assert script.index("REFERENCE_SET must be a plain") < script.index("git clone") and '"${REFSET_ARGS[@]}"' in script
+    for value, message in (("../x", "plain repository-relative"), ("assets/none", "refusing before any download")):
+        done = subprocess.run(["bash", str(REPO / "scripts" / "kaggle" / "sdxl_first_test.sh")], env={**os.environ, "REFERENCE_SET": value, "VISUAL": "vis_s1_kf"}, capture_output=True, text=True, timeout=60)
+        assert done.returncode == 2 and message in done.stdout
+    notebook = json.loads((REPO / "notebooks" / "kaggle_sdxl_first_test.ipynb").read_text(encoding="utf-8"))
+    source = "".join("".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code")
+    assert 'REFERENCE_SET = ""' in source and '"REFERENCE_SET": REFERENCE_SET' in source
