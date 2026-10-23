@@ -1,0 +1,44 @@
+[{"stream_name":"stderr","time":7.111599445,"data":"/usr/local/lib/python3.13/dist-packages/nbformat/validator.py:434: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.\n"}
+,{"stream_name":"stderr","time":7.11164249,"data":"  _validate(nbdict, ref, version, version_minor, relax_add_props)\n"}
+,{"stream_name":"stderr","time":8.120286233,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.120312405,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.120317783,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.120322352,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.768871981,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.768901565,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.768907349,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.768911452,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":10.042992444,"data":"$ nvidia-smi -L\n"}
+,{"stream_name":"stdout","time":10.043019013,"data":"GPU 0: Tesla T4 (UUID: GPU-1d4c88cf-77a4-b90f-b300-b5d02c581d70)\n"}
+,{"stream_name":"stdout","time":10.043023815,"data":"GPU 1: Tesla T4 (UUID: GPU-43933431-465f-6cbf-b6a9-19b656e4bbf1)\n"}
+,{"stream_name":"stdout","time":10.043027532,"data":"\n"}
+,{"stream_name":"stdout","time":10.043047306,"data":"$ df -h /kaggle/working /kaggle/temp /kaggle/temp/ltx /tmp\n"}
+,{"stream_name":"stdout","time":10.043052326,"data":"Filesystem      Size  Used Avail Use% Mounted on\n"}
+,{"stream_name":"stdout","time":10.04305579,"data":"/dev/loop2       20G  104K   20G   1% /kaggle/working\n"}
+,{"stream_name":"stdout","time":10.043059583,"data":"overlay         8.0T  7.0T  1.1T  88% /\n"}
+,{"stream_name":"stdout","time":10.043063361,"data":"overlay         8.0T  7.0T  1.1T  88% /\n"}
+,{"stream_name":"stdout","time":10.04306711,"data":"overlay         8.0T  7.0T  1.1T  88% /\n"}
+,{"stream_name":"stdout","time":10.04307096,"data":"\n"}
+,{"stream_name":"stdout","time":10.043075061,"data":"$ df -B1 --output=target,avail /kaggle/temp/ltx /kaggle/working\n"}
+,{"stream_name":"stdout","time":10.043079056,"data":"Mounted on              Avail\n"}
+,{"stream_name":"stdout","time":10.043082836,"data":"/               1126141693952\n"}
+,{"stream_name":"stdout","time":10.043086447,"data":"/kaggle/working   20940562432\n"}
+,{"stream_name":"stdout","time":10.043090162,"data":"\n"}
+,{"stream_name":"stdout","time":10.043093572,"data":"$ bash -c ls -ld /kaggle/tmp /kaggle/temp 2\u003e\u00261; free -m; nproc; which ffmpeg\n"}
+,{"stream_name":"stdout","time":10.043097457,"data":"ls: cannot access '/kaggle/tmp': No such file or directory\n"}
+,{"stream_name":"stdout","time":10.04310113,"data":"drwxr-xr-x 3 root root 4096 Oct 23 04:55 /kaggle/temp\n"}
+,{"stream_name":"stdout","time":10.043104954,"data":"               total        used        free      shared  buff/cache   available\n"}
+,{"stream_name":"stdout","time":10.043108786,"data":"Mem:           32099        1255       26567           1        4733       30843\n"}
+,{"stream_name":"stdout","time":10.043123333,"data":"Swap:              0           0           0\n"}
+,{"stream_name":"stdout","time":10.043127378,"data":"4\n"}
+,{"stream_name":"stdout","time":10.043130526,"data":"/usr/bin/ffmpeg\n"}
+,{"stream_name":"stdout","time":10.043133946,"data":"\n"}
+,{"stream_name":"stderr","time":12.503170886,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":12.503194537,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":12.688496623,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":12.68851965,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":13.526472639,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":13.599399561,"data":"[NbConvertApp] Writing 3594 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":16.1059343,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":16.613043189,"data":"[NbConvertApp] Writing 276799 bytes to __results__.html\n"}
+]

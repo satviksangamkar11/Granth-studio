@@ -25,9 +25,22 @@ case "$STAGE" in gpu0|gpu1|concurrent|retry) ;; *) echo "STAGE must be gpu0, gpu
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 W="${W:-/kaggle/working}"; COMFY="$W/ComfyUI"; OUT="$W/ltx_evidence_$STAGE"; PINS="$REPO/config/ltx_098_pins.yaml"
 SESSION_MINUTES="${SESSION_MINUTES:-240}"
+export PIP_CACHE_DIR="$W/cache/pip" HF_HOME="$W/cache/hf" TORCH_HOME="$W/cache/torch" TMPDIR="$W/cache/tmp"   # caches and scratch stay on the big disk, never in /kaggle/working or $HOME
 # Kaggle's /kaggle/working holds only 20 GB: the heavy workspace W lives on the big scratch disk and only the (small) evidence is published to EVIDENCE_DEST.
-publish() { [ -z "${EVIDENCE_DEST:-}" ] || { mkdir -p "$EVIDENCE_DEST/ltx_evidence_$STAGE" && cp -r "$OUT/." "$EVIDENCE_DEST/ltx_evidence_$STAGE/"; } 2>/dev/null || true; }
-mkdir -p "$OUT"; trap publish EXIT; rm -f "$OUT/stage_verdict.json"; exec > >(tee "$OUT/run_log.txt") 2>&1
+PUBLISHED=0
+publish() { # runs once, at exit: stop logging (so tee has flushed run_log.txt), archive, then replace any earlier published copy
+  [ "$PUBLISHED" = 0 ] || return 0; PUBLISHED=1
+  exec >&- 2>&-; [ -z "${TEE_PID:-}" ] || wait "$TEE_PID" 2>/dev/null || true
+  (cd "$W" && rm -f "ltx_evidence_$STAGE.tgz" && tar czf "ltx_evidence_$STAGE.tgz" "ltx_evidence_$STAGE") 2>/dev/null || true
+  [ -z "${EVIDENCE_DEST:-}" ] || {
+    rm -rf "$EVIDENCE_DEST/ltx_evidence_$STAGE" "$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz"
+    mkdir -p "$EVIDENCE_DEST/ltx_evidence_$STAGE" && cp -r "$OUT/." "$EVIDENCE_DEST/ltx_evidence_$STAGE/" && cp "$W/ltx_evidence_$STAGE.tgz" "$EVIDENCE_DEST/"
+  } 2>/dev/null || true
+}
+# an earlier invocation's success must never survive a failed or refused rerun: invalidate the published and local copies before anything else
+[ -z "${EVIDENCE_DEST:-}" ] || rm -rf "$EVIDENCE_DEST/ltx_evidence_$STAGE" "$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz"
+rm -f "$W/ltx_evidence_$STAGE.tgz"
+mkdir -p "$OUT" "$W/cache/tmp"; trap publish EXIT; rm -f "$OUT/stage_verdict.json"; exec > >(tee "$OUT/run_log.txt") 2>&1; TEE_PID=$!
 echo "stage $STAGE | approved by: $LTX_DOWNLOAD_APPROVED | $(date -u +%FT%TZ)"
 
 echo "== 0. refusals that need no network"
@@ -236,8 +249,6 @@ json.dump({"stage": stage, "verdict": "PASS", "commit": commit,
            "receipts": {p: hashlib.sha256(open(p, "rb").read()).hexdigest() for p in paths}}, open(out, "w"), indent=2)
 EOF
 fi
-cleanup; trap publish EXIT; sleep 1
-(cd "$W" && tar czf "ltx_evidence_$STAGE.tgz" "ltx_evidence_$STAGE")
-[ -z "${EVIDENCE_DEST:-}" ] || cp "$W/ltx_evidence_$STAGE.tgz" "$EVIDENCE_DEST/" 2>/dev/null || true
-echo "stage $STAGE exit status $STATUS; evidence: $W/ltx_evidence_$STAGE.tgz"
+cleanup; sleep 1
+echo "stage $STAGE exit status $STATUS; evidence: $W/ltx_evidence_$STAGE.tgz (archived at exit)"
 exit $STATUS

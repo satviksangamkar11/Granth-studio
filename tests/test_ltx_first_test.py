@@ -413,3 +413,10 @@ def test_gpu_script_reuses_ports_and_unlocks_stages_only_through_a_final_verdict
     assert text.index("gpu_attribution.py") < text.rindex("stage_verdict.json") and 'if [ "$STATUS" = 0 ]' in text            # verdict only after attribution succeeded
     assert "test_receipt.json\" ] ||" not in text and "receipt_verdict" not in text                                          # the bare client receipt no longer unlocks anything
     assert '"#OK"' in text and '"#FAIL"' in text and "--worker-evidence" in text
+
+
+def test_gpu_script_publishes_evidence_once_after_the_log_is_flushed_and_never_keeps_stale_success():
+    text = (REPO / "scripts" / "kaggle" / "ltx_first_test.sh").read_text(encoding="utf-8")
+    assert "TEE_PID=$!" in text and 'wait "$TEE_PID"' in text and text.index('wait "$TEE_PID"') < text.index("tar czf")      # tee flushed before archiving
+    assert text.index('rm -rf "$EVIDENCE_DEST/ltx_evidence_$STAGE" "$EVIDENCE_DEST/ltx_evidence_$STAGE.tgz"') < text.index("== 0. refusals")   # old success invalidated first
+    assert "PIP_CACHE_DIR" in text and "HF_HOME" in text and "TMPDIR" in text
