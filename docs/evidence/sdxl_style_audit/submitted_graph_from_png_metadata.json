@@ -1,0 +1,61 @@
+{
+ "granthstudio_sdxl_00001_.png": {
+  "classes": [
+   "CLIPTextEncode",
+   "CLIPVisionLoader",
+   "CheckpointLoaderSimple",
+   "EmptyLatentImage",
+   "IPAdapterModelLoader",
+   "KSampler",
+   "SaveImage",
+   "VAEDecode",
+   "VAELoader"
+  ],
+  "text_nodes": {
+   "6": "1950s vintage Indian devotional book illustration, authentic mid-century opaque gouache and egg tempera painting on aged matte ivory cardstock, soft hand-painted sepia contour linework, chalky matte gouache wash shading, flat hand-brushed tonal planes, Characters: Shri Gajanan Maharaj. Location: The road in front of Devidas's house. Props: Clay chilam, Gourd water vessel, Used leaf plates. Lighting: day_outdoor. Shri Gajanan Maharaj: a young man in the prime of youth with a radiant complexion, strong upper arms and neck and a broad chest, wearing only an old worn vest, seated calmly with a steady, inward gaze at the tip of the nose, shown seated and framed from the waist up. The road in front of Devidas's house: a village road in front of a house, midday sun, used leaf plates on the ground (the rest of the setting is an artistic interpretation). Source detail: He picks leftover grains of rice from the leaf plates and puts them in his mouth. Source detail: Gajanan Maharaj sits on the road in front of Devidas's house among the thrown leaf plates. Artistic interpretation: Shown seated and framed from the waist up, a modest composition. Source detail: His gaze rests steadily on the tip of his nose and his expression is calm. Source detail: He wears an old vest of worn cloth; he has a gourd for drinking water and a hand-made clay chilam in his hand warm natural mineral pigments of raw sienna, burnt umber, warm ochre, terracotta, and muted sage green, subtle paper grain texture, vintage double-line paper border mount, clean traditional graphic composition, text-free, no labels, no watermarks.",
+   "7": "photorealistic, 3D render, CGI, digital painting gloss, airbrushed gradients, shiny plastic skin, modern photography, harsh lens flare, neon colors, oil impasto, heavy black comic ink, blurry contours, text, typography, signature, watermarks."
+  },
+  "sampler": {
+   "seed": 1408754645,
+   "steps": 30,
+   "cfg": 6.5,
+   "sampler_name": "dpmpp_2m",
+   "scheduler": "karras",
+   "denoise": 1.0
+  },
+  "sampler_links": {
+   "model": [
+    "4",
+    0
+   ],
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "7",
+    0
+   ],
+   "latent_image": [
+    "5",
+    0
+   ]
+  },
+  "encoders": {
+   "6": {
+    "clip": [
+     "4",
+     1
+    ],
+    "class": "CLIPTextEncode"
+   },
+   "7": {
+    "clip": [
+     "4",
+     1
+    ],
+    "class": "CLIPTextEncode"
+   }
+  }
+ }
+}
