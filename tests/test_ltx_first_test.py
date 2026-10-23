@@ -520,6 +520,14 @@ def painted_inputs(tmp_path):
     return still, prompt, negative
 
 
+def clip_from_still(server, tmp_path, still):
+    """A smooth, slowly brightening clip whose first frame IS the still (ffmpeg's gradients source is not reproducible between runs, so it cannot give a still and a matching clip)."""
+    clip = tmp_path / "server_clip_from_still.mp4"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-loop", "1", "-i", str(still), "-vf", "eq=brightness='0.0005*n':eval=frame,format=yuv420p", "-frames:v", "49", "-r", "24",
+                    "-c:v", "libx264", "-threads", "1", str(clip)], check=True, timeout=60)
+    server.view_bytes = clip.read_bytes()
+
+
 def set_server_clip(server, tmp_path, source):
     clip = tmp_path / "server_clip2.mp4"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", source, "-frames:v", "49", "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(clip)], check=True, timeout=60)
@@ -529,7 +537,7 @@ def set_server_clip(server, tmp_path, source):
 def test_a_supplied_painting_and_prompt_replace_only_the_input_and_its_text(host, tmp_path):
     server, _, work = host
     still, prompt, negative = painted_inputs(tmp_path)
-    set_server_clip(server, tmp_path, "gradients=size=768x512:rate=24:speed=0.05:seed=3")
+    clip_from_still(server, tmp_path, still)
     code, receipt = run(host, "--execute", "--start-image", str(still), "--prompt-file", str(prompt), "--negative-prompt-file", str(negative))
     assert [r["status"] for r in receipt["results"]] == ["complete"], receipt["results"]
     assert receipt["start_image"]["sha256"] == hashlib.sha256(still.read_bytes()).hexdigest() and (receipt["start_image"]["width"], receipt["start_image"]["height"]) == (768, 512)
@@ -599,7 +607,7 @@ def test_a_stable_clip_of_something_else_does_not_clear_the_screen(tmp_path, mon
 def test_the_painted_retry_writes_its_own_previews_and_is_screened(host, tmp_path):
     server, _, work = host
     still, prompt, _ = painted_inputs(tmp_path)
-    set_server_clip(server, tmp_path, "gradients=size=768x512:rate=24:speed=0.05:seed=3")
+    clip_from_still(server, tmp_path, still)
     args = ["--start-image", str(still), "--prompt-file", str(prompt)]
     code, first = run(host, "--execute", *args)
     assert [r["status"] for r in first["results"]] == ["complete"]
