@@ -480,3 +480,18 @@ State at the freeze:
 - Audio: IndicTrans2 ran (execution PASS, quality FAIL, assistant Hindi drafts kept, review PENDING); IndicF5 voice stage ON HOLD (needs narrator recording + consent).
 - Known architecture gaps for the replan: (1) global IP-Adapter cannot place several identities (regional references needed); (2) the style lock covers text only, not references or a visual check; (3) assembly does not conform LTX (768x512) and Tier 0 (1280x720, stretched 3:2) clips to one size; (4) LTX on T4 adds a push-in the prompt cannot stop; (5) keyframe research text had leaked into image prompts (fixed by template v3).
 - Kaggle: account satviksangamkar54321; dataset granthstudio-pilot-bundle; no runs in progress.
+
+## FREEZE 2026-10-24 evening (owner: "freeze what all things are done and push to the branch and stop")
+
+Branch `arch/v4-2026-10-24`. Nothing below is validated; human review NOT_DONE. There is no git remote, so "push" means committed on this branch and tagged `wip-v4-p1-2026-10-24`.
+
+Done and recorded:
+- Architecture v4 frozen (D-013, tag `arch-v4-freeze-2026-10-24`) and amended by D-014 (tag `arch-v4-amend-d014-2026-10-24`): Blender (headless Python, 2.5D rigs) is the only planned production renderer; Nano Banana Pro images; Kimi writes code; FFmpeg assembly; quality test and expansion gate in `docs/ARCHITECTURE_V4.md` section 12. Codex reviewed the amendment (docs/evidence/codex_reviews/54).
+- Image backend evidence: Gemini key works (stored outside the repo, never printed); `scripts/image_trials/gemini_test.py` made the 3 pilot scenes with Nano Banana 2.1 (model `gemini-nano-banana-2.1`) and Nano Banana Pro (`gemini-3-pro-image`, owner's prefix/suffix/negative prompt); one Pro request timed out and was re-sent (possible double charge). Qwen-Image-2.1 on Kaggle also made all 3 scenes (fallback). The owner has not yet picked between the outputs. Images are in `D:\kaggle_upload\nb21`, `nbpro`, `g_gpu3` (not in git). gemini_test.py is NOT Codex-reviewed.
+- Machine: Blender 5.2.3 LTS portable at `D:\tools\blender\blender.exe` (sha256 verified, headless check passed). Caches cleaned: C: about 11 GB free, D: about 16.6 GB free. A `winget` MSI install of Blender was started in the background and may still be waiting on an admin prompt; the portable copy is the one in use.
+- P1 scripts written: `scripts/blender/p1_scene.py` (painted still on an unlit plane, keyframed camera push, frame-addressed) and `scripts/blender/p1_run.py` (240 frames at 1080p24, same-frame-twice repeatability check, FFmpeg MP4, receipt with times and peak memory). A 24-frame 640x360 test passed (24 frames written, MP4 24 frames, technical pass true). NOT Codex-reviewed, the full 240-frame 1080p run was NOT done.
+
+Not done / open:
+- P1 full run and Codex review of the P1 scripts; P2 (Maharaj blessing scene prototype and its audit); P0 schemas and the Kimi instruction pack.
+- Owner decisions pending: which image model output is preferred (Nano Banana 2.1, Pro, Qwen), Nano Banana Pro price confirmation (third-party prices only), whether `D:\local model\tmp\fable-cpu-checks` (14.7 GB) may be deleted, a git remote URL if a real push is wanted.
+- Kaggle: no runs in progress that matter; notebooks granthstudio-bench-gpu-all, -kontext, -qwen21, -all and the TPU probes exist on account satviksangamkar54321.
