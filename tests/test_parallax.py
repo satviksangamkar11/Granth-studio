@@ -32,6 +32,12 @@ def test_the_parallax_values_are_validated_ramp_with_the_camera_easing_and_neigh
     spec = p.validate(base(tmp_path, parallax={"start": -0.008, "end": 0.004}))
     shifts = [p.shift_at(spec, f) for f in range(p.motion.frame_count(spec))]
     assert abs(shifts[0] + 0.008) < 1e-12 and abs(shifts[-1] - 0.004) < 1e-12 and all(a <= b for a, b in zip(shifts, shifts[1:]))
+    held = base(tmp_path, parallax={"start": -0.008, "end": 0.008})
+    held["camera"] = {**held["camera"], "ease": "hold"}
+    with pytest.raises(p.motion.SpecError, match="hold"):
+        p.validate(held)                                                                             # a held shot never reaches the declared end: refuse the ramp
+    held["parallax"] = {"start": 0.004, "end": 0.004}
+    assert p.validate(held)
     short = p.validate(base(tmp_path, parallax={"amplitude": 0.016}))
     assert p.ends(short) == (-0.008, 0.008) and p.shift_at({**spec, "parallax": {}}, 5) == 0.0     # shorthand, and no block means no shift
     rp_spec = importlib.util.spec_from_file_location("render_motion_preview", REPO / "scripts" / "pilot" / "render_motion_preview.py")

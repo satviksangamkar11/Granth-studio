@@ -55,6 +55,8 @@ def validate(spec: dict) -> dict:
         low = 0 if key == "amplitude" else -MAX_AMPLITUDE
         if not (isinstance(value, (int, float)) and not isinstance(value, bool) and low <= value <= MAX_AMPLITUDE):
             raise motion.SpecError(f"parallax.{key} must be a number in {low}..{MAX_AMPLITUDE} (the amplitude limit)")
+    if spec["camera"].get("ease", "smooth") == "hold" and ends(spec)[0] != ends(spec)[1]:
+        raise motion.SpecError("parallax start and end must be equal when the camera ease is 'hold' (a held shot has no ramp: the end would never be reached)")
     return spec
 
 
