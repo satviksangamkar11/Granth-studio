@@ -17,3 +17,7 @@ The owner generated one reference per character and the location with Nano Banan
 - Maharaj is shown in a white loincloth only (no vest). The text says almost naked with at most an old torn vest, so this is within the text; the scene descriptions were changed to match the reference.
 - Devidas and Damodarpant share one body, pose and costume template (only the head differs). Accepted risk: in scene 3, where both appear, they may look alike.
 - Bankatlal carries a small money pouch; Devidas has a small plain round forehead mark and a sacred thread. Artistic, not from the text.
+
+## Correction 2026-10-24 (from the Adhyay 1-6 research)
+- Bankatlal's age IS stated: "तूं पोऱ्या तरणा ज्वान", a young man (Adhyay 2, ovi 13). Earlier lines saying his age is not stated are wrong for the series (Adhyay 1 itself gives no age).
+- Only Gajanan Maharaj and Bankatlal recur across Adhyays 1-6; everyone else needs a single reference. See `docs/pilot/REFERENCE_LIBRARY_SPEC.md`.

@@ -44,3 +44,8 @@ The owner froze `devotional_gouache_1950s_v1` (canon/style.yaml, sealed by `cont
 Prompts compose as {prefix} {shot_description} {suffix} (src/granthstudio/keyframes.py; the request said `runner.py`, which does not exist in this repository, so the composition lives where every SDXL prompt is built).
 Style id and hash are recorded in keyframe requests, `metrics.json`, task inputs (keyframe, LTX shots, both assembly tasks) and the production snapshot, so a change cannot happen silently. A second style in `visual_assets.yaml` is refused.
 Not decided here: the SDXL checkpoint, the identity-conditioning method (rest of O-006) and any character design. Characters stay provisional; SDXL stays NOT VALIDATED.
+
+## Replan 2026-10-24 (after the pilot freeze)
+
+- **D-010 (2026-10-24, PROPOSED, assistant; direction approved by the owner when they approved the replan plan):** architecture revision v3.2 as written in `docs/ARCHITECTURE_V3_2_PROPOSAL.md` (R1-R6: backend-neutral keyframes, reference library spec, code-driven Tier 0 animation toolkit, one episode size, style score against an approved anchor). `ARCHITECTURE_V3_1.md` is not edited. Binds only after the owner approves the text and a checksum receipt is recorded (frozen §16).
+- **D-011 (2026-10-24, APPROVED, owner choices while approving the plan):** (a) keyframe backend decided by a benchmark of Nano Banana, FLUX.2 klein and Qwen-Image-Edit on the same three pilot scenes, owner picks; (b) code animation is the default motion, AI video only for real actions; (c) the free NVIDIA LLM instead of Claude is a bounded experiment only (NVIDIA terms: evaluation use).
