@@ -20,6 +20,7 @@
     "ease": "smooth"
   },
   "parallax": {
-    "amplitude": 0.01
+    "start": -0.008,
+    "end": -0.002
   }
 }

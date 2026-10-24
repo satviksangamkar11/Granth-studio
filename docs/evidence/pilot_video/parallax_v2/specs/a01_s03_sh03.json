@@ -1,6 +1,6 @@
 {
   "image": "D:\\aai work\\granthstudio\\docs\\evidence\\sdxl_scenes\\style_anchor_16d48472\\scene3_keyframe.png",
-  "duration_s": 5.0,
+  "duration_s": 6.5,
   "fps": 24,
   "size": [
     1152,
@@ -8,18 +8,19 @@
   ],
   "camera": {
     "start": {
+      "zoom": 1.5,
+      "cx": 0.5,
+      "cy": 0.58
+    },
+    "end": {
       "zoom": 1.0,
       "cx": 0.5,
       "cy": 0.5
     },
-    "end": {
-      "zoom": 1.15,
-      "cx": 0.5,
-      "cy": 0.55
-    },
     "ease": "smooth"
   },
   "parallax": {
-    "amplitude": 0.01
+    "start": 0.008,
+    "end": -0.008
   }
 }

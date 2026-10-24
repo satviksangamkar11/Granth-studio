@@ -35,7 +35,9 @@ motion = _load("motion", ROOT / "scripts" / "animation" / "motion.py")
 bp = _load("build_pilot_project", ROOT / "scripts" / "pilot" / "build_pilot_project.py")
 
 
-PARALLAX_AMPLITUDE = {0: 0.010, 1: 0.016}          # the shot that carries the action (Tier 1 slot) gets the stronger depth shift
+# Parallax shift (fraction of the width) per shot as (start, end). The end of one shot is the start of the next and the third shot returns to where the scene began,
+# so the depth shift is as continuous across the cuts as the camera is.
+PARALLAX = {n: [(-0.008, -0.002), (-0.002, 0.008), (0.008, -0.008)] for n in (1, 2, 3)}
 
 
 def pt(zoom: float, cx: float, cy: float) -> dict:
@@ -70,10 +72,10 @@ def main(argv: list[str] | None = None) -> int:
     clips, report, cues, cursor = [], {"size": SIZE, "fps": FPS, "audio": None, "shots": []}, {"mr": [], "hi": []}, 0.0
     for n, scene in enumerate(manifest["scenes"], start=1):
         keyframe = KEYFRAMES / f"scene{n}_keyframe.png"
-        for shot, (start, end) in zip(scene["shots"], PLANS[n]):
+        for index, (shot, (start, end)) in enumerate(zip(scene["shots"], PLANS[n])):
             spec = {"image": str(keyframe), "duration_s": shot["duration_s"], "fps": FPS, "size": SIZE, "camera": {"start": start, "end": end, "ease": "smooth"}}
             if parallax:
-                spec["parallax"] = {"amplitude": PARALLAX_AMPLITUDE[shot["tier"]]}
+                spec["parallax"] = dict(zip(("start", "end"), PARALLAX[n][index]))
             (out / "specs" / f"{shot['shot_id']}.json").write_text(json.dumps(spec, indent=2), encoding="utf-8")
             clip = out / f"{shot['shot_id']}.mp4"
             (parallax.render(spec, clip, cache=args.depth_cache) if parallax else motion.render(spec, clip))

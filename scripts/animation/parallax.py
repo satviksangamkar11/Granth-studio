@@ -1,11 +1,14 @@
-"""2.5D parallax for a painted still: the same exact camera path as motion.py plus a depth-based sideways shift, so near things (figures, foreground) move more than
-far things (sky, background) while the picture itself is never regenerated. Host script (needs torch, numpy, Pillow and the Depth-Anything-V2-Small model through
+"""2.5D parallax for a painted still: the same exact camera path as motion.py plus a depth-based sideways shift while the picture itself is never regenerated.
+The shift is a rotation about a fixation plane at depth 0.5: content nearer than that plane slides one way, content farther slides the other way, in proportion
+to its distance from the plane (a camera that orbits slightly around the subject). Depth 1 (nearest) and depth 0 (farthest) therefore move equally and
+oppositely; only the SIGN says near from far. Host script (needs torch, numpy, Pillow and the Depth-Anything-V2-Small model through
 transformers): it is NOT part of the granthstudio package and adds no package dependency (D-006).
 
   python scripts/animation/parallax.py render SPEC.json OUT.mp4 [--depth-cache DIR]
 
-The spec is the motion.py spec plus  "parallax": {"amplitude": 0.012}  (fraction of the image width; the shift ramps from -amplitude/2 to +amplitude/2 over the
-shot with the same easing as the camera; keep it <= 0.02 or the stretched edges show). Depth is estimated once per image and cached as .npy next to a sha256 of
+The spec is the motion.py spec plus  "parallax": {"start": -0.008, "end": 0.004}  (fractions of the image width, both within +-0.02: more shows stretched
+edges). The shift ramps from start to end over the shot with the camera's easing. Neighbouring shots of one scene must use the previous shot's end as their start
+or the picture jumps at the cut. `{"amplitude": a}` is shorthand for start -a/2, end +a/2. Depth is estimated once per image and cached as .npy next to a sha256 of
 the image so a re-render is deterministic and offline.
 """
 from __future__ import annotations
@@ -34,21 +37,35 @@ MAX_AMPLITUDE = 0.02
 DEPTH_MODEL = "depth-anything/Depth-Anything-V2-Small-hf"
 
 
+def ends(spec: dict) -> tuple[float, float]:
+    block = spec.get("parallax", {})
+    if "amplitude" in block:
+        return -block["amplitude"] / 2, block["amplitude"] / 2
+    return block.get("start", 0.0), block.get("end", 0.0)
+
+
 def validate(spec: dict) -> dict:
     motion.validate(spec)
-    amplitude = spec.get("parallax", {}).get("amplitude", 0.0)
-    if not (isinstance(amplitude, (int, float)) and not isinstance(amplitude, bool) and 0 <= amplitude <= MAX_AMPLITUDE):
-        raise motion.SpecError(f"parallax.amplitude must be 0..{MAX_AMPLITUDE}")
+    block = spec.get("parallax", {})
+    unknown = set(block) - {"amplitude", "start", "end"}
+    if unknown or ("amplitude" in block and ("start" in block or "end" in block)):
+        raise motion.SpecError("parallax takes either amplitude or start/end, nothing else")
+    for key in block:
+        value = block[key]
+        low = 0 if key == "amplitude" else -MAX_AMPLITUDE
+        if not (isinstance(value, (int, float)) and not isinstance(value, bool) and low <= value <= MAX_AMPLITUDE):
+            raise motion.SpecError(f"parallax.{key} must be a number in {low}..{MAX_AMPLITUDE} (the amplitude limit)")
     return spec
 
 
 def shift_at(spec: dict, frame: int) -> float:
-    """Sideways parallax shift (fraction of the width) at `frame`: ramps -a/2 -> +a/2 with the camera easing."""
+    """Sideways parallax shift (fraction of the width) at `frame`: start -> end with the camera easing."""
     n = motion.frame_count(spec)
     p = frame / (n - 1) if n > 1 else 0.0
     ease = spec["camera"].get("ease", "smooth")
     e = 0.0 if ease == "hold" else p if ease == "linear" else p * p * (3 - 2 * p)
-    return spec.get("parallax", {}).get("amplitude", 0.0) * (e - 0.5)
+    start, end = ends(spec)
+    return start + (end - start) * e
 
 
 def estimate_depth(image_path: Path, cache: Path | None):
@@ -71,16 +88,18 @@ def estimate_depth(image_path: Path, cache: Path | None):
 
 
 def render(spec: dict, out: Path, base: Path | None = None, cache: Path | None = None) -> Path:
+    validate(spec)
+    image_path = Path(spec["image"])
+    if not image_path.is_absolute() and base is not None:
+        image_path = (base / image_path).resolve()
+        if not image_path.is_relative_to(base.resolve()):
+            raise motion.SpecError("a relative image path must stay inside the spec's folder (absolute paths are for the owner's own scripts)")
+    if not image_path.is_file():
+        raise motion.SpecError(f"image {image_path} does not exist")
     import numpy as np
     import torch
     import torch.nn.functional as F
     from PIL import Image
-    validate(spec)
-    image_path = Path(spec["image"])
-    if not image_path.is_absolute() and base is not None:
-        image_path = base / image_path
-    if not image_path.is_file():
-        raise motion.SpecError(f"image {image_path} does not exist")
     width, height = spec["size"]
     fps, n = spec.get("fps", 24), motion.frame_count(spec)
     image = Image.open(image_path).convert("RGB")
