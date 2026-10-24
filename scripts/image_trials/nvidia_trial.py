@@ -37,15 +37,19 @@ from granthstudio.style import compose, load_style  # noqa: E402
 REFS = ROOT / "assets" / "pilot_refs" / "set_v1"
 HOST = "https://ai.api.nvidia.com/v1/genai"
 KEY_PATTERN = re.compile(r"nvapi-[A-Za-z0-9_\-]{10,}")
+KEY_SYNTAX = re.compile(r"nvapi-[A-Za-z0-9_\-]{20,}")
+ALLOWED_PREFIXES = ("https://ai.api.nvidia.com/", "https://integrate.api.nvidia.com/")
 
 
 # ------------------------------------------------------------------ keys
 
 def keys_from_env(environ: dict | None = None) -> list[str]:
+    """Keys in order; a value that is not exactly one well-formed key (stray spaces, newlines, extra text) is dropped, never sent and never echoed."""
     environ = os.environ if environ is None else environ
     found = [k.strip() for k in environ.get("NVIDIA_API_KEYS", "").split(",") if k.strip()]
     single = environ.get("NVIDIA_API_KEY", "").strip()
-    return ([single] if single else []) + [k for k in found if k != single]
+    candidates = ([single] if single else []) + [k for k in found if k != single]
+    return [k for k in candidates if KEY_SYNTAX.fullmatch(k)]
 
 
 def scrub(text: str, keys: list[str]) -> str:
@@ -88,8 +92,24 @@ def extract_image(response: dict) -> bytes | None:
         candidates.append(response["data"][0].get("b64_json"))
     for value in candidates:
         if isinstance(value, str) and len(value) > 100:
-            return base64.b64decode(value.split(",", 1)[-1])
+            try:
+                return base64.b64decode(value.split(",", 1)[-1])
+            except ValueError:
+                return None
     return None
+
+
+PNG_MAGIC = bytes([0x89]) + b"PNG" + bytes([13, 10, 26, 10])
+JPEG_MAGIC = bytes([0xFF, 0xD8, 0xFF])
+
+
+def looks_like_an_image_without_a_secret(data: bytes, keys: list[str]) -> bool:
+    """PNG or JPEG magic bytes, and no key bytes anywhere inside (a response must never be able to write a secret into a saved file)."""
+    if not (data[:8] == PNG_MAGIC or data[:3] == JPEG_MAGIC):
+        return False
+    if any(key.encode() in data for key in keys):
+        return False
+    return KEY_PATTERN.search(data.decode("latin-1")) is None
 
 
 # ------------------------------------------------------------------ scenes (what the TEXT of Adhyay 1 says; the old SDXL keyframes had content gaps)
@@ -122,14 +142,32 @@ class _Project:                                                        # load_st
 
 # ------------------------------------------------------------------ HTTP
 
-def http_post(url: str, key: str, body: dict, timeout: int = 180) -> tuple[int, str]:
-    request = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"), method="POST",
-                                     headers={"Authorization": f"Bearer {key}", "Accept": "application/json", "Content-Type": "application/json"})
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """A redirect would forward the Authorization header to wherever it points: refuse them all (the answer becomes an HTTP 3xx error)."""
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_OPENER = urllib.request.build_opener(_NoRedirect)
+
+
+def _send(request: urllib.request.Request, timeout: int) -> tuple[int, str]:
+    """(status, body). Never raises with a secret in the message: any transport or header problem becomes (0, 'request failed: <ExceptionType>')."""
+    if not request.full_url.startswith(ALLOWED_PREFIXES):
+        return 0, "request failed: URL outside the approved NVIDIA hosts"
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
+        with _OPENER.open(request, timeout=timeout) as response:
             return response.status, response.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read().decode("utf-8", "replace")
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        return 0, f"request failed: {type(exc).__name__}"
+
+
+def http_post(url: str, key: str, body: dict, timeout: int = 180) -> tuple[int, str]:
+    request = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"), method="POST",
+                                     headers={"Authorization": f"Bearer {key}", "Accept": "application/json", "Content-Type": "application/json"})
+    return _send(request, timeout)
 
 
 def call(model: dict, body: dict, keys: list[str], post=http_post) -> tuple[int, dict | str, int]:
@@ -151,19 +189,21 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def cmd_check_key(args, post=http_post) -> int:
+def cmd_check_key(args, opener=None) -> int:
     keys = keys_from_env()
     if not keys:
-        print("no key: set NVIDIA_API_KEY (or NVIDIA_API_KEYS) in your Windows environment, then open a new terminal")
+        print("no usable key: set NVIDIA_API_KEY (or NVIDIA_API_KEYS) to well-formed nvapi-... keys in your Windows environment, then open a new terminal")
         return 2
+    send = opener or (lambda request: _send(request, 30))
     for index, key in enumerate(keys):
-        request = urllib.request.Request("https://integrate.api.nvidia.com/v1/models", headers={"Authorization": f"Bearer {key}"})
-        try:
-            with urllib.request.urlopen(request, timeout=30) as response:
-                print(f"key {index + 1} of {len(keys)}: accepted (HTTP {response.status})")
-        except urllib.error.HTTPError as exc:
-            print(f"key {index + 1} of {len(keys)}: HTTP {exc.code}")
-    return 0
+        status, _ = send(urllib.request.Request("https://integrate.api.nvidia.com/v1/models", headers={"Authorization": f"Bearer {key}"}))
+        if status in (401, 403):
+            print(f"key {index + 1} of {len(keys)}: rejected (HTTP {status}); trying the next one")
+            continue
+        print(f"key {index + 1} of {len(keys)}: " + ("accepted (HTTP 200)" if status == 200 else f"HTTP {status}" + (" (rate limit: stopping)" if status == 429 else "")))
+        return 0 if status == 200 else 1
+    print("every key was rejected")
+    return 1
 
 
 def build(model_name: str, scene: int, seed: int):
@@ -209,7 +249,7 @@ def cmd_run(args, post=http_post) -> int:
             status, response, key_index = call(model, body, keys, post)
             item.update(status=status, wall_s=round(time.monotonic() - started, 1), key_number_used=key_index + 1)
             image = extract_image(response) if isinstance(response, dict) else None
-            if status == 200 and image:
+            if status == 200 and image and looks_like_an_image_without_a_secret(image, keys):
                 target = out / f"scene{scene}_{args.model}.png"
                 target.write_bytes(image)
                 item.update(output=target.name, output_sha256=sha256(image), verdict="IMAGE_RETURNED")

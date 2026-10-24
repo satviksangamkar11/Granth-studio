@@ -16,8 +16,9 @@ def load():
     return module
 
 
-PNG = base64.b64encode(b"\x89PNG\r\n\x1a\n" + b"0" * 400).decode()
-KEY_A, KEY_B = "nvapi-AAAAAAAAAAAAAAAAAAAA", "nvapi-BBBBBBBBBBBBBBBBBBBB"
+PNG_MAGIC = bytes([0x89]) + b"PNG" + bytes([13, 10, 26, 10])
+PNG = base64.b64encode(PNG_MAGIC + b"0" * 400).decode()
+KEY_A, KEY_B = "nvapi-AAAAAAAAAAAAAAAAAAAAAAAA", "nvapi-BBBBBBBBBBBBBBBBBBBBBBBB"
 
 
 def test_keys_come_only_from_the_environment_in_order_and_are_scrubbed_everywhere():
@@ -92,3 +93,41 @@ def test_a_dry_run_needs_no_key_and_calls_nothing(tmp_path, monkeypatch):
     assert t.cmd_run(args, lambda *a: pytest.fail("no request may be sent")) == 0
     scenes = json.loads((tmp_path / "receipt.json").read_text(encoding="utf-8"))["scenes"]
     assert [s["status"] for s in scenes] == ["DRY_RUN"] * 3 and len(scenes[2]["references"]) == 4      # klein takes at most 4 references: the 5th (location) is dropped and recorded
+
+
+def test_malformed_keys_are_dropped_redirects_are_refused_and_transport_errors_never_carry_a_key(monkeypatch):
+    t = load()
+    assert t.keys_from_env({"NVIDIA_API_KEY": KEY_A + chr(10) + "X-Evil: 1"}) == []                   # an embedded newline: the whole value is dropped, never sent, never echoed
+    assert t.keys_from_env({"NVIDIA_API_KEYS": f"{KEY_A},short,nvapi-bad key with spaces"}) == [KEY_A]
+    assert t._NoRedirect().redirect_request(None, None, 302, "Found", {}, "https://evil.example/") is None
+    status, text = t._send(t.urllib.request.Request("https://evil.example/x", headers={"Authorization": f"Bearer {KEY_A}"}), 5)
+    assert status == 0 and KEY_A not in text and "outside the approved" in text                       # a URL outside the NVIDIA hosts is never contacted
+
+    def boom(*args, **kwargs):
+        raise ValueError(f"Invalid header value {KEY_A}")
+
+    monkeypatch.setattr(t._OPENER, "open", boom)
+    status, text = t._send(t.urllib.request.Request("https://ai.api.nvidia.com/v1/genai/x", headers={"Authorization": f"Bearer {KEY_A}"}), 5)
+    assert status == 0 and text == "request failed: ValueError" and KEY_A not in text
+
+
+def test_check_key_stops_after_a_good_key_or_a_non_auth_status_and_a_response_cannot_smuggle_a_key_into_a_file(tmp_path, monkeypatch, capsys):
+    t = load()
+    monkeypatch.setenv("NVIDIA_API_KEYS", f"{KEY_A},{KEY_B}")
+    monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
+    calls = []
+    for answers, expected_calls, code in (((200,), 1, 0), ((401, 200), 2, 0), ((429,), 1, 1), ((500,), 1, 1), ((401, 403), 2, 1)):
+        calls.clear()
+        feed = iter(answers)
+        assert t.cmd_check_key(None, opener=lambda request: (calls.append(request.get_header("Authorization")), (next(feed), ""))[1]) == code
+        assert len(calls) == expected_calls
+    assert KEY_A not in capsys.readouterr().out
+    raw_png = PNG_MAGIC + b"0" * 200
+    assert t.looks_like_an_image_without_a_secret(raw_png, [KEY_A])
+    assert not t.looks_like_an_image_without_a_secret(raw_png + KEY_A.encode(), [KEY_A])
+    assert not t.looks_like_an_image_without_a_secret(b"not an image" + b"0" * 200, [KEY_A])
+    monkeypatch.setenv("NVIDIA_API_KEY", KEY_A)
+    smuggled = base64.b64encode(raw_png + KEY_A.encode()).decode()
+    args = t.argparse.Namespace(model="flux2-klein-4b", seed=1, scenes="1", out=str(tmp_path / "o"), dry_run=False)
+    assert t.cmd_run(args, lambda u, k, b: (200, json.dumps({"artifacts": [{"base64": smuggled}]}))) == 1
+    assert not list((tmp_path / "o").glob("*.png"))                                                  # nothing was written

@@ -88,6 +88,15 @@ def test_conforming_matches_an_independent_crop_or_pad_reference_and_resolves_an
     conform_clip(flat, out_f, (240, 270), "cover", 24)
     assert (probe(out_a).width, probe(out_a).height) == (240, 270)
     assert psnr(grab(out_a, tmp_path / "ga.png"), grab(out_f, tmp_path / "gf.png")) > 25            # display aspect honoured: same result as the square-pixel original
+    pad_a, pad_f = tmp_path / "pa.mp4", tmp_path / "pf.mp4"
+    conform_clip(anamorphic, pad_a, (300, 270), "pad", 24)
+    conform_clip(flat, pad_f, (300, 270), "pad", 24)
+    assert psnr(grab(pad_a, tmp_path / "gpa.png"), grab(pad_f, tmp_path / "gpf.png")) > 25          # the same in pad mode
+    odd = soft(tmp_path / "odd.mp4", (130, 128))                                                    # an odd-looking square-pixel picture keeps its shape
+    odd_out, odd_ref = tmp_path / "odd_out.mp4", tmp_path / "odd_ref.png"
+    conform_clip(odd, odd_out, (128, 128), "cover", 24)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(odd), "-vf", "crop=128:128:1:0", "-frames:v", "1", str(odd_ref)], check=True)
+    assert psnr(grab(odd_out, tmp_path / "godd.png"), odd_ref) > 28
 
 
 @MEDIA
@@ -97,6 +106,10 @@ def test_a_still_with_a_fit_is_cropped_not_stretched(tmp_path):
     out = tmp_path / "still.mp4"
     still_motion_clip(image, out, 1.0, fps=24, size=(288, 192), fit="cover")
     assert (probe(out).width, probe(out).height) == (288, 192)
+    reference, stretched, got = tmp_path / "ref.png", tmp_path / "st.png", grab(out, tmp_path / "got.png")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(image), "-vf", "crop=1350:900:125:0,scale=288:192:flags=lanczos", "-frames:v", "1", str(reference)], check=True)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(image), "-vf", "scale=288:192:flags=lanczos", "-frames:v", "1", str(stretched)], check=True)
+    assert psnr(got, reference) > psnr(got, stretched) + 2                                           # the still follows the centred crop, not the stretched picture
     legacy = tmp_path / "legacy.mp4"
     still_motion_clip(image, legacy, 1.0, fps=24, size=(288, 192))                                 # without a fit the old behaviour is unchanged
     assert (probe(legacy).width, probe(legacy).height) == (288, 192)
