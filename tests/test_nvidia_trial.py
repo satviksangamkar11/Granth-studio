@@ -110,6 +110,21 @@ def test_malformed_keys_are_dropped_redirects_are_refused_and_transport_errors_n
     status, text = t._send(t.urllib.request.Request("https://ai.api.nvidia.com/v1/genai/x", headers={"Authorization": f"Bearer {KEY_A}"}), 5)
     assert status == 0 and text == "request failed: ValueError" and KEY_A not in text
 
+    def bad_status(*args, **kwargs):
+        raise t.http.client.BadStatusLine(f"HTTP/1.1 {KEY_A}")                                        # a malformed status line from the server
+
+    monkeypatch.setattr(t._OPENER, "open", bad_status)
+    status, text = t._send(t.urllib.request.Request("https://ai.api.nvidia.com/v1/genai/x", headers={"Authorization": f"Bearer {KEY_A}"}), 5)
+    assert status == 0 and text == "request failed: BadStatusLine" and KEY_A not in text
+
+
+def test_argparse_never_echoes_a_pasted_key(capsys):
+    t = load()
+    with pytest.raises(SystemExit):
+        t.main(["check-key", "--key", KEY_A])
+    captured = capsys.readouterr()
+    assert KEY_A not in captured.out + captured.err and "nvapi-" not in captured.out + captured.err and "error" in captured.err
+
 
 def test_check_key_stops_after_a_good_key_or_a_non_auth_status_and_a_response_cannot_smuggle_a_key_into_a_file(tmp_path, monkeypatch, capsys):
     t = load()

@@ -26,6 +26,7 @@ import os
 import re
 import sys
 import time
+import http.client
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -160,7 +161,7 @@ def _send(request: urllib.request.Request, timeout: int) -> tuple[int, str]:
             return response.status, response.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read().decode("utf-8", "replace")
-    except (urllib.error.URLError, OSError, ValueError) as exc:
+    except (urllib.error.URLError, http.client.HTTPException, OSError, ValueError) as exc:     # HTTPException covers BadStatusLine, which would carry the server's raw status line
         return 0, f"request failed: {type(exc).__name__}"
 
 
@@ -267,9 +268,16 @@ def cmd_run(args, post=http_post) -> int:
     return exit_code
 
 
+class _QuietParser(argparse.ArgumentParser):
+    """argparse echoes unrecognised arguments (a pasted key would be printed): scrub every diagnostic before it is shown."""
+    def error(self, message):
+        sys.stderr.write(f"{self.prog}: error: {scrub(message, [])}\n")
+        raise SystemExit(2)
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    sub = parser.add_subparsers(dest="command", required=True)
+    parser = _QuietParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = parser.add_subparsers(dest="command", required=True, parser_class=_QuietParser)
     sub.add_parser("check-key")
     for name in ("probe", "run"):
         one = sub.add_parser(name)

@@ -100,6 +100,20 @@ def test_conforming_matches_an_independent_crop_or_pad_reference_and_resolves_an
 
 
 @MEDIA
+def test_an_odd_width_square_pixel_picture_is_cropped_exactly_not_squeezed(tmp_path):
+    odd = tmp_path / "odd.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc2=size=129x128:rate=1,boxblur=2", "-frames:v", "1", str(odd)], check=True)
+    got = tmp_path / "got.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(odd), "-vf", conform_filter((128, 128), "cover"), "-frames:v", "1", str(got)], check=True)
+    scores = []
+    for x in (0, 1):                                                                               # the centred crop of 129 pixels to 128 may start at either column
+        ref = tmp_path / f"ref{x}.png"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(odd), "-vf", f"crop=128:128:{x}:0", "-frames:v", "1", str(ref)], check=True)
+        scores.append(psnr(got, ref))
+    assert max(scores) == float("inf")                                                             # bit-identical to a plain crop: no rescaling of a square-pixel picture
+
+
+@MEDIA
 def test_a_still_with_a_fit_is_cropped_not_stretched(tmp_path):
     image = tmp_path / "wide.png"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc2=size=1600x900:rate=1", "-frames:v", "1", str(image)], check=True)
