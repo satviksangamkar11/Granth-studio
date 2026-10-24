@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "set_id": "pilot_refs_set_v2",
+  "supplied_by": "Satvik Sangamkar",
+  "supplied_on": "2026-10-24",
+  "source": "owner-supplied, generated with an external image tool from the frozen v1 style wording and the owner's paintings of Adhyay scenes; PROVISIONAL external references, not canon, not validated",
+  "owner_decision": "owner instruction 2026-10-24: 'I want to fix the set I have given now' (set fixed as supplied)",
+  "open_items": [
+    "Maharaj has two designs (young dark-haired 'youth' and bald moustached 'mature'); which is canonical for Adhyay 1 is NOT decided",
+    "costume/adhyay mapping in the supplier's notes is unverified",
+    "render style is cleaner/more vector-like than the set_v1 gouache references",
+    "human review NOT_DONE"
+  ],
+  "items": {
+    "maharaj_youth_sheet": {
+      "file": "maharaj_youth_sheet.webp",
+      "character": "chr_gajanan_maharaj_youth",
+      "view": "sheet 5 poses",
+      "sha256": "428d3605759f3e1026e763de9de8baebca771cea29d5d48f9b714ba1bea5e297"
+    },
+    "maharaj_youth": {
+      "file": "maharaj_youth.webp",
+      "character": "chr_gajanan_maharaj_youth",
+      "view": "square front",
+      "sha256": "e7124df9df8afc470783131cc926d97d3768d2986984dda0fadc5986039c8db1"
+    },
+    "maharaj_sheet": {
+      "file": "maharaj_sheet.webp",
+      "character": "chr_gajanan_maharaj_mature",
+      "view": "sheet 5 poses",
+      "sha256": "14440a31e5af707d581442437519f3a67c8698f610ef0304dce3095964bfbc8d"
+    },
+    "maharaj": {
+      "file": "maharaj.webp",
+      "character": "chr_gajanan_maharaj_mature",
+      "view": "square front",
+      "sha256": "0a438048788217c7a0befe82158e821a8446d7655370b819b223b57a39901a5d"
+    },
+    "maharaj_attire_sheet": {
+      "file": "maharaj_attire_sheet.webp",
+      "character": "chr_gajanan_maharaj_attire",
+      "view": "5 costumes/poses: pitambar+garland, seated rock with chilim, walking with shoulder cloth, padmasana namaskar, gosavi disguise",
+      "sha256": "7441c9a92abf6c215f89cdb43f59b0016bc03e7a06688f71a33ac21ececfb47d"
+    },
+    "bankatlal_sheet": {
+      "file": "bankatlal_sheet.webp",
+      "character": "chr_bankatlal",
+      "view": "sheet 5 poses",
+      "sha256": "784d962e96f5f7c2daf94940f68289a17967a0b5494335d1f6a07ade2be02700"
+    },
+    "bankatlal": {
+      "file": "bankatlal.webp",
+      "character": "chr_bankatlal",
+      "view": "square front",
+      "sha256": "6dbd0516314a36ed12bb450d3bdd9f6b8394476288f6f63d43902426a6f72434"
+    },
+    "devidas_sheet": {
+      "file": "devidas_sheet.webp",
+      "character": "chr_devidas",
+      "view": "sheet 5 poses",
+      "sha256": "7fb3c1220d6caf1d86aada131414829d1fb600dd7073e535e13a140ce7b6aca0"
+    },
+    "devidas": {
+      "file": "devidas.webp",
+      "character": "chr_devidas",
+      "view": "square front",
+      "sha256": "16720981af903b0dd877cbe51fcdac2e0c7931ced45b41a4868b8f930a71ecb5"
+    },
+    "damodarpant_sheet": {
+      "file": "damodarpant_sheet.webp",
+      "character": "chr_damodarpant",
+      "view": "sheet 5 poses",
+      "sha256": "ac2d6340d056c338700970f903fbfa8f432dddb322da6cbce7b27a9f16a4d420"
+    },
+    "damodarpant": {
+      "file": "damodarpant.webp",
+      "character": "chr_damodarpant",
+      "view": "square front",
+      "sha256": "dc714225dea61d24bdfc3ebf809869efc9845eb5190672eb6c6de55c694fcf8c"
+    },
+    "bhaskar_sheet": {
+      "file": "bhaskar_sheet.webp",
+      "character": "chr_bhaskar_patil",
+      "view": "sheet 5 poses",
+      "sha256": "edec966ccba4f4d430fd51238f7fe11b6a57d4a63f0c1ff7fdba71f881d166af"
+    }
+  }
+}
