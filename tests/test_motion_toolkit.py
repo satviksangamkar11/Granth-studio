@@ -103,3 +103,19 @@ def test_a_wrong_aspect_image_is_cropped_not_stretched_and_the_cli_writes_the_cl
     info = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=width,height,nb_frames,r_frame_rate", "-of", "json", str(out)], capture_output=True, text=True, check=True).stdout
     stream = json.loads(info)["streams"][0]
     assert (stream["width"], stream["height"], int(stream["nb_frames"]), stream["r_frame_rate"]) == (576, 384, 48, "24/1")
+
+
+def test_the_pilot_camera_plans_are_valid_continuous_within_each_scene_and_keep_scene_1_off_the_signature_corner():
+    spec = importlib.util.spec_from_file_location("render_motion_preview", REPO / "scripts" / "pilot" / "render_motion_preview.py")
+    rp = importlib.util.module_from_spec(spec); sys.modules["render_motion_preview"] = rp; spec.loader.exec_module(rp)
+    for scene, shots in rp.PLANS.items():
+        assert len(shots) == 3
+        for index, (start, end) in enumerate(shots):
+            rp.motion.validate({"image": "x", "duration_s": 2, "size": rp.SIZE, "camera": {"start": start, "end": end}})
+            if index:
+                assert start == shots[index - 1][1]                                                  # the end of one shot is the start of the next: no jump cut
+        assert shots[-1][1] == shots[0][0]                                                           # and the scene returns to where it began
+    for start, end in rp.PLANS[1]:                                                                   # the pseudo-signature sits at about x >= 0.95, y >= 0.93 of the keyframe
+        for point in (start, end):
+            z, cx, cy = point["zoom"], point["cx"], point["cy"]
+            assert cx + 0.5 / z <= 0.93 or cy + 0.5 / z <= 0.93, point                              # the window stops before that corner on at least one axis

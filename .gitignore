@@ -76,3 +76,5 @@ __pycache__/
 !docs/evidence/pilot_video/ltx_s3_81de10dd/frames_0_24_48.png
 !docs/evidence/pilot_video/silent_preview_v1/pilot_silent_preview.mp4
 !docs/evidence/pilot_video/silent_preview_v1/frames_strip.png
+!docs/evidence/pilot_video/code_motion_v1/pilot_code_motion_preview.mp4
+!docs/evidence/pilot_video/code_motion_v1/frames_strip.png
