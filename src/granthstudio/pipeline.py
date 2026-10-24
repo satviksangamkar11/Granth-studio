@@ -68,7 +68,10 @@ def load_bundle(project: Project, models: dict[str, Any], adhyay: int, benchmark
     problems = check_timelines(canon, compiled, research, timelines["mr"], timelines["hi"])
     if problems:
         raise GateFailure("timeline gate failed: " + "; ".join(problems))
-    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark, style_identity(load_style(project)), output_format(project))
+    output = output_format(project)
+    if output and output["fit"] != "cover" and any(shot.get("camera") for shot in compiled["shots"]):
+        raise GateFailure("a camera path crops the still to its window and needs output.fit 'cover'; 'pad' would discard the edges the camera is meant to reveal")
+    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark, style_identity(load_style(project)), output)
 
 def episode_store(project: Project, adhyay: int) -> Path:
     return project.artifacts_dir / "tasks" / f"adhyay_{adhyay:02d}"

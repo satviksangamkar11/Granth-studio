@@ -114,10 +114,11 @@ def validate_video(path: Path, expected_duration_s: float, tolerance_s: float = 
 def conform_filter(size: tuple[int, int], fit: str) -> str:
     """FFmpeg filter that brings any picture to exactly `size`: cover = scale to fill then centre-crop, pad = scale to fit then pad with black. Never stretches."""
     width, height = size
+    display = "scale=trunc(iw*sar/2)*2:ih:flags=lanczos,setsar=1,"          # non-square pixels (e.g. 720x576, SAR 16:15) are first resolved to their DISPLAY shape
     if fit == "cover":
-        return f"scale={width}:{height}:force_original_aspect_ratio=increase:flags=lanczos,crop={width}:{height},setsar=1"
+        return f"{display}scale={width}:{height}:force_original_aspect_ratio=increase:flags=lanczos,crop={width}:{height},setsar=1"
     if fit == "pad":
-        return f"scale={width}:{height}:force_original_aspect_ratio=decrease:flags=lanczos,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1"
+        return f"{display}scale={width}:{height}:force_original_aspect_ratio=decrease:flags=lanczos,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1"
     raise ValueError(f"fit must be 'cover' or 'pad', not {fit!r}")
 
 

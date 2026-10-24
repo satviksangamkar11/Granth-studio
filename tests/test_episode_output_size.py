@@ -48,6 +48,48 @@ def test_conform_clip_brings_any_aspect_to_the_exact_size_and_fps(tmp_path):
         assert (info.width, info.height) == (320, 214) and not info.has_audio and abs(info.duration_s - 1.0) < 0.1
 
 
+def grab(video, target, index=0):
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(video), "-vf", f"select=eq(n\,{index})", "-frames:v", "1", str(target)], check=True)
+    return target
+
+
+def psnr(a, b):
+    import re
+    done = subprocess.run(["ffmpeg", "-v", "info", "-i", str(a), "-i", str(b), "-lavfi", "psnr", "-f", "null", "-"], capture_output=True, text=True)
+    value = re.search(r"average:([\d.]+|inf)", done.stderr).group(1)
+    return float("inf") if value == "inf" else float(value)
+
+
+def soft(path, size, sar=None, seconds=1):
+    chain = "testsrc2=size={}x{}:rate=24:duration={},boxblur=4".format(size[0], size[1], seconds) + (f",setsar={sar}" if sar else "")
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", chain, "-pix_fmt", "yuv420p", str(path)], check=True)
+    return path
+
+
+@MEDIA
+def test_conforming_matches_an_independent_crop_or_pad_reference_and_resolves_anamorphic_pixels(tmp_path):
+    wide = soft(tmp_path / "wide.mp4", (640, 360))
+    cover, pad = tmp_path / "cover.mp4", tmp_path / "pad.mp4"
+    conform_clip(wide, cover, (240, 160), "cover", 24)
+    conform_clip(wide, pad, (224, 150), "pad", 24)                                      # 224x126 content + two 12-pixel bars: no half-pixel offsets
+    ref_cover, ref_pad, stretched = tmp_path / "rc.png", tmp_path / "rp.png", tmp_path / "rs.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wide), "-vf", "crop=540:360:50:0,scale=240:160:flags=lanczos", "-frames:v", "1", str(ref_cover)], check=True)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wide), "-vf", "scale=224:126:flags=lanczos,pad=224:150:0:12", "-frames:v", "1", str(ref_pad)], check=True)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wide), "-vf", "scale=240:160:flags=lanczos", "-frames:v", "1", str(stretched)], check=True)
+    stretched_pad = tmp_path / "rsp.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wide), "-vf", "scale=224:150:flags=lanczos", "-frames:v", "1", str(stretched_pad)], check=True)
+    got_cover, got_pad = grab(cover, tmp_path / "gc.png"), grab(pad, tmp_path / "gp.png")
+    assert psnr(got_cover, ref_cover) > 28 and psnr(got_cover, ref_cover) > psnr(got_cover, stretched) + 3
+    assert psnr(got_pad, ref_pad) > 28 and psnr(got_pad, ref_pad) > psnr(got_pad, stretched_pad) + 3
+    anamorphic = soft(tmp_path / "ana.mp4", (480, 576), sar="16/15")                              # display shape 512x576
+    flat = soft(tmp_path / "flat.mp4", (512, 576))                                                # the same picture with square pixels
+    out_a, out_f = tmp_path / "oa.mp4", tmp_path / "of.mp4"
+    conform_clip(anamorphic, out_a, (240, 270), "cover", 24)
+    conform_clip(flat, out_f, (240, 270), "cover", 24)
+    assert (probe(out_a).width, probe(out_a).height) == (240, 270)
+    assert psnr(grab(out_a, tmp_path / "ga.png"), grab(out_f, tmp_path / "gf.png")) > 25            # display aspect honoured: same result as the square-pixel original
+
+
 @MEDIA
 def test_a_still_with_a_fit_is_cropped_not_stretched(tmp_path):
     image = tmp_path / "wide.png"
@@ -168,3 +210,13 @@ def test_a_camera_is_refused_on_a_motion_shot_and_when_its_window_leaves_the_ima
     put_camera(approved_project, {"start": {"zoom": 1.0}, "end": {"zoom": 2.0, "cx": 0.95, "cy": 0.5}}, shot_index=0)       # the first shot is Tier 0 and is checked first
     with pytest.raises(ConfigError, match="leaves the image"):
         compile_project(approved_project)
+
+
+def test_a_camera_path_is_refused_with_pad_fit_because_padding_would_discard_the_window_edges(approved_project):
+    make_cpu_project(approved_project)
+    set_output(approved_project, {"width": 320, "height": 214, "fit": "pad"})
+    put_camera(approved_project, MOVE)
+    with pytest.raises(GateFailure, match="needs output.fit 'cover'"):
+        load_bundle(approved_project, load_models(approved_project), 1)
+    set_output(approved_project, {"width": 320, "height": 214, "fit": "cover"})
+    assert load_bundle(approved_project, load_models(approved_project), 1).output["fit"] == "cover"

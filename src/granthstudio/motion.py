@@ -15,9 +15,10 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import subprocess
 import sys
 from pathlib import Path
+
+from .ffmpeg import _run, _tool
 
 EASES = ("smooth", "linear", "hold")
 UPSCALE = 4          # source width = 4 x output width before zoompan: zoompan rounds its window to whole pixels, this keeps the steps sub-pixel
@@ -116,11 +117,9 @@ def render(spec: dict, out: Path, base: Path | None = None) -> Path:
     if not image.is_file():
         raise SpecError(f"image {image} does not exist")
     n, fps = frame_count(spec), spec.get("fps", 24)
-    command = ["ffmpeg", "-y", "-v", "error", "-loop", "1", "-i", str(image), "-vf", video_filter(spec), "-frames:v", str(n), "-an",
+    command = [_tool("ffmpeg"), "-y", "-v", "error", "-loop", "1", "-i", str(image), "-vf", video_filter(spec), "-frames:v", str(n), "-an",
                "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", "-r", str(fps), str(out)]
-    done = subprocess.run(command, capture_output=True, text=True)
-    if done.returncode != 0:
-        raise RuntimeError(f"ffmpeg failed: {done.stderr[-400:]}")
+    _run(command)                                                           # the bounded media runner: 300 s timeout, failures raise TaskFailed
     return out
 
 
