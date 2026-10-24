@@ -112,13 +112,13 @@ def build_kontext():
 
 
 def build_qwen21():
-    """Qwen-Image-2.1 (7B, ungated). bf16 whole did not fit a 15 GB T4 (OutOfMemory at the first image), so the transformer is stored in 4-bit NF4 and the text encoder is offloaded."""
+    """Qwen-Image-2.1 (7B, ungated). bf16 whole did not fit a 15 GB T4 (OutOfMemory at the first image), so the transformer AND the text encoder (about 16 GB in bf16, the real memory hog: model offload moves it to the GPU whole) are stored in 4-bit NF4."""
     import torch
     from diffusers import QwenImage21Pipeline
     from diffusers.quantizers import PipelineQuantizationConfig
     quant = PipelineQuantizationConfig(quant_backend="bitsandbytes_4bit",
                                        quant_kwargs={"load_in_4bit": True, "bnb_4bit_quant_type": "nf4", "bnb_4bit_compute_dtype": torch.bfloat16},
-                                       components_to_quantize=["transformer"])
+                                       components_to_quantize=["transformer", "text_encoder"])
     pipe = QwenImage21Pipeline.from_pretrained("Qwen/Qwen-Image-2.1", torch_dtype=torch.bfloat16, quantization_config=quant)
     pipe.enable_model_cpu_offload()
     pipe.vae.enable_tiling()

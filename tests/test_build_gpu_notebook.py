@@ -21,7 +21,7 @@ def test_the_token_value_is_never_logged_and_failures_cannot_be_silent():
     text = "\n".join([mod.CELL1, mod.CELL2, mod.CELL3, mod.CELL4])
     assert "print(os.environ" not in text and "log(os.environ" not in text and "get_secret(\"HF_TOKEN\"))" not in text.replace("os.environ[\"HF_TOKEN\"] = UserSecretsClient().get_secret(\"HF_TOKEN\");", "")
     assert "raise SystemExit" in mod.CELL4 and "killpg" in mod.CELL1 and "TIMEOUT" in mod.CELL1
-    assert "device_map=\"auto\"" in mod.CELL3 and "--target" in mod.CELL3
+    assert "load_in_8bit=True" in mod.CELL3 and "--target" in mod.CELL3 and "scenes failed" in mod.CELL3
 
 
 def test_bench_helpers_flag_blank_images_and_write_receipts_atomically(tmp_path):

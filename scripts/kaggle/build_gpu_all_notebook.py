@@ -115,26 +115,26 @@ log("installing HiDream's pinned libraries into its OWN folder (the shared envir
 run([sys.executable, "-m", "pip", "install", "-q", "--target", SITE, "transformers==4.57.1", "tokenizers>=0.22,<=0.23.0", "huggingface-hub>=0.34,<1.0", "diffusers==0.39.0", "einops", "flask", "openai", "python-dotenv", "scipy"], must=True)
 run(["git", "clone", "-q", "https://github.com/HiDream-ai/HiDream-O1-Image.git", OUT + "/repo"], must=True)
 pp = OUT + "/repo/models/pipeline.py"; s = open(pp).read(); assert '"use_flash_attn": True' in s; open(pp, "w").write(s.replace('"use_flash_attn": True', '"use_flash_attn": False'))
-ip = OUT + "/repo/inference.py"; s = open(ip).read(); assert 'device_map="cuda"' in s; open(ip, "w").write(s.replace('device_map="cuda"', 'device_map="auto"'))
-log("patched: flash-attn off, model split over both GPUs (device_map=auto)")
+ip = OUT + "/repo/inference.py"; s = open(ip).read(); assert 'device_map="cuda"' in s; open(ip, "w").write(s.replace('device_map="cuda"', 'device_map="cuda", quantization_config=__import__("transformers").BitsAndBytesConfig(load_in_8bit=True)'))
+log("patched: flash-attn off, 8-bit weights on ONE GPU (a split over two GPUs failed with a cuda:0/cuda:1 tensor mismatch inside HiDream's own code)")
 sys.path.insert(0, SITE)
 from huggingface_hub import snapshot_download
 log("downloading HiDream-O1-Image-Dev weights (about 16 GB)"); mp = snapshot_download("HiDream-ai/HiDream-O1-Image-Dev", local_dir="/kaggle/temp/hidream_dev"); log("weights ready")
 inp = sys.argv[1]; spec = json.load(open(inp + "/prompts.json"))["scenes"]
 env = {**os.environ, "PYTHONPATH": SITE + ":" + os.environ.get("PYTHONPATH", "")}
+failures = 0
 for s_, item in spec.items():
     log("scene %s: generating" % s_); t = time.time()
     rc = run([sys.executable, "-u", "inference.py", "--model_path", mp, "--model_type", "dev", "--shift", "1", "--prompt", item["prompt"], "--ref_images", *[inp + "/" + x for x in item["refs"]], "--output_image", "%s/hidream_s%s.png" % (OUT, s_), "--height", "768", "--width", "1024"], env=env, cwd=OUT + "/repo")
-    log("scene %s: exit %s in %.0fs" % (s_, rc, time.time() - t))
+    log("scene %s: exit %s in %.0fs" % (s_, rc, time.time() - t)); failures += rc != 0
+if failures: raise SystemExit("HiDream: %d of %d scenes failed" % (failures, len(spec)))
 """
 os.makedirs(OUT + "/hidream", exist_ok=True); open(OUT + "/hid.py", "w").write(HID)
-log("STEP 3 stage A: HiDream-O1-Image-Dev on BOTH GPUs (its weights alone are about 16 GB)")
-sh([sys.executable, "-u", OUT + "/hid.py", inp], "hidream", timeout=3600, tee=OUT + "/hidream.log")
-log("STEP 4 stage B in parallel: GPU0 = Qwen-Image-2.1; GPU1 = FLUX 3 Image Klein then FLUX.1 Kontext (if the token has access)")
+log("STEP 3 run in parallel: GPU0 = HiDream-O1-Image-Dev (8-bit); GPU1 = Qwen-Image-2.1 (NF4), then FLUX 3 Image Klein and FLUX.1 Kontext if the token has access")
 def chain(tag, cmds, gpu):
     for c in cmds: sh(c, tag, timeout=3600, env={"CUDA_VISIBLE_DEVICES": str(gpu)}, tee=OUT + "/" + tag + ".log")
-g1 = ([bench("flux3")] if ACCESS["flux3"] else []) + ([bench("kontext")] if ACCESS["kontext"] else [])
-ts = [threading.Thread(target=chain, args=("qwen21", [bench("qwen21")], 0))] + ([threading.Thread(target=chain, args=("gated", g1, 1))] if g1 else [])
+g1 = [bench("qwen21")] + ([bench("flux3")] if ACCESS["flux3"] else []) + ([bench("kontext")] if ACCESS["kontext"] else [])
+ts = [threading.Thread(target=chain, args=("hidream", [[sys.executable, "-u", OUT + "/hid.py", inp]], 0)), threading.Thread(target=chain, args=("gpu1", g1, 1))]
 [t.start() for t in ts]; [t.join() for t in ts]
 '''
 
