@@ -14,6 +14,19 @@ import traceback
 from pathlib import Path
 
 W, H = 1024, 768
+_T0 = time.time()
+
+
+def log(msg: str) -> None:
+    """Timestamped step line with GPU memory, flushed at once so a Kaggle log shows progress live."""
+    mem = ""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            mem = " | gpu mem " + ", ".join(f"{torch.cuda.memory_allocated(i) / 2**30:.1f}/{torch.cuda.get_device_properties(i).total_memory / 2**30:.0f}GiB" for i in range(torch.cuda.device_count()))
+    except Exception:
+        pass
+    print(f"[{time.time() - _T0:7.1f}s] {msg}{mem}", flush=True)
 KLEIN_REPO = "black-forest-labs/FLUX.2-klein-4B"
 QWEN_REPO = "Qwen/Qwen-Image-Edit-2511"
 
@@ -46,7 +59,9 @@ def build_qwen():
                                        quant_kwargs={"load_in_4bit": True, "bnb_4bit_quant_type": "nf4", "bnb_4bit_compute_dtype": torch.float16},
                                        components_to_quantize=["transformer", "text_encoder"])
     pipe = QwenImageEditPlusPipeline.from_pretrained(QWEN_REPO, torch_dtype=torch.float16, quantization_config=quant)
-    pipe.enable_sequential_cpu_offload()                    # whole-model offload ran out of memory next to 5 reference latents on a 15 GB T4
+    import diffusers.pipelines.qwenimage.pipeline_qwenimage_edit_plus as q
+    q.VAE_IMAGE_SIZE = 512 * 512                            # default 1024*1024 per reference: five references overflow a 15 GB T4
+    pipe.enable_model_cpu_offload()
     pipe.vae.enable_tiling()
     return pipe, lambda pipe, imgs, prompt, seed: pipe(image=imgs, prompt=prompt, height=H, width=W, num_inference_steps=40, true_cfg_scale=4.0,
                                                        negative_prompt=" ", generator=torch.Generator("cpu").manual_seed(seed)).images[0]
@@ -59,9 +74,9 @@ def build_kontext():
     from diffusers.quantizers import PipelineQuantizationConfig
     from PIL import Image
     quant = PipelineQuantizationConfig(quant_backend="bitsandbytes_4bit",
-                                       quant_kwargs={"load_in_4bit": True, "bnb_4bit_quant_type": "nf4", "bnb_4bit_compute_dtype": torch.float16},
+                                       quant_kwargs={"load_in_4bit": True, "bnb_4bit_quant_type": "nf4", "bnb_4bit_compute_dtype": torch.bfloat16},
                                        components_to_quantize=["transformer", "text_encoder_2"])
-    pipe = FluxKontextPipeline.from_pretrained("black-forest-labs/FLUX.1-Kontext-dev", torch_dtype=torch.float16, quantization_config=quant)
+    pipe = FluxKontextPipeline.from_pretrained("black-forest-labs/FLUX.1-Kontext-dev", torch_dtype=torch.bfloat16, quantization_config=quant)
     pipe.enable_model_cpu_offload()
 
     def run(pipe, imgs, prompt, seed):
@@ -75,7 +90,27 @@ def build_kontext():
     return pipe, run
 
 
-BUILDERS = {"klein": build_klein, "qwen": build_qwen, "kontext": build_kontext}
+def build_qwen21():
+    """Qwen-Image-2.1 (7B, ungated): one checkpoint for text-to-image and editing with several reference images."""
+    import torch
+    from diffusers import QwenImage21Pipeline
+    pipe = QwenImage21Pipeline.from_pretrained("Qwen/Qwen-Image-2.1", torch_dtype=torch.bfloat16)   # the model card's dtype; bf16 is emulated on a T4
+    pipe.enable_model_cpu_offload()
+    return pipe, lambda pipe, imgs, prompt, seed: pipe(prompt=prompt, image=imgs, width=W, height=H, num_inference_steps=40,
+                                                       generator=torch.Generator("cpu").manual_seed(seed)).images[0]
+
+
+def build_flux3():
+    """FLUX 3 Image Klein (gated on Hugging Face: needs HF_TOKEN). The model card is gated, so the call below is a best guess and may need a fix."""
+    import torch
+    from diffusers import DiffusionPipeline
+    pipe = DiffusionPipeline.from_pretrained("black-forest-labs/flux-3-image-klein", torch_dtype=torch.bfloat16)
+    pipe.enable_model_cpu_offload()
+    return pipe, lambda pipe, imgs, prompt, seed: pipe(prompt=prompt, image=imgs, width=W, height=H,
+                                                       generator=torch.Generator("cpu").manual_seed(seed)).images[0]
+
+
+BUILDERS = {"klein": build_klein, "qwen": build_qwen, "kontext": build_kontext, "qwen21": build_qwen21, "flux3": build_flux3}
 
 
 def main() -> int:
@@ -95,13 +130,16 @@ def main() -> int:
         entry = receipt["models"][name] = {"results": [], "error": None}
         try:
             t0 = time.time()
+            log(f"{name}: loading model (download + weights)")
             pipe, run = BUILDERS[name]()
+            log(f"{name}: model loaded")
             entry["load_s"] = round(time.time() - t0, 1)
             for scene, item in spec["scenes"].items():
                 imgs = load_refs(args.inputs, item["refs"])
                 for seed in range(args.seeds):
                     t1 = time.time()
                     row = {"scene": scene, "seed": seed}
+                    log(f"{name}: scene {scene} seed {seed}: generating with {len(imgs)} reference images")
                     try:
                         image = run(pipe, imgs, item["prompt"], seed)
                         path = args.out / f"{name}_s{scene}_seed{seed}.png"
@@ -113,10 +151,11 @@ def main() -> int:
                         traceback.print_exc()
                     row["wall_s"] = round(time.time() - t1, 1)
                     entry["results"].append(row)
-                    print(name, row, flush=True)
+                    log(f"{name}: scene {scene} seed {seed}: done {row.get('file') or row.get('error')} in {row['wall_s']}s")
             del pipe
         except Exception as exc:
             entry["error"] = f"{type(exc).__name__}: {exc}"[:600]
+            log(f"{name}: FAILED during load/run: {entry['error']}")
             traceback.print_exc()
         torch.cuda.empty_cache()
         (args.out / "receipt.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")

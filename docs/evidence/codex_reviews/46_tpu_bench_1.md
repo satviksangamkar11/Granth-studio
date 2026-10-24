@@ -1,0 +1,21 @@
+Blocking issues remain.
+
+1. **BLOCKER — [build_tpu_notebook.py:19](</D:/aai work/granthstudio/scripts/kaggle/build_tpu_notebook.py:19>), :48:** The notebook initializes and uses the TPU, then launches a second process that initializes the same TPU. The live notebook process retains the TPU runtime and tensors; the child can fail with TPU-device ownership errors. Run the TPU preflight inside the benchmark process or another subprocess that exits before benchmarking.
+
+2. **BLOCKER — [tpu_bench.py:86](</D:/aai work/granthstudio/scripts/image_trials/tpu_bench.py:86>), :91; equivalent placement in all builders:** Moving only transformer/VAE to XLA does not establish supported CPU text encoding inside a full pipeline call. `_execution_device` governs prompt encoding and tensor placement; leaving encoders on CPU can produce CPU/XLA mismatches. Explicitly encode prompts on CPU, transfer all required embeddings to XLA, and establish the denoising execution device. The CPU generator alone does not solve placement.
+
+3. **MAJOR — [build_tpu_notebook.py:24](</D:/aai work/granthstudio/scripts/kaggle/build_tpu_notebook.py:24>):** Pip resolves transitive dependencies without protecting installed `torch`/`torch_xla`; the “NOT touched” claim is unenforced. Its return code is also ignored. Constrain the existing accelerator stack, stop on installation failure, and verify installed versions in a fresh process.
+
+4. **MAJOR — [tpu_bench.py:212](</D:/aai work/granthstudio/scripts/image_trials/tpu_bench.py:212>):** Cleanup happens only on success. If reference loading or another outer operation raises, `pipe` remains alive while the next model loads, potentially causing an otherwise avoidable memory failure. **Reproduced with in-memory mocks.** Release model references in `finally` and perform appropriate cleanup between models.
+
+5. **MAJOR — [tpu_bench.py:120](</D:/aai work/granthstudio/scripts/image_trials/tpu_bench.py:120>):** The roughly 12-billion-parameter Kontext transformer requires approximately 24 GB for bf16 weights alone. It cannot fit one 16 GB chip with this unsharded placement; eight chips do not automatically pool their memory. Mark this configuration unsupported before loading, or provide an explicitly validated fitting configuration.
+
+6. **MAJOR — [build_tpu_notebook.py:36](</D:/aai work/granthstudio/scripts/kaggle/build_tpu_notebook.py:36>):** Downloading `README.md` does not establish gated-weight access: model cards can remain publicly accessible. This can report “access OK” before weight loading fails. Probe a gated configuration file using the supplied token.
+
+7. **MAJOR — [tpu_bench.py:219](</D:/aai work/granthstudio/scripts/image_trials/tpu_bench.py:219>); [build_tpu_notebook.py:54](</D:/aai work/granthstudio/scripts/kaggle/build_tpu_notebook.py:54>):** The runner returns zero even when every model fails—**reproduced with mocks**. Blank images also retain ordinary file results, while the summary omits their blank status and comparison includes them. Return a failure status when no usable output exists and explicitly report blank/failed results.
+
+8. **MAJOR — [tpu_bench.py:153](</D:/aai work/granthstudio/scripts/image_trials/tpu_bench.py:153>):** Each receipt rewrite truncates the previous receipt. Interruption during writing can destroy evidence for every completed image and make summary JSON loading fail. Write a temporary receipt and atomically replace the previous one.
+
+Checks: all three files and all four generated cells compile in memory; no current quote/backslash syntax defect found. Logging flushes explicitly, per-image receipts are attempted, the TPU check raises `SystemExit`, and no explicit token-value logging or persistence was found.
+
+Tests cover image helpers and builder names only. They do not exercise these failure paths. The project Python could not start because of sandbox permissions; default Python lacks the test dependencies. Exact pipeline component contracts, internal `mark_step` behavior, and runtime memory remain unverified without the installed target libraries. No files, accelerators, downloads, or network were used.
