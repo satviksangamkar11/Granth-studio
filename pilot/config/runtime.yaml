@@ -27,6 +27,9 @@ python_packages: {}
 # Weights to fetch on the GPU host: {name, url, dest, sha256}. sha256 is pinned from the
 # official file; a null pin downloads in record mode only and never validates anything.
 downloads: []
+# One output size for every episode clip (docs/ARCHITECTURE_V3_2_PROPOSAL.md R4, owner-approved D-012). Absent = legacy behaviour.
+# fit: cover = scale to fill and centre-crop (no bars, no stretch); pad = scale to fit and pad with black.
+# output: {width: 1152, height: 768, fit: cover}
 checks:
   # Frozen section 8 numerical-stability proxy: a generated clip or keyframe in which every
   # frame is one flat colour is treated as a failed (e.g. FP16 decode) output.

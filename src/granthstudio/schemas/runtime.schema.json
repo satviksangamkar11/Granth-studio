@@ -227,6 +227,36 @@
           "type": "boolean"
         }
       }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height",
+        "fit"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 4096,
+          "multipleOf": 2
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 4096,
+          "multipleOf": 2
+        },
+        "fit": {
+          "enum": [
+            "cover",
+            "pad"
+          ]
+        }
+      },
+      "description": "One output size for every episode clip (R4). Absent = the legacy behaviour (Tier 0 at 1280x720, no conforming)."
     }
   }
 }

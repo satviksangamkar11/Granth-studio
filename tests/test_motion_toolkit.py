@@ -12,11 +12,8 @@ pytestmark = pytest.mark.skipif(not have_tool("ffmpeg"), reason="ffmpeg required
 
 
 def load():
-    spec = importlib.util.spec_from_file_location("motion", REPO / "scripts" / "animation" / "motion.py")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["motion"] = module
-    spec.loader.exec_module(module)
-    return module
+    from granthstudio import motion
+    return motion
 
 
 def make_image(path, width=1216, height=810):

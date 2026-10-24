@@ -31,7 +31,7 @@ def _load(name: str, path: Path):
     return module
 
 
-motion = _load("motion", ROOT / "scripts" / "animation" / "motion.py")
+from granthstudio import motion  # noqa: E402
 bp = _load("build_pilot_project", ROOT / "scripts" / "pilot" / "build_pilot_project.py")
 
 

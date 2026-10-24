@@ -20,8 +20,9 @@ from .comfy import (ComfyBackend, check_checkpoint_binding, generation_seed, ens
 from .config import Project, load_models, ltx_dimension_problems, require_capability, verify_benchmark_runtime
 from .episodes import compile_episode, trimmed_required_actions, unplaced_required_actions
 from .errors import GateFailure, GranthError, IntegrationUnavailable, TaskFailed
-from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
+from .ffmpeg import assemble, assemble_audio, audio_video_tolerance, conform_clip, hold_clip, probe, still_motion_clip, trim_hold, validate_audio, validate_video
 from .lipsync import plan_lipsync
+from .motion import render as render_motion
 from .keyframes import (approved_keyframe, keyframe_request, load_registry, require_references, sdxl_generate,
                         sdxl_preflight)
 from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, normalize_text, read_json, sha256_bytes,
@@ -29,7 +30,7 @@ from .integrity import (atomic_write_bytes, atomic_write_json, contained_path, n
 from .pilot import plan_pilot, score_receipts
 from .qa import GateResult, gate
 from .research import load_research, require_approved
-from .runtime import gpu_status, require_host_ready, require_source_pins
+from .runtime import gpu_status, load_runtime, require_host_ready, require_source_pins
 from .style import identity as style_identity, load_style
 from .scheduler import RECEIPT, RUN_LOG, STAGE_ORDER, RunFn, Scheduler, Task, TaskResult
 from .schemas import validate_document
@@ -54,6 +55,7 @@ class Bundle:
     timelines: dict[str, dict[str, Any]]
     benchmark: bool = False  # pilot only: may run LTX capabilities that are not validated yet
     style: dict[str, Any] | None = None  # style identity captured when the bundle was loaded: later edits must be seen by require_current
+    output: dict[str, Any] | None = None  # the configured episode output size {width, height, fit} captured at load (R4), same reason
 
 def load_bundle(project: Project, models: dict[str, Any], adhyay: int, benchmark: bool = False) -> Bundle:
     canon = load_canon(project)
@@ -66,13 +68,18 @@ def load_bundle(project: Project, models: dict[str, Any], adhyay: int, benchmark
     problems = check_timelines(canon, compiled, research, timelines["mr"], timelines["hi"])
     if problems:
         raise GateFailure("timeline gate failed: " + "; ".join(problems))
-    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark, style_identity(load_style(project)))
+    return Bundle(project, models, adhyay, canon, research, compiled, timelines, benchmark, style_identity(load_style(project)), output_format(project))
 
 def episode_store(project: Project, adhyay: int) -> Path:
     return project.artifacts_dir / "tasks" / f"adhyay_{adhyay:02d}"
 
+def output_format(project: Project) -> dict | None:
+    """The configured episode output ({width, height, fit}) or None for the legacy behaviour (config/runtime.yaml `output`)."""
+    return load_runtime(project).get("output")
+
+
 def snapshot(bundle: Bundle) -> dict:
-    return {"compiled": sha256_obj(bundle.compiled), "models": sha256_obj(bundle.models),
+    return {**({"output": bundle.output} if bundle.output else {}), "compiled": sha256_obj(bundle.compiled), "models": sha256_obj(bundle.models),
             "research_sha256": bundle.compiled["research_sha256"], "research_version": bundle.compiled["research_version"],
             "canon_sha256": bundle.canon.digest(),
             "style": bundle.style,
@@ -194,7 +201,14 @@ def _seed(shot_id):
 
 def _tier0_run(bundle, shot, visual):
     def run(work):
-        still_motion_clip(_visual_file(bundle, visual), work / "clip.mp4", shot["duration_s"], fps=FPS)
+        output = bundle.output
+        if shot.get("camera"):                                                         # R3: an exact camera path (granthstudio.motion), at the episode size
+            size = [output["width"], output["height"]] if output else [1280, 720]
+            render_motion({"image": str(_visual_file(bundle, visual)), "duration_s": shot["duration_s"], "fps": FPS, "size": size, "camera": shot["camera"]}, work / "clip.mp4")
+        elif output:
+            still_motion_clip(_visual_file(bundle, visual), work / "clip.mp4", shot["duration_s"], fps=FPS, size=(output["width"], output["height"]), fit=output["fit"])
+        else:
+            still_motion_clip(_visual_file(bundle, visual), work / "clip.mp4", shot["duration_s"], fps=FPS)
         return {"clip": "clip.mp4"}
     return run
 
@@ -319,6 +333,7 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
     timeline = bundle.timelines[lang]
     stem = f"adhyay_{bundle.adhyay:02d}_{LANGUAGE_NAME[lang]}"
     def run(work):
+        output = bundle.output
         audio_dir = scheduler.task_dir(audio_task)
         _verify_audio(bundle, lang, audio_dir)
         timings = read_json(audio_dir / "timings.json")
@@ -330,6 +345,10 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
                 continue  # coverage footage: only placed through another shot's coverage
             lip = (lipsync_tasks or {}).get(shot["shot_id"])  # declared lip-sync for this language: never the shared clip
             clip = scheduler.task_dir(lip) / "lipsync.mp4" if lip else scheduler.task_dir(shot_tasks[shot["shot_id"]]) / "clip.mp4"
+            source_clip = clip                                                  # provenance below hashes the clip as rendered
+            if output:
+                clip = work / f"conformed_{index:04d}.mp4"
+                conform_clip(source_clip, clip, (output["width"], output["height"]), output["fit"], FPS)
             info = probe(clip)
             duration = info.video_duration_s if info.video_duration_s is not None else info.duration_s
             speech = sum(timings[line]["duration_s"] for line in shot["dialogue_ids"])
@@ -344,14 +363,18 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
             extra = span - duration
             if cover and cover["mode"] == "cutaway" and extra > 1e-6:
                 cut = scheduler.task_dir(shot_tasks[cover["shot_id"]]) / "clip.mp4"
+                cut_source = cut
+                if output:
+                    cut = work / f"conformed_cut_{index:04d}.mp4"
+                    conform_clip(cut_source, cut, (output["width"], output["height"]), output["fit"], FPS)
                 trimmed = work / f"cutaway_{index:04d}.mp4"
                 trim_hold(cut, trimmed, extra)
                 edit_main = work / f"main_{index:04d}.mp4"
                 hold_clip(clip, edit_main, duration)
                 assemble([edit_main, trimmed], edit)
                 coverage = {"mode": "cutaway", "shot_id": cover["shot_id"], "duration_s": extra,
-                            "source_sha256": sha256_file(cut),
-                            "source_duration_s": (lambda i: i.video_duration_s if i.video_duration_s is not None else i.duration_s)(probe(cut))}
+                            "source_sha256": sha256_file(cut_source),
+                            "source_duration_s": (lambda i: i.video_duration_s if i.video_duration_s is not None else i.duration_s)(probe(cut_source))}
             else:
                 hold_clip(clip, edit, span)
                 coverage = None
@@ -364,9 +387,9 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
                 offset += item["duration_s"]
             if span - offset > 0.000001:
                 segments.append((None, span - offset))
-            marker = clip.parent / "fallback.json"  # absent in a lip-sync task directory
+            marker = source_clip.parent / "fallback.json"  # absent in a lip-sync task directory
             edits.append({"shot_id": shot["shot_id"], "start_s": cursor, "duration_s": span,
-                          "source_sha256": sha256_file(clip), "primary_action_duration_s": duration,
+                          "source_sha256": sha256_file(source_clip), "primary_action_duration_s": duration,
                           **({"coverage": coverage} if coverage else {}),
                           "clip_source": "lipsync" if lip else "fallback_tier0" if marker.is_file() else "rendered",
                           **({"fallback": read_json(marker)} if marker.is_file() else {})})
@@ -380,7 +403,8 @@ def _assembly_run(bundle, lang, shot_tasks, audio_task, scheduler, lipsync_tasks
         assemble_audio(segments, work / "voice.wav")
         atomic_write_bytes(work / f"{stem}.srt", srt_text(cues).encode("utf-8"))
         assemble(clips, work / f"{stem}.mp4", work / "voice.wav")
-        atomic_write_json(work / "edit_plan.json", {"language": lang, "duration_s": cursor, "shots": edits, "cues": cues})
+        atomic_write_json(work / "edit_plan.json", {"language": lang, "duration_s": cursor, "shots": edits, "cues": cues,
+                                                    **({"output": output} if output else {})})
         atomic_write_json(work / "provenance.json", {
             "schema_version": 1, "language": lang, "adhyay": bundle.adhyay,
             "research_sha256": bundle.compiled["research_sha256"],
@@ -415,6 +439,11 @@ def _verify_assembly(bundle, lang, directory):
     duration = plan["duration_s"]
     if not math.isfinite(duration) or duration <= 0:
         raise TaskFailed("invalid editorial duration")
+    output = bundle.output
+    if output:                                                                                              # R4: the finished video must be exactly the configured size
+        final = probe(directory / f"{stem}.mp4")
+        if (final.width, final.height) != (output["width"], output["height"]) or plan.get("output") != output:
+            raise TaskFailed(f"video is {final.width}x{final.height}, the configured episode size is {output['width']}x{output['height']}")
     if abs(validate_audio(directory / "voice.wav") - duration) > audio_video_tolerance(probe(directory / "voice.wav")):
         raise TaskFailed("voice duration differs from editorial timeline")
     if (directory / f"{stem}.srt").read_text(encoding="utf-8") != srt_text(plan["cues"]):
@@ -437,6 +466,8 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     tasks, audio, keyframes, shot_tasks = [], {}, {}, {}
     frozen = bundle.style
     style_input = {"style": f"{frozen['style_id']}@{frozen['version']}:{frozen['sha256']}"} if frozen else {}   # one style for every shot and both languages
+    output = bundle.output
+    output_input = {"output": sha256_obj(output)} if output else {}                                       # the episode size is part of every Tier 0 and assembly identity
     for lang in ("mr", "hi"):
         def audio_preflight(lang=lang):
             require_current(bundle)
@@ -469,7 +500,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
         relevant_ids = [*shot["characters"], shot["location"], *shot["props"]]
         inputs = {"shot": sha256_obj(shot), "visual": sha256_obj(visual),
                   "source": sha256_obj(shot["research_scene"]),
-                  "canon": sha256_obj({key: bundle.canon.entries[key] for key in relevant_ids})}
+                  "canon": sha256_obj({key: bundle.canon.entries[key] for key in relevant_ids}), **(output_input if shot["tier"] == 0 else {})}
         capability = None
         if shot["tier"] == 0:
             stage, version, run = "tier0", TIER0_VERSION, _tier0_run(bundle, shot, visual)
@@ -519,7 +550,7 @@ def plan_tasks(bundle: Bundle, scheduler: Scheduler) -> list[Task]:
     for lang in ("mr", "hi"):
         deps = (audio[lang].task_id(), *(t.task_id() for t in shot_tasks.values()), *(t.task_id() for t in lipsync_tasks[lang].values()))
         task = Task("assembly", f"assemble_{lang}", {"language": lang, "timeline": sha256_obj(bundle.timelines[lang]),
-                    "edit_rules": sha256_obj([{k: s[k] for k in ("shot_id", "duration_s", "dialogue_ids", "coverage")} for s in compiled["shots"]]), **style_input},
+                    "edit_rules": sha256_obj([{k: s[k] for k in ("shot_id", "duration_s", "dialogue_ids", "coverage")} for s in compiled["shots"]]), **style_input, **output_input},
                     ASSEMBLY_VERSION, _assembly_run(bundle, lang, shot_tasks, audio[lang], scheduler, lipsync_tasks[lang]),
                     depends_on=deps, preflight=lambda: require_current(bundle),
                     verify=lambda directory, lang=lang: _verify_assembly(bundle, lang, directory))

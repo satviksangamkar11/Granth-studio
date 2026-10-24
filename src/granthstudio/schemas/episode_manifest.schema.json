@@ -310,6 +310,54 @@
               "pattern": "\\S"
             }
           }
+        },
+        "camera": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "end"
+          ],
+          "properties": {
+            "start": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "zoom": {
+                  "type": "number"
+                },
+                "cx": {
+                  "type": "number"
+                },
+                "cy": {
+                  "type": "number"
+                }
+              }
+            },
+            "end": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "zoom": {
+                  "type": "number"
+                },
+                "cx": {
+                  "type": "number"
+                },
+                "cy": {
+                  "type": "number"
+                }
+              }
+            },
+            "ease": {
+              "enum": [
+                "smooth",
+                "linear",
+                "hold"
+              ]
+            }
+          },
+          "description": "Tier 0 only (R3): an exact camera path over the still, fractions of the image; see granthstudio.motion"
         }
       }
     }

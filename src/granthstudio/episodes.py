@@ -11,6 +11,7 @@ from typing import Any
 
 from .canon import Canon
 from .config import Project, load_yaml
+from .motion import SpecError, validate_camera
 from .errors import CanonReferenceError, ConfigError, GateFailure, SourceChanged
 from .integrity import sha256_file, sha256_obj
 from .research import dialogue_index
@@ -159,6 +160,13 @@ def compile_episode(
                 if fallback["kind"] == "ambient" and set(action_ids) & required_actions:
                     raise GateFailure(f"{shot_id}: an ambient fallback cannot replace a required approved action; "
                                       "use kind 'faithful' only if a reviewer attests Tier 0 still shows the action")
+            if shot.get("camera") is not None:
+                if shot["tier"] != 0:
+                    raise ConfigError(f"{shot_id}: a camera path applies to Tier 0 stills only")
+                try:
+                    validate_camera(shot["camera"])
+                except SpecError as exc:
+                    raise ConfigError(f"{shot_id}: {exc}") from exc
             label = shot.get("pilot_shot")
             if label is not None:
                 if label in pilot:
@@ -188,6 +196,7 @@ def compile_episode(
                     "lip_sync": shot.get("lip_sync"),
                     "fallback": shot.get("fallback"),
                     "pilot_shot": label,
+                    **({"camera": shot["camera"]} if shot.get("camera") else {}),     # only when present: shots without one keep their identity hash
                 }
             )
     return {

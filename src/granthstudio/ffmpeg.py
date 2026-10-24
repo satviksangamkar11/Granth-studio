@@ -111,14 +111,31 @@ def validate_video(path: Path, expected_duration_s: float, tolerance_s: float = 
     return problems
 
 
-def still_motion_clip(image: Path, out: Path, duration_s: float, fps: int = 24, size: tuple[int, int] = (1280, 720)) -> None:
+def conform_filter(size: tuple[int, int], fit: str) -> str:
+    """FFmpeg filter that brings any picture to exactly `size`: cover = scale to fill then centre-crop, pad = scale to fit then pad with black. Never stretches."""
+    width, height = size
+    if fit == "cover":
+        return f"scale={width}:{height}:force_original_aspect_ratio=increase:flags=lanczos,crop={width}:{height},setsar=1"
+    if fit == "pad":
+        return f"scale={width}:{height}:force_original_aspect_ratio=decrease:flags=lanczos,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1"
+    raise ValueError(f"fit must be 'cover' or 'pad', not {fit!r}")
+
+
+def conform_clip(clip: Path, out: Path, size: tuple[int, int], fit: str, fps: int) -> None:
+    """Silent copy of `clip` at exactly `size` and `fps` (the primary action is never cut: only the frame is reshaped)."""
+    _run([_tool("ffmpeg"), "-y", "-v", "error", "-i", str(clip), "-vf", f"{conform_filter(size, fit)},fps={fps},format=yuv420p",
+          "-an", "-c:v", "libx264", "-threads", "1", "-pix_fmt", "yuv420p", str(out)])
+
+
+def still_motion_clip(image: Path, out: Path, duration_s: float, fps: int = 24, size: tuple[int, int] = (1280, 720), fit: str | None = None) -> None:
     if duration_s <= 0:
         raise ValueError("duration must be positive")
     # Round up to whole frames, as the editorial span does, so the still never falls a frame short.
     frames = math.ceil(duration_s * fps - 1e-6)
     width, height = size
+    pre = f"{conform_filter(size, fit)}," if fit else ""     # with a configured fit the still is reshaped to the output aspect first: no stretching
     video_filter = (
-        f"zoompan=z='min(zoom+0.0008,1.1)':d={frames}"
+        f"{pre}zoompan=z='min(zoom+0.0008,1.1)':d={frames}"
         f":x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={width}x{height}:fps={fps},format=yuv420p"
     )
     _run(
