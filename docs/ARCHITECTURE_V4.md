@@ -1,7 +1,7 @@
 # GranthStudio v4 — Frozen Architecture (animation-studio design)
 
 Project: Shri Gajanan Maharaj Vijay Granth series — 21 Adhyays, 21 episodes, 42 Marathi/Hindi releases
-Status: FROZEN by the owner ("FREEZE THE NEW PLANS", 2026-10-24, Asia/Calcutta). Checksum receipt: `docs/ARCHITECTURE_V4.FREEZE.json`.
+Status: FROZEN by the owner ("FREEZE THE NEW PLANS", 2026-10-24, Asia/Calcutta). AMENDED the same day by D-014 (renderer fixed to Blender, section 12). Checksum receipt: `docs/ARCHITECTURE_V4.FREEZE.json`. The original freeze is preserved at git tag `arch-v4-freeze-2026-10-24` (commit 818fe6b); the amendment is a new commit and a new tag.
 Supersedes for new work: `docs/ARCHITECTURE_V3_1.md` (kept unedited, D-001/D-005) and the v3.2 proposal (D-010).
 Freezing records the design. It does not claim that anything below is implemented, benchmarked, validated or reviewed by a human.
 
@@ -16,7 +16,7 @@ Unchanged principles from v3.1: sacred source integrity (no invented events, dia
 
 - Images: Nano Banana API (owner provides a billed key) is the production image backend; use as many images as the work needs.
 - Code: Kimi K3.1 Pro writes the pipeline code; Codex reviews every change.
-- Renderer: ONE renderer, chosen by a same-scene acting bake-off between Blender (headless, Python) and HyperFrames (Node + Chromium, GSAP). The loser is removed.
+- Renderer: Blender (headless, Python API) is the primary and only planned production renderer (D-014). No Blender-versus-HyperFrames bake-off. HyperFrames is outside the production path and exists only as a separately approved fallback if Blender fails the defined quality test in section 12.
 - Assembly: FFmpeg.
 - Nano Banana 2.1 supplies separate body parts (arms, legs and other elements) on request.
 
@@ -34,7 +34,7 @@ Unchanged principles from v3.1: sacred source integrity (no invented events, dia
 
 Not verified here: Kimi K3.1 Pro on this repository (released 2026-10-23/24); Nano Banana 2.1 prices (secondary sources: about USD 0.034 / 0.050 / 0.113 per 1K / 2K / 4K image, batch about half) until read on Google's pricing page.
 
-## 4. Five subsystems, one renderer
+## 4. Five subsystems, one renderer (Blender)
 
 ### 4.1 Source-locked Cinematic Coverage Planner (Kimi at runtime, bounded)
 Input: approved ovi research and beats. Output per beat: a coverage plan (establishing, action stages, reaction, insert, hold), what the viewer notices first, the event communicated, screen direction, what moves and what stays still, and timing anchors on narration words.
@@ -50,13 +50,13 @@ Produces a **shot asset package**, not a single picture: master composition, cle
 - Qwen-Image-2.1 on Kaggle is the outage/quota fallback only, checked for equivalence before its output is used.
 - Mattes: masks or keying first (parts generated on a flat ground); a segmentation model only when a real shot needs it.
 
-### 4.3 Character Performance Engine and cinematography (inside the chosen renderer)
+### 4.3 Character Performance Engine and cinematography (inside Blender)
 Character acting is a first-class system, not an effect added to paintings.
 - Performance library per character: reusable actions, each defined by pose keys, pivots or bones, timing arcs and facial states. Maharaj (seated first): rest, listen, eat, blessing, fold hands, turn, smile. Bankatlal: listen, folded hands, speak, stand, approach.
-- Three methods in the one renderer: layered puppet (head, arms, torso, garment, eyes; bones with mesh deformation if Blender wins) for subtle acting; authored pose animation (approved drawings switched on deliberate keys, poses may run "on twos" while camera and environment run at 24 fps); cinematic action coverage (several generated angles and action stages joined by cuts, cut-on-action) for complex actions and object handling.
+- Three methods in the one renderer: layered 2.5D puppet (the Nano Banana parts as image planes with bones and mesh deformation: head, arms, hands, torso, garment, eyes, mouth) for subtle acting; authored pose animation (approved drawings switched on deliberate keys, poses may run "on twos" while camera and environment run at 24 fps); cinematic action coverage (several generated angles and action stages joined by cuts, cut-on-action) for complex actions and object handling.
 - Physical constraints are part of the performance asset: anchor points, prop attachments, pivots, occlusion order, gaze targets.
 - The stage (camera, entrances, environment, 2.5D depth, transitions, manuscript graphics) is a separate track from the body.
-- Determinism contract: frame-addressable, seekable timelines only; no wall-clock timers or live network assets; seeded randomness; all assets local and preloaded; random-access frame test per preset.
+- Determinism contract: every motion is a function of the frame number (keyframed actions, drivers, fixed seeds for any noise); no wall-clock or live network inputs; all assets local; the same frame rendered twice must match within a stated tolerance; renderer and add-on versions pinned and recorded.
 - Every shot carries an approved visual event, a reaction or a deliberate hold. Camera motion alone is not acting.
 - Token rule: reusable performances and a manifest runner. No per-shot code generation and no per-shot interactive tool sessions in production (interactive control, e.g. Blender MCP, only while building rigs).
 
@@ -95,15 +95,15 @@ Keys (Nano Banana, Kimi) live outside the repository (a secrets folder or enviro
 
 ## 7. Compute placement
 
-This PC (RTX 3050 6 GB): manifests, rendering, FFmpeg, QA. Google API: Nano Banana. Kimi API: planner and screener. Kaggle T4: Qwen-Image-2.1 fallback, segmentation or depth only when needed, with logs teed to files, one model at a time and caches cleared. No TPU path.
+This PC (RTX 3050 6 GB): manifests, headless Blender rendering (EEVEE), FFmpeg, QA. Google API: Nano Banana. Kimi API: planner and screener. Kaggle T4: Qwen-Image-2.1 fallback, segmentation or depth only when needed, with logs teed to files, one model at a time and caches cleared. No TPU path.
 
 ## 8. Work order (riskiest first; each phase ends in something the owner can watch)
 
 | Phase | Deliverable | Gate |
 |---|---|---|
-| P0 | This document, D-013, JSON schemas, Kimi pack (AGENTS.md and seven skills: source-to-shots, nano-banana-assets, character-performance, cinematic-direction, manuscript-graphics, audio-timing, render-qa, adapted from HyperFrames' official skills and the ClaudeAnimationBase guide, read not installed wholesale) | Codex review |
-| P1 | Renderer proofs on this PC, Blender headless and HyperFrames: 10 s at 1080p24 = 240 frames, the same frame rendered twice is identical, local assets only, RAM/VRAM/time recorded; Devanagari caption via FFmpeg/libass | technical pass |
-| P2 | Acting bake-off: the same Maharaj seated blessing or eating shot from the same Nano Banana parts in both renderers; then one Bankatlal folded-hands/listen in the winner | owner picks the renderer |
+| P0 | This document, D-013/D-014, JSON schemas, Kimi pack (AGENTS.md and seven skills: source-to-shots, nano-banana-assets, character-performance, cinematic-direction, manuscript-graphics, audio-timing, render-qa; Blender-specific skills written for this project, community skills read and adapted, not installed wholesale) | Codex review |
+| P1 | Blender headless proof on this PC: 10 s at 1080p24 = 240 frames, the same frame rendered twice matches, local assets only, RAM/VRAM/time recorded; Devanagari caption via FFmpeg/libass | technical pass |
+| P2 | **Maharaj blessing scene prototype**: Nano Banana Pro animation assets for one character (head, eyes, mouth shapes, torso, both arms, hands, garment, clean background), a minimal Blender Python rig (arm, hand, head, facial movement), one complete seated blessing scene with a visible hand gesture, believable movement and camera coverage; then the audit in section 12 | owner approves, or fails the quality test |
 | P3 | Asset automation: runner, packets, anchored branches, lifecycle with UNKNOWN, cost, mattes, clean plates, reconstruction test, lineage | reassembly and identity pass |
 | P4 | Coverage planner for the Adhyay 1 pilot beats; refuses unsupported events | adversarial beats refused |
 | P5 | Cinematic presets: camera, environment, 2.5D, manuscript graphics with character tracks | visual pass |
@@ -113,11 +113,11 @@ This PC (RTX 3050 6 GB): manifests, rendering, FFmpeg, QA. Google API: Nano Bana
 | P9 | One Adhyay unattended from approved research to both masters | owner approval |
 | P10 | Remaining Adhyays | repeated QA and release gates |
 
-P1 and P3 run in parallel with the P2 art preparation; P4 starts once the P0 schemas are frozen.
+P1 may run in parallel with P2's art preparation. Gate (D-014): P3 onward is blocked until the owner approves the P2 audit (section 12). Before that approval only prototype-only preparation is allowed: schemas, documentation, the Nano Banana asset runner scaffold and Blender rig code needed by the P2 scene; no production runners, no planner, no episode pipeline, no batch asset generation beyond the P2 scene.
 
 ## 9. Prerequisites from the owner
 
-Nano Banana API key (billed) in a secrets folder; Kimi API access for the runtime planner and screener; permission to install Blender (current LTS) and Node 22 + Chromium for P1/P2; a Marathi narration source (recording or an approved TTS voice; IndicF5 is on hold pending consent).
+Nano Banana API key (billed) in a secrets folder; Kimi API access for the runtime planner and screener; permission to install Blender (current LTS) for P1/P2; a Marathi narration source (recording or an approved TTS voice; IndicF5 is on hold pending consent).
 
 ## 10. Verification rules
 
@@ -126,3 +126,20 @@ Every change: synthetic-fixture tests, the full suite, a Codex review with no bl
 ## 11. Explicit non-guarantees
 
 Perfect facial identity in every frame; fully fluid feature-film acting; historical authenticity of unspecified visuals; error-free pronunciation; fixed cost or render hours per episode. These are measured and reviewed, never assumed.
+
+## 12. Amendment D-014 (2026-10-24): Blender is the renderer
+
+Owner decision: Blender is the primary and only planned production renderer. The Blender-versus-HyperFrames bake-off is removed. HyperFrames is not part of the normal production path; it may be considered only as a separately approved fallback if Blender fails the quality test below. No additional renderers, paid services or infrastructure are introduced by this amendment (Nano Banana Pro via the owner's key, Kimi and FFmpeg stay as decided).
+
+Design consequence: the pipeline is Approved research → source-grounded cinematic coverage → Kimi shot plans and code → Nano Banana Pro assets (character sheets, body-part images, backgrounds, props) → Blender 2.5D rigs, character performance, camera and lighting, rendered headless by Python → FFmpeg (audio, subtitles, assembly, exports).
+
+2.5D first, not full 3D: generated paintings are mapped onto image planes or low-poly meshes with bones; full 3D modelling (topology, materials, rigging) is out of scope because an image-first pipeline does not remove that work.
+
+Ranked risks:
+1. Character reconstruction: Nano Banana Pro produces images, not animation-ready rigs. Separated arms, hands, faces and clothing can show seams and anatomical errors. Mitigation: parts generated as edits of the approved master, the reconstruction test (parts re-assembled vs the master) before any rigging.
+2. Acting quality: Blender can animate but cannot turn a static illustration into believable acting by itself. Mitigation: a reusable rig and the Character Performance Engine (library of actions with timing arcs, pivots, facial states).
+3. Production speed: unique animation per scene across 21 episodes would remove the time savings. Mitigation: reusable actions, camera setups and rigs are mandatory; the production path is manifest → headless Blender Python with no agent in the loop.
+
+Quality test (decides whether the decision stands): the first milestone, ONE complete Maharaj blessing scene, is audited and the OWNER records PASS or FAIL in writing (docs/pilot, with the audit evidence). Categories: (a) image seams and halos at joints, (b) hand anatomy, (c) motion believability with a visible gesture, (d) visual consistency with the approved master and style, (e) rendering cost per second of video on this PC (measured and reported; the owner sets any acceptable limit before the audit, and records FAIL if the measured cost makes the series unaffordable by that limit). Rule: a severe error in (a)-(d), meaning a visible seam or halo at rest, a malformed hand, a broken or floating limb, or a face that no longer reads as the approved character, is an automatic FAIL; minor issues are listed and fixed before PASS. PASS is the owner's decision, never a model's. On FAIL the renderer question is reopened by the owner; the fallback to HyperFrames needs a separate written owner approval and is not automatic.
+
+Not in scope now: the full episode pipeline, extra renderers, paid services beyond those already approved, 3D character modelling.
