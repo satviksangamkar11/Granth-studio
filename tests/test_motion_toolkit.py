@@ -119,3 +119,36 @@ def test_the_pilot_camera_plans_are_valid_continuous_within_each_scene_and_keep_
         for point in (start, end):
             z, cx, cy = point["zoom"], point["cx"], point["cy"]
             assert cx + 0.5 / z <= 0.93 or cy + 0.5 / z <= 0.93, point                              # the window stops before that corner on at least one axis
+
+
+def test_booleans_and_sub_frame_durations_are_refused_and_relative_paths_stay_in_the_spec_folder(tmp_path):
+    m = load()
+    image = make_image(tmp_path / "a.png")
+    with pytest.raises(m.SpecError, match="fps"):
+        m.validate({**spec_for(image), "fps": True})
+    with pytest.raises(m.SpecError, match="duration_s"):
+        m.validate({**spec_for(image), "duration_s": True})
+    with pytest.raises(m.SpecError, match="one frame"):
+        m.validate({**spec_for(image), "duration_s": 1e-9})
+    with pytest.raises(m.SpecError, match="numbers"):
+        m.validate(spec_for(image, start={"zoom": True}))
+    folder = tmp_path / "specs"
+    folder.mkdir()
+    with pytest.raises(m.SpecError, match="inside the spec's folder"):
+        m.render({**spec_for(image), "image": "../a.png"}, tmp_path / "x.mp4", base=folder)
+
+
+def test_a_wide_image_is_cropped_to_the_planned_window_not_stretched_and_a_rerender_is_identical(tmp_path):
+    m = load()
+    wide = make_image(tmp_path / "wide.png", 1600, 900)
+    spec = spec_for(wide, ease="hold")
+    first, second = tmp_path / "one.mp4", tmp_path / "two.mp4"
+    m.render(spec, first)
+    m.render(spec, second)
+    assert frame_md5s(first) == frame_md5s(second)                                                   # deterministic: the same spec renders the same frames
+    reference, got = tmp_path / "ref.png", tmp_path / "got.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wide), "-vf", "crop=1350:900:125:0,scale=576:384:flags=lanczos", "-frames:v", "1", str(reference)], check=True)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(first), "-vf", "select=eq(n\,0)", "-frames:v", "1", str(got)], check=True)
+    stretched = tmp_path / "stretched.png"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wide), "-vf", "scale=576:384:flags=lanczos", "-frames:v", "1", str(stretched)], check=True)
+    assert psnr(got, reference) > 27 and psnr(got, reference) > psnr(got, stretched) + 3              # matches the centred 3:2 crop, and clearly NOT the stretched picture

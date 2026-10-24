@@ -35,6 +35,9 @@ motion = _load("motion", ROOT / "scripts" / "animation" / "motion.py")
 bp = _load("build_pilot_project", ROOT / "scripts" / "pilot" / "build_pilot_project.py")
 
 
+PARALLAX_AMPLITUDE = {0: 0.010, 1: 0.016}          # the shot that carries the action (Tier 1 slot) gets the stronger depth shift
+
+
 def pt(zoom: float, cx: float, cy: float) -> dict:
     return {"zoom": zoom, "cx": cx, "cy": cy}
 
@@ -56,7 +59,10 @@ def srt_time(seconds: float) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", required=True, type=Path)
+    parser.add_argument("--parallax", action="store_true", help="add the depth-based 2.5D parallax (needs torch, numpy, Pillow, transformers: see scripts/animation/parallax.py)")
+    parser.add_argument("--depth-cache", type=Path, help="where depth maps are cached (with --parallax)")
     args = parser.parse_args(argv)
+    parallax = _load("parallax", ROOT / "scripts" / "animation" / "parallax.py") if args.parallax else None
     out = args.out
     (out / "specs").mkdir(parents=True, exist_ok=True)
     manifest, timelines = bp.manifest(), bp.timelines()
@@ -66,9 +72,11 @@ def main(argv: list[str] | None = None) -> int:
         keyframe = KEYFRAMES / f"scene{n}_keyframe.png"
         for shot, (start, end) in zip(scene["shots"], PLANS[n]):
             spec = {"image": str(keyframe), "duration_s": shot["duration_s"], "fps": FPS, "size": SIZE, "camera": {"start": start, "end": end, "ease": "smooth"}}
+            if parallax:
+                spec["parallax"] = {"amplitude": PARALLAX_AMPLITUDE[shot["tier"]]}
             (out / "specs" / f"{shot['shot_id']}.json").write_text(json.dumps(spec, indent=2), encoding="utf-8")
             clip = out / f"{shot['shot_id']}.mp4"
-            motion.render(spec, clip)
+            (parallax.render(spec, clip, cache=args.depth_cache) if parallax else motion.render(spec, clip))
             info = probe(clip)
             duration = info.video_duration_s if info.video_duration_s is not None else info.duration_s
             for lang in cues:
@@ -77,14 +85,15 @@ def main(argv: list[str] | None = None) -> int:
                                     "image": str(keyframe.relative_to(ROOT)), "image_sha256": hashlib.sha256(keyframe.read_bytes()).hexdigest()})
             clips.append(clip)
             cursor += duration
-    video = out / "pilot_code_motion_preview.mp4"
+    stem = "pilot_parallax_preview" if parallax else "pilot_code_motion_preview"
+    video = out / f"{stem}.mp4"
     assemble(clips, video)
     for lang, items in cues.items():
-        (out / f"pilot_code_motion_preview.{lang}.srt").write_text(
+        (out / f"{stem}.{lang}.srt").write_text(
             "".join(f"{i}\n{srt_time(a)} --> {srt_time(b)}\n{text}\n\n" for i, (a, b, text) in enumerate(items, start=1)), encoding="utf-8")
     info = probe(video)
     report.update(video=video.name, video_sha256=hashlib.sha256(video.read_bytes()).hexdigest(), duration_s=info.duration_s, width=info.width, height=info.height,
-                  note="SILENT PREVIEW, code-driven camera motion only (no AI video, no figure animation yet): provisional technical test; no narration; Hindi lines are "
+                  note=("SILENT PREVIEW, code-driven camera motion + depth parallax (no AI video, no figure animation yet):" if parallax else "SILENT PREVIEW, code-driven camera motion only (no AI video, no figure animation yet):") +" provisional technical test; no narration; Hindi lines are "
                        "drafts (review PENDING); human review NOT_DONE.")
     (out / "preview_report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({k: report[k] for k in ("video", "duration_s", "width", "height")}))

@@ -6,7 +6,7 @@ Status: PROPOSED by the assistant on 2026-10-24 after the owner's freeze ("we ne
 
 All from the frozen pilot (`freeze/pilot-v1-2026-10-24`, `docs/pilot/SDXL_STYLE_AUDIT.md` §1-11):
 1. SDXL base + IP-Adapter could not hold the 1950s gouache look and several identities at once: global references collapse multi-person scenes; style-only conditioning loses faces between scenes.
-2. LTX 0.9.8 on a T4 adds a push-in the prompt cannot stop and smears faces (`docs/evidence/pilot_video`).
+2. LTX 0.9.8 on a T4 added a push-in under every prompt tested, including an explicit camera-lock prompt (`docs/evidence/kaggle_dual_t4/gpu0_attempt4..6`), and smeared faces in the pilot clips (`docs/evidence/pilot_video`). Other prompts, checkpoints or workflows were not tested.
 3. Tier 0 and LTX clips have different sizes and nothing conforms them.
 4. The style lock covers the prompt text only; references and outputs are never measured against the target look.
 
@@ -22,6 +22,9 @@ All from the frozen pilot (`freeze/pilot-v1-2026-10-24`, `docs/pilot/SDXL_STYLE_
 | R6 | §2D "minimal orchestration" | Unchanged. The animation toolkit is a Python + FFmpeg script collection, not an orchestration layer; no Node/Remotion/HyperFrames. | Keeps D-006. |
 
 Not changed: Marathi lock, Hindi adaptation review, IndicF5/IndicTrans2/IndicConformer, receipts and gates, frozen style v1 text, Codex review, exact-commit pins, human review rule.
+
+## Exception the owner must accept (reference prompts)
+The reference-library prompts (`docs/pilot/REFERENCE_LIBRARY_SPEC.md`) omit the frozen style's "vintage double-line paper border mount" clause on purpose (a border wastes a square reference; the accepted pilot set had none) and state the frozen negative list as plain "not ..." words (Nano Banana has no negative field). Keyframe prompts keep the full frozen text. Approve or amend this together with R1-R6.
 
 ## Constraints that stay
 

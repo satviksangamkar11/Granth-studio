@@ -34,11 +34,13 @@ def validate(spec: dict) -> dict:
     width, height = spec["size"]
     if not (isinstance(width, int) and isinstance(height, int) and width >= 64 and height >= 64 and width % 2 == 0 and height % 2 == 0):
         raise SpecError("size must be two even integers >= 64")
-    if not (isinstance(spec["duration_s"], (int, float)) and 0 < spec["duration_s"] <= 120):
-        raise SpecError("duration_s must be in (0, 120]")
-    fps = spec.get("fps", 24)
-    if not (isinstance(fps, int) and 1 <= fps <= 60):
+    duration, fps = spec["duration_s"], spec.get("fps", 24)
+    if not (isinstance(duration, (int, float)) and not isinstance(duration, bool) and 0 < duration <= 120):
+        raise SpecError("duration_s must be a number in (0, 120]")
+    if not (isinstance(fps, int) and not isinstance(fps, bool) and 1 <= fps <= 60):
         raise SpecError("fps must be an integer 1-60")
+    if math.ceil(duration * fps - 1e-6) < 1:
+        raise SpecError("duration_s is shorter than one frame")
     camera = spec["camera"]
     if camera.get("ease", "smooth") not in EASES:
         raise SpecError(f"ease must be one of {EASES}")
@@ -47,6 +49,8 @@ def validate(spec: dict) -> dict:
         if not point:
             raise SpecError(f"camera.{end} is missing")
         zoom, cx, cy = point.get("zoom", 1.0), point.get("cx", 0.5), point.get("cy", 0.5)
+        if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (zoom, cx, cy)):
+            raise SpecError(f"camera.{end} zoom, cx and cy must be numbers")
         if not (1.0 <= zoom <= 3.0):
             raise SpecError(f"camera.{end}.zoom must be 1.0-3.0 (below 1 would show outside the image)")
         if not (0.5 / zoom - 1e-9 <= cx <= 1 - 0.5 / zoom + 1e-9 and 0.5 / zoom - 1e-9 <= cy <= 1 - 0.5 / zoom + 1e-9):
@@ -95,7 +99,9 @@ def render(spec: dict, out: Path, base: Path | None = None) -> Path:
     validate(spec)
     image = Path(spec["image"])
     if not image.is_absolute() and base is not None:
-        image = base / image
+        image = (base / image).resolve()
+        if not image.is_relative_to(base.resolve()):
+            raise SpecError("a relative image path must stay inside the spec's folder (absolute paths are for the owner's own scripts)")
     if not image.is_file():
         raise SpecError(f"image {image} does not exist")
     n, fps = frame_count(spec), spec.get("fps", 24)

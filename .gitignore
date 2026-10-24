@@ -78,3 +78,6 @@ __pycache__/
 !docs/evidence/pilot_video/silent_preview_v1/frames_strip.png
 !docs/evidence/pilot_video/code_motion_v1/pilot_code_motion_preview.mp4
 !docs/evidence/pilot_video/code_motion_v1/frames_strip.png
+!docs/evidence/pilot_video/parallax_v1/pilot_parallax_preview.mp4
+!docs/evidence/pilot_video/parallax_v1/frames_strip.png
+!docs/evidence/pilot_video/parallax_v1/scene1_sh02_first_last.png
