@@ -468,3 +468,15 @@ Stale success invalidation and a final stage verdict in the shell script; the Py
 - IndicTrans2: execution PASS, translation quality FAIL. The assistant's Hindi drafts remain the provisional working text; original model outputs preserved as evidence; Hindi human review PENDING (`docs/pilot/HINDI_REVIEW_SHEET.md`). d_0006 model output must never enter a soundtrack.
 - SDXL scenes 2 and 3: GO under all existing gates (exact commit + bundle hash authorization still required per run). Secondary characters (Devidas, Bankatlal, Damodarpant) had no reference sheets: the harness now generates provisional SDXL sheets from their frozen-style design prompts (artistic, appearance not in the text) and approves them at run time under the owner's provisional instruction before the keyframe.
 - Audio: IndicF5 is the next blocker; recording checklist and unsigned consent form in `docs/pilot/VOICE_REFERENCE_CHECKLIST_AND_CONSENT.md`.
+
+## FREEZE 2026-10-24 (owner: "freeze all the things done; we need to replan; change the architecture for quality")
+
+Frozen on branch `freeze/pilot-v1-2026-10-24` (tag `pilot-v1-freeze-2026-10-24`). Nothing below is validated; human review NOT_DONE.
+
+State at the freeze:
+- Pilot images: SDXL base 1.0 + IP-Adapter Plus (pinned), frozen style v1 text unchanged; prompt template v3 (short visual descriptions, no names or research labels); owner reference set v1 (assets/pilot_refs/set_v1); final pilot keyframes made in style-anchor mode (one style-only reference) - style homogeneous, content partial, faces not consistent across scenes. Full history and causes: docs/pilot/SDXL_STYLE_AUDIT.md sections 1-11.
+- Pilot motion: LTX 0.9.8 I2V, one 2.04 s clip per scene (gpu0 PASS, commit 81de10dd); strong push-in in scenes 1-2, face smearing in scene 2.
+- Pilot video: 42.1 s SILENT preview (docs/evidence/pilot_video/silent_preview_v1), Tier 0 stills + LTX clips conformed to 1152x768, MR/HI subtitle files at planned timings.
+- Audio: IndicTrans2 ran (execution PASS, quality FAIL, assistant Hindi drafts kept, review PENDING); IndicF5 voice stage ON HOLD (needs narrator recording + consent).
+- Known architecture gaps for the replan: (1) global IP-Adapter cannot place several identities (regional references needed); (2) the style lock covers text only, not references or a visual check; (3) assembly does not conform LTX (768x512) and Tier 0 (1280x720, stretched 3:2) clips to one size; (4) LTX on T4 adds a push-in the prompt cannot stop; (5) keyframe research text had leaked into image prompts (fixed by template v3).
+- Kaggle: account satviksangamkar54321; dataset granthstudio-pilot-bundle; no runs in progress.
