@@ -6,10 +6,10 @@
   "source": "owner-supplied, generated with an external image tool from the frozen v1 style wording and the owner's paintings of Adhyay scenes; PROVISIONAL external references, not canon, not validated",
   "owner_decision": "owner instruction 2026-10-24: 'I want to fix the set I have given now' (set fixed as supplied)",
   "open_items": [
-    "Maharaj has two designs (young dark-haired 'youth' and bald moustached 'mature'); which is canonical for Adhyay 1 is NOT decided",
     "costume/adhyay mapping in the supplier's notes is unverified",
     "render style is cleaner/more vector-like than the set_v1 gouache references",
-    "human review NOT_DONE"
+    "human review NOT_DONE",
+    "Maharaj long-run design (youth vs mature from Adhyay 2 on) deferred by the owner until after the pilot clip"
   ],
   "items": {
     "maharaj_youth_sheet": {
@@ -84,5 +84,6 @@
       "view": "sheet 5 poses",
       "sha256": "edec966ccba4f4d430fd51238f7fe11b6a57d4a63f0c1ff7fdba71f881d166af"
     }
-  }
+  },
+  "owner_decision_maharaj": "owner 2026-10-24: pilot scenes 1-3 use the YOUTH Maharaj (maharaj_youth); long-run choice (youth vs mature) deferred to the owner after the small pilot clip"
 }
