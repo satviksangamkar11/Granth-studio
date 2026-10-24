@@ -4,10 +4,13 @@
   python scripts/image_trials/nvidia_trial.py probe  --model flux2-klein-4b
   python scripts/image_trials/nvidia_trial.py run    --model flux2-klein-4b --scenes 1,2,3 --out D:/kaggle_upload/trial_klein
 
-KEYS: read ONLY from the environment, never from a file, never printed, never written to a receipt:
+KEYS (never printed, never written to a receipt, never committed): the environment first, then the owner's key folder
   NVIDIA_API_KEY            one key, or
-  NVIDIA_API_KEYS           several keys separated by commas (accounts of the owner)
-A later key is used only when the earlier one is rejected as invalid (HTTP 401/403); the script never rotates keys to get around a rate limit (429 stops the run).
+  NVIDIA_API_KEYS           several keys separated by commas, then
+  every nvidia_api_key*.txt in the folder named by NVIDIA_KEYS_DIR (default D:/aai work/secrets/nvidia, outside any repository; one key per file, empty files skipped).
+SPEED: all keys form one pool. The owner's limit is 10 requests per key per rolling 60 s: each request goes to the ready key with the fewest recent requests, scenes and variants run in
+parallel (one worker per key, at most 8), a key that answers 429 cools down for 60 s while the others keep working, a key answering 401/402/403 (invalid or out of credit) is retired
+for the run. The owner owns every account in the pool (decision D-012, personal prototyping).
 
 What it does: sends the owner's reference images (assets/pilot_refs/set_v1, first = the person in image 1 ...) with a scene prompt built from the frozen style v1 prefix/suffix
 (canon/style.yaml) plus a plain description of who stands where, saves each result as a PNG and writes receipt.json (model, endpoint, reference hashes, prompt, seed, output
@@ -53,6 +56,32 @@ def keys_from_env(environ: dict | None = None) -> list[str]:
     return [k for k in candidates if KEY_SYNTAX.fullmatch(k)]
 
 
+DEFAULT_KEYS_DIR = Path("D:/aai work/secrets/nvidia")
+
+
+def keys_from_folder(folder: Path | None = None, environ: dict | None = None) -> list[str]:
+    """One key per nvidia_api_key*.txt file (sorted by name); an empty or malformed file is skipped without echoing its content."""
+    environ = os.environ if environ is None else environ
+    folder = Path(folder or environ.get("NVIDIA_KEYS_DIR") or DEFAULT_KEYS_DIR)
+    if not folder.is_dir():
+        return []
+    found = []
+    for path in sorted(folder.glob("nvidia_api_key*.txt"), key=lambda p: (len(p.stem), p.stem)):
+        text = path.read_text(encoding="utf-8", errors="replace").strip()
+        if KEY_SYNTAX.fullmatch(text):
+            found.append(text)
+    return found
+
+
+def load_keys(environ: dict | None = None, folder: Path | None = None) -> list[str]:
+    seen, keys = set(), []
+    for key in keys_from_env(environ) + keys_from_folder(folder, environ):
+        if key not in seen:
+            seen.add(key)
+            keys.append(key)
+    return keys
+
+
 def scrub(text: str, keys: list[str]) -> str:
     text = KEY_PATTERN.sub("***", text)
     for key in keys:
@@ -67,17 +96,23 @@ def data_uri(path: Path) -> str:
     return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
 
 
+# "Effort high where available": these image models have no effort switch; the equivalent is the sampling steps, guidance and the largest output size each endpoint accepts.
+# FLUX.2 klein 4B is step-distilled (4 steps is its design point: more steps do not add quality); FLUX.1 Kontext dev gets 50 steps.
+QUALITY = {"flux2-klein-4b": {"steps": 4, "note": "distilled: 4 steps is the maximum useful value", "size": [1152, 768]},
+           "flux1-kontext-dev": {"steps": 50, "cfg_scale": 3.5, "note": "50 steps (the model default is 30)"}}
+
+
 def body_klein(prompt: str, refs: list[Path], seed: int, size: tuple[int, int]) -> dict:
-    return {"prompt": prompt, "image": [data_uri(p) for p in refs], "width": size[0], "height": size[1], "seed": seed, "steps": 4}
+    return {"prompt": prompt, "image": [data_uri(p) for p in refs], "width": size[0], "height": size[1], "seed": seed, "steps": QUALITY["flux2-klein-4b"]["steps"]}
 
 
 def body_kontext(prompt: str, refs: list[Path], seed: int, size: tuple[int, int]) -> dict:
-    return {"prompt": prompt, "image": data_uri(refs[0]), "aspect_ratio": "match_input_image", "seed": seed, "steps": 30, "cfg_scale": 3.5}
+    return {"prompt": prompt, "image": data_uri(refs[0]), "aspect_ratio": "match_input_image", "seed": seed, "steps": QUALITY["flux1-kontext-dev"]["steps"], "cfg_scale": QUALITY["flux1-kontext-dev"]["cfg_scale"]}
 
 
 MODELS = {
-    "flux2-klein-4b": {"url": f"{HOST}/black-forest-labs/flux.2-klein-4b", "builder": body_klein, "max_refs": 4, "size": (1152, 768), "note": "multi-reference editing; up to 4 images"},
-    "flux1-kontext-dev": {"url": f"{HOST}/black-forest-labs/flux.1-kontext-dev", "builder": body_kontext, "max_refs": 1, "size": (1024, 1024), "note": "single image only: baseline"},
+    "flux2-klein-4b": {"url": f"{HOST}/black-forest-labs/flux.2-klein-4b", "builder": body_klein, "max_refs": 4, "size": (1152, 768), "quality": QUALITY["flux2-klein-4b"], "note": "multi-reference editing; up to 4 images"},
+    "flux1-kontext-dev": {"url": f"{HOST}/black-forest-labs/flux.1-kontext-dev", "builder": body_kontext, "max_refs": 1, "size": (1024, 1024), "quality": QUALITY["flux1-kontext-dev"], "note": "single image only: baseline"},
 }
 
 
@@ -115,26 +150,33 @@ def looks_like_an_image_without_a_secret(data: bytes, keys: list[str]) -> bool:
 
 # ------------------------------------------------------------------ scenes (what the TEXT of Adhyay 1 says; the old SDXL keyframes had content gaps)
 
-STYLE_CLAUSE = ("Keep the exact illustration style, line weight, colours and aged paper of the reference images. Each person must look exactly like his reference image: "
-                "same face, age, build and clothing.")
+STYLE_CLAUSE = "Match the style, faces, builds and clothing of the reference images exactly."
+SHORT_STYLE = ("1950s Indian devotional book illustration, opaque gouache on aged ivory paper, soft sepia contour lines, flat matte colours of raw sienna, "
+               "burnt umber, ochre, terracotta and sage green, no text.")
+PROMPT_LIMIT = 800                                        # the hosted endpoint rejects longer prompts (HTTP 422, 'at most 800 characters')
 SCENES = {
     1: {"refs": ["maharaj.jpg", "location.jpg"],
-        "text": ("Image 1 is the young man, image 2 is the village road and house. Draw him sitting cross-legged on the dusty road in front of the house, among scattered used leaf plates, "
+        "text": ("Image 1 is the young man, image 2 is the village road and house. He sits cross-legged on the dusty road in front of the house, among scattered used leaf plates, "
                  "lifting a few grains of rice from a leaf plate toward his mouth, a small clay pipe in his other hand, calm face. Bright daylight.")},
     2: {"refs": ["maharaj.jpg", "bankatlal.jpg", "damodarpant.jpg", "location.jpg"],
-        "text": ("Image 1 is the young man, image 2 is the merchant in the turban and long coat, image 3 is the clerk in the cap, image 4 is the village road and house. "
-                 "The young man sits cross-legged on the road among scattered leaf plates, eating a grain of rice. The merchant and the clerk stand on the road a few steps away, watching him in amazement. "
+        "text": ("Image 1 is the young man, image 2 the merchant in the turban, image 3 the clerk in the cap, image 4 the village road and house. "
+                 "The young man sits cross-legged on the road among scattered leaf plates, eating a grain of rice. The merchant and the clerk stand on the road a few steps away, watching in amazement. "
                  "Bright daylight.")},
     3: {"refs": ["maharaj.jpg", "devidas.jpg", "bankatlal.jpg", "damodarpant.jpg", "location.jpg"],
-        "text": ("Image 1 is the young man, image 2 is the householder with the sacred thread, image 3 is the merchant in the turban, image 4 is the clerk in the cap, image 5 is the house and road. "
-                 "At the doorway of the house the householder sets a large plate of sweet dishes on the ground before the young man, who sits cross-legged and eats calmly. "
+        "text": ("Image 1 is the young man, image 2 the householder with the sacred thread, image 3 the merchant in the turban, image 4 the clerk in the cap, image 5 the house and road. "
+                 "At the doorway the householder sets a large plate of sweets on the ground before the young man, who sits cross-legged and eats calmly. "
                  "The merchant and the clerk stand nearby, watching with respect. Bright daylight.")},
 }
 
 
-def scene_prompt(scene: int) -> str:
-    style = load_style(_Project())
-    return compose(style, f"{SCENES[scene]['text']} {STYLE_CLAUSE}")
+def scene_prompt(scene: int, limit: int = PROMPT_LIMIT) -> str:
+    """The frozen style text + scene when it fits the endpoint's limit; otherwise a short style line + scene (the references carry the look). Never longer than `limit`."""
+    body = f"{SCENES[scene]['text']} {STYLE_CLAUSE}"
+    full = compose(load_style(_Project()), body)
+    prompt = full if len(full) <= limit else f"{SHORT_STYLE} {body}"
+    if len(prompt) > limit:
+        raise SystemExit(f"scene {scene}: the prompt is {len(prompt)} characters, the endpoint allows {limit}")
+    return prompt
 
 
 class _Project:                                                        # load_style only needs the canon directory
@@ -171,19 +213,76 @@ def http_post(url: str, key: str, body: dict, timeout: int = 180) -> tuple[int, 
     return _send(request, timeout)
 
 
-def call(model: dict, body: dict, keys: list[str], post=http_post) -> tuple[int, dict | str, int]:
-    """(status, parsed response or text, index of the key used). Moves to the next key only on 401/403; stops on anything else (429 included)."""
-    last: tuple[int, str] = (0, "no key")
-    for index, key in enumerate(keys):
+REJECTED = (401, 402, 403)          # invalid or out-of-credit key: retired for the run
+PER_KEY = 10                        # owner's limit: requests per key ...
+WINDOW_S = 60.0                     # ... per rolling window; a 429 also cools the key for one window
+
+
+class AllKeysUnavailable(RuntimeError):
+    pass
+
+
+class KeyPool:
+    """Thread-safe rate-limited key pool. acquire() blocks (sleeping outside the lock) until some live key has fewer than PER_KEY requests in the last WINDOW_S seconds."""
+
+    def __init__(self, keys: list[str], per_key: int = PER_KEY, window_s: float = WINDOW_S, clock=time.monotonic, sleep=time.sleep):
+        import threading
+        self.keys = list(keys)
+        self.per_key, self.window_s, self.clock, self.sleep = per_key, window_s, clock, sleep
+        self._stamps = [[] for _ in self.keys]
+        self._dead = [False] * len(self.keys)
+        self._cool = [0.0] * len(self.keys)
+        self._lock = threading.Lock()
+
+    def acquire(self) -> tuple[int, str]:
+        while True:
+            with self._lock:
+                now = self.clock()
+                live = [i for i in range(len(self.keys)) if not self._dead[i]]
+                if not live:
+                    raise AllKeysUnavailable("every key was rejected (invalid or out of credit)")
+                for i in live:
+                    self._stamps[i] = [t for t in self._stamps[i] if now - t < self.window_s]
+                ready = [i for i in live if self._cool[i] <= now and len(self._stamps[i]) < self.per_key]
+                if ready:
+                    pick = min(ready, key=lambda i: (len(self._stamps[i]), self._stamps[i][-1] if self._stamps[i] else 0.0, i))
+                    self._stamps[pick].append(now)
+                    return pick, self.keys[pick]
+                waits = [max(self._cool[i] - now, (self._stamps[i][0] + self.window_s - now) if len(self._stamps[i]) >= self.per_key else 0.0) for i in live]
+                wait = max(min(waits), 0.05)
+            self.sleep(wait)
+
+    def report(self, index: int, status: int) -> None:
+        with self._lock:
+            if status in REJECTED:
+                self._dead[index] = True
+            elif status == 429:
+                self._cool[index] = self.clock() + self.window_s
+
+    @property
+    def live(self) -> int:
+        return sum(1 for d in self._dead if not d)
+
+
+def call(model: dict, body: dict, pool: KeyPool, post=http_post) -> tuple[int, dict | str, int]:
+    """(status, parsed response or text, index of the key used). 401/402/403 retire that key and the request moves on; 429 cools that key and the request goes to another key
+    (waiting for one if all are cooling); any other answer ends the request."""
+    last: tuple[int, str, int] = (0, "no key", 0)
+    for _ in range(3 * len(pool.keys) + 5):
+        try:
+            index, key = pool.acquire()
+        except AllKeysUnavailable as exc:
+            return last[0] or 401, str(exc), last[2]
         status, text = post(model["url"], key, body)
-        last = (status, text)
-        if status in (401, 403):
+        pool.report(index, status)
+        last = (status, text, index)
+        if status in REJECTED or status == 429:
             continue
         try:
             return status, json.loads(text), index
         except json.JSONDecodeError:
             return status, text, index
-    return last[0], last[1], len(keys) - 1
+    return last[0], last[1], last[2]
 
 
 def sha256(data: bytes) -> str:
@@ -191,20 +290,27 @@ def sha256(data: bytes) -> str:
 
 
 def cmd_check_key(args, opener=None) -> int:
-    keys = keys_from_env()
+    keys = load_keys()
     if not keys:
-        print("no usable key: set NVIDIA_API_KEY (or NVIDIA_API_KEYS) to well-formed nvapi-... keys in your Windows environment, then open a new terminal")
+        print("no usable key: put one nvapi-... key per file nvidia_api_key*.txt in the key folder (D:/aai work/secrets/nvidia), or set NVIDIA_API_KEY / NVIDIA_API_KEYS")
         return 2
     send = opener or (lambda request: _send(request, 30))
+    print(f"{len(keys)} well-formed key(s) loaded (values are never shown)")
+    accepted = 0
     for index, key in enumerate(keys):
         status, _ = send(urllib.request.Request("https://integrate.api.nvidia.com/v1/models", headers={"Authorization": f"Bearer {key}"}))
-        if status in (401, 403):
-            print(f"key {index + 1} of {len(keys)}: rejected (HTTP {status}); trying the next one")
+        if status in REJECTED:
+            print(f"key {index + 1} of {len(keys)}: rejected (HTTP {status})" + ("; trying the next one" if not args.all else ""))
             continue
         print(f"key {index + 1} of {len(keys)}: " + ("accepted (HTTP 200)" if status == 200 else f"HTTP {status}" + (" (rate limit: stopping)" if status == 429 else "")))
-        return 0 if status == 200 else 1
-    print("every key was rejected")
-    return 1
+        if status != 200:
+            return 1                                                                              # 429 or a server error: stop, never move on
+        accepted += 1
+        if not args.all:
+            return 0
+    if not accepted:
+        print("every key was rejected")
+    return 0 if accepted else 1
 
 
 def build(model_name: str, scene: int, seed: int):
@@ -217,55 +323,65 @@ def build(model_name: str, scene: int, seed: int):
     return model, refs, prompt, model["builder"](prompt, refs, seed, model["size"])
 
 
-def cmd_probe(args, post=http_post) -> int:
-    keys = keys_from_env()
+def cmd_probe(args, post=http_post, pool: KeyPool | None = None) -> int:
+    keys = load_keys()
     if not keys:
-        print("no key: set NVIDIA_API_KEY (or NVIDIA_API_KEYS) first")
+        print("no key: put the key files in D:/aai work/secrets/nvidia (see check-key) or set NVIDIA_API_KEY first")
         return 2
+    pool = pool or KeyPool(keys)
     model, refs, prompt, body = build(args.model, 1, args.seed)
-    status, response, _ = call(model, body, keys, post)
+    status, response, _ = call(model, body, pool, post)
     shown = json.dumps(response)[:600] if isinstance(response, dict) else str(response)[:600]
     print(f"HTTP {status}\n{scrub(shown, keys)}\nrequest fields sent: {sorted(body)}")
     return 0 if status == 200 else 1
 
 
-def cmd_run(args, post=http_post) -> int:
-    keys = keys_from_env()
+def cmd_run(args, post=http_post, pool: KeyPool | None = None) -> int:
+    from concurrent.futures import ThreadPoolExecutor
+    keys = load_keys()
     if not keys and not args.dry_run:
-        print("no key: set NVIDIA_API_KEY (or NVIDIA_API_KEYS) first")
+        print("no key: put the key files in D:/aai work/secrets/nvidia (see check-key) or set NVIDIA_API_KEY first")
         return 2
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    receipt = {"schema_version": 1, "model": args.model, "endpoint": MODELS[args.model]["url"], "schema_confidence": "unverified request field names",
+    model_spec = MODELS[args.model]
+    receipt = {"schema_version": 1, "model": args.model, "endpoint": model_spec["url"], "schema_confidence": "unverified request field names",
+               "quality_settings": model_spec["quality"], "prompt_note": "frozen style text is longer than the endpoint limit (800 characters): a short style line is sent and the reference images carry the look", "variants_per_scene": args.variants,
                "note": "PROTOTYPE via the NVIDIA API catalog (personal use, D-012); human review NOT_DONE", "scenes": []}
-    exit_code = 0
-    for scene in [int(s) for s in args.scenes.split(",")]:
-        model, refs, prompt, body = build(args.model, scene, args.seed + scene)
-        item = {"scene": scene, "seed": args.seed + scene, "prompt": prompt, "references": [{"file": p.name, "sha256": sha256(p.read_bytes())} for p in refs],
+    jobs = [(scene, variant) for scene in [int(x) for x in args.scenes.split(",")] for variant in range(args.variants)]
+    pool = pool or KeyPool(keys or ["nvapi-" + "0" * 20])
+    started_all = time.monotonic()
+
+    def work(job):
+        scene, variant = job
+        seed = args.seed + scene * 100 + variant
+        model, refs, prompt, body = build(args.model, scene, seed)
+        item = {"scene": scene, "variant": variant, "seed": seed, "prompt": prompt, "references": [{"file": p.name, "sha256": sha256(p.read_bytes())} for p in refs],
                 "request_fields": sorted(body)}
         if args.dry_run:
             item["status"] = "DRY_RUN"
+            return item
+        started = time.monotonic()
+        status, response, key_index = call(model, body, pool, post)
+        item.update(status=status, wall_s=round(time.monotonic() - started, 1), key_number_used=key_index + 1)
+        image = extract_image(response) if isinstance(response, dict) else None
+        if status == 200 and image and looks_like_an_image_without_a_secret(image, keys):
+            target = out / f"scene{scene}_v{variant}_{args.model}.png"
+            target.write_bytes(image)
+            item.update(output=target.name, output_sha256=sha256(image), verdict="IMAGE_RETURNED")
         else:
-            started = time.monotonic()
-            status, response, key_index = call(model, body, keys, post)
-            item.update(status=status, wall_s=round(time.monotonic() - started, 1), key_number_used=key_index + 1)
-            image = extract_image(response) if isinstance(response, dict) else None
-            if status == 200 and image and looks_like_an_image_without_a_secret(image, keys):
-                target = out / f"scene{scene}_{args.model}.png"
-                target.write_bytes(image)
-                item.update(output=target.name, output_sha256=sha256(image), verdict="IMAGE_RETURNED")
-            else:
-                item.update(verdict="FAILED", detail=scrub((json.dumps(response) if isinstance(response, dict) else str(response))[:600], keys))
-                exit_code = 1
-                if status == 429:
-                    receipt["scenes"].append(item)
-                    print("HTTP 429: rate limit reached; stopping (no key rotation to get around it)")
-                    break
-        receipt["scenes"].append(item)
-        print(f"scene {scene}: {item.get('verdict', item['status'])}")
+            item.update(verdict="FAILED", detail=scrub((json.dumps(response) if isinstance(response, dict) else str(response))[:600], keys))
+        return item
+
+    workers = 1 if args.dry_run else max(1, min(len(keys), 8, len(jobs)))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        receipt["scenes"] = list(executor.map(work, jobs))
+    receipt["wall_s_total"] = round(time.monotonic() - started_all, 1)
+    for item in receipt["scenes"]:
+        print(f"scene {item['scene']} v{item['variant']}: {item.get('verdict', item['status'])}")
     text = scrub(json.dumps(receipt, indent=2, ensure_ascii=False), keys)
     (out / "receipt.json").write_text(text, encoding="utf-8")
-    return exit_code
+    return 0 if all(i.get("verdict", "IMAGE_RETURNED") == "IMAGE_RETURNED" for i in receipt["scenes"]) else 1
 
 
 class _QuietParser(argparse.ArgumentParser):
@@ -278,13 +394,15 @@ class _QuietParser(argparse.ArgumentParser):
 def main(argv: list[str] | None = None) -> int:
     parser = _QuietParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True, parser_class=_QuietParser)
-    sub.add_parser("check-key")
+    check = sub.add_parser("check-key")
+    check.add_argument("--all", action="store_true", help="test every key (HTTP status only) instead of stopping at the first good one")
     for name in ("probe", "run"):
         one = sub.add_parser(name)
         one.add_argument("--model", choices=sorted(MODELS), required=True)
         one.add_argument("--seed", type=int, default=20261024)
         if name == "run":
             one.add_argument("--scenes", default="1,2,3")
+            one.add_argument("--variants", type=int, default=1, choices=range(1, 7), help="seeds per scene, generated in parallel across the key pool")
             one.add_argument("--out", required=True)
             one.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
