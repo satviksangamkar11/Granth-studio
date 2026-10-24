@@ -50,7 +50,7 @@ def test_near_pixels_move_more_than_far_pixels(tmp_path):
     frames = {}
     for index in (0, 23):
         out = tmp_path / f"f{index}.png"
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(clip), "-vf", f"select=eq(n\,{index})", "-frames:v", "1", str(out)], check=True)
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(clip), "-vf", f"select=eq(n\\,{index})", "-frames:v", "1", str(out)], check=True)
         frames[index] = out
     still = tmp_path / "still.mp4"
     flat = dict(spec, parallax={"amplitude": 0.0})
