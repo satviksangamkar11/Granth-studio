@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "architecture_version": "4",
+  "status": "frozen_design_not_implemented",
+  "frozen_on": "2026-10-24",
+  "timezone": "Asia/Calcutta",
+  "file": "docs/ARCHITECTURE_V4.md",
+  "sha256": "624be258227898dbde797539a3d50ab50a82d4896795ba96dfc94c2114fd5ce8",
+  "authority": "Owner instruction 2026-10-24: 'FREEZE THE NEW PLANS' (approved plan C:/Users/Satvik/.claude/plans/greedy-dreaming-octopus.md)",
+  "supersedes_for_new_work": [
+    "docs/ARCHITECTURE_V3_1.md (unedited)",
+    "docs/ARCHITECTURE_V3_2_PROPOSAL.md (D-010)"
+  ],
+  "research_approved_by_this_freeze": false,
+  "implementation_started": false,
+  "renderer_chosen": false,
+  "renderer_candidates": [
+    "Blender (headless Python)",
+    "HyperFrames (Node + Chromium)"
+  ],
+  "codex_reviewed": false,
+  "human_review": "NOT_DONE",
+  "next_milestone": "P0 schemas and Kimi pack, then P1 renderer proofs and P2 acting bake-off"
+}
