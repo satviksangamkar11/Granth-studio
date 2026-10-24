@@ -1,0 +1,6 @@
+- **BLOCKER — `scripts/kaggle/build_gpu_all_notebook.py:79,93`:** Raw `str(e)` can expose tokens. Synthetic exceptions containing a fake token reproduced leakage through both `get_secret()` failures and `HfApi().whoami()` failures. `log()` also writes these messages to `notebook.log` (line 18). Truncation provides no redaction. Required: sanitize exception diagnostics before logging; suppress untrusted content when token removal cannot be guaranteed.
+- **MINOR — `scripts/kaggle/build_gpu_all_notebook.py:80`:** Empty values silently advance without logging that label’s failure. Required: log an explicit empty-value diagnostic without including the value.
+
+Fallback order, continuation after exceptions/empty values, first-success stopping, and final attachment instructions passed isolated checks. The generated RuntimeError contains labels only; no unrelated behavioral changes appear in the diff.
+
+Only synthetic in-memory checks ran; no changes, network, or GPU use. Token confidentiality remains unverified until corrected.

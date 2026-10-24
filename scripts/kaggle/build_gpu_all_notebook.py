@@ -10,12 +10,17 @@ import json
 import os
 import sys
 
-CELL1 = '''import subprocess, sys, glob, os, json, time, shutil, threading, queue, signal
+CELL1 = '''import subprocess, sys, glob, os, json, time, shutil, threading, queue, signal, re
 T0 = time.time()
+def scrub(s):
+    """Redact anything that looks like a Hugging Face token, and the exact value once it is loaded, from EVERY log line (page and files)."""
+    s = re.sub(r"hf_[A-Za-z0-9]{10,}", "hf_***", s)
+    v = os.environ.get("HF_TOKEN", "")
+    return s.replace(v, "***") if len(v) > 8 else s
 OUT = "/kaggle/working/all"; shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT, exist_ok=True)   # a rerun can never reuse an older run's files
 LOGF = open(OUT + "/notebook.log", "a", encoding="utf-8")
 def log(m):
-    line = "[%7.1fs] %s" % (time.time() - T0, m); print(line[:400], flush=True); LOGF.write(line + chr(10)); LOGF.flush()   # page: shortened line, file: whole line
+    line = scrub("[%7.1fs] %s" % (time.time() - T0, m)); print(line[:400], flush=True); LOGF.write(line + chr(10)); LOGF.flush()   # page: shortened line, file: whole line
 def sh(cmd, tag, timeout=1800, env=None, cwd=None, tee=None):
     """Run a command (list or shell string) in its own process group, stream every line to the page and to the log files, enforce the deadline on every pass, kill the whole group on timeout."""
     log("%s: START %s" % (tag, (cmd if isinstance(cmd, str) else " ".join(cmd))[:220]))
@@ -36,7 +41,7 @@ def sh(cmd, tag, timeout=1800, env=None, cwd=None, tee=None):
             if l is None: eof = True
             else:
                 log("[%s] %s" % (tag, l)); tail = (tail + [l])[-12:]
-                if side: side.write(l + chr(10)); side.flush()
+                if side: side.write(scrub(l) + chr(10)); side.flush()
         if eof:
             try: rc = p.wait(timeout=max(1.0, deadline - time.time()))
             except subprocess.TimeoutExpired: timed_out = True; log("%s: TIMEOUT (output closed, process still running)" % tag)
@@ -68,9 +73,20 @@ vers = subprocess.run([sys.executable, "-c", "import torch, diffusers, transform
 log("versions (torch diffusers transformers gpus): " + vers)
 log("STEP 2 Hugging Face token and access to the gated repos (FLUX 3 Image Klein, FLUX.1 Kontext)")
 ACCESS = {"flux3": False, "kontext": False}
+LABELS = ("HF_TOKEN", "HF_KEY", "HF-TOKEN", "hf_token", "HUGGINGFACE_TOKEN", "HUGGING_FACE_HUB_TOKEN", "HF")
 try:
     from kaggle_secrets import UserSecretsClient
-    os.environ["HF_TOKEN"] = UserSecretsClient().get_secret("HF_TOKEN"); log("HF_TOKEN secret found (value never printed)")
+    client = UserSecretsClient(); found = None
+    for label in LABELS:
+        try:
+            value = client.get_secret(label)
+        except Exception as e:
+            log("secret label %r: not available (%s: %s)" % (label, type(e).__name__, str(e)[:160])); continue
+        if not value:
+            log("secret label %r: attached but EMPTY" % label); continue
+        if value:
+            os.environ["HF_TOKEN"] = value; found = label; log("secret %r found and used as HF_TOKEN (value never printed; length %d)" % (label, len(value))); break
+    if not found: raise RuntimeError("none of the labels %s is attached to THIS notebook session: in the editor open Add-ons > Secrets, add a secret labelled exactly HF_TOKEN, tick its checkbox for this notebook, then Save and Run All" % (LABELS,))
     from huggingface_hub import HfApi, hf_hub_download
     log("token belongs to Hugging Face user: %s" % HfApi().whoami().get("name"))
     for key, repo, f in (("flux3", "black-forest-labs/flux-3-image-klein", "config.json"), ("kontext", "black-forest-labs/FLUX.1-Kontext-dev", "model_index.json")):
@@ -81,7 +97,7 @@ try:
         except Exception as e:
             log("NO ACCESS to %s: %s. Use a token from the account that was granted access (fine-grained tokens must allow reading public gated repos). Skipped." % (repo, type(e).__name__))
 except Exception as e:
-    log("HF_TOKEN secret not available (%s): FLUX 3 and Kontext are skipped. Attach it under Add-ons > Secrets." % type(e).__name__)
+    log("HF token not available (%s: %s). FLUX 3 and Kontext are skipped." % (type(e).__name__, str(e)[:400]))
 inp = os.path.dirname(glob.glob("/kaggle/input/**/open_edit_bench.py", recursive=True)[0]); log("inputs at %s: %s" % (inp, sorted(os.listdir(inp))))
 '''
 

@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 import traceback
@@ -38,9 +39,16 @@ def is_blank(image) -> bool:
     return hi - lo < 8
 
 
+def scrub(text: str) -> str:
+    """Redact anything that looks like a Hugging Face token (and the exact loaded value) before text is persisted."""
+    text = re.sub(r"hf_[A-Za-z0-9]{10,}", "hf_***", text)
+    value = os.environ.get("HF_TOKEN", "")
+    return text.replace(value, "***") if len(value) > 8 else text
+
+
 def write_receipt(out: Path, receipt: dict) -> None:
     tmp = out / "receipt.json.tmp"
-    tmp.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
+    tmp.write_text(scrub(json.dumps(receipt, indent=2)), encoding="utf-8")
     os.replace(tmp, out / "receipt.json")
 
 

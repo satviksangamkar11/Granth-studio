@@ -61,3 +61,52 @@ def test_summary_cell_runs_end_to_end_on_synthetic_outputs(tmp_path):
     exec(mod.CELL4, ns)
     assert (out / "compare.png").exists()
     assert any("unreadable image" in line for line in logs) and any("DONE" in line for line in logs)
+
+
+def test_tokens_are_scrubbed_from_every_log_line():
+    """Run CELL1's scrub/log on fake secrets (no GPU needed: stop before the accelerator check)."""
+    import os
+    head = mod.CELL1.split('log("STEP 0')[0]
+    ns = {}
+    os.environ["HF_TOKEN"] = "plainSecretValue123"
+    try:
+        exec(head.replace("/kaggle/working/all", (Path(__file__).parent / "_scratch_all").as_posix()), ns)
+        ns["log"]("whoami failed: Bearer hf_abcdefghijKLMNOP1234 and plainSecretValue123 end")
+        text = (Path(__file__).parent / "_scratch_all" / "notebook.log").read_text()
+        assert "hf_abcdefghij" not in text and "plainSecretValue123" not in text and "hf_***" in text and "***" in text
+    finally:
+        os.environ.pop("HF_TOKEN", None)
+        import shutil
+        shutil.rmtree(Path(__file__).parent / "_scratch_all", ignore_errors=True)
+
+
+def test_tee_side_files_are_scrubbed_too():
+    import os
+    import shutil
+    head = mod.CELL1.split('log("STEP 0')[0]
+    scratch = Path(__file__).parent / "_scratch_tee"
+    os.environ["HF_TOKEN"] = "plainSecretValue123"
+    try:
+        ns = {}
+        exec(head.replace("/kaggle/working/all", scratch.as_posix()), ns)
+        tee = scratch / "side.log"
+        ns["sh"](["python", "-c", "print('token hf_abcdefghijKLMNOP1234 and plainSecretValue123')"], "t", timeout=60, tee=tee.as_posix())
+        text = tee.read_text()
+        assert "hf_abcdefghij" not in text and "plainSecretValue123" not in text and "***" in text
+    finally:
+        os.environ.pop("HF_TOKEN", None)
+        shutil.rmtree(scratch, ignore_errors=True)
+
+
+def test_receipts_never_persist_a_token(tmp_path):
+    import os
+    bspec = importlib.util.spec_from_file_location("open_edit_bench2", Path(__file__).resolve().parents[1] / "scripts" / "image_trials" / "open_edit_bench.py")
+    bench = importlib.util.module_from_spec(bspec)
+    bspec.loader.exec_module(bench)
+    os.environ["HF_TOKEN"] = "plainSecretValue123"
+    try:
+        bench.write_receipt(tmp_path, {"models": {"m": {"error": "401 Bearer hf_abcdefghijKLMNOP1234 / plainSecretValue123", "results": [{"error": "x hf_zzzzzzzzzzzz0000"}]}}})
+        text = (tmp_path / "receipt.json").read_text()
+        assert "hf_abcdefghij" not in text and "hf_zzzzzzzz" not in text and "plainSecretValue123" not in text and "hf_***" in text
+    finally:
+        os.environ.pop("HF_TOKEN", None)
