@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
 import time
 import traceback
@@ -29,6 +30,18 @@ def log(msg: str) -> None:
     print(f"[{time.time() - _T0:7.1f}s] {msg}{mem}", flush=True)
 KLEIN_REPO = "black-forest-labs/FLUX.2-klein-4B"
 QWEN_REPO = "Qwen/Qwen-Image-Edit-2511"
+
+
+def is_blank(image) -> bool:
+    """A black or one-colour picture is the usual silent failure of a half-precision model."""
+    lo, hi = image.convert("L").getextrema()
+    return hi - lo < 8
+
+
+def write_receipt(out: Path, receipt: dict) -> None:
+    tmp = out / "receipt.json.tmp"
+    tmp.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
+    os.replace(tmp, out / "receipt.json")
 
 
 def load_refs(inputs: Path, names: list[str]):
@@ -91,11 +104,16 @@ def build_kontext():
 
 
 def build_qwen21():
-    """Qwen-Image-2.1 (7B, ungated): one checkpoint for text-to-image and editing with several reference images."""
+    """Qwen-Image-2.1 (7B, ungated). bf16 whole did not fit a 15 GB T4 (OutOfMemory at the first image), so the transformer is stored in 4-bit NF4 and the text encoder is offloaded."""
     import torch
     from diffusers import QwenImage21Pipeline
-    pipe = QwenImage21Pipeline.from_pretrained("Qwen/Qwen-Image-2.1", torch_dtype=torch.bfloat16)   # the model card's dtype; bf16 is emulated on a T4
+    from diffusers.quantizers import PipelineQuantizationConfig
+    quant = PipelineQuantizationConfig(quant_backend="bitsandbytes_4bit",
+                                       quant_kwargs={"load_in_4bit": True, "bnb_4bit_quant_type": "nf4", "bnb_4bit_compute_dtype": torch.bfloat16},
+                                       components_to_quantize=["transformer"])
+    pipe = QwenImage21Pipeline.from_pretrained("Qwen/Qwen-Image-2.1", torch_dtype=torch.bfloat16, quantization_config=quant)
     pipe.enable_model_cpu_offload()
+    pipe.vae.enable_tiling()
     return pipe, lambda pipe, imgs, prompt, seed: pipe(prompt=prompt, image=imgs, width=W, height=H, num_inference_steps=40,
                                                        generator=torch.Generator("cpu").manual_seed(seed)).images[0]
 
@@ -145,12 +163,13 @@ def main() -> int:
                         path = args.out / f"{name}_s{scene}_seed{seed}.png"
                         image.save(path)
                         row.update(file=path.name, sha256=hashlib.sha256(path.read_bytes()).hexdigest(), size=list(image.size),
-                                   min_max=[int(v) for v in (image.convert("L").getextrema())])
+                                   min_max=[int(v) for v in (image.convert("L").getextrema())], blank=is_blank(image))
                     except Exception as exc:                                  # one failed image must not hide the rest
                         row["error"] = f"{type(exc).__name__}: {exc}"[:400]
                         traceback.print_exc()
                     row["wall_s"] = round(time.time() - t1, 1)
                     entry["results"].append(row)
+                    write_receipt(args.out, receipt)
                     log(f"{name}: scene {scene} seed {seed}: done {row.get('file') or row.get('error')} in {row['wall_s']}s")
             del pipe
         except Exception as exc:
@@ -158,7 +177,7 @@ def main() -> int:
             log(f"{name}: FAILED during load/run: {entry['error']}")
             traceback.print_exc()
         torch.cuda.empty_cache()
-        (args.out / "receipt.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
+        write_receipt(args.out, receipt)
     return 0
 
 
