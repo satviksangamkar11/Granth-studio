@@ -6,6 +6,7 @@ Usage: python open_edit_bench.py --inputs DIR --out DIR --models klein[,qwen] --
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import json
 import os
@@ -111,6 +112,24 @@ def build_kontext():
     return pipe, run
 
 
+def with_smaller_references(call, resolutions=(512, 384), oom=None, release=None):
+    """call(resolution) -> image. On a memory error the exception (and the traceback that pins the failed call's tensors) is DROPPED before the next, smaller attempt."""
+    gc.collect()
+    for res in resolutions:
+        try:
+            return call(res)
+        except oom:
+            pass                                                     # leaving the handler frees the exception and its traceback
+        log(f"out of memory with output_resolution={res}, retrying smaller")
+        gc.collect()
+        if release is not None:
+            release()
+        else:
+            import torch
+            torch.cuda.empty_cache()
+    raise RuntimeError(f"out of memory at every reference resolution {resolutions}")
+
+
 def build_qwen21():
     """Qwen-Image-2.1 (7B, ungated). bf16 whole did not fit a 15 GB T4 (OutOfMemory at the first image), so the transformer AND the text encoder (about 16 GB in bf16, the real memory hog: model offload moves it to the GPU whole) are stored in 4-bit NF4."""
     import torch
@@ -122,8 +141,12 @@ def build_qwen21():
     pipe = QwenImage21Pipeline.from_pretrained("Qwen/Qwen-Image-2.1", torch_dtype=torch.bfloat16, quantization_config=quant)
     pipe.enable_model_cpu_offload()
     pipe.vae.enable_tiling()
-    return pipe, lambda pipe, imgs, prompt, seed: pipe(prompt=prompt, image=imgs, width=W, height=H, num_inference_steps=40,
-                                                       generator=torch.Generator("cpu").manual_seed(seed)).images[0]
+
+    def run(pipe, imgs, prompt, seed):
+        """Every reference is resized to output_resolution squared (the default 1024 means 1 megapixel EACH, which is what overflowed the T4). Start at 512 and fall back to 384 on a memory error."""
+        return with_smaller_references(lambda res: pipe(prompt=prompt, image=imgs, width=768, height=576, output_resolution=res, num_inference_steps=40,
+                                                        generator=torch.Generator("cpu").manual_seed(seed)).images[0], oom=torch.OutOfMemoryError)
+    return pipe, run
 
 
 def build_flux3():

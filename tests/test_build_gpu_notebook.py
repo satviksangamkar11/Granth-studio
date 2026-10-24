@@ -21,7 +21,7 @@ def test_the_token_value_is_never_logged_and_failures_cannot_be_silent():
     text = "\n".join([mod.CELL1, mod.CELL2, mod.CELL3, mod.CELL4])
     assert "print(os.environ" not in text and "log(os.environ" not in text and "get_secret(\"HF_TOKEN\"))" not in text.replace("os.environ[\"HF_TOKEN\"] = UserSecretsClient().get_secret(\"HF_TOKEN\");", "")
     assert "raise SystemExit" in mod.CELL4 and "killpg" in mod.CELL1 and "TIMEOUT" in mod.CELL1
-    assert "load_in_8bit=True" in mod.CELL3 and "--target" in mod.CELL3 and "scenes failed" in mod.CELL3
+    assert "load_in_4bit=True" in mod.CELL3 and "t_embedder1" in mod.CELL3 and "--target" in mod.CELL3 and "scenes failed" in mod.CELL3
 
 
 def test_bench_helpers_flag_blank_images_and_write_receipts_atomically(tmp_path):
@@ -110,3 +110,53 @@ def test_receipts_never_persist_a_token(tmp_path):
         assert "hf_abcdefghij" not in text and "hf_zzzzzzzz" not in text and "plainSecretValue123" not in text and "hf_***" in text
     finally:
         os.environ.pop("HF_TOKEN", None)
+
+
+def test_the_hidream_patch_text_is_valid_python_and_flux3_is_not_run():
+    import re
+    m = re.search(r"s\.replace\('device_map=\"cuda\"', '(.+?)'\)\)", mod.CELL3)
+    assert m, "patch line not found"
+    snippet = "model = loader(args.model_path, torch_dtype=torch.bfloat16, " + m.group(1) + ").eval()"
+    compile(snippet, "patched_inference", "exec")
+    assert "llm_int8_skip_modules" in snippet and "not run on a T4" not in snippet.lower()
+    assert 'bench("flux3")' not in mod.CELL3 and "NOT run on a T4" in mod.CELL3
+
+
+def test_qwen21_and_disk_safeguards_are_present():
+    bench = (Path(__file__).resolve().parents[1] / "scripts" / "image_trials" / "open_edit_bench.py").read_text(encoding="utf-8")
+    assert "output_resolution=res" in bench and "(512, 384)" in bench and "OutOfMemoryError" in bench
+    assert "free_cache" in mod.CELL1 and "free_cache(*c[1])" in mod.CELL3
+
+
+def test_oom_retry_releases_the_failed_attempts_memory_before_the_smaller_try():
+    import weakref
+    bspec = importlib.util.spec_from_file_location("open_edit_bench3", Path(__file__).resolve().parents[1] / "scripts" / "image_trials" / "open_edit_bench.py")
+    bench = importlib.util.module_from_spec(bspec)
+    bspec.loader.exec_module(bench)
+
+    class Boom(Exception):
+        pass
+
+    class Payload:
+        pass
+
+    seen = {}
+
+    def call(res):
+        if res == 512:
+            payload = Payload()                                      # stands for the failed call's GPU tensors, pinned by the traceback
+            seen["ref"] = weakref.ref(payload)
+            raise Boom()
+        seen["alive_at_retry"] = seen["ref"]() is not None
+        return "image at %d" % res
+
+    assert bench.with_smaller_references(call, oom=Boom, release=lambda: None) == "image at 384"
+    assert seen["alive_at_retry"] is False
+
+    def always(res):
+        raise Boom()
+    try:
+        bench.with_smaller_references(always, oom=Boom, release=lambda: None)
+        raise AssertionError("must raise")
+    except RuntimeError as exc:
+        assert "every reference resolution" in str(exc)

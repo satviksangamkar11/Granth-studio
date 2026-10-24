@@ -59,8 +59,14 @@ def sh(cmd, tag, timeout=1800, env=None, cwd=None, tee=None):
 log("STEP 0 accelerator check")
 rc, tail = sh("nvidia-smi -L", "gpu", timeout=60)
 if rc != 0 or "GPU" not in " ".join(tail): raise SystemExit("STOP: no NVIDIA GPU. In the editor choose Session options > Accelerator > GPU T4 (not a TPU), then Save and Run All (Commit).")
-sh("df -h /kaggle/working /kaggle/temp /dev/shm; free -g", "disk", timeout=60)
 os.makedirs("/kaggle/temp/hf", exist_ok=True); os.environ["HF_HOME"] = "/kaggle/temp/hf"
+def disk(tag): sh("df -h /kaggle/working /kaggle/temp /dev/shm; free -g", "disk-" + tag, timeout=60)
+def free_cache(*names):
+    """Delete finished models' downloads so the next model fits on the scratch disk."""
+    for n in names:
+        shutil.rmtree(n if n.startswith("/") else "/kaggle/temp/hf/hub/" + n, ignore_errors=True)
+    disk("after-cleanup")
+disk("start")
 '''
 
 CELL2 = '''log("STEP 1 install diffusers (git main) and text-model libraries; torch is pinned so it cannot change")
@@ -115,8 +121,8 @@ log("installing HiDream's pinned libraries into its OWN folder (the shared envir
 run([sys.executable, "-m", "pip", "install", "-q", "--target", SITE, "transformers==4.57.1", "tokenizers>=0.22,<=0.23.0", "huggingface-hub>=0.34,<1.0", "diffusers==0.39.0", "einops", "flask", "openai", "python-dotenv", "scipy"], must=True)
 run(["git", "clone", "-q", "https://github.com/HiDream-ai/HiDream-O1-Image.git", OUT + "/repo"], must=True)
 pp = OUT + "/repo/models/pipeline.py"; s = open(pp).read(); assert '"use_flash_attn": True' in s; open(pp, "w").write(s.replace('"use_flash_attn": True', '"use_flash_attn": False'))
-ip = OUT + "/repo/inference.py"; s = open(ip).read(); assert 'device_map="cuda"' in s; open(ip, "w").write(s.replace('device_map="cuda"', 'device_map="cuda", quantization_config=__import__("transformers").BitsAndBytesConfig(load_in_8bit=True)'))
-log("patched: flash-attn off, 8-bit weights on ONE GPU (a split over two GPUs failed with a cuda:0/cuda:1 tensor mismatch inside HiDream's own code)")
+ip = OUT + "/repo/inference.py"; s = open(ip).read(); assert 'device_map="cuda"' in s; open(ip, "w").write(s.replace('device_map="cuda"', 'device_map="cuda", quantization_config=__import__("transformers").BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=__import__("torch").bfloat16, llm_int8_skip_modules=["t_embedder1", "x_embedder", "final_layer2", "lm_head"])'))
+log("patched: flash-attn off, 4-bit weights on ONE GPU, HiDream's own small layers (t_embedder1, x_embedder, final_layer2) kept in full precision (a two-GPU split failed with a device mismatch, 8-bit quantizing those layers failed with silu on int8)")
 sys.path.insert(0, SITE)
 from huggingface_hub import snapshot_download
 log("downloading HiDream-O1-Image-Dev weights (about 16 GB)"); mp = snapshot_download("HiDream-ai/HiDream-O1-Image-Dev", local_dir="/kaggle/temp/hidream_dev"); log("weights ready")
@@ -130,11 +136,14 @@ for s_, item in spec.items():
 if failures: raise SystemExit("HiDream: %d of %d scenes failed" % (failures, len(spec)))
 """
 os.makedirs(OUT + "/hidream", exist_ok=True); open(OUT + "/hid.py", "w").write(HID)
-log("STEP 3 run in parallel: GPU0 = HiDream-O1-Image-Dev (8-bit); GPU1 = Qwen-Image-2.1 (NF4), then FLUX 3 Image Klein and FLUX.1 Kontext if the token has access")
+log("FLUX 3 Image Klein (open weights) is NOT run on a T4: its own code needs about 31 GB (bf16) or 26 GB (fp8), has no int8 path and no multi-GPU path; the hosted NVIDIA text-only images are the only FLUX 3 sample here")
+log("STEP 3 run in parallel: GPU0 = HiDream-O1-Image-Dev (4-bit); GPU1 = Qwen-Image-2.1 (NF4), then FLUX.1 Kontext if the token has access")
 def chain(tag, cmds, gpu):
-    for c in cmds: sh(c, tag, timeout=3600, env={"CUDA_VISIBLE_DEVICES": str(gpu)}, tee=OUT + "/" + tag + ".log")
-g1 = [bench("qwen21")] + ([bench("flux3")] if ACCESS["flux3"] else []) + ([bench("kontext")] if ACCESS["kontext"] else [])
-ts = [threading.Thread(target=chain, args=("hidream", [[sys.executable, "-u", OUT + "/hid.py", inp]], 0)), threading.Thread(target=chain, args=("gpu1", g1, 1))]
+    for c in cmds:
+        sh(c[0], tag, timeout=3600, env={"CUDA_VISIBLE_DEVICES": str(gpu)}, tee=OUT + "/" + tag + ".log")
+        free_cache(*c[1])
+g1 = [(bench("qwen21"), ["models--Qwen--Qwen-Image-2.1"])] + ([(bench("kontext"), ["models--black-forest-labs--FLUX.1-Kontext-dev"])] if ACCESS["kontext"] else [])
+ts = [threading.Thread(target=chain, args=("hidream", [([sys.executable, "-u", OUT + "/hid.py", inp], ["/kaggle/temp/hidream_dev", "/kaggle/temp/hid_site"])], 0)), threading.Thread(target=chain, args=("gpu1", g1, 1))]
 [t.start() for t in ts]; [t.join() for t in ts]
 '''
 
@@ -147,7 +156,7 @@ def blank(path):
     except Exception as e:
         log("unreadable image %s: %s" % (path, type(e).__name__)); return None
 usable = {}
-for m in ("qwen21", "flux3", "kontext"):
+for m in ("qwen21", "kontext"):
     f = "%s/%s/receipt.json" % (OUT, m)
     if os.path.exists(f):
         e = json.load(open(f))["models"].get(m, {})
