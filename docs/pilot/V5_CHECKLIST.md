@@ -4,7 +4,7 @@ Plan: `docs/pilot/V5_PRODUCTION_PLAN.md` rev 4 (D-015). Mark each item when done
 
 ## A. Owner decisions needed (Phase 0)
 - [ ] A1. Approve the exact Adhyay 1 pilot passage (Marathi + Hindi lines) in `SOURCE_APPROVAL_SHEET.md` — send the text.
-- [ ] A2. Which Maharaj for the pilot: mature (default) or young.
+- [x] A2. Pilot Maharaj: **YOUNG** (owner, 2026-10-25). Attach the young reference sheet for every Maharaj image; mature comes later.
 - [ ] A3. Name a backup drive/folder for verified copies.
 - [ ] A4. Reference sheets to use for identity (the young/mature parts sheets already sent).
 
