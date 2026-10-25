@@ -140,3 +140,26 @@ def test_schema_refuses(mutate):
 ])
 def test_guard_refuses_codex_bypasses(bad):
     assert B.check(bad) != []
+
+
+S2 = load('v5_schema2')
+GOOD2 = {'shot_id': 'SA', 'frames': 144, 'backdrop': {'top': '#f5e6c8', 'bottom': '#e8c98f'}, 'transitions': [{'after_segment': 0, 'kind': 'slide', 'frames': 5, 'direction': 'left'}], 'segments': [{'start': 1, 'end': 72, 'layers': [{'asset': 'a', 'depth': 5, 'x': 0, 'y': 0, 'scale': 1, 'idle': {'amplitude': 0.012, 'period_sec': 3.5}}], 'camera': {'start': {'x': 0, 'y': 0, 'zoom': 1}, 'end': {'x': 0.1, 'y': 0, 'zoom': 1.2}, 'ease': 'ease_in_out'}}, {'start': 73, 'end': 144, 'layers': [{'asset': 'b', 'depth': 5, 'x': 0, 'y': 0, 'scale': 1, 'soft_warp': {'u': 0.6, 'v': 0.5, 'radius': 0.2, 'start': 80, 'end': 120, 'rotate_deg': 10}}], 'camera': {'start': {'x': 0, 'y': 0, 'zoom': 1}, 'end': {'x': 0, 'y': 0, 'zoom': 1.1}}}]}
+
+
+def test_schema2_accepts_good():
+    assert S2.validate(GOOD2, {'a', 'b'}) == []
+
+
+def test_schema2_refuses_static_and_ghost_dissolve():
+    import copy
+    s = copy.deepcopy(GOOD2)
+    for seg in s['segments']:
+        seg['camera']['end'] = dict(seg['camera']['start'])
+    assert S2.validate(s, {'a', 'b'}) != []
+    t = copy.deepcopy(GOOD2)
+    t['transitions'][0]['kind'] = 'dissolve'
+    assert S2.validate(t, {'a', 'b'}) != []
+    w = copy.deepcopy(GOOD2)
+    w['segments'][1]['layers'][0]['soft_warp']['end'] = 200
+    assert S2.validate(w, {'a', 'b'}) != []
+
