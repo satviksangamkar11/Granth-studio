@@ -1,4 +1,4 @@
-"""V5 Phase 0.5 image prep, step 2 only: border-connected plain white -> transparent for layer images (enclosed whites such as white clothing stay).
+﻿"""V5 Phase 0.5 image prep, step 2 only: border-connected plain white -> transparent for layer images (enclosed whites such as white clothing stay).
 Originals are never modified; outputs go to <inbox>/prepped/ with a preview on dark and on saffron backgrounds for the owner's edge check.
 The watermark step is NOT here: it waits for the owner's decision on Google's watermark terms.
 Usage: python v5_prep.py [--inbox "D:/aai work/v5_inbox"]"""
@@ -35,7 +35,7 @@ def main():
     out.mkdir(exist_ok=True)
     report = []
     for name in LAYERS:
-        src = inbox / f"{name}.png"
+        src = inbox / "clean" / f"{name}.png"          # watermark-cleaned copy (v5_watermark.py)
         im = Image.open(src)
         rgba, frac = to_alpha(im)
         rgba.save(out / f"{name}.png")
@@ -56,3 +56,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
