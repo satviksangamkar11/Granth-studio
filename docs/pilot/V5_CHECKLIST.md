@@ -10,7 +10,7 @@ Plan: `docs/pilot/V5_PRODUCTION_PLAN.md` rev 4 (D-015). Mark each item when done
 
 ## B. Machine check (Claude, done 2026-10-25)
 - [x] NVIDIA RTX 3050 6GB Laptop GPU + AMD Radeon iGPU; 15.3 GB RAM; D: 15.8 GB free; C: 5.7 GB free.
-- [ ] B1. Blender 5.2.3 EEVEE test render (Claude runs after A is done).
+- [x] B1. Blender 5.2.3 EEVEE test render: OK, 1280x720 default scene in 1.76 s (2026-10-25).
 
 ## C. Image style block (paste at the start of EVERY prompt; attach the Maharaj reference sheet for his images)
 > Flat 2D illustration for a printed devotional film, simple styled figures, bold dark-navy outlines, flat colour fills, limited palette (warm brown skin, white cloth, saffron, indigo, ochre, brick red), no gradients, no photographic texture, no text, no watermark. Calm, respectful expression. 16:9, 1920x1080.
@@ -48,6 +48,6 @@ Object: a plain brass water pot (lota). Test shot only, not a canon claim.
 | `FX_light_smoke.png` | soft light rays and a few smoke curls on plain black (for overlay effects) |
 
 ## E. Done when
-- [ ] Checker reports all files present, PNG, 16:9, readable.
+- [x] Checker reports all files present, PNG, 16:9, readable (13/13, 2026-10-25; Flow sparkle watermark on several images to be painted out).
 - [ ] Owner sentence per shot: which images were rejected and why (for cost-per-accepted-shot).
 - [ ] Claude + Codex have Phase 0 gates checked; then Phase 1 starts.
