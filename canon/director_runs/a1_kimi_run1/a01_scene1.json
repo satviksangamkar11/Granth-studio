@@ -1,0 +1,458 @@
+{
+  "scene": 1,
+  "chapter": 1,
+  "range": [
+    84,
+    96
+  ],
+  "result": "INVALID",
+  "errors": [
+    "shots/0: 'needs' is a required property",
+    "shots/1: 'needs' is a required property",
+    "shots/2: 'needs' is a required property",
+    "shots/3: 'needs' is a required property",
+    "shots/4: 'needs' is a required property",
+    "shots/5: 'needs' is a required property"
+  ],
+  "warnings": [],
+  "plan": {
+    "scene_id": "S1",
+    "chapter": 1,
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Place Gajanan outside Devidas’s Ritushanti feast house, show his few possessions and calm search of used leaf plates, then reveal the grain-by-grain act’s stated अन्नपरब्रह्म purpose.",
+    "turn": {
+      "ovi": "A1:94",
+      "text": "His picking up of seen rice grains has a stated purpose: to make known that food is the supreme Brahman. Ovi 96 adds that ordinary people did not understand its inner meaning."
+    },
+    "shots": [
+      {
+        "shot_id": "S1-1",
+        "ovi_ids": [
+          "A1:86",
+          "A1:87"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "road_leaf_plates_fg",
+          "fx": "neutral_light_fx",
+          "mid": "devidas_house_mid",
+          "sky": "neutral_sky_backdrop"
+        },
+        "action": "Dollying toward the housefront and the discarded leaf plates",
+        "held_pose": "Used leaf plates lie scattered on the road directly before Devidas’s house; no person is shown.",
+        "performance": "The Ritushanti meal preparation establishes the house’s context, while the visible event is the already discarded plates outside.",
+        "camera": "Slow 1.00-to-1.28 dolly toward the housefront.",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road in front of Devidas’s house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "Devidas’s house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "used leaf plates thrown on the road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "event",
+            "term": "Ritushanti meal preparation at Devidas’s house",
+            "source": "A1:86"
+          },
+          {
+            "kind": "event",
+            "term": "used plates already thrown outside",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "neutral sky backdrop without weather cues",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "neutral flat illumination without a stated time of day",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow establishing dolly",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Use a neutral sky and flat illumination; neither weather nor time of day is stated here.",
+          "STAGING: Keep Devidas, his son and household workers off-screen; do not invent feast utensils or decorations."
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-2",
+        "ovi_ids": [
+          "A1:88",
+          "A1:89",
+          "A1:90",
+          "A1:91",
+          "A1:92",
+          "A1:93"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_seated_possessions"
+        },
+        "action": "Pushing slowly toward the seated figure and his two possessions",
+        "held_pose": "He sits on the road, almost naked except for one old worn-cloth bandi; the gourd rests by him and his unfired raw-clay chilim is already in his hand.",
+        "performance": "No other possession appears. A still bodily sheen represents तपोबल अंगीं झळकत, without rays, a halo or animated glitter.",
+        "camera": "Slow push from the full seated figure toward his body and possessions.",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj, the siddha yogi",
+            "source": "A1:88"
+          },
+          {
+            "kind": "pose",
+            "term": "already seated at that place on the road",
+            "source": "A1:88"
+          },
+          {
+            "kind": "pose",
+            "term": "almost naked, with at most the old bandi",
+            "source": "A1:92"
+          },
+          {
+            "kind": "prop",
+            "term": "one bandi of old worn cloth",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel, भोपळा",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "self-made unfired raw-clay chilim held in his hand",
+            "source": "A1:90"
+          },
+          {
+            "kind": "event",
+            "term": "ascetic power shining on his body",
+            "source": "A1:91"
+          },
+          {
+            "kind": "scenery",
+            "term": "road where he sits",
+            "source": "A1:93"
+          },
+          {
+            "kind": "camera",
+            "term": "slow cinematic push",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Show the stated bodily shining only as a restrained sheen in the held illustration, with no supernatural light effect."
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-3",
+        "ovi_ids": [
+          "A1:91"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "maharaj_calm_face"
+        },
+        "action": "Pushing gently toward the calm, unmoving face",
+        "held_pose": "Close-up held pose with नासाग्र दृष्टि and मुद्रा शांत; his gaze and expression remain fixed.",
+        "performance": "The face conveys only the stated calm posture and gaze toward the nose tip, without an added emotion or facial change.",
+        "camera": "Gentle close-up push with no halo or light effect.",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan’s face",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "gaze directed toward the tip of the nose",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "calm posture, मुद्रा शांत",
+            "source": "A1:91"
+          },
+          {
+            "kind": "camera",
+            "term": "gentle close-up push",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Hold the face completely still; do not animate the eyes, mouth or expression."
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S1-4",
+        "ovi_ids": [
+          "A1:93"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_searching_plates"
+        },
+        "action": "Pushing toward the hand held within the leaf plates",
+        "held_pose": "Gajanan remains seated on the road, with one hand already held among the used leaf plates in a searching pose.",
+        "performance": "The search is shown as a held moment, केवळ निजलीलेनें; no hand, head or lip movement occurs.",
+        "camera": "Slow push toward the seated figure’s hand and the plates.",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan seated on the road",
+            "source": "A1:93"
+          },
+          {
+            "kind": "prop",
+            "term": "used leaf plates being searched",
+            "source": "A1:93"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:93"
+          },
+          {
+            "kind": "pose",
+            "term": "seated searching posture",
+            "source": "A1:93"
+          },
+          {
+            "kind": "pose",
+            "term": "hand already resting within the plates",
+            "source": "STAGING"
+          },
+          {
+            "kind": "event",
+            "term": "searches through the leaf plates only as his own play",
+            "source": "A1:93"
+          },
+          {
+            "kind": "camera",
+            "term": "push toward the searching hand",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Use the held hand position to indicate searching; do not animate rummaging or picking."
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-5",
+        "ovi_ids": [
+          "A1:94"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "rice_grain_at_mouth_insert"
+        },
+        "action": "Pushing in on the single rice grain held at the mouth",
+        "held_pose": "Full-frame insert: his fingers already hold one leftover rice grain at his mouth; the grain, fingers and lips stay fixed.",
+        "performance": "This held instant represents the ovi’s seeing, picking up and putting each grain into his mouth, without animating the sequence.",
+        "camera": "Short, steady push into the grain and fingers.",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan’s fingers and mouth in close-up",
+            "source": "A1:94"
+          },
+          {
+            "kind": "prop",
+            "term": "one grain of leftover rice, शीत",
+            "source": "A1:94"
+          },
+          {
+            "kind": "pose",
+            "term": "grain already held at the mouth",
+            "source": "STAGING"
+          },
+          {
+            "kind": "event",
+            "term": "picks up each rice grain that comes into sight and puts it in his mouth",
+            "source": "A1:94"
+          },
+          {
+            "kind": "camera",
+            "term": "close insert push",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Present the eating act as one held instant; no rising hand, chewing or lip movement."
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-6",
+        "ovi_ids": [
+          "A1:87",
+          "A1:88",
+          "A1:89",
+          "A1:90",
+          "A1:92",
+          "A1:93",
+          "A1:96"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "devidas_house_mid",
+          "mid": "maharaj_seated_possessions",
+          "near": "road_leaf_plates_fg",
+          "sky": "neutral_sky_backdrop"
+        },
+        "action": "Tracking laterally with a 1.00-to-1.16 parallax zoom",
+        "held_pose": "The wide view returns to Gajanan seated before the house, his gourd and chilim unchanged and the used plates around him.",
+        "performance": "The closing view holds the grain-selector called दयाघन by the narrator; no bystanders, symbolic vision or added speech appears.",
+        "camera": "Lateral parallax move with a 1.00-to-1.16 zoom, ending on the seated figure.",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan, called दयाघन by the narrator",
+            "source": "A1:96"
+          },
+          {
+            "kind": "event",
+            "term": "selects leftover rice grains",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road and housefront",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "used leaf plates",
+            "source": "A1:87"
+          },
+          {
+            "kind": "pose",
+            "term": "seated figure",
+            "source": "A1:88"
+          },
+          {
+            "kind": "pose",
+            "term": "almost naked except for the old bandi",
+            "source": "A1:92"
+          },
+          {
+            "kind": "prop",
+            "term": "one bandi of old worn cloth",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel, भोपळा",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "self-made unfired raw-clay chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "scenery",
+            "term": "neutral sky backdrop",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "unchanged neutral flat illumination",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "lateral parallax and closing zoom",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Close on the plain held scene; do not visualize Brahman, add a crowd or create a radiance effect."
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "road_leaf_plates_fg",
+        "description": "Transparent foreground layer of the road with scattered used leaf plates, suitable for both a wide dolly and near parallax layer."
+      },
+      {
+        "image_id": "neutral_light_fx",
+        "description": "Very subtle neutral flat-colour illumination layer, with no sun, rays, halo, weather cue or coloured glow."
+      },
+      {
+        "image_id": "devidas_house_mid",
+        "description": "Flat-colour housefront of Devidas seen from the road, with no people, feast utensils or decorations; usable as mid or far layer."
+      },
+      {
+        "image_id": "neutral_sky_backdrop",
+        "description": "Plain neutral sky backdrop with no sun, clouds, birds or other time-and-weather indicators."
+      },
+      {
+        "image_id": "maharaj_seated_possessions",
+        "description": "Full seated Gajanan on the road, almost naked except one old worn-cloth bandi; gourd beside him, self-made unfired raw-clay chilim in hand, restrained still bodily sheen."
+      },
+      {
+        "image_id": "maharaj_calm_face",
+        "description": "Transparent close-up of Gajanan’s calm face, gaze directed toward the nose tip, fixed expression and no halo."
+      },
+      {
+        "image_id": "maharaj_searching_plates",
+        "description": "Gajanan seated on the road among used leaf plates, one hand already held within them in a searching pose; full held-pose illustration."
+      },
+      {
+        "image_id": "rice_grain_at_mouth_insert",
+        "description": "Full-frame close insert of Gajanan’s fingers holding one leftover rice grain at his mouth; all elements fixed, with no chewing or hand motion."
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "kimi-k3.1-pro",
+      "provider": "moonshot",
+      "model": "kimi-k3.1-pro",
+      "status": 200,
+      "wall_s": 332.4,
+      "finish": "stop",
+      "usage": {
+        "prompt_tokens": 11782,
+        "completion_tokens": 10018
+      },
+      "cost_usd": 0.123744,
+      "reservation": "4e02895f7e1148ecb969870157c62037",
+      "error": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": []
+}

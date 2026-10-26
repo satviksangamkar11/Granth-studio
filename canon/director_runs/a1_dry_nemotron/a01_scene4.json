@@ -1,0 +1,808 @@
+{
+  "scene": 4,
+  "chapter": 1,
+  "range": [
+    108,
+    112
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [],
+  "plan": {
+    "scene_id": "S4",
+    "chapter": 1,
+    "ovi_range": [
+      108,
+      112
+    ],
+    "goal": "Bankatlal humbly questions Gajanan about searching the plates; Gajanan gives no reply, only looks up at both visitors; his radiant, bliss-absorbed form is revealed; the two visitors bow silently in reverence.",
+    "turn": {
+      "ovi": "A1:112",
+      "text": "The visitors' silent bow marks their shift from testing to surrender."
+    },
+    "shots": [
+      {
+        "shot_id": "S4-1",
+        "ovi_ids": [
+          "A1:108"
+        ],
+        "preset": "04_character_entrance",
+        "assets": {
+          "char": "bankatlal_walking",
+          "other": "gajanan_seated"
+        },
+        "action": "camera pans right following Bankatlal's approach",
+        "held_pose": "Bankatlal in mid-stride walking pose approaching Gajanan seated among leaf plates",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal advances humbly; Gajanan remains seated, gaze on plate",
+        "camera": "pan right following Bankatlal's approach",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:108"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:108"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi (बंडी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd vessel (भोपळा)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim (कच्ची चिलीम)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road in front of Brahmin's house",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal walking forward",
+            "source": "A1:108"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan seated on road",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: early morning light, dust on road"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-2",
+        "ovi_ids": [
+          "A1:109"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_speaking",
+          "right": "gajanan_listening"
+        },
+        "action": "gentle drift across the two figures facing each other",
+        "held_pose": "Bankatlal speaking with hands folded; Gajanan seated, looking at him",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal asks why Gajanan searches plates and offers food; Gajanan listens silently",
+        "camera": "slow drift left to right across both figures",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:109",
+            "marathi": "ह्या पत्रावळीच्या शोधना । कां हो करितां कळेना । क्षुधा असेल आपणां । तरी तरतूद करुं अन्नाची",
+            "meaning_en": "Why search these plates? Why do you do this? If you are hungry, we will arrange food."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:109"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:109"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi (बंडी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal speaking with folded hands",
+            "source": "A1:108"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan seated listening",
+            "source": "A1:110"
+          }
+        ],
+        "staging": [
+          "STAGING: soft morning light, plates in foreground"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-3",
+        "ovi_ids": [
+          "A1:110"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_looking_up_at_visitors"
+        },
+        "action": "slow push in on Gajanan looking up at the two visitors",
+        "held_pose": "Gajanan seated, head tilted up, eyes fixed on the two standing men",
+        "needs": [
+          "none"
+        ],
+        "performance": "narrator carries ovi 110: Gajanan thinks, gives no reply, only looks up at both faces",
+        "camera": "slow push in from medium to close-up",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:110"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:108"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan looking up (वरी पाहिलें)",
+            "source": "A1:110"
+          },
+          {
+            "kind": "event",
+            "term": "Gajanan gives no reply",
+            "source": "A1:110"
+          }
+        ],
+        "staging": [
+          "STAGING: steady gaze, no movement"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-4",
+        "ovi_ids": [
+          "A1:111"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "gajanan_radiant_closeup"
+        },
+        "action": "slow close push with soft halo on Gajanan's radiant face",
+        "held_pose": "Gajanan's face close-up: radiant complexion, muscular neck, steady gaze, attention at brow",
+        "needs": [
+          "none"
+        ],
+        "performance": "visual only: shows ovi 111 description of his radiant body and absorbed attention",
+        "camera": "slow push in to extreme close-up with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "radiant complexion (सतेज कांती मनोहर)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "muscular upper arms and neck (दंड गर्दन पिळदार)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "broad chest (भव्य छाती)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "steady gaze (दृष्टि स्थिर)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "attention at eyebrows (भृकुटी ठायीं झाली असे)",
+            "source": "A1:111"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo to suggest inner bliss"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-5",
+        "ovi_ids": [
+          "A1:112"
+        ],
+        "preset": "05_bowing_prayer",
+        "assets": {
+          "pose": "visitors_bowing_gajanan_seated"
+        },
+        "action": "camera tilts down onto the bowing figures",
+        "held_pose": "Bankatlal and Damodarpant bowing in pranam before seated Gajanan",
+        "needs": [
+          "none"
+        ],
+        "performance": "narrator carries ovi 112: absorbed in inner bliss, such a yogi seen, silent namaskar, satisfaction in heart",
+        "camera": "tilt down from faces to bowed heads",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:112"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:112"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:112"
+          },
+          {
+            "kind": "event",
+            "term": "silent namaskar (मौनेंच नमस्कार केला)",
+            "source": "A1:112"
+          },
+          {
+            "kind": "pose",
+            "term": "bowing pranam",
+            "source": "A1:112"
+          }
+        ],
+        "staging": [
+          "STAGING: silent reverence, no sound"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-6",
+        "ovi_ids": [
+          "A1:112"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_serene_closeup"
+        },
+        "action": "slow push in on Gajanan's serene face after the bow",
+        "held_pose": "Gajanan's face serene, eyes half-closed, absorbed in inner bliss",
+        "needs": [
+          "none"
+        ],
+        "performance": "visual only: continues ovi 112, showing the resulting satisfaction and bliss",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:112"
+          },
+          {
+            "kind": "pose",
+            "term": "absorbed in inner bliss (निजानंदीं रंगलेला)",
+            "source": "A1:112"
+          },
+          {
+            "kind": "event",
+            "term": "visitors' silent bow completed",
+            "source": "A1:112"
+          }
+        ],
+        "staging": [
+          "STAGING: quiet stillness"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "bankatlal_walking",
+        "description": "Bankatlal Agarwal walking forward, humble posture, transparent background"
+      },
+      {
+        "image_id": "gajanan_seated",
+        "description": "Shri Gajanan Maharaj seated on road among leaf plates, wearing old worn bandi, gourd and chilim nearby, transparent background"
+      },
+      {
+        "image_id": "bankatlal_speaking",
+        "description": "Bankatlal Agarwal standing, hands folded in speech, facing right, transparent background"
+      },
+      {
+        "image_id": "gajanan_listening",
+        "description": "Shri Gajanan Maharaj seated, head slightly turned listening, transparent background"
+      },
+      {
+        "image_id": "gajanan_looking_up_at_visitors",
+        "description": "Gajanan seated looking upward at two standing visitors (Bankatlal and Damodarpant), wide composition"
+      },
+      {
+        "image_id": "gajanan_radiant_closeup",
+        "description": "Close-up of Gajanan's face showing radiant complexion, muscular neck, steady gaze, attention at brow"
+      },
+      {
+        "image_id": "visitors_bowing_gajanan_seated",
+        "description": "Bankatlal and Damodarpant bowing in pranam before seated Gajanan, both figures transparent"
+      },
+      {
+        "image_id": "gajanan_serene_closeup",
+        "description": "Close-up of Gajanan's serene face after bow, eyes half-closed, absorbed in inner bliss"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 176.6,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 78.4,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S4-1: S4-1: action/performance describes motion the renderer cannot do ('walks'); show it as a held pose (held_pose) or use NEED_NEW",
+        "S4-1: S4-1: claim 'leaf plates (पत्रावळी)' cites A1:87, outside the scene",
+        "S4-1: S4-1: claim 'old worn bandi (बंडी)' cites A1:88, outside the scene",
+        "S4-1: S4-1: claim 'gourd vessel (भोपळा)' cites A1:89, outside the scene",
+        "S4-1: S4-1: claim 'unfired clay chilim (कच्ची चिलीम)' cites A1:89, outside the scene",
+        "S4-1: S4-1: claim \"road in front of Brahmin's house\" cites A1:87, outside the scene",
+        "S4-1: S4-1: claim 'Gajanan seated on road' cites A1:88, outside the scene",
+        "S4-2: S4-2: claim 'leaf plates (पत्रावळी)' cites A1:87, outside the scene",
+        "S4-2: S4-2: claim 'old worn bandi (बंडी)' cites A1:88, outside the scene",
+        "S4-3: S4-3: claim 'Damodarpant Kulkarni' cites A1:97, outside the scene",
+        "S4-5: S4-5: action/performance describes motion the renderer cannot do ('point'); show it as a held pose (held_pose) or use NEED_NEW"
+      ],
+      "scope": [
+        "S4-1",
+        "S4-2",
+        "S4-3",
+        "S4-5"
+      ],
+      "status": "USED"
+    }
+  ],
+  "final_reviews": [],
+  "plan_before_repair": {
+    "scene_id": "S4",
+    "chapter": 1,
+    "ovi_range": [
+      108,
+      112
+    ],
+    "goal": "Bankatlal humbly questions Gajanan about searching the plates; Gajanan gives no reply, only looks up at both visitors; his radiant, bliss-absorbed form is revealed; the two visitors bow silently in reverence.",
+    "turn": {
+      "ovi": "A1:112",
+      "text": "The visitors' silent bow marks their shift from testing to surrender."
+    },
+    "shots": [
+      {
+        "shot_id": "S4-1",
+        "ovi_ids": [
+          "A1:108"
+        ],
+        "preset": "04_character_entrance",
+        "assets": {
+          "char": "bankatlal_walking",
+          "other": "gajanan_seated"
+        },
+        "action": "camera pans with Bankatlal as he walks toward seated Gajanan",
+        "held_pose": "Bankatlal mid-stride approaching Gajanan who sits among leaf plates",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal advances humbly; Gajanan remains seated, gaze on plate",
+        "camera": "pan right following Bankatlal's approach",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:108"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:108"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi (बंडी)",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd vessel (भोपळा)",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim (कच्ची चिलीम)",
+            "source": "A1:89"
+          },
+          {
+            "kind": "scenery",
+            "term": "road in front of Brahmin's house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal walking forward",
+            "source": "A1:108"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan seated on road",
+            "source": "A1:88"
+          }
+        ],
+        "staging": [
+          "STAGING: early morning light, dust on road"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-2",
+        "ovi_ids": [
+          "A1:109"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_speaking",
+          "right": "gajanan_listening"
+        },
+        "action": "gentle drift across the two figures facing each other",
+        "held_pose": "Bankatlal speaking with hands folded; Gajanan seated, looking at him",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal asks why Gajanan searches plates and offers food; Gajanan listens silently",
+        "camera": "slow drift left to right across both figures",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:109",
+            "marathi": "ह्या पत्रावळीच्या शोधना । कां हो करितां कळेना । क्षुधा असेल आपणां । तरी तरतूद करुं अन्नाची",
+            "meaning_en": "Why search these plates? Why do you do this? If you are hungry, we will arrange food."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:109"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:109"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi (बंडी)",
+            "source": "A1:88"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal speaking with folded hands",
+            "source": "A1:108"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan seated listening",
+            "source": "A1:110"
+          }
+        ],
+        "staging": [
+          "STAGING: soft morning light, plates in foreground"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-3",
+        "ovi_ids": [
+          "A1:110"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_looking_up_at_visitors"
+        },
+        "action": "slow push in on Gajanan looking up at the two visitors",
+        "held_pose": "Gajanan seated, head tilted up, eyes fixed on the two standing men",
+        "needs": [
+          "none"
+        ],
+        "performance": "narrator carries ovi 110: Gajanan thinks, gives no reply, only looks up at both faces",
+        "camera": "slow push in from medium to close-up",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:110"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:108"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:97"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan looking up (वरी पाहिलें)",
+            "source": "A1:110"
+          },
+          {
+            "kind": "event",
+            "term": "Gajanan gives no reply",
+            "source": "A1:110"
+          }
+        ],
+        "staging": [
+          "STAGING: steady gaze, no movement"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-4",
+        "ovi_ids": [
+          "A1:111"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "gajanan_radiant_closeup"
+        },
+        "action": "slow close push with soft halo on Gajanan's radiant face",
+        "held_pose": "Gajanan's face close-up: radiant complexion, muscular neck, steady gaze, attention at brow",
+        "needs": [
+          "none"
+        ],
+        "performance": "visual only: shows ovi 111 description of his radiant body and absorbed attention",
+        "camera": "slow push in to extreme close-up with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "radiant complexion (सतेज कांती मनोहर)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "muscular upper arms and neck (दंड गर्दन पिळदार)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "broad chest (भव्य छाती)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "steady gaze (दृष्टि स्थिर)",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "attention at eyebrows (भृकुटी ठायीं झाली असे)",
+            "source": "A1:111"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo to suggest inner bliss"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-5",
+        "ovi_ids": [
+          "A1:112"
+        ],
+        "preset": "05_bowing_prayer",
+        "assets": {
+          "pose": "visitors_bowing_gajanan_seated"
+        },
+        "action": "camera tilts down onto the contact point of the bow",
+        "held_pose": "Bankatlal and Damodarpant bowing in pranam before seated Gajanan",
+        "needs": [
+          "none"
+        ],
+        "performance": "narrator carries ovi 112: absorbed in inner bliss, such a yogi seen, silent namaskar, satisfaction in heart",
+        "camera": "tilt down from faces to bowed heads",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:112"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:112"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:112"
+          },
+          {
+            "kind": "event",
+            "term": "silent namaskar (मौनेंच नमस्कार केला)",
+            "source": "A1:112"
+          },
+          {
+            "kind": "pose",
+            "term": "bowing pranam",
+            "source": "A1:112"
+          }
+        ],
+        "staging": [
+          "STAGING: silent reverence, no sound"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-6",
+        "ovi_ids": [
+          "A1:112"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_serene_closeup"
+        },
+        "action": "slow push in on Gajanan's serene face after the bow",
+        "held_pose": "Gajanan's face serene, eyes half-closed, absorbed in inner bliss",
+        "needs": [
+          "none"
+        ],
+        "performance": "visual only: continues ovi 112, showing the resulting satisfaction and bliss",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:112"
+          },
+          {
+            "kind": "pose",
+            "term": "absorbed in inner bliss (निजानंदीं रंगलेला)",
+            "source": "A1:112"
+          },
+          {
+            "kind": "event",
+            "term": "visitors' silent bow completed",
+            "source": "A1:112"
+          }
+        ],
+        "staging": [
+          "STAGING: quiet stillness"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "bankatlal_walking",
+        "description": "Bankatlal Agarwal walking forward, humble posture, transparent background"
+      },
+      {
+        "image_id": "gajanan_seated",
+        "description": "Shri Gajanan Maharaj seated on road among leaf plates, wearing old worn bandi, gourd and chilim nearby, transparent background"
+      },
+      {
+        "image_id": "bankatlal_speaking",
+        "description": "Bankatlal Agarwal standing, hands folded in speech, facing right, transparent background"
+      },
+      {
+        "image_id": "gajanan_listening",
+        "description": "Shri Gajanan Maharaj seated, head slightly turned listening, transparent background"
+      },
+      {
+        "image_id": "gajanan_looking_up_at_visitors",
+        "description": "Gajanan seated looking upward at two standing visitors (Bankatlal and Damodarpant), wide composition"
+      },
+      {
+        "image_id": "gajanan_radiant_closeup",
+        "description": "Close-up of Gajanan's face showing radiant complexion, muscular neck, steady gaze, attention at brow"
+      },
+      {
+        "image_id": "visitors_bowing_gajanan_seated",
+        "description": "Bankatlal and Damodarpant bowing in pranam before seated Gajanan, both figures transparent"
+      },
+      {
+        "image_id": "gajanan_serene_closeup",
+        "description": "Close-up of Gajanan's serene face after bow, eyes half-closed, absorbed in inner bliss"
+      }
+    ]
+  },
+  "status": "VALID",
+  "reviewed": false
+}

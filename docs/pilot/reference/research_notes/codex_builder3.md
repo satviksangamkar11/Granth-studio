@@ -1,0 +1,2 @@
+SAFE relative to previously approved builder_v2.py: only named-socket substitutions at lines 291–297 and 422 (including separate.inputs["Image"]); no other changes or new access class. Execution not tested.
+LF-normalised UTF-8 SHA256: bf7d3266f771950b9f928e9377500273c88cf5a0f3fedf0901305d31b9ccc6a0 — matches expected.

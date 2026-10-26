@@ -1,0 +1,283 @@
+{
+  "chapter": 1,
+  "result": "NO_CHECK",
+  "errors": [],
+  "warnings": [
+    "A1-T1: 37 shots in total: it will be directed in several ordered parts"
+  ],
+  "macro": {
+    "schema_version": 1,
+    "chapter": 1,
+    "source_sha256": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+    "source_range": [
+      1,
+      146
+    ],
+    "stories": [
+      {
+        "story_id": "A1-T1",
+        "title": "Gajanan's arrival in Shegaon and the first recognition at Devidas's feast",
+        "ovi_range": [
+          70,
+          144
+        ],
+        "arc": "complete",
+        "boundary_evidence": [
+          {
+            "ovi": "A1:70",
+            "reason": "The narrator turns to the great man himself and how he came to Shegaon (ovi 70-83); ovi 83-84 then tie the feast to that time, so one story begins here."
+          },
+          {
+            "ovi": "A1:74",
+            "reason": "He comes to Shegaon in his prime: the arrival that the encounter follows."
+          },
+          {
+            "ovi": "A1:144",
+            "reason": "After the teaching and the men's readiness to surrender, Gajanan runs off like the wind, closing the encounter."
+          }
+        ],
+        "scenes": [
+          {
+            "scene_id": "S1",
+            "ovi_range": [
+              70,
+              83
+            ],
+            "brief": "Opening. Narrated: his place and caste cannot be traced; he came to Shegaon in his prime, in the year 1878 (the Granth: Shaka 1800s); the Sajjangad claim has no strong proof. One view of Shegaon, then the young Gajanan seen there. No birth, childhood or journey is shown.",
+            "context_ovi_ids": [
+              "A1:58",
+              "A1:60"
+            ],
+            "shot_budget": 2
+          },
+          {
+            "scene_id": "S2",
+            "ovi_range": [
+              84,
+              96
+            ],
+            "brief": "Devidas prepares his son's Ritushanti feast; outside, the almost bare stranger (worn old bandi, digambar) picks leftover rice grains from the leaf plates; narrator gives the teaching 'food is Brahman' (94-96).",
+            "context_ovi_ids": [
+              "A1:74",
+              "A1:83"
+            ],
+            "shot_budget": 5
+          },
+          {
+            "scene_id": "S3",
+            "ovi_range": [
+              97,
+              105
+            ],
+            "brief": "Bankatlal and Damodarpant see him, debate whether he is mad or profoundly wise, and resolve to test his conduct rather than dismiss him.",
+            "context_ovi_ids": [
+              "A1:94"
+            ],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S4",
+            "ovi_range": [
+              108,
+              112
+            ],
+            "brief": "Bankatlal humbly asks why he searches the plates; no answer, only a steady look at both; radiant, absorbed in inner bliss; the two visitors bow to him in silence (ovi 112).",
+            "context_ovi_ids": [
+              "A1:102"
+            ],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S5",
+            "ovi_range": [
+              113,
+              118
+            ],
+            "brief": "After a request whose speaker is unnamed, Devidas sets a plate of rich cooked dishes before Gajanan; he mixes all the dishes together and eats without liking or disliking any taste (118); narrator's two comparisons (116-117).",
+            "context_ovi_ids": [],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S6",
+            "ovi_range": [
+              119,
+              122
+            ],
+            "brief": "Bankatlal tells Damodarpant that calling him mad was a mistake; like Arjuna for Subhadra, Gajanan seeks liberation; no further test is needed. Ovi 122 praises Shegaon and Hari's gift of desirelessness; speaker unclear.",
+            "context_ovi_ids": [
+              "A1:99",
+              "A1:118"
+            ],
+            "shot_budget": 3
+          },
+          {
+            "scene_id": "S7",
+            "ovi_range": [
+              123,
+              133
+            ],
+            "brief": "At noon the gourd is empty; Damodar offers water, Gajanan laughingly explains practical conduct, and Damodar joyfully enters Devidas's house to fetch water in a gadva.",
+            "context_ovi_ids": [
+              "A1:89",
+              "A1:118"
+            ],
+            "shot_budget": 5
+          },
+          {
+            "scene_id": "S8",
+            "ovi_range": [
+              134,
+              137
+            ],
+            "brief": "Gajanan drinks at the cattle trough; Damodar returns with cool, vetiver-scented water and protests that the muddy water is fit only for animals.",
+            "context_ovi_ids": [
+              "A1:133"
+            ],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S9",
+            "ovi_range": [
+              138,
+              144
+            ],
+            "brief": "Gajanan declares that water in any form and the drinker are one in Brahman (138-142), with room for his words; the men are ready to fall at his feet (143); he runs off like the wind (144).",
+            "context_ovi_ids": [
+              "A1:137"
+            ],
+            "shot_budget": 6
+          }
+        ]
+      }
+    ],
+    "unfilmed_ranges": [
+      {
+        "ovi_range": [
+          1,
+          32
+        ],
+        "kind": "invocation",
+        "reason": "Invocations to deities and saints, with the author's humility and prayer for guidance in composing the work."
+      },
+      {
+        "ovi_range": [
+          33,
+          38
+        ],
+        "kind": "commentary",
+        "reason": "The author exhorts listeners and praises saints; these verses narrate no story event."
+      },
+      {
+        "ovi_range": [
+          39,
+          57
+        ],
+        "kind": "background",
+        "reason": "Lists of earlier saints, earlier books and the author's plan explain the lineage and purpose of this biography."
+      },
+      {
+        "ovi_range": [
+          58,
+          69
+        ],
+        "kind": "background",
+        "reason": "Shegaon, Patil's request and the praise of the true saint set the scene; one view of Shegaon is drawn from 58-60 as context."
+      },
+      {
+        "ovi_range": [
+          106,
+          107
+        ],
+        "kind": "commentary",
+        "reason": "The narrator contrasts unobservant passers-by with the discerning gem-picker; this is reflective narration, not required action."
+      },
+      {
+        "ovi_range": [
+          145,
+          146
+        ],
+        "kind": "closing",
+        "reason": "The next-chapter announcement and the author's prayerful dedication close the chapter."
+      }
+    ]
+  },
+  "macro_sha256": "78b56087f81a880b422a2e9f2002ffb68afedf1033a8fb87d4a7df0cef9620a0",
+  "parts": [
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P1",
+      "scene_ids": [
+        "S1",
+        "S2"
+      ],
+      "shot_budget": 7
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P2",
+      "scene_ids": [
+        "S3",
+        "S4"
+      ],
+      "shot_budget": 8
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P3",
+      "scene_ids": [
+        "S5",
+        "S6"
+      ],
+      "shot_budget": 7
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P4",
+      "scene_ids": [
+        "S7",
+        "S8"
+      ],
+      "shot_budget": 9
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P5",
+      "scene_ids": [
+        "S9"
+      ],
+      "shot_budget": 6
+    }
+  ],
+  "reviews": [
+    {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "verdict": "NO_CHECK",
+      "problems": [],
+      "missing": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6"
+      ]
+    }
+  ],
+  "final_reviews": [],
+  "repairs": [],
+  "calls": [
+    {
+      "step": "macro_review",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 274.9,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "revised_from": "acb32841c7ccb81597935b0f180c764ab0b02038a1dcbd90c98860141267d39d",
+  "note": "Owner-directed revision of Kimi's split (run a1_kimi_plan2, hash acb32841c7cc): opening scene written from ovi 70-83 (only the YEAR is named, 1878 at the owner's instruction; the Granth itself says only 'within Shaka 1800s'; no day or month); the 'food is Brahman' teaching (95-96) joins scene 2; the mixing of dishes (116-118) joins scene 5; scene 9 gets 6 shots for the teaching; the silent salutation (112) and the costume (88, 92) are added. Verified against the Marathi ovis; no Kimi call. Story retitled to cover the arrival and the feast, after the cross-check objected that the opening was not about the feast. Codex integrity check applied: unclear speaker kept in scene 6, 'rich cooked dishes' instead of 'sweet dishes', Devidas's house in scene 7, direction notes added."
+}

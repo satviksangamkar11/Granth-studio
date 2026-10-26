@@ -1,0 +1,839 @@
+{
+  "scene": 5,
+  "chapter": 1,
+  "range": [
+    113,
+    118
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S5-1: STAGING pose 'standing addressing' needs the owner's approval",
+    "S5-2: STAGING light 'daytime' needs the owner's approval",
+    "S5-3: STAGING light 'midday sun' needs the owner's approval",
+    "S5-4: STAGING light 'morning sun' needs the owner's approval",
+    "S5-4: STAGING scenery 'sky' needs the owner's approval",
+    "S5-4: STAGING light 'subtle light effect' needs the owner's approval",
+    "S5-4: STAGING scenery 'foreground leaf plates' needs the owner's approval",
+    "S5-5: STAGING pose 'hands mixing' needs the owner's approval",
+    "S5-6: STAGING light 'soft halo' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S5",
+    "chapter": 1,
+    "ovi_range": [
+      113,
+      118
+    ],
+    "goal": "Show Devidas serving a plate of rich dishes to Gajanan, who mixes them and eats without taste preference, while narrator gives two comparisons.",
+    "turn": {
+      "ovi": "A1:118",
+      "text": "Gajanan mixes all cooked dishes into one and eats without liking or disliking, satisfying his hunger in two prahars."
+    },
+    "shots": [
+      {
+        "shot_id": "S5-1",
+        "ovi_ids": [
+          "A1:113"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "speaker_unclear_standing",
+          "right": "devidas_standing_listening"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "speaker addressing Devidas with hand gesture; Devidas standing attentive",
+        "needs": [
+          "none"
+        ],
+        "performance": "speaker delivers the request to bring a plate; Devidas listens",
+        "camera": "gentle drift left to right across the two figures",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": "A1:113",
+            "marathi": "तुम्ही पात्र वाढून वेगेंसी। आणा एक बाहेर",
+            "meaning_en": "You increase the plate quickly. Bring one outside."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "unclear speaker",
+            "source": "A1:113"
+          },
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:113"
+          },
+          {
+            "kind": "prop",
+            "term": "plate (पात्र)",
+            "source": "A1:113"
+          },
+          {
+            "kind": "scenery",
+            "term": "door exterior",
+            "source": "A1:113"
+          },
+          {
+            "kind": "pose",
+            "term": "standing addressing",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: speaker stands on road near door, Devidas stands at door threshold"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S5-2",
+        "ovi_ids": [
+          "A1:114"
+        ],
+        "preset": "04_character_entrance",
+        "assets": {
+          "char": "devidas_walking_with_plate",
+          "other": "gajanan_seated_at_door"
+        },
+        "action": "camera pans right across the threshold following Devidas's path",
+        "held_pose": "Devidas in mid-stride carrying a full plate; Gajanan seated calmly on the road",
+        "needs": [
+          "none"
+        ],
+        "performance": "held poses show Devidas approaching with the plate and Gajanan waiting; narrator covers ovi 114",
+        "camera": "pan right following the path from house to Gajanan",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:114"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:114"
+          },
+          {
+            "kind": "prop",
+            "term": "plate full of cooked dishes (पक्वान्न)",
+            "source": "A1:114"
+          },
+          {
+            "kind": "scenery",
+            "term": "door (द्वार)",
+            "source": "A1:114"
+          },
+          {
+            "kind": "pose",
+            "term": "Devidas mid-stride with plate",
+            "source": "A1:114"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan seated",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daytime",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Devidas emerges from house doorway, plate in hands; Gajanan seated on road before door"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S5-3",
+        "ovi_ids": [
+          "A1:114"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_at_plate_front"
+        },
+        "action": "camera slowly pushes in on Gajanan seated at the plate",
+        "held_pose": "Gajanan seated before the plate, hands resting, gaze at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows Gajanan ready to eat; narrator continues from previous ovi",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:114"
+          },
+          {
+            "kind": "prop",
+            "term": "plate with dishes",
+            "source": "A1:114"
+          },
+          {
+            "kind": "pose",
+            "term": "seated, gaze at nose tip",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "worn old bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "midday sun",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: camera pushes in to emphasize stillness"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S5-4",
+        "ovi_ids": [
+          "A1:115",
+          "A1:116",
+          "A1:117"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_foreground_elements",
+          "fx": "fx_light_subtle",
+          "mid": "mid_gajanan_plate_door",
+          "sky": "sky_morning"
+        },
+        "action": "camera dollies in from wide to mid, revealing the setting",
+        "held_pose": "wide view: Gajanan at door, plate before him, house exterior, road",
+        "needs": [
+          "none"
+        ],
+        "performance": "establishing the meal scene; narrator covers ovi 115, 116, 117",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:115"
+          },
+          {
+            "kind": "prop",
+            "term": "plate with dishes",
+            "source": "A1:115"
+          },
+          {
+            "kind": "scenery",
+            "term": "door, house exterior, road",
+            "source": "A1:114"
+          },
+          {
+            "kind": "light",
+            "term": "morning sun",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "subtle light effect",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "foreground leaf plates",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: wide shot includes the road, door, Gajanan, plate, and distant leaf plates"
+        ],
+        "transition_out": "pan_bridge"
+      },
+      {
+        "shot_id": "S5-5",
+        "ovi_ids": [
+          "A1:118"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "hands_mixing_food_closeup"
+        },
+        "action": "camera pushes in slightly on the close-up of hands mixing food",
+        "held_pose": "Gajanan's hands mixing all dishes together into one",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows the mixing of all cooked dishes as described in ovi 118",
+        "camera": "slow push in on insert",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj (hands)",
+            "source": "A1:118"
+          },
+          {
+            "kind": "prop",
+            "term": "mixed food",
+            "source": "A1:118"
+          },
+          {
+            "kind": "event",
+            "term": "mixing dishes",
+            "source": "A1:118"
+          },
+          {
+            "kind": "pose",
+            "term": "hands mixing",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: close-up focuses on hands and food, no face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S5-6",
+        "ovi_ids": [
+          "A1:118"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "gajanan_face_serene_closeup"
+        },
+        "action": "camera pushes in slowly with soft halo on Gajanan's face",
+        "held_pose": "Gajanan's face serene, eyes half-closed, expressing equanimity",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows satisfaction without taste preference; narrator covers ovi 118 continued",
+        "camera": "slow push in with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:118"
+          },
+          {
+            "kind": "pose",
+            "term": "serene face",
+            "source": "A1:115"
+          },
+          {
+            "kind": "light",
+            "term": "soft halo",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo effect emphasizes inner bliss"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "speaker_unclear_standing",
+        "description": "Unclear speaker (likely Bankatlal) standing on road, addressing Devidas, wearing simple clothes, hand gesturing outward"
+      },
+      {
+        "image_id": "devidas_standing_listening",
+        "description": "Devidas standing at door threshold, listening attentively, wearing Brahmin householder attire"
+      },
+      {
+        "image_id": "devidas_walking_with_plate",
+        "description": "Devidas walking forward carrying a plate full of cooked dishes, transparent background for parallax"
+      },
+      {
+        "image_id": "gajanan_seated_at_door",
+        "description": "Gajanan Maharaj seated on road before door, wearing worn bandi, holding unfired clay chilim, gourd nearby, gaze at nose tip"
+      },
+      {
+        "image_id": "gajanan_seated_at_plate_front",
+        "description": "Gajanan Maharaj seated front view, plate of dishes before him, hands resting on knees, calm posture"
+      },
+      {
+        "image_id": "sky_morning",
+        "description": "Morning sky with soft light, flat color illustration"
+      },
+      {
+        "image_id": "mid_gajanan_plate_door",
+        "description": "Mid layer: Gajanan seated at door with plate, house exterior, road"
+      },
+      {
+        "image_id": "fx_light_subtle",
+        "description": "Subtle light effect layer for establishing shot"
+      },
+      {
+        "image_id": "fg_foreground_elements",
+        "description": "Foreground elements: scattered leaf plates, road texture"
+      },
+      {
+        "image_id": "hands_mixing_food_closeup",
+        "description": "Close-up of Gajanan's hands mixing various cooked dishes together in a plate"
+      },
+      {
+        "image_id": "gajanan_face_serene_closeup",
+        "description": "Close-up of Gajanan Maharaj's face, serene expression, eyes half-closed, radiant complexion"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 257.3,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 14.5,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S5-2: S5-2: action/performance describes motion the renderer cannot do ('walks'); show it as a held pose (held_pose) or use NEED_NEW"
+      ],
+      "scope": [
+        "S5-2"
+      ],
+      "status": "USED"
+    }
+  ],
+  "final_reviews": [],
+  "plan_before_repair": {
+    "scene_id": "S5",
+    "chapter": 1,
+    "ovi_range": [
+      113,
+      118
+    ],
+    "goal": "Show Devidas serving a plate of rich dishes to Gajanan, who mixes them and eats without taste preference, while narrator gives two comparisons.",
+    "turn": {
+      "ovi": "A1:118",
+      "text": "Gajanan mixes all cooked dishes into one and eats without liking or disliking, satisfying his hunger in two prahars."
+    },
+    "shots": [
+      {
+        "shot_id": "S5-1",
+        "ovi_ids": [
+          "A1:113"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "speaker_unclear_standing",
+          "right": "devidas_standing_listening"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "speaker addressing Devidas with hand gesture; Devidas standing attentive",
+        "needs": [
+          "none"
+        ],
+        "performance": "speaker delivers the request to bring a plate; Devidas listens",
+        "camera": "gentle drift left to right across the two figures",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": "A1:113",
+            "marathi": "तुम्ही पात्र वाढून वेगेंसी। आणा एक बाहेर",
+            "meaning_en": "You increase the plate quickly. Bring one outside."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "unclear speaker",
+            "source": "A1:113"
+          },
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:113"
+          },
+          {
+            "kind": "prop",
+            "term": "plate (पात्र)",
+            "source": "A1:113"
+          },
+          {
+            "kind": "scenery",
+            "term": "door exterior",
+            "source": "A1:113"
+          },
+          {
+            "kind": "pose",
+            "term": "standing addressing",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: speaker stands on road near door, Devidas stands at door threshold"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S5-2",
+        "ovi_ids": [
+          "A1:114"
+        ],
+        "preset": "04_character_entrance",
+        "assets": {
+          "char": "devidas_walking_with_plate",
+          "other": "gajanan_seated_at_door"
+        },
+        "action": "camera pans with Devidas as he walks to Gajanan",
+        "held_pose": "Devidas walking carrying a full plate; Gajanan seated calmly",
+        "needs": [
+          "none"
+        ],
+        "performance": "Devidas brings the plate of cooked dishes and places it before Gajanan",
+        "camera": "pan right following Devidas",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:114"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:114"
+          },
+          {
+            "kind": "prop",
+            "term": "plate full of cooked dishes (पक्वान्न)",
+            "source": "A1:114"
+          },
+          {
+            "kind": "scenery",
+            "term": "door (द्वार)",
+            "source": "A1:114"
+          },
+          {
+            "kind": "pose",
+            "term": "Devidas walking with plate",
+            "source": "A1:114"
+          },
+          {
+            "kind": "pose",
+            "term": "Gajanan seated",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daytime",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Devidas emerges from house, walks across threshold to Gajanan seated on road"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S5-3",
+        "ovi_ids": [
+          "A1:114"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_at_plate_front"
+        },
+        "action": "camera slowly pushes in on Gajanan seated at the plate",
+        "held_pose": "Gajanan seated before the plate, hands resting, gaze at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows Gajanan ready to eat; narrator continues from previous ovi",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:114"
+          },
+          {
+            "kind": "prop",
+            "term": "plate with dishes",
+            "source": "A1:114"
+          },
+          {
+            "kind": "pose",
+            "term": "seated, gaze at nose tip",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "worn old bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "midday sun",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: camera pushes in to emphasize stillness"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S5-4",
+        "ovi_ids": [
+          "A1:115",
+          "A1:116",
+          "A1:117"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_foreground_elements",
+          "fx": "fx_light_subtle",
+          "mid": "mid_gajanan_plate_door",
+          "sky": "sky_morning"
+        },
+        "action": "camera dollies in from wide to mid, revealing the setting",
+        "held_pose": "wide view: Gajanan at door, plate before him, house exterior, road",
+        "needs": [
+          "none"
+        ],
+        "performance": "establishing the meal scene; narrator covers ovi 115, 116, 117",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:115"
+          },
+          {
+            "kind": "prop",
+            "term": "plate with dishes",
+            "source": "A1:115"
+          },
+          {
+            "kind": "scenery",
+            "term": "door, house exterior, road",
+            "source": "A1:114"
+          },
+          {
+            "kind": "light",
+            "term": "morning sun",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "subtle light effect",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "foreground leaf plates",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: wide shot includes the road, door, Gajanan, plate, and distant leaf plates"
+        ],
+        "transition_out": "pan_bridge"
+      },
+      {
+        "shot_id": "S5-5",
+        "ovi_ids": [
+          "A1:118"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "hands_mixing_food_closeup"
+        },
+        "action": "camera pushes in slightly on the close-up of hands mixing food",
+        "held_pose": "Gajanan's hands mixing all dishes together into one",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows the mixing of all cooked dishes as described in ovi 118",
+        "camera": "slow push in on insert",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj (hands)",
+            "source": "A1:118"
+          },
+          {
+            "kind": "prop",
+            "term": "mixed food",
+            "source": "A1:118"
+          },
+          {
+            "kind": "event",
+            "term": "mixing dishes",
+            "source": "A1:118"
+          },
+          {
+            "kind": "pose",
+            "term": "hands mixing",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: close-up focuses on hands and food, no face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S5-6",
+        "ovi_ids": [
+          "A1:118"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "gajanan_face_serene_closeup"
+        },
+        "action": "camera pushes in slowly with soft halo on Gajanan's face",
+        "held_pose": "Gajanan's face serene, eyes half-closed, expressing equanimity",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows satisfaction without taste preference; narrator covers ovi 118 continued",
+        "camera": "slow push in with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:118"
+          },
+          {
+            "kind": "pose",
+            "term": "serene face",
+            "source": "A1:115"
+          },
+          {
+            "kind": "light",
+            "term": "soft halo",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo effect emphasizes inner bliss"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "speaker_unclear_standing",
+        "description": "Unclear speaker (likely Bankatlal) standing on road, addressing Devidas, wearing simple clothes, hand gesturing outward"
+      },
+      {
+        "image_id": "devidas_standing_listening",
+        "description": "Devidas standing at door threshold, listening attentively, wearing Brahmin householder attire"
+      },
+      {
+        "image_id": "devidas_walking_with_plate",
+        "description": "Devidas walking forward carrying a plate full of cooked dishes, transparent background for parallax"
+      },
+      {
+        "image_id": "gajanan_seated_at_door",
+        "description": "Gajanan Maharaj seated on road before door, wearing worn bandi, holding unfired clay chilim, gourd nearby, gaze at nose tip"
+      },
+      {
+        "image_id": "gajanan_seated_at_plate_front",
+        "description": "Gajanan Maharaj seated front view, plate of dishes before him, hands resting on knees, calm posture"
+      },
+      {
+        "image_id": "sky_morning",
+        "description": "Morning sky with soft light, flat color illustration"
+      },
+      {
+        "image_id": "mid_gajanan_plate_door",
+        "description": "Mid layer: Gajanan seated at door with plate, house exterior, road"
+      },
+      {
+        "image_id": "fx_light_subtle",
+        "description": "Subtle light effect layer for establishing shot"
+      },
+      {
+        "image_id": "fg_foreground_elements",
+        "description": "Foreground elements: scattered leaf plates, road texture"
+      },
+      {
+        "image_id": "hands_mixing_food_closeup",
+        "description": "Close-up of Gajanan's hands mixing various cooked dishes together in a plate"
+      },
+      {
+        "image_id": "gajanan_face_serene_closeup",
+        "description": "Close-up of Gajanan Maharaj's face, serene expression, eyes half-closed, radiant complexion"
+      }
+    ]
+  },
+  "status": "VALID",
+  "reviewed": false
+}

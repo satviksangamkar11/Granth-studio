@@ -1,0 +1,415 @@
+{
+  "scene": 1,
+  "chapter": 1,
+  "range": [
+    70,
+    83
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S1-1: STAGING scenery 'village houses' needs the owner's approval",
+    "S1-1: STAGING scenery 'distant trees' needs the owner's approval",
+    "S1-1: STAGING light 'daylight' needs the owner's approval",
+    "S1-2: STAGING light 'daylight' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S1",
+    "chapter": 1,
+    "ovi_range": [
+      70,
+      83
+    ],
+    "goal": "Establish the historical setting of Shegaon in 1878 and introduce the young Gajanan Maharaj as an enigmatic figure whose origins are untraceable.",
+    "turn": {
+      "ovi": "A1:70",
+      "text": "The narrator states that the great man's place and caste cannot be traced historically."
+    },
+    "shots": [
+      {
+        "shot_id": "S1-1",
+        "ovi_ids": [
+          "A1:70"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "shegaon_fg",
+          "fx": "shegaon_fx",
+          "mid": "shegaon_mid",
+          "sky": "shegaon_sky"
+        },
+        "action": "camera dollies in slowly over the village landscape",
+        "held_pose": "wide view of historical Shegaon with pond and village",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows the village of Shegaon in 1878; narrator speaks ovi 70",
+        "camera": "dolly in from 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "Shegaon village",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "pond",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "village houses",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "distant trees",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "caption 1878",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: daylight lighting",
+          "STAGING: dolly in camera move",
+          "STAGING: on-screen caption 1878",
+          "STAGING: village houses in mid layer",
+          "STAGING: distant trees in mid layer"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-2",
+        "ovi_ids": [
+          "A1:71",
+          "A1:72",
+          "A1:73",
+          "A1:74",
+          "A1:75",
+          "A1:76",
+          "A1:77",
+          "A1:78",
+          "A1:79",
+          "A1:80",
+          "A1:81",
+          "A1:82",
+          "A1:83"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_young_shegaon"
+        },
+        "action": "camera pushes in slowly on the figure",
+        "held_pose": "young Gajanan Maharaj seated on the road in Shegaon, wearing worn bandi, otherwise bare, with gourd and clay chilim, calm gaze at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows the young Gajanan in Shegaon; no narration in this shot",
+        "camera": "push in from 1.0 to 1.2",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "worn old bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road in Shegaon",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm, gaze at nose tip",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: daylight lighting",
+          "STAGING: slow push in camera"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "shegaon_sky",
+        "description": "sky layer for historical Shegaon, clear daytime"
+      },
+      {
+        "image_id": "shegaon_mid",
+        "description": "mid layer showing Shegaon village with pond, houses, and distant trees"
+      },
+      {
+        "image_id": "shegaon_fx",
+        "description": "fx layer for atmospheric light and dust"
+      },
+      {
+        "image_id": "shegaon_fg",
+        "description": "foreground frame elements like foliage or archway"
+      },
+      {
+        "image_id": "gajanan_young_shegaon",
+        "description": "young Gajanan Maharaj seated on road in Shegaon, wearing worn bandi, otherwise bare, with gourd and clay chilim, calm gaze at nose tip"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 151.9,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 31.2,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S1-1: S1-1: scenery 'village houses' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+        "S1-1: S1-1: scenery 'distant trees' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)"
+      ],
+      "scope": [
+        "S1-1"
+      ],
+      "status": "USED"
+    }
+  ],
+  "final_reviews": [],
+  "plan_before_repair": {
+    "scene_id": "S1",
+    "chapter": 1,
+    "ovi_range": [
+      70,
+      83
+    ],
+    "goal": "Establish the historical setting of Shegaon in 1878 and introduce the young Gajanan Maharaj as an enigmatic figure whose origins are untraceable.",
+    "turn": {
+      "ovi": "A1:70",
+      "text": "The narrator states that the great man's place and caste cannot be traced historically."
+    },
+    "shots": [
+      {
+        "shot_id": "S1-1",
+        "ovi_ids": [
+          "A1:70"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "shegaon_fg",
+          "fx": "shegaon_fx",
+          "mid": "shegaon_mid",
+          "sky": "shegaon_sky"
+        },
+        "action": "camera dollies in slowly over the village landscape",
+        "held_pose": "wide view of historical Shegaon with pond, village houses, and distant trees",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows the village of Shegaon in 1878; narrator speaks ovi 70",
+        "camera": "dolly in from 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "Shegaon village",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "pond",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "village houses",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "distant trees",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "caption 1878",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: daylight lighting",
+          "STAGING: dolly in camera move",
+          "STAGING: on-screen caption 1878"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-2",
+        "ovi_ids": [
+          "A1:71",
+          "A1:72",
+          "A1:73",
+          "A1:74",
+          "A1:75",
+          "A1:76",
+          "A1:77",
+          "A1:78",
+          "A1:79",
+          "A1:80",
+          "A1:81",
+          "A1:82",
+          "A1:83"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_young_shegaon"
+        },
+        "action": "camera pushes in slowly on the figure",
+        "held_pose": "young Gajanan Maharaj seated on the road in Shegaon, wearing worn bandi, otherwise bare, with gourd and clay chilim, calm gaze at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "held pose shows the young Gajanan in Shegaon; no narration in this shot",
+        "camera": "push in from 1.0 to 1.2",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "worn old bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road in Shegaon",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm, gaze at nose tip",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: daylight lighting",
+          "STAGING: slow push in camera"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "shegaon_sky",
+        "description": "sky layer for historical Shegaon, clear daytime"
+      },
+      {
+        "image_id": "shegaon_mid",
+        "description": "mid layer showing Shegaon village with pond, houses, and distant trees"
+      },
+      {
+        "image_id": "shegaon_fx",
+        "description": "fx layer for atmospheric light and dust"
+      },
+      {
+        "image_id": "shegaon_fg",
+        "description": "foreground frame elements like foliage or archway"
+      },
+      {
+        "image_id": "gajanan_young_shegaon",
+        "description": "young Gajanan Maharaj seated on road in Shegaon, wearing worn bandi, otherwise bare, with gourd and clay chilim, calm gaze at nose tip"
+      }
+    ]
+  },
+  "status": "VALID",
+  "reviewed": false
+}

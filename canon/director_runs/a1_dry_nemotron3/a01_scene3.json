@@ -1,0 +1,566 @@
+{
+  "scene": 3,
+  "chapter": 1,
+  "range": [
+    97,
+    105
+  ],
+  "result": "INVALID",
+  "errors": [
+    "S3-1: action/performance describes motion the renderer cannot do ('walking'); show it as a held pose (held_pose) or use NEED_NEW",
+    "S3-3: dialogue Marathi for A1:99 is not a substring of that ovi's text",
+    "S3-3: dialogue Marathi for A1:99 is not a substring of that ovi's text",
+    "S3-3: dialogue A1:99 by 'Bankatlal Agarwal' is not one of the character lines planned for this shot (exact Marathi, that character)",
+    "S3-3: dialogue A1:99 by 'Damodarpant Kulkarni' is not one of the character lines planned for this shot (exact Marathi, that character)",
+    "S3-3: dialogue A1:100 by 'unclear' is not one of the character lines planned for this shot (exact Marathi, that character)",
+    "S3-3: dialogue A1:101 by 'unclear' is not one of the character lines planned for this shot (exact Marathi, that character)",
+    "S3-5: dialogue A1:103 by 'unclear' is not one of the character lines planned for this shot (exact Marathi, that character)"
+  ],
+  "warnings": [
+    "S3-1: STAGING scenery 'sky' needs the owner's approval",
+    "S3-1: STAGING light 'morning light' needs the owner's approval",
+    "S3-2: STAGING scenery 'sky' needs the owner's approval",
+    "S3-3: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S3-4: STAGING pose 'close-up face' needs the owner's approval",
+    "S3-5: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S3-7: STAGING scenery 'sky' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S3",
+    "chapter": 1,
+    "ovi_range": [
+      97,
+      105
+    ],
+    "goal": "Show Bankatlal and Damodarpant encountering Maharaj, debating his nature, and deciding to test him.",
+    "turn": {
+      "ovi": "A1:102",
+      "text": "Bankatlal proposes they stand on the road and test Maharaj's conduct rather than dismiss him."
+    },
+    "shots": [
+      {
+        "shot_id": "S3-1",
+        "ovi_ids": [
+          "A1:97",
+          "A1:98"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_road_frame",
+          "fx": "fx_morning_light",
+          "mid": "mid_bankatlal_damodarpant_walking",
+          "sky": "sky_clear"
+        },
+        "action": "camera dollies in slowly",
+        "held_pose": "two men walk side by side on a dusty road stretching into distance",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows Bankatlal Agarwal and Damodarpant Kulkarni walking together on the road",
+        "camera": "dolly in from wide to medium",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:97"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:97"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:97"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "morning light",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "walking side by side",
+            "source": "A1:97"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: sky added for establishing shot",
+          "STAGING: morning light added for atmosphere",
+          "STAGING: foreground frame added for composition"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S3-2",
+        "ovi_ids": [
+          "A1:98"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "far_road_distant",
+          "mid": "mid_maharaj_seated",
+          "near": "near_bankatlal_damodarpant_standing",
+          "sky": "sky_clear2"
+        },
+        "action": "camera pans laterally through depth layers",
+        "held_pose": "two men stand on road gazing at seated Maharaj in middle distance",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows Bankatlal and Damodarpant turned toward Maharaj with astonished posture",
+        "camera": "pan right across layers",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:98"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:98"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:98"
+          },
+          {
+            "kind": "pose",
+            "term": "standing gazing",
+            "source": "A1:98"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "lateral pan",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: sky added for depth",
+          "STAGING: far road layer added for parallax"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S3-3",
+        "ovi_ids": [
+          "A1:99",
+          "A1:100",
+          "A1:101"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "left_bankatlal_facing",
+          "right": "right_damodarpant_facing"
+        },
+        "action": "camera drifts gently across the two faces",
+        "held_pose": "Bankatlal and Damodarpant face each other, mouths closed, eyes intent",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows them in mid-conversation, each listening to the other",
+        "camera": "slow drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:99",
+            "marathi": "कीं याची करणी विपरीत। वेड्यापरी दिसतसे",
+            "meaning_en": "His actions are contrary; he looks like a madman."
+          },
+          {
+            "speaker": "Damodarpant Kulkarni",
+            "ovi": "A1:99",
+            "marathi": "कीं याची करणी विपरीत। वेड्यापरी दिसतसे",
+            "meaning_en": "His actions are contrary; he looks like a madman."
+          },
+          {
+            "speaker": "unclear",
+            "ovi": "A1:100",
+            "marathi": "हा अन्नार्थी जरी असतां। तरी पात्र मागून घेता। देवीदासही यातें देता। कां कीं तोही सज्जन",
+            "meaning_en": "Even if he is a beggar, he would ask for a vessel; Devidas would give; for he is a good man."
+          },
+          {
+            "speaker": "unclear",
+            "ovi": "A1:101",
+            "marathi": "द्वारीं आलेला याचक। लावी ना सुज्ञ परत देख। कांहीं न चाले तर्क। कृतीवरुनी याच्या ह्या",
+            "meaning_en": "A beggar came to the door; a wise host does not send him back; no reasoning fits; from his actions."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:99"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:99"
+          },
+          {
+            "kind": "pose",
+            "term": "facing each other",
+            "source": "A1:99"
+          },
+          {
+            "kind": "event",
+            "term": "conversation about Maharaj",
+            "source": "A1:99"
+          },
+          {
+            "kind": "event",
+            "term": "joint reasoning about beggar",
+            "source": "A1:100"
+          },
+          {
+            "kind": "event",
+            "term": "joint reasoning about host",
+            "source": "A1:101"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S3-4",
+        "ovi_ids": [
+          "A1:102"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "face_bankatlal_closeup"
+        },
+        "action": "camera pushes in slowly on Bankatlal's face",
+        "held_pose": "Bankatlal's face close-up, calm expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows Bankatlal looking thoughtful",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:102"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: close-up framing for character reaction"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S3-5",
+        "ovi_ids": [
+          "A1:102",
+          "A1:103"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "left_bankatlal_facing",
+          "right": "right_damodarpant_facing"
+        },
+        "action": "camera drifts gently across the two faces",
+        "held_pose": "Bankatlal speaks, Damodarpant listens",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows Bankatlal addressing Damodarpant",
+        "camera": "slow drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:102",
+            "marathi": "ऐसेच उभें रस्‍त्यासी । आपण राहूं यत्कृतीसी । अजमावयाकारणें",
+            "meaning_en": "Let us stand here on the road and test his actions."
+          },
+          {
+            "speaker": "unclear",
+            "ovi": "A1:103",
+            "marathi": "खरे साधु पिशापरी। जगीं वागती वरवरी। ऐसी व्यासाची वैखरी। बोलली आहे भागवतांत",
+            "meaning_en": "True sadhus behave like madmen in the world; such is Vyasa's statement in the Bhagavat."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:102"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:102"
+          },
+          {
+            "kind": "pose",
+            "term": "facing each other",
+            "source": "A1:102"
+          },
+          {
+            "kind": "event",
+            "term": "Bankatlal proposes test",
+            "source": "A1:102"
+          },
+          {
+            "kind": "event",
+            "term": "reference to Bhagavat about sadhus",
+            "source": "A1:103"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S3-6",
+        "ovi_ids": [
+          "A1:104"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "img_both_men_standing_maharaj_bg"
+        },
+        "action": "camera pushes in slowly",
+        "held_pose": "both men stand on road, gazing at Maharaj",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows them reflecting",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:104"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:104"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:104"
+          },
+          {
+            "kind": "pose",
+            "term": "standing gazing",
+            "source": "A1:104"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: camera push in for reflection"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S3-7",
+        "ovi_ids": [
+          "A1:105"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "far_road_distant",
+          "mid": "mid_maharaj_seated",
+          "near": "near_bankatlal_damodarpant_standing",
+          "sky": "sky_clear2"
+        },
+        "action": "camera pans laterally through depth layers",
+        "held_pose": "two men remain on road, Maharaj seated in distance",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows the scene continuing unchanged",
+        "camera": "pan right across layers",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:105"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:105"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:105"
+          },
+          {
+            "kind": "pose",
+            "term": "standing gazing",
+            "source": "A1:105"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "lateral pan",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: sky added for depth",
+          "STAGING: far road layer added for parallax"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "fg_road_frame",
+        "description": "Foreground frame: dusty road edges with subtle texture, wide framing"
+      },
+      {
+        "image_id": "fx_morning_light",
+        "description": "Morning light effect: soft glow over road, full frame"
+      },
+      {
+        "image_id": "mid_bankatlal_damodarpant_walking",
+        "description": "Mid ground: Bankatlal Agarwal and Damodarpant Kulkarni walking side by side on road, full body, medium wide"
+      },
+      {
+        "image_id": "sky_clear",
+        "description": "Sky: clear blue sky, wide"
+      },
+      {
+        "image_id": "far_road_distant",
+        "description": "Far layer: road stretching into horizon, wide"
+      },
+      {
+        "image_id": "mid_maharaj_seated",
+        "description": "Mid layer: Shri Gajanan Maharaj seated on road in yogic posture, wearing old bandi, gourd and chilim nearby, medium"
+      },
+      {
+        "image_id": "near_bankatlal_damodarpant_standing",
+        "description": "Near layer: Bankatlal Agarwal and Damodarpant Kulkarni standing on road, turned toward mid, medium close"
+      },
+      {
+        "image_id": "sky_clear2",
+        "description": "Sky: clear blue sky, wide (for parallax)"
+      },
+      {
+        "image_id": "left_bankatlal_facing",
+        "description": "Left figure: Bankatlal Agarwal facing right, three-quarter profile, upper body, transparent background"
+      },
+      {
+        "image_id": "right_damodarpant_facing",
+        "description": "Right figure: Damodarpant Kulkarni facing left, three-quarter profile, upper body, transparent background"
+      },
+      {
+        "image_id": "face_bankatlal_closeup",
+        "description": "Close-up: Bankatlal Agarwal face, neutral thoughtful expression, tight framing"
+      },
+      {
+        "image_id": "img_both_men_standing_maharaj_bg",
+        "description": "Full frame: Bankatlal Agarwal and Damodarpant Kulkarni standing on road, Shri Gajanan Maharaj seated in background, wide"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 175.1,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 220.6,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S3-1: S3-1: action/performance describes motion the renderer cannot do ('walking'); show it as a held pose (held_pose) or use NEED_NEW",
+        "S3-3: S3-3: dialogue Marathi for A1:99 is not a substring of that ovi's text",
+        "S3-3: S3-3: dialogue Marathi for A1:99 is not a substring of that ovi's text",
+        "S3-3: S3-3: dialogue A1:99 by 'Bankatlal Agarwal' is not one of the character lines planned for this shot (exact Marathi, that character)",
+        "S3-3: S3-3: dialogue A1:99 by 'Damodarpant Kulkarni' is not one of the character lines planned for this shot (exact Marathi, that character)",
+        "S3-3: S3-3: dialogue A1:100 by 'unclear' is not one of the character lines planned for this shot (exact Marathi, that character)",
+        "S3-3: S3-3: dialogue A1:101 by 'unclear' is not one of the character lines planned for this shot (exact Marathi, that character)",
+        "S3-5: S3-5: dialogue A1:103 by 'unclear' is not one of the character lines planned for this shot (exact Marathi, that character)"
+      ],
+      "scope": [
+        "S3-1",
+        "S3-3",
+        "S3-5"
+      ],
+      "status": "REJECTED (still invalid: S3-1: action/performance describes motion the renderer cannot do ('walking'); show it as a held pose (held_pose) or use NEED_NEW)"
+    }
+  ],
+  "final_reviews": []
+}

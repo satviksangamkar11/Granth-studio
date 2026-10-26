@@ -1,0 +1,15 @@
+{
+  "model": "nvidia/nemotron-3-ultra-550b-a55b",
+  "scenes": [
+    1,
+    4,
+    6
+  ],
+  "wall_s": 876.0,
+  "results": {
+    "1": "VALID",
+    "4": "VALID",
+    "6": "VALID"
+  },
+  "status": "DRAFT, not approved; nothing rendered"
+}

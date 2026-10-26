@@ -1,0 +1,52 @@
+{
+  "packet": "adhyay_01",
+  "built": "2026-10-26",
+  "note": "COPIES of owner-frozen files (2026-10-22) plus the Hindu Jagruti working ovis; originals untouched in D:/aai work. Not a new approval: frozen preserves files, source approval and film review are separate states (review NOT_DONE).",
+  "files": [
+    {
+      "path": "adhyay_01_ovis_hj.jsonl",
+      "bytes": 41643,
+      "sha256": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c"
+    },
+    {
+      "path": "frozen_copies/adhyay_01_FINAL_answers.md",
+      "bytes": 2509,
+      "sha256": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846"
+    },
+    {
+      "path": "frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "bytes": 43542,
+      "sha256": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882"
+    },
+    {
+      "path": "frozen_copies/adhyay_01_analysis_v3.md",
+      "bytes": 45456,
+      "sha256": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e"
+    },
+    {
+      "path": "frozen_copies/characters_1to12_FINAL.md",
+      "bytes": 27152,
+      "sha256": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870"
+    },
+    {
+      "path": "frozen_copies/glossary_user_supplied.md",
+      "bytes": 4836,
+      "sha256": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c"
+    },
+    {
+      "path": "frozen_copies/glossary_v3.md",
+      "bytes": 6159,
+      "sha256": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918"
+    },
+    {
+      "path": "frozen_copies/verification_report.md",
+      "bytes": 21027,
+      "sha256": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b"
+    },
+    {
+      "path": "presets_index.json",
+      "bytes": 2974,
+      "sha256": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    }
+  ]
+}

@@ -1,0 +1,736 @@
+{
+  "scene": 9,
+  "chapter": 1,
+  "range": [
+    138,
+    144
+  ],
+  "result": "INVALID",
+  "errors": [
+    "S9-9: action/performance describes motion the renderer cannot do ('point'); show it as a held pose (held_pose) or use NEED_NEW",
+    "S9-11: action/performance describes motion the renderer cannot do ('run'); show it as a held pose (held_pose) or use NEED_NEW",
+    "S9-13: scenery 'open landscape' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)"
+  ],
+  "warnings": [
+    "S9-1: STAGING pose 'seated teaching' needs the owner's approval",
+    "S9-1: STAGING pose 'seated listening' needs the owner's approval",
+    "S9-2: STAGING pose 'close-up face' needs the owner's approval",
+    "S9-2: STAGING light 'soft frontal light' needs the owner's approval",
+    "S9-3: STAGING pose 'seated teaching full body' needs the owner's approval",
+    "S9-4: STAGING pose 'seated teaching' needs the owner's approval",
+    "S9-4: STAGING pose 'seated listening' needs the owner's approval",
+    "S9-5: STAGING pose 'seated teaching full body' needs the owner's approval",
+    "S9-6: STAGING pose 'emotional close-up face' needs the owner's approval",
+    "S9-6: STAGING light 'soft halo' needs the owner's approval",
+    "S9-7: STAGING pose 'close-up face' needs the owner's approval",
+    "S9-7: STAGING light 'soft frontal light' needs the owner's approval",
+    "S9-8: STAGING pose 'seated teaching full body' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S9",
+    "chapter": 1,
+    "ovi_range": [
+      138,
+      144
+    ],
+    "goal": "Maharaj teaches oneness of water and drinker in Brahman; men ready to surrender; Maharaj runs off like wind.",
+    "turn": {
+      "ovi": "A1:143",
+      "text": "Both men become ready to fall at Maharaj's feet"
+    },
+    "shots": [
+      {
+        "shot_id": "S9-1",
+        "ovi_ids": [
+          "A1:138"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "maharaj_teaching_left",
+          "right": "bankatlal_listening_right"
+        },
+        "action": "camera drifts gently across the two figures facing each other",
+        "held_pose": "Maharaj seated teaching, Bankatlal seated listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "Maharaj speaks the first teaching lines; Bankatlal listens attentively",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:138",
+            "marathi": "व्यावहारिक अवघ्या कथा । ह्या न सांगा आम्हां तुम्ही",
+            "meaning_en": "Don't tell us worldly tales; all is pervaded by Brahman"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated listening",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: well and trough visible in background",
+          "STAGING: soft morning light"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-2",
+        "ovi_ids": [
+          "A1:139"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "maharaj_face_closeup"
+        },
+        "action": "camera pushes slowly into Maharaj's face",
+        "held_pose": "Maharaj close-up, calm expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "Maharaj delivers the verse on Brahman pervading all",
+        "camera": "slow push in",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:139",
+            "marathi": "हें अवघें चरचर । ब्रह्में व्याप्त साचार । तेथें गढुळ,निर्मळ वासित नीर । हे न भेद राहिले",
+            "meaning_en": "All this moving world is pervaded by Brahman; there muddy and clear water abide; no distinction remains"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "soft frontal light",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: tight framing on eyes and forehead"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S9-3",
+        "ovi_ids": [
+          "A1:139"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_teaching_full"
+        },
+        "action": "camera pushes slowly on full figure of Maharaj",
+        "held_pose": "Maharaj seated teaching, hands resting on knees",
+        "needs": [
+          "none"
+        ],
+        "performance": "Continued teaching, narrator carries the verse",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching full body",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: maintain same background as previous"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-4",
+        "ovi_ids": [
+          "A1:140"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "maharaj_teaching_left",
+          "right": "bankatlal_listening_right"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Maharaj seated teaching, Bankatlal listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "Maharaj speaks on water's nature",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:140",
+            "marathi": "पाणी तरी तोच आहे । निर्मळ गढुळ तोच पाहे । सुवास कुवास दोन्ही हें । रुप त्याचें निःसंशय",
+            "meaning_en": "Water is water in any form; muddy or clear, both are its forms; fragrance and stench both are its nature"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated listening",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: well and trough in background"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S9-5",
+        "ovi_ids": [
+          "A1:140"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_teaching_full"
+        },
+        "action": "camera pushes slowly on Maharaj full figure",
+        "held_pose": "Maharaj seated teaching",
+        "needs": [
+          "none"
+        ],
+        "performance": "Narrator continues the teaching",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching full body",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: consistent lighting"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-6",
+        "ovi_ids": [
+          "A1:141"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "maharaj_face_emotional"
+        },
+        "action": "camera pushes slowly closer with soft halo",
+        "held_pose": "Maharaj close-up, serene emotional expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "Maharaj speaks on drinker and God's play",
+        "camera": "slow push in with halo",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:141",
+            "marathi": "पिणाराही वेगळा । त्यापासून ना निराळा । ईश्वराची अगाध लीला । ती कळे या नरजन्मीं",
+            "meaning_en": "The drinker is not separate; God's unfathomable play is known in this human birth"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "emotional close-up face",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "soft halo",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: subtle halo around head"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S9-7",
+        "ovi_ids": [
+          "A1:142"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "maharaj_face_closeup"
+        },
+        "action": "camera pushes slowly into Maharaj's face",
+        "held_pose": "Maharaj close-up, calm",
+        "needs": [
+          "none"
+        ],
+        "performance": "Maharaj concludes teaching, urging reflection",
+        "camera": "slow push in",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:142",
+            "marathi": "तें दिलें टाकून । व्यवहारीं गोविलें मन । यांचेंच करा सदा मनन । कशापासून जग झालें",
+            "meaning_en": "You dropped that; your mind is caught in dealings; reflect always on the origin of the world"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "soft frontal light",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: tight framing on eyes"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-8",
+        "ovi_ids": [
+          "A1:142"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_teaching_full"
+        },
+        "action": "camera pushes slowly on Maharaj full figure",
+        "held_pose": "Maharaj seated teaching",
+        "needs": [
+          "none"
+        ],
+        "performance": "Narrator carries the concluding verse",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching full body",
+            "source": "STAGING"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: same background"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S9-9",
+        "ovi_ids": [
+          "A1:143"
+        ],
+        "preset": "05_bowing_prayer",
+        "assets": {
+          "pose": "both_men_bowing_pose"
+        },
+        "action": "camera tilts down onto the contact point of their prostration",
+        "held_pose": "Both men on knees, heads lowered toward Maharaj's feet",
+        "needs": [
+          "none"
+        ],
+        "performance": "Men are ready to fall at his feet in surrender",
+        "camera": "tilt down",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "prostrate bowing",
+            "source": "A1:143"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: dust motes in light"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-10",
+        "ovi_ids": [
+          "A1:143"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "both_men_bowing_pose"
+        },
+        "action": "camera pushes slowly on the bowing figures",
+        "held_pose": "Both men remain bowed",
+        "needs": [
+          "none"
+        ],
+        "performance": "Narrator describes their readiness",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "prostrate bowing",
+            "source": "A1:143"
+          },
+          {
+            "kind": "scenery",
+            "term": "well area",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: hold the pose"
+        ],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S9-11",
+        "ovi_ids": [
+          "A1:144"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_running_pose"
+        },
+        "action": "camera pushes slowly on Maharaj in mid-run",
+        "held_pose": "Maharaj running swiftly, bandi fluttering",
+        "needs": [
+          "none"
+        ],
+        "performance": "Maharaj runs off like the wind",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "running pose",
+            "source": "A1:144"
+          },
+          {
+            "kind": "prop",
+            "term": "old bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "open road",
+            "source": "PACKET"
+          }
+        ],
+        "staging": [
+          "STAGING: motion blur suggested by pose"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-12",
+        "ovi_ids": [
+          "A1:144"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_layer_ground",
+          "fx": "fx_layer_dust",
+          "mid": "mid_layer_running",
+          "sky": "sky_layer"
+        },
+        "action": "camera dollies forward revealing the wide landscape",
+        "held_pose": "Wide view of Maharaj running away on road, well behind",
+        "needs": [
+          "none"
+        ],
+        "performance": "Establishing his departure into the distance",
+        "camera": "dolly forward 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road and well",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "midday sun",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly forward",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: dust rising from road",
+          "STAGING: bright midday light"
+        ],
+        "transition_out": "pan_bridge"
+      },
+      {
+        "shot_id": "S9-13",
+        "ovi_ids": [
+          "A1:144"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "far_layer",
+          "mid": "mid_layer_parallax",
+          "near": "near_layer",
+          "sky": "sky_layer"
+        },
+        "action": "camera pans laterally through depth layers",
+        "held_pose": "Layered landscape with Maharaj disappearing into distance",
+        "needs": [
+          "none"
+        ],
+        "performance": "Final view of his departure, no destination shown",
+        "camera": "lateral parallax",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "open landscape",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "parallax pan",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: layers move at different speeds"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "maharaj_teaching_left",
+        "description": "Maharaj seated teaching, facing right, transparent layer for dialogue composition"
+      },
+      {
+        "image_id": "bankatlal_listening_right",
+        "description": "Bankatlal seated listening, facing left, transparent layer for dialogue composition"
+      },
+      {
+        "image_id": "maharaj_face_closeup",
+        "description": "Close-up of Maharaj's face, calm expression, transparent"
+      },
+      {
+        "image_id": "maharaj_teaching_full",
+        "description": "Full body of Maharaj seated teaching, hands on knees"
+      },
+      {
+        "image_id": "maharaj_face_emotional",
+        "description": "Close-up of Maharaj's face with serene emotional expression, transparent"
+      },
+      {
+        "image_id": "both_men_bowing_pose",
+        "description": "Both Bankatlal and Damodarpant on knees, heads lowered toward Maharaj's feet"
+      },
+      {
+        "image_id": "maharaj_running_pose",
+        "description": "Maharaj in mid-run, old bandi fluttering, dynamic pose"
+      },
+      {
+        "image_id": "sky_layer",
+        "description": "Sky layer for establishing and parallax shots"
+      },
+      {
+        "image_id": "mid_layer_running",
+        "description": "Midground layer showing road and well for establishing shot"
+      },
+      {
+        "image_id": "fx_layer_dust",
+        "description": "Dust effect layer for establishing shot"
+      },
+      {
+        "image_id": "fg_layer_ground",
+        "description": "Foreground ground layer for establishing shot"
+      },
+      {
+        "image_id": "far_layer",
+        "description": "Far distance landscape layer for parallax"
+      },
+      {
+        "image_id": "mid_layer_parallax",
+        "description": "Midground landscape layer for parallax"
+      },
+      {
+        "image_id": "near_layer",
+        "description": "Near foreground layer for parallax"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 319.7,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 64.5,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S9-9: S9-9: action/performance describes motion the renderer cannot do ('point'); show it as a held pose (held_pose) or use NEED_NEW",
+        "S9-11: S9-11: action/performance describes motion the renderer cannot do ('run'); show it as a held pose (held_pose) or use NEED_NEW",
+        "S9-13: S9-13: scenery 'open landscape' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)"
+      ],
+      "scope": [
+        "S9-11",
+        "S9-13",
+        "S9-9"
+      ],
+      "status": "REJECTED (still invalid: S9-9: action/performance describes motion the renderer cannot do ('point'); show it as a held pose (held_pose) or use NEED_NEW; S9-11: action/performance describes motion the renderer cannot do ('run'); show it as a held pose (held_pose) or use NEED_NEW)"
+    }
+  ],
+  "final_reviews": []
+}

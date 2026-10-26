@@ -1,0 +1,268 @@
+{
+  "scene": 4,
+  "range": [
+    114,
+    122
+  ],
+  "result": "VALID",
+  "errors": [],
+  "warnings": [],
+  "plan": {
+    "scene_id": "S4",
+    "ovi_range": [
+      114,
+      122
+    ],
+    "goal": "Show Gajanan's total indifference to taste as he mixes and eats the rich meal, and Bankatlal's reversal from calling him mad to declaring him the king of yogis, blessing Shegaon.",
+    "turn": {
+      "ovi": 119,
+      "text": "Bankatlal declares that calling Gajanan mad was undoubtedly a mistake and no further testing is needed."
+    },
+    "shots": [
+      {
+        "shot_id": "S4-1",
+        "ovi_ids": [
+          114
+        ],
+        "preset": "04_character_entrance",
+        "assets": {
+          "char": "Devidas walking toward door carrying a full plate of rich cooked dishes, side view, transparent background",
+          "other": "Gajanan seated on ground in front of door, plate not yet placed, neutral pose, transparent background"
+        },
+        "action": "Devidas carries plate to door and sets it before Gajanan",
+        "performance": "Devidas strides purposefully; Gajanan sits still, gaze downward",
+        "camera": "pan right with Devidas, then hold on Gajanan",
+        "dialogue": [],
+        "staging": [
+          "STAGING: Plate enters frame from right as Devidas approaches; door frame in foreground"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-2",
+        "ovi_ids": [
+          115,
+          118
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "Gajanan seated at plate, hands mixing all dishes into one mass, eating calmly, full body"
+        },
+        "action": "Gajanan mixes dishes together and eats",
+        "performance": "Hands move steadily, no hesitation, no savoring gestures",
+        "camera": "slow push in from waist-up to chest-up",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 116,
+            "marathi": "अनुपम ब्रह्मरसाला जो पिऊन तृप्त झाला तो कां मागतो गुळवण्याला मिटक्या मारीत बैसेल",
+            "meaning_en": "One who has drunk the incomparable nectar of Brahman and been satisfied — why would he ask for jaggery-water and sit smacking his lips?",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 117,
+            "marathi": "जो सार्वभौम नृपवर झाला असे साचार अशा नरासी जहागीर मिळाल्यासी प्रेम नुपजे",
+            "meaning_en": "If a supreme emperor has become such, love does not arise for a petty estate.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: No lip-smacking, no selective picking; all dishes become one"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-3",
+        "ovi_ids": [
+          115
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "Close-up of Gajanan's face, neutral expression, eyes downcast at food, transparent background"
+        },
+        "action": "Gajanan chews with neutral expression",
+        "performance": "No flicker of pleasure or dislike; breath even, gaze fixed",
+        "camera": "slow push in on face, breathing sway",
+        "dialogue": [],
+        "staging": [
+          "STAGING: Hold on still face to show 'चवी न कशाची अंतरीं अणुमात्र उरली असे' — no taste-craving remains, not an atom"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-4",
+        "ovi_ids": [
+          119,
+          120,
+          121
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "Bankatlal standing, turned toward left, right hand raised in declarative gesture, transparent background",
+          "right": "Damodarpant standing, turned toward right, head slightly tilted listening, transparent background"
+        },
+        "action": "Bankatlal gestures toward Gajanan while speaking to Damodarpant",
+        "performance": "Bankatlal earnest, finger pointing; Damodarpant absorbs, no interruption",
+        "camera": "gentle drift left to right across both faces",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal",
+            "ovi": 119,
+            "marathi": "ह्या वेडा म्हणालों आपण ती निःसंशय झाली चुकी",
+            "meaning_en": "We called him mad; that was undoubtedly a mistake.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "Bankatlal",
+            "ovi": 120,
+            "marathi": "सुभद्रेसाठीं द्वारकेला अर्जुन ऐसाच वेडा झाला व्यवहाराचा विसर पडला करुं लागला भलभलतें",
+            "meaning_en": "For Subhadra's sake at Dwarka, Arjuna went just such a madman; worldly conduct was forgotten, he did odd things.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "Bankatlal",
+            "ovi": 121,
+            "marathi": "तैसाच हा ज्ञानजेठी मुक्तिरुप सुभद्रेसाठीं वेडा झाला कसवटी याची आतां घेणें नको",
+            "meaning_en": "Likewise this eldest-in-knowledge went mad for liberation-form Subhadra; testing him now is not needed.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: Bankatlal's gesture includes Gajanan off-screen left; Damodarpant does not speak"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-5",
+        "ovi_ids": [
+          122
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "Close-up of Bankatlal's face, reverent expression, hands folded at chest, eyes uplifted, transparent background"
+        },
+        "action": "Bankatlal looks upward with folded hands",
+        "performance": "Eyes soft, lips move silently; pride and reverence blended",
+        "camera": "slower push in, soft halo bloom at edges",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": 122,
+            "marathi": "धन्य आपुलें शेगांव दृष्टी पाहिला योगीराव निरिच्छा हा जहागीरगांव दिला हरीनें जयाला",
+            "meaning_en": "Blessed is our Shegaon; we have seen the king of yogis with our eyes; Hari gave him the estate of desirelessness.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: 'आपुलें' (our) marks Bankatlal as Shegaon resident; halo suggests grace, not miracle"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "devidas_walking_plate",
+        "description": "Devidas walking toward door carrying a full plate of rich cooked dishes, side view, transparent background",
+        "used_in": [
+          "S4-1"
+        ]
+      },
+      {
+        "image_id": "gajanan_seated_door",
+        "description": "Gajanan seated on ground in front of door, plate not yet placed, neutral pose, transparent background",
+        "used_in": [
+          "S4-1"
+        ]
+      },
+      {
+        "image_id": "gajanan_mixing_eating",
+        "description": "Gajanan seated at plate, hands mixing all dishes into one mass, eating calmly, full body",
+        "used_in": [
+          "S4-2"
+        ]
+      },
+      {
+        "image_id": "gajanan_face_neutral",
+        "description": "Close-up of Gajanan's face, neutral expression, eyes downcast at food, transparent background",
+        "used_in": [
+          "S4-3"
+        ]
+      },
+      {
+        "image_id": "bankatlal_facing",
+        "description": "Bankatlal standing, turned toward left, right hand raised in declarative gesture, transparent background",
+        "used_in": [
+          "S4-4"
+        ]
+      },
+      {
+        "image_id": "damodarpant_facing",
+        "description": "Damodarpant standing, turned toward right, head slightly tilted listening, transparent background",
+        "used_in": [
+          "S4-4"
+        ]
+      },
+      {
+        "image_id": "bankatlal_face_reverent",
+        "description": "Close-up of Bankatlal's face, reverent expression, hands folded at chest, eyes uplifted, transparent background",
+        "used_in": [
+          "S4-5"
+        ]
+      }
+    ]
+  },
+  "calls": [
+    {
+      "attempt": 1,
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 105.0,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "attempt": 2,
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 19.6,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "verdict": "OK",
+      "problems": [],
+      "call": {
+        "model": "openai/gpt-oss-20b",
+        "status": 200,
+        "wall_s": 190.5,
+        "streamed": true,
+        "finish": "stop",
+        "usage": {
+          "prompt_tokens": 11660,
+          "completion_tokens": 6545,
+          "total_tokens": 18205
+        }
+      }
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "verdict": "NO_CHECK",
+      "problems": [],
+      "call": {
+        "model": "z-ai/glm-5.3-flash",
+        "status": 0,
+        "wall_s": 751.4,
+        "streamed": true,
+        "error": "incomplete stream (finish=length)",
+        "finish": "length"
+      }
+    }
+  ],
+  "repair": null
+}

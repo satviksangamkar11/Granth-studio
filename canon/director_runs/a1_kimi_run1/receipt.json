@@ -1,0 +1,64 @@
+{
+  "created": "2026-10-26 15:06:53",
+  "files": {
+    "a01_scene1.json": "d8a5e3431ea0e1c6e99ec92e230079da180782bc7e7e517c97ba1210d259fd30",
+    "calls/scene1__kimi-k3.1-pro__7ab7ed4815622e9a.json": "bbf7719e24f1883ef5e2c433ad00dcf0d92c540675dd6f5584b97ca51bb1c989",
+    "calls/scene1__kimi-k3.1-pro__7ab7ed4815622e9a.json.attempt": "233c03f3395bc79d44d8e2213f2912d7a754c5b9018c3e41877bf8344b5c76a8",
+    "calls/scene2__kimi-k3.1-pro__d9564cf078070681.json.attempt": "be93fbcfe13272d191724ff6eb1d4814a8578cf10947671ca3ad70b5bd79ebc0"
+  },
+  "inputs": {
+    "code_sha256": {
+      "director_run.py": "40f224cae7971e379d4a9a177ebbfc7ce72fab6b1ced10c21242e3709d163554",
+      "director_test.py": "9eb5e4e9153e6deccb53c5619d98082f6927026ee1bd4c226ad89a402c965980",
+      "draft_source.py": "5dba4c42b6a9e09938d42bd31affa245c34fa50c1eb17f830d32abdb885f540f",
+      "kimi_adapter.py": "aa45551f003f3fcc6e3825aa82b3604b09d6c864f7fcbff82fd1831f9778028c",
+      "nvidia_trial.py": "b3e1dffa3f5b4d8b8710f03f2082827e18bdfbf8b92af5988920d4b962cc4771",
+      "v5_ledger.py": "ab99259d2d462a5c55dec15dce8c95e79facee1a0054e50fbca9c8864984d5ee"
+    },
+    "director": "kimi-k3.1-pro",
+    "packet_files": {
+      "adhyay_01_ovis_hj.jsonl": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+      "frozen_copies/adhyay_01_FINAL_answers.md": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846",
+      "frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882",
+      "frozen_copies/adhyay_01_analysis_v3.md": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e",
+      "frozen_copies/characters_1to12_FINAL.md": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870",
+      "frozen_copies/glossary_user_supplied.md": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c",
+      "frozen_copies/glossary_v3.md": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918",
+      "frozen_copies/verification_report.md": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b",
+      "presets_index.json": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    },
+    "presets_sha256": {
+      "01_establishing_shot": "a7ec003060f9a02a3376b45104a93642ff0bb795e04e6b9b4075f1818174728c",
+      "02_environmental_parallax": "19923612ef52a37b089a53246297257239ceb0946547253760b19929a20cb4e2",
+      "03_slow_cinematic_push": "19bbba18ed58aa55b35989fe7e2c3508193aaecb556165b42c3c13047f945781",
+      "04_character_entrance": "b5cdf2cc535f96176977c3137c46dae3e38dac090d2cd99f8727511068dce1f9",
+      "05_bowing_prayer": "edb06a70ae3f27d39dd02fd083f6cbe3b959e6b41cac5cb34ef948215a08a03f",
+      "06_blessing_gesture": "842eb1d43feddd832ad211c554173dcc6e299abf3a7768683dab5f0f035ddc93",
+      "07_character_reaction": "dbc5bd73a5739481344aae4576cddf558a3c9ea33b3bb9d0d58e5bf049e19166",
+      "08_emotional_closeup": "1039236a2970438f9069ca4767efe3ebbb2523130956d27e0272f8954ddcfdb5",
+      "09_dialogue_composition": "49837b00c13635abab1075eb1b7391cf756189e7ce71c44902f6136956ca1631",
+      "10_object_hand_insert": "2ed82f4f0cfbf8b1bf43623e7594101d0fe7c373e36bbcdedefe7ba2d5b3e180",
+      "11_scene_transition": "5eb9edaa179606ce44fda329663355bbf1288888302c1357d43359cf268f19fb"
+    },
+    "reviewers": [
+      "nvidia/nemotron-3-ultra-550b-a55b"
+    ],
+    "scenes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "settings": {
+      "effort": "high",
+      "max_tokens": 32000,
+      "model": "kimi-k3.1-pro",
+      "phase": "P4"
+    }
+  },
+  "run": "a1_kimi_run1",
+  "status": "STARTED"
+}

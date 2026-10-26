@@ -1,0 +1,26 @@
+{
+  "adhyay": 1,
+  "status": "DRAFT, not approved",
+  "drafter": "z-ai/glm-5.3-flash",
+  "checker": "nvidia/nemotron-3-ultra-550b-a55b",
+  "calls": [
+    {
+      "step": "characters",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 416.5,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "characters_check",
+      "model": "z-ai/glm-5.3-flash",
+      "status": 0,
+      "wall_s": 1057.5,
+      "streamed": true,
+      "error": "incomplete stream (finish=length)",
+      "finish": "length"
+    }
+  ]
+}

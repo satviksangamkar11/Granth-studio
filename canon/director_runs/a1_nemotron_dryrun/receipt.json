@@ -1,0 +1,46 @@
+{
+  "created": "2026-10-26 15:35:44",
+  "files": {
+    "MACRO_REVIEW.md": "98eb9a1184b9edab50ce112b9a3f02db094ad49e9f7674823d1e195c9126c16a",
+    "calls/scene0__nvidia_nemotron-3-ultra-550b-a55b__3db34ea253940fe8.json": "1a9820a2a28626c8deecbeaebf9371def070cc8b8a842259fbd38270888d98c8",
+    "calls/scene0__nvidia_nemotron-3-ultra-550b-a55b__e6fc913faab37539.json": "df6aee33e92f3176a7ca68b0e5d8a2a4da44c1709a680c3314764e6b7d0a42c5",
+    "calls/scene0__openai_gpt-oss-20b__7819362957aa669f.json": "93a7d772657173caafc8c34eaf5a223a709a8575afb2c15a0d536e9d12f42106",
+    "macro_A1.json": "316c49c8bac0cc7308a661e0073ed61417da4014bcb37ce6761b96ed27baadeb"
+  },
+  "inputs": {
+    "code_sha256": {
+      "director_run.py": "b895543d650a76424343e20e9f25e60272698d841337c8fd8145a83705336ead",
+      "director_test.py": "d385e815f701d9a425ea09528d7983c9c65c0408c58d77c8cfa169741fb46046",
+      "draft_source.py": "5dba4c42b6a9e09938d42bd31affa245c34fa50c1eb17f830d32abdb885f540f",
+      "kimi_adapter.py": "aa45551f003f3fcc6e3825aa82b3604b09d6c864f7fcbff82fd1831f9778028c",
+      "nvidia_trial.py": "b3e1dffa3f5b4d8b8710f03f2082827e18bdfbf8b92af5988920d4b962cc4771",
+      "story_split.py": "41fa527170ff84271e963defb3b871ad19bbc13baac9b56796e317a0d814f3f4",
+      "v5_ledger.py": "ab99259d2d462a5c55dec15dce8c95e79facee1a0054e50fbca9c8864984d5ee"
+    },
+    "director": "nvidia/nemotron-3-ultra-550b-a55b",
+    "mode": "plan_stories",
+    "packet_files": {
+      "adhyay_01_ovis_hj.jsonl": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+      "frozen_copies/adhyay_01_FINAL_answers.md": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846",
+      "frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882",
+      "frozen_copies/adhyay_01_analysis_v3.md": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e",
+      "frozen_copies/characters_1to12_FINAL.md": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870",
+      "frozen_copies/glossary_user_supplied.md": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c",
+      "frozen_copies/glossary_v3.md": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918",
+      "frozen_copies/verification_report.md": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b",
+      "presets_index.json": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    },
+    "reviewers": [
+      "openai/gpt-oss-20b"
+    ],
+    "settings": {
+      "max_tokens": 12000,
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
+    }
+  },
+  "macro_sha256": "bf664651e8376632ab1fd3054fc7107168f72c8f5a4b5cc9b13ca57732dfcc1b",
+  "result": "NO_CHECK",
+  "run": "a1_nemotron_dryrun",
+  "status": "STOPPED AT THE OWNER'S GATE: approve the split's hash before any direction",
+  "updated": "2026-10-26 15:38:29"
+}

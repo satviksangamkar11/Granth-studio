@@ -1,0 +1,417 @@
+{
+  "characters": [
+    {
+      "char_id": "char_gajanan",
+      "names_in_text": [
+        "श्रीगजानन",
+        "गजानन",
+        "गजानन समर्थसिद्धयोगी",
+        "महाराज",
+        "स्वामी",
+        "समर्थ",
+        "योगीराव",
+        "अवतारी पुरुष",
+        "हिरा",
+        "महापुरुष",
+        "संतरत्न",
+        "ज्ञानजेठी",
+        "मुक्तिरुप",
+        "सिद्धयोगी",
+        "योगीपुरुष"
+      ],
+      "name_en": "Gajanan",
+      "role": "Central saint, avatar, Siddhayogi who appears in Shegaon at age 18, performs leelas, teaches Annaparbrahma.",
+      "description": "Age 18 (ovi 74), wears a bandi of old torn clothes (ovi 88), carries a bhopala (vessel) for water (ovi 89), holds a raw self-made chilim (pipe) not baked in kiln (ovi 90), has nasagra drishti, calm mudra, tapobal shining on body like early sun rays (ovi 91), digambar (sky-clad) (ovi 92), sits on road searching leaf plates (ovi 93), lifts food to mouth to teach Annaparbrahma (ovi 94), eats all cooked food without distinction in two prahars (ovi 115-118), speaks about Brahman pervading all (ovi 128-131), laughs (ovi 127), departs swiftly like wind (ovi 144).",
+      "evidence_ovis": [
+        53,
+        60,
+        61,
+        62,
+        63,
+        64,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        81,
+        82,
+        83,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        111,
+        112,
+        114,
+        115,
+        116,
+        117,
+        118,
+        122,
+        124,
+        125,
+        127,
+        128,
+        129,
+        130,
+        131,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144
+      ]
+    },
+    {
+      "char_id": "char_dasganu",
+      "names_in_text": [
+        "मीं",
+        "दासगणू"
+      ],
+      "name_en": "Dasganu",
+      "role": "Narrator and devotee who desires to compose Gajanan Vijay, receives help from Ramchandra Patil.",
+      "description": null,
+      "evidence_ovis": [
+        54,
+        55,
+        56,
+        62,
+        63,
+        66,
+        67,
+        68,
+        84,
+        146
+      ]
+    },
+    {
+      "char_id": "char_ramchandra_patil",
+      "names_in_text": [
+        "रामचंद्र पाटलांनीं",
+        "रामचंद्राची",
+        "रामचंद्र"
+      ],
+      "name_en": "Ramchandra Patil",
+      "role": "Devotee who fulfills narrator's request at Pandhari and plans for Gajanan charitra.",
+      "description": null,
+      "evidence_ovis": [
+        66,
+        68
+      ]
+    },
+    {
+      "char_id": "char_devidas",
+      "names_in_text": [
+        "देविदास",
+        "देविदास सज्जन",
+        "देविदास विप्र",
+        "देविदासबुवा",
+        "देविदासें"
+      ],
+      "name_en": "Devidas",
+      "role": "Devout householder, Paturkar descendant, Madhyandin branch, mathadhipati, prepares food for daughter's ritushanti, offers food to Gajanan.",
+      "description": "Householder, mathadhipati, has a daughter undergoing ritushanti (ovi 86), prepares food (ovi 86), throws used leaf plates on road (ovi 87), brings vessel filled with cooked food and places before Gajanan (ovi 114).",
+      "evidence_ovis": [
+        84,
+        85,
+        86,
+        87,
+        100,
+        113,
+        114
+      ]
+    },
+    {
+      "char_id": "char_bankatlal_agarwala",
+      "names_in_text": [
+        "बंकटलाल आगरवाला",
+        "बंकटलाल",
+        "बंकटलाल म्हणे"
+      ],
+      "name_en": "Bankatlal Agarwala",
+      "role": "Observer on road, discusses Gajanan's behavior with Damodarpant, approaches Gajanan humbly, realizes his mistake.",
+      "description": "Walks on road (ovi 97), sees Gajanan's actions (ovi 97), discusses with Pant (ovi 98-105), goes to Gajanan for inquiry (ovi 108), sees Gajanan's radiant form (ovi 111), silently bows (ovi 112), later delighted (ovi 132).",
+      "evidence_ovis": [
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        119,
+        132
+      ]
+    },
+    {
+      "char_id": "char_damodarpant_kulkarni",
+      "names_in_text": [
+        "दामोदरपंत कुलकर्णी",
+        "पंत",
+        "दामोदर",
+        "पंतासी"
+      ],
+      "name_en": "Damodarpant Kulkarni",
+      "role": "Companion of Bankatlal, observes Gajanan, fetches water from well, brings water in ghadvi.",
+      "description": "Known for affection (ovi 98), sees scene with Bankatlal (ovi 98), discusses (ovi 99-105), goes to well to fetch water (ovi 133-135), brings water in ghadvi (ovi 135), adds fragrant substance (ovi 137).",
+      "evidence_ovis": [
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        119,
+        126,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137
+      ]
+    }
+  ],
+  "places": [
+    {
+      "place_id": "loc_shegaon",
+      "names_in_text": [
+        "शेगांव",
+        "शेगांव सरोवर",
+        "शेगांवनगरीं",
+        "शेगांवीं"
+      ],
+      "name_en": "Shegaon",
+      "description": "Village in Varhad, famous, small but great glory, name immortal due to saints, on its lake shore Gajanan lotus bloomed (ovi 60), residents fortunate (ovi 64), Gajanan arrived on Magh Vadya Saptami (ovi 83), blessed village (ovi 122).",
+      "evidence_ovis": [
+        58,
+        59,
+        60,
+        61,
+        64,
+        74,
+        83,
+        122
+      ]
+    },
+    {
+      "place_id": "loc_varhad",
+      "names_in_text": [
+        "वर्‍हाडांत"
+      ],
+      "name_en": "Varhad (Berar)",
+      "description": "Region where Shegaon is located.",
+      "evidence_ovis": [
+        58
+      ]
+    },
+    {
+      "place_id": "loc_khamgaon",
+      "names_in_text": [
+        "खामगांव",
+        "खामगांव नामें तालुक्यांत"
+      ],
+      "name_en": "Khamgaon",
+      "description": "Taluka where trade is large.",
+      "evidence_ovis": [
+        58
+      ]
+    },
+    {
+      "place_id": "loc_akot",
+      "names_in_text": [
+        "आकोटासन्निध"
+      ],
+      "name_en": "Akot",
+      "description": "Place near which narrator first saw a good saint.",
+      "evidence_ovis": [
+        56
+      ]
+    },
+    {
+      "place_id": "loc_pandhari",
+      "names_in_text": [
+        "पंढरी",
+        "पंढरी क्षेत्रीं"
+      ],
+      "name_en": "Pandhari (Pandharpur)",
+      "description": "Place where Ramchandra Patil came for Kartiki vari.",
+      "evidence_ovis": [
+        66
+      ]
+    },
+    {
+      "place_id": "loc_sajjangad",
+      "names_in_text": [
+        "सज्जनगड",
+        "सज्जनगडाहून"
+      ],
+      "name_en": "Sajjangad",
+      "description": "Place from which some say Gajanan came.",
+      "evidence_ovis": [
+        75
+      ]
+    },
+    {
+      "place_id": "loc_ukirada",
+      "names_in_text": [
+        "उकिरड्यांत"
+      ],
+      "name_en": "Ukirada",
+      "description": "Birthplace of Gorakh.",
+      "evidence_ovis": [
+        80
+      ]
+    },
+    {
+      "place_id": "loc_gajkarna",
+      "names_in_text": [
+        "गजकर्णांत"
+      ],
+      "name_en": "Gajkarna",
+      "description": "Birthplace of Kanifnath.",
+      "evidence_ovis": [
+        80
+      ]
+    },
+    {
+      "place_id": "loc_narayan_doh",
+      "names_in_text": [
+        "नारायण डोहांत"
+      ],
+      "name_en": "Narayan Doh",
+      "description": "Birthplace of Changdev.",
+      "evidence_ovis": [
+        80
+      ]
+    },
+    {
+      "place_id": "loc_well",
+      "names_in_text": [
+        "कूपाचिया शेजारीं",
+        "कूप"
+      ],
+      "name_en": "Well",
+      "description": "Near well, water drawing device fixed, animals drink water, Damodarpant fetches water from here.",
+      "evidence_ovis": [
+        134,
+        135
+      ]
+    },
+    {
+      "place_id": "loc_dwarka",
+      "names_in_text": [
+        "द्वारकेला"
+      ],
+      "name_en": "Dwarka",
+      "description": "Mentioned in analogy where Arjuna became mad for Subhadra.",
+      "evidence_ovis": [
+        120
+      ]
+    }
+  ],
+  "named_only": [
+    {
+      "name_en": "Gorakh",
+      "ovis": [
+        80
+      ]
+    },
+    {
+      "name_en": "Kanifnath",
+      "ovis": [
+        80
+      ]
+    },
+    {
+      "name_en": "Changdev",
+      "ovis": [
+        80
+      ]
+    },
+    {
+      "name_en": "Shri Samarth",
+      "ovis": [
+        75
+      ]
+    },
+    {
+      "name_en": "Hari",
+      "ovis": [
+        122
+      ]
+    },
+    {
+      "name_en": "Jaya",
+      "ovis": [
+        122
+      ]
+    },
+    {
+      "name_en": "Arjuna",
+      "ovis": [
+        120
+      ]
+    },
+    {
+      "name_en": "Subhadra",
+      "ovis": [
+        120,
+        121
+      ]
+    },
+    {
+      "name_en": "Vyasa",
+      "ovis": [
+        103
+      ]
+    }
+  ],
+  "questions_for_owner": [
+    "Is the narrator 'मीं' the same person as 'दासगणू' mentioned in ovi 146?",
+    "Is the saint seen near Akot (ovi 56) the same as Gajanan who later appears in Shegaon?",
+    "In ovi 75, 'श्रीसमर्थांचें जें कां स्थान' refers to which Samarth? Samarth Ramdas or Gajanan?",
+    "Who are Hari and Jaya in ovi 122 ('दिला हरीनें जयाला')? Are they characters in the narrative?",
+    "Are Arjuna and Subhadra (ovi 120-121) part of the narrated events or only an analogy?",
+    "Is 'पंत' in ovi 102, 119, etc. the same as Damodarpant Kulkarni?",
+    "Is 'बुवा' in ovi 113 the same as Devidas?",
+    "Does 'हिरा' in ovi 61, 72, 73 refer to Gajanan or a literal diamond?",
+    "Who throws the used leaf plates (पत्रावळी) on the road (ovi 87)?",
+    "What is the 'निरिच्छा' village mentioned in ovi 122?"
+  ],
+  "name_check": [
+    "char_gajanan: name 'संतरत्न' not found in its cited ovis [53, 60, 61, 62, 63, 64, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 81, 82, 83, 88, 89, 90, 91, 92, 93, 94, 95, 96, 111, 112, 114, 115, 116, 117, 118, 122, 124, 125, 127, 128, 129, 130, 131, 138, 139, 140, 141, 142, 143, 144]",
+    "char_gajanan: name 'ज्ञानजेठी' not found in its cited ovis [53, 60, 61, 62, 63, 64, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 81, 82, 83, 88, 89, 90, 91, 92, 93, 94, 95, 96, 111, 112, 114, 115, 116, 117, 118, 122, 124, 125, 127, 128, 129, 130, 131, 138, 139, 140, 141, 142, 143, 144]",
+    "char_gajanan: name 'मुक्तिरुप' not found in its cited ovis [53, 60, 61, 62, 63, 64, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 81, 82, 83, 88, 89, 90, 91, 92, 93, 94, 95, 96, 111, 112, 114, 115, 116, 117, 118, 122, 124, 125, 127, 128, 129, 130, 131, 138, 139, 140, 141, 142, 143, 144]"
+  ],
+  "model_check": "NO_CHECK",
+  "status": "DRAFT, not approved",
+  "written_by": "nvidia/nemotron-3-ultra-550b-a55b",
+  "checked_by": "z-ai/glm-5.3-flash"
+}

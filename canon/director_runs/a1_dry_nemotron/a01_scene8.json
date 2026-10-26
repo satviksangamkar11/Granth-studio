@@ -1,0 +1,450 @@
+{
+  "scene": 8,
+  "chapter": 1,
+  "range": [
+    134,
+    137
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S8-1: STAGING light 'afternoon sunlight' needs the owner's approval",
+    "S8-6: STAGING pose 'serene gaze' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S8",
+    "chapter": 1,
+    "ovi_range": [
+      134,
+      137
+    ],
+    "goal": "Show Gajanan drinking at the cattle trough and Damodarpant returning with vetiver-scented water to protest the muddy water.",
+    "turn": {
+      "ovi": "A1:136",
+      "text": "Damodarpant protests the muddy trough water and offers sweet, clear, cool vetiver-scented water."
+    },
+    "shots": [
+      {
+        "shot_id": "S8-1",
+        "ovi_ids": [
+          "A1:134"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "well_fg",
+          "fx": "well_fx",
+          "mid": "well_mid",
+          "sky": "well_sky"
+        },
+        "action": "camera dollies in slowly over the well and trough",
+        "held_pose": "well and trough with animals drinking, early afternoon light",
+        "needs": [
+          "none"
+        ],
+        "performance": "establishes the cattle trough beside the well where animals drink",
+        "camera": "dolly in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "well (कूप)",
+            "source": "A1:134"
+          },
+          {
+            "kind": "scenery",
+            "term": "trough (हाळ)",
+            "source": "A1:134"
+          },
+          {
+            "kind": "person",
+            "term": "cattle (जनावरें)",
+            "source": "A1:134"
+          },
+          {
+            "kind": "light",
+            "term": "afternoon sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: afternoon sunlight on well and trough",
+          "STAGING: camera dolly in"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S8-2",
+        "ovi_ids": [
+          "A1:135"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_at_trough"
+        },
+        "action": "camera pushes in slowly on Gajanan drinking",
+        "held_pose": "Gajanan stands at trough, bandi worn, drinking water, belching",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan drinking the muddy trough water and belching with satisfaction",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:134"
+          },
+          {
+            "kind": "prop",
+            "term": "old bandi (बंडी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "event",
+            "term": "drinks trough water",
+            "source": "A1:135"
+          },
+          {
+            "kind": "event",
+            "term": "belches audibly",
+            "source": "A1:135"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Gajanan's bandi and digambar appearance",
+          "STAGING: camera push in"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S8-3",
+        "ovi_ids": [
+          "A1:135"
+        ],
+        "preset": "04_character_entrance",
+        "assets": {
+          "char": "damodarpant_walking",
+          "other": "gajanan_seated_trough"
+        },
+        "action": "camera pans with Damodarpant as he approaches",
+        "held_pose": "Damodarpant walks toward trough carrying a gadva, Gajanan remains at trough",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Damodarpant arriving with a gadva of cool vetiver-scented water",
+        "camera": "pan right",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:135"
+          },
+          {
+            "kind": "prop",
+            "term": "gadva (गडवा)",
+            "source": "A1:135"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:134"
+          },
+          {
+            "kind": "camera",
+            "term": "pan right",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Damodarpant walking pose with gadva",
+          "STAGING: camera pan right"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S8-4",
+        "ovi_ids": [
+          "A1:136"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "damodarpant_facing",
+          "right": "gajanan_facing"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Damodarpant and Gajanan face each other, Damodarpant gesturing",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Damodarpant protesting that the trough water is fit only for animals",
+        "camera": "drift across",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant Kulkarni",
+            "ovi": "A1:136",
+            "marathi": "हां हां तें गढूळ पाणी । समर्था न लावा वदनीं । तें जनावरालागुनी । योग्य आहे प्यावया",
+            "meaning_en": "Oh oh, that muddy water. Samarth, don't put it to your mouth. It is fit for animals to drink."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:136"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:136"
+          },
+          {
+            "kind": "event",
+            "term": "protests muddy water",
+            "source": "A1:136"
+          },
+          {
+            "kind": "camera",
+            "term": "drift across",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: two figures facing each other",
+          "STAGING: camera drift across"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S8-5",
+        "ovi_ids": [
+          "A1:137"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "damodarpant_closeup"
+        },
+        "action": "camera pushes in slowly on Damodarpant's face",
+        "held_pose": "Damodarpant close-up, calm expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Damodarpant offering his sweet, clear, cool water scented with vetiver",
+        "camera": "push in",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant Kulkarni",
+            "ovi": "A1:137",
+            "marathi": "मीं हें पहा आणिलें नीर । गोड निर्मळ थंडगार । वासित केलें साचार । वाळा घालून यामध्यें",
+            "meaning_en": "See, I have brought this water. Sweet, pure, cool. I have scented it with vetiver."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:137"
+          },
+          {
+            "kind": "prop",
+            "term": "vetiver (वाळा)",
+            "source": "A1:137"
+          },
+          {
+            "kind": "prop",
+            "term": "cool water (थंडगार)",
+            "source": "A1:137"
+          },
+          {
+            "kind": "event",
+            "term": "offers scented water",
+            "source": "A1:137"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Damodarpant close-up face",
+          "STAGING: camera push in"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S8-6",
+        "ovi_ids": [
+          "A1:137"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_reaction"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Gajanan close-up, serene gaze",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan listening silently, unchanged",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:137"
+          },
+          {
+            "kind": "pose",
+            "term": "serene gaze",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Gajanan serene close-up",
+          "STAGING: camera push in"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S8-7",
+        "ovi_ids": [
+          "A1:137"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "well_fg",
+          "fx": "well_fx",
+          "mid": "well_mid",
+          "sky": "well_sky"
+        },
+        "action": "camera dollies in slowly over the well and trough",
+        "held_pose": "well and trough with gadva placed beside, vetiver scent implied",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows the two waters side by side at the trough",
+        "camera": "dolly in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "well (कूप)",
+            "source": "A1:134"
+          },
+          {
+            "kind": "scenery",
+            "term": "trough (हाळ)",
+            "source": "A1:134"
+          },
+          {
+            "kind": "prop",
+            "term": "gadva (गडवा)",
+            "source": "A1:135"
+          },
+          {
+            "kind": "prop",
+            "term": "vetiver (वाळा)",
+            "source": "A1:137"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: two waters side by side at trough",
+          "STAGING: camera dolly in"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "well_fg",
+        "description": "Foreground frame: edge of trough with muddy water, flat colour"
+      },
+      {
+        "image_id": "well_fx",
+        "description": "Light effect: sunlight glint on water surface"
+      },
+      {
+        "image_id": "well_mid",
+        "description": "Mid layer: well structure, trough, cattle drinking"
+      },
+      {
+        "image_id": "well_sky",
+        "description": "Sky far: clear afternoon sky"
+      },
+      {
+        "image_id": "gajanan_at_trough",
+        "description": "Gajanan standing at trough, wearing old bandi, digambar, drinking, belching"
+      },
+      {
+        "image_id": "damodarpant_walking",
+        "description": "Damodarpant walking toward trough, carrying a gadva"
+      },
+      {
+        "image_id": "gajanan_seated_trough",
+        "description": "Gajanan at trough, same pose as previous shot, for entrance composition"
+      },
+      {
+        "image_id": "damodarpant_facing",
+        "description": "Damodarpant facing Gajanan, gesturing protest"
+      },
+      {
+        "image_id": "gajanan_facing",
+        "description": "Gajanan facing Damodarpant, calm"
+      },
+      {
+        "image_id": "damodarpant_closeup",
+        "description": "Close-up of Damodarpant's face, calm expression"
+      },
+      {
+        "image_id": "gajanan_reaction",
+        "description": "Close-up of Gajanan's face, serene gaze"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 112.3,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": [],
+  "status": "VALID",
+  "reviewed": false
+}

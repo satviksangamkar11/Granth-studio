@@ -1,0 +1,240 @@
+{
+  "z-ai/glm-5.3-flash": [
+    {
+      "case": 0,
+      "ovi": 84,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 121.1,
+      "status": 200
+    },
+    {
+      "case": 2,
+      "ovi": 97,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 121.1,
+      "status": 200
+    },
+    {
+      "case": 4,
+      "ovi": 146,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 121.1,
+      "status": 200
+    },
+    {
+      "case": 6,
+      "ovi": 128,
+      "label": "reversed meaning",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 121.1,
+      "status": 200
+    },
+    {
+      "case": 8,
+      "ovi": 98,
+      "label": "invented motive (angry)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 121.1,
+      "status": 200
+    },
+    {
+      "case": 10,
+      "ovi": 74,
+      "label": "wrong date (Shuddha for Vadya)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 223.0,
+      "status": 200
+    },
+    {
+      "case": 12,
+      "ovi": 87,
+      "label": "invented agent (servants)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 223.0,
+      "status": 200
+    },
+    {
+      "case": 1,
+      "ovi": 90,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 223.0,
+      "status": 200
+    },
+    {
+      "case": 3,
+      "ovi": 123,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 223.0,
+      "status": 200
+    },
+    {
+      "case": 5,
+      "ovi": 84,
+      "label": "omitted clause (Devidas)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 223.0,
+      "status": 200
+    },
+    {
+      "case": 7,
+      "ovi": 89,
+      "label": "wrong object (gourd -> copper pot)",
+      "expected": "ISSUE",
+      "verdict": "NO_ANSWER",
+      "wall_s": 302.1,
+      "status": 504
+    },
+    {
+      "case": 9,
+      "ovi": 99,
+      "label": "wrong speaker (Devidas)",
+      "expected": "ISSUE",
+      "verdict": "NO_ANSWER",
+      "wall_s": 302.1,
+      "status": 504
+    },
+    {
+      "case": 11,
+      "ovi": 94,
+      "label": "unsupported detail (starving)",
+      "expected": "ISSUE",
+      "verdict": "NO_ANSWER",
+      "wall_s": 302.1,
+      "status": 504
+    }
+  ],
+  "nvidia/nemotron-3-ultra-550b-a55b": [
+    {
+      "case": 0,
+      "ovi": 84,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 74.2,
+      "status": 200
+    },
+    {
+      "case": 2,
+      "ovi": 97,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 74.2,
+      "status": 200
+    },
+    {
+      "case": 4,
+      "ovi": 146,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 74.2,
+      "status": 200
+    },
+    {
+      "case": 6,
+      "ovi": 128,
+      "label": "reversed meaning",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 74.2,
+      "status": 200
+    },
+    {
+      "case": 8,
+      "ovi": 98,
+      "label": "invented motive (angry)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 74.2,
+      "status": 200
+    },
+    {
+      "case": 10,
+      "ovi": 74,
+      "label": "wrong date (Shuddha for Vadya)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 73.8,
+      "status": 200
+    },
+    {
+      "case": 12,
+      "ovi": 87,
+      "label": "invented agent (servants)",
+      "expected": "ISSUE",
+      "verdict": "OK",
+      "wall_s": 73.8,
+      "status": 200
+    },
+    {
+      "case": 1,
+      "ovi": 90,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 73.8,
+      "status": 200
+    },
+    {
+      "case": 3,
+      "ovi": 123,
+      "label": "control",
+      "expected": "OK",
+      "verdict": "OK",
+      "wall_s": 73.8,
+      "status": 200
+    },
+    {
+      "case": 5,
+      "ovi": 84,
+      "label": "omitted clause (Devidas)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 73.8,
+      "status": 200
+    },
+    {
+      "case": 7,
+      "ovi": 89,
+      "label": "wrong object (gourd -> copper pot)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 34.5,
+      "status": 200
+    },
+    {
+      "case": 9,
+      "ovi": 99,
+      "label": "wrong speaker (Devidas)",
+      "expected": "ISSUE",
+      "verdict": "OK",
+      "wall_s": 34.5,
+      "status": 200
+    },
+    {
+      "case": 11,
+      "ovi": 94,
+      "label": "unsupported detail (starving)",
+      "expected": "ISSUE",
+      "verdict": "ISSUE",
+      "wall_s": 34.5,
+      "status": 200
+    }
+  ]
+}

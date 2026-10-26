@@ -1,0 +1,194 @@
+{
+  "scene": 1,
+  "chapter": 1,
+  "range": [
+    70,
+    83
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S1-1: STAGING scenery 'foreground tree line' needs the owner's approval",
+    "S1-1: STAGING light 'daytime ambient light' needs the owner's approval",
+    "S1-2: STAGING light 'midday sun' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S1",
+    "chapter": 1,
+    "ovi_range": [
+      70,
+      83
+    ],
+    "goal": "Establish the historical setting of Shegaon in 1878 and introduce the young Gajanan Maharaj as an unknown yogi.",
+    "turn": {
+      "ovi": "A1:74",
+      "text": "Gajanan arrives in Shegaon in his prime youth on Magh Vadya Saptami."
+    },
+    "shots": [
+      {
+        "shot_id": "S1-1",
+        "ovi_ids": [
+          "A1:70"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "shegaon_fg",
+          "fx": "shegaon_fx",
+          "mid": "shegaon_mid",
+          "sky": "shegaon_sky"
+        },
+        "action": "camera dollies in over the village",
+        "held_pose": "wide view of historical Shegaon with lake and village",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows the village and lake; narrator carries ovi 70",
+        "camera": "dolly in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "Shegaon village",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "lake (सरोवर)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "foreground tree line",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "daytime ambient light",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: caption '१८७८' appears on screen",
+          "STAGING: foreground frame includes tree line"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-2",
+        "ovi_ids": [
+          "A1:71",
+          "A1:72",
+          "A1:73",
+          "A1:74",
+          "A1:75",
+          "A1:76",
+          "A1:77",
+          "A1:78",
+          "A1:79",
+          "A1:80",
+          "A1:81",
+          "A1:82",
+          "A1:83"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_young_shegaon"
+        },
+        "action": "camera pushes in slowly on the young Gajanan",
+        "held_pose": "young Gajanan seated on Shegaon road, wearing old bandi, holding clay chilim, gourd nearby",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows Gajanan as described; narrator carries ovi 71-83",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:74"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "Shegaon road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm, gaze at nose tip",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "midday sun",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: midday sun lighting"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "shegaon_fg",
+        "description": "foreground frame: tree line at village edge"
+      },
+      {
+        "image_id": "shegaon_fx",
+        "description": "fx light: subtle dust motes in air"
+      },
+      {
+        "image_id": "shegaon_mid",
+        "description": "mid subject: historical Shegaon village with lake (सरोवर) and clusters of houses"
+      },
+      {
+        "image_id": "shegaon_sky",
+        "description": "sky: clear daytime sky over Vanhad region"
+      },
+      {
+        "image_id": "gajanan_young_shegaon",
+        "description": "young Gajanan seated on Shegaon road, wearing old torn bandi, holding unfired clay chilim, gourd vessel beside him, calm posture, gaze at nose tip"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 160.4,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": [],
+  "status": "VALID",
+  "reviewed": false
+}

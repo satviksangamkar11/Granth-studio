@@ -1,0 +1,976 @@
+{
+  "scene": 9,
+  "chapter": 1,
+  "range": [
+    138,
+    144
+  ],
+  "result": "INVALID",
+  "errors": [
+    "S9-1: the owner's table gives 'Gajanan' as the speaker of A1:138, not 'unclear'",
+    "S9-1: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+    "S9-2: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+    "S9-4: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+    "S9-6: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+    "S9-8: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+    "S9-11: action/performance describes motion the renderer cannot do ('running'); show it as a held pose (held_pose) or use NEED_NEW"
+  ],
+  "warnings": [
+    "S9-1: STAGING light 'sunlight' needs the owner's approval",
+    "S9-2: STAGING light 'sunlight' needs the owner's approval",
+    "S9-3: STAGING light 'soft light' needs the owner's approval",
+    "S9-4: STAGING light 'sunlight' needs the owner's approval",
+    "S9-5: STAGING light 'soft light' needs the owner's approval",
+    "S9-6: STAGING light 'sunlight' needs the owner's approval",
+    "S9-7: STAGING light 'soft light' needs the owner's approval",
+    "S9-8: STAGING light 'sunlight' needs the owner's approval",
+    "S9-9: STAGING light 'soft light' needs the owner's approval",
+    "S9-10: STAGING light 'soft halo light' needs the owner's approval",
+    "S9-11: STAGING light 'sunlight' needs the owner's approval",
+    "S9-12: STAGING light 'sunlight' needs the owner's approval",
+    "S9-13: STAGING light 'sunlight' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S9",
+    "chapter": 1,
+    "ovi_range": [
+      138,
+      144
+    ],
+    "goal": "Show Gajanan's teaching on water and Brahman, the men's emotional readiness to surrender, and his sudden departure like the wind.",
+    "turn": {
+      "ovi": "A1:144",
+      "text": "Maharaj runs off at wind speed, leaving the men without a destination."
+    },
+    "shots": [
+      {
+        "shot_id": "S9-1",
+        "ovi_ids": [
+          "A1:138"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_frame",
+          "fx": "fx_light",
+          "mid": "mid_scene_teaching",
+          "sky": "sky_bg"
+        },
+        "action": "camera dollies in slowly from wide to medium",
+        "held_pose": "Gajanan seated on road, two men standing before him, leaf plates scattered, gourd and chilim near him",
+        "needs": [
+          "none"
+        ],
+        "performance": "The wide view establishes the teaching setting with all figures in place",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": "A1:138",
+            "marathi": "ऐसें भाषण ऐकतां । महाराज वदले तत्त्वतां",
+            "meaning_en": "Such speech hearing, Maharaj spoke the principle"
+          },
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:138",
+            "marathi": "व्यावहारिक अवघ्या कथा । ह्या न सांगा आम्हां तुम्ही",
+            "meaning_en": "Worldly tales all, do not tell us"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:138"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "clay chilim (कच्ची चिलीम)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "A1:138"
+          },
+          {
+            "kind": "pose",
+            "term": "standing listening",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-2",
+        "ovi_ids": [
+          "A1:139"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "gajanan_seated_left",
+          "right": "bankatlal_standing_right"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Gajanan seated teaching, Bankatlal standing listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "The composition shows the teacher and listener in dialogue",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:139",
+            "marathi": "हें अवघें चरचर । ब्रह्में व्याप्त साचार । तेथें गढुळ,निर्मळ वासित नीर । हे न भेद राहिले",
+            "meaning_en": "All this moving world is pervaded by Brahman; there muddy and pure water reside; no distinction remains"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:139"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "A1:139"
+          },
+          {
+            "kind": "pose",
+            "term": "standing listening",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "gentle drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-3",
+        "ovi_ids": [
+          "A1:139"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_closeup_teaching1"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Close-up of Gajanan's face, calm, gaze on nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "Shows the intensity of his teaching",
+        "camera": "push in 1.0 to 1.2",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:139"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face, gaze on nose tip",
+            "source": "A1:139"
+          },
+          {
+            "kind": "light",
+            "term": "soft light",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft light on face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-4",
+        "ovi_ids": [
+          "A1:140"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "gajanan_seated_left",
+          "right": "bankatlal_standing_right"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Gajanan seated teaching, Bankatlal standing listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "Continues the teaching on water",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:140",
+            "marathi": "पाणी तरी तोच आहे । निर्मळ गढुळ तोच पाहे । सुवास कुवास दोन्ही हें । रुप त्याचें निःसंशय",
+            "meaning_en": "Water is that alone; pure or muddy, both are its form; good and bad smell both are its form, without doubt"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:140"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "A1:140"
+          },
+          {
+            "kind": "pose",
+            "term": "standing listening",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "gentle drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-5",
+        "ovi_ids": [
+          "A1:140"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_closeup_teaching2"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Close-up of Gajanan, calm",
+        "needs": [
+          "none"
+        ],
+        "performance": "Emphasizes the teaching on water's unity",
+        "camera": "push in 1.0 to 1.2",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:140"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face, calm",
+            "source": "A1:140"
+          },
+          {
+            "kind": "light",
+            "term": "soft light",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft light on face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-6",
+        "ovi_ids": [
+          "A1:141"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "gajanan_seated_left",
+          "right": "bankatlal_standing_right"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Gajanan seated teaching, Bankatlal standing listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "Teaching on drinker and Brahman",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:141",
+            "marathi": "पिणाराही वेगळा । त्यापासून ना निराळा । ईश्वराची अगाध लीला । ती कळे या नरजन्मीं",
+            "meaning_en": "The drinker is not separate; from Him not apart; God's unfathomable play is known in this human birth"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:141"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "A1:141"
+          },
+          {
+            "kind": "pose",
+            "term": "standing listening",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "gentle drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-7",
+        "ovi_ids": [
+          "A1:142"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_closeup_teaching3"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Close-up of Gajanan, calm",
+        "needs": [
+          "none"
+        ],
+        "performance": "Final teaching on worldly mind and origin of world",
+        "camera": "push in 1.0 to 1.2",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:142",
+            "marathi": "तें दिलें टाकून । व्यवहारीं गोविलें मन । यांचेंच करा सदा मनन । कशापासून जग झालें",
+            "meaning_en": "Having dropped that, the mind is caught in dealings; reflect on them always; from what did the world arise"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:142"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face, calm",
+            "source": "A1:142"
+          },
+          {
+            "kind": "light",
+            "term": "soft light",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft light on face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-8",
+        "ovi_ids": [
+          "A1:142"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "far_bg",
+          "mid": "mid_scene_teaching",
+          "near": "near_fg",
+          "sky": "sky_bg"
+        },
+        "action": "camera moves laterally through depth layers",
+        "held_pose": "Wide view of teaching scene with foreground plates",
+        "needs": [
+          "none"
+        ],
+        "performance": "Shows the environment as teaching concludes",
+        "camera": "lateral parallax",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "clay chilim (कच्ची चिलीम)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated teaching",
+            "source": "A1:142"
+          },
+          {
+            "kind": "pose",
+            "term": "standing listening",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "lateral parallax",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-9",
+        "ovi_ids": [
+          "A1:143"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "bankatlal_face_emotional"
+        },
+        "action": "camera pushes in slowly on Bankatlal's face",
+        "held_pose": "Bankatlal's face emotional, eyes downcast, ready to prostrate",
+        "needs": [
+          "none"
+        ],
+        "performance": "Shows his moved state",
+        "camera": "push in 1.0 to 1.14",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": "A1:143",
+            "marathi": "ऐसी ऐकतां समर्थवाणी । दोघे गेले गहिंवरोनी । अनन्यभावें समर्थचरणीं । लोळावया तयार झाले",
+            "meaning_en": "Hearing such Samarth's words, both went to prostrate; with exclusive devotion to Samarth's feet, they became ready to roll"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:143"
+          },
+          {
+            "kind": "pose",
+            "term": "emotional close-up, ready to prostrate",
+            "source": "A1:143"
+          },
+          {
+            "kind": "light",
+            "term": "soft light",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft light on face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-10",
+        "ovi_ids": [
+          "A1:143"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "damodarpant_face_emotional"
+        },
+        "action": "camera pushes in slower with soft halo on Damodarpant's face",
+        "held_pose": "Damodarpant's face emotional, ready to prostrate",
+        "needs": [
+          "none"
+        ],
+        "performance": "Shows his moved state",
+        "camera": "slow push in with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:143"
+          },
+          {
+            "kind": "pose",
+            "term": "emotional close-up, ready to prostrate",
+            "source": "A1:143"
+          },
+          {
+            "kind": "light",
+            "term": "soft halo light",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in with halo",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo light"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-11",
+        "ovi_ids": [
+          "A1:144"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "maharaj_running_pose"
+        },
+        "action": "camera pushes in slowly on Maharaj running",
+        "held_pose": "Maharaj in mid-stride running, bandi fluttering",
+        "needs": [
+          "none"
+        ],
+        "performance": "Shows his sudden departure like wind",
+        "camera": "push in 1.0 to 1.2",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": "A1:144",
+            "marathi": "तो त्यांचा जाणोन हेत । महाराज निघाले पळत पळत । वायूच्या त्या गतिप्रत । अडथळा जगीं कोण करी ?",
+            "meaning_en": "Knowing their intent, Maharaj departed running, running; at wind's speed, who can obstruct in the world?"
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:144"
+          },
+          {
+            "kind": "event",
+            "term": "Maharaj runs off",
+            "source": "A1:144"
+          },
+          {
+            "kind": "prop",
+            "term": "bandi (old worn vest)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "running mid-stride",
+            "source": "A1:144"
+          },
+          {
+            "kind": "camera",
+            "term": "push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-12",
+        "ovi_ids": [
+          "A1:144"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "far_bg",
+          "mid": "mid_scene_empty",
+          "near": "near_fg",
+          "sky": "sky_bg"
+        },
+        "action": "camera moves laterally through empty road layers",
+        "held_pose": "Empty road with leaf plates, gourd, chilim, no figures",
+        "needs": [
+          "none"
+        ],
+        "performance": "Shows the scene after Maharaj left",
+        "camera": "lateral parallax",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "clay chilim (कच्ची चिलीम)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "sky",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "lateral parallax",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S9-13",
+        "ovi_ids": [
+          "A1:144"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_frame",
+          "fx": "fx_light",
+          "mid": "mid_scene_empty",
+          "sky": "sky_bg"
+        },
+        "action": "camera dollies in slowly on empty road",
+        "held_pose": "Wide empty road, leaf plates, gourd, chilim remain",
+        "needs": [
+          "none"
+        ],
+        "performance": "Final establishing shot of the place after departure",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "clay chilim (कच्ची चिलीम)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "sunlight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft sunlight glow"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "fg_frame",
+        "description": "Foreground frame layer: leaf plates and dust on road"
+      },
+      {
+        "image_id": "fx_light",
+        "description": "Light effect layer: soft sunlight glow"
+      },
+      {
+        "image_id": "mid_scene_teaching",
+        "description": "Mid layer: Gajanan seated on road, Bankatlal and Damodarpant standing before him, gourd and chilim nearby"
+      },
+      {
+        "image_id": "sky_bg",
+        "description": "Sky layer: clear sky"
+      },
+      {
+        "image_id": "gajanan_seated_left",
+        "description": "Gajanan seated, facing right, calm teaching pose, wearing old bandi, chilim in hand"
+      },
+      {
+        "image_id": "bankatlal_standing_right",
+        "description": "Bankatlal standing, facing left, hands folded, listening"
+      },
+      {
+        "image_id": "gajanan_closeup_teaching1",
+        "description": "Close-up of Gajanan's face, gaze on nose tip, calm"
+      },
+      {
+        "image_id": "gajanan_closeup_teaching2",
+        "description": "Close-up of Gajanan's face, slight variation, calm"
+      },
+      {
+        "image_id": "gajanan_closeup_teaching3",
+        "description": "Close-up of Gajanan's face, calm, eyes steady"
+      },
+      {
+        "image_id": "far_bg",
+        "description": "Far background: distant road and horizon"
+      },
+      {
+        "image_id": "near_fg",
+        "description": "Near foreground: scattered leaf plates and gourd"
+      },
+      {
+        "image_id": "bankatlal_face_emotional",
+        "description": "Close-up of Bankatlal's face, emotional, eyes downcast"
+      },
+      {
+        "image_id": "damodarpant_face_emotional",
+        "description": "Close-up of Damodarpant's face, emotional, eyes downcast"
+      },
+      {
+        "image_id": "maharaj_running_pose",
+        "description": "Maharaj in running pose, mid-stride, bandi fluttering, barefoot"
+      },
+      {
+        "image_id": "mid_scene_empty",
+        "description": "Mid layer: empty road with leaf plates, gourd, chilim, no figures"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 210.7,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 107.8,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S9-1: S9-1: the owner's table gives 'Gajanan' as the speaker of A1:138, not 'unclear'",
+        "S9-1: S9-1: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+        "S9-2: S9-2: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+        "S9-4: S9-4: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+        "S9-6: S9-6: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+        "S9-8: S9-8: pose 'standing listening' is not in the owner's research (cite an ovi, or label it STAGING if it is only scenery/light/pose/camera)",
+        "S9-11: S9-11: action/performance describes motion the renderer cannot do ('running'); show it as a held pose (held_pose) or use NEED_NEW"
+      ],
+      "scope": [
+        "S9-1",
+        "S9-11",
+        "S9-2",
+        "S9-4",
+        "S9-6",
+        "S9-8"
+      ],
+      "status": "REJECTED (still invalid: S9-11: action/performance describes motion the renderer cannot do ('running'); show it as a held pose (held_pose) or use NEED_NEW)"
+    }
+  ],
+  "final_reviews": []
+}

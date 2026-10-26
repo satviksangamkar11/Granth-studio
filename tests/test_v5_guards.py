@@ -59,7 +59,7 @@ def test_refuses_uncounted_and_unknown_phase(tmp_path):
     with pytest.raises(L.Refused):
         led.reserve("P1", "kimi-k3.1-pro", 0, 100)
     with pytest.raises(L.Refused):
-        led.reserve("P4", "kimi-k3.1-pro", N, 100)
+        led.reserve("P9", "kimi-k3.1-pro", N, 100)
 
 
 def test_lock_blocks_a_second_holder(tmp_path):

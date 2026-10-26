@@ -1,0 +1,106 @@
+{
+  "created": "2026-10-26 16:54:58",
+  "files": {
+    "REVIEW.md": "935da2c41e0e42d99a3f03930aa29a6fd12b9b01e82afe3818674d3cdcce22e4",
+    "a01_scene1.json": "5d258d24e5891c44de16e5173cebf1af160761b9c747b29bcc24b2eb044a9449",
+    "a01_scene2.json": "620dd2c7e5ed8bf4ba75cac71f4c8d477e6ceb12100912337736f5a61f5fc9d1",
+    "a01_scene3.json": "9014014629e3538cde86994aab24f3e06404ed105841661c3be7d2a09e551e2c",
+    "a01_scene4.json": "2d029a9b3db657c2a3c64235799864b7bf2eb4974662fb3c8ec7537b912d6d84",
+    "a01_scene5.json": "a442f13a5b7432776d9cf91f2994d20921091985bbbf014ce67281d0f1d2b867",
+    "a01_scene6.json": "d6ac21c7bf766a5bcab3e979f5394148c4458f0b2666b47606b5a271b7d857ea",
+    "a01_scene7.json": "5b117f2b0efed7bfbf4ecddf842c32aa9bc93b77e0b3e4f2e61b7c1a474f46fd",
+    "a01_scene8.json": "28dba2cf863d102d0296a622cfcea6c5364150e8a841708225335b554588d48e",
+    "a01_scene9.json": "97f1e595b1307dfb849c7ee5d3db6fcdbd77c695d6e74eeae8d7aa05a785ab1b",
+    "calls/scene1__nvidia_nemotron-3-ultra-550b-a55b__15cb250993ea9fb6.json": "6acdd9143b87d694595f3611b7412a52adaddaa67141d3939743185f449c1cf1",
+    "calls/scene1__nvidia_nemotron-3-ultra-550b-a55b__9726395caa77fd8e.json": "b0dde87263f721f8e68ff478ed1aa8c143a3daaac0f2439a57cdf50029fdaf80",
+    "calls/scene2__nvidia_nemotron-3-ultra-550b-a55b__173682c1604ecbc0.json": "a2edab619e2f6f71a7970b9fc42597996038719fb8ec0fdec1389fd5b79a9ffb",
+    "calls/scene2__nvidia_nemotron-3-ultra-550b-a55b__7f9c449df0fab3ac.json": "a450b651987ccc19be19ff1330ab911effdd19a36a403b2c949f4027ac484639",
+    "calls/scene3__nvidia_nemotron-3-ultra-550b-a55b__99294e01e5772b69.json": "2acd58329402185a4f2adfc17c9f3365670f6fb44747e63e0927bc5459cde388",
+    "calls/scene3__nvidia_nemotron-3-ultra-550b-a55b__e8999345edbc24ee.json": "8026d5c116be398b83719c859a64e5b5bfec5be0616691f14113ca65594e71e5",
+    "calls/scene4__nvidia_nemotron-3-ultra-550b-a55b__2c2d06da7007540e.json": "d8881172ca958cf9c695811bf6e3aa6d5e2b4c4501a9d8d6d0a6fd84600dcc8b",
+    "calls/scene4__nvidia_nemotron-3-ultra-550b-a55b__c5a181cc86d5f316.json": "a609602798070e5d3912ad9afd3df5920f5f2c127553a4ec754bbcd0a2a6e04f",
+    "calls/scene5__nvidia_nemotron-3-ultra-550b-a55b__56f946cd69a09418.json": "f4b802e69a8fb324efbd9ecc9dccc964b983b6b7fb1aad57c28078d323c6e6a2",
+    "calls/scene5__nvidia_nemotron-3-ultra-550b-a55b__84c0bbacb83f5362.json": "b028974619c7972671c0d728bcffe343b95a56b0a71bcced0c248f94efba777a",
+    "calls/scene6__nvidia_nemotron-3-ultra-550b-a55b__585f4efb29440eec.json": "5c85426a53c159fc769eba9cbff3e7b6668adcdb87e172bdeac88a7c0afd50f2",
+    "calls/scene7__nvidia_nemotron-3-ultra-550b-a55b__2d3935c022a33d5e.json": "64ceb4feb8d57b5eaa70e1374af86c2d7ed6cb471b6632731c1550d78435fb82",
+    "calls/scene7__nvidia_nemotron-3-ultra-550b-a55b__30edd4ce07c4c3d6.json": "3266d3e8a5b8c4f5496b2c21ad471a1bdd20a6ba0196f7dfa2c8b32472ae546f",
+    "calls/scene8__nvidia_nemotron-3-ultra-550b-a55b__447b69b50070d742.json": "abe52596512d10027d11cf99def0ba03edb599793e121d43736ad74f490d1f9e",
+    "calls/scene9__nvidia_nemotron-3-ultra-550b-a55b__7fea8ac6e4f97df1.json": "0227583d9196d6c0e9e4b6e0f2c7a6b7df66aa9a669b4a29a3bd0835b6bcfa84",
+    "calls/scene9__nvidia_nemotron-3-ultra-550b-a55b__d09e61c6090cc38e.json": "95a7ee375e05787ed7f259a04cd80e5d336e2d5e138d2479259ea1a674133209",
+    "shot_id_map.json": "31b11939c0460b6e537550f29ac80848613a3e5510e9ea29639deba6ab413ac1"
+  },
+  "inputs": {
+    "code_sha256": {
+      "director_run.py": "a1b9f1c499403e622158b531163b917e4b58857f45c19d7bd061fca1a629fde6",
+      "director_test.py": "ddfca8811ff5a2eee0d751d98ba70255c36b0758912cc5bc049478ece65feda5",
+      "draft_source.py": "5dba4c42b6a9e09938d42bd31affa245c34fa50c1eb17f830d32abdb885f540f",
+      "kimi_adapter.py": "aa45551f003f3fcc6e3825aa82b3604b09d6c864f7fcbff82fd1831f9778028c",
+      "nvidia_trial.py": "b3e1dffa3f5b4d8b8710f03f2082827e18bdfbf8b92af5988920d4b962cc4771",
+      "v5_ledger.py": "ab99259d2d462a5c55dec15dce8c95e79facee1a0054e50fbca9c8864984d5ee"
+    },
+    "director": "nvidia/nemotron-3-ultra-550b-a55b",
+    "packet_files": {
+      "adhyay_01_ovis_hj.jsonl": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+      "frozen_copies/adhyay_01_FINAL_answers.md": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846",
+      "frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882",
+      "frozen_copies/adhyay_01_analysis_v3.md": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e",
+      "frozen_copies/characters_1to12_FINAL.md": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870",
+      "frozen_copies/glossary_user_supplied.md": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c",
+      "frozen_copies/glossary_v3.md": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918",
+      "frozen_copies/verification_report.md": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b",
+      "presets_index.json": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    },
+    "presets_sha256": {
+      "01_establishing_shot": "a7ec003060f9a02a3376b45104a93642ff0bb795e04e6b9b4075f1818174728c",
+      "02_environmental_parallax": "19923612ef52a37b089a53246297257239ceb0946547253760b19929a20cb4e2",
+      "03_slow_cinematic_push": "19bbba18ed58aa55b35989fe7e2c3508193aaecb556165b42c3c13047f945781",
+      "04_character_entrance": "b5cdf2cc535f96176977c3137c46dae3e38dac090d2cd99f8727511068dce1f9",
+      "05_bowing_prayer": "edb06a70ae3f27d39dd02fd083f6cbe3b959e6b41cac5cb34ef948215a08a03f",
+      "06_blessing_gesture": "842eb1d43feddd832ad211c554173dcc6e299abf3a7768683dab5f0f035ddc93",
+      "07_character_reaction": "dbc5bd73a5739481344aae4576cddf558a3c9ea33b3bb9d0d58e5bf049e19166",
+      "08_emotional_closeup": "1039236a2970438f9069ca4767efe3ebbb2523130956d27e0272f8954ddcfdb5",
+      "09_dialogue_composition": "49837b00c13635abab1075eb1b7391cf756189e7ce71c44902f6136956ca1631",
+      "10_object_hand_insert": "2ed82f4f0cfbf8b1bf43623e7594101d0fe7c373e36bbcdedefe7ba2d5b3e180",
+      "11_scene_transition": "5eb9edaa179606ce44fda329663355bbf1288888302c1357d43359cf268f19fb"
+    },
+    "reviewers": [],
+    "scenes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "settings": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
+    },
+    "split": {
+      "files": {
+        "audio/A1_audio_plan.json": "0ea405a3363aef09ff4de2452ca92afad470c430b4b5ccee0a2614fbadb45707",
+        "audio/A1_timing_plan.json": "39e947db29661ba5c60190ad02d02fe260607c7b73b67528f9088957849a143b",
+        "story_split_edits/A1_rev1.json": "9353e89f6144a6cfc564a4cee3f71bb7881b3f9ab3fe0b5bede15cad9a0e5847"
+      },
+      "hash": "88ef96e6200f41a80c7896e07324fd83ecaeadc57da429d96f9d423514e916f6",
+      "run": "a1_split_rev6"
+    }
+  },
+  "results": {
+    "1": "UNREVIEWED",
+    "2": "UNREVIEWED",
+    "3": "INVALID",
+    "4": "UNREVIEWED",
+    "5": "UNREVIEWED",
+    "6": "UNREVIEWED",
+    "7": "INVALID",
+    "8": "UNREVIEWED",
+    "9": "INVALID"
+  },
+  "run": "a1_dry_nemotron",
+  "status": "DRAFT, not approved; nothing rendered",
+  "updated": "2026-10-26 17:00:17",
+  "wall_s": 318.5
+}

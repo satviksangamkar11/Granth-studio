@@ -1,0 +1,22 @@
+{
+  "packet": "adhyay_02",
+  "built": "2026-10-26",
+  "note": "COPIES of owner-frozen files (2026-10-22). Adhyay 2 Marathi ovi text is NOT in the project yet (the earlier web run got HTTP 403); the analysis was read from the printed PDF pages. Shares glossary and characters file with packets/adhyay_01. Frozen is not source approval; film review NOT_DONE.",
+  "files": [
+    {
+      "path": "frozen_copies/adhyay_02_FINAL_answers.md",
+      "bytes": 1333,
+      "sha256": "3cab68af9c3d38fd40255fc2adbb9a54767b37c0f59f9d35c89df71241d3d512"
+    },
+    {
+      "path": "frozen_copies/adhyay_02_analysis_v3.md",
+      "bytes": 93377,
+      "sha256": "4dcea20401304aea02018736df08fb3efb257d11d9f5b66fade3c141c2019565"
+    },
+    {
+      "path": "frozen_copies/adhyay_02_reference_user_supplied.md",
+      "bytes": 2502,
+      "sha256": "fdc4b731e8c9f3e749e22fb2e4897515490e15e899c9a7330f5205d3308baefe"
+    }
+  ]
+}

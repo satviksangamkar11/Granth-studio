@@ -1,0 +1,303 @@
+{
+  "chapter": 1,
+  "result": "REVIEW_BLOCKED",
+  "errors": [],
+  "warnings": [
+    "A1-T1: 65 shots in total: it will be directed in several ordered parts"
+  ],
+  "macro": {
+    "schema_version": 1,
+    "chapter": 1,
+    "source_sha256": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+    "source_range": [
+      1,
+      146
+    ],
+    "stories": [
+      {
+        "story_id": "A1-T1",
+        "title": "First Appearance in Shegaon and Recognition at Devidas's Feast",
+        "ovi_range": [
+          70,
+          144
+        ],
+        "arc": "complete",
+        "boundary_evidence": [
+          {
+            "ovi": "A1:70",
+            "reason": "The narrator turns to the great man himself and to his coming to Shegaon (ovi 70-83); ovi 83-84 then tie the feast to that time, so one story begins here."
+          },
+          {
+            "ovi": "A1:74",
+            "reason": "He comes to Shegaon in his prime: the arrival that the encounter follows."
+          },
+          {
+            "ovi": "A1:144",
+            "reason": "After the teaching and the men's readiness to surrender, Gajanan runs off like the wind, closing the encounter."
+          }
+        ],
+        "scenes": [
+          {
+            "scene_id": "S1",
+            "ovi_range": [
+              70,
+              83
+            ],
+            "brief": "Opening, two shots. Narrated: his place and caste cannot be traced (70-73). On screen: only the year 1878 as a caption. Shot 1: historical Shegaon (58-60). Shot 2: the young Gajanan seen there. No birthplace, childhood, parents or journey is shown.",
+            "context_ovi_ids": [
+              "A1:58",
+              "A1:60"
+            ],
+            "shot_budget": 2
+          },
+          {
+            "scene_id": "S2",
+            "ovi_range": [
+              84,
+              96
+            ],
+            "brief": "Devidas prepares his son's Ritushanti feast; outside, the almost bare stranger (worn old bandi, digambar) picks leftover rice grains from the leaf plates; narrator gives the teaching 'food is Brahman' (94-96).",
+            "context_ovi_ids": [
+              "A1:74",
+              "A1:83"
+            ],
+            "shot_budget": 8
+          },
+          {
+            "scene_id": "S3",
+            "ovi_range": [
+              97,
+              105
+            ],
+            "brief": "Bankatlal and Damodarpant see him, debate whether he is mad or profoundly wise, and resolve to test his conduct rather than dismiss him.",
+            "context_ovi_ids": [
+              "A1:94"
+            ],
+            "shot_budget": 7
+          },
+          {
+            "scene_id": "S4",
+            "ovi_range": [
+              108,
+              112
+            ],
+            "brief": "Bankatlal humbly asks why he searches the plates; no answer, only a steady look at both; radiant, absorbed in inner bliss; the two visitors bow to him in silence (ovi 112).",
+            "context_ovi_ids": [
+              "A1:102"
+            ],
+            "shot_budget": 6
+          },
+          {
+            "scene_id": "S5",
+            "ovi_range": [
+              113,
+              118
+            ],
+            "brief": "After a request whose speaker is unnamed, Devidas sets a plate of rich cooked dishes before Gajanan; he mixes all the dishes together and eats without liking or disliking any taste (118); narrator's two comparisons (116-117).",
+            "context_ovi_ids": [],
+            "shot_budget": 6
+          },
+          {
+            "scene_id": "S6",
+            "ovi_range": [
+              119,
+              122
+            ],
+            "brief": "Bankatlal tells Damodarpant that calling him mad was a mistake; like Arjuna for Subhadra, Gajanan seeks liberation; no further test is needed. Ovi 122 praises Shegaon and Hari's gift of desirelessness; speaker unclear.",
+            "context_ovi_ids": [
+              "A1:99",
+              "A1:118"
+            ],
+            "shot_budget": 6
+          },
+          {
+            "scene_id": "S7",
+            "ovi_range": [
+              123,
+              133
+            ],
+            "brief": "At noon the gourd is empty; Damodarpant offers water, Gajanan laughingly explains practical conduct, and Damodarpant joyfully enters Devidas's house to fetch water in a gadva.",
+            "context_ovi_ids": [
+              "A1:89",
+              "A1:118"
+            ],
+            "shot_budget": 10
+          },
+          {
+            "scene_id": "S8",
+            "ovi_range": [
+              134,
+              137
+            ],
+            "brief": "Gajanan drinks at the cattle trough beside the well; Damodarpant returns with cool, vetiver-scented water and protests that the muddy water is fit only for animals.",
+            "context_ovi_ids": [
+              "A1:133"
+            ],
+            "shot_budget": 7
+          },
+          {
+            "scene_id": "S9",
+            "ovi_range": [
+              138,
+              144
+            ],
+            "brief": "Gajanan declares that water in any form and the drinker are one in Brahman (138-142), with room for his words; the men are ready to fall at his feet (143); he runs off like the wind (144).",
+            "context_ovi_ids": [
+              "A1:137"
+            ],
+            "shot_budget": 13
+          }
+        ]
+      }
+    ],
+    "unfilmed_ranges": [
+      {
+        "ovi_range": [
+          1,
+          32
+        ],
+        "kind": "invocation",
+        "reason": "Invocations to deities and saints, with the author's humility and prayer for guidance in composing the work."
+      },
+      {
+        "ovi_range": [
+          33,
+          38
+        ],
+        "kind": "commentary",
+        "reason": "The author exhorts listeners and praises saints; these verses narrate no story event."
+      },
+      {
+        "ovi_range": [
+          39,
+          57
+        ],
+        "kind": "background",
+        "reason": "Lists of earlier saints, earlier books and the author's plan explain the lineage and purpose of this biography."
+      },
+      {
+        "ovi_range": [
+          58,
+          69
+        ],
+        "kind": "background",
+        "reason": "Shegaon, Patil's request and the praise of the true saint set the scene; one view of Shegaon is drawn from 58-60 as context."
+      },
+      {
+        "ovi_range": [
+          106,
+          107
+        ],
+        "kind": "commentary",
+        "reason": "The narrator contrasts unobservant passers-by with the discerning gem-picker; this is reflective narration, not required action."
+      },
+      {
+        "ovi_range": [
+          145,
+          146
+        ],
+        "kind": "closing",
+        "reason": "The next-chapter announcement and the author's prayerful dedication close the chapter."
+      }
+    ]
+  },
+  "macro_sha256": "88ef96e6200f41a80c7896e07324fd83ecaeadc57da429d96f9d423514e916f6",
+  "parts": [
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P1",
+      "scene_ids": [
+        "S1",
+        "S2"
+      ],
+      "shot_budget": 10
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P2",
+      "scene_ids": [
+        "S3"
+      ],
+      "shot_budget": 7
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P3",
+      "scene_ids": [
+        "S4",
+        "S5"
+      ],
+      "shot_budget": 12
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P4",
+      "scene_ids": [
+        "S6"
+      ],
+      "shot_budget": 6
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P5",
+      "scene_ids": [
+        "S7"
+      ],
+      "shot_budget": 10
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P6",
+      "scene_ids": [
+        "S8"
+      ],
+      "shot_budget": 7
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P7",
+      "scene_ids": [
+        "S9"
+      ],
+      "shot_budget": 13
+    }
+  ],
+  "reviews": [
+    {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "verdict": "BLOCK",
+      "problems": [
+        {
+          "where": "S6",
+          "kind": "M3",
+          "problem": "Ovi 119-121 are Bankatlal's dialogue admitting mistake; ovi 122 is narrator's independent praise of Shegaon and Hari's gift of desirelessness. Merging them combines character reaction with narrator commentary, two unrelated events.",
+          "fix": "Split S6 at ovi 122; make 119-121 a scene for feast reaction, and treat 122 as unfilmed commentary or start of next scene."
+        },
+        {
+          "where": "macro",
+          "kind": "M5",
+          "problem": "Owner's research explicitly classifies ovi 70-83 as 'Background passage (not counted as an episode)' but the proposed split places them in filmed scene S1 and omits them from unfilmed ranges.",
+          "fix": "Add ovi 70-83 to unfilmed background range or reclassify S1 as unfilmed background."
+        }
+      ],
+      "missing": []
+    }
+  ],
+  "final_reviews": [],
+  "repairs": [],
+  "calls": [
+    {
+      "step": "macro_review",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 265.6,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "revised_from": "acb32841c7ccb81597935b0f180c764ab0b02038a1dcbd90c98860141267d39d",
+  "note": "Owner-directed revision of Kimi's split (run a1_kimi_plan2, hash acb32841c7cc), no new Kimi call. Opening scene S1 written from ovi 70-83: only the year 1878 (owner's instruction), no Sajjangad theory in film-facing text (kept under research_evidence_not_narrated). 'Food is Brahman' (95-96) joins scene 2; the mixing of dishes (116-118) joins scene 5; scene 9 has 6 shots for the teaching; the silent salutation (112), the bandi (88) and digambar (92) are kept; Damodarpant fetches the water (133). Verified against the Marathi ovis. Shot budgets are the PLANNED shots from the estimated narration timing (canon/audio/A1_timing_plan.json); the first split's allocation was 2,5,4,4,4,3,5,4,6 = 37."
+}

@@ -1,0 +1,990 @@
+{
+  "approvals": {},
+  "deps": {
+    "asset:bankatlal_face_closeup": [
+      "plan:S6"
+    ],
+    "asset:bankatlal_facing_right": [
+      "plan:S6"
+    ],
+    "asset:bankatlal_speaking": [
+      "plan:S4"
+    ],
+    "asset:bankatlal_walking": [
+      "plan:S4"
+    ],
+    "asset:damodarpant_closeup": [
+      "plan:S8"
+    ],
+    "asset:damodarpant_face_closeup": [
+      "plan:S6"
+    ],
+    "asset:damodarpant_facing": [
+      "plan:S8"
+    ],
+    "asset:damodarpant_facing_left": [
+      "plan:S6"
+    ],
+    "asset:damodarpant_walking": [
+      "plan:S8"
+    ],
+    "asset:devidas_standing_listening": [
+      "plan:S5"
+    ],
+    "asset:devidas_walking_with_plate": [
+      "plan:S5"
+    ],
+    "asset:fg_foreground_elements": [
+      "plan:S5"
+    ],
+    "asset:fg_gate": [
+      "plan:S6"
+    ],
+    "asset:fx_light": [
+      "plan:S6"
+    ],
+    "asset:fx_light_subtle": [
+      "plan:S5"
+    ],
+    "asset:gajanan_at_trough": [
+      "plan:S8"
+    ],
+    "asset:gajanan_face_serene_closeup": [
+      "plan:S5"
+    ],
+    "asset:gajanan_facing": [
+      "plan:S8"
+    ],
+    "asset:gajanan_listening": [
+      "plan:S4"
+    ],
+    "asset:gajanan_looking_up_at_visitors": [
+      "plan:S4"
+    ],
+    "asset:gajanan_radiant_closeup": [
+      "plan:S4"
+    ],
+    "asset:gajanan_reaction": [
+      "plan:S8"
+    ],
+    "asset:gajanan_seated": [
+      "plan:S4"
+    ],
+    "asset:gajanan_seated_at_door": [
+      "plan:S5"
+    ],
+    "asset:gajanan_seated_at_plate_front": [
+      "plan:S5"
+    ],
+    "asset:gajanan_seated_full": [
+      "plan:S6"
+    ],
+    "asset:gajanan_seated_trough": [
+      "plan:S8"
+    ],
+    "asset:gajanan_serene_closeup": [
+      "plan:S4"
+    ],
+    "asset:gajanan_young_shegaon": [
+      "plan:S1"
+    ],
+    "asset:hands_mixing_food_closeup": [
+      "plan:S5"
+    ],
+    "asset:mid_gajanan": [
+      "plan:S6"
+    ],
+    "asset:mid_gajanan_plate_door": [
+      "plan:S5"
+    ],
+    "asset:s2_estab_fg": [
+      "plan:S2"
+    ],
+    "asset:s2_estab_fx": [
+      "plan:S2"
+    ],
+    "asset:s2_estab_mid": [
+      "plan:S2"
+    ],
+    "asset:s2_estab_sky": [
+      "plan:S2"
+    ],
+    "asset:s2_face_gajanan_teaching": [
+      "plan:S2"
+    ],
+    "asset:s2_insert_chilim_gourd": [
+      "plan:S2"
+    ],
+    "asset:s2_insert_picking_grain": [
+      "plan:S2"
+    ],
+    "asset:s2_parallax_far": [
+      "plan:S2"
+    ],
+    "asset:s2_parallax_mid": [
+      "plan:S2"
+    ],
+    "asset:s2_parallax_near": [
+      "plan:S2"
+    ],
+    "asset:s2_parallax_sky": [
+      "plan:S2"
+    ],
+    "asset:s2_push_gajanan_eating": [
+      "plan:S2"
+    ],
+    "asset:s2_push_gajanan_seated": [
+      "plan:S2"
+    ],
+    "asset:s2_push_plates": [
+      "plan:S2"
+    ],
+    "asset:shegaon_fg": [
+      "plan:S1"
+    ],
+    "asset:shegaon_fx": [
+      "plan:S1"
+    ],
+    "asset:shegaon_mid": [
+      "plan:S1"
+    ],
+    "asset:shegaon_sky": [
+      "plan:S1"
+    ],
+    "asset:sky_morning": [
+      "plan:S5"
+    ],
+    "asset:sky_shegaon": [
+      "plan:S6"
+    ],
+    "asset:speaker_unclear_standing": [
+      "plan:S5"
+    ],
+    "asset:visitors_bowing_gajanan_seated": [
+      "plan:S4"
+    ],
+    "asset:well_fg": [
+      "plan:S8"
+    ],
+    "asset:well_fx": [
+      "plan:S8"
+    ],
+    "asset:well_mid": [
+      "plan:S8"
+    ],
+    "asset:well_sky": [
+      "plan:S8"
+    ],
+    "macro:A1": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ],
+    "plan:S1": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ],
+    "plan:S2": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ],
+    "plan:S4": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ],
+    "plan:S5": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ],
+    "plan:S6": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ],
+    "plan:S8": [
+      "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md",
+      "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "canon:A1:frozen_copies/adhyay_01_analysis_v3.md",
+      "canon:A1:frozen_copies/characters_1to12_FINAL.md",
+      "canon:A1:frozen_copies/glossary_user_supplied.md",
+      "canon:A1:frozen_copies/glossary_v3.md",
+      "canon:A1:frozen_copies/verification_report.md",
+      "canon:A1:presets_index.json",
+      "source:A1:adhyay_01_ovis_hj.jsonl"
+    ]
+  },
+  "film": "gajanan-vijay-a1-a2",
+  "items": {
+    "asset:bankatlal_face_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "721d36b922d89d39e5a6b319a4b4a15961823336fb06a47bd13a09203bd0d61d",
+      "used_in": [
+        "S6-2"
+      ]
+    },
+    "asset:bankatlal_facing_right": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "90b34dc537f842a8b21e8e1e5d962e1c7e8c47d4891ce4c7736b73bf167b88f3",
+      "used_in": [
+        "S6-1"
+      ]
+    },
+    "asset:bankatlal_speaking": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "655644a373fa362a1278918cae4d69d4b9b2dd3325c4c08ee01e4d7d74d6f2c8",
+      "used_in": [
+        "S4-2"
+      ]
+    },
+    "asset:bankatlal_walking": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "67e04c5b239a6e2c16e0f14aee698ac5d6187232225783ece78ed28f63527e95",
+      "used_in": [
+        "S4-1"
+      ]
+    },
+    "asset:damodarpant_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "688cc773d78302e37f511ea30c00b8af96144a41bcd6c481b78f03f5af047681",
+      "used_in": [
+        "S8-5"
+      ]
+    },
+    "asset:damodarpant_face_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "12fea31eb8686c5dab76b671976aaf1fe349ce52ccd849704a8057c87af81a12",
+      "used_in": [
+        "S6-3"
+      ]
+    },
+    "asset:damodarpant_facing": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "f040b68e5cec35a6bcf332e2cd0c2b4ecf7bd634e9f2dbc672863b9663f263e8",
+      "used_in": [
+        "S8-4"
+      ]
+    },
+    "asset:damodarpant_facing_left": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "8ba513f04c362ce8e9d881df495e35cf0e389df12b9954ea222756520f696c40",
+      "used_in": [
+        "S6-1"
+      ]
+    },
+    "asset:damodarpant_walking": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "f1f10736f7003a21d9802471ffae12d5e669f1b8a625d4c8f823190102ca584d",
+      "used_in": [
+        "S8-3"
+      ]
+    },
+    "asset:devidas_standing_listening": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "543917479fd5a8bfa6498551a5a68fe0973fb049d1d8266fe7df78f1bf6ae19e",
+      "used_in": [
+        "S5-1"
+      ]
+    },
+    "asset:devidas_walking_with_plate": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "3fc912a19063ed5edcb1c2dc08289fdbcf4f694fe6f4531ddcca7f582879578e",
+      "used_in": [
+        "S5-2"
+      ]
+    },
+    "asset:fg_foreground_elements": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "019918f3112de2183811789a66765daceb40075812af875cdfcf91434d6382ef",
+      "used_in": [
+        "S5-4"
+      ]
+    },
+    "asset:fg_gate": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "0cdedc8064f4e39e402d9235a9106af7028574bcfa4b67bdea5c1a1dc35fb029",
+      "used_in": [
+        "S6-5"
+      ]
+    },
+    "asset:fx_light": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "b26278e7f43eba0ac49c040846034a5f7845b8c86f6910602307d2efafb2fbb3",
+      "used_in": [
+        "S6-5"
+      ]
+    },
+    "asset:fx_light_subtle": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "ea8fb43d42a34eb28e83ab7d5bc48c9d7b9e2fb4e7c3e7a99b571be5bbf543b8",
+      "used_in": [
+        "S5-4"
+      ]
+    },
+    "asset:gajanan_at_trough": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "f7d41b3e673edf7f6a08f67f4c68de4c2f4197fd1228cd944ae5b5c16ef05dc2",
+      "used_in": [
+        "S8-2"
+      ]
+    },
+    "asset:gajanan_face_serene_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "9cec37d5ec0030d98d67b71f4e7fc56c311e03eb2127e34d330ed4955cfbdc07",
+      "used_in": [
+        "S5-6"
+      ]
+    },
+    "asset:gajanan_facing": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "7ef2bf38ec2497fe785ba609df0e63ca5b664c8463e00d8c07e20bf8a2a4c1db",
+      "used_in": [
+        "S8-4"
+      ]
+    },
+    "asset:gajanan_listening": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "7d99e76e11e9c9321595a066e113796fd91fe3b2e9182458c9c55aed089387cb",
+      "used_in": [
+        "S4-2"
+      ]
+    },
+    "asset:gajanan_looking_up_at_visitors": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "8615b2707ab97c2a0075172225f0c648f6f769083894252c64ad47fe6fbffa6c",
+      "used_in": [
+        "S4-3"
+      ]
+    },
+    "asset:gajanan_radiant_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "b616687cbd91bc4269701c572c84b7de69a05053bb5d0d725ac0e45244ff7606",
+      "used_in": [
+        "S4-4"
+      ]
+    },
+    "asset:gajanan_reaction": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "aebe2c84d4fef431927fd556fe1f59b458d9e40ab2a6b4fda5e0fb154ec97c1d",
+      "used_in": [
+        "S8-6"
+      ]
+    },
+    "asset:gajanan_seated": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "c13efc90859ec90f937d48fcc0f26b7dc0cb89739b60e30665c3d0f3b6eed9e8",
+      "used_in": [
+        "S4-1"
+      ]
+    },
+    "asset:gajanan_seated_at_door": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "093c9454617f6de2e87fa4a4ef10aa0e7bd1c061fb8610698d57d08bf46a8d8a",
+      "used_in": [
+        "S5-2"
+      ]
+    },
+    "asset:gajanan_seated_at_plate_front": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "08c21428d6a74975ab623a264255399b95ce142789266c70a3f87871f7313e87",
+      "used_in": [
+        "S5-3"
+      ]
+    },
+    "asset:gajanan_seated_full": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "851d08615760c138ca2be63c554b030f1d1c06e4bb8a1d5367fdff7d2599f8b2",
+      "used_in": [
+        "S6-4",
+        "S6-6"
+      ]
+    },
+    "asset:gajanan_seated_trough": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "9881bfc8c06e177d0378a26a7d56427f603cbaeab05b0367bf8015209cdc97e2",
+      "used_in": [
+        "S8-3"
+      ]
+    },
+    "asset:gajanan_serene_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "c12311a1a7b0318e3f563e75a7344f08e901f2f090d408da35682b7d62f4b10d",
+      "used_in": [
+        "S4-6"
+      ]
+    },
+    "asset:gajanan_young_shegaon": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        1
+      ],
+      "sha256": "397fb9afafc484f5e84628c1a41f17402a3d7cb8b38fe88ade447d1d62cf4b20",
+      "used_in": [
+        "S1-2"
+      ]
+    },
+    "asset:hands_mixing_food_closeup": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "7697db972e62971b694354bcc51d4503b97f3f3cf64c7c8aa27eea1624753264",
+      "used_in": [
+        "S5-5"
+      ]
+    },
+    "asset:mid_gajanan": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "bc90c3a4e982f63846ddedcc18588d142e1fb500588dc884e61132e13d4b660b",
+      "used_in": [
+        "S6-5"
+      ]
+    },
+    "asset:mid_gajanan_plate_door": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "0da1aa527a680b75d8fc147455c10f8ed58bc9aba89b88779cc4c04bdfeb575c",
+      "used_in": [
+        "S5-4"
+      ]
+    },
+    "asset:s2_estab_fg": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "a0c4d300d7e191d41ac59944a960e7f9e4702210e9bbebe4d76ba13ce80312d0",
+      "used_in": [
+        "S2-1"
+      ]
+    },
+    "asset:s2_estab_fx": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "06b6b3c77c32269b43cbae819f76bb60c010b89f393dfac2ad1ca0828cdb46b0",
+      "used_in": [
+        "S2-1"
+      ]
+    },
+    "asset:s2_estab_mid": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "7adcb7cfd430fb746ab6b6ad7d2d0cd917e8fa206e467cc355aa7ea7cf1ea78a",
+      "used_in": [
+        "S2-1"
+      ]
+    },
+    "asset:s2_estab_sky": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "f879190eaee82c1eb421912c12307df811e8513a1f818939c8f5c71fe7c7857e",
+      "used_in": [
+        "S2-1"
+      ]
+    },
+    "asset:s2_face_gajanan_teaching": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "f92bcc0ec1485a1af5358e78ab1fe69ba6323cc308c2d57f8bf0ce7783c3b8e1",
+      "used_in": [
+        "S2-7"
+      ]
+    },
+    "asset:s2_insert_chilim_gourd": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "262bd5529e82dd0a2cd8de542724541b0da4b70af6ad1b31a2138b0ccb212382",
+      "used_in": [
+        "S2-4"
+      ]
+    },
+    "asset:s2_insert_picking_grain": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "8a1598a9e82e65065776cd28922afd41e8e9f40790175a3572c79773ff311db2",
+      "used_in": [
+        "S2-5"
+      ]
+    },
+    "asset:s2_parallax_far": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "cd2ab60a7e5e8bf7b921b4355364bcdbdd2cb85c8ce74a7cb498c31df6ef8aa4",
+      "used_in": [
+        "S2-8"
+      ]
+    },
+    "asset:s2_parallax_mid": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "ad583adaa6481d265a6544ea2054ebd5555be2f17abb4d92383d0e63b790cdec",
+      "used_in": [
+        "S2-8"
+      ]
+    },
+    "asset:s2_parallax_near": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "050c38258292e1dfe3de906a869b53f1107bb4f8f6955b1a4b3778ea706c0f73",
+      "used_in": [
+        "S2-8"
+      ]
+    },
+    "asset:s2_parallax_sky": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "7c863a9d81adfaf5f194714d47321f7978cd1980b866dbfe8b25c1be9e53cf4b",
+      "used_in": [
+        "S2-8"
+      ]
+    },
+    "asset:s2_push_gajanan_eating": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "7ef7d4cc4d4ac18c586c9ed5db1446884670bef96235cad8a688d81e54aa0216",
+      "used_in": [
+        "S2-6"
+      ]
+    },
+    "asset:s2_push_gajanan_seated": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "3782ffd241b7ac13d238f5360600085b7384f459492d720943520f831b854b8f",
+      "used_in": [
+        "S2-3"
+      ]
+    },
+    "asset:s2_push_plates": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        2
+      ],
+      "sha256": "615e53f84880afab464c6c59b939be1b21e263e1c027dab73bf815faeb555893",
+      "used_in": [
+        "S2-2"
+      ]
+    },
+    "asset:shegaon_fg": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        1
+      ],
+      "sha256": "e132738ae390f00ebdfbba917ce195374a8b5192427bd6005a12a02dbbad66df",
+      "used_in": [
+        "S1-1"
+      ]
+    },
+    "asset:shegaon_fx": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        1
+      ],
+      "sha256": "6fa746b88286895470d88c45e10f9899d7a42fd8893ca86181661a5d63b15c16",
+      "used_in": [
+        "S1-1"
+      ]
+    },
+    "asset:shegaon_mid": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        1
+      ],
+      "sha256": "1b877142edb3f2ff31c2c4c19d8b29dbd23884325a0cece2542bdcc5266b54ea",
+      "used_in": [
+        "S1-1"
+      ]
+    },
+    "asset:shegaon_sky": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        1
+      ],
+      "sha256": "45b2ddb8f21564dc5654ee0ec254bf6e565428850657a19a15846aed4450cb9a",
+      "used_in": [
+        "S1-1"
+      ]
+    },
+    "asset:sky_morning": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "cabbce4c9c183b4cde6f42bebb0fc6bfb248657ca242fe019d0843f90f47a01a",
+      "used_in": [
+        "S5-4"
+      ]
+    },
+    "asset:sky_shegaon": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        6
+      ],
+      "sha256": "b35b6894568c17e9b004a715838d50196ebe2b18b3d23c4301ce6dc03c7cf5f3",
+      "used_in": [
+        "S6-5"
+      ]
+    },
+    "asset:speaker_unclear_standing": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        5
+      ],
+      "sha256": "416d15f97f3c79d760debdacc9c75ea022d103d1e993e13209db0ee08f0e38c0",
+      "used_in": [
+        "S5-1"
+      ]
+    },
+    "asset:visitors_bowing_gajanan_seated": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "4081c9f975d51e09909fd9c968c8bc1d0aa1a294b1d85522ab6e84351dbb6cfa",
+      "used_in": [
+        "S4-5"
+      ]
+    },
+    "asset:well_fg": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "d72f6e318b21bfaf2c160cc673ba89ff0dca1bad1ca8239c4d5de2009621dbee",
+      "used_in": [
+        "S8-1",
+        "S8-7"
+      ]
+    },
+    "asset:well_fx": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "4b9b89f0ee47671c2bda3cf18d2760aaee729b31ffd7490ee391aba189afe0c3",
+      "used_in": [
+        "S8-1",
+        "S8-7"
+      ]
+    },
+    "asset:well_mid": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "61db64ed45748171dd72156cf81963e692545a126fc469e3e39ffeffcbc2d787",
+      "used_in": [
+        "S8-1",
+        "S8-7"
+      ]
+    },
+    "asset:well_sky": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        8
+      ],
+      "sha256": "68efcefdb0d378d87d95f78a5c295f4c55bcf567a4071758e24e1f88b04e2cff",
+      "used_in": [
+        "S8-1",
+        "S8-7"
+      ]
+    },
+    "canon:A1:frozen_copies/adhyay_01_FINAL_answers.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/adhyay_01_FINAL_answers.md",
+      "sha256": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846"
+    },
+    "canon:A1:frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md",
+      "sha256": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882"
+    },
+    "canon:A1:frozen_copies/adhyay_01_analysis_v3.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/adhyay_01_analysis_v3.md",
+      "sha256": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e"
+    },
+    "canon:A1:frozen_copies/characters_1to12_FINAL.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/characters_1to12_FINAL.md",
+      "sha256": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870"
+    },
+    "canon:A1:frozen_copies/glossary_user_supplied.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/glossary_user_supplied.md",
+      "sha256": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c"
+    },
+    "canon:A1:frozen_copies/glossary_v3.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/glossary_v3.md",
+      "sha256": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918"
+    },
+    "canon:A1:frozen_copies/verification_report.md": {
+      "path": "canon/packets/adhyay_01/frozen_copies/verification_report.md",
+      "sha256": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b"
+    },
+    "canon:A1:presets_index.json": {
+      "path": "canon/packets/adhyay_01/presets_index.json",
+      "sha256": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    },
+    "macro:A1": {
+      "run": "a1_split_rev7",
+      "sha256": "2c10b79b011b17c716eb475df7b752a238c32fe7a3011344e6c545b51d9959cb"
+    },
+    "plan:S1": {
+      "chapter": 1,
+      "ovi_range": [
+        70,
+        83
+      ],
+      "sha256": "8a2a05727e2c9491a5f2e146201e31b558ebf51b1f9e2f4ce13454eb575206d2"
+    },
+    "plan:S2": {
+      "chapter": 1,
+      "ovi_range": [
+        84,
+        96
+      ],
+      "sha256": "017bea3d84873e6994087903b59cd8a4d7b766de0aef86872e2844a7e8d62433"
+    },
+    "plan:S4": {
+      "chapter": 1,
+      "ovi_range": [
+        108,
+        112
+      ],
+      "sha256": "53a98d462f42f95273c2be2135ee1f1b7143f8b50624091783c85ffd369f5d10"
+    },
+    "plan:S5": {
+      "chapter": 1,
+      "ovi_range": [
+        113,
+        118
+      ],
+      "sha256": "438a73124cd6c50ff84fc5cf21c5c39afddc7c2f2d5f2d263527dfff3022e06b"
+    },
+    "plan:S6": {
+      "chapter": 1,
+      "ovi_range": [
+        119,
+        122
+      ],
+      "sha256": "e291123b1bd4aac743c57a2f0d4ed62dd2e13d97f33ffcf0184c47f65456046a"
+    },
+    "plan:S8": {
+      "chapter": 1,
+      "ovi_range": [
+        134,
+        137
+      ],
+      "sha256": "ae9a3ad7f27b03efeef2afcdb026815b29cda59314839ed77f80b9ea6b0d0da1"
+    },
+    "source:A1:adhyay_01_ovis_hj.jsonl": {
+      "path": "canon/packets/adhyay_01/adhyay_01_ovis_hj.jsonl",
+      "sha256": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c"
+    }
+  }
+}

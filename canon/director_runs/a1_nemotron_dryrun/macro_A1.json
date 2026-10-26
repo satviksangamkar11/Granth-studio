@@ -1,0 +1,370 @@
+{
+  "chapter": 1,
+  "result": "NO_CHECK",
+  "errors": [],
+  "warnings": [
+    "A1-T1: 21 shots in total: it will be directed in several ordered parts"
+  ],
+  "macro": {
+    "schema_version": 1,
+    "chapter": 1,
+    "source_sha256": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+    "source_range": [
+      1,
+      146
+    ],
+    "stories": [
+      {
+        "story_id": "A1-T1",
+        "title": "Gajanan Maharaj reveals his divine nature at Devidas's house in Shegaon",
+        "ovi_range": [
+          84,
+          144
+        ],
+        "arc": "complete",
+        "boundary_evidence": [
+          {
+            "ovi": "A1:84",
+            "reason": "Author explicitly begins the story: 'Now I tell you the story of that time; a devout householder named Devidas'"
+          },
+          {
+            "ovi": "A1:144",
+            "reason": "Gajanan departs running like the wind, ending the incident: 'Maharaj went away swiftly, who can obstruct the wind's speed?'"
+          }
+        ],
+        "scenes": [
+          {
+            "scene_id": "S1",
+            "ovi_range": [
+              84,
+              96
+            ],
+            "brief": "Devidas prepares a feast; Gajanan sits on the road eating leftover rice from discarded leaf plates, embodying 'food is Brahman'; Bankatlal witnesses this.",
+            "context_ovi_ids": [
+              "A1:83"
+            ],
+            "shot_budget": 5
+          },
+          {
+            "scene_id": "S2",
+            "ovi_range": [
+              97,
+              110
+            ],
+            "brief": "Bankatlal and Damodarpant debate whether Gajanan is mad or a sage; Bankatlal humbly questions him; Gajanan only gazes steadily at both.",
+            "context_ovi_ids": [],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S3",
+            "ovi_range": [
+              111,
+              121
+            ],
+            "brief": "Gajanan's radiant form described; Devidas brings a full plate of delicacies; Gajanan eats without craving; Bankatlal realizes his error, comparing Gajanan to Arjuna's feigned madness.",
+            "context_ovi_ids": [],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S4",
+            "ovi_range": [
+              122,
+              137
+            ],
+            "brief": "At midday Gajanan's gourd is empty; Damodar fetches water; Gajanan drinks from a cattle trough, then teaches worldly conduct must be followed; Damodar returns with scented water in a pot.",
+            "context_ovi_ids": [],
+            "shot_budget": 5
+          },
+          {
+            "scene_id": "S5",
+            "ovi_range": [
+              138,
+              144
+            ],
+            "brief": "Gajanan teaches non-duality: water and drinker are one Brahman; both men are moved to surrender; knowing their intent, Gajanan vanishes like the wind.",
+            "context_ovi_ids": [
+              "A1:145"
+            ],
+            "shot_budget": 3
+          }
+        ]
+      }
+    ],
+    "unfilmed_ranges": [
+      {
+        "ovi_range": [
+          1,
+          32
+        ],
+        "kind": "invocation",
+        "reason": "Invocations to Ganesha, Saraswati, Pandurang, Shiva, Kuladevi, Dattatreya, rishis, saints; author's humility and plea for guidance"
+      },
+      {
+        "ovi_range": [
+          33,
+          41
+        ],
+        "kind": "commentary",
+        "reason": "Author urges listeners to hear saint-stories, praises saints as God on earth, source of liberation"
+      },
+      {
+        "ovi_range": [
+          42,
+          55
+        ],
+        "kind": "background",
+        "reason": "Lists of saints from Narad to Mahipati; references to author's earlier works Bhaktivijay and Bhaktamala"
+      },
+      {
+        "ovi_range": [
+          56,
+          68
+        ],
+        "kind": "background",
+        "reason": "Shegaon's glory described; Ramchandra Patil requests the author to write Gajanan's life during Kartiki pilgrimage"
+      },
+      {
+        "ovi_range": [
+          69,
+          83
+        ],
+        "kind": "background",
+        "reason": "Gajanan's mysterious arrival in youth on Magh Vadya Saptami; avatar discussion citing ayonisambhava births of Nath yogis"
+      },
+      {
+        "ovi_range": [
+          145,
+          146
+        ],
+        "kind": "closing",
+        "reason": "Author announces next chapter, asks for attention, signs off with colophon and 'Shri Hari Hararpanamastu'"
+      }
+    ]
+  },
+  "macro_sha256": "bf664651e8376632ab1fd3054fc7107168f72c8f5a4b5cc9b13ca57732dfcc1b",
+  "parts": [
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P1",
+      "scene_ids": [
+        "S1",
+        "S2"
+      ],
+      "shot_budget": 9
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P2",
+      "scene_ids": [
+        "S3",
+        "S4"
+      ],
+      "shot_budget": 9
+    },
+    {
+      "story_id": "A1-T1",
+      "part_id": "A1-T1-P3",
+      "scene_ids": [
+        "S5"
+      ],
+      "shot_budget": 3
+    }
+  ],
+  "reviews": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "verdict": "NO_CHECK",
+      "problems": [],
+      "missing": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6"
+      ]
+    }
+  ],
+  "final_reviews": [],
+  "repairs": [
+    {
+      "label": "macro_repair",
+      "problems_sent": [
+        "A1-T1: boundary evidence A1:145 is outside the story"
+      ],
+      "status": "USED"
+    }
+  ],
+  "calls": [
+    {
+      "step": "macro",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 97.4,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "macro_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 24.1,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "macro_review",
+      "agent": "openai/gpt-oss-20b",
+      "provider": "nvidia",
+      "model": "openai/gpt-oss-20b",
+      "status": 200,
+      "wall_s": 43.9,
+      "streamed": true,
+      "finish": "stop",
+      "usage": {
+        "prompt_tokens": 11875,
+        "completion_tokens": 1298,
+        "total_tokens": 13173
+      }
+    }
+  ],
+  "split_before_repair": {
+    "stories": [
+      {
+        "story_id": "A1-T1",
+        "title": "Gajanan Maharaj reveals his divine nature at Devidas's house in Shegaon",
+        "ovi_range": [
+          84,
+          144
+        ],
+        "arc": "complete",
+        "boundary_evidence": [
+          {
+            "ovi": "A1:84",
+            "reason": "Author explicitly begins the story: 'Now I tell you the story of that time; a devout householder named Devidas'"
+          },
+          {
+            "ovi": "A1:144",
+            "reason": "Gajanan departs running like the wind, ending the incident: 'Maharaj went away swiftly, who can obstruct the wind's speed?'"
+          },
+          {
+            "ovi": "A1:145",
+            "reason": "Author signals continuation in next chapter, confirming this story's closure: 'The further story will be told in the second chapter'"
+          }
+        ],
+        "scenes": [
+          {
+            "scene_id": "S1",
+            "ovi_range": [
+              84,
+              96
+            ],
+            "brief": "Devidas prepares a feast; Gajanan sits on the road eating leftover rice from discarded leaf plates, embodying 'food is Brahman'; Bankatlal witnesses this.",
+            "context_ovi_ids": [
+              "A1:83"
+            ],
+            "shot_budget": 5
+          },
+          {
+            "scene_id": "S2",
+            "ovi_range": [
+              97,
+              110
+            ],
+            "brief": "Bankatlal and Damodarpant debate whether Gajanan is mad or a sage; Bankatlal humbly questions him; Gajanan only gazes steadily at both.",
+            "context_ovi_ids": [],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S3",
+            "ovi_range": [
+              111,
+              121
+            ],
+            "brief": "Gajanan's radiant form described; Devidas brings a full plate of delicacies; Gajanan eats without craving; Bankatlal realizes his error, comparing Gajanan to Arjuna's feigned madness.",
+            "context_ovi_ids": [],
+            "shot_budget": 4
+          },
+          {
+            "scene_id": "S4",
+            "ovi_range": [
+              122,
+              137
+            ],
+            "brief": "At midday Gajanan's gourd is empty; Damodar fetches water; Gajanan drinks from a cattle trough, then teaches worldly conduct must be followed; Damodar returns with scented water in a pot.",
+            "context_ovi_ids": [],
+            "shot_budget": 5
+          },
+          {
+            "scene_id": "S5",
+            "ovi_range": [
+              138,
+              144
+            ],
+            "brief": "Gajanan teaches non-duality: water and drinker are one Brahman; both men are moved to surrender; knowing their intent, Gajanan vanishes like the wind.",
+            "context_ovi_ids": [
+              "A1:145"
+            ],
+            "shot_budget": 3
+          }
+        ]
+      }
+    ],
+    "unfilmed_ranges": [
+      {
+        "ovi_range": [
+          1,
+          32
+        ],
+        "kind": "invocation",
+        "reason": "Invocations to Ganesha, Saraswati, Pandurang, Shiva, Kuladevi, Dattatreya, rishis, saints; author's humility and plea for guidance"
+      },
+      {
+        "ovi_range": [
+          33,
+          41
+        ],
+        "kind": "commentary",
+        "reason": "Author urges listeners to hear saint-stories, praises saints as God on earth, source of liberation"
+      },
+      {
+        "ovi_range": [
+          42,
+          55
+        ],
+        "kind": "background",
+        "reason": "Lists of saints from Narad to Mahipati; references to author's earlier works Bhaktivijay and Bhaktamala"
+      },
+      {
+        "ovi_range": [
+          56,
+          68
+        ],
+        "kind": "background",
+        "reason": "Shegaon's glory described; Ramchandra Patil requests the author to write Gajanan's life during Kartiki pilgrimage"
+      },
+      {
+        "ovi_range": [
+          69,
+          83
+        ],
+        "kind": "background",
+        "reason": "Gajanan's mysterious arrival in youth on Magh Vadya Saptami; avatar discussion citing ayonisambhava births of Nath yogis"
+      },
+      {
+        "ovi_range": [
+          145,
+          146
+        ],
+        "kind": "closing",
+        "reason": "Author announces next chapter, asks for attention, signs off with colophon and 'Shri Hari Hararpanamastu'"
+      }
+    ]
+  }
+}

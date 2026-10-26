@@ -1,4 +1,4 @@
-﻿"""V5 Phase 1, JSON route (D-015 + owner choice 2026-10-25). Kimi K3.1 Pro writes ONE Blender shot builder once plus shot JSON files; after that only JSON.
+"""V5 Phase 1, JSON route (D-015 + owner choice 2026-10-25). Kimi K3.1 Pro writes ONE Blender shot builder once plus shot JSON files; after that only JSON.
   author  - one Kimi call: builder.py + SA/SB/SC JSON. Saved, JSON validated, builder guard-checked. NOTHING is executed.
   run     - only if APPROVED.json holds the builder's sha256 (written after Codex's full review and the owner's yes): builds and renders each valid shot.
   revise  - Kimi sees a shot's contact sheet + its JSON and returns a new JSON only (builder unchanged); max 4 generations per shot incl. author.
@@ -290,18 +290,23 @@ def cmd_run(a, k, led) -> int:
 
 def cmd_revise(a, k, led) -> int:
     builder = approved_builder()
-    sid, gen = a.shot, state()["generations"].get(a.shot, 0)
+    sid, count = a.shot, state()["generations"].get(a.shot, 0)
+    gen = count
+    while gen > 1 and not (OUT / sid / f"gen{gen}" / "contact.jpg").exists():     # latest generation that actually rendered
+        gen -= 1
     d = OUT / sid / f"gen{gen}"
     sheet = d / "contact.jpg"
     if not sheet.exists():
         raise SystemExit(f"{sid} gen{gen} has no render yet; run it first")
     text = REVISE.format(sid=sid, brief=SHOTS[sid]["brief"], current=(d / "shot.json").read_text())
+    if a.note:
+        text += "\n\nOWNER FEEDBACK (measured on the render): " + a.note
     claim(led, [sid], need_zero=False, limit=MAX_GEN)                  # counted before dispatch; a failed paid attempt still counts
     reply, usage, err, wall = call(k, led, [{"role": "user", "content": [img_part(sheet, 1800), img_part(LOOK_REF, 900), {"type": "text", "text": text}]}], a.effort)
     if err:
         print("revise call failed:", err)
         return 1
-    nd = OUT / sid / f"gen{gen + 1}"
+    nd = OUT / sid / f"gen{count + 1}"
     nd.mkdir(parents=True, exist_ok=True)
     (nd / "reply.txt").write_text(reply, encoding="utf-8")
     js = blocks(reply, "json")
@@ -309,15 +314,15 @@ def cmd_revise(a, k, led) -> int:
         print("expected one json block")
         return 1
     try:
-        problems = save_shot(sid, json.loads(js[0]), gen + 1)
+        problems = save_shot(sid, json.loads(js[0]), count + 1)
     except json.JSONDecodeError as exc:
         print("bad JSON:", exc)
         return 1
     if problems:
         print("invalid JSON:", problems[:5])
         return 1
-    ok, msg = run_shot(builder, sid, gen + 1)
-    print(sid, f"gen{gen + 1}", "OK" if ok else "FAILED", msg, "| P1 committed $", round(led.committed(PHASE), 4))
+    ok, msg = run_shot(builder, sid, count + 1)
+    print(sid, f"gen{count + 1}", "OK" if ok else "FAILED", msg, "| P1 committed $", round(led.committed(PHASE), 4))
     return 0 if ok else 1
 
 
@@ -326,6 +331,7 @@ def main() -> int:
     ap.add_argument("cmd", choices=["author", "run", "revise"])
     ap.add_argument("--shot", choices=sorted(SHOTS))
     ap.add_argument("--effort", default="high", choices=["low", "high", "max"])
+    ap.add_argument("--note", default="", help="owner feedback appended to the revise prompt")
     a = ap.parse_args()
     if a.cmd == "revise" and not a.shot:
         raise SystemExit("revise needs --shot")

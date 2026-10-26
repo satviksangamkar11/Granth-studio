@@ -1,0 +1,407 @@
+{
+  "scene": 6,
+  "chapter": 1,
+  "range": [
+    119,
+    122
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S6-1: STAGING scenery \"road near Devidas's house\" needs the owner's approval",
+    "S6-1: STAGING pose 'standing facing each other' needs the owner's approval",
+    "S6-2: STAGING pose 'close-up face' needs the owner's approval",
+    "S6-3: STAGING pose 'close-up face' needs the owner's approval",
+    "S6-4: STAGING pose 'seated calm' needs the owner's approval",
+    "S6-4: STAGING light 'daylight' needs the owner's approval",
+    "S6-5: STAGING scenery 'Shegaon village' needs the owner's approval",
+    "S6-5: STAGING light 'daylight' needs the owner's approval",
+    "S6-6: STAGING pose 'seated calm' needs the owner's approval",
+    "S6-6: STAGING light 'daylight' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S6",
+    "chapter": 1,
+    "ovi_range": [
+      119,
+      122
+    ],
+    "goal": "Show Bankatlal admitting his mistake, comparing Gajanan to Arjuna, declaring no further test needed, and praising Shegaon as blessed by Hari's gift of desirelessness.",
+    "turn": {
+      "ovi": "A1:119",
+      "text": "Bankatlal admits calling Gajanan mad was a mistake and says no further test is needed."
+    },
+    "shots": [
+      {
+        "shot_id": "S6-1",
+        "ovi_ids": [
+          "A1:119"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_facing_right",
+          "right": "damodarpant_facing_left"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Bankatlal gesturing with hand, Damodarpant standing attentive",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal speaks the admission of mistake",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:119",
+            "marathi": "ह्या वेडा म्हणालों आपण । ती निःसंशय झाली चुकी",
+            "meaning_en": "Calling him mad was surely our mistake."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:119"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:119"
+          },
+          {
+            "kind": "scenery",
+            "term": "road near Devidas's house",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "standing facing each other",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "gentle drift",
+            "source": "STAGING"
+          },
+          {
+            "kind": "event",
+            "term": "Bankatlal speaks to Damodarpant",
+            "source": "A1:119"
+          }
+        ],
+        "staging": [
+          "STAGING: two men standing on road near Devidas's house",
+          "STAGING: daytime lighting"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-2",
+        "ovi_ids": [
+          "A1:120"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "bankatlal_face_closeup"
+        },
+        "action": "camera pushes slowly on Bankatlal's face",
+        "held_pose": "Bankatlal close-up, eyes fixed, mouth slightly open as if speaking",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal recounts Arjuna's feigned madness",
+        "camera": "slow push in",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:120",
+            "marathi": "सुभद्रेसाठीं द्वारकेला । अर्जुन ऐसाच वेडा झाला । व्यवहाराचा विसर पडला । करुं लागला भलभलतें",
+            "meaning_en": "For Subhadra, Arjuna went mad in Dwarka; he forgot worldly dealings and started babbling."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:120"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "event",
+            "term": "Bankatlal speaks ovi 120",
+            "source": "A1:120"
+          }
+        ],
+        "staging": [
+          "STAGING: close-up framing of Bankatlal's face",
+          "STAGING: soft lighting"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-3",
+        "ovi_ids": [
+          "A1:121"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "damodarpant_face_closeup"
+        },
+        "action": "camera pushes slowly on Damodarpant's face",
+        "held_pose": "Damodarpant close-up, eyes lowered, listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "Damodarpant listens as Bankatlal declares no further test needed",
+        "camera": "slow push in",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:121",
+            "marathi": "तैसाच हा ज्ञानजेठी । मुक्तिरुप सुभद्रेसाठीं । वेडा झाला कसवटी । याची आतां घेणें नको",
+            "meaning_en": "Likewise this elder of knowledge became mad for liberation in the form of Subhadra; no need to test him now."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "A1:121"
+          },
+          {
+            "kind": "pose",
+            "term": "close-up face",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "event",
+            "term": "Bankatlal speaks ovi 121",
+            "source": "A1:121"
+          }
+        ],
+        "staging": [
+          "STAGING: close-up framing of Damodarpant's face",
+          "STAGING: soft lighting"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-4",
+        "ovi_ids": [
+          "A1:121"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_full"
+        },
+        "action": "camera pushes slowly on Gajanan seated",
+        "held_pose": "Gajanan seated calmly, gaze on nose tip, bandi worn",
+        "needs": [
+          "none"
+        ],
+        "performance": "Gajanan remains absorbed in inner bliss",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Gajanan seated on road, wearing old bandi, gourd and chilim nearby"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-5",
+        "ovi_ids": [
+          "A1:122"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_gate",
+          "fx": "fx_light",
+          "mid": "mid_gajanan",
+          "sky": "sky_shegaon"
+        },
+        "action": "camera dollies in from wide to mid, revealing village and Gajanan",
+        "held_pose": "Wide view of Shegaon with Gajanan seated at center, gate in foreground",
+        "needs": [
+          "none"
+        ],
+        "performance": "The unclear voice praises Shegaon and Hari's gift",
+        "camera": "dolly in from 1.0 to 1.28",
+        "dialogue": [
+          {
+            "speaker": "unclear",
+            "ovi": "A1:122",
+            "marathi": "धन्य आपुलें शेगांव । दृष्टी पाहिला योगीराव । \"निरिच्छा\" हा जहागीरगांव । दिला हरीनें जयाला",
+            "meaning_en": "Blessed is our Shegaon; we saw the king of yogis; desirelessness is the estate Hari gave for victory."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "Shegaon village",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "event",
+            "term": "unclear speaker praises Shegaon",
+            "source": "A1:122"
+          }
+        ],
+        "staging": [
+          "STAGING: wide view of Shegaon village with gate in foreground, Gajanan at center"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-6",
+        "ovi_ids": [
+          "A1:122"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_full"
+        },
+        "action": "camera pushes slowly on Gajanan seated",
+        "held_pose": "Gajanan seated calmly, same as before",
+        "needs": [
+          "none"
+        ],
+        "performance": "Gajanan continues in silent bliss",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Gajanan seated, same as before"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "bankatlal_facing_right",
+        "description": "Bankatlal Agarwal standing facing right, wearing simple clothes, transparent background for dialogue composition"
+      },
+      {
+        "image_id": "damodarpant_facing_left",
+        "description": "Damodarpant Kulkarni standing facing left, wearing simple clothes, transparent background"
+      },
+      {
+        "image_id": "bankatlal_face_closeup",
+        "description": "Close-up of Bankatlal Agarwal's face, earnest expression, transparent background"
+      },
+      {
+        "image_id": "damodarpant_face_closeup",
+        "description": "Close-up of Damodarpant Kulkarni's face, listening expression, transparent background"
+      },
+      {
+        "image_id": "gajanan_seated_full",
+        "description": "Shri Gajanan Maharaj seated on road, wearing old torn bandi, digambar, with gourd and clay chilim nearby, calm posture, gaze on nose tip"
+      },
+      {
+        "image_id": "fg_gate",
+        "description": "Foreground gate or archway of Shegaon village, flat color"
+      },
+      {
+        "image_id": "fx_light",
+        "description": "Soft light rays effect layer for establishing shot"
+      },
+      {
+        "image_id": "mid_gajanan",
+        "description": "Mid-layer image of Shri Gajanan Maharaj seated, sized for parallax establishing shot"
+      },
+      {
+        "image_id": "sky_shegaon",
+        "description": "Sky background for Shegaon, flat color"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 252.3,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": [],
+  "status": "VALID",
+  "reviewed": false
+}

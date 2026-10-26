@@ -1,0 +1,599 @@
+{
+  "scene": 7,
+  "chapter": 1,
+  "range": [
+    123,
+    133
+  ],
+  "result": "INVALID",
+  "errors": [
+    "shots/0/claims/3/kind: 'animal' is not one of ['person', 'prop', 'scenery', 'light', 'pose', 'camera', 'event']",
+    "shots/0/claims/6/kind: 'fx' is not one of ['person', 'prop', 'scenery', 'light', 'pose', 'camera', 'event']"
+  ],
+  "warnings": [],
+  "plan": {
+    "scene_id": "S7",
+    "chapter": 1,
+    "ovi_range": [
+      123,
+      133
+    ],
+    "goal": "Show noon heat, empty gourd, Damodarpant's offer, Gajanan's teaching on worldly conduct, Bankatlal's joy, Damodarpant fetching water.",
+    "turn": {
+      "ovi": "A1:126",
+      "text": "Damodarpant offers to fetch water and Gajanan teaches that worldly conduct requires water after eating."
+    },
+    "shots": [
+      {
+        "shot_id": "S7-1",
+        "ovi_ids": [
+          "A1:123",
+          "A1:124"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "sky": "sky_noon",
+          "mid": "gajanan_seated_wide",
+          "fx": "heat_haze_fx",
+          "fg": "tree_birds_fg"
+        },
+        "action": "camera dollies in slowly",
+        "held_pose": "Gajanan seated calmly on hot ground, birds perched in trees above",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan sitting blissfully in midday heat",
+        "camera": "dolly in slowly",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:124"
+          },
+          {
+            "kind": "scenery",
+            "term": "hot ground",
+            "source": "A1:123"
+          },
+          {
+            "kind": "scenery",
+            "term": "trees",
+            "source": "A1:123"
+          },
+          {
+            "kind": "animal",
+            "term": "birds",
+            "source": "A1:123"
+          },
+          {
+            "kind": "light",
+            "term": "noon sun",
+            "source": "A1:123"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calmly",
+            "source": "A1:124"
+          },
+          {
+            "kind": "fx",
+            "term": "heat haze",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: heat haze shimmer on ground",
+          "STAGING: bright noon sky"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-2",
+        "ovi_ids": [
+          "A1:125",
+          "A1:126"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_gesturing",
+          "right": "damodarpant_listening"
+        },
+        "action": "camera drifts gently across both figures",
+        "held_pose": "Bankatlal gesturing toward Damodarpant, Damodarpant standing attentively",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Bankatlal urging Damodarpant to fetch water for Gajanan",
+        "camera": "gentle drift across both",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:125"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant",
+            "source": "A1:125"
+          },
+          {
+            "kind": "pose",
+            "term": "gesturing",
+            "source": "A1:125"
+          },
+          {
+            "kind": "pose",
+            "term": "standing attentively",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Bankatlal hand gesture indicating Gajanan's gourd"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-3",
+        "ovi_ids": [
+          "A1:126"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "damodarpant_speaking",
+          "right": "gajanan_listening"
+        },
+        "action": "camera drifts gently across both figures",
+        "held_pose": "Damodarpant speaking with folded hands, Gajanan seated listening",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Damodarpant humbly offering to bring water",
+        "camera": "gentle drift across both",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant Kulkarni",
+            "ovi": "A1:126",
+            "marathi": "तुंब्यामध्यें नाहीं नीर । मर्जी असल्या हा चाकर । पाणी द्याया तयार असे",
+            "meaning_en": "There is no water in your gourd; if you wish, this servant is ready to bring water."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant",
+            "source": "A1:126"
+          },
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:126"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (tumba)",
+            "source": "A1:126"
+          },
+          {
+            "kind": "pose",
+            "term": "speaking with folded hands",
+            "source": "A1:126"
+          },
+          {
+            "kind": "pose",
+            "term": "seated listening",
+            "source": "A1:126"
+          }
+        ],
+        "staging": [
+          "STAGING: Damodarpant's folded hands gesture of service"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-4",
+        "ovi_ids": [
+          "A1:127"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "gajanan_face_laughing"
+        },
+        "action": "camera pushes in slowly on face",
+        "held_pose": "Gajanan's face smiling in laughter, eyes looking toward both men",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan laughing at Damodarpant's offer",
+        "camera": "push in slowly",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:127"
+          },
+          {
+            "kind": "pose",
+            "term": "laughing",
+            "source": "A1:127"
+          },
+          {
+            "kind": "event",
+            "term": "Gajanan laughs",
+            "source": "A1:127"
+          }
+        ],
+        "staging": [
+          "STAGING: soft morning light on face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-5",
+        "ovi_ids": [
+          "A1:128"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_teaching_medium"
+        },
+        "action": "camera pushes in slowly",
+        "held_pose": "Gajanan seated, one hand raised in teaching gesture, looking at both men",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan explaining that one Brahman fills the world",
+        "camera": "push in slowly",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:128",
+            "marathi": "तुम्हां गरज असेल जरी । तरी आणून घाला वारी । एक ब्रह्म जगदांतरीं । ओतप्रोत भरलें असें",
+            "meaning_en": "Even if you need it, bring it; one Brahman pervades the world."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:128"
+          },
+          {
+            "kind": "pose",
+            "term": "teaching gesture",
+            "source": "A1:128"
+          },
+          {
+            "kind": "event",
+            "term": "Gajanan teaches oneness of Brahman",
+            "source": "A1:128"
+          }
+        ],
+        "staging": [
+          "STAGING: calm background, no distractions"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-6",
+        "ovi_ids": [
+          "A1:128"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_teaching_medium"
+        },
+        "action": "camera pushes in slowly",
+        "held_pose": "Gajanan seated, hand raised in teaching gesture, looking at both men",
+        "needs": [
+          "none"
+        ],
+        "performance": "holds Gajanan's teaching pose as narration continues",
+        "camera": "push in slowly",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:128"
+          },
+          {
+            "kind": "pose",
+            "term": "teaching gesture",
+            "source": "A1:128"
+          }
+        ],
+        "staging": [
+          "STAGING: continued calm background"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-7",
+        "ovi_ids": [
+          "A1:129"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "gajanan_teaching_facing",
+          "right": "bankatlal_listening"
+        },
+        "action": "camera drifts gently across both figures",
+        "held_pose": "Gajanan teaching, Bankatlal listening intently",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan teaching no difference between them, worldly conduct must be followed",
+        "camera": "gentle drift across both",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:129",
+            "marathi": "तुम्ही आम्ही भेद तेथ । नाहीं उरला यत्किंचित । परी जगव्यवहार सत्य । आचरिला पाहिजे",
+            "meaning_en": "There is no difference between you and me; yet worldly conduct is true and must be followed."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:129"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:129"
+          },
+          {
+            "kind": "pose",
+            "term": "teaching",
+            "source": "A1:129"
+          },
+          {
+            "kind": "pose",
+            "term": "listening intently",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: Damodarpant also present but not in frame"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-8",
+        "ovi_ids": [
+          "A1:130",
+          "A1:131"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_teaching_medium"
+        },
+        "action": "camera pushes in slowly",
+        "held_pose": "Gajanan seated, hand raised in teaching gesture",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Gajanan explaining bodies ate food so need water, arrange it",
+        "camera": "push in slowly",
+        "dialogue": [
+          {
+            "speaker": "Shri Gajanan Maharaj",
+            "ovi": "A1:130",
+            "marathi": "अन्न भक्षिलें देहानीं । म्हणून त्या पाहिजे पाणी",
+            "meaning_en": "Bodies have eaten food; therefore water is needed."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Gajanan",
+            "source": "A1:130"
+          },
+          {
+            "kind": "pose",
+            "term": "teaching gesture",
+            "source": "A1:130"
+          },
+          {
+            "kind": "event",
+            "term": "Gajanan teaches practical conduct",
+            "source": "A1:130"
+          }
+        ],
+        "staging": [
+          "STAGING: calm background"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-9",
+        "ovi_ids": [
+          "A1:132"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_speaking_joyful",
+          "right": "damodarpant_standing"
+        },
+        "action": "camera drifts gently across both figures",
+        "held_pose": "Bankatlal speaking joyfully, Damodarpant standing nearby",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Bankatlal declaring their fortune blessed",
+        "camera": "gentle drift across both",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:132",
+            "marathi": "आपुलें आहे भाग्य धन्य",
+            "meaning_en": "Our fortune is blessed."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:132"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant",
+            "source": "A1:132"
+          },
+          {
+            "kind": "pose",
+            "term": "speaking joyfully",
+            "source": "A1:132"
+          },
+          {
+            "kind": "pose",
+            "term": "standing",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: both men emotionally moved"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S7-10",
+        "ovi_ids": [
+          "A1:133"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "house_exterior_far",
+          "mid": "damodarpant_walking_mid",
+          "near": "foreground_path_near",
+          "sky": "sky_noon"
+        },
+        "action": "camera pans laterally through depth layers",
+        "held_pose": "Damodarpant walking toward house entrance, house exterior visible",
+        "needs": [
+          "none"
+        ],
+        "performance": "shows Damodarpant entering Devidas's house to fetch water",
+        "camera": "pan right across layers",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Damodarpant",
+            "source": "A1:133"
+          },
+          {
+            "kind": "scenery",
+            "term": "house exterior",
+            "source": "A1:133"
+          },
+          {
+            "kind": "event",
+            "term": "Damodarpant enters house",
+            "source": "A1:133"
+          },
+          {
+            "kind": "light",
+            "term": "noon sun",
+            "source": "A1:123"
+          }
+        ],
+        "staging": [
+          "STAGING: house entrance visible, path in foreground"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "sky_noon",
+        "description": "Bright noon sky, no clouds, for establishing and final shots"
+      },
+      {
+        "image_id": "gajanan_seated_wide",
+        "description": "Gajanan seated on ground in worn bandi, wide framing showing hot ground around him"
+      },
+      {
+        "image_id": "heat_haze_fx",
+        "description": "Subtle heat haze shimmer layer for midday heat effect"
+      },
+      {
+        "image_id": "tree_birds_fg",
+        "description": "Tree branches with birds perched, foreground framing"
+      },
+      {
+        "image_id": "bankatlal_gesturing",
+        "description": "Bankatlal standing, hand gesturing toward Damodarpant, transparent pose facing right"
+      },
+      {
+        "image_id": "damodarpant_listening",
+        "description": "Damodarpant standing attentively, transparent pose facing left"
+      },
+      {
+        "image_id": "damodarpant_speaking",
+        "description": "Damodarpant with folded hands speaking humbly, transparent pose facing right"
+      },
+      {
+        "image_id": "gajanan_listening",
+        "description": "Gajanan seated listening calmly, transparent pose facing left"
+      },
+      {
+        "image_id": "gajanan_face_laughing",
+        "description": "Close-up of Gajanan's face smiling in laughter, eyes directed sideways"
+      },
+      {
+        "image_id": "gajanan_teaching_medium",
+        "description": "Gajanan seated, one hand raised in teaching gesture, medium framing"
+      },
+      {
+        "image_id": "gajanan_teaching_facing",
+        "description": "Gajanan seated teaching, transparent pose facing right for dialogue composition"
+      },
+      {
+        "image_id": "bankatlal_listening",
+        "description": "Bankatlal standing listening intently, transparent pose facing left"
+      },
+      {
+        "image_id": "bankatlal_speaking_joyful",
+        "description": "Bankatlal standing speaking joyfully, transparent pose facing right"
+      },
+      {
+        "image_id": "damodarpant_standing",
+        "description": "Damodarpant standing calmly, transparent pose facing left"
+      },
+      {
+        "image_id": "house_exterior_far",
+        "description": "Devidas's house exterior at a distance, doorway visible"
+      },
+      {
+        "image_id": "damodarpant_walking_mid",
+        "description": "Damodarpant walking toward house entrance, mid-ground"
+      },
+      {
+        "image_id": "foreground_path_near",
+        "description": "Dirt path in foreground with subtle texture"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 257.2,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": []
+}

@@ -42,21 +42,32 @@ def split_ovis(text: str):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="D:/aai work/granthstudio/canon/source_hj")
+    ap.add_argument("--from-raw", type=int, nargs="+", metavar="N", help="split saved adhyay_NN_raw.txt (page text saved from the browser) instead of fetching")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     summary = []
     for i, page in enumerate(PAGES, 1):
-        raw = urllib.request.urlopen(urllib.request.Request(BASE.format(page), headers={"User-Agent": "Mozilla/5.0"}), timeout=60).read().decode("utf-8")
-        text = article_text(raw)
-        (out / f"adhyay_{i:02d}_raw.txt").write_text(text, encoding="utf-8")
+        if a.from_raw:
+            if i not in a.from_raw:
+                continue
+            raw = text = (out / f"adhyay_{i:02d}_raw.txt").read_text(encoding="utf-8")
+        else:
+            raw = urllib.request.urlopen(urllib.request.Request(BASE.format(page), headers={"User-Agent": "Mozilla/5.0"}), timeout=60).read().decode("utf-8")
+            text = article_text(raw)
+            (out / f"adhyay_{i:02d}_raw.txt").write_text(text, encoding="utf-8")
         ovis = split_ovis(text)
         with (out / f"adhyay_{i:02d}.jsonl").open("w", encoding="utf-8") as f:
             for seq, printed, t in ovis:
                 f.write(json.dumps({"adhyay": i, "ovi": seq, "printed_no": printed, "text": t}, ensure_ascii=False) + "\n")
-        summary.append({"adhyay": i, "page": page, "ovis": len(ovis), "sha256": hashlib.sha256(raw.encode()).hexdigest()})
+        summary.append({"adhyay": i, "page": page, "ovis": len(ovis), "sha256": hashlib.sha256(raw.encode()).hexdigest(),
+                        "hash_of": "browser page text (adhyay_NN_raw.txt)" if a.from_raw else "page HTML"})
         print(i, page, len(ovis), flush=True)
-        time.sleep(1)
+        if not a.from_raw:
+            time.sleep(1)
+    if a.from_raw and (out / "SOURCE.json").is_file():           # keep the records of Adhyays not re-split this time
+        done = {s["adhyay"] for s in summary}
+        summary = sorted([s for s in json.loads((out / "SOURCE.json").read_text(encoding="utf-8"))["adhyays"] if s["adhyay"] not in done] + summary, key=lambda s: s["adhyay"])
     (out / "SOURCE.json").write_text(json.dumps({"source": "hindujagruti.org (working copy; owner's printed PDF is the authority)",
                                                  "fetched": time.strftime("%Y-%m-%d"), "adhyays": summary, "total_ovis": sum(s["ovis"] for s in summary)}, indent=2, ensure_ascii=False), encoding="utf-8")
     print("total", sum(s["ovis"] for s in summary))

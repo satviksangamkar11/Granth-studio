@@ -1,0 +1,1117 @@
+{
+  "scene": 2,
+  "chapter": 1,
+  "range": [
+    84,
+    96
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S2-1: STAGING scenery 'doorway edge' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S2",
+    "chapter": 1,
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Show Devidas's feast preparation, the stranger Gajanan picking leftover grains, and the teaching that food is Brahman.",
+    "turn": {
+      "ovi": "A1:94",
+      "text": "Gajanan picks up leftover rice grains to teach that food is Brahman."
+    },
+    "shots": [
+      {
+        "shot_id": "S2-1",
+        "ovi_ids": [
+          "A1:84",
+          "A1:85",
+          "A1:86",
+          "A1:87"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "estab_fg",
+          "fx": "estab_fx",
+          "mid": "estab_mid",
+          "sky": "estab_sky"
+        },
+        "action": "camera dollies in over the road",
+        "held_pose": "the road with leaf plates in front of a house holds steady",
+        "needs": [
+          "none"
+        ],
+        "performance": "the establishing shot reveals the feast aftermath",
+        "camera": "dolly in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "house front",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "doorway edge",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: sky layer added for depth",
+          "STAGING: foreground frame layer added",
+          "STAGING: light dust effect added"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-2",
+        "ovi_ids": [
+          "A1:87"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "parallax_far",
+          "mid": "parallax_mid",
+          "near": "parallax_near",
+          "sky": "parallax_sky"
+        },
+        "action": "camera pans laterally along the road",
+        "held_pose": "leaf plates on the road remain in place across depth layers",
+        "needs": [
+          "none"
+        ],
+        "performance": "the parallax move shows the extent of the discarded plates",
+        "camera": "pan right",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: far layer shows distant road",
+          "STAGING: near layer shows foreground plates",
+          "STAGING: sky layer for atmosphere"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-3",
+        "ovi_ids": [
+          "A1:88",
+          "A1:89",
+          "A1:90",
+          "A1:91",
+          "A1:92",
+          "A1:93"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera pushes in slowly on the seated figure",
+        "held_pose": "Gajanan sits on the road among leaf plates, wearing old bandi, gourd at side, chilim in hand, gaze at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows his digambar state and ascetic radiance",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "calm posture",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "digambar",
+            "source": "A1:92"
+          },
+          {
+            "kind": "event",
+            "term": "searching leaf plates",
+            "source": "A1:93"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-4",
+        "ovi_ids": [
+          "A1:88"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera continues pushing in slowly",
+        "held_pose": "same seated pose holds",
+        "needs": [
+          "none"
+        ],
+        "performance": "the continued push emphasizes his stillness",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "calm posture",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "digambar",
+            "source": "A1:92"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-5",
+        "ovi_ids": [
+          "A1:93",
+          "A1:94"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "hand_picking_grain"
+        },
+        "action": "camera pushes in slightly on the hand close-up",
+        "held_pose": "hand picks a single rice grain from a leaf plate",
+        "needs": [
+          "none"
+        ],
+        "performance": "the insert shows the grain-picking action that teaches annaparabrahma",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "event",
+            "term": "picking rice grain",
+            "source": "A1:93"
+          },
+          {
+            "kind": "event",
+            "term": "lifting to mouth",
+            "source": "A1:94"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plate",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "rice grain (shita)",
+            "source": "A1:93"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:94"
+          }
+        ],
+        "staging": [
+          "STAGING: gloss and vignette from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-6",
+        "ovi_ids": [
+          "A1:94"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_face_closeup"
+        },
+        "action": "camera pushes in slowly on the face",
+        "held_pose": "Gajanan's face calm, gaze steady, grain at lips",
+        "needs": [
+          "none"
+        ],
+        "performance": "the close-up shows the moment of receiving the grain",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:94"
+          },
+          {
+            "kind": "pose",
+            "term": "calm face",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "lifting grain to mouth",
+            "source": "A1:94"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-7",
+        "ovi_ids": [
+          "A1:95"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "gajanan_face_closeup_transparent"
+        },
+        "action": "camera pushes in closer with a soft halo",
+        "held_pose": "Gajanan's face serene, eyes at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "the emotional close-up underscores the teaching of annam brahma",
+        "camera": "push in with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:95"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "teaching annam brahma",
+            "source": "A1:95"
+          }
+        ],
+        "staging": [
+          "STAGING: halo effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-8",
+        "ovi_ids": [
+          "A1:96"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera pushes in slowly on the wider scene",
+        "held_pose": "Gajanan seated on road, plates around, compassionate presence",
+        "needs": [
+          "none"
+        ],
+        "performance": "the wide shot shows the teacher of the common people",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:96"
+          },
+          {
+            "kind": "event",
+            "term": "compassion shows the meaning",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road with plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-9",
+        "ovi_ids": [
+          "A1:96"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "parallax_far",
+          "mid": "parallax_mid",
+          "near": "parallax_near",
+          "sky": "parallax_sky"
+        },
+        "action": "camera pans laterally away from the scene",
+        "held_pose": "the road and plates remain across layers",
+        "needs": [
+          "none"
+        ],
+        "performance": "the parallax pulls back to end the sequence",
+        "camera": "pan left",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: far layer shows distance",
+          "STAGING: near layer shows foreground",
+          "STAGING: sky layer"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-10",
+        "ovi_ids": [
+          "A1:96"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera pushes in slowly to a final hold",
+        "held_pose": "Gajanan seated, the scene settles",
+        "needs": [
+          "none"
+        ],
+        "performance": "final push concludes the scene",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "estab_fg",
+        "description": "foreground frame layer: a doorway edge framing the road"
+      },
+      {
+        "image_id": "estab_fx",
+        "description": "light dust effect layer: subtle dust motes in the air"
+      },
+      {
+        "image_id": "estab_mid",
+        "description": "mid subject layer: the road in front of Devidas's house with used leaf plates scattered"
+      },
+      {
+        "image_id": "estab_sky",
+        "description": "sky far layer: plain sky background"
+      },
+      {
+        "image_id": "parallax_far",
+        "description": "far layer: distant road stretching into perspective"
+      },
+      {
+        "image_id": "parallax_mid",
+        "description": "mid layer: leaf plates on the road at middle distance"
+      },
+      {
+        "image_id": "parallax_near",
+        "description": "near layer: leaf plates close to camera"
+      },
+      {
+        "image_id": "parallax_sky",
+        "description": "sky layer for parallax: plain sky"
+      },
+      {
+        "image_id": "gajanan_seated_wide",
+        "description": "Gajanan seated on the road among leaf plates, wearing old worn bandi, gourd at side, unfired clay chilim in hand, gaze at nose tip, calm posture, digambar appearance"
+      },
+      {
+        "image_id": "hand_picking_grain",
+        "description": "close-up of a hand picking a single rice grain from a leaf plate"
+      },
+      {
+        "image_id": "gajanan_face_closeup",
+        "description": "close-up of Gajanan's face, calm, gaze steady, grain at lips"
+      },
+      {
+        "image_id": "gajanan_face_closeup_transparent",
+        "description": "close-up of Gajanan's face with transparent background for emotional close-up preset"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 286.1,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 124.7,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S2-1: S2-1: 'tree' appears in the shot but not in the owner's research or in any claim (declare it as a claim with an ovi, or STAGING for scenery/light)",
+        "S2-5: S2-5: event 'picking rice grain' cites A1:93, which this shot does not show"
+      ],
+      "scope": [
+        "S2-1",
+        "S2-5"
+      ],
+      "status": "USED"
+    }
+  ],
+  "final_reviews": [],
+  "plan_before_repair": {
+    "scene_id": "S2",
+    "chapter": 1,
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Show Devidas's feast preparation, the stranger Gajanan picking leftover grains, and the teaching that food is Brahman.",
+    "turn": {
+      "ovi": "A1:94",
+      "text": "Gajanan picks up leftover rice grains to teach that food is Brahman."
+    },
+    "shots": [
+      {
+        "shot_id": "S2-1",
+        "ovi_ids": [
+          "A1:84",
+          "A1:85",
+          "A1:86",
+          "A1:87"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "estab_fg",
+          "fx": "estab_fx",
+          "mid": "estab_mid",
+          "sky": "estab_sky"
+        },
+        "action": "camera dollies in over the road",
+        "held_pose": "the road with leaf plates in front of a house holds steady",
+        "needs": [
+          "none"
+        ],
+        "performance": "the establishing shot reveals the feast aftermath",
+        "camera": "dolly in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "house front",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: sky layer added for depth",
+          "STAGING: foreground frame layer added",
+          "STAGING: light dust effect added"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-2",
+        "ovi_ids": [
+          "A1:87"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "parallax_far",
+          "mid": "parallax_mid",
+          "near": "parallax_near",
+          "sky": "parallax_sky"
+        },
+        "action": "camera pans laterally along the road",
+        "held_pose": "leaf plates on the road remain in place across depth layers",
+        "needs": [
+          "none"
+        ],
+        "performance": "the parallax move shows the extent of the discarded plates",
+        "camera": "pan right",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: far layer shows distant road",
+          "STAGING: near layer shows foreground plates",
+          "STAGING: sky layer for atmosphere"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-3",
+        "ovi_ids": [
+          "A1:88",
+          "A1:89",
+          "A1:90",
+          "A1:91",
+          "A1:92",
+          "A1:93"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera pushes in slowly on the seated figure",
+        "held_pose": "Gajanan sits on the road among leaf plates, wearing old bandi, gourd at side, chilim in hand, gaze at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows his digambar state and ascetic radiance",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "calm posture",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "digambar",
+            "source": "A1:92"
+          },
+          {
+            "kind": "event",
+            "term": "searching leaf plates",
+            "source": "A1:93"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-4",
+        "ovi_ids": [
+          "A1:88"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera continues pushing in slowly",
+        "held_pose": "same seated pose holds",
+        "needs": [
+          "none"
+        ],
+        "performance": "the continued push emphasizes his stillness",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "old worn bandi",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd water vessel",
+            "source": "A1:89"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "calm posture",
+            "source": "A1:91"
+          },
+          {
+            "kind": "pose",
+            "term": "digambar",
+            "source": "A1:92"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-5",
+        "ovi_ids": [
+          "A1:94"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "hand_picking_grain"
+        },
+        "action": "camera pushes in slightly on the hand close-up",
+        "held_pose": "hand picks a single rice grain from a leaf plate",
+        "needs": [
+          "none"
+        ],
+        "performance": "the insert shows the grain-picking action that teaches annaparabrahma",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "event",
+            "term": "picking rice grain",
+            "source": "A1:93"
+          },
+          {
+            "kind": "event",
+            "term": "lifting to mouth",
+            "source": "A1:94"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plate",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "rice grain (shita)",
+            "source": "A1:93"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:94"
+          }
+        ],
+        "staging": [
+          "STAGING: gloss and vignette from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-6",
+        "ovi_ids": [
+          "A1:94"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_face_closeup"
+        },
+        "action": "camera pushes in slowly on the face",
+        "held_pose": "Gajanan's face calm, gaze steady, grain at lips",
+        "needs": [
+          "none"
+        ],
+        "performance": "the close-up shows the moment of receiving the grain",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:94"
+          },
+          {
+            "kind": "pose",
+            "term": "calm face",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "lifting grain to mouth",
+            "source": "A1:94"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-7",
+        "ovi_ids": [
+          "A1:95"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "gajanan_face_closeup_transparent"
+        },
+        "action": "camera pushes in closer with a soft halo",
+        "held_pose": "Gajanan's face serene, eyes at nose tip",
+        "needs": [
+          "none"
+        ],
+        "performance": "the emotional close-up underscores the teaching of annam brahma",
+        "camera": "push in with halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:95"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "teaching annam brahma",
+            "source": "A1:95"
+          }
+        ],
+        "staging": [
+          "STAGING: halo effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-8",
+        "ovi_ids": [
+          "A1:96"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera pushes in slowly on the wider scene",
+        "held_pose": "Gajanan seated on road, plates around, compassionate presence",
+        "needs": [
+          "none"
+        ],
+        "performance": "the wide shot shows the teacher of the common people",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:96"
+          },
+          {
+            "kind": "event",
+            "term": "compassion shows the meaning",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road with plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-9",
+        "ovi_ids": [
+          "A1:96"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "parallax_far",
+          "mid": "parallax_mid",
+          "near": "parallax_near",
+          "sky": "parallax_sky"
+        },
+        "action": "camera pans laterally away from the scene",
+        "held_pose": "the road and plates remain across layers",
+        "needs": [
+          "none"
+        ],
+        "performance": "the parallax pulls back to end the sequence",
+        "camera": "pan left",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: far layer shows distance",
+          "STAGING: near layer shows foreground",
+          "STAGING: sky layer"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-10",
+        "ovi_ids": [
+          "A1:96"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_seated_wide"
+        },
+        "action": "camera pushes in slowly to a final hold",
+        "held_pose": "Gajanan seated, the scene settles",
+        "needs": [
+          "none"
+        ],
+        "performance": "final push concludes the scene",
+        "camera": "push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: vignette effect from preset"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "estab_fg",
+        "description": "foreground frame layer: a tree branch or doorway edge framing the road"
+      },
+      {
+        "image_id": "estab_fx",
+        "description": "light dust effect layer: subtle dust motes in the air"
+      },
+      {
+        "image_id": "estab_mid",
+        "description": "mid subject layer: the road in front of Devidas's house with used leaf plates scattered"
+      },
+      {
+        "image_id": "estab_sky",
+        "description": "sky far layer: plain sky background"
+      },
+      {
+        "image_id": "parallax_far",
+        "description": "far layer: distant road stretching into perspective"
+      },
+      {
+        "image_id": "parallax_mid",
+        "description": "mid layer: leaf plates on the road at middle distance"
+      },
+      {
+        "image_id": "parallax_near",
+        "description": "near layer: leaf plates close to camera"
+      },
+      {
+        "image_id": "parallax_sky",
+        "description": "sky layer for parallax: plain sky"
+      },
+      {
+        "image_id": "gajanan_seated_wide",
+        "description": "Gajanan seated on the road among leaf plates, wearing old worn bandi, gourd at side, unfired clay chilim in hand, gaze at nose tip, calm posture, digambar appearance"
+      },
+      {
+        "image_id": "hand_picking_grain",
+        "description": "close-up of a hand picking a single rice grain from a leaf plate"
+      },
+      {
+        "image_id": "gajanan_face_closeup",
+        "description": "close-up of Gajanan's face, calm, gaze steady, grain at lips"
+      },
+      {
+        "image_id": "gajanan_face_closeup_transparent",
+        "description": "close-up of Gajanan's face with transparent background for emotional close-up preset"
+      }
+    ]
+  },
+  "status": "VALID",
+  "reviewed": false
+}

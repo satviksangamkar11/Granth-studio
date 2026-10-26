@@ -1,0 +1,471 @@
+{
+  "scene": 6,
+  "range": [
+    133,
+    137
+  ],
+  "result": "VALID",
+  "errors": [],
+  "warnings": [],
+  "plan": {
+    "scene_id": "S6",
+    "ovi_range": [
+      133,
+      137
+    ],
+    "goal": "Show Gajanan drinking at the cattle trough and Damodar returning with scented water to stop him.",
+    "turn": {
+      "ovi": 135,
+      "text": "Gajanan drinks the muddy trough water and belches; Damodar arrives with a gadva of clear vetiver water."
+    },
+    "shots": [
+      {
+        "shot_id": "S6-1",
+        "ovi_ids": [
+          134
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "sky": "pale midday sky, no clouds",
+          "mid": "well with a trough (haal) beside it; cattle drinking at the trough",
+          "fx": "none",
+          "fg": "thin foreground frame of grass blades"
+        },
+        "action": "camera dollies in on well and trough",
+        "performance": "cattle stand still drinking; water surface calm",
+        "camera": "slow dolly 1.0 to 1.28",
+        "dialogue": [],
+        "staging": [
+          "STAGING: hold on the trough water to show it is muddy (gaDhuuL)"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-2",
+        "ovi_ids": [
+          135
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "Gajanan standing at the trough, bent forward, hands cupped, drinking water; old torn bandi on near-naked body"
+        },
+        "action": "Gajanan drinks from trough",
+        "performance": "held pose of drinking, head bent, hands at water",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [],
+        "staging": [
+          "STAGING: pose shows drinking action only; belch is separate beat"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-3",
+        "ovi_ids": [
+          135
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "Gajanan upright after drinking, head lifted, chest slightly expanded, one hand at throat, calm face; old torn bandi"
+        },
+        "action": "Gajanan belches with satisfaction",
+        "performance": "held pose of post-drink belch (truptateche Dhekar)",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [],
+        "staging": [
+          "STAGING: chest expanded, hand at throat shows belch completed"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-4",
+        "ovi_ids": [
+          135
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "Gajanan upright, calm face, old torn bandi, facing right",
+          "right": "Damodarpant standing, holding brass gadva in both hands, concerned expression, facing left"
+        },
+        "action": "Damodar stands before Gajanan offering water",
+        "performance": "both figures still, facing each other; gadva held forward in Damodar's hands",
+        "camera": "gentle drift across both figures",
+        "dialogue": [],
+        "staging": [
+          "STAGING: brass gadva clearly visible in Damodar's hands"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-5",
+        "ovi_ids": [
+          136
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "Damodarpant close-up, eyebrows raised, mouth open in alarm, one hand pointing sideways toward trough"
+        },
+        "action": "Damodar gestures to trough warning",
+        "performance": "held alarm pose, breathing visible",
+        "camera": "slow push in with breathing sway",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant",
+            "ovi": 136,
+            "marathi": "हां हां तें गढूळ पाणी । समर्था न लावा वदनीं । तें जनावरालागुनी । योग्य आहे प्यावया",
+            "meaning_en": "Oh oh, that muddy water. Samarth, do not put it to your mouth. It is fit for animals to drink.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: eyes wide, hand pointing off-screen to trough"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-6",
+        "ovi_ids": [
+          137
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "pair of hands holding brass gadva, clear water visible inside, a few vetiver roots (vaalaa) lying on the rim"
+        },
+        "action": "Damodar presents water pot",
+        "performance": "hands steady, gadva tilted slightly to show water clarity and vetiver",
+        "camera": "hold, full-frame insert",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant",
+            "ovi": 137,
+            "marathi": "मीं हें पहा आणिलें नीर । गोड निर्मळ थंडगार । वासित केलें साचार । वाळा घालून यामध्यें",
+            "meaning_en": "See, I have brought this water. Sweet, clear, cool. Made fragrant with vetiver placed inside.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: vetiver roots visible on rim to show scenting"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "S6_well_trough_cattle",
+        "description": "Wide establishing illustration: well with trough (haal) beside it, cattle drinking at trough, pale midday sky, grass foreground frame. Flat colour, layers separable for parallax.",
+        "used_in": [
+          "S6-1"
+        ]
+      },
+      {
+        "image_id": "S6_Gajanan_drinking_trough",
+        "description": "Gajanan standing at trough, bent forward, hands cupped drinking water; wearing old torn bandi, otherwise near-naked (digambar), muscular arms and neck, calm posture. Flat colour, transparent background.",
+        "used_in": [
+          "S6-2"
+        ]
+      },
+      {
+        "image_id": "S6_Gajanan_postdrink_belch",
+        "description": "Gajanan upright after drinking, head lifted, chest slightly expanded, one hand at throat, calm face; old torn bandi. Flat colour, transparent background.",
+        "used_in": [
+          "S6-3"
+        ]
+      },
+      {
+        "image_id": "S6_Gajanan_upright_facing_right",
+        "description": "Gajanan upright, calm face, old torn bandi, facing right. Flat colour, transparent background.",
+        "used_in": [
+          "S6-4"
+        ]
+      },
+      {
+        "image_id": "S6_Damodar_standing_gadva_facing_left",
+        "description": "Damodarpant standing, holding brass gadva in both hands, concerned expression, facing left. Flat colour, transparent background.",
+        "used_in": [
+          "S6-4"
+        ]
+      },
+      {
+        "image_id": "S6_Damodar_closeup_alarm",
+        "description": "Damodarpant close-up face, eyebrows raised, mouth open in alarm, one hand pointing sideways (toward trough). Flat colour, transparent background.",
+        "used_in": [
+          "S6-5"
+        ]
+      },
+      {
+        "image_id": "S6_gadva_hands_vetiver",
+        "description": "Close-up insert: pair of hands holding brass gadva, clear water visible inside, a few vetiver roots (vaalaa) lying on the rim. Flat colour, full frame.",
+        "used_in": [
+          "S6-6"
+        ]
+      }
+    ]
+  },
+  "calls": [
+    {
+      "attempt": 1,
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 36.3,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "verdict": "ISSUES",
+      "problems": [
+        {
+          "shot_id": "S6-2",
+          "kind": "unexecutable",
+          "problem": "Shot S6-2 attempts to animate a head lift and throat movement (belch) within a single image, which is not possible with the 03_slow_cinematic_push preset.",
+          "fix": "Split the action into two separate shots: one for drinking, one for the belch, or use a static drinking pose only."
+        },
+        {
+          "shot_id": "S6-3",
+          "kind": "unexecutable",
+          "problem": "Shot S6-3 includes a gentle drift across both figures, but the 09_dialogue_composition preset is static and cannot show movement across the frame.",
+          "fix": "Remove the drift; use a cut between two static poses or replace the preset with one that supports camera movement."
+        },
+        {
+          "shot_id": "S6-1",
+          "kind": "unsupported_fact",
+          "problem": "The description specifies a stone well with a long stone trough and cows/buffaloes, none of which are mentioned in the ovi text.",
+          "fix": "Use a generic well and trough without specifying material or length, and describe the animals generically as cattle."
+        }
+      ],
+      "call": {
+        "model": "openai/gpt-oss-20b",
+        "status": 200,
+        "wall_s": 107.9,
+        "streamed": true,
+        "finish": "stop",
+        "usage": {
+          "prompt_tokens": 10961,
+          "completion_tokens": 3158,
+          "total_tokens": 14119
+        }
+      }
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "verdict": "ISSUES",
+      "problems": [
+        {
+          "shot_id": "S6-2",
+          "kind": "unexecutable",
+          "problem": "The performance 'held pose of drinking, then head lifted, throat moving' and the staging 'after drink, hold pose with chest slightly expanded for belch' require a pose change and throat movement inside one preset 03 shot, which is a single image with no limb or facial animation.",
+          "fix": "Split into two shots with two images (drinking pose, then a separate head-lifted post-drink/belch pose), or keep only the single drinking held pose and drop the in-shot change."
+        },
+        {
+          "shot_id": "S6-3",
+          "kind": "unexecutable",
+          "problem": "The performance 'Damodar steps forward, arms extended offering' (with the asset described as 'walking up') requires walking and arm movement inside preset 09, which only drifts across two static facing poses with no limb animation.",
+          "fix": "Use a static arrived pose of Damodar standing facing Gajanan holding the gadva in both hands, and let the camera drift or a separate entrance image carry the approach."
+        },
+        {
+          "shot_id": "S6-3 (also S6-5, images S6_Damodar_arriving_gadva and S6_gadva_hands_vetiver)",
+          "kind": "other",
+          "problem": "The plan specifies a clay/earthen gadva, but the owner's frozen research records 'video prop choice: brass' for Damodar's gadva at ovi 135.",
+          "fix": "Change all gadva depictions to brass, or have the owner re-freeze the prop choice before the images are made."
+        }
+      ],
+      "call": {
+        "model": "z-ai/glm-5.3-flash",
+        "status": 200,
+        "wall_s": 361.2,
+        "streamed": true,
+        "finish": "stop",
+        "usage": null
+      }
+    }
+  ],
+  "repair": {
+    "status": "USED",
+    "call": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 50.1,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    "problems_sent": [
+      "[gpt-oss-20b] S6-2 unexecutable: Shot S6-2 attempts to animate a head lift and throat movement (belch) within a single image, which is not possible with the 03_slow_cinematic_push preset. Fix: Split the action into two separate shots: one for drinking, one for the belch, or use a static drinking pose only.",
+      "[gpt-oss-20b] S6-3 unexecutable: Shot S6-3 includes a gentle drift across both figures, but the 09_dialogue_composition preset is static and cannot show movement across the frame. Fix: Remove the drift; use a cut between two static poses or replace the preset with one that supports camera movement.",
+      "[gpt-oss-20b] S6-1 unsupported_fact: The description specifies a stone well with a long stone trough and cows/buffaloes, none of which are mentioned in the ovi text. Fix: Use a generic well and trough without specifying material or length, and describe the animals generically as cattle.",
+      "[glm-5.3-flash] S6-2 unexecutable: The performance 'held pose of drinking, then head lifted, throat moving' and the staging 'after drink, hold pose with chest slightly expanded for belch' require a pose change and throat movement inside one preset 03 shot, which is a single image with no limb or facial animation. Fix: Split into two shots with two images (drinking pose, then a separate head-lifted post-drink/belch pose), or keep only the single drinking held pose and drop the in-shot change.",
+      "[glm-5.3-flash] S6-3 unexecutable: The performance 'Damodar steps forward, arms extended offering' (with the asset described as 'walking up') requires walking and arm movement inside preset 09, which only drifts across two static facing poses with no limb animation. Fix: Use a static arrived pose of Damodar standing facing Gajanan holding the gadva in both hands, and let the camera drift or a separate entrance image carry the approach.",
+      "[glm-5.3-flash] S6-3 (also S6-5, images S6_Damodar_arriving_gadva and S6_gadva_hands_vetiver) other: The plan specifies a clay/earthen gadva, but the owner's frozen research records 'video prop choice: brass' for Damodar's gadva at ovi 135. Fix: Change all gadva depictions to brass, or have the owner re-freeze the prop choice before the images are made."
+    ]
+  },
+  "plan_before_repair": {
+    "scene_id": "S6",
+    "ovi_range": [
+      133,
+      137
+    ],
+    "goal": "Show Gajanan drinking at the cattle trough and Damodar returning with scented water to stop him.",
+    "turn": {
+      "ovi": 135,
+      "text": "Gajanan drinks the muddy trough water and belches; Damodar arrives with a gadva of clear vetiver water."
+    },
+    "shots": [
+      {
+        "shot_id": "S6-1",
+        "ovi_ids": [
+          134
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "sky": "pale midday sky, no clouds",
+          "mid": "stone well with a long stone trough (haal) beside it; cattle (cows, buffaloes) drinking at the trough",
+          "fx": "none",
+          "fg": "thin foreground frame of grass blades"
+        },
+        "action": "camera dollies in on well and trough",
+        "performance": "cattle stand still drinking; water surface calm",
+        "camera": "slow dolly 1.0 to 1.28",
+        "dialogue": [],
+        "staging": [
+          "STAGING: hold on the trough water to show it is muddy (gaDhuuL)"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-2",
+        "ovi_ids": [
+          135
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "Gajanan standing at the trough, bent forward, hands cupped, drinking water; old torn bandi on near-naked body"
+        },
+        "action": "Gajanan drinks from trough",
+        "performance": "held pose of drinking, then head lifted, throat moving",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [],
+        "staging": [
+          "STAGING: after drink, hold pose with chest slightly expanded for belch (truptateche Dhekar)"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-3",
+        "ovi_ids": [
+          135
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "Gajanan upright, wiping mouth, calm face",
+          "right": "Damodarpant walking up, holding a clay gadva (earthen pot) in both hands, concerned expression"
+        },
+        "action": "Damodar arrives with water pot",
+        "performance": "Gajanan still; Damodar steps forward, arms extended offering",
+        "camera": "gentle drift across both figures",
+        "dialogue": [],
+        "staging": [
+          "STAGING: position gadva clearly visible in Damodar's hands"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-4",
+        "ovi_ids": [
+          136
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "Damodarpant close-up, eyebrows raised, mouth open in alarm, one hand pointing back toward trough"
+        },
+        "action": "Damodar gestures to trough warning",
+        "performance": "held alarm pose, breathing visible",
+        "camera": "slow push in with breathing sway",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant",
+            "ovi": 136,
+            "marathi": "हां हां तें गढूळ पाणी । समर्था न लावा वदनीं । तें जनावरालागुनी । योग्य आहे प्यावया",
+            "meaning_en": "Oh oh, that muddy water. Samarth, do not put it to your mouth. It is fit for animals to drink.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: eyes wide, hand pointing off-screen to trough"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-5",
+        "ovi_ids": [
+          137
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "Damodar's hands holding the gadva, water visible inside clear and still; a few vetiver roots (vaalaa) lying on the rim"
+        },
+        "action": "Damodar presents water pot",
+        "performance": "hands steady, gadva tilted slightly to show water clarity",
+        "camera": "hold, full-frame insert",
+        "dialogue": [
+          {
+            "speaker": "Damodarpant",
+            "ovi": 137,
+            "marathi": "मीं हें पहा आणिलें नीर । गोड निर्मळ थंडगार । वासित केलें साचार । वाळा घालून यामध्यें",
+            "meaning_en": "See, I have brought this water. Sweet, clear, cool. Made fragrant with vetiver placed inside.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: vetiver roots visible on rim to show scenting"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "S6_well_trough_cattle",
+        "description": "Wide establishing illustration: stone well with long stone trough (haal) beside it, cattle (cows, buffaloes) drinking at trough, pale midday sky, grass foreground frame. Flat colour, layers separable for parallax.",
+        "used_in": [
+          "S6-1"
+        ]
+      },
+      {
+        "image_id": "S6_Gajanan_drinking_trough",
+        "description": "Gajanan standing at trough, bent forward, hands cupped drinking water; wearing old torn bandi, otherwise near-naked (digambar), muscular arms and neck, calm posture. Flat colour, transparent background.",
+        "used_in": [
+          "S6-2"
+        ]
+      },
+      {
+        "image_id": "S6_Gajanan_upright_wiping_mouth",
+        "description": "Gajanan upright after drinking, one hand wiping mouth, calm face, old torn bandi. Flat colour, transparent background, facing right.",
+        "used_in": [
+          "S6-3"
+        ]
+      },
+      {
+        "image_id": "S6_Damodar_arriving_gadva",
+        "description": "Damodarpant walking forward, holding clay gadva (earthen pot) in both hands, concerned expression, traditional dress. Flat colour, transparent background, facing left.",
+        "used_in": [
+          "S6-3"
+        ]
+      },
+      {
+        "image_id": "S6_Damodar_closeup_alarm",
+        "description": "Damodarpant close-up face, eyebrows raised, mouth open in alarm, one hand pointing sideways (toward trough). Flat colour, transparent background.",
+        "used_in": [
+          "S6-4"
+        ]
+      },
+      {
+        "image_id": "S6_gadva_hands_vetiver",
+        "description": "Close-up insert: pair of hands holding clay gadva, clear water visible inside, a few vetiver roots (vaalaa) lying on the rim. Flat colour, full frame.",
+        "used_in": [
+          "S6-5"
+        ]
+      }
+    ]
+  }
+}

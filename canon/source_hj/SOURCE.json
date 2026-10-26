@@ -1,0 +1,14 @@
+{
+  "source": "hindujagruti.org (working copy; owner's printed PDF is the authority)",
+  "fetched": "2026-10-25",
+  "adhyays": [
+    {
+      "adhyay": 1,
+      "page": 764,
+      "ovis": 146,
+      "sha256": "3474f6be22654d7c68a892cba3574f1c2210ba5fe90402d6ba376662c7be86fb",
+      "hash_of": "browser page text (adhyay_NN_raw.txt)"
+    }
+  ],
+  "total_ovis": 146
+}

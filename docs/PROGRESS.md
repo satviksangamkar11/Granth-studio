@@ -495,3 +495,14 @@ Not done / open:
 - P1 full run and Codex review of the P1 scripts; P2 (Maharaj blessing scene prototype and its audit); P0 schemas and the Kimi instruction pack.
 - Owner decisions pending: which image model output is preferred (Nano Banana 2.1, Pro, Qwen), Nano Banana Pro price confirmation (third-party prices only), whether `D:\local model\tmp\fable-cpu-checks` (14.7 GB) may be deleted, a git remote URL if a real push is wanted.
 - Kaggle: no runs in progress that matter; notebooks granthstudio-bench-gpu-all, -kontext, -qwen21, -all and the TPU probes exist on account satviksangamkar54321.
+
+## 2026-10-26 Adhyay 1 story-first director (checkpoint)
+
+Done (all draft, nothing approved, no audio, nothing rendered):
+- Kimi directed scene 1 under the old split and planned the whole Adhyay (one story); the split was then revised by hand, no further Kimi call: ONE story, NINE scenes, title "First Appearance in Shegaon and Recognition at Devidas's Feast", year 1878 only (an on-screen caption), Sajjangad/Samarth/Nath material kept as research evidence but out of film-facing text. Canonical file `canon/story_split_edits/A1_rev1.json`; validated run `a1_split_rev7` (hash `2c10b79b...`; Nemotron's advisory cross-check recorded as returned, owner override needed to approve).
+- Story text for the owner is generated from the data (`docs/pilot/A1_story_for_approval.md`); audio plan (exact verse segments, Hindi draft NOT VALIDATED, closed UNSOURCED sound palette, 18 cues), estimated timing (70 planned shots = 7 min of picture; Marathi ~6 min 26 s, Hindi ~5 min 57 s) and a free structural dry run of the director with Nemotron.
+- Code: `story_split.py` (plan / revise / render / approve), `director_run.py` (immutable runs, locks, manifest), `kimi_adapter.py` (P4 $1 cap), `director_test.py` (contract v2, split-driven direction, dialogue bound to the audio lines), `a1_audio.py`, `a1_eval.py`; Pillow/numpy/scipy added as dev dependencies on the owner's approval.
+- Codex reviews: handoff audit, phase-1 audits v1-v3, story design, scene-1 review, planner review, integrity check, final diff reviews (reports in `docs/pilot/reference/research_notes/`).
+- Paid spending: Kimi probe $0.001 + scene 1 $0.124 + planner $0.141, plus the killed scene-2 reservation booked at its worst case $0.347 (actual charge unknown).
+
+Not done: the paid direction of the nine scenes (needs the owner's approval of the split hash and a Kimi cap above $1), TTS/audio, Adhyay 2, rendering, human review of any film (NOT_DONE).

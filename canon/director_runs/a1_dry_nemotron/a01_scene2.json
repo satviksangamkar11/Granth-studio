@@ -1,0 +1,891 @@
+{
+  "scene": 2,
+  "chapter": 1,
+  "range": [
+    84,
+    96
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S2-2: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S2-3: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S2-4: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S2-5: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S2-6: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S2-7: no staging line (every camera/light/pose choice should be labelled STAGING)",
+    "S2-8: no staging line (every camera/light/pose choice should be labelled STAGING)"
+  ],
+  "plan": {
+    "scene_id": "S2",
+    "chapter": 1,
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Show Devidas's feast preparations, the stranger Gajanan seated on the road picking leftover rice grains, and the narrator's teaching that food is Brahman.",
+    "turn": {
+      "ovi": "A1:94",
+      "text": "Gajanan picks up each rice grain he sees and puts it in his mouth to teach 'annaparabrahma'."
+    },
+    "shots": [
+      {
+        "shot_id": "S2-1",
+        "ovi_ids": [
+          "A1:84",
+          "A1:85",
+          "A1:86",
+          "A1:87"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "s2_estab_fg",
+          "fx": "s2_estab_fx",
+          "mid": "s2_estab_mid",
+          "sky": "s2_estab_sky"
+        },
+        "action": "camera dollies in over the road and house",
+        "held_pose": "wide view of Devidas's house with leaf plates scattered on the road in front",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator introduces Devidas and describes the leaf plates thrown on the road",
+        "camera": "dolly in from wide to medium-wide",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:84"
+          },
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:85"
+          },
+          {
+            "kind": "event",
+            "term": "feast preparation for son's Ritushanti",
+            "source": "A1:86"
+          },
+          {
+            "kind": "scenery",
+            "term": "house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: early morning light suggested by context"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-2",
+        "ovi_ids": [
+          "A1:87"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "s2_push_plates"
+        },
+        "action": "camera pushes in slowly on the leaf plates",
+        "held_pose": "close view of used leaf plates on the road",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator's words about Devidas end; the view settles on the plates",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S2-3",
+        "ovi_ids": [
+          "A1:88"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "s2_push_gajanan_seated"
+        },
+        "action": "camera pushes in slowly on Gajanan seated",
+        "held_pose": "Gajanan seated on the road, wearing a worn old bandi",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator describes Gajanan as a siddha yogi seated there",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "bandi (old worn cloth)",
+            "source": "A1:88"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:88"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-4",
+        "ovi_ids": [
+          "A1:88",
+          "A1:89",
+          "A1:90",
+          "A1:91",
+          "A1:92"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "s2_insert_chilim_gourd"
+        },
+        "action": "camera pushes in slightly on the hand holding the chilim",
+        "held_pose": "Gajanan's hand holding a self-made unfired clay chilim, a gourd resting beside him",
+        "needs": [
+          "none"
+        ],
+        "performance": "the view shows his only possessions: the chilim and gourd",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "prop",
+            "term": "chilim (कच्ची चिलीम)",
+            "source": "A1:90"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "A1:89"
+          },
+          {
+            "kind": "pose",
+            "term": "hand holding chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-5",
+        "ovi_ids": [
+          "A1:93",
+          "A1:94"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "s2_insert_picking_grain"
+        },
+        "action": "camera pushes in on the hand holding a grain",
+        "held_pose": "hand holding a single rice grain near the mouth",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows the grain at the mouth; the narrator explains this teaches 'annaparabrahma'",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "event",
+            "term": "picking rice grain (शीत)",
+            "source": "A1:93"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plate (पत्रावळी)",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "rice grain (शीत)",
+            "source": "A1:93"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:93"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-6",
+        "ovi_ids": [
+          "A1:94"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "s2_push_gajanan_eating"
+        },
+        "action": "camera pushes in slowly on Gajanan seated",
+        "held_pose": "Gajanan seated calmly after picking the grain",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator's teaching about food as Brahman continues visually",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:94"
+          },
+          {
+            "kind": "pose",
+            "term": "calm seated posture",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "teaching annaparabrahma",
+            "source": "A1:94"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-7",
+        "ovi_ids": [
+          "A1:95"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "s2_face_gajanan_teaching"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Gajanan's face with gaze at nose tip, calm expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator recites the Shruti verse 'annam brahma'",
+        "camera": "slow push in with soft halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:95"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "teaching",
+            "source": "A1:95"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-8",
+        "ovi_ids": [
+          "A1:95",
+          "A1:96"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "s2_parallax_far",
+          "mid": "s2_parallax_mid",
+          "near": "s2_parallax_near",
+          "sky": "s2_parallax_sky"
+        },
+        "action": "camera pans laterally through the scene",
+        "held_pose": "wide view of Gajanan on the road with plates, house in background",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator concludes the teaching; the scene holds on the compassionate moment",
+        "camera": "lateral parallax move",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "event",
+            "term": "compassion (दयाघन)",
+            "source": "A1:96"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "s2_estab_sky",
+        "description": "sky layer for establishing shot, early morning"
+      },
+      {
+        "image_id": "s2_estab_mid",
+        "description": "mid layer: Devidas's house and road with leaf plates"
+      },
+      {
+        "image_id": "s2_estab_fx",
+        "description": "fx layer: subtle light dust"
+      },
+      {
+        "image_id": "s2_estab_fg",
+        "description": "fg layer: foreground frame elements"
+      },
+      {
+        "image_id": "s2_push_plates",
+        "description": "close view of used leaf plates on road"
+      },
+      {
+        "image_id": "s2_push_gajanan_seated",
+        "description": "Gajanan seated on road wearing worn old bandi, full body"
+      },
+      {
+        "image_id": "s2_insert_chilim_gourd",
+        "description": "close-up of hand holding unfired clay chilim, gourd beside"
+      },
+      {
+        "image_id": "s2_insert_picking_grain",
+        "description": "close-up of hand holding a single rice grain near the mouth, leaf plate visible below"
+      },
+      {
+        "image_id": "s2_push_gajanan_eating",
+        "description": "Gajanan seated calmly after picking grain, medium shot"
+      },
+      {
+        "image_id": "s2_face_gajanan_teaching",
+        "description": "close-up of Gajanan's face, gaze at nose tip, calm"
+      },
+      {
+        "image_id": "s2_parallax_sky",
+        "description": "sky layer for parallax shot"
+      },
+      {
+        "image_id": "s2_parallax_far",
+        "description": "far layer: distant house and trees"
+      },
+      {
+        "image_id": "s2_parallax_mid",
+        "description": "mid layer: Gajanan seated on road with plates"
+      },
+      {
+        "image_id": "s2_parallax_near",
+        "description": "near layer: foreground grass or road texture"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 234.3,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    {
+      "step": "validator_repair",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 38.8,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [
+    {
+      "label": "validator_repair",
+      "problems_sent": [
+        "S2-5: S2-5: action/performance describes motion the renderer cannot do ('lifts'); show it as a held pose (held_pose) or use NEED_NEW"
+      ],
+      "scope": [
+        "S2-5"
+      ],
+      "status": "USED"
+    }
+  ],
+  "final_reviews": [],
+  "plan_before_repair": {
+    "scene_id": "S2",
+    "chapter": 1,
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Show Devidas's feast preparations, the stranger Gajanan seated on the road picking leftover rice grains, and the narrator's teaching that food is Brahman.",
+    "turn": {
+      "ovi": "A1:94",
+      "text": "Gajanan picks up each rice grain he sees and puts it in his mouth to teach 'annaparabrahma'."
+    },
+    "shots": [
+      {
+        "shot_id": "S2-1",
+        "ovi_ids": [
+          "A1:84",
+          "A1:85",
+          "A1:86",
+          "A1:87"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "s2_estab_fg",
+          "fx": "s2_estab_fx",
+          "mid": "s2_estab_mid",
+          "sky": "s2_estab_sky"
+        },
+        "action": "camera dollies in over the road and house",
+        "held_pose": "wide view of Devidas's house with leaf plates scattered on the road in front",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator introduces Devidas and describes the leaf plates thrown on the road",
+        "camera": "dolly in from wide to medium-wide",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:84"
+          },
+          {
+            "kind": "person",
+            "term": "Devidas",
+            "source": "A1:85"
+          },
+          {
+            "kind": "event",
+            "term": "feast preparation for son's Ritushanti",
+            "source": "A1:86"
+          },
+          {
+            "kind": "scenery",
+            "term": "house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [
+          "STAGING: early morning light suggested by context"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-2",
+        "ovi_ids": [
+          "A1:87"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "s2_push_plates"
+        },
+        "action": "camera pushes in slowly on the leaf plates",
+        "held_pose": "close view of used leaf plates on the road",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator's words about Devidas end; the view settles on the plates",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "prop",
+            "term": "leaf plates (पत्रावळी)",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          }
+        ],
+        "staging": [],
+        "transition_out": "slide"
+      },
+      {
+        "shot_id": "S2-3",
+        "ovi_ids": [
+          "A1:88"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "s2_push_gajanan_seated"
+        },
+        "action": "camera pushes in slowly on Gajanan seated",
+        "held_pose": "Gajanan seated on the road, wearing a worn old bandi",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator describes Gajanan as a siddha yogi seated there",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          },
+          {
+            "kind": "prop",
+            "term": "bandi (old worn cloth)",
+            "source": "A1:88"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:88"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-4",
+        "ovi_ids": [
+          "A1:88",
+          "A1:89",
+          "A1:90",
+          "A1:91",
+          "A1:92"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "s2_insert_chilim_gourd"
+        },
+        "action": "camera pushes in slightly on the hand holding the chilim",
+        "held_pose": "Gajanan's hand holding a self-made unfired clay chilim, a gourd resting beside him",
+        "needs": [
+          "none"
+        ],
+        "performance": "the view shows his only possessions: the chilim and gourd",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "prop",
+            "term": "chilim (कच्ची चिलीम)",
+            "source": "A1:90"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd (भोपळा)",
+            "source": "A1:89"
+          },
+          {
+            "kind": "pose",
+            "term": "hand holding chilim",
+            "source": "A1:90"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:88"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-5",
+        "ovi_ids": [
+          "A1:93",
+          "A1:94"
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "s2_insert_picking_grain"
+        },
+        "action": "camera pushes in on the hand picking a grain",
+        "held_pose": "hand picking a single rice grain from a leaf plate",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator explains he lifts the grain to his mouth to teach 'annaparabrahma'",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "event",
+            "term": "picking rice grain (शीत)",
+            "source": "A1:93"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plate (पत्रावळी)",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "rice grain (शीत)",
+            "source": "A1:93"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:93"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-6",
+        "ovi_ids": [
+          "A1:94"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "s2_push_gajanan_eating"
+        },
+        "action": "camera pushes in slowly on Gajanan seated",
+        "held_pose": "Gajanan seated calmly after picking the grain",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator's teaching about food as Brahman continues visually",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:94"
+          },
+          {
+            "kind": "pose",
+            "term": "calm seated posture",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "teaching annaparabrahma",
+            "source": "A1:94"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-7",
+        "ovi_ids": [
+          "A1:95"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "s2_face_gajanan_teaching"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Gajanan's face with gaze at nose tip, calm expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator recites the Shruti verse 'annam brahma'",
+        "camera": "slow push in with soft halo",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:95"
+          },
+          {
+            "kind": "pose",
+            "term": "nasagra drishti",
+            "source": "A1:91"
+          },
+          {
+            "kind": "event",
+            "term": "teaching",
+            "source": "A1:95"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S2-8",
+        "ovi_ids": [
+          "A1:95",
+          "A1:96"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "s2_parallax_far",
+          "mid": "s2_parallax_mid",
+          "near": "s2_parallax_near",
+          "sky": "s2_parallax_sky"
+        },
+        "action": "camera pans laterally through the scene",
+        "held_pose": "wide view of Gajanan on the road with plates, house in background",
+        "needs": [
+          "none"
+        ],
+        "performance": "the narrator concludes the teaching; the scene holds on the compassionate moment",
+        "camera": "lateral parallax move",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:96"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "A1:87"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:87"
+          },
+          {
+            "kind": "scenery",
+            "term": "house",
+            "source": "A1:87"
+          },
+          {
+            "kind": "event",
+            "term": "compassion (दयाघन)",
+            "source": "A1:96"
+          }
+        ],
+        "staging": [],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "s2_estab_sky",
+        "description": "sky layer for establishing shot, early morning"
+      },
+      {
+        "image_id": "s2_estab_mid",
+        "description": "mid layer: Devidas's house and road with leaf plates"
+      },
+      {
+        "image_id": "s2_estab_fx",
+        "description": "fx layer: subtle light dust"
+      },
+      {
+        "image_id": "s2_estab_fg",
+        "description": "fg layer: foreground frame elements"
+      },
+      {
+        "image_id": "s2_push_plates",
+        "description": "close view of used leaf plates on road"
+      },
+      {
+        "image_id": "s2_push_gajanan_seated",
+        "description": "Gajanan seated on road wearing worn old bandi, full body"
+      },
+      {
+        "image_id": "s2_insert_chilim_gourd",
+        "description": "close-up of hand holding unfired clay chilim, gourd beside"
+      },
+      {
+        "image_id": "s2_insert_picking_grain",
+        "description": "close-up of hand picking a single rice grain from leaf plate"
+      },
+      {
+        "image_id": "s2_push_gajanan_eating",
+        "description": "Gajanan seated calmly after picking grain, medium shot"
+      },
+      {
+        "image_id": "s2_face_gajanan_teaching",
+        "description": "close-up of Gajanan's face, gaze at nose tip, calm"
+      },
+      {
+        "image_id": "s2_parallax_sky",
+        "description": "sky layer for parallax shot"
+      },
+      {
+        "image_id": "s2_parallax_far",
+        "description": "far layer: distant house and trees"
+      },
+      {
+        "image_id": "s2_parallax_mid",
+        "description": "mid layer: Gajanan seated on road with plates"
+      },
+      {
+        "image_id": "s2_parallax_near",
+        "description": "near layer: foreground grass or road texture"
+      }
+    ]
+  },
+  "status": "VALID",
+  "reviewed": false
+}

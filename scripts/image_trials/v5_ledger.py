@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import json
+import math
 import msvcrt
 import os
 import time
@@ -16,7 +17,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 PRICES = {"kimi-k3.1-pro": (2.0, 10.0)}            # USD per million tokens (input, output)
-PHASE_CAPS = {"P1": 15.0, "P2": 20.0, "P3": 15.0}  # Phases 0 and 0.5 are $0
+PHASE_CAPS = {"P1": 15.0, "P2": 20.0, "P3": 15.0, "P4": 1.0}  # Phases 0 and 0.5 are $0; P4 = Kimi director testing, $1 hard cap (owner 2026-10-26), inside the $50 total
 TOTAL_CAP = 50.0
 MARGIN = (1.10, 200)                               # counted input tokens x 1.10 + 200
 
@@ -81,13 +82,15 @@ class Ledger:
             total += e["actual"] if e["status"] == "settled" else e["reserved"]
         return total
 
-    def reserve(self, phase: str, model: str, counted_input_tokens: int, max_tokens: int) -> str:
+    def reserve(self, phase: str, model: str, counted_input_tokens: int, max_tokens: int, require_reconciled: bool = False) -> str:
         if phase not in PHASE_CAPS:
             raise Refused(f"phase {phase} has no money cap")
         if not isinstance(counted_input_tokens, int) or counted_input_tokens <= 0:
             raise Refused("input tokens were not counted")
         worst = cost(model, int(counted_input_tokens * MARGIN[0]) + MARGIN[1], max_tokens)
         with self._locked():
+            if require_reconciled and self.unreconciled():                # checked INSIDE the lock, so two runs cannot both pass it
+                raise Refused("an earlier reservation is unreconciled; reconcile it against the provider dashboard first")
             if self.committed(phase) + worst > PHASE_CAPS[phase] + 1e-9:
                 raise Refused(f"{phase} cap ${PHASE_CAPS[phase]} would be exceeded (committed ${self.committed(phase):.3f} + worst ${worst:.3f})")
             if self.committed() + worst > TOTAL_CAP + 1e-9:
@@ -98,6 +101,10 @@ class Ledger:
         return rid
 
     def settle(self, rid: str, usage: dict):
+        for k in ("prompt_tokens", "completion_tokens"):
+            v = usage.get(k) if isinstance(usage, dict) else None
+            if not isinstance(v, int) or isinstance(v, bool) or v < 0:
+                raise Refused("usage counts must be non-negative integers")             # a negative count would create budget out of thin air
         with self._locked():
             e = self._state()[rid]
             actual = cost(e["model"], int(usage["prompt_tokens"]), int(usage["completion_tokens"]))
@@ -107,3 +114,19 @@ class Ledger:
     def unknown(self, rid: str, why: str):
         with self._locked():
             self._append({"id": rid, "status": "UNKNOWN", "why": why[:80]})
+
+    def unreconciled(self) -> list:
+        """Ids of reservations that are still open or UNKNOWN: money that has not been matched to the provider's usage page."""
+        return [i for i, e in self._state().items() if e["status"] in ("open", "UNKNOWN")]
+
+    def reconcile(self, rid: str, actual_usd: float, note: str):
+        """Owner-supplied figure from the provider dashboard: turns an open/UNKNOWN reservation into a settled one."""
+        if not isinstance(actual_usd, (int, float)) or isinstance(actual_usd, bool) or not math.isfinite(actual_usd) or actual_usd < 0:
+            raise Refused("the reconciled amount must be a finite number, zero or more")
+        if len(str(note).strip()) < 5:
+            raise Refused("reconciliation needs a note saying where the figure came from (for example the dashboard date)")
+        with self._locked():
+            e = self._state().get(rid)
+            if not e or e["status"] not in ("open", "UNKNOWN"):
+                raise Refused("only an open or UNKNOWN reservation can be reconciled")
+            self._append({"id": rid, "status": "settled", "actual": float(actual_usd), "reconciled": note[:80]})

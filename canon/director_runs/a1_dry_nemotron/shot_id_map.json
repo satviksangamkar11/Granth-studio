@@ -1,0 +1,142 @@
+{
+  "S1-1": {
+    "batch": 0,
+    "schema_id": "SA"
+  },
+  "S1-2": {
+    "batch": 0,
+    "schema_id": "SB"
+  },
+  "S2-1": {
+    "batch": 0,
+    "schema_id": "SC"
+  },
+  "S2-2": {
+    "batch": 0,
+    "schema_id": "SD"
+  },
+  "S2-3": {
+    "batch": 0,
+    "schema_id": "SE"
+  },
+  "S2-4": {
+    "batch": 0,
+    "schema_id": "SF"
+  },
+  "S2-5": {
+    "batch": 0,
+    "schema_id": "SG"
+  },
+  "S2-6": {
+    "batch": 0,
+    "schema_id": "SH"
+  },
+  "S2-7": {
+    "batch": 0,
+    "schema_id": "SI"
+  },
+  "S2-8": {
+    "batch": 0,
+    "schema_id": "SJ"
+  },
+  "S4-1": {
+    "batch": 0,
+    "schema_id": "SK"
+  },
+  "S4-2": {
+    "batch": 0,
+    "schema_id": "SL"
+  },
+  "S4-3": {
+    "batch": 0,
+    "schema_id": "SM"
+  },
+  "S4-4": {
+    "batch": 0,
+    "schema_id": "SN"
+  },
+  "S4-5": {
+    "batch": 0,
+    "schema_id": "SO"
+  },
+  "S4-6": {
+    "batch": 0,
+    "schema_id": "SP"
+  },
+  "S5-1": {
+    "batch": 0,
+    "schema_id": "SQ"
+  },
+  "S5-2": {
+    "batch": 0,
+    "schema_id": "SR"
+  },
+  "S5-3": {
+    "batch": 0,
+    "schema_id": "SS"
+  },
+  "S5-4": {
+    "batch": 0,
+    "schema_id": "ST"
+  },
+  "S5-5": {
+    "batch": 0,
+    "schema_id": "SU"
+  },
+  "S5-6": {
+    "batch": 0,
+    "schema_id": "SV"
+  },
+  "S6-1": {
+    "batch": 0,
+    "schema_id": "SW"
+  },
+  "S6-2": {
+    "batch": 0,
+    "schema_id": "SX"
+  },
+  "S6-3": {
+    "batch": 0,
+    "schema_id": "SY"
+  },
+  "S6-4": {
+    "batch": 0,
+    "schema_id": "SZ"
+  },
+  "S6-5": {
+    "batch": 1,
+    "schema_id": "SA"
+  },
+  "S6-6": {
+    "batch": 1,
+    "schema_id": "SB"
+  },
+  "S8-1": {
+    "batch": 1,
+    "schema_id": "SC"
+  },
+  "S8-2": {
+    "batch": 1,
+    "schema_id": "SD"
+  },
+  "S8-3": {
+    "batch": 1,
+    "schema_id": "SE"
+  },
+  "S8-4": {
+    "batch": 1,
+    "schema_id": "SF"
+  },
+  "S8-5": {
+    "batch": 1,
+    "schema_id": "SG"
+  },
+  "S8-6": {
+    "batch": 1,
+    "schema_id": "SH"
+  },
+  "S8-7": {
+    "batch": 1,
+    "schema_id": "SI"
+  }
+}

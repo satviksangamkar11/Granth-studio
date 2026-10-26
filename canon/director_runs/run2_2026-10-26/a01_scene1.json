@@ -1,0 +1,576 @@
+{
+  "scene": 1,
+  "range": [
+    84,
+    96
+  ],
+  "result": "VALID",
+  "errors": [],
+  "warnings": [],
+  "plan": {
+    "scene_id": "S1",
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Show Gajanan Maharaj sitting among leftover leaf plates on the road, picking up rice grains to demonstrate that food is the supreme Brahman.",
+    "turn": {
+      "ovi": 93,
+      "text": "Gajanan searches the leaf plates and eats fallen rice grains to make known that food is the supreme Brahman."
+    },
+    "shots": [
+      {
+        "shot_id": "S1-1",
+        "ovi_ids": [
+          84,
+          85,
+          86,
+          87
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "sky": "neutral daytime sky above Shegaon road",
+          "mid": "road in front of Devidas's house with used leaf plates scattered",
+          "fx": "subtle atmospheric particles",
+          "fg": "foreground tree branch framing the road"
+        },
+        "action": "camera dollies forward along the road revealing used leaf plates",
+        "performance": "static environment, gentle sway of foreground branch",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 84,
+            "marathi": "त्या वेळची तुम्हां कथा । सांगतों मी ऐका आतां । एक भाविक गृहस्थ होता । नाम ज्याचें देविदास",
+            "meaning_en": "I tell the story of that time; listen now. There was a devout householder named Devidas.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 85,
+            "marathi": "हा देविदास सज्जन । पातूरकरांचा वंशज जाण । शाखा ज्यांची माध्यंदिन । मठाधिपती होता तो",
+            "meaning_en": "This Devidas is a good man, descendant of Paturkar, of the Madhyandin branch, head of a math.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 86,
+            "marathi": "त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा",
+            "meaning_en": "For one of his sons a Ritushanti rite was being performed; a feast was being prepared at his house.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 87,
+            "marathi": "उष्टया पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या",
+            "meaning_en": "Used leaf plates were thrown on the road, in front of that Brahmin Devidas's house.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: leaf plates are visibly used and scattered; no people in frame"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-2",
+        "ovi_ids": [
+          88,
+          89,
+          90
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "Gajanan sitting on the road among leaf plates, wearing an old torn bandi, a gourd vessel beside him, a raw clay chilim in hand, calm posture, subtle radiance on skin"
+        },
+        "action": "Gajanan sits calmly among the leaf plates",
+        "performance": "held seated pose, slow breathing, slight sway",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 88,
+            "marathi": "तो गजानन समर्थसिद्धयोगी । बसले होते तया जागीं । एक बंडी होती अंगीं । जुन्या पुराण्या कापडाची",
+            "meaning_en": "That Gajanan, accomplished siddha yogi, was sitting at that spot. He wore a bandi of old torn cloth.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 89,
+            "marathi": "कोणत्याहि उपाधीचें । नांव नव्हतें जवळीं साचें । पात्र पाणी प्यावयाचें । होता एक भोपळा",
+            "meaning_en": "No worldly attribute's name was near him. For drinking water he had a gourd.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 90,
+            "marathi": "कच्ची चिलीम हातांत । जी होती तयांची स्वकृत । कुंभाराच्या भट्टीप्रत । जिनें नव्हतें पाहिलें",
+            "meaning_en": "A raw clay chilim in his hand, self-made, never seen a potter's kiln.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: illustration shows a subtle radiance on Gajanan's skin as per tapobal description"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-3",
+        "ovi_ids": [
+          91,
+          92
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "close-up of Gajanan's face, eyes half-closed gazing at nose tip, calm expression, subtle radiance on skin"
+        },
+        "action": "Gajanan holds his gaze at the tip of his nose",
+        "performance": "steady nasagra drishti, calm mudra, slow breathing",
+        "camera": "slow push in with breathing",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 91,
+            "marathi": "नासाग्र दृष्टि मुद्रा शांत । तपोबल अंगीं झळकत । प्राचीच्या वालरवीवत् । वर्णन किती करावें",
+            "meaning_en": "Gaze at nose tip, calm posture. Austerity power shines on his body, like the young sun in the east. How much to describe?",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 92,
+            "marathi": "मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या",
+            "meaning_en": "The whole form is digambar. Feeling of mine and other melted away. No like or dislike remained near him.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: eyes directed downward at nose tip, calm expression; no other figures"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-4",
+        "ovi_ids": [
+          93,
+          94,
+          95,
+          96
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "Gajanan's hand picking up a single rice grain from a leaf plate and lifting it to his mouth"
+        },
+        "action": "hand lifts a rice grain to the mouth",
+        "performance": "deliberate pick-and-place motion frozen in held pose",
+        "camera": "hold on insert",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 93,
+            "marathi": "ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें",
+            "meaning_en": "That samarth's presence, sitting on the road, searching the leaf plates, only as his own play.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 94,
+            "marathi": "शीत पडल्या दृष्टीप्रत । तें मुखीं उचलुनी घालीत । हें करण्याचा हाच हेत । ’अन्नपरब्रह्म’ कळवावया",
+            "meaning_en": "Whatever grain fell into his sight, he lifted it to his mouth. This is the purpose: to make known 'food is supreme Brahman'.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 95,
+            "marathi": "कां कीं गर्जोन सांगे श्रुती । अन्न हेंच ब्रह्म निगुती । \"अन्नम् ब्रह्मेति\" ऐसी उक्ती । उपनिषदांठायीं असे",
+            "meaning_en": "For the Shruti declares: food is Brahman. 'Annam Brahma' is the Upanishadic statement.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 96,
+            "marathi": "त्याची पटवावया खण । शितें वेंचती दयाघन । त्याचा सामान्य जनांलागून । भावार्थ तो कळला नसे",
+            "meaning_en": "To make that known, the cloud of compassion picks the rice grains. The common people did not grasp its meaning.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: leaf plate visible in background of insert; hand pose shows deliberate calm action"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "S1_sky",
+        "description": "neutral daytime sky above Shegaon road, flat colour",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_mid_road_plates",
+        "description": "road in front of Devidas's house with used leaf plates scattered, flat colour",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_fx_particles",
+        "description": "subtle atmospheric particles, transparent layer",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_fg_branch",
+        "description": "foreground tree branch framing the road, flat colour",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_gajanan_full",
+        "description": "Gajanan sitting on the road among leaf plates, wearing old torn bandi, gourd vessel beside him, raw clay chilim in hand, calm posture, subtle radiance on skin, full body, transparent background",
+        "used_in": [
+          "S1-2"
+        ]
+      },
+      {
+        "image_id": "S1_gajanan_face",
+        "description": "close-up of Gajanan's face, eyes half-closed gazing at nose tip, calm expression, subtle radiance on skin, transparent background",
+        "used_in": [
+          "S1-3"
+        ]
+      },
+      {
+        "image_id": "S1_hand_rice",
+        "description": "Gajanan's hand picking up a single rice grain from a leaf plate and lifting it to his mouth, full-frame close-up, transparent background",
+        "used_in": [
+          "S1-4"
+        ]
+      }
+    ]
+  },
+  "calls": [
+    {
+      "attempt": 1,
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 72.9,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "verdict": "OK",
+      "problems": [],
+      "call": {
+        "model": "openai/gpt-oss-20b",
+        "status": 200,
+        "wall_s": 92.7,
+        "streamed": true,
+        "finish": "stop",
+        "usage": {
+          "prompt_tokens": 12074,
+          "completion_tokens": 2610,
+          "total_tokens": 14684
+        }
+      }
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "verdict": "ISSUES",
+      "problems": [
+        {
+          "shot_id": "S1-1",
+          "kind": "unsupported_fact",
+          "problem": "The assets specify a 'clear daytime sky' and 'subtle dust motes in the light', but the brief states that weather and light are not stated in this scene (the only light image in the ovis is the ovi 91 simile for Gajanan himself).",
+          "fix": "Use a neutral daytime sky (daytime itself is supported by the continuity running to noon at ovi 118/123) and drop the light-specific dust-mote fx or make it non-light-specific."
+        },
+        {
+          "shot_id": "S1-4",
+          "kind": "wrong_quote",
+          "problem": "The meaning_en for ovi 96 says 'the cloud of compassion smiled', but the ovi reads 'शितें वेंचती दयाघन' (the cloud of compassion picks the rice grains), and laughter is stated only at ovi 127 in a later scene.",
+          "fix": "Correct the gloss to 'to make that known, the cloud of compassion picks the grains of rice; the common people did not grasp its meaning'."
+        },
+        {
+          "shot_id": "S1-4",
+          "kind": "invented_detail",
+          "problem": "The staging note 'hand pose shows gentle reverence' attributes a feeling the materials do not state; ovi 93 frames the searching as his own play (केवळ निजलीलेनें) and ovi 96 as compassion (दयाघन).",
+          "fix": "Describe the pose neutrally as deliberate and calm, or key it to the stated play/compassion instead of reverence."
+        }
+      ],
+      "call": {
+        "model": "z-ai/glm-5.3-flash",
+        "status": 200,
+        "wall_s": 277.0,
+        "streamed": true,
+        "finish": "stop",
+        "usage": null
+      }
+    }
+  ],
+  "repair": {
+    "status": "USED",
+    "call": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 34.5,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    },
+    "problems_sent": [
+      "[glm-5.3-flash] S1-1 unsupported_fact: The assets specify a 'clear daytime sky' and 'subtle dust motes in the light', but the brief states that weather and light are not stated in this scene (the only light image in the ovis is the ovi 91 simile for Gajanan himself). Fix: Use a neutral daytime sky (daytime itself is supported by the continuity running to noon at ovi 118/123) and drop the light-specific dust-mote fx or make it non-light-specific.",
+      "[glm-5.3-flash] S1-4 wrong_quote: The meaning_en for ovi 96 says 'the cloud of compassion smiled', but the ovi reads 'शितें वेंचती दयाघन' (the cloud of compassion picks the rice grains), and laughter is stated only at ovi 127 in a later scene. Fix: Correct the gloss to 'to make that known, the cloud of compassion picks the grains of rice; the common people did not grasp its meaning'.",
+      "[glm-5.3-flash] S1-4 invented_detail: The staging note 'hand pose shows gentle reverence' attributes a feeling the materials do not state; ovi 93 frames the searching as his own play (केवळ निजलीलेनें) and ovi 96 as compassion (दयाघन). Fix: Describe the pose neutrally as deliberate and calm, or key it to the stated play/compassion instead of reverence."
+    ]
+  },
+  "plan_before_repair": {
+    "scene_id": "S1",
+    "ovi_range": [
+      84,
+      96
+    ],
+    "goal": "Show Gajanan Maharaj sitting among leftover leaf plates on the road, picking up rice grains to demonstrate that food is the supreme Brahman.",
+    "turn": {
+      "ovi": 93,
+      "text": "Gajanan searches the leaf plates and eats fallen rice grains to make known that food is the supreme Brahman."
+    },
+    "shots": [
+      {
+        "shot_id": "S1-1",
+        "ovi_ids": [
+          84,
+          85,
+          86,
+          87
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "sky": "clear daytime sky above Shegaon road",
+          "mid": "road in front of Devidas's house with used leaf plates scattered",
+          "fx": "subtle dust motes in the light",
+          "fg": "foreground tree branch framing the road"
+        },
+        "action": "camera dollies forward along the road revealing used leaf plates",
+        "performance": "static environment, gentle sway of foreground branch",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 84,
+            "marathi": "त्या वेळची तुम्हां कथा । सांगतों मी ऐका आतां । एक भाविक गृहस्थ होता । नाम ज्याचें देविदास",
+            "meaning_en": "I tell the story of that time; listen now. There was a devout householder named Devidas.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 85,
+            "marathi": "हा देविदास सज्जन । पातूरकरांचा वंशज जाण । शाखा ज्यांची माध्यंदिन । मठाधिपती होता तो",
+            "meaning_en": "This Devidas is a good man, descendant of Paturkar, of the Madhyandin branch, head of a math.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 86,
+            "marathi": "त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा",
+            "meaning_en": "For one of his sons a Ritushanti rite was being performed; a feast was being prepared at his house.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 87,
+            "marathi": "उष्टया पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या",
+            "meaning_en": "Used leaf plates were thrown on the road, in front of that Brahmin Devidas's house.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: leaf plates are visibly used and scattered; no people in frame"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-2",
+        "ovi_ids": [
+          88,
+          89,
+          90
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "Gajanan sitting on the road among leaf plates, wearing an old torn bandi, a gourd vessel beside him, a raw clay chilim in hand, calm posture, subtle radiance on skin"
+        },
+        "action": "Gajanan sits calmly among the leaf plates",
+        "performance": "held seated pose, slow breathing, slight sway",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 88,
+            "marathi": "तो गजानन समर्थसिद्धयोगी । बसले होते तया जागीं । एक बंडी होती अंगीं । जुन्या पुराण्या कापडाची",
+            "meaning_en": "That Gajanan, accomplished siddha yogi, was sitting at that spot. He wore a bandi of old torn cloth.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 89,
+            "marathi": "कोणत्याहि उपाधीचें । नांव नव्हतें जवळीं साचें । पात्र पाणी प्यावयाचें । होता एक भोपळा",
+            "meaning_en": "No worldly attribute's name was near him. For drinking water he had a gourd.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 90,
+            "marathi": "कच्ची चिलीम हातांत । जी होती तयांची स्वकृत । कुंभाराच्या भट्टीप्रत । जिनें नव्हतें पाहिलें",
+            "meaning_en": "A raw clay chilim in his hand, self-made, never seen a potter's kiln.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: illustration shows a subtle radiance on Gajanan's skin as per tapobal description"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-3",
+        "ovi_ids": [
+          91,
+          92
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "close-up of Gajanan's face, eyes half-closed gazing at nose tip, calm expression, subtle radiance on skin"
+        },
+        "action": "Gajanan holds his gaze at the tip of his nose",
+        "performance": "steady nasagra drishti, calm mudra, slow breathing",
+        "camera": "slow push in with breathing",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 91,
+            "marathi": "नासाग्र दृष्टि मुद्रा शांत । तपोबल अंगीं झळकत । प्राचीच्या वालरवीवत् । वर्णन किती करावें",
+            "meaning_en": "Gaze at nose tip, calm posture. Austerity power shines on his body, like the young sun in the east. How much to describe?",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 92,
+            "marathi": "मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या",
+            "meaning_en": "The whole form is digambar. Feeling of mine and other melted away. No like or dislike remained near him.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: eyes directed downward at nose tip, calm expression; no other figures"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S1-4",
+        "ovi_ids": [
+          93,
+          94,
+          95,
+          96
+        ],
+        "preset": "10_object_hand_insert",
+        "assets": {
+          "insert": "Gajanan's hand picking up a single rice grain from a leaf plate and lifting it to his mouth"
+        },
+        "action": "hand lifts a rice grain to the mouth",
+        "performance": "deliberate pick-and-place motion frozen in held pose",
+        "camera": "hold on insert",
+        "dialogue": [
+          {
+            "speaker": "narrator",
+            "ovi": 93,
+            "marathi": "ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें",
+            "meaning_en": "That samarth's presence, sitting on the road, searching the leaf plates, only as his own play.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 94,
+            "marathi": "शीत पडल्या दृष्टीप्रत । तें मुखीं उचलुनी घालीत । हें करण्याचा हाच हेत । ’अन्नपरब्रह्म’ कळवावया",
+            "meaning_en": "Whatever grain fell into his sight, he lifted it to his mouth. This is the purpose: to make known 'food is supreme Brahman'.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 95,
+            "marathi": "कां कीं गर्जोन सांगे श्रुती । अन्न हेंच ब्रह्म निगुती । \"अन्नम् ब्रह्मेति\" ऐसी उक्ती । उपनिषदांठायीं असे",
+            "meaning_en": "For the Shruti declares: food is Brahman. 'Annam Brahma' is the Upanishadic statement.",
+            "paraphrase": false
+          },
+          {
+            "speaker": "narrator",
+            "ovi": 96,
+            "marathi": "त्याची पटवावया खण । शितें वेंचती दयाघन । त्याचा सामान्य जनांलागून । भावार्थ तो कळला नसे",
+            "meaning_en": "To make that known, the cloud of compassion smiled. The common people did not grasp its meaning.",
+            "paraphrase": false
+          }
+        ],
+        "staging": [
+          "STAGING: leaf plate visible in background of insert; hand pose shows gentle reverence"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "S1_sky",
+        "description": "clear daytime sky above Shegaon road, flat colour",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_mid_road_plates",
+        "description": "road in front of Devidas's house with used leaf plates scattered, flat colour",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_fx_dust",
+        "description": "subtle dust motes in light, transparent layer",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_fg_branch",
+        "description": "foreground tree branch framing the road, flat colour",
+        "used_in": [
+          "S1-1"
+        ]
+      },
+      {
+        "image_id": "S1_gajanan_full",
+        "description": "Gajanan sitting on the road among leaf plates, wearing old torn bandi, gourd vessel beside him, raw clay chilim in hand, calm posture, subtle radiance on skin, full body, transparent background",
+        "used_in": [
+          "S1-2"
+        ]
+      },
+      {
+        "image_id": "S1_gajanan_face",
+        "description": "close-up of Gajanan's face, eyes half-closed gazing at nose tip, calm expression, subtle radiance on skin, transparent background",
+        "used_in": [
+          "S1-3"
+        ]
+      },
+      {
+        "image_id": "S1_hand_rice",
+        "description": "Gajanan's hand picking up a single rice grain from a leaf plate and lifting it to his mouth, full-frame close-up, transparent background",
+        "used_in": [
+          "S1-4"
+        ]
+      }
+    ]
+  }
+}

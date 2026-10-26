@@ -1,0 +1,1 @@
+All seven MAJOR findings are addressed at the draft level: layer/zoom limits, amendment scope, reproducible reuse, limb/shadow constraints, workload/framing, captions/licensing, and the 15-second acceptance gate. No remaining BLOCKER or MAJOR in this narrow re-check. The draft is ready for the owner’s decisions; implementation and proof renders remain pending.

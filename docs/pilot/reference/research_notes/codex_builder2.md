@@ -1,0 +1,2 @@
+SAFE TO EXECUTE — only engine replacement and integer frames coercion/reuse, including visibility comparison; prior SAFE verdict holds.
+SHA-256 (LF-normalised UTF-8): 4747f2fe47660410fb6a3bc1da52104c021e10aa22fa3546b1389f53941234e2 — MATCH.

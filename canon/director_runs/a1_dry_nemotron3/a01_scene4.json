@@ -1,0 +1,452 @@
+{
+  "scene": 4,
+  "chapter": 1,
+  "range": [
+    108,
+    112
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S4-1: STAGING light 'daylight' needs the owner's approval",
+    "S4-4: STAGING light 'daylight' needs the owner's approval"
+  ],
+  "plan": {
+    "scene_id": "S4",
+    "chapter": 1,
+    "ovi_range": [
+      108,
+      112
+    ],
+    "goal": "Show Bankatlal's humble inquiry, Gajanan's silent absorption, and the visitors' silent bow.",
+    "turn": {
+      "ovi": "A1:112",
+      "text": "The two visitors bow silently to the radiant yogi and find inner satisfaction."
+    },
+    "shots": [
+      {
+        "shot_id": "S4-1",
+        "ovi_ids": [
+          "A1:108"
+        ],
+        "preset": "01_establishing_shot",
+        "assets": {
+          "fg": "fg_frame",
+          "fx": "fx_glow",
+          "mid": "mid_scene",
+          "sky": "sky_bg"
+        },
+        "action": "camera dollies in from wide to medium",
+        "held_pose": "wide view of road with leaf plates, Gajanan seated, Bankatlal stepping forward",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows the setting and Bankatlal's humble approach",
+        "camera": "dolly in 1.0 to 1.28",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:108"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:108"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "old bandi",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "gourd vessel",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "unfired clay chilim",
+            "source": "PACKET"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm",
+            "source": "A1:111"
+          },
+          {
+            "kind": "camera",
+            "term": "dolly in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: daylight ambient light",
+          "STAGING: sky layer for establishing shot"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-2",
+        "ovi_ids": [
+          "A1:109"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_facing",
+          "right": "gajanan_facing"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Bankatlal standing with hands folded, Gajanan seated calm",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal speaks the question, Gajanan listens silently",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:109",
+            "marathi": "ह्या पत्रावळीच्या शोधना । कां हो करितां कळेना । क्षुधा असेल आपणां । तरी तरतूद करुं अन्नाची",
+            "meaning_en": "Why do you search these plates? If you are hungry, we will arrange food."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:109"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:109"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "A1:109"
+          },
+          {
+            "kind": "pose",
+            "term": "standing humble",
+            "source": "A1:108"
+          },
+          {
+            "kind": "pose",
+            "term": "seated calm",
+            "source": "A1:111"
+          },
+          {
+            "kind": "camera",
+            "term": "drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft focus on faces"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-3",
+        "ovi_ids": [
+          "A1:110"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "gajanan_looking_up"
+        },
+        "action": "camera pushes in slowly on Gajanan's face",
+        "held_pose": "Gajanan seated, gaze lifted toward the two visitors",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows his steady gaze and absorbed attention",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:110"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:110"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "steady gaze",
+            "source": "A1:111"
+          },
+          {
+            "kind": "pose",
+            "term": "attention between eyebrows",
+            "source": "A1:111"
+          },
+          {
+            "kind": "camera",
+            "term": "push",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: subtle halo around head to suggest radiance"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-4",
+        "ovi_ids": [
+          "A1:111"
+        ],
+        "preset": "02_environmental_parallax",
+        "assets": {
+          "far": "far_road",
+          "mid": "mid_plates",
+          "near": "near_bankatlal",
+          "sky": "sky_bg"
+        },
+        "action": "camera pans laterally through depth layers",
+        "held_pose": "road with plates, Gajanan seated, Bankatlal nearby",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows the environment and the figures in place",
+        "camera": "lateral pan with parallax",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "prop",
+            "term": "leaf plates",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:111"
+          },
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:108"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "light",
+            "term": "daylight",
+            "source": "STAGING"
+          },
+          {
+            "kind": "camera",
+            "term": "parallax",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: midday sun angle"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-5",
+        "ovi_ids": [
+          "A1:112"
+        ],
+        "preset": "05_bowing_prayer",
+        "assets": {
+          "pose": "both_bowing"
+        },
+        "action": "camera tilts down onto the bowing figures",
+        "held_pose": "Bankatlal and Damodarpant bowing silently before Gajanan",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose shows silent namaskar and inner satisfaction",
+        "camera": "tilt down 1.12 to 1.26",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:112"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:112"
+          },
+          {
+            "kind": "pose",
+            "term": "bowing",
+            "source": "A1:112"
+          },
+          {
+            "kind": "event",
+            "term": "silent namaskar",
+            "source": "A1:112"
+          },
+          {
+            "kind": "camera",
+            "term": "tilt",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo around Gajanan"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S4-6",
+        "ovi_ids": [
+          "A1:112"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "both_bowing"
+        },
+        "action": "camera pushes in slowly on the bowing figures",
+        "held_pose": "both visitors remain bowed in silence",
+        "needs": [
+          "none"
+        ],
+        "performance": "the held pose sustains the silent reverence",
+        "camera": "slow push in 1.0 to 1.2",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal Agarwal",
+            "source": "A1:112"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant Kulkarni",
+            "source": "PACKET"
+          },
+          {
+            "kind": "person",
+            "term": "Shri Gajanan Maharaj",
+            "source": "A1:112"
+          },
+          {
+            "kind": "pose",
+            "term": "bowed",
+            "source": "A1:112"
+          },
+          {
+            "kind": "camera",
+            "term": "push",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: lingering silence"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "sky_bg",
+        "description": "clear sky background for establishing and parallax shots"
+      },
+      {
+        "image_id": "mid_scene",
+        "description": "mid layer: road with leaf plates, Gajanan seated in old bandi, Bankatlal stepping forward"
+      },
+      {
+        "image_id": "fx_glow",
+        "description": "fx layer: subtle glow around Gajanan to suggest radiance"
+      },
+      {
+        "image_id": "fg_frame",
+        "description": "foreground frame: faint foliage edge for depth"
+      },
+      {
+        "image_id": "bankatlal_facing",
+        "description": "Bankatlal standing, hands folded, facing Gajanan, transparent"
+      },
+      {
+        "image_id": "gajanan_facing",
+        "description": "Gajanan seated calm, facing Bankatlal, transparent"
+      },
+      {
+        "image_id": "gajanan_looking_up",
+        "description": "Gajanan seated, gaze lifted toward two visitors, steady gaze"
+      },
+      {
+        "image_id": "far_road",
+        "description": "far layer: road stretching into distance"
+      },
+      {
+        "image_id": "mid_plates",
+        "description": "mid layer: leaf plates scattered on road"
+      },
+      {
+        "image_id": "near_bankatlal",
+        "description": "near layer: Bankatlal standing near plates"
+      },
+      {
+        "image_id": "both_bowing",
+        "description": "both visitors bowing silently before Gajanan, Gajanan seated radiant"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 159.6,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": [],
+  "status": "VALID",
+  "reviewed": false
+}

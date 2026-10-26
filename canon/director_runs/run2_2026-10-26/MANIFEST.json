@@ -1,0 +1,12 @@
+{
+  "run": "run2",
+  "preserved": "2026-10-26",
+  "note": "Run #2 outputs copied before any rerun overwrites canon/director_test/. VALID means structurally valid only.",
+  "files": {
+    "REVIEW.md": "8dd13c2d6be16be67b0d1623a4bc70bf475cf98131b7a299369e69c8bc28ff42",
+    "a01_scene1.json": "d686468f95eb5420e6eb3ac675d446567edbbae05158fc3c265f32f0a4d33484",
+    "a01_scene4.json": "3168866986e50b6e107285aa8afd397a97877148b13af7eb65c087a55697462b",
+    "a01_scene6.json": "d8f35fac67e98a721b5b51e8c233a3472193954f66b9706c12f3ed3b92de4144",
+    "receipt.json": "3a23e11b5bcdc841399e6c4ed1475e308212b0e2452b47f99ed75c41a2aac100"
+  }
+}

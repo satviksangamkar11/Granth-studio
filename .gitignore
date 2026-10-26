@@ -79,3 +79,7 @@ __pycache__/
 !docs/evidence/pilot_video/code_motion_v1/pilot_code_motion_preview.mp4
 !docs/evidence/pilot_video/code_motion_v1/frames_strip.png
 !docs/evidence/pilot_video/parallax_v2/pilot_parallax_preview.mp4
+
+# Lock files held while a process works (never committed)
+canon/film_manifest.lock
+canon/director_runs/*/run.lock

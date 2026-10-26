@@ -1,0 +1,343 @@
+{
+  "scene": 6,
+  "chapter": 1,
+  "range": [
+    119,
+    122
+  ],
+  "result": "UNREVIEWED",
+  "errors": [],
+  "warnings": [
+    "S6-6: preset 03_slow_cinematic_push used 3 times in a row"
+  ],
+  "plan": {
+    "scene_id": "S6",
+    "chapter": 1,
+    "ovi_range": [
+      119,
+      122
+    ],
+    "goal": "Bankatlal admits calling Gajanan mad was a mistake, compares him to Arjuna for Subhadra, declares no further test needed, and praises Shegaon as blessed by Hari.",
+    "turn": {
+      "ovi": "A1:119",
+      "text": "Bankatlal declares the 'mad' verdict a mistake and says no more testing is needed."
+    },
+    "shots": [
+      {
+        "shot_id": "S6-1",
+        "ovi_ids": [
+          "A1:119"
+        ],
+        "preset": "09_dialogue_composition",
+        "assets": {
+          "left": "bankatlal_left",
+          "right": "damodarpant_right"
+        },
+        "action": "camera drifts gently across the two figures",
+        "held_pose": "Bankatlal and Damodarpant face each other, Bankatlal speaking",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal speaks, Damodarpant listens",
+        "camera": "gentle drift left to right",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:119",
+            "marathi": "ह्या वेडा म्हणालों आपण । ती निःसंशय झाली चुकी",
+            "meaning_en": "Calling him mad was surely our mistake."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:119"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant",
+            "source": "A1:119"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal speaking",
+            "source": "A1:119"
+          },
+          {
+            "kind": "pose",
+            "term": "Damodarpant listening",
+            "source": "A1:119"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "camera",
+            "term": "gentle drift",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: place figures on road with Devidas house door in background"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-2",
+        "ovi_ids": [
+          "A1:120"
+        ],
+        "preset": "07_character_reaction",
+        "assets": {
+          "face": "bankatlal_face_closeup"
+        },
+        "action": "camera pushes in slowly on Bankatlal's face",
+        "held_pose": "Bankatlal close-up, calm expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal continues speaking",
+        "camera": "slow push in",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:120",
+            "marathi": "सुभद्रेसाठीं द्वारकेला । अर्जुन ऐसाच वेडा झाला",
+            "meaning_en": "Like Arjuna went mad for Subhadra."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:120"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal close-up speaking",
+            "source": "A1:120"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: close-up framing on Bankatlal face"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-3",
+        "ovi_ids": [
+          "A1:121"
+        ],
+        "preset": "08_emotional_closeup",
+        "assets": {
+          "face": "bankatlal_face_emotional"
+        },
+        "action": "camera pushes in slowly with soft halo on Bankatlal's face",
+        "held_pose": "Bankatlal close-up, earnest expression",
+        "needs": [
+          "none"
+        ],
+        "performance": "Bankatlal finishes his argument",
+        "camera": "slow push in with halo",
+        "dialogue": [
+          {
+            "speaker": "Bankatlal Agarwal",
+            "ovi": "A1:121",
+            "marathi": "तैसाच हा ज्ञानजेठी । मुक्तिरुप सुभद्रेसाठीं । वेडा झाला कसवटी । याची आतां घेणें नको",
+            "meaning_en": "Similarly this great knower became mad for liberation in the form of Subhadra; no need to test him now."
+          }
+        ],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:121"
+          },
+          {
+            "kind": "pose",
+            "term": "Bankatlal close-up earnest",
+            "source": "A1:121"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push with halo",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: soft halo effect for emotional beat"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-4",
+        "ovi_ids": [
+          "A1:121"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "both_figures_wide"
+        },
+        "action": "camera pushes in slowly on the two figures",
+        "held_pose": "Bankatlal and Damodarpant stand on road, silent",
+        "needs": [
+          "none"
+        ],
+        "performance": "Silent pause as narration continues",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "person",
+            "term": "Bankatlal",
+            "source": "A1:121"
+          },
+          {
+            "kind": "person",
+            "term": "Damodarpant",
+            "source": "A1:121"
+          },
+          {
+            "kind": "scenery",
+            "term": "road",
+            "source": "PACKET"
+          },
+          {
+            "kind": "pose",
+            "term": "both standing",
+            "source": "A1:121"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: hold wide two-shot on road"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-5",
+        "ovi_ids": [
+          "A1:122"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "shegaon_landscape"
+        },
+        "action": "camera pushes in slowly on Shegaon village",
+        "held_pose": "Wide view of Shegaon village",
+        "needs": [
+          "none"
+        ],
+        "performance": "Narrator praises Shegaon",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "Shegaon village",
+            "source": "A1:122"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: establish Shegaon village landscape"
+        ],
+        "transition_out": "cut"
+      },
+      {
+        "shot_id": "S6-6",
+        "ovi_ids": [
+          "A1:122"
+        ],
+        "preset": "03_slow_cinematic_push",
+        "assets": {
+          "img": "shegaon_landscape"
+        },
+        "action": "camera continues slow push on Shegaon village",
+        "held_pose": "Shegaon village landscape held",
+        "needs": [
+          "none"
+        ],
+        "performance": "Silent reflection",
+        "camera": "slow push in",
+        "dialogue": [],
+        "claims": [
+          {
+            "kind": "scenery",
+            "term": "Shegaon village",
+            "source": "A1:122"
+          },
+          {
+            "kind": "camera",
+            "term": "slow push in",
+            "source": "STAGING"
+          }
+        ],
+        "staging": [
+          "STAGING: continue Shegaon village landscape"
+        ],
+        "transition_out": "cut"
+      }
+    ],
+    "images_needed": [
+      {
+        "image_id": "bankatlal_left",
+        "description": "Bankatlal standing, facing right, transparent pose for dialogue composition"
+      },
+      {
+        "image_id": "damodarpant_right",
+        "description": "Damodarpant standing, facing left, transparent pose for dialogue composition"
+      },
+      {
+        "image_id": "bankatlal_face_closeup",
+        "description": "Close-up of Bankatlal's face, calm expression, transparent"
+      },
+      {
+        "image_id": "bankatlal_face_emotional",
+        "description": "Close-up of Bankatlal's face, earnest expression, transparent"
+      },
+      {
+        "image_id": "both_figures_wide",
+        "description": "Wide shot of Bankatlal and Damodarpant standing on road, silent"
+      },
+      {
+        "image_id": "shegaon_landscape",
+        "description": "Landscape of Shegaon village, establishing shot"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "step": "generate",
+      "agent": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "status": 200,
+      "wall_s": 184.5,
+      "streamed": true,
+      "finish": "stop",
+      "usage": null
+    }
+  ],
+  "reviews": [],
+  "repairs": [],
+  "final_reviews": [],
+  "status": "VALID",
+  "reviewed": false
+}
