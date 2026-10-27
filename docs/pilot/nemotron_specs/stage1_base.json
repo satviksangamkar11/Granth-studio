@@ -1,0 +1,355 @@
+{
+ "docs": {
+  "story_map": {
+   "adhyay": 1,
+   "ovi_types": [
+    {
+     "ovi": 1,
+     "type": "STORY"
+    },
+    {
+     "ovi": 2,
+     "type": "STORY"
+    },
+    {
+     "ovi": 3,
+     "type": "STORY"
+    },
+    {
+     "ovi": 4,
+     "type": "STORY"
+    },
+    {
+     "ovi": 5,
+     "type": "STORY"
+    },
+    {
+     "ovi": 6,
+     "type": "TEACHING"
+    },
+    {
+     "ovi": 7,
+     "type": "TEACHING"
+    },
+    {
+     "ovi": 8,
+     "type": "TEACHING"
+    },
+    {
+     "ovi": 9,
+     "type": "TEACHING"
+    }
+   ],
+   "events": [
+    {
+     "event_id": "E1",
+     "title": "Arrival",
+     "ovi_range": [
+      1,
+      5
+     ],
+     "key_ovis": [
+      3
+     ],
+     "kind": "story",
+     "closure": "RESOLVED_IN_ADHYAY"
+    },
+    {
+     "event_id": "E2",
+     "title": "Teaching",
+     "ovi_range": [
+      6,
+      9
+     ],
+     "key_ovis": [
+      7
+     ],
+     "kind": "discourse",
+     "closure": "NA"
+    }
+   ]
+  },
+  "coverage": {
+   "adhyay": 1,
+   "ovis": [
+    {
+     "ovi": 1,
+     "disposition": "VISUALISED"
+    },
+    {
+     "ovi": 2,
+     "disposition": "VISUALISED"
+    },
+    {
+     "ovi": 3,
+     "disposition": "NARRATED"
+    },
+    {
+     "ovi": 4,
+     "disposition": "QUOTED"
+    },
+    {
+     "ovi": 5,
+     "disposition": "MERGED_EQUIVALENT",
+     "reason": "same meaning as the line",
+     "covered_by": "S1-L2"
+    },
+    {
+     "ovi": 6,
+     "disposition": "NARRATED"
+    },
+    {
+     "ovi": 7,
+     "disposition": "NARRATED"
+    },
+    {
+     "ovi": 8,
+     "disposition": "NARRATED"
+    },
+    {
+     "ovi": 9,
+     "disposition": "NARRATED"
+    }
+   ]
+  },
+  "scenes": {
+   "adhyay": 1,
+   "scenes": [
+    {
+     "scene_id": "S1",
+     "section_kind": "story",
+     "ovi_range": [
+      1,
+      5
+     ],
+     "goal": "arrival",
+     "turn": {
+      "ovi": 3,
+      "text": "he sits"
+     },
+     "line_ids": [
+      "S1-L1",
+      "S1-L2"
+     ]
+    },
+    {
+     "scene_id": "S2",
+     "section_kind": "discourse",
+     "ovi_range": [
+      6,
+      9
+     ],
+     "goal": "teaching",
+     "turn": {
+      "ovi": 7,
+      "text": "the saying"
+     },
+     "line_ids": [
+      "S2-L1"
+     ],
+     "teaching_treatment": "narration_over_typography"
+    }
+   ]
+  },
+  "shots": {
+   "adhyay": 1,
+   "shots": [
+    {
+     "shot_id": "S1-1",
+     "scene_id": "S1",
+     "ovi_ids": [
+      1,
+      2
+     ],
+     "beat_line_ids": [
+      "S1-L1"
+     ],
+     "preset": "01_establishing_shot",
+     "need_new": null,
+     "needs_cutout": false,
+     "pose": "standing",
+     "framing": "wide"
+    },
+    {
+     "shot_id": "S1-2",
+     "scene_id": "S1",
+     "ovi_ids": [
+      3
+     ],
+     "beat_line_ids": [
+      "S1-L2"
+     ],
+     "preset": "03_slow_cinematic_push",
+     "need_new": null,
+     "needs_cutout": false,
+     "pose": "seated",
+     "framing": "medium"
+    },
+    {
+     "shot_id": "S2-1",
+     "scene_id": "S2",
+     "ovi_ids": [
+      6,
+      7
+     ],
+     "beat_line_ids": [
+      "S2-L1"
+     ],
+     "preset": "03_slow_cinematic_push",
+     "need_new": null,
+     "needs_cutout": false,
+     "pose": "seated",
+     "framing": "close"
+    }
+   ]
+  },
+  "briefs": {
+   "adhyay": 1,
+   "images": [
+    {
+     "image_id": "s1_maharaj_seated",
+     "scene_id": "S1",
+     "shot_ids": [
+      "S1-2"
+     ],
+     "people": [
+      {
+       "name": "Maharaj",
+       "position": "centre",
+       "pose": "seated",
+       "gaze": "forward"
+      }
+     ],
+     "place_id": "roadside",
+     "prop": null,
+     "prop_state": null,
+     "camera": "medium, eye level",
+     "light": "morning",
+     "reason_new": "new pose",
+     "on_screen_facts": [
+      "Maharaj sits by the road"
+     ],
+     "references": {
+      "characters": [
+       "gajanan_maharaj"
+      ],
+      "place": "roadside",
+      "style_anchor": "ref_temple",
+      "prop": null
+     }
+    }
+   ]
+  },
+  "looks": {
+   "adhyay": 1,
+   "entries": [
+    {
+     "entity_id": "gajanan_maharaj",
+     "kind": "character",
+     "state_id": "adult_youth_v2",
+     "look": "slim adult, cropped hair, open frayed grey-white vest",
+     "source_ovis": [
+      1
+     ],
+     "basis": "stated"
+    },
+    {
+     "entity_id": "bankatlal",
+     "kind": "character",
+     "state_id": "merchant_v1",
+     "look": "cream turban, sage coat",
+     "source_ovis": [
+      2
+     ],
+     "basis": "inferred"
+    }
+   ]
+  },
+  "voices": {
+   "adhyay": 1,
+   "cast": [
+    {
+     "character_id": "narrator",
+     "voice_key": "narrator",
+     "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+     "gender": "male",
+     "status": "RECURRING"
+    },
+    {
+     "character_id": "gajanan_maharaj",
+     "voice_key": "gajanan",
+     "voice_id": "8fqGzH80bdkm2UseeV9f",
+     "gender": "male",
+     "status": "RECURRING"
+    }
+   ]
+  },
+  "sounds": {
+   "adhyay": 1,
+   "cues": [
+    {
+     "scene_id": "S1",
+     "anchor_line_id": "S1-L1",
+     "sound_id": "bed_roadside_quiet",
+     "kind": "bed",
+     "purpose": "location bed",
+     "basis": "staging"
+    }
+   ]
+  },
+  "questions": {
+   "adhyay": 1,
+   "questions": [
+    {
+     "id": "Q1",
+     "text": "Which hand holds the gourd?",
+     "scene_id": "S1"
+    }
+   ]
+  }
+ },
+ "ctx": {
+  "script_line_ids": [
+   "S1-L1",
+   "S1-L2",
+   "S2-L1"
+  ],
+  "core_line_ids": [
+   "S1-L1",
+   "S2-L1"
+  ],
+  "chapter_ovis": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "unfilmed_ovis": [],
+  "preset_ids": [
+   "01_establishing_shot",
+   "03_slow_cinematic_push"
+  ],
+  "sound_ids": [
+   "bed_roadside_quiet",
+   "fx_door_wood_creak"
+  ],
+  "saved_voices": {
+   "narrator": "CXkeo30p0Sk4Lr0TAzeo",
+   "gajanan": "8fqGzH80bdkm2UseeV9f"
+  },
+  "speaking_characters": [
+   "narrator",
+   "gajanan_maharaj"
+  ],
+  "known_states": {
+   "gajanan_maharaj": [
+    "adult_youth_v1"
+   ]
+  }
+ }
+}

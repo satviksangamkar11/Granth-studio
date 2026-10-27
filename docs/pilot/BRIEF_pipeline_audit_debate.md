@@ -1,0 +1,21 @@
+# Brief: audit the local project and argue the final GranthStudio pipeline (read-only; two reviewers argue opposite sides)
+
+## Owner's position (2026-10-26) that you must test
+"We must FIX the pipeline NOW; we cannot keep generating again and again." Specifically:
+1. Audit the local folders properly (what exists, what is stale, duplicated, inconsistent, risky, wasting disk (D: has ~13 GB free), what the pipeline can reuse).
+2. **Presets and Blender:** the renderer is built from reusable PRESETS (JSON presets in `assets/v5_presets/`, 11 today; Builder v2 frozen by D-017). The owner expects a preset LIBRARY that grows: when the director cannot do a shot with the existing presets (it returns NEED_NEW), a new preset is authored ONCE, tested, added, and then reused everywhere. Blender (portable at `D:\tools\blender`) executes the renderer code. Who authors new presets and the code (D-017 says no model writes animation/Blender code; the owner's memory notes said Kimi writes animation) is a rule you must check in `docs/DECISIONS.md` and flag if the owner's expectation conflicts with it.
+3. **Sound reuse:** most sound effects are reused across scenes (closed palette: 22 sounds; Adhyay 1 references 13 distinct ones; 3 beds + 10 effects). The reuse rule must be in the Kimi director prompt: Kimi may only choose existing palette ids and reuse them; it never invents a new sound; new sounds are generated once in ElevenLabs, stored with a hash, then reused.
+4. **Spend Kimi ONCE, deliberately,** rather than generating with many different models and then fixing inaccurate results. Test this: is a single well-specified Kimi pass per scene, with a compact contract and a production bible, better than many cheap passes?
+5. Proposed pipeline to judge: (1) final Marathi/Hindi wording (the owner's EASY script, `docs/pilot/A1_full_script_simple.md`) checked against the verses; (2) production bible + image catalog built in code from the frozen research; (3) ElevenLabs voices chosen (owner + mother), clips generated; (4) measured timing -> shot counts; (5) Kimi writes image prompts for the catalog once, owner makes reference sheets (Nano Banana / Google Flow); (6) Kimi directs each scene once from a compact contract (choose presets, catalog images, staging, sound ids from the palette); (7) owner makes missing shot images; (8) pilot render then the rest; (9) sound effects from ElevenLabs by cue, mixed in code. Checks stay in code (validators, ledger, manifest), not extra agents.
+
+## Read (read-only)
+`docs/pilot/HANDOFF.md`, `docs/DECISIONS.md`, `docs/pilot/BRIEF_director_contract_bible.md` and Codex's earlier report `D:/kaggle_upload/repo_research/codex_director_contract.md`, `docs/pilot/reference/research_notes/opus_*.md`, `scripts/source/director_test.py`, `scripts/animation/`, `src/granthstudio/motion.py`, `assets/v5_presets/`, `scripts/source/a1_audio_spec.py`, `scripts/source/a1_eleven.py`.
+Local audit scope (list and inspect, never open file CONTENTS of secrets): `D:\aai work` top-level folders (adhyay_01..12, frozen_* copies, overnight, overnight2, pilot_refs, v3, v3_final, v5_inbox, granthstudio, granthstudio-artifacts), `D:\kaggle_upload` (4.8 GB), and the repo (465 MB). NEVER open or read anything under `D:\aai work\secrets`, any key/token file, or the private ID photo. Report sizes (`du`), duplicates (same names/hashes), obsolete runs, files that are git-tracked but huge, untracked generated media, anything that could leak a secret, and what is safe to archive or delete (recommend only; delete nothing).
+
+## Output
+Write your report as your whole answer. Executive summary first. Cite file paths and lines. Separate verified facts from inferences. Say plainly what you could not verify.
+
+## Role (assigned per reviewer in the prompt)
+- ADVOCATE: defend the proposed pipeline; strengthen it; fix its gaps (preset-library growth loop, sound-reuse rule in the Kimi prompt, a "freeze" point after which nothing is regenerated); give the exact ordered plan and the exit criteria for each stage.
+- CRITIC: attack it; find where one-shot Kimi fails, hidden costs, D-017 conflicts, owner-effort traps, lock-in, what the audit finds that contradicts the plan; give the cheaper or safer alternative and the evidence that would change your mind.
+Both: no file modifications, no paid calls, no keys.

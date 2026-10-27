@@ -143,7 +143,19 @@ def validate_plan(plan: dict, ovis: dict, macro: dict, speaker_rows: dict) -> tu
     return errors, warnings
 
 
-def timing(plan: dict, macro: dict) -> dict:
+def with_measured(plan: dict, measured: dict | None) -> tuple:
+    """A copy of the plan whose line durations are the MEASURED seconds of the generated speech (per language) where they exist. Returns (plan, how many lines are measured)."""
+    p = json.loads(json.dumps(plan))
+    n = 0
+    for l in p["lines"]:
+        m = (measured or {}).get(l["id"])
+        if m and m.get("mr") and m.get("hi"):
+            l["seconds"] = {"mr": round(m["mr"], 2), "hi": round(m["hi"], 2)}
+            n += 1
+    return p, n
+
+
+def timing(plan: dict, macro: dict, floor: bool = True) -> dict:
     """Per scene: the common picture timeline sized to the LONGER of the Marathi and Hindi line; shots needed at 6 s; the planned shots = max(audio need, allocation)."""
     out, total_mr, total_hi, total_common, total_shots = [], 0.0, 0.0, 0.0, 0
     for st in macro["stories"]:
@@ -158,13 +170,14 @@ def timing(plan: dict, macro: dict) -> dict:
             gaps = PAUSE * max(len(core) - 1, 0)
             mr, hi = LEAD + sum(l["seconds"]["mr"] for l in core) + gaps + TAIL, LEAD + sum(l["seconds"]["hi"] for l in core) + gaps + TAIL
             need = max(2, math.ceil(common / SHOT_S))
-            planned = max(need, sc["shot_budget"])
+            planned = max(need, sc["shot_budget"]) if floor else need
             shots = [{"shot": k, "from_s": round((k - 1) * SHOT_S, 2), "to_s": round(k * SHOT_S, 2), "lines_starting": [b["line"] for b in beats if b["shot"] == k],
                       "ovis": sorted({b["ovi"] for b in beats if b["shot"] == k})} for k in range(1, planned + 1)]
             out.append({"scene": sc["scene_id"], "ovi_range": sc["ovi_range"], "allocation": sc["shot_budget"], "audio_needs": need, "planned_shots": planned,
                         "marathi_s": round(mr, 1), "hindi_s": round(hi, 1), "common_s": round(common, 1), "visual_only_shots": [s["shot"] for s in shots if not s["lines_starting"]], "beats": beats, "shots": shots})
             total_mr, total_hi, total_common, total_shots = total_mr + mr, total_hi + hi, total_common + common, total_shots + planned
-    return {"estimate": True, "assumed_rates": RATE, "scenes": out, "marathi_s": round(total_mr, 1), "hindi_s": round(total_hi, 1), "common_audio_s": round(total_common, 1),
+    measured_n = sum(1 for l in plan["lines"] if l.get("measured"))
+    return {"estimate": not (measured_n and measured_n == len(plan["lines"])), "basis": f"{measured_n} of {len(plan['lines'])} lines MEASURED from generated speech; the rest are estimates at the assumed rates", "assumed_rates": RATE, "scenes": out, "marathi_s": round(total_mr, 1), "hindi_s": round(total_hi, 1), "common_audio_s": round(total_common, 1),
             "planned_shots": total_shots, "planned_picture_s": total_shots * 6, "allocated_shots": sum(s["allocation"] for s in out)}
 
 
@@ -173,9 +186,9 @@ def mmss(s: float) -> str:
 
 
 def render_md(plan: dict, tm: dict, split_hash: str) -> str:
-    L = ["# Adhyay 1: audio plan and timing (DRAFT, ESTIMATES)", "",
-         f"Split hash: `{split_hash}`. Nothing here is approved, recorded or synthesised. **Marathi** lines are exact verse segments cut from the ovis by code (the year 1878 is an on-screen caption only). "
-         "**Hindi** is a draft adaptation and is NOT VALIDATED. **Durations** are estimates from syllable counts at assumed speaking rates "
+    L = ["# Adhyay 1: audio plan and timing (DRAFT; durations MEASURED from generated speech when available)", "",
+         f"Split hash: `{split_hash}`. Nothing here is approved. Draft speech was synthesised (voices NOT VALIDATED until the owner listens). **Marathi** lines are exact verse segments cut from the ovis by code (the year 1878 is an on-screen caption only). "
+         "**Hindi** is a draft adaptation and is NOT VALIDATED. **Durations** (where not measured) are estimates from syllable counts at assumed speaking rates "
          f"(Marathi {RATE['mr']} and Hindi {RATE['hi']} syllables per second: hypotheses to calibrate with the TTS test). One video, one picture timeline: it follows the LONGER of the two languages per line.", "",
          f"**Whole story (core narration):** Marathi about {mmss(tm['marathi_s'])}, Hindi about {mmss(tm['hindi_s'])}, common picture timeline about {mmss(tm['common_audio_s'])}. "
          f"Planned shots: **{tm['planned_shots']}** ({mmss(tm['planned_picture_s'])} of picture) against {tm['allocated_shots']} allocated by the split. Optional lines are NOT counted.", ""]
@@ -203,17 +216,48 @@ def main() -> int:
     ap.add_argument("--run", required=True, help="split run holding macro_A1.json (e.g. a1_split_rev4)")
     ap.add_argument("--out-dir", default=str(ROOT / "canon" / "audio"))
     ap.add_argument("--out-md", default=str(ROOT / "docs" / "pilot" / "A1_audio_plan.md"))
+    ap.add_argument("--measured", default=None, help="canon/audio/A1_voice_measured.json: use the measured durations of the generated speech instead of estimates")
+    ap.add_argument("--no-floor", action="store_true", help="planned shots = the measured audio need only (do NOT keep the old allocation as a minimum); use after the final voices are measured")
     a = ap.parse_args()
     res = json.loads((dt.RUNS / a.run / "macro_A1.json").read_text(encoding="utf-8"))
     files, ovis, _ = dt.load_inputs()
     plan = build_plan(ovis)
+    if a.measured:
+        mj = json.loads(Path(a.measured).read_text(encoding="utf-8"))
+        if mj.get("problems"):
+            print("ERROR the measured file records problems; refusing")
+            return 1
+        import importlib.util as _iu
+        _sp = _iu.spec_from_file_location("a1_voices", ROOT / "scripts" / "source" / "a1_voices.py")
+        _v = _iu.module_from_spec(_sp)
+        _sp.loader.exec_module(_v)
+        if mj.get("engine") == "elevenlabs":                                        # ElevenLabs speech of the owner's EASY wording
+            _es = _iu.spec_from_file_location("easy_script", ROOT / "scripts" / "source" / "easy_script.py")
+            _e = _iu.module_from_spec(_es)
+            _es.loader.exec_module(_e)
+            if mj.get("script_sha256") != _e.script_sha256():
+                print("ERROR the measured speech was made from a different easy script; regenerate or re-measure")
+                return 1
+            _ov = _e.overlay(plan, _e.load_simple(_e.DEFAULT))
+            want = {f"{l['id']}.{lg}": _v.prep_text(l["spoken_marathi" if lg == "mr" else "spoken_hindi"]) for l in _ov["lines"] for lg in ("mr", "hi")}
+            stale = [k for k, t in want.items() if mj["clips"].get(k, {}).get("text") != t]
+        else:
+            stale = [j["id"] for j in _v.build_jobs(plan) if mj["clips"].get(j["id"], {}).get("text") != j["text"]]
+        if stale:
+            print(f"ERROR measured speech does not match the current script/voices for {len(stale)} clips (first: {stale[0]}); regenerate the voices")
+            return 1
+        meas = mj["lines"]
+        plan, n = with_measured(plan, meas)
+        for l in plan["lines"]:
+            l["measured"] = l["id"] in meas and bool(meas[l["id"]].get("mr") and meas[l["id"]].get("hi"))
+        print(f"measured durations used for {n} of {len(plan['lines'])} lines")
     errors, warnings = validate_plan(plan, ovis, res["macro"], dt.speaker_table(files["addendum"].splitlines()))
     for w in warnings:
         print("WARN", w)
     if errors:
         print("\n".join("ERROR " + e for e in errors))
         return 1
-    tm = timing(plan, res["macro"])
+    tm = timing(plan, res["macro"], floor=not a.no_floor)
     out = Path(a.out_dir)
     out.mkdir(parents=True, exist_ok=True)
     plan["split_sha256"] = tm["split_sha256"] = res["macro_sha256"]

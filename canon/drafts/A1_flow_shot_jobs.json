@@ -1,0 +1,1143 @@
+[
+ {
+  "shot_id": "SH_S1_01",
+  "scene": "S1",
+  "flow_title": "SH_S1_01__v01",
+  "preset_suggested": "01_establishing_shot",
+  "characters": [],
+  "place_search": "landscape illustration",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Setting: the attached Shegaon village picture. Establishing shot of historical Shegaon: the village spread across the flat plain under a wide sky, low mud-walled houses with clay-tile and thatched roofs, neem and babul trees, a dusty lane winding in from the foreground, a bullock-cart track and dark ploughed earth near the camera, neem branches framing the top corners. Leave the upper sky calm for the 1878 caption added later. No people in the picture. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 998,
+  "source_refs": [
+   "S1-K1 caption 1878 (added later, never drawn)",
+   "A1:58-60 context",
+   "story S1 shot 1",
+   "timing: S1-L1 (narrator, ovi 70, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S1_02",
+  "scene": "S1",
+  "flow_title": "SH_S1_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "landscape illustration",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached Shegaon village picture. The young Gajanan seen in Shegaon: medium-wide view, the young ascetic seated cross-legged at the edge of a dusty village lane, calm and still, gaze on the tip of his nose, hands resting on his knees, the gourd and the chilim on the ground beside him; behind him low ochre houses, a neem tree, a thatched cattle shed, the open plain beyond. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1158,
+  "source_refs": [
+   "A1:74 prime of youth (context)",
+   "A1:70 origin unknown (S1-L1 narration over it)",
+   "story S1 shot 2",
+   "timing: S1-L1 (narrator, ovi 70, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_01",
+  "scene": "S2",
+  "flow_title": "SH_S2_01__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "DV_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Devidas's house: wide view of the road with the house on the left; Devidas stands on the raised plinth step at his half-open door, gentle and devout, palms lightly joined; through the doorway the warm glow of a clay hearth with brass cooking vessels and a stack of fresh leaf plates (the feast being prepared); on the road in front lie the used leaf plates with scattered rice; neem trees and neighbouring houses down the road. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1311,
+  "source_refs": [
+   "A1:84 devout householder Devidas (S2-L1)",
+   "A1:86 feast for his son's Ritushanti (FINAL S5-3; objects only)",
+   "A1:87 used plates (S2-L3)",
+   "timing: S2-L1 (narrator, ovi 84, starts); S2-L3 (narrator, ovi 87, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_02",
+  "scene": "S2",
+  "flow_title": "SH_S2_02__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Ground-level close view of the used leaf plates thrown on the dusty road before the house: crumpled stitched-leaf plates, scattered grains of leftover white rice, a few small stones and dry grass tufts; behind them the earthen plinth step and the bottom of the heavy wooden door, a neighbouring wall and a neem trunk further back. No people in the picture. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 994,
+  "source_refs": [
+   "A1:87 (S2-L3)",
+   "timing: S2-L3 (narrator, ovi 87, continues); S2-L4 (narrator, ovi 88, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_03",
+  "scene": "S2",
+  "flow_title": "SH_S2_03__v01",
+  "preset_suggested": "02_environmental_parallax",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). the young ascetic seated there: medium-wide view of the road before Devidas's house, the young ascetic seated cross-legged on the road among the used leaf plates, facing screen-right, calm, the frayed old vest clearly visible, the gourd and the chilim on the ground by his knee; the house wall and door behind him, neighbouring houses and neem trees beyond, neem branches near the camera. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1255,
+  "source_refs": [
+   "A1:88 seated there, old bandi (S2-L4)",
+   "A1:91-92 calm, digambar (optional lines, not spoken)",
+   "timing: S2-L4 (narrator, ovi 88, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_04",
+  "scene": "S2",
+  "flow_title": "SH_S2_04__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Closer view: the young ascetic seated on the road, leaning slightly forward over three used leaf plates, picking up one grain of rice between the fingers of his right hand, face calm and absorbed; the plinth step and wooden door behind him, the gourd and chilim at his side, dusty road texture and scattered grains in the foreground. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1200,
+  "source_refs": [
+   "A1:93 searches the plates seated on the road",
+   "A1:94 picks each grain he sees (S2-L8)",
+   "timing: S2-L4 (narrator, ovi 88, continues); S2-L8 (narrator, ovi 94, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_05",
+  "scene": "S2",
+  "flow_title": "SH_S2_05__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": null,
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert: the young ascetic's right hand and wrist, fingers lifting one single grain of white rice from a crumpled used leaf plate on the dusty road; his crossed knee and the frayed hem of the vest at the edge of the frame; small stones and rice grains around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1035,
+  "source_refs": [
+   "A1:94 (S2-L8)",
+   "A1:95 food is Brahman (S2-L9 starts)",
+   "timing: S2-L8 (narrator, ovi 94, continues); S2-L9 (narrator, ovi 95, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_06",
+  "scene": "S2",
+  "flow_title": "SH_S2_06__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up: the young ascetic raising a grain of rice toward his mouth with his right hand, serene and unhurried, eyes half-lowered; behind him the ochre wall of the house, the edge of the door frame and a neem tree in soft morning light. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1110,
+  "source_refs": [
+   "A1:94 puts it in his mouth (S2-L8)",
+   "A1:95 Vedas: food is Brahman (S2-L9)",
+   "timing: S2-L9 (narrator, ovi 95, continues); S2-L10 (narrator, ovi 96, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_07",
+  "scene": "S2",
+  "flow_title": "SH_S2_07__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). High wide view down the village road: the young ascetic small in the middle of the frame, seated among the leaf plates before Devidas's house, patiently gathering grains; the whole road, the house roofs, neighbouring houses, a cattle shed, neem trees and the plain beyond; the road otherwise empty. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1165,
+  "source_refs": [
+   "A1:96 compassionate Maharaj gathering grains; people did not understand (S2-L10)",
+   "timing: S2-L10 (narrator, ovi 96, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S2_08",
+  "scene": "S2",
+  "flow_title": "SH_S2_08__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": null,
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert: the young ascetic's right hand resting on his crossed knee, loosely holding the small unfired clay chilim; the dried gourd water vessel stands on the dusty ground beside the knee; the frayed hem of the old vest at the top edge; leaf plates and rice grains on the road around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1060,
+  "source_refs": [
+   "A1:89-90 gourd and unfired chilim, his only possessions (FINAL G-4)",
+   "A1:96 (S2-L10 continues)",
+   "timing: S2-L10 (narrator, ovi 96, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_01",
+  "scene": "S3",
+  "flow_title": "SH_S3_01__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). The two friends walking along the village road toward screen-left, Bankatlal nearer to camera, Damodarpant beside him, both in easy conversation; the road with neighbouring houses, a neem tree and a cattle shed on the right; Devidas's house just coming into view at the far left edge. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1241,
+  "source_refs": [
+   "A1:97 Bankatlal walking along the road (S3-L1)",
+   "A1:98 his friend Damodarpant (S3-L2)",
+   "timing: S3-L1 (narrator, ovi 97, starts); S3-L2 (narrator, ovi 98, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_02",
+  "scene": "S3",
+  "flow_title": "SH_S3_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Over-the-shoulder view: Bankatlal and Damodarpant in the right foreground seen from behind in three-quarter back view, stopped on the road, astonished; in the middle distance the young ascetic sits among the used leaf plates before Devidas's house, picking grains; the house, its door, neem trees and the road fill the frame. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1355,
+  "source_refs": [
+   "A1:98 both astonished (S3-L3)",
+   "timing: S3-L2 (narrator, ovi 98, continues); S3-L3 (narrator, ovi 98, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_03",
+  "scene": "S3",
+  "flow_title": "SH_S3_03__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium two-shot facing camera: Bankatlal with raised eyebrows and a puzzled frown, turning his head toward Damodarpant, who looks on with a doubtful frown; behind them the road and the houses on the far side, a neem tree. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1178,
+  "source_refs": [
+   "A1:99 'he looks mad' (S3-L4)",
+   "A1:102 Bankatlal said to Damodarpant (S3-L6)",
+   "timing: S3-L4 (narrator, ovi 99, starts); S3-L6 (narrator, ovi 102, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_04",
+  "scene": "S3",
+  "flow_title": "SH_S3_04__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot: Bankatlal on the right speaking earnestly to Damodarpant on the left, one open hand lowered toward the road ahead ('let us stand here and watch'), Damodarpant listening thoughtfully, hands loosely joined; the road, houses and neem trees behind them. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1216,
+  "source_refs": [
+   "A1:102 Bankatlal: let us stand on the road and watch (S3-L7)",
+   "timing: S3-L6 (narrator, ovi 102, continues); S3-L7 (bankatlal, ovi 102, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_05",
+  "scene": "S3",
+  "flow_title": "SH_S3_05__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Reverse view from behind the young ascetic: his shoulder and the back of his vest out of focus in the left foreground; Bankatlal and Damodarpant stand on the road a few steps away, watching him thoughtfully, beginning to sense he is a great wise man; the road, neighbouring houses and neem trees behind them. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1338,
+  "source_refs": [
+   "A1:104 looks mad but seems a great wise man (S3-L8)",
+   "FINAL G-2 bastion of wisdom (meaning only, not drawn)",
+   "timing: S3-L7 (bankatlal, ovi 102, continues); S3-L8 (narrator, ovi 104, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_06",
+  "scene": "S3",
+  "flow_title": "SH_S3_06__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Wide view: the young ascetic in the left middle ground seated among the leaf plates before Devidas's house, calm and indifferent; the two men stand small at the right on the road, watching quietly; the house, door, road, neem trees and neighbouring roofs fill the frame. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1300,
+  "source_refs": [
+   "A1:104-105 the two men weigh him up (S3-L8 tail; L9 optional, not spoken)",
+   "timing: S3-L8 (narrator, ovi 104, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S4_01",
+  "scene": "S4",
+  "flow_title": "SH_S4_01__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Bankatlal steps forward first: he walks toward the seated the young ascetic with palms joined humbly at his chest, Damodarpant a step behind him; the young ascetic sits among the leaf plates in front of the house, still picking grains; road, door and neem trees around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1299,
+  "source_refs": [
+   "A1:108 Bankatlal steps forward first, humbly (S4-L1)",
+   "timing: S4-L1 (narrator, ovi 108, starts); S4-L2 (bankatlal, ovi 109, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S4_02",
+  "scene": "S4",
+  "flow_title": "SH_S4_02__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "BA_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot: Bankatlal on the right leaning slightly down toward the young ascetic, palms joined, gentle concerned face, asking his question; the young ascetic on the left seated among the plates, still picking grains, not looking up; the house wall and door behind. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1204,
+  "source_refs": [
+   "A1:109 Bankatlal asks why, offers food (S4-L2)",
+   "timing: S4-L2 (bankatlal, ovi 109, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S4_03",
+  "scene": "S4",
+  "flow_title": "SH_S4_03__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Over the shoulders of the two standing men (their backs and turbans framing the left and right edges), the young ascetic seated among the leaf plates raises his head and looks steadily up at their faces, silent, giving no answer; the house door behind him. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1286,
+  "source_refs": [
+   "A1:110 no answer, looks up at both faces (S4-L3)",
+   "timing: S4-L3 (narrator, ovi 110, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S4_04",
+  "scene": "S4",
+  "flow_title": "SH_S4_04__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Close-up, slightly low angle: the young ascetic's face and upper body, head raised, eyes open and steady, attention gathered between the eyebrows, radiant handsome calm face, strong neck and arms, broad chest under the open frayed vest; the ochre house wall and the door frame behind him. No glow. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1164,
+  "source_refs": [
+   "A1:110 (S4-L3)",
+   "A1:111 radiant, arms, neck, chest, gaze between brows (optional line, not spoken)",
+   "timing: S4-L3 (narrator, ovi 110, continues); S4-L4 (narrator, ovi 112, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S4_05",
+  "scene": "S4",
+  "flow_title": "SH_S4_05__v01",
+  "preset_suggested": "05_bowing_prayer",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Silent namaskar: Bankatlal and Damodarpant standing on the right, heads bowed, palms joined at the chest, content faces; the young ascetic seated among the plates on the left, calm, absorbed in his own bliss; nobody speaks; house, door, road and neem trees around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1294,
+  "source_refs": [
+   "A1:112 contentment, silent namaskar (S4-L4; two men: analysis_v3 A1-1)",
+   "timing: S4-L4 (narrator, ovi 112, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_01",
+  "scene": "S5",
+  "flow_title": "SH_S5_01__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "DV_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). At the door: Devidas stands on his plinth step in the half-open doorway, listening attentively; Bankatlal and Damodarpant stand on the road before him, speaking with affection and urgency, one open hand gesturing back toward the young ascetic, who sits small among the plates at the left edge of the road; the hearth glow inside the doorway. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1461,
+  "source_refs": [
+   "A1:113 'quickly serve a plate and bring it out' (S5-L1; plural speaker)",
+   "timing: S5-L1 (narrator, ovi 113, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_02",
+  "scene": "S5",
+  "flow_title": "SH_S5_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "DV_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Devidas stepping quickly down from his doorway onto the road, carrying in both hands one fresh leaf plate heaped with rich dishes (rice, yellow dal, a vegetable, puris, two round sweets), willing and silent; the door, the ochre wall, the clay-tile eaves above. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1144,
+  "source_refs": [
+   "A1:114 Devidas brings a plate full of rich dishes (S5-L2)",
+   "timing: S5-L2 (narrator, ovi 114, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_03",
+  "scene": "S5",
+  "flow_title": "SH_S5_03__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "DV_v01",
+   "GM_v01"
+  ],
+  "place_search": null,
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert: Devidas's hands and forearms (edge of the white dhoti) setting the fresh served leaf plate down on the ground just in front of the plinth step, before the young ascetic's crossed knee at the right edge of the frame; dusty ground and the foot of the door. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1129,
+  "source_refs": [
+   "A1:114 set at the door before the Swami (S5-L2)",
+   "A1:115 sits to eat (S5-L3 starts)",
+   "timing: S5-L2 (narrator, ovi 114, continues); S5-L3 (narrator, ovi 115, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_04",
+  "scene": "S5",
+  "flow_title": "SH_S5_04__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "DV_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium-wide: the young ascetic seated cross-legged before the served leaf plate in front of the door, eating calmly without any relish; Devidas stands back on his plinth step; Bankatlal and Damodarpant watch from the road at the right; house, road, neem trees. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1380,
+  "source_refs": [
+   "A1:115 sits to eat, no craving (S5-L3)",
+   "A1:116 jaggery-water comparison (S5-L4; not illustrated, OC-17)",
+   "timing: S5-L4 (narrator, ovi 116, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_05",
+  "scene": "S5",
+  "flow_title": "SH_S5_05__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Close-up: the young ascetic's calm face, eyes half-lowered, completely content and indifferent to taste, his right hand resting beside the plate; the ochre house wall and the edge of the door behind. No glow. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1075,
+  "source_refs": [
+   "A1:116-117 already full of bliss; emperor comparison (S5-L4, S5-L5; not illustrated, OC-17)",
+   "timing: S5-L4 (narrator, ovi 116, continues); S5-L5 (narrator, ovi 117, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_06",
+  "scene": "S5",
+  "flow_title": "SH_S5_06__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": null,
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert from above: the young ascetic's right hand mixing all the dishes on the leaf plate together into one single heap: rice, dal, vegetable, broken puris and sweets all combined; dusty ground around the plate. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 988,
+  "source_refs": [
+   "A1:118 mixes all dishes, no like or dislike (S5-L6)",
+   "timing: S5-L5 (narrator, ovi 117, continues); S5-L6 (narrator, ovi 118, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S5_07",
+  "scene": "S5",
+  "flow_title": "SH_S5_07__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "DV_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). the young ascetic eating from the single mixed heap on the leaf plate, face indifferent; Devidas at the doorway and the two men on the road watching in quiet wonder; the sun higher now, shadows a little shorter; house, road, neem trees. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1356,
+  "source_refs": [
+   "A1:118 (S5-L6 continues)",
+   "addendum: 'two prahar' = around noon (118)",
+   "timing: S5-L6 (narrator, ovi 118, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S6_01",
+  "scene": "S6",
+  "flow_title": "SH_S6_01__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot: Bankatlal on the right turning to Damodarpant on the left, one hand on his chest, remorseful, speaking; Damodarpant listening; in the background the young ascetic sits small before the house with the finished leaf plate. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1260,
+  "source_refs": [
+   "A1:119 'calling him mad was our big mistake' (S6-L1, S6-L2)",
+   "timing: S6-L1 (narrator, ovi 119, starts); S6-L2 (bankatlal, ovi 119, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S6_02",
+  "scene": "S6",
+  "flow_title": "SH_S6_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up: Bankatlal speaking earnestly, one open palm raised a little, eyes turned toward the young ascetic off-screen left; behind him the road, a neighbouring house and a neem tree. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1058,
+  "source_refs": [
+   "A1:120 Arjuna comparison (S6-L3; not illustrated, OC-17)",
+   "timing: S6-L2 (bankatlal, ovi 119, continues); S6-L3 (bankatlal, ovi 120, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S6_03",
+  "scene": "S6",
+  "flow_title": "SH_S6_03__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot from a new angle: Bankatlal speaking, a gentle hand gesturing toward the young ascetic off-screen left; Damodarpant beside him nodding in agreement, palms joined; behind them the house corner, the road and neem trees. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1183,
+  "source_refs": [
+   "A1:121 mad for liberation; no more testing (S6-L4)",
+   "timing: S6-L3 (bankatlal, ovi 120, continues); S6-L4 (bankatlal, ovi 121, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S6_04",
+  "scene": "S6",
+  "flow_title": "SH_S6_04__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Over the young ascetic's shoulder (his back and the vest in the left foreground): Bankatlal and Damodarpant gaze at him with reverence and joy, palms joined; behind them the village road opens out toward the rest of Shegaon. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1254,
+  "source_refs": [
+   "A1:121 (S6-L4 tail)",
+   "A1:122 blessed is our Shegaon (S6-L5)",
+   "timing: S6-L4 (bankatlal, ovi 121, continues); S6-L5 (narrator, ovi 122, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S6_05",
+  "scene": "S6",
+  "flow_title": "SH_S6_05__v01",
+  "preset_suggested": "01_establishing_shot",
+  "characters": [],
+  "place_search": "landscape illustration",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Setting: the attached Shegaon village picture. Shegaon blessed: a different wide view of the village from inside its lanes, houses with clay-tile roofs and courtyards, a neem tree over a well-trodden lane, cattle sheds and haystacks, the plain beyond; the sun high and bright. No people in the picture. Light: the sun has climbed high toward noon, the sky paler and brighter than before, shadows short and shrinking, the ground turning pale with heat. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 822,
+  "source_refs": [
+   "A1:122 blessed is our Shegaon (S6-L5 continues)",
+   "timing: S6-L5 (narrator, ovi 122, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S6_06",
+  "scene": "S6",
+  "flow_title": "SH_S6_06__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). the young ascetic seated alone and calm on the road before Devidas's house beside the finished leaf plate, the gourd at his side; the sun climbing high, shadows shrinking under him; the road empty, neem trees still. Show only the attached characters and no other people. Light: the sun has climbed high toward noon, the sky paler and brighter than before, shadows short and shrinking, the ground turning pale with heat. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1060,
+  "source_refs": [
+   "visual-only shot after A1:122; bridge to noon (addendum: one stretch from before noon to noon)",
+   "timing: S6-L5 (narrator, ovi 122, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_01",
+  "scene": "S7",
+  "flow_title": "SH_S7_01__v01",
+  "preset_suggested": "01_establishing_shot",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Noon: the road before Devidas's house under a blazing overhead sun, the ground pale and hot; small brown village birds sheltering in the shade of the neem branches; the young ascetic sits small in the full sun on the open road; the road otherwise empty. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1162,
+  "source_refs": [
+   "A1:123 noon, ground hot, birds in the trees (S7-L1; L2 optional)",
+   "A1:124 sits in full sun (S7-L3)",
+   "timing: S7-L1 (narrator, ovi 123, starts); S7-L3 (narrator, ovi 124, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_02",
+  "scene": "S7",
+  "flow_title": "SH_S7_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). the young ascetic seated joyful and fearless in the full noon sun on the road, a faint smile; in the foreground his gourd lies on its side on the hot cracked dust, mouth open and dry, clearly empty; Bankatlal and Damodarpant stand in the thin shade of a neem tree at the right, looking at the gourd. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1371,
+  "source_refs": [
+   "A1:124 joyful in full sun (S7-L3)",
+   "A1:125 no water in the gourd (S7-L4 optional, not spoken)",
+   "A1:126 Damodarpant asked (S7-L5)",
+   "timing: S7-L3 (narrator, ovi 124, continues); S7-L5 (narrator, ovi 126, starts); S7-L6 (damodarpant, ovi 126, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_03",
+  "scene": "S7",
+  "flow_title": "SH_S7_03__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot: Damodarpant on the right bending a little toward the young ascetic, one hand on his chest in humble offer of service, eager face; the young ascetic on the left seated with the empty gourd on its side beside him; hot pale road and the house wall behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1260,
+  "source_refs": [
+   "A1:126 'no water in your gourd; this servant is ready' (S7-L6)",
+   "timing: S7-L6 (damodarpant, ovi 126, continues); S7-L7 (narrator, ovi 127, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_04",
+  "scene": "S7",
+  "flow_title": "SH_S7_04__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up: the young ascetic laughing warmly, eyes creased with amusement, looking up at the two men just out of frame on the right; the sunlit house wall behind him, hard short shadows. No glow. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1110,
+  "source_refs": [
+   "A1:127 laughs and looks at both (S7-L7)",
+   "timing: S7-L7 (narrator, ovi 127, continues); S7-L8 (gajanan, ovi 128, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_05",
+  "scene": "S7",
+  "flow_title": "SH_S7_05__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). the young ascetic on the left seated, speaking gently, right hand raised a little with the palm open, a faint smile; Bankatlal and Damodarpant on the right standing side by side, attentive; noon road behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1279,
+  "source_refs": [
+   "A1:128 'bring water if you feel the need; one Brahman fills the world' (S7-L8)",
+   "FINAL G-3 vari = water",
+   "timing: S7-L8 (gajanan, ovi 128, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_06",
+  "scene": "S7",
+  "flow_title": "SH_S7_06__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Over the shoulders of the two standing men, the young ascetic seated on the road looks up at them, his open right hand held out toward them, gentle and smiling (there is no difference between you and us); the house wall behind him, hard noon light. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1320,
+  "source_refs": [
+   "A1:129 no difference between you and us; yet follow the world's way (S7-L9)",
+   "timing: S7-L9 (gajanan, ovi 129, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_07",
+  "scene": "S7",
+  "flow_title": "SH_S7_07__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up: the young ascetic with his right hand resting lightly on his own chest (this body), a gentle ironic smile; the empty gourd beside his knee; the sunlit wall and a strip of hot road behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1113,
+  "source_refs": [
+   "A1:129 tail (S7-L9)",
+   "A1:130 this body ate food, so it needs water (S7-L10)",
+   "A1:131 optional, not spoken",
+   "timing: S7-L9 (gajanan, ovi 129, continues); S7-L10 (gajanan, ovi 130, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_08",
+  "scene": "S7",
+  "flow_title": "SH_S7_08__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Bankatlal joyful, palms joined, face lit with happiness (our fortune is great); beside him Damodarpant already turning eagerly toward the half-open door of Devidas's house; noon road and house behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1199,
+  "source_refs": [
+   "A1:132 both rejoice; Bankatlal: our fortune is blessed (S7-L12)",
+   "A1:133 Damodarpant goes into the house (S7-L13)",
+   "timing: S7-L10 (gajanan, ovi 130, continues); S7-L12 (bankatlal, ovi 132, starts); S7-L13 (narrator, ovi 133, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S7_09",
+  "scene": "S7",
+  "flow_title": "SH_S7_09__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "DK_v01",
+   "BA_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Damodarpant seen from behind stepping up onto the plinth step and into the half-open door of Devidas's house to fetch water; Bankatlal waits on the road; the young ascetic sits in the sun at the left; hard short shadows. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1292,
+  "source_refs": [
+   "A1:133 Damodarpant goes into Devidas's house for water (S7-L13; FINAL A1-5)",
+   "timing: S7-L13 (narrator, ovi 133, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S8_01",
+  "scene": "S8",
+  "flow_title": "SH_S8_01__v01",
+  "preset_suggested": "02_environmental_parallax",
+  "characters": [],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Setting: the attached well and cattle trough picture. The well and the cattle trough beside it at noon: the round stone well at the left, the long stone trough across the middle with shallow muddy water, two or three humped cattle drinking at the right end, trampled dust, a neem tree, village houses beyond. No people in the picture. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 918,
+  "source_refs": [
+   "A1:134 a trough beside the well where all the animals drink (S8-L1)",
+   "analysis_v3 G-1",
+   "timing: S8-L1 (narrator, ovi 134, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S8_02",
+  "scene": "S8",
+  "flow_title": "SH_S8_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic kneeling at the left end of the cattle trough in side view facing screen-right, drinking the muddy water from his cupped hands, content; the cattle drinking at the far end; his gourd on the ground beside him; the well behind, hard noon sun. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1125,
+  "source_refs": [
+   "A1:134-135 goes there, drinks, belches with satisfaction (S8-L2)",
+   "timing: S8-L2 (narrator, ovi 135, starts); S8-L3 (narrator, ovi 135, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S8_03",
+  "scene": "S8",
+  "flow_title": "SH_S8_03__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "DK_v01",
+   "BA_v01",
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Damodarpant hurrying in from the right carrying the brass gadva of water in his left arm, his right palm raised in alarm (stop!), mouth open calling out; Bankatlal a few steps behind him; the young ascetic at the trough in the left background, wiping his mouth, content. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1300,
+  "source_refs": [
+   "A1:135 Pant arrives with water in a gadva (S8-L3)",
+   "A1:136 'stop, do not drink' (S8-L4)",
+   "timing: S8-L3 (narrator, ovi 135, continues); S8-L4 (damodarpant, ovi 136, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S8_04",
+  "scene": "S8",
+  "flow_title": "SH_S8_04__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Two-shot at the trough: Damodarpant on the right holding the brass gadva out with both hands toward the young ascetic, worried and pleading; the young ascetic on the left seated cross-legged by the trough, calm; the muddy trough water and a cow behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1208,
+  "source_refs": [
+   "A1:136 muddy water fit only for animals (S8-L4)",
+   "A1:137 I brought clean water (S8-L5)",
+   "addendum F1: muddy water is the trough's",
+   "timing: S8-L4 (damodarpant, ovi 136, continues); S8-L5 (damodarpant, ovi 137, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S8_05",
+  "scene": "S8",
+  "flow_title": "SH_S8_05__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "DK_v01"
+  ],
+  "place_search": null,
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Close insert from slightly above: Damodarpant's hands (white angarkha sleeves) holding the brass gadva forward: clear cool water with a small bundle of pale golden vetiver roots in it; below and behind, out of focus, the muddy brown water of the stone trough. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1088,
+  "source_refs": [
+   "A1:137 sweet, clear, cool, vetiver-scented (S8-L5)",
+   "timing: S8-L5 (damodarpant, ovi 137, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_01",
+  "scene": "S9",
+  "flow_title": "SH_S9_01__v01",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "GM_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Two-shot: the young ascetic on the left seated by the trough, speaking, right palm raised gently in refusal; Damodarpant on the right still holding the brass gadva, surprised; the trough and the well behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1163,
+  "source_refs": [
+   "A1:138 'do not tell us such worldly things' (S9-L1, S9-L2)",
+   "timing: S9-L1 (narrator, ovi 138, starts); S9-L2 (gajanan, ovi 138, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_02",
+  "scene": "S9",
+  "flow_title": "SH_S9_02__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Wide view: the young ascetic seated by the trough speaking calmly, the two men standing and listening, the cattle drinking, the well, the neem tree, village roofs and the wide open plain under the vast sky (the whole world around them). Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1266,
+  "source_refs": [
+   "A1:139 the whole world pervaded by Brahman (S9-L3)",
+   "timing: S9-L2 (gajanan, ovi 138, continues); S9-L3 (gajanan, ovi 139, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_03",
+  "scene": "S9",
+  "flow_title": "SH_S9_03__v01",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Setting: the attached well and cattle trough picture. Close insert: the stone rim of the trough; on the left the shallow muddy water with a cow's muzzle drinking and ripples; on the rim at the right stands the brass gadva of clear water with the vetiver roots in it: both waters in one frame. No people in the picture. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 902,
+  "source_refs": [
+   "A1:139 muddy, clear or scented: no difference (S9-L3)",
+   "A1:140 water is the same (S9-L4 starts)",
+   "timing: S9-L3 (gajanan, ovi 139, continues); S9-L4 (gajanan, ovi 140, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_04",
+  "scene": "S9",
+  "flow_title": "SH_S9_04__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Medium close-up: the young ascetic speaking calmly, one palm open upward in explanation, eyes gentle; behind him the trough and a cow, the neem tree and the bright noon sky. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1040,
+  "source_refs": [
+   "A1:140 scent and stench both forms of God (S9-L4)",
+   "timing: S9-L4 (gajanan, ovi 140, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_05",
+  "scene": "S9",
+  "flow_title": "SH_S9_05__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic seated by the trough, right hand on his chest and left hand open toward the trough water (the drinker is not apart from God), serene; the well and the cattle behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1050,
+  "source_refs": [
+   "A1:140 tail (S9-L4)",
+   "A1:141 the drinker is not separate (S9-L5)",
+   "timing: S9-L4 (gajanan, ovi 140, continues); S9-L5 (gajanan, ovi 141, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_06",
+  "scene": "S9",
+  "flow_title": "SH_S9_06__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Over the shoulders of the two standing men, the young ascetic looks up at them steadily, his open hand held toward them (you dropped the root truth); the trough and the well behind him. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1215,
+  "source_refs": [
+   "A1:141 tail (S9-L5)",
+   "A1:142 you left the root truth (S9-L6)",
+   "timing: S9-L5 (gajanan, ovi 141, continues); S9-L6 (gajanan, ovi 142, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_07",
+  "scene": "S9",
+  "flow_title": "SH_S9_07__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Reaction two-shot: Bankatlal and Damodarpant listening, deeply moved, heads slightly bowed; Damodarpant still holds the brass gadva; the well parapet and the neem tree behind them. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1137,
+  "source_refs": [
+   "A1:142 (S9-L6 continues)",
+   "timing: S9-L6 (gajanan, ovi 142, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_08",
+  "scene": "S9",
+  "flow_title": "SH_S9_08__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic seated calm by the trough, eyes half-lowered, both hands resting on his knees, framed against the wide plain and the open noon sky (reflect on what this world is made of). Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1056,
+  "source_refs": [
+   "A1:142 always reflect on the origin of the world (S9-L6)",
+   "A1:143 starts (S9-L7)",
+   "timing: S9-L6 (gajanan, ovi 142, continues); S9-L7 (narrator, ovi 143, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_09",
+  "scene": "S9",
+  "flow_title": "SH_S9_09__v01",
+  "preset_suggested": "05_bowing_prayer",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic seated on the left; Bankatlal and Damodarpant on the right, overwhelmed, eyes moist, palms joined, both beginning to kneel forward toward his feet but not yet down; the brass gadva set on the ground beside Damodarpant; trough and well behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1290,
+  "source_refs": [
+   "A1:143 overcome, ready to fall at his feet (S9-L7)",
+   "timing: S9-L7 (narrator, ovi 143, continues)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_10",
+  "scene": "S9",
+  "flow_title": "SH_S9_10__v01",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic running fast in full side view toward screen-left along the dusty road past the well, long stride, body leaning forward, the gourd in his left hand, the vest flapping, dust kicked up behind him; Bankatlal and Damodarpant left half-kneeling by the trough at the right, the gadva on the ground. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1340,
+  "source_refs": [
+   "A1:144 knowing their intent he runs off like the wind (S9-L8; FINAL A1-11 no destination)",
+   "timing: S9-L8 (narrator, ovi 144, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S9_11",
+  "scene": "S9",
+  "flow_title": "SH_S9_11__v01",
+  "preset_suggested": "02_environmental_parallax",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. The empty road leading away from the well across the open plain, a trail of dust swirling in the wind where he ran, neem branches tossing; Bankatlal and Damodarpant small by the trough looking after him; nobody on the road (who can stop the wind). Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1204,
+  "source_refs": [
+   "A1:144 who can stop the wind (S9-L8 tail)",
+   "timing: S9-L8 (narrator, ovi 144, continues)"
+  ],
+  "status": "TODO"
+ }
+]

@@ -1,0 +1,40 @@
+{
+  "created": "2026-10-26 22:22:43",
+  "files": {
+    "MACRO_REVIEW.md": "573791e6d44ec522695222159fc894cc3d1ed09b9063bb18f158ae6f314001bd",
+    "calls/scene0__nvidia_nemotron-3-ultra-550b-a55b__94db96d939f851a5.json": "667e874470fe2d0fdb41808977cfa4d3cc4febaccce1e0ea401e39a8d103d352",
+    "macro_A1.json": "818b416332893a8c82d4053bbe010cd9a9b8b4cfda89825b93c20b5ddc4bce0c"
+  },
+  "inputs": {
+    "base_macro_sha256": "acb32841c7ccb81597935b0f180c764ab0b02038a1dcbd90c98860141267d39d",
+    "base_run": "a1_kimi_plan2",
+    "code_sha256": {
+      "director_run.py": "a1b9f1c499403e622158b531163b917e4b58857f45c19d7bd061fca1a629fde6",
+      "director_test.py": "08a370a4f276f6b30cc6beafdb3f35451a4e92f9e0786e2d3c9cdcb1ab704077",
+      "draft_source.py": "5dba4c42b6a9e09938d42bd31affa245c34fa50c1eb17f830d32abdb885f540f",
+      "story_split.py": "a92ede39eae13e6dd4109a2c105ac0bac646335a257d405067173b7077aca1d6"
+    },
+    "edits_sha256": "d81a25caf325f72de842f8cae49708b9b46d3b70943302de1836bb5ab38fc3fc",
+    "mode": "revise_split",
+    "packet_files": {
+      "adhyay_01_ovis_hj.jsonl": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+      "frozen_copies/adhyay_01_FINAL_answers.md": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846",
+      "frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882",
+      "frozen_copies/adhyay_01_analysis_v3.md": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e",
+      "frozen_copies/characters_1to12_FINAL.md": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870",
+      "frozen_copies/glossary_user_supplied.md": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c",
+      "frozen_copies/glossary_v3.md": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918",
+      "frozen_copies/verification_report.md": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b",
+      "presets_index.json": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    },
+    "reviewers": [
+      "nvidia/nemotron-3-ultra-550b-a55b"
+    ]
+  },
+  "macro_sha256": "285046ade8110e61ec1e9f6e85935e3354495b3dd5e54daff87663a3e4fa5949",
+  "result": "NO_CHECK",
+  "revised_from": "acb32841c7ccb81597935b0f180c764ab0b02038a1dcbd90c98860141267d39d",
+  "run": "a1_split_rev9",
+  "status": "REVISED SPLIT, waiting for the owner's approval of its hash",
+  "updated": "2026-10-26 22:27:22"
+}

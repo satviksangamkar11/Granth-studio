@@ -1,0 +1,644 @@
+[
+ {
+  "shot_id": "SH_S4_03",
+  "scene": "S4",
+  "flow_title": "SH_S4_03__v03",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house. Over the shoulders of the two standing men, the young ascetic seated among the leaf plates raises his head and looks steadily up at their faces, silent, giving no answer; the house door behind him. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Exactly three people: Bankatlal in the cream turban and sage coat on the left, one Damodarpant in the terracotta turban and white dhoti on the right, and the young ascetic seated between them among the leaf plates. Draw no second Damodarpant. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Frame this as an over-the-shoulder view from behind Bankatlal and Damodarpant, with their backs and turbans at opposite foreground edges and Maharaj seated between them looking up at their faces. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1887,
+  "source_refs": [
+   "A1:110 no answer, looks up at both faces (S4-L3)",
+   "timing: S4-L3 (narrator, ovi 110, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S5_06",
+  "scene": "S5",
+  "flow_title": "SH_S5_06__v04",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert from above: the young ascetic's right hand mixing all the dishes on the leaf plate together into one single heap: rice, dal, vegetable, broken puris and sweets all combined; dusty ground around the plate. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. One single full-frame image with no inset, no border and no picture-in-picture. The young ascetic sits on the ground at the leaf plate, his right hand mixing all the food on the plate into one heap. The house is the same tiled mud-brick house with the plain wooden door as the village road reference. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Show his right hand combining the rice, dal, vegetables, broken puris and sweets into one heap on the same small round stitched-leaf plate, beside the single doorway and step of Devidas's house. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1737,
+  "source_refs": [
+   "A1:118 mixes all dishes, no like or dislike (S5-L6)",
+   "timing: S5-L5 (narrator, ovi 117, continues); S5-L6 (narrator, ovi 118, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v04"
+ },
+ {
+  "shot_id": "SH_S7_04",
+  "scene": "S7",
+  "flow_title": "SH_S7_04__v03",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house. Medium close-up: the young ascetic laughing warmly, eyes creased with amusement, looking up at the two men just out of frame on the right; the sunlit house wall behind him, hard short shadows. No glow. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Show only the young ascetic, alone in the frame. The people he laughs at are out of frame and must not be drawn; the right side of the frame is open dusty ground. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Keep the recognizable village road, neighbouring houses and neem trees visible beyond the same house, while Maharaj laughs and looks up toward screen-right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1651,
+  "source_refs": [
+   "A1:127 laughs and looks at both (S7-L7)",
+   "timing: S7-L7 (narrator, ovi 127, continues); S7-L8 (gajanan, ovi 128, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S9_02",
+  "scene": "S9",
+  "flow_title": "SH_S9_02__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Wide view: the young ascetic seated by the trough speaking calmly, the two men standing and listening, the cattle drinking, the well, the neem tree, village roofs and the wide open plain under the vast sky. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic wears the same open frayed grey-white vest a short white hip cloth as the reference sheet, chest visible under the open vest, same face and build as the sheet. No tank top, no . Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1436,
+  "source_refs": [
+   "A1:139 the whole world pervaded by Brahman (S9-L3)",
+   "timing: S9-L2 (gajanan, ovi 138, continues); S9-L3 (gajanan, ovi 139, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1"
+ },
+ {
+  "shot_id": "SH_S9_08",
+  "scene": "S9",
+  "flow_title": "SH_S9_08__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic seated calm by the trough, eyes half-lowered, both hands resting on his knees, framed against the wide plain and the open noon sky. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic is the adult from the reference sheet, wearing the open frayed grey-white vest a short white hip cloth. Behind him the wide open plain stretches under the noon sky. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1199,
+  "source_refs": [
+   "A1:142 always reflect on the origin of the world (S9-L6)",
+   "A1:143 starts (S9-L7)",
+   "timing: S9-L6 (gajanan, ovi 142, continues); S9-L7 (narrator, ovi 143, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1"
+ },
+ {
+  "shot_id": "SH_S9_11",
+  "scene": "S9",
+  "flow_title": "SH_S9_11__v04",
+  "preset_suggested": "02_environmental_parallax",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Medium-wide framing: Bankatlal and Damodarpant stand side by side beside the stone trough in the middle of the frame, seen from the knees up and filling about half the height of the frame, both looking away along the empty dusty road across the open plain where a trail of dust swirls; the well, the neem tree and the cattle are around them; nobody on the road. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Exactly two people: Bankatlal in the cream turban and sage coat, and one Damodarpant in the terracotta turban, standing close in the middle of the frame. No third person. Bankatlal and Damodarpant look toward screen-left along the road after Maharaj, with his fading dust trail leading away in that same direction. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1633,
+  "source_refs": [
+   "A1:144 who can stop the wind (S9-L8 tail)",
+   "timing: S9-L8 (narrator, ovi 144, continues)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v04"
+ },
+ {
+  "shot_id": "SH_S5_03",
+  "scene": "S5",
+  "flow_title": "SH_S5_03__v03",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "DV_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DV_v01 (Devidas (shaved head with a small tuft, red tilak, shoulders uncovered, white dhoti)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert: Devidas's hands and forearms setting the fresh served leaf plate down on the ground just in front of the plinth step, before the young ascetic's crossed knee at the right edge of the frame; dusty ground and the foot of the door. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Same tiled mud-brick house with the plain wooden door and the low plinth step of the village road reference; no carved doorway and no stone stairs. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Clearly separate Devidas's two hands and forearms placing the plate from Maharaj's crossed knee and open frayed vest at the right edge, so the two people cannot be mistaken for one. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1691,
+  "source_refs": [
+   "A1:114 set at the door before the Swami (S5-L2)",
+   "A1:115 sits to eat (S5-L3 starts)",
+   "timing: S5-L2 (narrator, ovi 114, continues); S5-L3 (narrator, ovi 115, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S9_03",
+  "scene": "S9",
+  "flow_title": "SH_S9_03__v03",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Setting: the attached well and cattle trough picture. Close insert: the stone rim of the trough; on the left the shallow muddy water with a cow's muzzle drinking and ripples; on the rim at the right stands the brass gadva of clear water with the vetiver roots in it: both waters in one frame. No people in the picture. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Close insert filling the frame: only the stone rim of the trough in the foreground, shallow muddy water with a cow's muzzle at the left edge, and the brass gadva with vetiver roots on the rim at right. No houses and no sky. Show an opaque brass gadva with a small bundle of vetiver roots resting in the clear water at its open mouth, beside the cow drinking muddy trough water. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1280,
+  "source_refs": [
+   "A1:139 muddy, clear or scented: no difference (S9-L3)",
+   "A1:140 water is the same (S9-L4 starts)",
+   "timing: S9-L3 (gajanan, ovi 139, continues); S9-L4 (gajanan, ovi 140, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S9_04",
+  "scene": "S9",
+  "flow_title": "SH_S9_04__v04",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Medium close-up: the young ascetic speaking calmly, one palm open upward in explanation, eyes gentle; behind him the trough and a cow, the neem tree and the bright noon sky. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Medium close-up of the slim young ascetic with the same narrow face and short hair as the reference sheet, head in sheet proportions, speaking calmly with one palm open upward. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Keep the neem tree behind and separate from the well, its trunk rooted in the ground outside the well. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1573,
+  "source_refs": [
+   "A1:140 scent and stench both forms of God (S9-L4)",
+   "timing: S9-L4 (gajanan, ovi 140, continues)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v04"
+ },
+ {
+  "shot_id": "SH_S9_10",
+  "scene": "S9",
+  "flow_title": "SH_S9_10__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic running fast in full side view toward screen-left along the dusty road past the well, long stride, body leaning forward, the gourd in his left hand, the vest flapping, dust kicked up behind him; Bankatlal and Damodarpant left half-kneeling by the trough at the right, the gadva on the ground. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic is the adult from the reference sheet with the open frayed grey-white vest a short white hip cloth, running in full side view. Bankatlal and Damodarpant half-kneel by the trough, the brass gadva set on the ground beside them. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1582,
+  "source_refs": [
+   "A1:144 knowing their intent he runs off like the wind (S9-L8; FINAL A1-11 no destination)",
+   "timing: S9-L8 (narrator, ovi 144, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1"
+ },
+ {
+  "shot_id": "SH_S3_03",
+  "scene": "S3",
+  "flow_title": "SH_S3_03__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house. Medium two-shot in profile: Bankatlal on the left with raised eyebrows and a puzzled frown, and Damodarpant on the right with a doubtful frown, standing close and looking directly at each other, the two faces turned towards one another and NOT towards the viewer; behind them the road and the houses on the far side, a neem tree. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Bankatlal turns his head toward Damodarpant, who looks back at him, the two facing each other in profile across the frame. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1269,
+  "source_refs": [
+   "A1:99 'he looks mad' (S3-L4)",
+   "A1:102 Bankatlal said to Damodarpant (S3-L6)",
+   "timing: S3-L4 (narrator, ovi 99, starts); S3-L6 (narrator, ovi 102, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1"
+ },
+ {
+  "shot_id": "SH_S8_03",
+  "scene": "S8",
+  "flow_title": "SH_S8_03__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "DK_v01",
+   "BA_v01",
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Damodarpant hurrying in from the right carrying the brass gadva of water in his left arm, his right palm raised in alarm (stop!), mouth open calling out; Bankatlal a few steps behind him; the young ascetic at the trough in the left background, wiping his mouth, content. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Exactly three people: Damodarpant in the foreground right, Bankatlal behind him, and the young ascetic small at the trough in the left background. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1713,
+  "source_refs": [
+   "A1:135 Pant arrives with water in a gadva (S8-L3)",
+   "A1:136 'stop, do not drink' (S8-L4)",
+   "timing: S8-L3 (narrator, ovi 135, continues); S8-L4 (damodarpant, ovi 136, starts)"
+  ],
+  "status": "TODO"
+ },
+ {
+  "shot_id": "SH_S3_02",
+  "scene": "S3",
+  "flow_title": "SH_S3_02__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Over-the-shoulder view: Bankatlal and Damodarpant in the right foreground seen from behind in three-quarter back view, stopped on the road, astonished; in the middle distance the young ascetic sits among the used leaf plates before Devidas's house, picking grains; the house, its door, neem trees and the road fill the frame. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1718,
+  "source_refs": [
+   "A1:98 both astonished (S3-L3)",
+   "timing: S3-L2 (narrator, ovi 98, continues); S3-L3 (narrator, ovi 98, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S3_05",
+  "scene": "S3",
+  "flow_title": "SH_S3_05__v03",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Reverse view from behind the young ascetic: his shoulder and the back of his vest out of focus in the left foreground; Bankatlal and Damodarpant stand on the road a few steps away, watching him thoughtfully, beginning to sense he is a great wise man; the road, neighbouring houses and neem trees behind them. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Seen from behind, the open frayed vest hangs from his shoulders with a torn hem. Show Maharaj seated cross-legged among the leaf plates in the left foreground, viewed from behind at his seated shoulder height, while both standing men look toward him. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1952,
+  "source_refs": [
+   "A1:104 looks mad but seems a great wise man (S3-L8)",
+   "FINAL G-2 bastion of wisdom (meaning only, not drawn)",
+   "timing: S3-L7 (bankatlal, ovi 102, continues); S3-L8 (narrator, ovi 104, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S3_06",
+  "scene": "S3",
+  "flow_title": "SH_S3_06__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Wide view: the young ascetic in the left middle ground seated among the leaf plates before Devidas's house, calm and indifferent; the two men stand small at the right on the road, watching quietly; the house, door, road, neem trees and neighbouring roofs fill the frame. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1663,
+  "source_refs": [
+   "A1:104-105 the two men weigh him up (S3-L8 tail; L9 optional, not spoken)",
+   "timing: S3-L8 (narrator, ovi 104, continues)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S4_01",
+  "scene": "S4",
+  "flow_title": "SH_S4_01__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Bankatlal steps forward first: he walks toward the seated the young ascetic with palms joined humbly at his chest, Damodarpant a step behind him; the young ascetic sits among the leaf plates in front of the house, still picking grains; road, door and neem trees around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1662,
+  "source_refs": [
+   "A1:108 Bankatlal steps forward first, humbly (S4-L1)",
+   "timing: S4-L1 (narrator, ovi 108, starts); S4-L2 (bankatlal, ovi 109, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S4_02",
+  "scene": "S4",
+  "flow_title": "SH_S4_02__v02",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "BA_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot: Bankatlal on the right leaning slightly down toward the young ascetic, palms joined, gentle concerned face, asking his question; the young ascetic on the left seated among the plates, still picking grains, not looking up; the house wall and door behind. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1567,
+  "source_refs": [
+   "A1:109 Bankatlal asks why, offers food (S4-L2)",
+   "timing: S4-L2 (bankatlal, ovi 109, continues)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S6_04",
+  "scene": "S6",
+  "flow_title": "SH_S6_04__v03",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Over the young ascetic's shoulder (his back and the vest in the left foreground): Bankatlal and Damodarpant gaze at him with reverence and joy, palms joined; behind them the village road opens out toward the rest of Shegaon. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Seen from behind, the open frayed vest hangs from his shoulders with a torn hem. Show the young ascetic SEATED cross-legged on the road in the left foreground, seen from behind at shoulder height (not standing), wearing his open frayed grey-white vest and a short white cloth at the hips; the two men stand ahead of him. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1938,
+  "source_refs": [
+   "A1:121 (S6-L4 tail)",
+   "A1:122 blessed is our Shegaon (S6-L5)",
+   "timing: S6-L4 (bankatlal, ovi 121, continues); S6-L5 (narrator, ovi 122, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S2_07",
+  "scene": "S2",
+  "flow_title": "SH_S2_07__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). High wide view down the village road: the young ascetic small in the middle of the frame, seated among the leaf plates before Devidas's house, patiently gathering grains; the whole road, the house roofs, neighbouring houses, a cattle shed, neem trees and the plain beyond; the road otherwise empty. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest (the vest is open at the front and has torn hems, it is NOT a sleeveless undershirt or tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no tank top, no shirt, no trousers, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1528,
+  "source_refs": [
+   "A1:96 compassionate Maharaj gathering grains; people did not understand (S2-L10)",
+   "timing: S2-L10 (narrator, ovi 96, continues)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S9_06",
+  "scene": "S9",
+  "flow_title": "SH_S9_06__v03",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Over the shoulders of the two standing men, the young ascetic looks up at them steadily, his open hand held toward them; the trough and the well behind him. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Camera behind the two men: their backs and turbans frame the left and right edges, and the young ascetic seated in the middle looks up at their faces, his open hand held toward them. Maharaj is a slim adult youth with cropped short dark hair and a narrow face, wearing the open frayed grey-white vest over his chest and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no trousers, no shirt, not a boy. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1622,
+  "source_refs": [
+   "A1:141 tail (S9-L5)",
+   "A1:142 you left the root truth (S9-L6)",
+   "timing: S9-L5 (gajanan, ovi 141, continues); S9-L6 (gajanan, ovi 142, starts)"
+  ],
+  "status": "TODO",
+  "model": "Nano Banana 2.1 x1",
+  "file_version": "v03"
+ },
+ {
+  "shot_id": "SH_S2_08",
+  "scene": "S2",
+  "flow_title": "SH_S2_08__v02",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert: the young ascetic's right hand resting on his crossed knee, loosely holding the small unfired clay chilim; the dried gourd water vessel stands on the dusty ground beside the knee; the frayed hem of the old vest at the top edge; leaf plates and rice grains on the road around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is clearly visible between two loose front panels (a vest with armholes and a torn hem, NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child or a boy. Keep the whole picture, including the village background, in the same flat-colour navy-ink style as the village road reference, with crisp outlines, no blur and no soft focus. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1730,
+  "source_refs": [
+   "A1:89-90 gourd and unfired chilim, his only possessions (FINAL G-4)",
+   "A1:96 (S2-L10 continues)",
+   "timing: S2-L10 (narrator, ovi 96, continues)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S4_04",
+  "scene": "S4",
+  "flow_title": "SH_S4_04__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Close-up, slightly low angle: the young ascetic's face and upper body, head raised, eyes open and steady, attention gathered between the eyebrows, radiant handsome calm face, strong neck and arms, broad chest under the open frayed vest; the ochre house wall and the door frame behind him. No glow. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is clearly visible between two loose front panels (a vest with armholes and a torn hem, NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child or a boy. The face must match the attached character sheet exactly (narrow adult face, cropped dark hair, same skin tone). The background is the detailed village road: the tiled mud-brick house with its wooden door and the leaf plates, not empty ground. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1902,
+  "source_refs": [
+   "A1:110 (S4-L3)",
+   "A1:111 radiant, arms, neck, chest, gaze between brows (optional line, not spoken)",
+   "timing: S4-L3 (narrator, ovi 110, continues); S4-L4 (narrator, ovi 112, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S5_01",
+  "scene": "S5",
+  "flow_title": "SH_S5_01__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "DV_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); DV_v01 (Devidas (shaved head with a small tuft, red tilak, bare shoulders, white dhoti)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). At the door: Devidas stands on his plinth step in the half-open doorway, listening attentively; Bankatlal and Damodarpant stand on the road before him, speaking with affection and urgency, one open hand gesturing back toward the young ascetic, who sits small among the plates at the left edge of the road; the hearth glow inside the doorway. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is clearly visible between two loose front panels (a vest with armholes and a torn hem, NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child or a boy. Damodarpant wears a plain white kurta-style shirt without a collar, without pockets and without buttons showing, and a white dhoti, exactly as in his character sheet. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 2122,
+  "source_refs": [
+   "A1:113 'quickly serve a plate and bring it out' (S5-L1; plural speaker)",
+   "timing: S5-L1 (narrator, ovi 113, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S8_02",
+  "scene": "S8",
+  "flow_title": "SH_S8_02__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic kneeling at the left end of the cattle trough in side view facing screen-right, drinking the muddy water from his cupped hands, content; the cattle drinking at the far end; his gourd on the ground beside him; the well behind, hard noon sun. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Show the clearly separated open front edges of the frayed grey-white vest over his chest and a short white cloth wrapped at the hips, as he drinks from cupped hands. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1731,
+  "source_refs": [
+   "A1:134-135 goes there, drinks, belches with satisfaction (S8-L2)",
+   "timing: S8-L2 (narrator, ovi 135, starts); S8-L3 (narrator, ovi 135, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S8_04",
+  "scene": "S8",
+  "flow_title": "SH_S8_04__v02",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Two-shot at the trough: Damodarpant on the right holding the brass gadva out with both hands toward the young ascetic, worried and pleading; the young ascetic on the left seated cross-legged by the trough, calm; the muddy trough water and a cow behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Keep the same neem tree, village houses and road visible behind the well and trough as in the attached well reference, with the two cattle at the trough. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1802,
+  "source_refs": [
+   "A1:136 muddy water fit only for animals (S8-L4)",
+   "A1:137 I brought clean water (S8-L5)",
+   "addendum F1: muddy water is the trough's",
+   "timing: S8-L4 (damodarpant, ovi 136, continues); S8-L5 (damodarpant, ovi 137, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S2_05",
+  "scene": "S2",
+  "flow_title": "SH_S2_05__v02",
+  "preset_suggested": "10_object_hand_insert",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": null,
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Close insert: the young ascetic's right hand and wrist, fingers lifting one single grain of white rice from a crumpled used leaf plate on the dusty road; his crossed knee and the frayed hem of the vest at the edge of the frame; small stones and rice grains around. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Keep this close insert on the village road immediately in front of Devidas's ochre house, with its plinth or wooden doorway visible behind the hand and plate; do not show hills or an empty landscape. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1675,
+  "source_refs": [
+   "A1:94 (S2-L8)",
+   "A1:95 food is Brahman (S2-L9 starts)",
+   "timing: S2-L8 (narrator, ovi 94, continues); S2-L9 (narrator, ovi 95, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S6_01",
+  "scene": "S6",
+  "flow_title": "SH_S6_01__v02",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "BA_v01",
+   "DK_v01",
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Two-shot: Bankatlal on the right turning to Damodarpant on the left, one hand on his chest, remorseful, speaking; Damodarpant listening; in the background the young ascetic sits small before the house with the finished leaf plate. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Keep the young ascetic seated cross-legged on the dusty road in front of the house step, beside his finished leaf plate, not on the raised plinth. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1847,
+  "source_refs": [
+   "A1:119 'calling him mad was our big mistake' (S6-L1, S6-L2)",
+   "timing: S6-L1 (narrator, ovi 119, starts); S6-L2 (bankatlal, ovi 119, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S5_05",
+  "scene": "S5",
+  "flow_title": "SH_S5_05__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Close-up: the young ascetic's calm face, eyes half-lowered, completely content and indifferent to taste, his right hand resting beside the plate; the ochre house wall and the edge of the door behind. No glow. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Keep his right hand resting beside the same served stitched-leaf plate, with the village road and neighbouring houses visible beyond the doorway. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1661,
+  "source_refs": [
+   "A1:116-117 already full of bliss; emperor comparison (S5-L4, S5-L5; not illustrated, OC-17)",
+   "timing: S5-L4 (narrator, ovi 116, continues); S5-L5 (narrator, ovi 117, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S7_07",
+  "scene": "S7",
+  "flow_title": "SH_S7_07__v02",
+  "preset_suggested": "03_slow_cinematic_push",
+  "characters": [
+   "GM_v01"
+  ],
+  "place_search": "Village road",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up: the young ascetic with his right hand resting lightly on his own chest (this body), a gentle ironic smile; the empty gourd beside his knee; the sunlit wall and a strip of hot road behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Keep the recognizable village road, neighbouring houses and neem trees visible beyond the same house, with his right hand on his chest and the gourd beside his knee. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1719,
+  "source_refs": [
+   "A1:129 tail (S7-L9)",
+   "A1:130 this body ate food, so it needs water (S7-L10)",
+   "A1:131 optional, not spoken",
+   "timing: S7-L9 (gajanan, ovi 129, continues); S7-L10 (gajanan, ovi 130, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S9_01",
+  "scene": "S9",
+  "flow_title": "SH_S9_01__v02",
+  "preset_suggested": "09_dialogue_composition",
+  "characters": [
+   "GM_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. Two-shot: the young ascetic on the left seated by the trough, speaking, right palm raised gently in refusal; Damodarpant on the right still holding the brass gadva, surprised; the trough and the well behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Show Maharaj raising his right palm gently toward Damodarpant, with the two cattle drinking behind them at the trough. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1722,
+  "source_refs": [
+   "A1:138 'do not tell us such worldly things' (S9-L1, S9-L2)",
+   "timing: S9-L1 (narrator, ovi 138, starts); S9-L2 (gajanan, ovi 138, starts)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ },
+ {
+  "shot_id": "SH_S9_09",
+  "scene": "S9",
+  "flow_title": "SH_S9_09__v02",
+  "preset_suggested": "05_bowing_prayer",
+  "characters": [
+   "GM_v01",
+   "BA_v01",
+   "DK_v01"
+  ],
+  "place_search": "Cattle drinking",
+  "style_ref_search": "ref_temple",
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached well and cattle trough picture. the young ascetic seated on the left; Bankatlal and Damodarpant on the right, overwhelmed, eyes moist, palms joined, both beginning to kneel forward toward his feet but not yet down; the brass gadva set on the ground beside Damodarpant; trough and well behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. The young ascetic (Maharaj) is a slim ADULT youth with cropped short dark hair and a narrow face, exactly as in the attached character sheet, wearing the open frayed grey-white vest hanging open at the front so the chest is visible between two loose front panels (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Show both men still upright on their feet, just beginning to bend their knees and lean toward Maharaj with joined palms, neither knee touching the ground. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+  "chars_in_prompt": 1885,
+  "source_refs": [
+   "A1:143 overcome, ready to fall at his feet (S9-L7)",
+   "timing: S9-L7 (narrator, ovi 143, continues)"
+  ],
+  "status": "TODO",
+  "file_version": "v02"
+ }
+]

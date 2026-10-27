@@ -1,0 +1,33 @@
+**All nine units: FIX FIRST.** References are to `docs/pilot/nemotron_specs/review_units_tests_v2/test_stage1_<unit>.py`. **High** denotes execution blockers; **Medium** denotes incorrect expectations or ineffective coverage. “FIXED” below means the earlier defect is corrected by inspection, not a pytest pass.
+
+- **story_map:** Earlier wording and schema-level range findings **FIXED**. **High:** `test_schema_errors`/`test_validate` decorators, **93,138**, reference `pytest` without importing it. `append_at`, **37–41**, checks the parent dictionary rather than its `ovi_types` list; duplicate/outside rows **146,148** raise `AssertionError`. **Medium:** reversed-range row **150** still also puts key ovi 3 outside the range; checking only `E1` cannot distinguish the two violations.
+
+- **coverage:** Earlier tuple arity, duplicate append, integer references and wording **FIXED**. **High:** `test_schema_errors`, **111**, still deletes absent `ovis[0].reason`, raising `KeyError`. `test_validate`, **160**, sets the already-empty `unfilmed_ovis` to `[]`, triggering its mutation guard. **Medium:** missing-disposition row **142** deletes a required field instead of removing the ovi entry, violating semantic validation’s schema-passed precondition. Omission row **146** and assertions **169–173** still check neither exactly one note nor ordering after an error. Duplicate row **144** checks `"twice"` without ovi 1’s identity.
+
+- **scenes:** Earlier list-index handling and required/extra-field coverage **FIXED**; story-treatment coverage added. **Medium:** `test_schema_errors`, **144**, still expects schema rejection of `[5,1]`, explicitly semantic. `test_semantic_errors` duplicate-scene row **166** duplicates ranges and lines too, so an `S1` overlap diagnostic satisfies the test without duplicate-ID detection. Unknown-line row **180** also removes core line `S1-L1`; duplicate-line row **182** additionally reverses script order within S2. Reversed-range row **168** also breaks turn containment and chapter coverage. These remain non-isolated.
+
+- **shots:** Earlier mismatch, real duplicate creation and unsupported script-membership assertion **FIXED**. **High:** `test_required_need_new_fields`, **150–151**, deletes inside `need_new=None`; nested-extra row **181,184** similarly writes into `None`. `test_need_new_if_then_preset_need_new_requires_object`, **195–196**, reapplies `None`, triggering the guard. **Medium:** `test_required_root`, **137**, still demands child error paths instead of `shots doc`. `test_no_extra_keys`, **186**, constructs `shots/shots/0` for shot objects. `test_shot_field_types_and_formats`, **166**, still masks invalid class with the normal-preset-required-null violation. `test_shot_id_non_consecutive`, **231**, requires nonexistent `S1-2` rather than the mutated item `S1-4`. `test_scene_exists`, **235–237**, also breaks ID sequencing and leaves a scene line uncovered.
+
+- **briefs:** Earlier root rows, isolated extras and actual duplicate creation **FIXED**. **High:** every `test_semantic_errors` row returns a brief document as `docs` (**247–275**), then **283** accesses `docs["briefs"]`: `KeyError`. **Medium:** `test_schema_errors`, **213**, still assigns semantic empty-name rejection to schema validation. Semantic rows **263–275** still mandate unquoted wording and omit item IDs. Missing-scene row **267** also breaks image-prefix and shot-scene consistency.
+
+- **looks:** Earlier wording **FIXED**. **Medium:** `test_validate_errors`, `"duplicate_entity_state"` row **136**, changes only Bankatlal’s entity: the resulting pairs are `(gajanan_maharaj, adult_youth_v2)` and `(gajanan_maharaj, merchant_v1)`, still distinct. No real duplicate-pair test exists.
+
+- **voices:** Earlier context path and duplicate-wording findings **FIXED**. **Medium:** `test_schema`, **136–146,159**, assigns `None`; none of those labeled required-field cases deletes a key. `test_validate`, **168–169**, similarly replaces cast entries with `None`. Wrong-ID row **171** still uses schema-invalid `"wrong"`. Rows **177–185** still expect forbidden-sharing errors when one participant is narrator, expressly allowed; they also mandate unquoted wording. No prohibited sharing between two non-narrators is tested.
+
+- **sounds:** Earlier independent kind mutations **FIXED**. **Medium:** `test_schema_errors`, **164–179**, replaces fields rather than performing the labeled required deletions; only `cues` is deleted. **188–193** constructs valid NEED_NEW-with-prompt but expects rejection. Neither missing-prompt nor ordinary-cue-with-prompt schema rejection is tested; **217** incorrectly demands missing-prompt rejection semantically. `test_semantic_errors`, **207–215**, still asserts unquoted field wording instead of item IDs. `test_empty_context_missing_refs`, **250**, still requires unsupported script-membership rejection.
+
+- **questions:** Earlier wording partly **FIXED**. **High:** `test_validate_duplicate_id`, **141**, calls `append_at` with the list path, but **94–96** asserts its parent dictionary is a list. **Medium:** `test_validate_scene_missing`, **149**, still mandates unquoted `"scene"`.
+
+All mutation helpers contain change assertions; several rows now fail those guards before validation. Python attempts returned no output and were stopped; implementation modules are absent. No files edited, secrets opened or web used.
+
+| Unit | Verdict | Concrete fixes |
+|---|---|---|
+| story_map | FIX FIRST | Import pytest; repair append; isolate range |
+| coverage | FIX FIRST | Repair deletion; remove no-op; remove whole entry; verify note count/order; require duplicate ID |
+| scenes | FIX FIRST | Remove schema range row; isolate semantic mutations |
+| shots | FIX FIRST | Initialize nested objects; remove no-op; correct paths; isolate class; fix sequence ID; isolate missing scene |
+| briefs | FIX FIRST | Preserve docs wrapper; move empty-name check; relax wording; isolate missing scene |
+| looks | FIX FIRST | Duplicate both entity and state |
+| voices | FIX FIRST | Delete required keys; remove cast entries; use valid-length ID; correct narrator cases; add prohibited sharing; relax wording |
+| sounds | FIX FIRST | Add deletions; correct NEED_NEW expectation; test both prompt schema rules; remove semantic prompt demand; relax wording; remove script assertion |
+| questions | FIX FIRST | Repair append; remove wording requirement |

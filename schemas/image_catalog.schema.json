@@ -1,0 +1,66 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "image_catalog",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "adhyay",
+  "images"
+ ],
+ "properties": {
+  "adhyay": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 21
+  },
+  "images": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "file",
+     "sha256",
+     "chosen_version",
+     "prompt_sha256",
+     "model",
+     "edit_id",
+     "approved"
+    ],
+    "properties": {
+     "file": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+     },
+     "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "chosen_version": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "prompt_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+     },
+     "edit_id": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "approved": {
+      "type": "boolean"
+     }
+    }
+   }
+  }
+ }
+}

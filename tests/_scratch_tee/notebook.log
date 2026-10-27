@@ -1,3 +1,3 @@
 [    0.0s] t: START python -c print('token hf_*** and ***')
-[    0.2s] [t] token hf_*** and ***
-[    0.2s] t: END exit=0
+[    0.0s] [t] token hf_*** and ***
+[    0.0s] t: END exit=0

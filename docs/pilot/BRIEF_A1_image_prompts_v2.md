@@ -1,0 +1,26 @@
+# Brief v2: Adhyay 1 image prompt list, one tailored FULL image per shot (drafts for the owner)
+
+Read `docs/pilot/BRIEF_A1_image_prompts.md` first: its rules, inputs and output format STILL APPLY, except where this brief changes them. Also read `docs/pilot/DECISION_LOG.md` (decisions already taken; do not re-open them) and your predecessor's v1 files `docs/pilot/A1_image_prompts.md` + `canon/drafts/A1_image_catalog_DRAFT.json` (reuse their identity paragraphs, ids, defaults and the generator `C:\Users\Satvik\AppData\Local\Temp\claude\D--aai-work\9161bfdd-8925-416b-9a17-cfa28c066ddf\scratchpad\make_a1_prompts.py` as a starting point; copy it to your own file, never edit the original).
+
+## What changed (owner decisions, 2026-10-26)
+1. **No image budget.** The owner supplies as many images as the film needs. Reuse is for CONSISTENCY of look only, never to save images. Do NOT bend a shot to reuse an image.
+2. **The film must look FULL.** Every shot image is a completely drawn, rich, full-frame 16:9 scene (foreground, midground, background all filled in: sky, ground, buildings, trees, carved stone, village life details). No plain or empty backgrounds. Plain-white cut-outs are allowed ONLY for the reference sheets and for figures a layered preset truly needs; prefer full-frame images.
+3. **Style = the owner's reference clips** (frames in `assets/pilot_refs/style_v2/`; view all three): flat colour, clean dark navy-ink contour lines, fine hatching for folds/stone/brick, warm earth palette + indigo and sunset orange/gold skies, golden brass pot. The v1 generator's STYLE paragraph already encodes this; keep it verbatim at the start of every prompt.
+4. **Shot count is now MEASURED = 59 shots**, per scene S1..S9 = 2, 8, 6, 5, 7, 6, 9, 5, 11 (6 s each). Use `canon/audio/A1_timing_plan.json` (scenes[].shots[]: which narration/dialogue lines start in each shot, their ovis, the speaker) and `docs/pilot/A1_full_script_simple.md` (the EASY spoken wording, the lines the shot must picture) as the source of what each shot shows. The audio, not the picture, sets the order and length.
+5. **Voices are fixed** (narrator Tukaram, Gajanan Sharad, Bankatlal Bipin, Damodarpant Vinayak): the speaking character is usually the one on screen with a held pose; the narrator is never on screen.
+
+## Task
+Produce, in this order:
+A. **Reference sheets** (generated first; later prompts attach them): per recurring character (Gajanan Maharaj, Bankatlal, Damodarpant, Devidas) a full-body front/side turnaround sheet and a head-and-shoulders sheet in the reference style; per place (Shegaon village view, road before Devidas's house, the well and cattle trough) one wide establishing reference; per prop sheet (leaf plates, the water vessel (gourd/pot: owner choice, see questions), etc.). Keep the v1 ids where they exist.
+B. **One tailored shot image for EACH of the 59 shots** (id `SH_S<d>_<nn>`): a full-frame scene that pictures exactly what that shot's narration/dialogue says (use the easy script line + the verse ovi it renders, source refs per image), with the characters in a HELD POSE (the renderer cannot move limbs or faces inside a shot: a changed pose is a different shot image), correct costume/continuity from the reference sheets, time-of-day light (late morning S1-S6, hard noon S7-S9, unless the research says otherwise), and a suggested preset from `assets/v5_presets/` with the roles it needs. If a preset needs separate layers (background/midground/foreground/character cut-out), list the extra layer prompts for that shot too, each a complete drawn layer.
+C. **Continuity table**: per shot, who is on screen, their pose, costume state (e.g. Maharaj in the worn bandi; Damodarpant's pot), location, light; flag any continuity risk between neighbouring shots.
+D. **Questions list**: every unsettled look in ONE list with a proposed default (carry over OC-xx ids from v1; mark OC-00 style as RESOLVED by the owner's reference clips; add new questions only when the research is silent).
+E. **Totals**: counts by kind, and the generation order (A first, then B in scene order, checking each scene's characters against the sheets).
+
+## Rules that still apply (from the v1 brief)
+Never invent Granth content; every person/object/place/event must come from the scene's ovis, the frozen FINAL answers, or be a labelled STAGING/OWNER_CHOICE proposal (scenery, light, pose, camera only). No dates beyond the 1878 caption, no modern items, no text in images, no halo/glow on Maharaj unless the research states it, do not illustrate the comparisons (emperor, Arjuna and Subhadra) unless the research requires. Never open `D:\aai work\secrets`. Generate no images, call no paid service, modify no repository file except the two outputs below.
+
+## Outputs (write ONLY these two)
+1. `docs/pilot/A1_image_prompts_v2.md` (human-readable, same sections as v1 plus the continuity table).
+2. `canon/drafts/A1_image_catalog_v2_DRAFT.json` (machine-readable; each item: image_id, kind (character_sheet | prop_sheet | place_ref | shot_image | layer), shot_id or null, scene, preset_suggested, preset_roles, entities, prompt, references (image ids to attach), source_refs, owner_choice, status "DRAFT_NOT_APPROVED").
+Finish with a reply under 200 words: counts, the 5 biggest owner questions, blockers.

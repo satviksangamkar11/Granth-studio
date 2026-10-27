@@ -1,0 +1,44 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "stage1_questions",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "adhyay",
+  "questions"
+ ],
+ "properties": {
+  "adhyay": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 21
+  },
+  "questions": {
+   "type": "array",
+   "minItems": 0,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "text"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^Q[0-9]+$"
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+     },
+     "scene_id": {
+      "type": "string",
+      "pattern": "^S[0-9]{1,2}$"
+     }
+    }
+   }
+  }
+ }
+}

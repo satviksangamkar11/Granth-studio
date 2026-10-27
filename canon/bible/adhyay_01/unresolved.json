@@ -1,0 +1,163 @@
+{
+ "status": "OPEN: answer once; defaults are proposals, not decisions",
+ "items": [
+  {
+   "code": "OC-01",
+   "text": "age look 25-30",
+   "images": [
+    "CH_GM"
+   ],
+   "question": "Maharaj's apparent age: the Granth says only 'in the prime of youth' (74); 'about 30' is a web figure.",
+   "proposed_default": "Looks 25-30."
+  },
+  {
+   "code": "OC-02",
+   "text": "hair/beard/skin",
+   "images": [
+    "CH_GM"
+   ],
+   "question": "Maharaj's hair, beard and skin tone are not stated anywhere.",
+   "proposed_default": "Short cropped dark hair, clean-shaven, warm medium-brown skin (as in your M1_young_ref / set_v1)."
+  },
+  {
+   "code": "OC-03",
+   "text": "bandi colour and shown throughout",
+   "images": [
+    "CH_GM"
+   ],
+   "question": "The old bandi (88) with otherwise digambar (92): your set_v1 Maharaj has a loincloth and no bandi.",
+   "proposed_default": "Show the worn grey-white open bandi plus a minimal off-white loincloth in every image (direction note: 'throughout')."
+  },
+  {
+   "code": "OC-04",
+   "text": "Bankatlal costume and age",
+   "images": [
+    "CH_BA"
+   ],
+   "question": "Bankatlal's look (none stated).",
+   "proposed_default": "Your set_v1 colours: cream turban, sage-green angarkha, white dhoti, uparna, about 35; money pouch removed (it is an Adhyay 2 detail)."
+  },
+  {
+   "code": "OC-05",
+   "text": "Damodarpant costume; must not look like Devidas",
+   "images": [
+    "CH_DK"
+   ],
+   "question": "Damodarpant's look (none stated). set_v1 gave him a white cap that reads as a 20th-century 'Gandhi cap' and the same body/costume as Devidas.",
+   "proposed_default": "Terracotta-red pagadi, white angarkha, lean, about 35: clearly different from Devidas."
+  },
+  {
+   "code": "OC-06",
+   "text": "Devidas look and age",
+   "images": [
+    "CH_DV"
+   ],
+   "question": "Devidas's look and age (none stated; his son is 13-16 by FINAL S5-3).",
+   "proposed_default": "About 45, shaved head with shikha, sacred thread, red tilak, bare-chested with uparna (set_v1 based)."
+  },
+  {
+   "code": "OC-07",
+   "text": "Devidas's plate: leaf (default) or metal; which dishes",
+   "images": [
+    "PR_LEAF_PLATES",
+    "P_GM_EATING",
+    "P_DV_CARRY_PLATE",
+    "INS_PLATE_SET",
+    "INS_MIXING"
+   ],
+   "question": "Devidas's plate (114): the verse says 'patra' (material not stated); your easy script says 'patraval' (leaf plate). Which dishes?",
+   "proposed_default": "Fresh leaf plate; rice, yellow dal, a vegetable, puris, two round sweets."
+  },
+  {
+   "code": "OC-08",
+   "text": "time of day / light of the opening",
+   "images": [
+    "LOC_SHEGAON_REF",
+    "SKY_MORNING"
+   ],
+   "question": "Time of day of S1-S6 (not stated; the story only reaches noon at 118/123).",
+   "proposed_default": "Clear late-morning light for S1-S6, hard noon for S7-S9."
+  },
+  {
+   "code": "OC-09",
+   "text": "look of Devidas's house",
+   "images": [
+    "LOC_ROAD_REF",
+    "MID_ROAD_HOUSE"
+   ],
+   "question": "Devidas's house (not described; he heads a math).",
+   "proposed_default": "A solid mud-plastered house with clay-tile roof, plinth step and heavy wooden door (as in your set_v1 location)."
+  },
+  {
+   "code": "OC-10",
+   "text": "well/trough design; kind and number of animals",
+   "images": [
+    "LOC_WELL_REF",
+    "MID_WELL_TROUGH"
+   ],
+   "question": "Well and trough design; which animals and how many (134 says 'all the animals').",
+   "proposed_default": "Round stone well, long stone trough, two or three humped Deccan cattle."
+  },
+  {
+   "code": "OC-11",
+   "text": "neem as the village tree",
+   "images": [
+    "FG_NEEM"
+   ],
+   "question": "Village trees.",
+   "proposed_default": "Neem (and babul in the distance)."
+  },
+  {
+   "code": "OC-12",
+   "text": "posture at the trough during the teaching (seated default)",
+   "images": [
+    "P_GM_SPEAKING",
+    "BEAT_S8_GM_DRINKS"
+   ],
+   "question": "How Maharaj drinks at the trough and his posture during the teaching (not stated).",
+   "proposed_default": "Kneels and drinks from cupped hands; sits cross-legged by the trough for the teaching."
+  },
+  {
+   "code": "OC-13",
+   "text": "carries the gourd while running (default yes)",
+   "images": [
+    "P_GM_RUN"
+   ],
+   "question": "Does he carry the gourd when he runs (144)?",
+   "proposed_default": "Yes, in his left hand."
+  },
+  {
+   "code": "OC-14",
+   "text": "preset 08 halo",
+   "images": [
+    "F_GM_CALM"
+   ],
+   "question": "Preset 08 adds a soft backdrop halo; the brief forbids a halo unless the research states it (91 and 111 speak of radiance, as similes).",
+   "proposed_default": "Keep preset 08 but set its halo intensity to 0 (or at most 0.1 as plain backlight) for Maharaj."
+  },
+  {
+   "code": "OC-15",
+   "text": "bow type: standing folded-hands bow (default), not prostration",
+   "images": [
+    "POSE_SILENT_BOW"
+   ],
+   "question": "The silent bow (112): standing namaskar or prostration?",
+   "proposed_default": "Standing, heads bowed, palms joined (prostration would anticipate 143)."
+  },
+  {
+   "code": "OC-16",
+   "text": "show feast preparation only through objects (no household members)",
+   "images": [
+    "INS_FEAST_PREP"
+   ],
+   "question": "Feast preparation (86) and Devidas's son/household: show people?",
+   "proposed_default": "Objects only (hearth, rice, leaf plates); no household members, no guests."
+  }
+ ],
+ "resolved_by_owner": [
+  {
+   "code": "OC-00",
+   "decision": "Style: the flat-colour look of the owner's reference clips (assets/pilot_refs/style_v2), full-frame rich backgrounds (2026-10-26)"
+  }
+ ]
+}

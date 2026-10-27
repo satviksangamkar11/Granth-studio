@@ -1,0 +1,354 @@
+[
+ {
+  "shot_id": "SH_S8_02",
+  "base_version": "v01",
+  "base_edit_id": "c6cd2aec-ee77-455a-8764-3bf02dd97fbd",
+  "out_version": "v02",
+  "method": "edit",
+  "edit_instruction": "Change only the grey-white sleeveless top into an open frayed vest: the vest hangs open at the front in two separate loose panels with his chest visible between them, torn hems, and a short white cloth at his hips. Keep everything else exactly the same: the pose, drinking from cupped hands, the well, the trough, the cattle and the flat navy-ink style.",
+  "regen_fix_sentence": "Show the clearly separated open front edges of the frayed grey-white vest over his chest and a short white cloth wrapped at the hips, as he drinks from cupped hands.",
+  "previous_shot": {
+   "shot_id": "SH_S8_01",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S8_01__candidate_v01.png",
+   "flow_title": "SH_S8_01__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S8_03",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S8_03__candidate_v02.png",
+   "flow_title": "SH_S8_03__v02"
+  }
+ },
+ {
+  "shot_id": "SH_S8_04",
+  "base_version": "v01",
+  "base_edit_id": "250aa084-82e8-4077-8a91-bfd4725439e4",
+  "out_version": "v02",
+  "method": "edit",
+  "edit_instruction": "Add the village behind the well and trough: tiled mud-brick houses on both sides and a neem tree, instead of the empty plain. Keep the people, the well, the trough, the cattle and the brass pot exactly the same, in the same flat navy-ink style.",
+  "regen_fix_sentence": "Keep the same neem tree, village houses and road visible behind the well and trough as in the attached well reference, with the two cattle at the trough.",
+  "previous_shot": {
+   "shot_id": "SH_S8_03",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S8_03__candidate_v02.png",
+   "flow_title": "SH_S8_03__v02"
+  },
+  "next_shot": {
+   "shot_id": "SH_S8_05",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S8_05__candidate_v01.png",
+   "flow_title": "SH_S8_05__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S6_04",
+  "base_version": "v02",
+  "base_edit_id": "c42564c7-9500-4dee-bca1-35c70af6bdbd",
+  "out_version": "v03",
+  "method": "regenerate",
+  "edit_instruction": "Change only the pose: the young ascetic sits cross-legged on the road in the left foreground, seen from behind at shoulder height, instead of standing. Keep the open vest, the hip cloth, the two men with joined palms, the house and the road exactly the same.",
+  "regen_fix_sentence": "Show the young ascetic SEATED cross-legged on the road in the left foreground, seen from behind at shoulder height (not standing), wearing his open frayed grey-white vest and a short white cloth at the hips; the two men stand ahead of him.",
+  "previous_shot": {
+   "shot_id": "SH_S6_03",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S6_03__candidate_v01.png",
+   "flow_title": "SH_S6_03__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S6_05",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S6_05__candidate_v01.png",
+   "flow_title": "SH_S6_05__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S5_03",
+  "base_version": "v02",
+  "base_edit_id": "3f346cf6-c814-4ebb-b62c-9c7fdaa4ac94",
+  "out_version": "v03",
+  "method": "edit",
+  "edit_instruction": "Make the two people clearly separate: Devidas's two forearms and hands placing the leaf plate on the ground come from the left, clearly apart from Maharaj's crossed knee and open frayed vest at the right edge. Keep the plate, the wooden door, the step and the style exactly the same.",
+  "regen_fix_sentence": "Clearly separate Devidas's two hands and forearms placing the plate from Maharaj's crossed knee and open frayed vest at the right edge, so the two people cannot be mistaken for one.",
+  "previous_shot": {
+   "shot_id": "SH_S5_02",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_02__candidate_v01.png",
+   "flow_title": "SH_S5_02__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S5_04",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_04__candidate_v01.png",
+   "flow_title": "SH_S5_04__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S9_03",
+  "base_version": "v02",
+  "base_edit_id": "ad7e523f-4ef8-4a39-a4d8-5454d012bd27",
+  "out_version": "v03",
+  "method": "edit",
+  "edit_instruction": "Redraw the vetiver roots so they rest inside the clear water at the open mouth of the brass pot, not drawn across the outside of the pot. Keep the cow, the trough, the position of the pot and the style exactly the same.",
+  "regen_fix_sentence": "Show an opaque brass gadva with a small bundle of vetiver roots resting in the clear water at its open mouth, beside the cow drinking muddy trough water.",
+  "previous_shot": {
+   "shot_id": "SH_S9_02",
+   "version": "v03",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_02__candidate_v03.png",
+   "flow_title": "SH_S9_02__v03"
+  },
+  "next_shot": {
+   "shot_id": "SH_S9_04",
+   "version": "v03",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_04__candidate_v03.png",
+   "flow_title": "SH_S9_04__v03"
+  }
+ },
+ {
+  "shot_id": "SH_S9_04",
+  "base_version": "v03",
+  "base_edit_id": "11616fde-aab5-4bfe-9865-1ba9ee22d950",
+  "out_version": "v04",
+  "method": "edit",
+  "edit_instruction": "Move the neem tree so its trunk stands in the ground behind and separate from the well, not growing out of the well. Keep Maharaj, his open palm, the cow, the trough and the style exactly the same.",
+  "regen_fix_sentence": "Keep the neem tree behind and separate from the well, its trunk rooted in the ground outside the well.",
+  "previous_shot": {
+   "shot_id": "SH_S9_03",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_03__candidate_v02.png",
+   "flow_title": "SH_S9_03__v02"
+  },
+  "next_shot": {
+   "shot_id": "SH_S9_05",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_05__candidate_v01.png",
+   "flow_title": "SH_S9_05__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S2_05",
+  "base_version": "v01",
+  "base_edit_id": "b5434246-b603-4919-986e-e3945ee26620",
+  "out_version": "v02",
+  "method": "edit",
+  "edit_instruction": "Replace the empty hills in the background with the village road: the ochre house with its wooden doorway and plinth behind the hand and plate, and the dusty road. Keep the hand, the leaf plate, the grains and the style exactly the same.",
+  "regen_fix_sentence": "Keep this close insert on the village road immediately in front of Devidas's ochre house, with its plinth or wooden doorway visible behind the hand and plate; do not show hills or an empty landscape.",
+  "previous_shot": {
+   "shot_id": "SH_S2_04",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S2_04__candidate_v01.png",
+   "flow_title": "SH_S2_04__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S2_06",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S2_06__candidate_v01.png",
+   "flow_title": "SH_S2_06__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S5_06",
+  "base_version": "v03",
+  "base_edit_id": "f9a672d7-088a-4cec-9024-5f14febc5c9a",
+  "out_version": "v04",
+  "method": "edit",
+  "edit_instruction": "Change the big green leaf into the small round stitched leaf plate used in the other shots, with all the food mixed into one heap under his right hand; remove the second doorway so the house has one wooden door and one step. Keep Maharaj, his pose and the style exactly the same.",
+  "regen_fix_sentence": "Show his right hand combining the rice, dal, vegetables, broken puris and sweets into one heap on the same small round stitched-leaf plate, beside the single doorway and step of Devidas's house.",
+  "previous_shot": {
+   "shot_id": "SH_S5_05",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_05__candidate_v01.png",
+   "flow_title": "SH_S5_05__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S5_07",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_07__candidate_v01.png",
+   "flow_title": "SH_S5_07__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S6_01",
+  "base_version": "v01",
+  "base_edit_id": "4a4755fe-fc48-4240-852c-42c78bc83986",
+  "out_version": "v02",
+  "method": "regenerate",
+  "edit_instruction": "Move the young ascetic off the plinth: he sits cross-legged on the dusty road in front of the step, beside his finished leaf plate. Keep the two men, the house and the style exactly the same.",
+  "regen_fix_sentence": "Keep the young ascetic seated cross-legged on the dusty road in front of the house step, beside his finished leaf plate, not on the raised plinth.",
+  "previous_shot": {
+   "shot_id": "SH_S5_07",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_07__candidate_v01.png",
+   "flow_title": "SH_S5_07__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S6_02",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S6_02__candidate_v01.png",
+   "flow_title": "SH_S6_02__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S4_03",
+  "base_version": "v02",
+  "base_edit_id": "212ae799-10f3-4327-9f72-14788ca5e43c",
+  "out_version": "v03",
+  "method": "regenerate",
+  "edit_instruction": "Change only the framing to over-the-shoulder: the backs and turbans of Bankatlal and Damodarpant at the opposite foreground edges, Maharaj seated between them looking up at their faces. Keep the costumes, house and style the same.",
+  "regen_fix_sentence": "Frame this as an over-the-shoulder view from behind Bankatlal and Damodarpant, with their backs and turbans at opposite foreground edges and Maharaj seated between them looking up at their faces.",
+  "previous_shot": {
+   "shot_id": "SH_S4_02",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S4_02__candidate_v02.png",
+   "flow_title": "SH_S4_02__v02"
+  },
+  "next_shot": {
+   "shot_id": "SH_S4_04",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S4_04__candidate_v02.png",
+   "flow_title": "SH_S4_04__v02"
+  }
+ },
+ {
+  "shot_id": "SH_S5_05",
+  "base_version": "v01",
+  "base_edit_id": "a1e900ef-93a1-4555-acef-618faf32eb67",
+  "out_version": "v02",
+  "method": "edit",
+  "edit_instruction": "Move his right hand to rest beside the plate instead of at his mouth, and show the village road and the neighbouring houses beyond the doorway instead of the empty ground. Keep the face, the vest, the plate and the style exactly the same.",
+  "regen_fix_sentence": "Keep his right hand resting beside the same served stitched-leaf plate, with the village road and neighbouring houses visible beyond the doorway.",
+  "previous_shot": {
+   "shot_id": "SH_S5_04",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_04__candidate_v01.png",
+   "flow_title": "SH_S5_04__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S5_06",
+   "version": "v03",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S5_06__candidate_v03.png",
+   "flow_title": "SH_S5_06__v03"
+  }
+ },
+ {
+  "shot_id": "SH_S3_05",
+  "base_version": "v02",
+  "base_edit_id": "8be7456b-01ca-4d3c-a350-6294a3eccefa",
+  "out_version": "v03",
+  "method": "regenerate",
+  "edit_instruction": "Change only the pose: Maharaj sits cross-legged among the leaf plates in the left foreground, seen from behind at seated shoulder height, instead of upright; the two men stand ahead of him. Keep the vest, the men, the house and the style the same.",
+  "regen_fix_sentence": "Show Maharaj seated cross-legged among the leaf plates in the left foreground, viewed from behind at his seated shoulder height, while both standing men look toward him.",
+  "previous_shot": {
+   "shot_id": "SH_S3_04",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S3_04__candidate_v01.png",
+   "flow_title": "SH_S3_04__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S3_06",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S3_06__candidate_v02.png",
+   "flow_title": "SH_S3_06__v02"
+  }
+ },
+ {
+  "shot_id": "SH_S7_04",
+  "base_version": "v02",
+  "base_edit_id": "1e35526c-2d11-474c-a530-cbd500bc2603",
+  "out_version": "v03",
+  "method": "edit",
+  "edit_instruction": "Add the village behind him: the road, neighbouring tiled houses and neem trees, instead of the empty plain. Keep Maharaj laughing, his vest, the doorway and the style exactly the same.",
+  "regen_fix_sentence": "Keep the recognizable village road, neighbouring houses and neem trees visible beyond the same house, while Maharaj laughs and looks up toward screen-right.",
+  "previous_shot": {
+   "shot_id": "SH_S7_03",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S7_03__candidate_v01.png",
+   "flow_title": "SH_S7_03__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S7_05",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S7_05__candidate_v01.png",
+   "flow_title": "SH_S7_05__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S7_07",
+  "base_version": "v01",
+  "base_edit_id": "0a92eeb0-51cb-45f7-8ddc-8d21e6cafbe0",
+  "out_version": "v02",
+  "method": "edit",
+  "edit_instruction": "Add the village behind him: the road, neighbouring tiled houses and neem trees, instead of the empty plain. Keep Maharaj, his hand on his chest, the gourd beside his knee and the style exactly the same.",
+  "regen_fix_sentence": "Keep the recognizable village road, neighbouring houses and neem trees visible beyond the same house, with his right hand on his chest and the gourd beside his knee.",
+  "previous_shot": {
+   "shot_id": "SH_S7_06",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S7_06__candidate_v01.png",
+   "flow_title": "SH_S7_06__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S7_08",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S7_08__candidate_v01.png",
+   "flow_title": "SH_S7_08__v01"
+  }
+ },
+ {
+  "shot_id": "SH_S9_01",
+  "base_version": "v01",
+  "base_edit_id": "93c1ffab-474c-48ef-920f-d50d8e4c5f9a",
+  "out_version": "v02",
+  "method": "edit",
+  "edit_instruction": "Add the two cattle drinking at the trough behind them, as in the other shots of this place. Keep Maharaj, Damodarpant, the pot, the well and the style exactly the same.",
+  "regen_fix_sentence": "Show Maharaj raising his right palm gently toward Damodarpant, with the two cattle drinking behind them at the trough.",
+  "previous_shot": {
+   "shot_id": "SH_S8_05",
+   "version": "v01",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S8_05__candidate_v01.png",
+   "flow_title": "SH_S8_05__v01"
+  },
+  "next_shot": {
+   "shot_id": "SH_S9_02",
+   "version": "v03",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_02__candidate_v03.png",
+   "flow_title": "SH_S9_02__v03"
+  }
+ },
+ {
+  "shot_id": "SH_S9_09",
+  "base_version": "v01",
+  "base_edit_id": "283b7301-1cd4-4bc9-af7a-2ffb3084a878",
+  "out_version": "v02",
+  "method": "regenerate",
+  "edit_instruction": "Change only the pose of the men: both are still upright on their feet, just beginning to bend their knees and lean toward Maharaj, neither knee touching the ground. Keep everything else the same.",
+  "regen_fix_sentence": "Show both men still upright on their feet, just beginning to bend their knees and lean toward Maharaj with joined palms, neither knee touching the ground.",
+  "previous_shot": {
+   "shot_id": "SH_S9_08",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_08__candidate_v02.png",
+   "flow_title": "SH_S9_08__v02"
+  },
+  "next_shot": {
+   "shot_id": "SH_S9_10",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_10__candidate_v02.png",
+   "flow_title": "SH_S9_10__v02"
+  }
+ },
+ {
+  "shot_id": "SH_S9_11",
+  "base_version": "v03",
+  "base_edit_id": "63f647c6-a38c-4be2-84c9-6a3d0560df60",
+  "out_version": "v04",
+  "method": "edit",
+  "edit_instruction": "Make Bankatlal and Damodarpant look toward the left of the picture along the road, and make the dust trail lead away to the left. Keep the men, the well, the trough, the cattle and the style exactly the same.",
+  "regen_fix_sentence": "Bankatlal and Damodarpant look toward screen-left along the road after Maharaj, with his fading dust trail leading away in that same direction.",
+  "previous_shot": {
+   "shot_id": "SH_S9_10",
+   "version": "v02",
+   "file": "D:/aai work/flow_outputs/adhyay_01/shots/SH_S9_10__candidate_v02.png",
+   "flow_title": "SH_S9_10__v02"
+  },
+  "next_shot": null
+ }
+]

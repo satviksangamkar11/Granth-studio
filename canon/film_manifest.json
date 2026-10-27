@@ -139,6 +139,33 @@
     "asset:s2_push_plates": [
       "plan:S2"
     ],
+    "asset:s4_bankatlal_ahead": [
+      "plan:S4"
+    ],
+    "asset:s4_house_road_far": [
+      "plan:S4"
+    ],
+    "asset:s4_leafplates_foreground": [
+      "plan:S4"
+    ],
+    "asset:s4_maharaj_inner_bliss_face": [
+      "plan:S4"
+    ],
+    "asset:s4_maharaj_looks_up": [
+      "plan:S4"
+    ],
+    "asset:s4_question_group": [
+      "plan:S4"
+    ],
+    "asset:s4_road_sky": [
+      "plan:S4"
+    ],
+    "asset:s4_soft_daylight": [
+      "plan:S4"
+    ],
+    "asset:s4_visitors_silent_bow": [
+      "plan:S4"
+    ],
     "asset:shegaon_fg": [
       "plan:S1"
     ],
@@ -762,6 +789,107 @@
         "S2-2"
       ]
     },
+    "asset:s4_bankatlal_ahead": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "b7cb4ab5699beedd20077c2c5d260146a3fa33e3594a5d83da57a4a552101576",
+      "used_in": [
+        "S4-1"
+      ]
+    },
+    "asset:s4_house_road_far": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "f28322b1166d5872e8b8ca52c6e7627b2c23f7f8cdfd554ca37d9cb3fd78fa19",
+      "used_in": [
+        "S4-2"
+      ]
+    },
+    "asset:s4_leafplates_foreground": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "5891646569c9d6f0d301799ea04ae4d4890c048a309748d53ecfc7349e62d6f3",
+      "used_in": [
+        "S4-1",
+        "S4-2"
+      ]
+    },
+    "asset:s4_maharaj_inner_bliss_face": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "4c381ff3cac0843acb918c492277f0fe8ef599a8dc5cbf0d41c0939f71dfd72f",
+      "used_in": [
+        "S4-4"
+      ]
+    },
+    "asset:s4_maharaj_looks_up": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "d505df3520d8976f8bb0639db07eaabb779b2c5ed6c8f0727226e0936cfef4e8",
+      "used_in": [
+        "S4-3"
+      ]
+    },
+    "asset:s4_question_group": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "dd73ade11587d81d128d6a3c6151831944f2381ca38af998412c8990e7fa33cc",
+      "used_in": [
+        "S4-2"
+      ]
+    },
+    "asset:s4_road_sky": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "4052ad8bb1d26989fe11cf2028d56e07c4148e45cbb52d13f6bcfa5caea54310",
+      "used_in": [
+        "S4-1",
+        "S4-2"
+      ]
+    },
+    "asset:s4_soft_daylight": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "8507888e82a121df62e94299741a82497761c998080eb3e1bf9722b348edf258",
+      "used_in": [
+        "S4-1"
+      ]
+    },
+    "asset:s4_visitors_silent_bow": {
+      "file": null,
+      "rebind_needed": false,
+      "scenes": [
+        4
+      ],
+      "sha256": "bb92060d63521afa3965f00ec1c36a5767354d1109ff324a45f671dac2054bd4",
+      "used_in": [
+        "S4-5"
+      ]
+    },
     "asset:shegaon_fg": {
       "file": null,
       "rebind_needed": false,
@@ -931,8 +1059,8 @@
       "sha256": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
     },
     "macro:A1": {
-      "run": "a1_split_rev7",
-      "sha256": "2c10b79b011b17c716eb475df7b752a238c32fe7a3011344e6c545b51d9959cb"
+      "run": "a1_split_rev9",
+      "sha256": "285046ade8110e61ec1e9f6e85935e3354495b3dd5e54daff87663a3e4fa5949"
     },
     "plan:S1": {
       "chapter": 1,
@@ -956,7 +1084,7 @@
         108,
         112
       ],
-      "sha256": "53a98d462f42f95273c2be2135ee1f1b7143f8b50624091783c85ffd369f5d10"
+      "sha256": "486dddea131951829744f464d8354a6786159a5455baec734f2c2861f106c7d2"
     },
     "plan:S5": {
       "chapter": 1,

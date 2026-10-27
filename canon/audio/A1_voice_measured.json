@@ -1,0 +1,1252 @@
+{
+ "status": "MEASURED from generated speech (DRAFT voices, NOT VALIDATED until the owner has listened)",
+ "model": "ai4bharat/indic-parler-tts",
+ "model_commit": "660bc53c64ae83150613264111708a0465211237",
+ "sampling_rate": 44100,
+ "split_sha256": "2c10b79b011b17c716eb475df7b752a238c32fe7a3011344e6c545b51d9959cb",
+ "problems": [],
+ "clips": {
+  "S1-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.429,
+   "wav_sha256": "00f091f6031506876c842b40843592bcb8e918c244d836df0b74d706940ca18b",
+   "text": "या महापुरुषाचा, ठावठिकाण कोणचा, वा पत्ता त्यांच्या जातीचा, इतिहासदृष्टया न लागे कीं."
+  },
+  "S1-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.011,
+   "wav_sha256": "6a9ca101e1ab90165f6475e8dce113ebba31fe3ceba23d28cd6964adc7bbd679",
+   "text": "इन महापुरुष का ठौर-ठिकाना कहाँ था, या उनकी जाति का पता क्या था, यह इतिहास की दृष्टि से पता नहीं चलता."
+  },
+  "S2-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.017,
+   "wav_sha256": "89a627fe65963e831c83dcc53032f62bdb9252b3c76aba9b84d8ad483b372d95",
+   "text": "एक भाविक गृहस्थ होता, नाम ज्याचें देविदास."
+  },
+  "S2-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.609,
+   "wav_sha256": "a286bda1dabc6f083562af0269c9c0a35aee134e193cb2f0b0287dc527135090",
+   "text": "वहाँ एक श्रद्धालु गृहस्थ थे, उनका नाम देविदास था."
+  },
+  "S2-L2.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.663,
+   "wav_sha256": "9a5e520c292ac5417c7a919f5c65fc4c2b3740ba87c9333507878018c439f868",
+   "text": "त्याच्या एका मुलाची, ऋतुशांति होती साची, त्यानिमित्त भोजनाची, तयारी होती त्याचे घरा."
+  },
+  "S2-L2.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 7.198,
+   "wav_sha256": "c5a23d451872fcf13c923bf83f54764de2b888b4de5f0901b0ae689dec9cd5ce",
+   "text": "उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी."
+  },
+  "S2-L3.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.465,
+   "wav_sha256": "06b51e23769db9febac0439737566d05808f6d4e294d92bec4e738081a1f2885",
+   "text": "उष्टया पत्रावळी रस्त्यावर, टाकिल्या होत्या साचार, घराचिया समोर, त्या देविदास विप्राच्या."
+  },
+  "S2-L3.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 5.828,
+   "wav_sha256": "a47636058f8eca29cc68199fd8a8c78d541993a64e500765cabb9e57d5df5a10",
+   "text": "देविदास ब्राह्मण के घर के सामने रास्ते पर जूठी पत्तलें फेंकी गई थीं."
+  },
+  "S2-L4.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.707,
+   "wav_sha256": "6badf105078c78b0e730de0c5a45d42b219907e60da27095bc69233a9f3b47dc",
+   "text": "तो गजानन समर्थसिद्धयोगी, बसले होते तया जागीं, एक बंडी होती अंगीं, जुन्या पुराण्या कापडाची."
+  },
+  "S2-L4.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.301,
+   "wav_sha256": "da831070c072980f902bbd69a6fe84dd27b2792534258ba904ac85b9dcce346f",
+   "text": "समर्थ सिद्ध योगी गजानन उसी जगह बैठे थे; उनके बदन पर पुराने-धुराने कपड़े की एक बंडी थी."
+  },
+  "S2-L5.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.837,
+   "wav_sha256": "442766a9224fbe55cc1c3c5943655d1a8a70d3e8ca2321d7f30ded0b74b540fb",
+   "text": "नासाग्र दृष्टि मुद्रा शांत, तपोबल अंगीं झळकत, प्राचीच्या वालरवीवत्, वर्णन किती करावें."
+  },
+  "S2-L5.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 11.111,
+   "wav_sha256": "1d8059767cc0a34ebcba86c3a0fdf8116f8fa18f0a2413ec5360cc60686dd935",
+   "text": "दृष्टि नासिका के अग्रभाग पर, मुद्रा शांत; तपोबल देह में झलक रहा था, जैसे पूर्व दिशा का बाल सूर्य — कितना वर्णन करें!"
+  },
+  "S2-L6.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.417,
+   "wav_sha256": "28af1d4a3290addd00e59cfa8bd6a6d3bdaf1469642cb9549d97a3145ca38d33",
+   "text": "मूर्ति अवघी दिगंबर, भाव मावळला आपपर, आवडनिवड साचार, राहिली न जवळी जयाच्या."
+  },
+  "S2-L6.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.858,
+   "wav_sha256": "21325ed45c936b889dccdece06a724960e245ecd39295409ec58104ecf856058",
+   "text": "पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं."
+  },
+  "S2-L7.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.059,
+   "wav_sha256": "99dce654a23f6050e7258452fa515d9d57ab328bec6a418598c8fcbe22917863",
+   "text": "ती समर्थांची स्वारी, बैसोनिया रस्त्यावरी, शोधन पत्रावळीचे करी, केवळ निजलीलेनें."
+  },
+  "S2-L7.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 7.407,
+   "wav_sha256": "e5507bee2f8d020bea50df82d749f062572e5fbb6de60c2fbbfd7b2fa32d808f",
+   "text": "वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे."
+  },
+  "S2-L8.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.115,
+   "wav_sha256": "663c3f89d6decc50ba0a5d2de8728ad5852040ec5928e6358a9b99f1d86c7f96",
+   "text": "शीत पडल्या दृष्टीप्रत, तें मुखीं उचलुनी घालीत, हें करण्याचा हाच हेत, अन्नपरब्रह्म कळवावया."
+  },
+  "S2-L8.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 9.903,
+   "wav_sha256": "aee00c63f07c04e97a0a3e5ccb342e706f1253602cbbd8352c43aa659417c9b6",
+   "text": "जो भी चावल का दाना नज़र में आता, उसे उठाकर मुँह में डालते; इसका हेतु यही था — अन्न ही परब्रह्म है यह समझाना."
+  },
+  "S2-L9.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 10.17,
+   "wav_sha256": "624b2fc4f49756376fc81cee135e38be044a5cf85c2035171e2bbec59c8c0f9a",
+   "text": "कां कीं गर्जोन सांगे श्रुती, अन्न हेंच ब्रह्म निगुती, अन्नम् ब्रह्मेति ऐसी उक्ती, उपनिषदांठायीं असे."
+  },
+  "S2-L9.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 10.449,
+   "wav_sha256": "75b2aecc482f7c3ffa3ea8cfa50d09b84441ea3760cd3fb23bc825cad20d2a1c",
+   "text": "क्योंकि श्रुति गरजकर कहती है कि अन्न ही निश्चय से ब्रह्म है — अन्नं ब्रह्मेति यह उक्ति उपनिषदों में है."
+  },
+  "S2-L10.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 9.288,
+   "wav_sha256": "10e5e5002bba3fcf8dae4282a4f2227b283be81a69f25a20d0baa8418f4eef3c",
+   "text": "त्याची पटवावया खण, शितें वेंचती दयाघन, त्याचा सामान्य जनांलागून, भावार्थ तो कळला नसे."
+  },
+  "S2-L10.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.882,
+   "wav_sha256": "f94770b7edbfaf90c7673a7ba74d47a099a7e24539847144aaedda39c2eb33bc",
+   "text": "उसकी प्रतीति कराने के लिए वे दयाघन दाने चुन रहे थे; पर उसका भावार्थ साधारण लोगों को समझ में नहीं आया था."
+  },
+  "S3-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.122,
+   "wav_sha256": "2f05cd982a4c5136f6724f7c6180c88107c0d49e6f6be1716580a64446c1a0d9",
+   "text": "बंकटलाल आगरवाला, होता रस्त्यानें चालला."
+  },
+  "S3-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.855,
+   "wav_sha256": "21b23a332d53cfd5c4f894381617ccf3eb76c42dafc1945b09cb373b8279223e",
+   "text": "बंकटलाल अगरवाला रास्ते से जा रहा था."
+  },
+  "S3-L2.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.994,
+   "wav_sha256": "358faeeb0068e1836da848288abc73b3408f849f867b63e25813aaee0be14413",
+   "text": "दामोदरपंत कुलकर्णी, त्यांच्या स्नेह्याचें नांव जाणी."
+  },
+  "S3-L2.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.796,
+   "wav_sha256": "c52eba148ff6933b11fe407d85361ac21da43c893d548c4c3460a41958d125e9",
+   "text": "उसके मित्र का नाम दामोदरपंत कुलकर्णी था."
+  },
+  "S3-L3.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.402,
+   "wav_sha256": "5cfc061f3cb8b0c39aa01abb005c6b78ddf217f698049df3b5b239a23f14ee3c",
+   "text": "दोघे तो प्रकार पाहोनी, आश्चर्यचकित जाहले."
+  },
+  "S3-L3.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.899,
+   "wav_sha256": "32d7ce7e9786d25635064b374f2c3983bc5aaf843be7d378a001cf2063b0a37e",
+   "text": "दोनों यह प्रकार देखकर आश्चर्यचकित हो गए."
+  },
+  "S3-L4.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.553,
+   "wav_sha256": "830825ac08b23d6923ad9de62e7011f8647a2ba973786e3743c0eb154bed634b",
+   "text": "कीं याची करणी विपरीत, वेडयापरी दिसतसे."
+  },
+  "S3-L4.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.889,
+   "wav_sha256": "714156f64fa701551f7e2e126a65b7260114ffac21cbd10fad06c10f64afb47f",
+   "text": "इसकी करनी विपरीत है; यह पागल जैसा दिखता है."
+  },
+  "S3-L5.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.348,
+   "wav_sha256": "c3dc2cf9c3a6eca6655fde15bbddbef0cadf9506ef441174d67d71af0ed5b0ea",
+   "text": "हा अन्नार्थी जरी असतां, तरी पात्र मागून घेता, देवीदासही यातें देता, कां कीं तोही सज्जन."
+  },
+  "S3-L5.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 9.091,
+   "wav_sha256": "27cc4347af610f2b92653b905bd6497532e8e22feab5a0c82c09244003f6041b",
+   "text": "यदि यह अन्न का इच्छुक होता, तो पत्तल माँग लेता; देविदास भी इसे दे देते, क्योंकि वे भी सज्जन हैं."
+  },
+  "S3-L6.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 2.334,
+   "wav_sha256": "231e45a797bd3666a92c6b4d884362c405fdbbdbac3af0b627cde2cb3867d7df",
+   "text": "बंकटलाल म्हणे पंतासी."
+  },
+  "S3-L6.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 2.694,
+   "wav_sha256": "28481cb1c76e9155a4a137e54d27f5b9530174227093294772c0913857b9bdbe",
+   "text": "बंकटलाल पंत से बोला —."
+  },
+  "S3-L7.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "Nikhil",
+   "seconds": 4.981,
+   "wav_sha256": "ceff3e21b57b4d4a4937caab0a33a9bda4f26be628e41f77a52e893dc87204e8",
+   "text": "ऐसेच उभें रस्‍त्यासी, आपण राहूं यत्कृतीसी, अजमावयाकारणें."
+  },
+  "S3-L7.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "Aman",
+   "seconds": 3.646,
+   "wav_sha256": "220a55c5efa3213f5356156f73d4bf73ddf8b2770f986f1366d1818ae2889a26",
+   "text": "ऐसे ही रास्ते पर खड़े रहकर हम इसकी करनी को परखें."
+  },
+  "S3-L8.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.005,
+   "wav_sha256": "3f5040f50dc077e7daf8f042acc75dfdf4d7269d2c0d0a3b3b3e619bec9038ea",
+   "text": "कृतीनें हा दिसे वेडा, परी वाटे ज्ञानगाडा."
+  },
+  "S3-L8.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.354,
+   "wav_sha256": "116b2155c0105733535f8d27bdf97ffdcf0615e8d5f8be5fbad49f0810d914e4",
+   "text": "कर्म से यह पागल दिखता है, पर ज्ञान का भंडार लगता है."
+  },
+  "S3-L9.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.175,
+   "wav_sha256": "b45021dae5e2a7985f5056413cd249b741cf315c5e68996e9d829d143bda026d",
+   "text": "ऐसा विचार परस्पर, करुं लागले साचार, रत्‍न असतां समोर, पारखी तोच जाणे त्या."
+  },
+  "S3-L9.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 7.291,
+   "wav_sha256": "360fb72cf06f3c04c8e5970e6663fca8861c6213a684a3f735a8f09db3428191",
+   "text": "वे आपस में ऐसा विचार करने लगे; रत्न सामने हो, तो उसे पारखी ही पहचानता है."
+  },
+  "S4-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.924,
+   "wav_sha256": "f2f74215ac2400a0225859caf3bda66a02c40def160e612810c11f47390768aa",
+   "text": "प्रथमता तो पुढें झाला, बंकटलाल आगरवाला."
+  },
+  "S4-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.017,
+   "wav_sha256": "c3490c160191318fa38e7c7a9d429bc599aa4c45194a8e9f97be5e6924e5f347",
+   "text": "सबसे पहले बंकटलाल अगरवाला आगे आया."
+  },
+  "S4-L2.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "Nikhil",
+   "seconds": 7.663,
+   "wav_sha256": "9135230293b8f795f504da5d18fd7fa46959f423416cf6a3aa8e70c3407b376a",
+   "text": "ह्या पत्रावळीच्या शोधना, कां हो करितां कळेना, क्षुधा असेल आपणां, तरी तरतूद करुं अन्नाची."
+  },
+  "S4-L2.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "Aman",
+   "seconds": 7.593,
+   "wav_sha256": "cb19fcc48e213904d86479f4d175305e4621e7b76ef7d58b9c8f103ba1925ded",
+   "text": "इन पत्तलों को आप क्यों टटोल रहे हैं, यह समझ नहीं आता; यदि आपको भूख हो, तो हम अन्न का प्रबंध कर दें."
+  },
+  "S4-L3.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 5.921,
+   "wav_sha256": "a91e9101c7bb4e1227b5396b6e783da8d389ba201233b65e1613155203f403b2",
+   "text": "त्यानें ऐसें विचारिलें, परि न उत्तर मिळालें, नुसतें वरी पाहिलें, उभयतांच्या मुखाकडे."
+  },
+  "S4-L3.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 6.536,
+   "wav_sha256": "51b569666ad59a3f911afd0045e11d65278470cfe86898bde1f9f5b912989f3c",
+   "text": "उसने ऐसा पूछा, पर उत्तर नहीं मिला; उन्होंने बस ऊपर दोनों के मुख की ओर देखा."
+  },
+  "S4-L5.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 9.787,
+   "wav_sha256": "c0ead76a99d9cf9eafe094889850ed03d45595e90735cbedc70432418e2b62f7",
+   "text": "तो सतेज कांती मनोहर, दंड गर्दन पिळदार, भव्य छाती दृष्टि स्थिर, भृकुटी ठायीं झाली असे."
+  },
+  "S4-L5.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.928,
+   "wav_sha256": "cfc4182b88b61c81cd45af12834b918820e370d703cbd853c3b2e7a859dd2abd",
+   "text": "उनकी कांति तेजस्वी और मनोहर थी; भुजाएँ और गर्दन पुष्ट, छाती भव्य, दृष्टि भृकुटी पर स्थिर थी."
+  },
+  "S4-L4.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.558,
+   "wav_sha256": "f99e89712b42cecedc1bcaa548dbac3c82f8be9971ca6bba9d2df7661754c8f4",
+   "text": "निजानंदीं रंगलेला, ऐसा योगी पाहिला, मौनेंच नमस्कार केला, चित्तीं संतोष पावोनिया."
+  },
+  "S4-L4.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 7.964,
+   "wav_sha256": "5d47b59483e01032a715604cb5b435140b4d27375c65e2f24146fbc73a41001d",
+   "text": "निजानंद में रंगे हुए ऐसे योगी को देखकर, उन्होंने मन में संतोष पाकर मौन ही नमस्कार किया."
+  },
+  "S5-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 6.966,
+   "wav_sha256": "c4b3d02af3612a77c6f5e4d50ed6d27ef8c89cceffbd4e25f23e134a611dbb3a",
+   "text": "देविदासबुवासी, सांगूं लागले प्रेमेंसी, तुम्ही पात्र वाढून वेगेंसी, आणा एक बाहेर."
+  },
+  "S5-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 7.57,
+   "wav_sha256": "ef818b272077f0a4e17c7a479823d38cc3d4a71b26a238d12f48ddf55a4aca7f",
+   "text": "वे देविदासबुवा से प्रेम से कहने लगे — तुम शीघ्र एक पत्तल परोसकर बाहर ले आओ."
+  },
+  "S5-L2.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.86,
+   "wav_sha256": "42d4776db9ffca0244f4276b5278be7c080af1088f8b3b0fd617337f4b7526bd",
+   "text": "देविदासें तैसें केलें, पक्वान्नांनीं भरलेलें, पात्र आणून ठेविलें, द्वारासमोर स्वामीपुढें."
+  },
+  "S5-L2.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 7.361,
+   "wav_sha256": "50973d3c823e19e09cac06a3b44319a63612a2fa47c6c99a56a5b0411e39d0dd",
+   "text": "देविदास ने वैसा ही किया; पक्वान्नों से भरी पत्तल लाकर द्वार के सामने स्वामी के आगे रख दी."
+  },
+  "S5-L3.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.725,
+   "wav_sha256": "3e39aeee9f6e158079debd032381b1c0a0cd67803fd737be2eab439a382b9325",
+   "text": "ठेविलेल्या पात्रावरी, भोजना बैसली समर्थस्वारी."
+  },
+  "S5-L3.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.69,
+   "wav_sha256": "ac13f352b3f391484174e33d37c50d67b90bcea82168c367f46d3084e6602951",
+   "text": "रखी हुई पत्तल पर समर्थ भोजन करने बैठे."
+  },
+  "S5-L4.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.104,
+   "wav_sha256": "039fdc4f8aceca654b4b0c63abb06f0ad2d4c0d9dd0e51ac14c497eaa44a9942",
+   "text": "अनुपम ब्रह्मरसाला, जो पिऊन तृप्त झाला, तो कां मागतो गुळवण्याला, मिटक्या मारीत बैसेल ?"
+  },
+  "S5-L4.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.812,
+   "wav_sha256": "4e2ffc8945844dc37722ddde902392d1838c0834167b47babec38de969f53be8",
+   "text": "अनुपम ब्रह्मरस पीकर जो तृप्त हो गया, वह क्या गुड़ का पानी माँगेगा, या चटकारे लेता बैठेगा?"
+  },
+  "S5-L5.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.162,
+   "wav_sha256": "7013f4e9ef83e6fe73c6343640584efe72bc1b5a19383c78285848c21577510b",
+   "text": "जो सार्वभौम नृपवर, झाला असे साचार, अशा नरासी जहागीर, मिळाल्यासी प्रेम नुपजे."
+  },
+  "S5-L5.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.336,
+   "wav_sha256": "2df4f8e286f45315b1e5b781d1ac63907adf4fc4d19cb3e57386a01b6ca0e90d",
+   "text": "जो सचमुच सार्वभौम राजा हो गया, उसे जागीर मिल जाने पर प्रेम (हर्ष) नहीं उपजता."
+  },
+  "S5-L6.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.911,
+   "wav_sha256": "2f71934e41cdcb7cc68443f8fe146dab47a16a9e686800c4de360a17ddf639eb",
+   "text": "अवघीं पक्वान्नें एक केलीं, आवडनिवड नाहीं उरली."
+  },
+  "S5-L6.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 5.782,
+   "wav_sha256": "dede5cfa13f0ba2836f5625a5b1c280cb2f28ee919a3030e8462a6378951739e",
+   "text": "उन्होंने सब पक्वान्न एक कर दिए; पसंद-नापसंद नहीं रही."
+  },
+  "S6-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.158,
+   "wav_sha256": "34c15466c5ccaf702a4e3c9f89f452b8287b08e7e25f9416f232bd1ada11460b",
+   "text": "बंकटलाल तें पाहून, पंतासी करी भाषण."
+  },
+  "S6-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.541,
+   "wav_sha256": "f5d661fde6929aa29211d33576593296d22343dca1640dd4f878dc3937714893",
+   "text": "बंकटलाल यह देखकर पंत से बोला —."
+  },
+  "S6-L2.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "Nikhil",
+   "seconds": 3.587,
+   "wav_sha256": "bde61e877ca7e261c3bc6ca02fafb2616d828ea80a0e9d5e65f6ee2f021f4857",
+   "text": "ह्या वेडा म्हणालों आपण, ती निःसंशय झाली चुकी."
+  },
+  "S6-L2.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "Aman",
+   "seconds": 3.82,
+   "wav_sha256": "2de3348d878dc7f8b65ab2b2cd966a940165e31ea59fb61a6eaa7caa8cc99e9e",
+   "text": "इसे हमने पागल कहा — यह निःसंदेह हमारी भूल हुई."
+  },
+  "S6-L3.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "Nikhil",
+   "seconds": 4.11,
+   "wav_sha256": "8adc633d7ae2a85a3371a06de742120250169dc638fdcda97855431e828a4ca7",
+   "text": "सुभद्रेसाठीं द्वारकेला, अर्जुन ऐसाच वेडा झाला."
+  },
+  "S6-L3.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "Aman",
+   "seconds": 4.214,
+   "wav_sha256": "36b97dd49b839bccb6d970f50c9cd3d304724084646f06338ff079ab6a9aec32",
+   "text": "सुभद्रा के लिए द्वारका में अर्जुन भी ऐसे ही पागल हो गया था."
+  },
+  "S6-L4.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "Nikhil",
+   "seconds": 7.105,
+   "wav_sha256": "1533752a627dc7ed000e4d5e39341c49b5968fda88650934c8cb2000552a143e",
+   "text": "तैसाच हा ज्ञानजेठी, मुक्तिरुप सुभद्रेसाठीं, वेडा झाला कसवटी, याची आतां घेणें नको."
+  },
+  "S6-L4.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "Aman",
+   "seconds": 6.56,
+   "wav_sha256": "b92b05fbf9e934a4411cdc90856541cc2298ea6f2e8a8d561eb562d0bda8d5a4",
+   "text": "वैसे ही यह ज्ञानजेठी मुक्तिरूपी सुभद्रा के लिए पागल हुआ है; अब इसकी कसौटी लेने की ज़रूरत नहीं."
+  },
+  "S6-L5.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.75,
+   "wav_sha256": "5f3f13467d22b4e65c743b6975de647c4558269b655287e05f31f22345750306",
+   "text": "धन्य आपुलें शेगांव, दृष्टी पाहिला योगीराव."
+  },
+  "S6-L5.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.83,
+   "wav_sha256": "c937d8f2a69462eeeac2d48ccfdb2ff51f73605e3c1201d9175d196fb90db0a1",
+   "text": "धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए."
+  },
+  "S7-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.214,
+   "wav_sha256": "e469eaf3db596151be6b1031d076753423de1c42811754844e2888b0f8dfa209",
+   "text": "सूर्य माध्यान्हीं आला, भाग भूमीचा तप्त झाला."
+  },
+  "S7-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.971,
+   "wav_sha256": "189602afb094fb1be95febc85265b0c93e8df8b3e0fd3279ad4f28ffb680824a",
+   "text": "सूर्य मध्याह्न पर आ गया; भूमि का भाग तप गया."
+  },
+  "S7-L2.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.795,
+   "wav_sha256": "b8bc4ccda466f4a096d44e30f5dfb772af13e5535c665707a91998f9a9c32912",
+   "text": "पांखरें हीं आश्रयाला, जाऊन बैसलीं वृक्षावरी."
+  },
+  "S7-L2.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.505,
+   "wav_sha256": "bcf22e036ea0988da7c0f261092ee6e2dcd60884cb4d8d9be08b292d4a840215",
+   "text": "पक्षी आश्रय के लिए जाकर पेड़ों पर बैठ गए."
+  },
+  "S7-L3.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.204,
+   "wav_sha256": "c80fb030eb0c4d1c0371dd10a8670d4a58d5cc359bc0ab62be61a5b209389442",
+   "text": "ऐशा भर उन्हांत, हा बैसला आनंदांत."
+  },
+  "S7-L3.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.901,
+   "wav_sha256": "f2abb9b854d829cf9eb73457b2fb1a4c0c263c0f36b3f6a7573ecc73bc67795a",
+   "text": "ऐसी भरी धूप में वह आनंद में बैठा है."
+  },
+  "S7-L4.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.475,
+   "wav_sha256": "f3a3fd24d74e044056bd9179f74848c2f84244c46d877b977197de441fe403ce",
+   "text": "हा जेवळा यथेच्छपणीं, तुंब्यामध्यें नाहीं पाणी, तें पंता या लागुनी, आपण देऊं आणून."
+  },
+  "S7-L4.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.266,
+   "wav_sha256": "cac900159a5783100ec64111cceb3dae6973fb60f373cb0369dd9912cb5852cd",
+   "text": "यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें."
+  },
+  "S7-L5.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 1.335,
+   "wav_sha256": "a25685daab93a3f5982fffc6cb2e03deac4d9331d9fcd102229370d8d40bf430",
+   "text": "पुसूं लागले दामोदर."
+  },
+  "S7-L5.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 1.753,
+   "wav_sha256": "2ff8a174a91538fe78006c0e5f8e1ef19ce4f8c42d428a00a1ad640dcb1e9f93",
+   "text": "दामोदर पूछने लगे —."
+  },
+  "S7-L6.mr": {
+   "lang": "mr",
+   "voice": "damodarpant",
+   "speaker": "Varun",
+   "seconds": 5.584,
+   "wav_sha256": "690a6d5b403b1232f26ebfccc29c7912eeaf7c1696117e75ee60369f7d8236ee",
+   "text": "तुंब्यामध्यें नाहीं नीर, मर्जी असल्या हा चाकर, पाणी द्याया तयार असे."
+  },
+  "S7-L6.hi": {
+   "lang": "hi",
+   "voice": "damodarpant",
+   "speaker": "Aman",
+   "seconds": 5.062,
+   "wav_sha256": "4a7a78d9397cf2b6b5b5016a1be18560f7adde2c025c3f208ba46810d5678c1d",
+   "text": "तुंबे में पानी नहीं है; आपकी मर्ज़ी हो तो यह सेवक पानी देने को तैयार है."
+  },
+  "S7-L7.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 5.921,
+   "wav_sha256": "09c1c9f13823ed3393c7f4d916693838787b8244e5b32b392305cb2af5799ba1",
+   "text": "ऐसे शब्द ऐकिले, समर्थांनीं हास्य केलें, उभयतांसी पाहून वदले."
+  },
+  "S7-L7.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 4.783,
+   "wav_sha256": "d0a0acb29cf375ee838f27ae679fa20b86ffeb7ff6842b31d1d2592570a2200f",
+   "text": "ये शब्द सुनकर समर्थ हँसे और दोनों को देखकर बोले —."
+  },
+  "S7-L8.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 8.22,
+   "wav_sha256": "2a7522d64a73b87233b549f6a78a455ca10fd560a2d9bb17dc48bc952abb4c50",
+   "text": "तुम्हां गरज असेल जरी, तरी आणून घाला वारी, एक ब्रह्म जगदांतरीं, ओतप्रोत भरलें असें."
+  },
+  "S7-L8.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 6.861,
+   "wav_sha256": "66263ed381c61d1cf4917f7bdc7b7d2d7b5800a25d29252f1ac5e45fb8f49377",
+   "text": "आपको ज़रूरत हो तो पानी ले आकर दीजिए; एक ही ब्रह्म जगत के भीतर ओतप्रोत भरा है."
+  },
+  "S7-L9.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 7.349,
+   "wav_sha256": "de7d3b9afb44b6d3398f2491055a9eb6eb4ddbd0ea763f3fb61964876d7a428c",
+   "text": "तुम्ही आम्ही भेद तेथ, नाहीं उरला यत्किंचित, परी जगव्यवहार सत्य, आचरिला पाहिजे."
+  },
+  "S7-L9.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 7.012,
+   "wav_sha256": "1e0dfc525aa814cdfba7aa37ac626731020f2e7d21695b697185d8f9e966ba13",
+   "text": "वहाँ आप और हम में थोड़ा भी भेद नहीं रहा; फिर भी जगत का व्यवहार ठीक तरह निभाना चाहिए."
+  },
+  "S7-L10.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 3.808,
+   "wav_sha256": "05bd817273f257698f727572818dc6f9dbff721a2f1ed484fc0b33e8542e0242",
+   "text": "अन्न भक्षिलें देहानीं, म्हणून त्या पाहिजे पाणी."
+  },
+  "S7-L10.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 4.354,
+   "wav_sha256": "bf9da54186291dcbcb5e388c18f1d58f437c52bb705b07a2e0e36f02212eab42",
+   "text": "देह ने अन्न खाया है, इसलिए उसे पानी चाहिए."
+  },
+  "S7-L11.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 7.558,
+   "wav_sha256": "4cad9fcef1a06b89a56c41e589b008fa4e5c370711da6e37459371157e583513",
+   "text": "म्हणून तुमच्या चातुर्यासी, गरज असल्या तुम्हां साची, तरतूद करा पाण्याची, म्हणजे अवघें संपलें."
+  },
+  "S7-L11.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 7.361,
+   "wav_sha256": "5cded92374f64b000816deb55a7b8741674a8cbba88caec556eea65e2dbd318e",
+   "text": "इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त."
+  },
+  "S7-L12.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "Nikhil",
+   "seconds": 2.45,
+   "wav_sha256": "b77be60113564f8831f9631c37cac5887d750ccd828f0c410e854d8e130735bc",
+   "text": "आपुलें आहे भाग्य धन्य."
+  },
+  "S7-L12.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "Aman",
+   "seconds": 1.95,
+   "wav_sha256": "ae7e83063317dd4c8f204191f8e07dca6c6d37a4b8e3b7053ed62b8549f9a1c8",
+   "text": "हमारा भाग्य धन्य है."
+  },
+  "S7-L13.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.239,
+   "wav_sha256": "bd953958764533f2cbeb5789422dfe4b3bc5103c614de03b27d66fc5e82d2a9e",
+   "text": "पाणी आणण्या दामोदर, घरांत गेले साचार."
+  },
+  "S7-L13.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.785,
+   "wav_sha256": "9ee2d22b9b99085e1cc8dc3d34a7a1ea480b3f216cdeef19cedcbc8fbc3ad759",
+   "text": "पानी लाने के लिए दामोदर घर के अंदर गए."
+  },
+  "S8-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 7.268,
+   "wav_sha256": "87ede6593535a81942efd83396dcb6f79ddfddd7e1d011f06c1fc123a10de293",
+   "text": "कूपाचिया शेजारीं, हाळ होता निर्धारीं, जेथें जनावरें सारीं, पीत होतीं पाण्याला."
+  },
+  "S8-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 5.236,
+   "wav_sha256": "7ae3f1c5c49505c72f682925c38e111f1dd5d1c4c1c6b13e2ce34fd73d32574c",
+   "text": "कुएँ के पास एक हौद था, जहाँ सब जानवर पानी पी रहे थे."
+  },
+  "S8-L2.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 4.098,
+   "wav_sha256": "2927f5d96c1a2a00912c457f814b07d8317854487c88152c34212f2f43c41ee2",
+   "text": "तेथें जाऊन पाणी प्याले, तृप्ततेचे ढेकर दिले."
+  },
+  "S8-L2.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 5.642,
+   "wav_sha256": "37c8f5f9929363d436a82fbfb753bb935845c00cf726500f7b2b6680a74fe2dc",
+   "text": "वहाँ जाकर उन्होंने पानी पिया और तृप्ति की डकार ली."
+  },
+  "S8-L3.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.727,
+   "wav_sha256": "db736caefbc75bd6a61f460376037dd3fa6fec7f8a06c0945a0969f1710793f7",
+   "text": "तों इतक्यांत घेऊन आले, पंत पाणी गडव्यांत."
+  },
+  "S8-L3.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 3.889,
+   "wav_sha256": "db509efee688a8a30442d337cc2ce7b8fce68ce02a4590eae2dc2ed8c80af4e3",
+   "text": "इतने में पंत गड़वे में पानी लेकर आ गए."
+  },
+  "S8-L4.mr": {
+   "lang": "mr",
+   "voice": "damodarpant",
+   "speaker": "Varun",
+   "seconds": 6.954,
+   "wav_sha256": "18cdad39537eb5ac3628d017e34625b8507170438df7423bf1c79de3c15a791f",
+   "text": "हां हां तें गढूळ पाणी, समर्था न लावा वदनीं, तें जनावरालागुनी, योग्य आहे प्यावया."
+  },
+  "S8-L4.hi": {
+   "lang": "hi",
+   "voice": "damodarpant",
+   "speaker": "Aman",
+   "seconds": 6.444,
+   "wav_sha256": "197a20e248d72e9391df75a01b1e3277a04a9af49ea24ce4d050e7b5639d620f",
+   "text": "अरे, अरे! वह गँदला पानी, समर्थ, मुख से न लगाइए; वह तो जानवरों के पीने योग्य है."
+  },
+  "S8-L5.mr": {
+   "lang": "mr",
+   "voice": "damodarpant",
+   "speaker": "Varun",
+   "seconds": 6.722,
+   "wav_sha256": "6b46e3c0ffd8d06d2036b062eb79c95fd44beac96eace00216a68ddacb739d14",
+   "text": "मीं हें पहा आणिलें नीर, गोड निर्मळ थंडगार, वासित केलें साचार, वाळा घालून यामध्यें."
+  },
+  "S8-L5.hi": {
+   "lang": "hi",
+   "voice": "damodarpant",
+   "speaker": "Aman",
+   "seconds": 5.782,
+   "wav_sha256": "42acb497ba27a496b235ad6aee895e1c7b1ce458b1bce3424d9d0c5bd7a1ee9a",
+   "text": "मैं यह देखिए जल ले आया — मीठा, निर्मल, ठंडा; इसमें खस डालकर सुगंधित किया है."
+  },
+  "S9-L1.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 3.088,
+   "wav_sha256": "f3d1d2eedbba3bd508bb2516584d8187e2a8d4aa20ae1f03d1ceb77b28df7786",
+   "text": "ऐसें भाषण ऐकतां, महाराज वदले तत्त्वतां."
+  },
+  "S9-L1.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 2.891,
+   "wav_sha256": "1289f95d404a39ab6723148c6f3be41c77103ab1de34d5b6d9fd45f1f1fd8d39",
+   "text": "यह भाषण सुनकर महाराज बोले —."
+  },
+  "S9-L2.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 4.052,
+   "wav_sha256": "5210671f88a9d806c55130f270cf77680cb0d446984d2c694140827c7151da42",
+   "text": "व्यावहारिक अवघ्या कथा, ह्या न सांगा आम्हां तुम्ही."
+  },
+  "S9-L2.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 4.238,
+   "wav_sha256": "dde63a5c2406490818e66af99b6483aa53b862da96a43e30cdb5261b24e4a53a",
+   "text": "ये सारी व्यावहारिक बातें आप हमें न सुनाइए."
+  },
+  "S9-L3.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 7.384,
+   "wav_sha256": "467e38261ddfc9bdb7eec7e7aeb5d9e93eaac5ee97491aec6066d722898074d8",
+   "text": "हें अवघें चरचर, ब्रह्में व्याप्त साचार, तेथें गढुळ,निर्मळ वासित नीर, हे न भेद राहिले."
+  },
+  "S9-L3.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 7.465,
+   "wav_sha256": "64a4b5b7904a3112b807553edc732e61ab576b31cb9c54b94300c348aecb3e9b",
+   "text": "यह सारा चराचर ब्रह्म से व्याप्त है; वहाँ गँदला, निर्मल, सुगंधित जल — ये भेद नहीं रहे."
+  },
+  "S9-L4.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 8.173,
+   "wav_sha256": "e91cc5766e24c15d17ccc2671c24029ab43b3e22549a15e7711f45b37f081113",
+   "text": "पाणी तरी तोच आहे, निर्मळ गढुळ तोच पाहे, सुवास कुवास दोन्ही हें, रुप त्याचें निःसंशय."
+  },
+  "S9-L4.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 8.661,
+   "wav_sha256": "1f7337090b6886a597e12404ac4e77810731207229dc5caf3c6995369ee3718d",
+   "text": "पानी तो वही है; निर्मल हो या गँदला, वही देखो; सुगंध और दुर्गंध — दोनों उसी के रूप हैं, इसमें संदेह नहीं."
+  },
+  "S9-L5.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 7.872,
+   "wav_sha256": "f8ffb3a4f0639d606ab2f74fa495aeaeea79221f738adb64a14753e19e151b4b",
+   "text": "पिणाराही वेगळा, त्यापासून ना निराळा, ईश्वराची अगाध लीला, ती कळे या नरजन्मीं."
+  },
+  "S9-L5.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 7.79,
+   "wav_sha256": "c31254c6ccf8043c1bb4e8d76690c4127f005d76a1c7e0eb2eac1c93bedced6b",
+   "text": "पीने वाला भी अलग नहीं है, उससे जुदा नहीं; ईश्वर की अगाध लीला इसी मनुष्य-जन्म में समझ आती है."
+  },
+  "S9-L6.mr": {
+   "lang": "mr",
+   "voice": "gajanan",
+   "speaker": "Sanjay",
+   "seconds": 7.407,
+   "wav_sha256": "65b3aed08cd503653097673c4c56716cf22927b5a02818a5de96eb5c2412903c",
+   "text": "तें दिलें टाकून, व्यवहारीं गोविलें मन, यांचेंच करा सदा मनन, कशापासून जग झालें."
+  },
+  "S9-L6.hi": {
+   "lang": "hi",
+   "voice": "gajanan",
+   "speaker": "Rohit",
+   "seconds": 8.127,
+   "wav_sha256": "ee0ca8dc63972b731b302ddb8273dafa41be4fab68eb8690aa06cff9ea5312f1",
+   "text": "उसे आपने छोड़ दिया और मन को व्यवहार में उलझा लिया; इसी का सदा मनन कीजिए कि जगत किससे उत्पन्न हुआ."
+  },
+  "S9-L7.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.916,
+   "wav_sha256": "e1a65af925ca63c66ec8ce5421e7147cd521bf034ee08eec9fa4051aa15f282c",
+   "text": "ऐसी ऐकतां समर्थवाणी, दोघे गेले गहिंवरोनी, अनन्यभावें समर्थचरणीं, लोळावया तयार झाले."
+  },
+  "S9-L7.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 10.008,
+   "wav_sha256": "8abc41ae242cca53942d361c50d2b308f3e0aa14211e07f7bd6f8f604d8b1728",
+   "text": "समर्थ की ऐसी वाणी सुनकर दोनों भाव-विह्वल हो गए; अनन्य भाव से समर्थ के चरणों में लोटने को तैयार हो गए."
+  },
+  "S9-L8.mr": {
+   "lang": "mr",
+   "voice": "narrator",
+   "speaker": "Sunita",
+   "seconds": 8.835,
+   "wav_sha256": "fde737a471fb1ea50cac901005ebe7f3be191956f162e952285abc32c7925692",
+   "text": "तो त्यांचा जाणोन हेत, महाराज निघाले पळत पळत, वायूच्या त्या गतिप्रत, अडथळा जगीं कोण करी ?"
+  },
+  "S9-L8.hi": {
+   "lang": "hi",
+   "voice": "narrator",
+   "speaker": "Divya",
+   "seconds": 8.487,
+   "wav_sha256": "d97d7e94be7ba44a086a164c4810d82d9c4bd79eb9044d55b6287aaee38cdbf9",
+   "text": "उनका भाव जानकर महाराज दौड़ते-दौड़ते निकल पड़े; वायु की उस गति को जगत में कौन रोक सकता है?"
+  }
+ },
+ "lines": {
+  "S1-L1": {
+   "mr": 8.429,
+   "hi": 8.011
+  },
+  "S2-L1": {
+   "mr": 4.017,
+   "hi": 4.609
+  },
+  "S2-L2": {
+   "mr": 7.663,
+   "hi": 7.198
+  },
+  "S2-L3": {
+   "mr": 7.465,
+   "hi": 5.828
+  },
+  "S2-L4": {
+   "mr": 8.707,
+   "hi": 8.301
+  },
+  "S2-L5": {
+   "mr": 7.837,
+   "hi": 11.111
+  },
+  "S2-L6": {
+   "mr": 8.417,
+   "hi": 8.858
+  },
+  "S2-L7": {
+   "mr": 7.059,
+   "hi": 7.407
+  },
+  "S2-L8": {
+   "mr": 8.115,
+   "hi": 9.903
+  },
+  "S2-L9": {
+   "mr": 10.17,
+   "hi": 10.449
+  },
+  "S2-L10": {
+   "mr": 9.288,
+   "hi": 8.882
+  },
+  "S3-L1": {
+   "mr": 4.122,
+   "hi": 3.855
+  },
+  "S3-L2": {
+   "mr": 3.994,
+   "hi": 3.796
+  },
+  "S3-L3": {
+   "mr": 3.402,
+   "hi": 4.899
+  },
+  "S3-L4": {
+   "mr": 3.553,
+   "hi": 3.889
+  },
+  "S3-L5": {
+   "mr": 8.348,
+   "hi": 9.091
+  },
+  "S3-L6": {
+   "mr": 2.334,
+   "hi": 2.694
+  },
+  "S3-L7": {
+   "mr": 4.981,
+   "hi": 3.646
+  },
+  "S3-L8": {
+   "mr": 4.005,
+   "hi": 4.354
+  },
+  "S3-L9": {
+   "mr": 7.175,
+   "hi": 7.291
+  },
+  "S4-L1": {
+   "mr": 3.924,
+   "hi": 4.017
+  },
+  "S4-L2": {
+   "mr": 7.663,
+   "hi": 7.593
+  },
+  "S4-L3": {
+   "mr": 5.921,
+   "hi": 6.536
+  },
+  "S4-L5": {
+   "mr": 9.787,
+   "hi": 8.928
+  },
+  "S4-L4": {
+   "mr": 7.558,
+   "hi": 7.964
+  },
+  "S5-L1": {
+   "mr": 6.966,
+   "hi": 7.57
+  },
+  "S5-L2": {
+   "mr": 7.86,
+   "hi": 7.361
+  },
+  "S5-L3": {
+   "mr": 4.725,
+   "hi": 4.69
+  },
+  "S5-L4": {
+   "mr": 8.104,
+   "hi": 8.812
+  },
+  "S5-L5": {
+   "mr": 8.162,
+   "hi": 8.336
+  },
+  "S5-L6": {
+   "mr": 4.911,
+   "hi": 5.782
+  },
+  "S6-L1": {
+   "mr": 3.158,
+   "hi": 3.541
+  },
+  "S6-L2": {
+   "mr": 3.587,
+   "hi": 3.82
+  },
+  "S6-L3": {
+   "mr": 4.11,
+   "hi": 4.214
+  },
+  "S6-L4": {
+   "mr": 7.105,
+   "hi": 6.56
+  },
+  "S6-L5": {
+   "mr": 3.75,
+   "hi": 4.83
+  },
+  "S7-L1": {
+   "mr": 4.214,
+   "hi": 3.971
+  },
+  "S7-L2": {
+   "mr": 4.795,
+   "hi": 4.505
+  },
+  "S7-L3": {
+   "mr": 3.204,
+   "hi": 3.901
+  },
+  "S7-L4": {
+   "mr": 8.475,
+   "hi": 8.266
+  },
+  "S7-L5": {
+   "mr": 1.335,
+   "hi": 1.753
+  },
+  "S7-L6": {
+   "mr": 5.584,
+   "hi": 5.062
+  },
+  "S7-L7": {
+   "mr": 5.921,
+   "hi": 4.783
+  },
+  "S7-L8": {
+   "mr": 8.22,
+   "hi": 6.861
+  },
+  "S7-L9": {
+   "mr": 7.349,
+   "hi": 7.012
+  },
+  "S7-L10": {
+   "mr": 3.808,
+   "hi": 4.354
+  },
+  "S7-L11": {
+   "mr": 7.558,
+   "hi": 7.361
+  },
+  "S7-L12": {
+   "mr": 2.45,
+   "hi": 1.95
+  },
+  "S7-L13": {
+   "mr": 3.239,
+   "hi": 3.785
+  },
+  "S8-L1": {
+   "mr": 7.268,
+   "hi": 5.236
+  },
+  "S8-L2": {
+   "mr": 4.098,
+   "hi": 5.642
+  },
+  "S8-L3": {
+   "mr": 3.727,
+   "hi": 3.889
+  },
+  "S8-L4": {
+   "mr": 6.954,
+   "hi": 6.444
+  },
+  "S8-L5": {
+   "mr": 6.722,
+   "hi": 5.782
+  },
+  "S9-L1": {
+   "mr": 3.088,
+   "hi": 2.891
+  },
+  "S9-L2": {
+   "mr": 4.052,
+   "hi": 4.238
+  },
+  "S9-L3": {
+   "mr": 7.384,
+   "hi": 7.465
+  },
+  "S9-L4": {
+   "mr": 8.173,
+   "hi": 8.661
+  },
+  "S9-L5": {
+   "mr": 7.872,
+   "hi": 7.79
+  },
+  "S9-L6": {
+   "mr": 7.407,
+   "hi": 8.127
+  },
+  "S9-L7": {
+   "mr": 8.916,
+   "hi": 10.008
+  },
+  "S9-L8": {
+   "mr": 8.835,
+   "hi": 8.487
+  }
+ }
+}

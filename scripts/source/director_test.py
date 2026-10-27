@@ -14,6 +14,7 @@ import copy
 import hashlib
 import importlib.util
 import json
+import math
 import re
 import sys
 import time
@@ -41,6 +42,7 @@ ds = _load("ds", ROOT / "scripts" / "source" / "draft_source.py")
 nt = ds.nt
 
 NVIDIA_MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
+ONE_CALL = False                                   # set by --one-call: exactly one director call, no re-ask, no repair (the owner decides what happens to a flawed plan)
 SHOT_SECONDS = 6                                   # one Builder v2 render = 144 frames at 24 fps
 TRANSITIONS = ["cut", "slide", "pan_bridge"]
 CLOSEUPS = {"07_character_reaction", "08_emotional_closeup", "10_object_hand_insert"}
@@ -228,6 +230,8 @@ def validate_scene(scene, presets: dict, ovi_text: dict, scene_range: tuple, ctx
         errors.append(f"turn.ovi {scene['turn']['ovi']} outside the scene range (chapter {chapter}, ovi {lo}-{hi})")
     images = {}
     for im in scene["images_needed"]:
+        if ctx.get("scene_image_prefix") and not im["image_id"].startswith(f"s{scene['scene_id'][1:]}_"):
+            errors.append(f"image {im['image_id']} must start with 's{scene['scene_id'][1:]}_' (one scene, one id space: no id is shared between scenes)")
         if im["image_id"] in images:
             errors.append(f"image {im['image_id']} is declared twice")
         images[im["image_id"]] = im["description"]
@@ -284,7 +288,7 @@ def validate_scene(scene, presets: dict, ovi_text: dict, scene_range: tuple, ctx
                 errors.append(f"{sid}: no source text for {d['ovi']}")
             elif len(qnorm(d["marathi"]).replace(" ", "")) < 3:
                 errors.append(f"{sid}: dialogue {d['ovi']} has an empty or too short Marathi quote")
-            elif not quote_in(d["marathi"], ovi_text[p[1]]):
+            elif ctx.get("dialogue_plan") is None and not quote_in(d["marathi"], ovi_text[p[1]]):          # with a plan, the owner's approved spoken line is the authority (checked below)
                 errors.append(f"{sid}: dialogue Marathi for {d['ovi']} is not a substring of that ovi's text")
             if d["speaker"].lower() not in speakers:
                 errors.append(f"{sid}: speaker {d['speaker']!r} is not a registered character (use a registered name or 'unclear')")
@@ -438,7 +442,7 @@ def speaker_registry(analysis_lines: list) -> set:
 
 RULES = """FIDELITY (facts)
 F1. Facts come only from the MATERIALS below (the owner's frozen research and the Marathi ovis). Every shot lists the ovi numbers it shows as chapter-qualified refs written exactly A<chapter>:<ovi> (e.g. "A1:84"; chapter 1-99, ovi up to four digits), all inside this scene's range. Every spoken line cites its ovi, and that ovi must be one of the shot's own ovi_ids.
-F2. Spoken lines: copy the Marathi words EXACTLY from the cited ovi, at least three letters long (spacing, danda and punctuation may differ; every letter and matra must match). Characters speak only exact Marathi words; paraphrase never goes in "dialogue". The speaker must be a REGISTERED SPEAKER, spelled as listed, and must agree with the owner's dialogue table: where the table marks the speaker unclear, write "unclear".
+F2. Spoken lines: copy the Marathi words EXACTLY from the cited ovi, at least three letters long (spacing, danda and punctuation may differ; every letter and matra must match). Characters speak only exact Marathi words; paraphrase never goes in "dialogue". When the message gives a NARRATION PLAN, a character's spoken Marathi is copied EXACTLY from that plan line (the owner's approved easy wording, which renders the cited ovi's meaning), not from the verse. The speaker must be a REGISTERED SPEAKER, spelled as listed, and must agree with the owner's dialogue table: where the table marks the speaker unclear, write "unclear".
 F3. Thoughts, and words the ovis do not clearly give as spoken aloud, are NOT dialogue: do not put them in a character's mouth. Leave them to the narrator and show the moment as a held pose. Motives, feelings and thoughts appear only where an ovi states them; show feeling only through a held pose or a camera choice, and label it STAGING.
 F4. Miracles and teaching are shown plainly with the cause the ovi gives; no invented cause (no glow, light rays or slow motion that suggests one).
 F5. Every person, object, scenery item, light, pose or event you show is listed in the shot's "claims" with its source: an ovi ref of this scene ("A1:90"); "PACKET" (a person, prop, scenery, light, pose or camera item that the owner's research names; use the research's own words for the term); or "STAGING". STAGING is only for scenery, light, pose or camera proposals (the owner approves each one); it can never add a person, an object, an event, a motive or a cause. An event must cite an ovi of its own shot. Staging lines start with "STAGING:". Do not add people, objects or places the materials do not name: no sky, trees, branches, birds, hands at the throat and the like unless the materials give them or the claim is a STAGING scenery/light proposal.
@@ -452,12 +456,15 @@ T2. Vary the kind of shot (the code warns the owner when one preset appears thre
 T3. Each shot has exactly one visible action written as a verb phrase of what the VIEWER sees during the 6 s (a camera move or a breathing figure). Anything that would change inside the shot (a hand rising, lips moving, a step, a smile starting) is NOT allowed as an action; show the result as a held pose (in "held_pose" and "performance") instead.
 T4. Plain, concrete wording. No metaphor of your own. No sermon the ovis do not state.
 T5. Economy: one concise held-pose sentence and one short performance sentence per shot; combine claims only when they share kind and source (keep every distinct factual assertion); do not repeat a restriction across fields.
-T6. Coverage: every ovi of the scene's range appears in some shot's ovi_ids. An ovi that only the narrator will tell (introduction, teaching, authority) is attached to the nearest shot, and the shot's performance says briefly that the narrator carries it."""
+T6. Coverage: every ovi of the scene's range appears in some shot's ovi_ids. An ovi that only the narrator will tell (introduction, teaching, authority) is attached to the nearest shot, and the shot's performance says briefly that the narrator carries it.
+T7. The film must look FULL (owner's rule): choose the presets and catalog images so every shot is a completely drawn scene with background, midground and foreground filled in; prefer layered presets and varied framings; never a figure alone on an empty or plain background unless the catalog says that image is a deliberate close-up.
+T8. There is NO limit on the number of images (the owner supplies as many as the film needs): reuse a catalog image for consistency of look when it fits the beat, but never bend a shot to save an image; when a shot needs a better pose, framing or setting, declare it as a new image."""
 
 CHARACTER_VOICES = {"bankatlal", "damodarpant", "gajanan"}
 CAPS = """RENDERER CAPABILITIES (facts about what can be produced; do not ask for more)
 - One shot = exactly ONE render of 144 frames = 6 seconds at 24 fps. A scene is 2-16 shots (12-96 s); the narration timing says how many.
 - Pictures are owner-made flat-colour illustrations used as HELD POSES and layers. There is NO limb animation, NO walking cycle, NO lip-sync, NO facial-expression change inside a shot; only gentle breathing/sway, camera push/pan/parallax, and cuts between poses.
+- Every image_id starts with the scene prefix, "s<n>_" (e.g. s4_maharaj_seated); ids are never shared between scenes.
 - A different pose or expression needs a different image: declare it in "images_needed" and use it in another shot.
 - Each shot picks ONE of the presets listed (name exactly). Select presets using their supplied transforms, layer formats and fixed effects: the parameters are fixed, so do not invent zoom values and do not assume that prose can switch an effect off. If no preset matches the treatment the scene needs, use NEED_NEW. "assets" must contain EXACTLY the roles of that preset, each mapped to an image_id declared in "images_needed". An image_id is lowercase letters, digits and underscores, starting with a letter, at most 40 characters (e.g. "maharaj_seated_wide"); its description says who/where, pose and framing. Declare each image once and use every declared image in some shot. If no preset can show what the scene needs, use "preset": "NEED_NEW" with "need_new_reason" and "needs" naming what is missing (do not pretend a preset can do it); the code reports such a scene as UNRESOLVED.
 - Transitions between shots: cut | slide | pan_bridge only (no dissolves)."""
@@ -487,7 +494,15 @@ def _sha_obj(obj) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
-def load_split(run_name: str, edits_path: Path | None = None, audio_path: Path | None = None, timing_path: Path | None = None) -> dict:
+def _easy():
+    import importlib.util as iu
+    sp = iu.spec_from_file_location("easy_script", ROOT / "scripts" / "source" / "easy_script.py")
+    m = iu.module_from_spec(sp)
+    sp.loader.exec_module(m)
+    return m
+
+
+def load_split(run_name: str, edits_path: Path | None = None, audio_path: Path | None = None, timing_path: Path | None = None, script_path: Path | None = None) -> dict:
     """The approved-split inputs for the director: the macro, the owner's direction notes, the audio plan and the timing plan, all checked to belong to ONE split hash."""
     res = json.loads((RUNS / run_name / "macro_A1.json").read_text(encoding="utf-8"))
     if not res.get("macro"):
@@ -498,11 +513,13 @@ def load_split(run_name: str, edits_path: Path | None = None, audio_path: Path |
     if edits["stories"] != res["macro"]["stories"] or edits["unfilmed_ranges"] != res["macro"]["unfilmed_ranges"]:
         raise SystemExit("the edits file does not match the split of this run (the briefs, ranges or budgets differ)")
     audio = json.loads((audio_path or ROOT / "canon" / "audio" / "A1_audio_plan.json").read_text(encoding="utf-8"))
+    easy = _easy()                                                                  # the owner's EASY spoken wording replaces the verse as the spoken text (A3 follow-up 8)
+    audio = easy.overlay(audio, easy.load_simple(script_path or easy.DEFAULT))
     timing_plan = json.loads((timing_path or ROOT / "canon" / "audio" / "A1_timing_plan.json").read_text(encoding="utf-8"))
     for name, d in (("audio plan", audio), ("timing plan", timing_plan)):
         if d.get("split_sha256") != res["macro_sha256"]:
             raise SystemExit(f"the {name} was built for a different split; rebuild it (a1_audio.py build --run {run_name})")
-    return {"macro": res["macro"], "hash": res["macro_sha256"], "edits": edits, "audio": audio, "timing": timing_plan}
+    return {"macro": res["macro"], "hash": res["macro_sha256"], "edits": edits, "audio": audio, "timing": timing_plan, "script_sha256": easy.script_sha256(script_path or easy.DEFAULT)}
 
 
 def split_scene_override(n: int, split: dict, ovis: dict, chapter: int = 1) -> dict:
@@ -512,21 +529,34 @@ def split_scene_override(n: int, split: dict, ovis: dict, chapter: int = 1) -> d
     tm = next(s for s in split["timing"]["scenes"] if s["scene"] == sid)
     lines = [l for l in split["audio"]["lines"] if l["scene"] == sid and l["priority"] == "core"]
     ctx_txt = "\n".join(f"A{chapter}:{c.split(':')[1]}: {ovis[int(c.split(':')[1])]}" for c in sc["context_ovi_ids"]) or "(none)"
-    plan = "\n".join(f"{l['id']} [{l['voice']}] ovi {l['ovi']}: {l['marathi']}" for l in lines)
+    plan = "\n".join(f"{l['id']} [{l['voice']}] ovi {l['ovi']}: {l.get('spoken_marathi', l['marathi'])}" for l in lines)
     captions = "\n".join(f"caption {k['id']}: {k['marathi']} (on screen only)" for k in split["audio"].get("captions", []) if k["scene"] == sid)
     voice_of = {l["id"]: l for l in lines}
     shot_of = {b["line"]: b["shot"] for b in tm["beats"]}
     dplan = {}
     for l in lines:
         if l["voice"] in CHARACTER_VOICES:
-            dplan.setdefault(shot_of[l["id"]], []).append({"id": l["id"], "ovi": l["ovi"], "marathi": l["marathi"], "voice": l["voice"]})
+            dplan.setdefault(shot_of[l["id"]], []).append({"id": l["id"], "ovi": l["ovi"], "marathi": l.get("spoken_marathi", l["marathi"]), "voice": l["voice"]})
+    by_id = {l["id"]: l for l in lines}
+    beat_rows = []                                                                  # shared bilingual beats: code-measured, the director never writes timings (schema has no timing key)
+    for b in tm["beats"]:
+        l = by_id.get(b["line"])
+        if not l or not {"mr", "hi"} <= set(l.get("seconds", {})):
+            raise SystemExit(f"{sid}: line {b['line']} has no measured Marathi and Hindi seconds; rebuild the audio plan from the measured clips")
+        mr, hi = l["seconds"]["mr"], l["seconds"]["hi"]
+        last = min(math.ceil(b["end_s"] / SHOT_SECONDS - 1e-9), tm["planned_shots"])        # exclusive end: a line ending exactly on a cut stays in its shot
+        crossed = list(range(b["shot"] + 1, last + 1))
+        cross = f"; CONTINUES over the cut into shot{'s' if len(crossed) > 1 else ''} {', '.join(map(str, crossed))}" if crossed else ""
+        beat_rows.append(f"{b['line']} starts shot {b['shot']} at {b['start_s']:.2f} s, shared beat ends {b['end_s']:.2f} s (Marathi {mr:.2f} s, Hindi {hi:.2f} s, longer: {'Hindi' if hi > mr else 'Marathi' if mr > hi else 'equal'}){cross}")
+    bilingual = "\n".join(beat_rows)
     tl = "\n".join(f"shot {x['shot']} ({x['from_s']:.0f}-{x['to_s']:.0f} s): " + (f"narration starts {', '.join(x['lines_starting'])} (ovi {', '.join(map(str, x['ovis']))})" if x["lines_starting"] else "visual only: continue the nearest ovi's picture")
                     + (" | dialogue entries for this shot: " + "; ".join(f"{d['id']} {d['voice']} ovi {d['ovi']}" for d in dplan.get(x["shot"], [])) if dplan.get(x["shot"]) else "") for x in tm["shots"])
     notes = "\n".join(f"- {t}" for t in split["edits"].get("direction_notes", []))
     block = (f"{sid}: ovi {sc['ovi_range'][0]}-{sc['ovi_range'][1]} (approved split {split['hash'][:12]}...). {sc['brief']}\n\n"
              f"READ-ONLY CONTEXT OVIS (not owned by this scene):\n{ctx_txt}\n\n"
-             f"NARRATION PLAN (fixed audio: the pictures follow it; exact Marathi verse segments; a character voice speaks only its own lines). Only lines with a CHARACTER voice (bankatlal, damodarpant, gajanan) go in a shot's \"dialogue\" (speaker exactly that character, Marathi exactly as below); narrator lines are read over the picture and are NOT dialogue:\n{plan}\n{captions}\n\n"
+             f"NARRATION PLAN (fixed audio: the pictures follow it; the owner's approved EASY spoken Marathi, script {split.get('script_sha256', 'n/a')[:12]}...; each line renders the meaning of the verse ovi it names; a character voice speaks only its own lines). Only lines with a CHARACTER voice (bankatlal, damodarpant, gajanan) go in a shot's \"dialogue\" (speaker exactly that character, Marathi exactly as below, cite that line's ovi); narrator lines are read over the picture and are NOT dialogue:\n{plan}\n{captions}\n\n"
              f"SHOT TIMELINE: direct EXACTLY {tm['planned_shots']} shots (6 s each). A shot's ovi_ids MUST list every ovi whose narration starts in it; a visual-only shot lists the ovi it continues from.\n{tl}\n\n"
+             f"SHARED BEATS (ONE picture serves BOTH the Marathi and the Hindi audio; code-measured, read-only; never write timings; a line that CONTINUES over a cut needs a pose and staging that stay true in the next shot too; the shorter language rests in silence):\n{bilingual}\n\n"
              f"DIRECTION NOTES (the owner's):\n{notes}")
     return {"brief_block": block, "shots_target": tm["planned_shots"], "timeline": {x["shot"]: x["ovis"] for x in tm["shots"] if x["ovis"]}, "range": tuple(sc["ovi_range"]), "dialogue_plan": dplan}
 
@@ -577,7 +607,7 @@ def load_preset_json(presets_index: list) -> dict:
 # ----------------------------------------------------------------------------- reviewers: binary questions with evidence
 
 BLOCKING = [  # fidelity and doability: any "no" blocks approval, a missing answer blocks too
-    ("Q1", "Is every spoken line's Marathi inside the ovi it cites, spoken by the speaker named (not a speaker the materials mark unclear)?"),
+    ("Q1", "Is every spoken line the approved line of the NARRATION PLAN (or, when there is no plan, inside the ovi it cites), spoken by the speaker named (not a speaker the materials mark unclear)?"),
     ("Q2", "Is every person, object, place and event shown named in the materials, or else only a labelled STAGING scenery/light/pose/camera proposal (proposals are fine; the owner approves them later)?"),
     ("Q3", "Is every motive, feeling, thought or cause shown stated by an ovi?"),
     ("Q4", "Are miracles and teaching shown with exactly the cause the ovi gives and nothing added?"),
@@ -811,12 +841,12 @@ def direct_scene(director: Agent, reviewers: list, n: int, rng: tuple, chapter: 
     system, materials = build_prompt(n, rng, files, ovis, presets_index, sorted(x for x in ctx["speakers"] if "(" not in x), chapter, ctx["preset_json"], override)
     ctx = {**ctx, "packet_text": ctx.get("packet_text") or materials}
     if override:
-        ctx = {**ctx, "shots_target": override["shots_target"], "timeline": override["timeline"], "dialogue_plan": override["dialogue_plan"]}
+        ctx = {**ctx, "scene_image_prefix": True, "shots_target": override["shots_target"], "timeline": override["timeline"], "dialogue_plan": override["dialogue_plan"]}
     check = lambda sc: validate_scene(sc, presets, ovi_text, rng, ctx, chapter, f"S{n}")
     log, repairs = [], []
     out = {"scene": n, "chapter": chapter, "range": list(rng), "result": "FAILED", "errors": [], "warnings": [], "plan": None, "calls": log, "reviews": [], "repairs": repairs, "final_reviews": []}
     scene, director_calls = None, 0
-    for attempt in range(2):                                                    # first answer; one re-ask only if the reply was not JSON
+    for attempt in range(1 if ONE_CALL else 2):                                 # first answer; one re-ask only if the reply was not JSON (never with --one-call)
         director_calls += 1
         scene = _ask(director, system, materials if attempt == 0 else materials + "\n\nYour last reply was not a single JSON object. Reply with ONLY the JSON object.", log, "generate")
         if scene is not None:
@@ -827,7 +857,7 @@ def direct_scene(director: Agent, reviewers: list, n: int, rng: tuple, chapter: 
     scene, notes = normalise(scene)
     errors, warnings = check(scene)
     warnings = notes + warnings
-    can_repair = director_calls < 2                                             # the owner's limit: no loops, two director calls at most
+    can_repair = director_calls < 2 and not ONE_CALL                                           # the owner's limit: no loops, two director calls at most
     if errors:                                                                  # the single repair round, spent here when the validator fails
         if can_repair and jsonschema.Draft202012Validator(SCENE).is_valid(scene):
             can_repair = False
@@ -925,9 +955,13 @@ def main() -> int:
     ap.add_argument("--model", default=None, help="director model (default: kimi-k3.1-pro, or the Nemotron Ultra for --director nvidia)")
     ap.add_argument("--redo", action="store_true", help="direct a scene again although this director already directed it in another run (owner's decision only)")
     ap.add_argument("--allow-paid", action="store_true", help="required for --director kimi (paid; money guard P4 applies)")
+    ap.add_argument("--one-call", action="store_true", help="exactly ONE director call per scene: no JSON re-ask, no repair round (the owner decides after reading the validator result)")
+    ap.add_argument("--effort", choices=["low", "medium", "high"], default="high", help="Kimi reasoning_effort (default high; the cost lever is low)")
+    ap.add_argument("--max-tokens", type=int, default=None, help="Kimi max output tokens (sets the ledger worst case; default the adapter's)")
     ap.add_argument("--probe", action="store_true", help="with --director kimi --allow-paid: ONE tiny call (about $0.01) to confirm the model id works; no run folder")
     ap.add_argument("--reviewers", default=None, help="comma-separated NVIDIA reviewer models; default Nemotron Ultra (or the older pair when Nemotron directs); '' = none (the result is then UNREVIEWED, never VALID)")
     a = ap.parse_args()
+    globals()["ONE_CALL"] = a.one_call
     if not a.probe and not a.run_name:
         raise SystemExit("--run-name is required")
     run_mod = _load("director_run", ROOT / "scripts" / "source" / "director_run.py")
@@ -941,10 +975,10 @@ def main() -> int:
             raise SystemExit("--director kimi is a paid call: add --allow-paid (the money guard P4, $1, still applies)")
         kimi = _load("kimi_adapter", ROOT / "scripts" / "source" / "kimi_adapter.py")
         try:
-            director = kimi.make_agent(model=a.model or kimi.MODEL, json_mode=a.probe)
+            director = kimi.make_agent(model=a.model or kimi.MODEL, json_mode=a.probe, effort=a.effort, max_tokens=a.max_tokens or kimi.MAX_TOKENS)
         except kimi.ledger_mod.Refused as exc:
             raise SystemExit(f"REFUSED: {exc}")
-        settings = {"model": director.name, "effort": "high", "max_tokens": kimi.MAX_TOKENS, "phase": kimi.PHASE}
+        settings = {"model": director.name, "effort": a.effort, "max_tokens": a.max_tokens or kimi.MAX_TOKENS, "phase": kimi.PHASE}
         default_reviewers = NVIDIA_MODEL
         if a.probe:
             try:

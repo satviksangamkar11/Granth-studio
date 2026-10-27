@@ -1,0 +1,22 @@
+{
+  "S4-1": {
+    "batch": 0,
+    "schema_id": "SA"
+  },
+  "S4-2": {
+    "batch": 0,
+    "schema_id": "SB"
+  },
+  "S4-3": {
+    "batch": 0,
+    "schema_id": "SC"
+  },
+  "S4-4": {
+    "batch": 0,
+    "schema_id": "SD"
+  },
+  "S4-5": {
+    "batch": 0,
+    "schema_id": "SE"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "created": "2026-10-27 22:03:28",
+  "files": {
+    "REVIEW.md": "cb1b5abdfae073392ee640cc3ae2c95430ad4c9e4f2c8b42966d72da05548768",
+    "a01_scene4.json": "e9bcf33a50d1d868b63de42779c8ebf50433cab795936c28588f5bf892178e64",
+    "calls/scene4__nvidia_nemotron-3-ultra-550b-a55b__9be81a984b28ca17.json": "057004c68b7e24e901f03480dc2794d589de9c958d7864dc625f38d9ac0ac6f1",
+    "calls/scene4__nvidia_nemotron-3-ultra-550b-a55b__ccee7a47846b0afd.json": "d396ff7a420de6c57a0288266d9485c8e0e52672bd742b784e249af98d8f8062",
+    "calls/scene4__openai_gpt-oss-20b__7b92fa0e4f61c4cb.json": "05bb3e098a61424d83776393fd009b1d8de74ec1ee670e89ae46683fb73dfe28",
+    "calls/scene4__z-ai_glm-5.3-flash__7a4656affb3dfd8c.json": "cfdca9c616fd2f79a90e15c9810e1d73ff7ca7c336643521e760ec847f4fe97c",
+    "shot_id_map.json": "44031dcd9b0907680537cf81fb098d2614248d439573204731e2bf5c27fc2e22"
+  },
+  "inputs": {
+    "code_sha256": {
+      "director_run.py": "a1b9f1c499403e622158b531163b917e4b58857f45c19d7bd061fca1a629fde6",
+      "director_test.py": "5c540fe3c131aa8985c50a68044fea3c9d5d5f6d8d0f150d432e4737f28e23a5",
+      "draft_source.py": "5dba4c42b6a9e09938d42bd31affa245c34fa50c1eb17f830d32abdb885f540f",
+      "kimi_adapter.py": "aa45551f003f3fcc6e3825aa82b3604b09d6c864f7fcbff82fd1831f9778028c",
+      "nvidia_trial.py": "b3e1dffa3f5b4d8b8710f03f2082827e18bdfbf8b92af5988920d4b962cc4771",
+      "v5_ledger.py": "ab99259d2d462a5c55dec15dce8c95e79facee1a0054e50fbca9c8864984d5ee"
+    },
+    "director": "nvidia/nemotron-3-ultra-550b-a55b",
+    "packet_files": {
+      "adhyay_01_ovis_hj.jsonl": "3e090d6a04eb32875667afe8eb9a5f30e326c751b25b3396150c71409f2b589c",
+      "frozen_copies/adhyay_01_FINAL_answers.md": "476a7131cd9735e77f0af47f41151ceaecd2143244b93464cc46bb631c3e9846",
+      "frozen_copies/adhyay_01__adhyay_01_video_gaps_addendum.md": "18f6eed8981a87771e7db7e5b8388b63ee0534d9619ee5dec6a3c21d83fd4882",
+      "frozen_copies/adhyay_01_analysis_v3.md": "10d0712ea13d93bd050877bbea85d876246c29a02854e2bda8b834dd3a1e317e",
+      "frozen_copies/characters_1to12_FINAL.md": "b9e271d5c49b9d3a778c5ec8af598d35c1d0e2e53e940165ec011aba17333870",
+      "frozen_copies/glossary_user_supplied.md": "9c05b975e8ad74a11d40a078ffc7291b89188c265ac642a625294c43476fd50c",
+      "frozen_copies/glossary_v3.md": "09c5f37be75bdb0b31fbd933cf268bd383664b054a83d135b401cbd8ab5c3918",
+      "frozen_copies/verification_report.md": "81ac5518b2054a9391d419033846f6dd932b164516323b2dc7993304acfe729b",
+      "presets_index.json": "ad5ea32d1af45b3af1fd54c34283e21dfe20daf777c0ee10a3f8c410b3c493ae"
+    },
+    "presets_sha256": {
+      "01_establishing_shot": "a7ec003060f9a02a3376b45104a93642ff0bb795e04e6b9b4075f1818174728c",
+      "02_environmental_parallax": "19923612ef52a37b089a53246297257239ceb0946547253760b19929a20cb4e2",
+      "03_slow_cinematic_push": "19bbba18ed58aa55b35989fe7e2c3508193aaecb556165b42c3c13047f945781",
+      "04_character_entrance": "b5cdf2cc535f96176977c3137c46dae3e38dac090d2cd99f8727511068dce1f9",
+      "05_bowing_prayer": "edb06a70ae3f27d39dd02fd083f6cbe3b959e6b41cac5cb34ef948215a08a03f",
+      "06_blessing_gesture": "842eb1d43feddd832ad211c554173dcc6e299abf3a7768683dab5f0f035ddc93",
+      "07_character_reaction": "dbc5bd73a5739481344aae4576cddf558a3c9ea33b3bb9d0d58e5bf049e19166",
+      "08_emotional_closeup": "1039236a2970438f9069ca4767efe3ebbb2523130956d27e0272f8954ddcfdb5",
+      "09_dialogue_composition": "49837b00c13635abab1075eb1b7391cf756189e7ce71c44902f6136956ca1631",
+      "10_object_hand_insert": "2ed82f4f0cfbf8b1bf43623e7594101d0fe7c373e36bbcdedefe7ba2d5b3e180",
+      "11_scene_transition": "5eb9edaa179606ce44fda329663355bbf1288888302c1357d43359cf268f19fb"
+    },
+    "reviewers": [
+      "openai/gpt-oss-20b",
+      "z-ai/glm-5.3-flash"
+    ],
+    "scenes": [
+      4
+    ],
+    "settings": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
+    },
+    "split": {
+      "files": {
+        "audio/A1_audio_plan.json": "61173e0ffd0c5b79cae05fc64dec0fe52071411d4824aeffd15c7eab701a0a96",
+        "audio/A1_timing_plan.json": "3f1926d367639a847d10fdf237064eb4054a4a453552c5ffee9a0908234eb220",
+        "story_split_edits/A1_rev1.json": "d81a25caf325f72de842f8cae49708b9b46d3b70943302de1836bb5ab38fc3fc"
+      },
+      "hash": "285046ade8110e61ec1e9f6e85935e3354495b3dd5e54daff87663a3e4fa5949",
+      "run": "a1_split_rev9"
+    }
+  },
+  "manifest_conflict": "image sky_morning is declared with different descriptions in scenes [4, 5]; give it one description or two ids",
+  "run": "a1_s4_dry3",
+  "status": "MANIFEST_CONFLICT (results saved, film manifest NOT updated)",
+  "updated": "2026-10-27 22:10:35"
+}

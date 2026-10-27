@@ -1,0 +1,357 @@
+{
+ "scene": "S7",
+ "characters": {
+  "BA": {
+   "code": "BA",
+   "name": "Bankatlal",
+   "identity_paragraph": "Bankatlal Agarwal: an adult man of about 35, medium height, slightly full build, kind attentive face, small neat moustache, warm brown skin. He wears a cream-white turban wound in a round pagadi, a long sage-green cotton angarkha coat to below the knee, tied at the side, over a white dhoti, and a cream shoulder cloth (uparna) over his left shoulder. Barefoot. Nothing in his hands unless stated.",
+   "images": [
+    "BEAT_S3_TWO_MEN_SEE",
+    "CH_BA",
+    "F_BA_AMAZED",
+    "F_BA_REVERENT",
+    "PAIR_BA_DK_STAND",
+    "PAIR_BA_DK_WALK",
+    "POSE_READY_TO_FALL",
+    "POSE_SILENT_BOW",
+    "P_BA_ASK",
+    "P_BA_TALK"
+   ],
+   "voice_role": "bankatlal",
+   "voice_ids": {
+    "mr": null,
+    "hi": null
+   }
+  },
+  "DK": {
+   "code": "DK",
+   "name": "Damodarpant",
+   "identity_paragraph": "Damodarpant Kulkarni: an adult man of about 35, lean and slightly taller than Bankatlal, narrow face, thin moustache, warm brown skin. He wears a terracotta-red Maharashtrian pagadi turban, a plain white long-sleeved cotton angarkha shirt to the knee, a white dhoti, and an off-white uparna over one shoulder. Barefoot.",
+   "images": [
+    "BEAT_S3_TWO_MEN_SEE",
+    "CH_DK",
+    "F_DK_ALARM",
+    "INS_GADVA_VETIVER",
+    "PAIR_BA_DK_STAND",
+    "PAIR_BA_DK_WALK",
+    "POSE_READY_TO_FALL",
+    "POSE_SILENT_BOW",
+    "P_DK_HOLD_GADVA",
+    "P_DK_LISTEN",
+    "P_DK_OFFER",
+    "P_DK_WALK_GADVA",
+    "P_DK_WALK_TO_HOUSE"
+   ],
+   "voice_role": "damodarpant",
+   "voice_ids": {
+    "mr": null,
+    "hi": null
+   }
+  },
+  "GM": {
+   "code": "GM",
+   "name": "Gajanan Maharaj",
+   "identity_paragraph": "Shri Gajanan Maharaj: a young man in the prime of youth (looks about 25 to 30), strong and well built, muscular upper arms and neck, broad chest, radiant calm handsome face, eyes half-lowered with the gaze resting on the tip of his nose, short cropped dark hair, clean-shaven, warm medium-brown skin. He wears only one old, worn, torn sleeveless bandi (a short open-front vest) of faded grey-white cloth with frayed edges, and a minimal plain off-white loincloth; otherwise bare. Barefoot, no jewellery, no beads, no forehead mark. His only belongings: a dried bottle-gourd water vessel (natural tan, narrow neck) and a small hand-made unfired clay chilim (a straight conical clay pipe, matte raw grey-brown clay, never kiln-fired).",
+   "images": [
+    "BEAT_S3_TWO_MEN_SEE",
+    "BEAT_S8_GM_DRINKS",
+    "CH_GM",
+    "F_GM_CALM",
+    "F_GM_LAUGH",
+    "F_GM_LOOK_UP",
+    "INS_CHILIM_GOURD",
+    "INS_MIXING",
+    "INS_PICK_GRAIN",
+    "POSE_READY_TO_FALL",
+    "POSE_SILENT_BOW",
+    "P_GM_EATING",
+    "P_GM_LOOK_UP",
+    "P_GM_PICKING",
+    "P_GM_RUN",
+    "P_GM_SEATED_CALM",
+    "P_GM_SPEAKING"
+   ],
+   "voice_role": "gajanan",
+   "voice_ids": {
+    "mr": null,
+    "hi": null
+   }
+  }
+ },
+ "places": {
+  "ROAD": {
+   "code": "ROAD",
+   "name": "Road before Devidas's house",
+   "identity_paragraph": "The road in front of Devidas's house in Shegaon: a dusty unpaved village road running across the picture; on the left a modest but solid village house with thick mud-plastered ochre walls, a terracotta clay-tile roof, a raised earthen plinth step (ota) and a heavy plain wooden door standing half open onto a dark interior; neighbouring low houses and neem trees further down the road. On the road in front of the door lie several used leaf plates (round plates of stitched dry leaves) with a few scattered grains of leftover white rice.",
+   "images": [
+    "BEAT_S3_TWO_MEN_SEE",
+    "LOC_ROAD_REF",
+    "MID_ROAD_HOUSE"
+   ]
+  },
+  "SHEGAON": {
+   "code": "SHEGAON",
+   "name": "Shegaon",
+   "identity_paragraph": "Shegaon in the 1870s: a small village on the flat open plain of Varhad, dark-brown soil, a cluster of low houses with mud-plastered walls in ochre and earth tones, some roofs of terracotta clay tiles and some thatched, a few neem and babul trees, dusty lanes, no temple spire, no large buildings, no people in view.",
+   "images": [
+    "FAR_VILLAGE",
+    "LOC_SHEGAON_REF",
+    "MID_SHEGAON"
+   ]
+  }
+ },
+ "catalog": [
+  {
+   "image_id": "CH_GM",
+   "kind": "character_ref",
+   "preset_roles": [],
+   "entities": [
+    "GM"
+   ],
+   "covers_shots": 0,
+   "owner_choice": [
+    "OC-01 age look 25-30",
+    "OC-02 hair/beard/skin",
+    "OC-03 bandi colour and shown throughout"
+   ]
+  },
+  {
+   "image_id": "CH_BA",
+   "kind": "character_ref",
+   "preset_roles": [],
+   "entities": [
+    "BA"
+   ],
+   "covers_shots": 0,
+   "owner_choice": [
+    "OC-04 Bankatlal costume and age"
+   ]
+  },
+  {
+   "image_id": "CH_DK",
+   "kind": "character_ref",
+   "preset_roles": [],
+   "entities": [
+    "DK"
+   ],
+   "covers_shots": 0,
+   "owner_choice": [
+    "OC-05 Damodarpant costume; must not look like Devidas"
+   ]
+  },
+  {
+   "image_id": "PR_GOURD_CHILIM",
+   "kind": "prop",
+   "preset_roles": [],
+   "entities": [],
+   "covers_shots": 0,
+   "owner_choice": []
+  },
+  {
+   "image_id": "PR_GADVA_VETIVER",
+   "kind": "prop",
+   "preset_roles": [],
+   "entities": [],
+   "covers_shots": 0,
+   "owner_choice": []
+  },
+  {
+   "image_id": "LOC_ROAD_REF",
+   "kind": "location",
+   "preset_roles": [],
+   "entities": [
+    "ROAD"
+   ],
+   "covers_shots": 0,
+   "owner_choice": [
+    "OC-09 look of Devidas's house"
+   ]
+  },
+  {
+   "image_id": "SKY_NOON",
+   "kind": "location",
+   "preset_roles": [
+    "01:sky",
+    "02:sky",
+    "bg"
+   ],
+   "entities": [],
+   "covers_shots": 14,
+   "owner_choice": []
+  },
+  {
+   "image_id": "FX_SUN",
+   "kind": "location",
+   "preset_roles": [
+    "01:fx"
+   ],
+   "entities": [],
+   "covers_shots": 3,
+   "owner_choice": []
+  },
+  {
+   "image_id": "FG_NEEM",
+   "kind": "location",
+   "preset_roles": [
+    "01:fg",
+    "02:near"
+   ],
+   "entities": [],
+   "covers_shots": 8,
+   "owner_choice": [
+    "OC-11 neem as the village tree"
+   ]
+  },
+  {
+   "image_id": "FAR_VILLAGE",
+   "kind": "location",
+   "preset_roles": [
+    "02:far",
+    "bg"
+   ],
+   "entities": [
+    "SHEGAON"
+   ],
+   "covers_shots": 31,
+   "owner_choice": []
+  },
+  {
+   "image_id": "MID_ROAD_HOUSE",
+   "kind": "location",
+   "preset_roles": [
+    "01:mid",
+    "02:mid",
+    "bg (all character shots on the road)"
+   ],
+   "entities": [
+    "ROAD"
+   ],
+   "covers_shots": 23,
+   "owner_choice": [
+    "OC-09"
+   ]
+  },
+  {
+   "image_id": "P_GM_SEATED_CALM",
+   "kind": "pose",
+   "preset_roles": [
+    "02:extra char layer",
+    "04:other",
+    "09:right"
+   ],
+   "entities": [
+    "GM"
+   ],
+   "covers_shots": 6,
+   "owner_choice": []
+  },
+  {
+   "image_id": "P_GM_SPEAKING",
+   "kind": "pose",
+   "preset_roles": [
+    "09:right",
+    "02:extra char layer"
+   ],
+   "entities": [
+    "GM"
+   ],
+   "covers_shots": 6,
+   "owner_choice": [
+    "OC-12 posture at the trough during the teaching (seated default)"
+   ]
+  },
+  {
+   "image_id": "F_GM_LAUGH",
+   "kind": "pose",
+   "preset_roles": [
+    "07:face"
+   ],
+   "entities": [
+    "GM"
+   ],
+   "covers_shots": 1,
+   "owner_choice": []
+  },
+  {
+   "image_id": "PAIR_BA_DK_STAND",
+   "kind": "pose",
+   "preset_roles": [
+    "09:left",
+    "02:extra char layer"
+   ],
+   "entities": [
+    "BA",
+    "DK"
+   ],
+   "covers_shots": 6,
+   "owner_choice": []
+  },
+  {
+   "image_id": "P_DK_OFFER",
+   "kind": "pose",
+   "preset_roles": [
+    "09:left"
+   ],
+   "entities": [
+    "DK"
+   ],
+   "covers_shots": 1,
+   "owner_choice": []
+  },
+  {
+   "image_id": "P_DK_WALK_TO_HOUSE",
+   "kind": "pose",
+   "preset_roles": [
+    "04:char"
+   ],
+   "entities": [
+    "DK"
+   ],
+   "covers_shots": 1,
+   "owner_choice": []
+  },
+  {
+   "image_id": "F_BA_REVERENT",
+   "kind": "pose",
+   "preset_roles": [
+    "07:face",
+    "08:face"
+   ],
+   "entities": [
+    "BA"
+   ],
+   "covers_shots": 1,
+   "owner_choice": []
+  },
+  {
+   "image_id": "INS_EMPTY_GOURD",
+   "kind": "beat_still",
+   "preset_roles": [
+    "10:insert"
+   ],
+   "entities": [],
+   "covers_shots": 1,
+   "owner_choice": []
+  },
+  {
+   "image_id": "BEAT_S7_BIRDS",
+   "kind": "beat_still",
+   "preset_roles": [
+    "03:img"
+   ],
+   "entities": [],
+   "covers_shots": 1,
+   "owner_choice": []
+  }
+ ],
+ "open_questions": [
+  "OC-01",
+  "OC-02",
+  "OC-03",
+  "OC-04",
+  "OC-05",
+  "OC-09",
+  "OC-11",
+  "OC-12"
+ ]
+}

@@ -1,0 +1,301 @@
+{
+ "source_dir": "D:\\aai work\\flow_outputs\\adhyay_01\\final_clean",
+ "count": 59,
+ "images": {
+  "SH_S1_01": {
+   "file": "SH_S1_01.png",
+   "sha256": "da58cf4ce27932f28ec0472d863f554687b001c8dbec80670803738bc460b294",
+   "bytes": 4518075
+  },
+  "SH_S1_02": {
+   "file": "SH_S1_02.png",
+   "sha256": "c401ea286c7cd1e0cf3dc341a359ec94114ea18479500c4d0d82e3d4a442a699",
+   "bytes": 2963904
+  },
+  "SH_S2_01": {
+   "file": "SH_S2_01.png",
+   "sha256": "3402c45a2ff77c5bb12a1fff1d49626ba58efc8cd1f3b78c924d0d6658ec6a53",
+   "bytes": 3187589
+  },
+  "SH_S2_02": {
+   "file": "SH_S2_02.png",
+   "sha256": "14937683169a4dfdf6ee8a25adca442a4c54f047929738d8f8ba221af325ac62",
+   "bytes": 2136213
+  },
+  "SH_S2_03": {
+   "file": "SH_S2_03.png",
+   "sha256": "fe7e40dd62d0513928a2c908544730309e89da0cc442ca7d908d0bcb7cf147f5",
+   "bytes": 3553024
+  },
+  "SH_S2_04": {
+   "file": "SH_S2_04.png",
+   "sha256": "fa0168baf8d4a0e26a879848f9fc21af4a22a13b1210e5cbeb2f7a6907963464",
+   "bytes": 3207431
+  },
+  "SH_S2_05": {
+   "file": "SH_S2_05.png",
+   "sha256": "923024a6cc92e7749ddb20d373576e35fe0ec07cc79d39dcaf0880112a274837",
+   "bytes": 2262751
+  },
+  "SH_S2_06": {
+   "file": "SH_S2_06.png",
+   "sha256": "694396837b1097d92c2b9039e7cc69f960edc648418f800da467f60f6728513c",
+   "bytes": 3199525
+  },
+  "SH_S2_07": {
+   "file": "SH_S2_07.png",
+   "sha256": "f5fd10d3f87a0f352b44df873dbc71137d04f44bd5ea402250b14d5b6efdd174",
+   "bytes": 3045359
+  },
+  "SH_S2_08": {
+   "file": "SH_S2_08.png",
+   "sha256": "b41920c07dd5137bdc690166b40c39d705a1308a83fc1de0c75ba3756420cf4f",
+   "bytes": 2278665
+  },
+  "SH_S3_01": {
+   "file": "SH_S3_01.png",
+   "sha256": "0b1e3a7d966adb4735b2755e181a6ce2f8a0a1a4fa9b178e17093d0ea99bf7e6",
+   "bytes": 3117450
+  },
+  "SH_S3_02": {
+   "file": "SH_S3_02.png",
+   "sha256": "ee1948bb40b33a1a8d05c8f820822844ce5d8ee1569c0bc0dddcde9da690fcb1",
+   "bytes": 3395824
+  },
+  "SH_S3_03": {
+   "file": "SH_S3_03.png",
+   "sha256": "a54aaaebeb1962dbed2fe8eaead07437048ec6d892738d93ae132c4b856b0794",
+   "bytes": 3099440
+  },
+  "SH_S3_04": {
+   "file": "SH_S3_04.png",
+   "sha256": "3b8f0eee5a1abf73a988ab31b4231a642985131875449dfd3caae184180053ec",
+   "bytes": 3367760
+  },
+  "SH_S3_05": {
+   "file": "SH_S3_05.png",
+   "sha256": "eec177c17347f9243ce3c539f0cd1e8b543b5d93395fec763f8f55c104b718b1",
+   "bytes": 3076626
+  },
+  "SH_S3_06": {
+   "file": "SH_S3_06.png",
+   "sha256": "f84d426e1619ddc8abfc881a4782acfdee3bc451b1a3057461a09b0b71062ff1",
+   "bytes": 3325747
+  },
+  "SH_S4_01": {
+   "file": "SH_S4_01.png",
+   "sha256": "9d9a80e03ad4f41fa9720f0219892c7304cdd580d64dc23f9e049b01b756fe18",
+   "bytes": 3352766
+  },
+  "SH_S4_02": {
+   "file": "SH_S4_02.png",
+   "sha256": "dfe5da6898a26ff148885843e6c02eafa957eda6c719db404410f6b860541211",
+   "bytes": 3345662
+  },
+  "SH_S4_03": {
+   "file": "SH_S4_03.png",
+   "sha256": "eed8fe8a39e4a276230033e81d5ead6336e161f1d830c790908830d46be7de73",
+   "bytes": 3113101
+  },
+  "SH_S4_04": {
+   "file": "SH_S4_04.png",
+   "sha256": "01fd20df6e2bbddfea3a3dc1f60816a9142a82842ba3a97821dd2ef50a4f546f",
+   "bytes": 2400897
+  },
+  "SH_S4_05": {
+   "file": "SH_S4_05.png",
+   "sha256": "892bf569edc509ef4d20e391b7aaf87486fc28e91214cafe38acdcb8f2556bf3",
+   "bytes": 3388507
+  },
+  "SH_S5_01": {
+   "file": "SH_S5_01.png",
+   "sha256": "583971efa931bae213b4f2e946713f3b0bd7d968d27f22bcaeaba3404553d15f",
+   "bytes": 3615885
+  },
+  "SH_S5_02": {
+   "file": "SH_S5_02.png",
+   "sha256": "e1ffe63f91fc51ac868c68d727aaa3a7308e2c9a56b6214c580850fb140f4dd7",
+   "bytes": 3191263
+  },
+  "SH_S5_03": {
+   "file": "SH_S5_03.png",
+   "sha256": "d9472fbf6c8e4b1f17031faf9b0ba1bf32e802e2f0c900eb5b4537cb1cf84fb1",
+   "bytes": 2040627
+  },
+  "SH_S5_04": {
+   "file": "SH_S5_04.png",
+   "sha256": "4361887a8a76a795ba770b4fc90eb622b6c531c3dc9c65777d03f485957d7df3",
+   "bytes": 3606668
+  },
+  "SH_S5_05": {
+   "file": "SH_S5_05.png",
+   "sha256": "d247c75e0ef36364976052d78e3705259725ca5b611cc3fa29dbe51721dd406d",
+   "bytes": 2677005
+  },
+  "SH_S5_06": {
+   "file": "SH_S5_06.png",
+   "sha256": "0e2b90a1be23f51d6152d50d834250d4ca451d215247c0dd7decc212408c109a",
+   "bytes": 2626372
+  },
+  "SH_S5_07": {
+   "file": "SH_S5_07.png",
+   "sha256": "1124eaafa47d9e8c4604418deb58607a0a649fc5b4777218aac275fc4a8bacb6",
+   "bytes": 3461239
+  },
+  "SH_S6_01": {
+   "file": "SH_S6_01.png",
+   "sha256": "3199383c3fc6cfa4e4fb4df056e00c051275ebf72c97d67108d4ee50f9431dee",
+   "bytes": 3322981
+  },
+  "SH_S6_02": {
+   "file": "SH_S6_02.png",
+   "sha256": "1280eba75b8f3a4100424a45954a8c20dcde03463d1cfb53d18d4b252f97aa81",
+   "bytes": 3265808
+  },
+  "SH_S6_03": {
+   "file": "SH_S6_03.png",
+   "sha256": "4c5369d5ec18f7e87b9fe9d7c50a912b0d67b12ac4a68f5432b816c6af704337",
+   "bytes": 3167287
+  },
+  "SH_S6_04": {
+   "file": "SH_S6_04.png",
+   "sha256": "eecc0d88e156f26d46df86fa9204aa4a264c7ececbd20126e94d493cb652bc46",
+   "bytes": 3293563
+  },
+  "SH_S6_05": {
+   "file": "SH_S6_05.png",
+   "sha256": "d1b62ec59cee09f57475478d5be4ca72c7d8504938aa5a15150ba8b036086baa",
+   "bytes": 3761300
+  },
+  "SH_S6_06": {
+   "file": "SH_S6_06.png",
+   "sha256": "6b0118116782e24e0e34ed8f8fd6313684c15294aaaa8251dfc935dd758957fe",
+   "bytes": 3101979
+  },
+  "SH_S7_01": {
+   "file": "SH_S7_01.png",
+   "sha256": "3eee22ef3ee29fe3d10070d648eb7aa2a57f8f87b0b0430e2ccd17dfe1ff8913",
+   "bytes": 3066835
+  },
+  "SH_S7_02": {
+   "file": "SH_S7_02.png",
+   "sha256": "2170cec17cd70bc99a0eb872da223707118755c24d9a3f796d625ce0842ac226",
+   "bytes": 3073453
+  },
+  "SH_S7_03": {
+   "file": "SH_S7_03.png",
+   "sha256": "e9e9679266c6e2a790b98b8aaf7f12c1b3e93ef8326f90b29e9957c285e4341a",
+   "bytes": 3241803
+  },
+  "SH_S7_04": {
+   "file": "SH_S7_04.png",
+   "sha256": "3e4a97f306844e77bd5bc2d74f0ade2e2a28271b41589d86777790194b79a23b",
+   "bytes": 2805451
+  },
+  "SH_S7_05": {
+   "file": "SH_S7_05.png",
+   "sha256": "75c19926d209e2c9212abcaf2bbc2aea94449acb8f14c1bca6591e081cf368bb",
+   "bytes": 3181439
+  },
+  "SH_S7_06": {
+   "file": "SH_S7_06.png",
+   "sha256": "cbce788ef9490611aeabf5d474f089827cdbf05c384630d12ae96f93b419a821",
+   "bytes": 3304161
+  },
+  "SH_S7_07": {
+   "file": "SH_S7_07.png",
+   "sha256": "fc1819d31acce92b4e599004363a2e292d83cc356a867405fe87d4a38b3e3675",
+   "bytes": 3037262
+  },
+  "SH_S7_08": {
+   "file": "SH_S7_08.png",
+   "sha256": "fa9df6dccd4da5a54ef00ade533e4fe1ac5fee0c27c3f911c709eb04c399aabc",
+   "bytes": 3143872
+  },
+  "SH_S7_09": {
+   "file": "SH_S7_09.png",
+   "sha256": "54f132eb8ed713ca406ac5b28e00f2bb72a52785b5d2f343edb3bd6a22e685d0",
+   "bytes": 3325173
+  },
+  "SH_S8_01": {
+   "file": "SH_S8_01.png",
+   "sha256": "a917ccb10186ad5e89b283c36acf39d7bff7e6e28d087d1e669fc8a0323e7e14",
+   "bytes": 3211977
+  },
+  "SH_S8_02": {
+   "file": "SH_S8_02.png",
+   "sha256": "aefa6ede4aec6f81aaecb0ca51417ba630a3aba570905e091787dd6b79264778",
+   "bytes": 3363202
+  },
+  "SH_S8_03": {
+   "file": "SH_S8_03.png",
+   "sha256": "863ebbe27a3424ed2febc779fc017535a62634e92d87e64fabcac3e3529f580b",
+   "bytes": 3451041
+  },
+  "SH_S8_04": {
+   "file": "SH_S8_04.png",
+   "sha256": "0b7f7d65abb8562ef2cf0cff164662b6b11491885fca85562cecb4aee03f6cc5",
+   "bytes": 3643972
+  },
+  "SH_S8_05": {
+   "file": "SH_S8_05.png",
+   "sha256": "15a84ea37e52253430d63b85f6ffbe2679517b2cf6abd2aa964906085402296f",
+   "bytes": 1535552
+  },
+  "SH_S9_01": {
+   "file": "SH_S9_01.png",
+   "sha256": "21abd73ade9dedb3486aeb8a10a8148c375b6136e833c2f1f7e25aa3ef8547db",
+   "bytes": 3421756
+  },
+  "SH_S9_02": {
+   "file": "SH_S9_02.png",
+   "sha256": "d420b90e34626cb62c182ab935894b5d0f0034f447aa0ff476a55d17191c2fc9",
+   "bytes": 3443667
+  },
+  "SH_S9_03": {
+   "file": "SH_S9_03.png",
+   "sha256": "6492e4db98f37508bef5b8e6df71671e14724c5c0aa71a1bdb23d15a7f631f99",
+   "bytes": 1720376
+  },
+  "SH_S9_04": {
+   "file": "SH_S9_04.png",
+   "sha256": "655838d70e25204bb794db6d4c49f16cb32e2622adbb02861c7f512736a4f35c",
+   "bytes": 3129521
+  },
+  "SH_S9_05": {
+   "file": "SH_S9_05.png",
+   "sha256": "89fe057eaaad50063cb7b7dea61b07d797afa0f9a8aa6ed279332d86235cb21a",
+   "bytes": 3295131
+  },
+  "SH_S9_06": {
+   "file": "SH_S9_06.png",
+   "sha256": "5e114a1ed3f2586d828998b94b3e91b0c7def7d850c6a38586e22e8c5b27f3e1",
+   "bytes": 3348386
+  },
+  "SH_S9_07": {
+   "file": "SH_S9_07.png",
+   "sha256": "42f315fee624703586e4f6a09f103a9315e86fb443eac0436476bdefa94969fd",
+   "bytes": 3366918
+  },
+  "SH_S9_08": {
+   "file": "SH_S9_08.png",
+   "sha256": "da15bc710222520bb605e1e38cce7e9d69dcd81babafaab5ffc1cd7820a9af93",
+   "bytes": 3240913
+  },
+  "SH_S9_09": {
+   "file": "SH_S9_09.png",
+   "sha256": "1dc8c69fdbf0b60c5bf7d52cab8832445b8f932ce6331edee7d6c4b14a706edc",
+   "bytes": 3714659
+  },
+  "SH_S9_10": {
+   "file": "SH_S9_10.png",
+   "sha256": "6739e1dd7874bd4a2fcc0d8a8f03357350e94a29e473bbb45c127819a90536ad",
+   "bytes": 3570256
+  },
+  "SH_S9_11": {
+   "file": "SH_S9_11.png",
+   "sha256": "f4fb7ba2b9dfc43acce4424f19fa31d94b164940a77a28f4b6c55deadc650974",
+   "bytes": 2928974
+  }
+ }
+}

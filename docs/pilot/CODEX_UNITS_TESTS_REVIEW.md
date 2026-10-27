@@ -1,0 +1,31 @@
+All nine units need fixes. References below are to `test_stage1_<unit>.py` in `docs/pilot/nemotron_specs/review_units_tests/`. **High** means execution failure; **Medium** means incorrect expectations or missing effective coverage. Findings follow the unit specs and shared BASE; no files were edited, no secrets opened, and no web used. Full pytest execution was unavailable because the implementation modules are absent.
+
+- **story_map — High:** `test_validate`, rows **137,139**, assigns index 9 of a nine-element list; `mutate` **78** raises `IndexError`. Append entries instead. **Medium:** `test_schema_errors` **112** wrongly requires schema rejection of reversed bounds, explicitly a semantic rule. `test_validate` **141** also leaves key ovi 3 outside the reversed range, combining violations. Assertions **141–143,159** require unmandated wording (`ovi_range`, `key_ovis`, `outside`); these rules permit checking the item ID.
+
+- **coverage — High:** `test_validate` **146,148** supplies two values for three parameter names, preventing collection. `test_schema_errors` **112** deletes absent `reason`, raising `KeyError`; **114** reapplies the unchanged valid MERGED_EQUIVALENT disposition while expecting an error. **Medium:** the purported duplicate mutation **148** merely reapplies VISUALISED; it creates no duplicate. `test_validate` **178,185** uses strings `"99"`/`"3"` instead of integer ovis. **153–156,209–211** checks note text membership but neither exactly one note nor error-before-note ordering. **172,180** prescribes unquoted diagnostic wording.
+
+- **scenes — High:** `test_schema_errors` **70,93–94,98–99** and `test_semantic_errors` **127,129** reach list leaves, but `mutate` **60** indexes lists with strings, raising `TypeError`. **Medium:** schema row **77** incorrectly tests semantic range ordering. Required-field deletion rows are missing for root fields, scene fields, and `turn.ovi/text`; only conditional teaching-treatment deletion is covered (**63–103**). Semantic rows **127,129** replace core lines, also causing missing-core-line failures; **129** can pass on that collateral diagnostic instead of detecting duplicate use.
+
+- **shots — Medium:** `test_adhyay_mismatch` **203** reverses the expected values: the required message is `shots adhyay 2 does not match 1`. `test_shot_id_unique_consecutive` **206** leaves S1-1 unchanged; no duplicate exists. Its assertion **213** also mandates unquoted wording. Required-field and extra-key assertions **125,135,169** demand child paths, whereas jsonschema reports those errors at the containing object. `test_empty_context_missing_refs` **270** requires script-membership validation absent from this unit’s rules. Missing nested `need_new` deletion rows for `reason/class` and an extra-key row leave that object incompletely tested. Field row **148** uses an object under a normal preset, so the required-null violation masks invalid-class coverage there.
+
+- **briefs — Medium:** `test_schema_errors` **175** requires schema rejection of empty person names, which the spec assigns to semantic validation. Extra-key rows **190–192** replace entire objects, simultaneously deleting required fields; add the extra key to otherwise valid objects. Root required-field deletions and a root extra-key row are absent. `test_semantic_errors` **214–239** requires unmandated wording instead of item IDs. Scene mutation **219** also breaks the image’s scene prefix, preventing isolated scene-existence coverage.
+
+- **looks — Medium:** `test_validate_errors` row **110** changes only Bankatlal’s state ID; the entity/state pairs remain distinct. It wrongly expects a duplicate error and supplies no actual duplicate-pair test. Assertions **108,110,125** mandate unquoted `source_ovis`/`duplicate` wording without requiring the affected entity ID.
+
+- **voices — High:** `test_validate` **129** addresses `docs.ctx`, which does not exist; `mutate` raises `KeyError`. **Medium:** **121–128** gives identical narrator-sharing inputs contradictory expectations; sharing with the narrator is expressly allowed. Consequently there is no isolated prohibited-sharing test. The “valid” row **130–134** makes Gajanan and `extra_char`, both non-narrators, share a key and must fail. Row **115** uses a five-character voice ID, violating schema before semantic validation. **120,124** mandates unquoted messages.
+
+- **sounds — Medium:** `test_schema_errors` **119** expects NEED_NEW without its required prompt to pass. Independent `test_semantic_errors` rows **150–154** mistakenly assume cumulative mutations: **150** retains `kind=bed` with an `fx_` ID; **151** leaves BASE unchanged while expecting an error; **154** adds a forbidden prompt to an ordinary cue. Add an isolated missing-prompt deletion case. Assertions **143–149,165** mandate unquoted wording; `test_empty_context_missing_refs` **189** requires script-membership validation outside this unit’s rules.
+
+- **questions — High:** `test_validate` **104** assigns index 1 of a one-element list; `mutate` **77** raises `IndexError`. Append the duplicate instead. **Medium:** **104–105,113** requires unmandated `unique`/`scene` wording and does not require Q1’s ID.
+
+| Unit | Verdict | Concrete fixes |
+|---|---|---|
+| story_map | FIX FIRST | Append; correct validation level; isolate range; relax wording |
+| coverage | FIX FIRST | Repair parameter tuples; repair schema rows; create duplicate; use integer ovis; verify note count/order; relax wording |
+| scenes | FIX FIRST | Fix list indexing; move range check; add deletions; isolate line mutations |
+| shots | FIX FIRST | Correct mismatch; create duplicate; fix error paths; remove unsupported assertion; complete/isolate nested rows; relax wording |
+| briefs | FIX FIRST | Correct validation level; isolate extras; add root rows; relax wording; isolate missing scene |
+| looks | FIX FIRST | Create duplicate pair; relax wording |
+| voices | FIX FIRST | Fix context path; correct sharing cases; isolate prohibited sharing; use schema-valid wrong ID; relax wording |
+| sounds | FIX FIRST | Repair NEED_NEW cases; repair independent mutations; relax wording; remove unsupported assertion |
+| questions | FIX FIRST | Append duplicate; assert permitted item IDs |

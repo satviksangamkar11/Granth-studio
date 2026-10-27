@@ -1,0 +1,1813 @@
+{
+ "version": 1,
+ "status": "DRAFT, not approved. Marathi = exact verse segments. Hindi = draft adaptation, NOT VALIDATED. Durations = ESTIMATES.",
+ "assumed_rates_syllables_per_second": {
+  "mr": 3.8,
+  "hi": 4.6
+ },
+ "voices": {
+  "narrator": "the storyteller (reads verse narration and every unclear or joint speech)",
+  "bankatlal": "Bankatlal Agarwal (only where the table names him)",
+  "damodarpant": "Damodarpant Kulkarni (only where the table names him)",
+  "gajanan": "Gajanan Maharaj (only where the table names him)"
+ },
+ "lines": [
+  {
+   "id": "S1-L1",
+   "scene": "S1",
+   "kind": "verse",
+   "ovi": 70,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "या महापुरुषाचा । ठावठिकाण कोणचा । वा पत्ता त्यांच्या जातीचा । इतिहासदृष्टया न लागे कीं",
+   "hindi": "इन महापुरुष का ठौर-ठिकाना कहाँ था, या उनकी जाति का पता क्या था, यह इतिहास की दृष्टि से पता नहीं चलता।",
+   "note": "Origins cannot be traced. The year appears only as the caption S1-K1.",
+   "syllables": {
+    "mr": 34,
+    "hi": 44
+   },
+   "seconds": {
+    "mr": 8.43,
+    "hi": 8.01
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L1",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 84,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "एक भाविक गृहस्थ होता । नाम ज्याचें देविदास",
+   "hindi": "वहाँ एक श्रद्धालु गृहस्थ थे, उनका नाम देविदास था।",
+   "note": "",
+   "syllables": {
+    "mr": 18,
+    "hi": 21
+   },
+   "seconds": {
+    "mr": 4.02,
+    "hi": 4.61
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L2",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 86,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा",
+   "hindi": "उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी।",
+   "note": "Ritushanti: a rite of passage for a boy of 13-16 (owner's final answer S5-3).",
+   "syllables": {
+    "mr": 32,
+    "hi": 36
+   },
+   "seconds": {
+    "mr": 7.66,
+    "hi": 7.2
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L3",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 87,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "उष्टया पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या",
+   "hindi": "देविदास ब्राह्मण के घर के सामने रास्ते पर जूठी पत्तलें फेंकी गई थीं।",
+   "note": "",
+   "syllables": {
+    "mr": 34,
+    "hi": 28
+   },
+   "seconds": {
+    "mr": 7.46,
+    "hi": 5.83
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L4",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 88,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "तो गजानन समर्थसिद्धयोगी । बसले होते तया जागीं । एक बंडी होती अंगीं । जुन्या पुराण्या कापडाची",
+   "hindi": "समर्थ सिद्ध योगी गजानन उसी जगह बैठे थे; उनके बदन पर पुराने-धुराने कपड़े की एक बंडी थी।",
+   "note": "The worn old bandi (88).",
+   "syllables": {
+    "mr": 38,
+    "hi": 42
+   },
+   "seconds": {
+    "mr": 8.71,
+    "hi": 8.3
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L5",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 91,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "नासाग्र दृष्टि मुद्रा शांत । तपोबल अंगीं झळकत । प्राचीच्या वालरवीवत् । वर्णन किती करावें",
+   "hindi": "दृष्टि नासिका के अग्रभाग पर, मुद्रा शांत; तपोबल देह में झलक रहा था, जैसे पूर्व दिशा का बाल सूर्य — कितना वर्णन करें!",
+   "note": "The sunrise comparison is not a time-of-day instruction.",
+   "syllables": {
+    "mr": 35,
+    "hi": 48
+   },
+   "seconds": {
+    "mr": 7.84,
+    "hi": 11.11
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L6",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 92,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या",
+   "hindi": "पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं।",
+   "note": "Digambar (92).",
+   "syllables": {
+    "mr": 38,
+    "hi": 41
+   },
+   "seconds": {
+    "mr": 8.42,
+    "hi": 8.86
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L7",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 93,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें",
+   "hindi": "वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे।",
+   "note": "",
+   "syllables": {
+    "mr": 33,
+    "hi": 31
+   },
+   "seconds": {
+    "mr": 7.06,
+    "hi": 7.41
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L8",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 94,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "शीत पडल्या दृष्टीप्रत । तें मुखीं उचलुनी घालीत । हें करण्याचा हाच हेत । ’अन्नपरब्रह्म’ कळवावया",
+   "hindi": "जो भी चावल का दाना नज़र में आता, उसे उठाकर मुँह में डालते; इसका हेतु यही था — 'अन्न ही परब्रह्म है' यह समझाना।",
+   "note": "Teaching 1: food is Brahman.",
+   "syllables": {
+    "mr": 39,
+    "hi": 48
+   },
+   "seconds": {
+    "mr": 8.12,
+    "hi": 9.9
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L9",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 95,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "कां कीं गर्जोन सांगे श्रुती । अन्न हेंच ब्रह्म निगुती । \"अन्नम् ब्रह्मेति\" ऐसी उक्ती । उपनिषदांठायीं असे",
+   "hindi": "क्योंकि श्रुति गरजकर कहती है कि अन्न ही निश्चय से ब्रह्म है — 'अन्नं ब्रह्मेति' यह उक्ति उपनिषदों में है।",
+   "note": "Teaching 1: the Upanishad words.",
+   "syllables": {
+    "mr": 36,
+    "hi": 40
+   },
+   "seconds": {
+    "mr": 10.17,
+    "hi": 10.45
+   },
+   "measured": true
+  },
+  {
+   "id": "S2-L10",
+   "scene": "S2",
+   "kind": "verse",
+   "ovi": 96,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "त्याची पटवावया खण । शितें वेंचती दयाघन । त्याचा सामान्य जनांलागून । भावार्थ तो कळला नसे",
+   "hindi": "उसकी प्रतीति कराने के लिए वे दयाघन दाने चुन रहे थे; पर उसका भावार्थ साधारण लोगों को समझ में नहीं आया था।",
+   "note": "",
+   "syllables": {
+    "mr": 37,
+    "hi": 48
+   },
+   "seconds": {
+    "mr": 9.29,
+    "hi": 8.88
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L1",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 97,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "बंकटलाल आगरवाला । होता रस्त्यानें चालला",
+   "hindi": "बंकटलाल अगरवाला रास्ते से जा रहा था।",
+   "note": "",
+   "syllables": {
+    "mr": 18,
+    "hi": 17
+   },
+   "seconds": {
+    "mr": 4.12,
+    "hi": 3.85
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L2",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 98,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "दामोदरपंत कुलकर्णी । त्यांच्या स्नेह्याचें नांव जाणी",
+   "hindi": "उसके मित्र का नाम दामोदरपंत कुलकर्णी था।",
+   "note": "",
+   "syllables": {
+    "mr": 19,
+    "hi": 19
+   },
+   "seconds": {
+    "mr": 3.99,
+    "hi": 3.8
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L3",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 98,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "दोघे तो प्रकार पाहोनी । आश्चर्यचकित जाहले",
+   "hindi": "दोनों यह प्रकार देखकर आश्चर्यचकित हो गए।",
+   "note": "",
+   "syllables": {
+    "mr": 18,
+    "hi": 20
+   },
+   "seconds": {
+    "mr": 3.4,
+    "hi": 4.9
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L4",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 99,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "कीं याची करणी विपरीत । वेडयापरी दिसतसे",
+   "hindi": "'इसकी करनी विपरीत है; यह पागल जैसा दिखता है।'",
+   "note": "Joint speech of the two men (table: speaker not split): read by the narrator.",
+   "syllables": {
+    "mr": 19,
+    "hi": 22
+   },
+   "seconds": {
+    "mr": 3.55,
+    "hi": 3.89
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L5",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 100,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "हा अन्नार्थी जरी असतां । तरी पात्र मागून घेता । देवीदासही यातें देता । कां कीं तोही सज्जन",
+   "hindi": "यदि यह अन्न का इच्छुक होता, तो पत्तल माँग लेता; देविदास भी इसे दे देते, क्योंकि वे भी सज्जन हैं।",
+   "note": "Joint reasoning (100-101): narrator.",
+   "syllables": {
+    "mr": 34,
+    "hi": 38
+   },
+   "seconds": {
+    "mr": 8.35,
+    "hi": 9.09
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L6",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 102,
+   "charans": [
+    1,
+    1
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "बंकटलाल म्हणे पंतासी",
+   "hindi": "बंकटलाल पंत से बोला —",
+   "note": "",
+   "syllables": {
+    "mr": 10,
+    "hi": 10
+   },
+   "seconds": {
+    "mr": 2.33,
+    "hi": 2.69
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L7",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 102,
+   "charans": [
+    2,
+    4
+   ],
+   "voice": "bankatlal",
+   "priority": "core",
+   "marathi": "ऐसेच उभें रस्‍त्यासी । आपण राहूं यत्कृतीसी । अजमावयाकारणें",
+   "hindi": "'ऐसे ही रास्ते पर खड़े रहकर हम इसकी करनी को परखें।'",
+   "note": "Table: Bankatlal to Damodarpant.",
+   "syllables": {
+    "mr": 25,
+    "hi": 25
+   },
+   "seconds": {
+    "mr": 4.98,
+    "hi": 3.65
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L8",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 104,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "कृतीनें हा दिसे वेडा । परी वाटे ज्ञानगाडा",
+   "hindi": "कर्म से यह पागल दिखता है, पर ज्ञान का भंडार लगता है।",
+   "note": "Table: speaker unclear (103-104): narrator.",
+   "syllables": {
+    "mr": 16,
+    "hi": 24
+   },
+   "seconds": {
+    "mr": 4.0,
+    "hi": 4.35
+   },
+   "measured": true
+  },
+  {
+   "id": "S3-L9",
+   "scene": "S3",
+   "kind": "verse",
+   "ovi": 105,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "ऐसा विचार परस्पर । करुं लागले साचार । रत्‍न असतां समोर । पारखी तोच जाणे त्या",
+   "hindi": "वे आपस में ऐसा विचार करने लगे; रत्न सामने हो, तो उसे पारखी ही पहचानता है।",
+   "note": "",
+   "syllables": {
+    "mr": 33,
+    "hi": 34
+   },
+   "seconds": {
+    "mr": 7.17,
+    "hi": 7.29
+   },
+   "measured": true
+  },
+  {
+   "id": "S4-L1",
+   "scene": "S4",
+   "kind": "verse",
+   "ovi": 108,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "प्रथमता तो पुढें झाला । बंकटलाल आगरवाला",
+   "hindi": "सबसे पहले बंकटलाल अगरवाला आगे आया।",
+   "note": "",
+   "syllables": {
+    "mr": 19,
+    "hi": 20
+   },
+   "seconds": {
+    "mr": 3.92,
+    "hi": 4.02
+   },
+   "measured": true
+  },
+  {
+   "id": "S4-L2",
+   "scene": "S4",
+   "kind": "verse",
+   "ovi": 109,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "bankatlal",
+   "priority": "core",
+   "marathi": "ह्या पत्रावळीच्या शोधना । कां हो करितां कळेना । क्षुधा असेल आपणां । तरी तरतूद करुं अन्नाची",
+   "hindi": "'इन पत्तलों को आप क्यों टटोल रहे हैं, यह समझ नहीं आता; यदि आपको भूख हो, तो हम अन्न का प्रबंध कर दें।'",
+   "note": "Table: Bankatlal to Gajanan.",
+   "syllables": {
+    "mr": 36,
+    "hi": 44
+   },
+   "seconds": {
+    "mr": 7.66,
+    "hi": 7.59
+   },
+   "measured": true
+  },
+  {
+   "id": "S4-L3",
+   "scene": "S4",
+   "kind": "verse",
+   "ovi": 110,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "त्यानें ऐसें विचारिलें । परि न उत्तर मिळालें । नुसतें वरी पाहिलें । उभयतांच्या मुखाकडे",
+   "hindi": "उसने ऐसा पूछा, पर उत्तर नहीं मिला; उन्होंने बस ऊपर दोनों के मुख की ओर देखा।",
+   "note": "The silence.",
+   "syllables": {
+    "mr": 34,
+    "hi": 34
+   },
+   "seconds": {
+    "mr": 5.92,
+    "hi": 6.54
+   },
+   "measured": true
+  },
+  {
+   "id": "S4-L5",
+   "scene": "S4",
+   "kind": "verse",
+   "ovi": 111,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "तो सतेज कांती मनोहर । दंड गर्दन पिळदार । भव्य छाती दृष्टि स्थिर । भृकुटी ठायीं झाली असे",
+   "hindi": "उनकी कांति तेजस्वी और मनोहर थी; भुजाएँ और गर्दन पुष्ट, छाती भव्य, दृष्टि भृकुटी पर स्थिर थी।",
+   "note": "",
+   "syllables": {
+    "mr": 36,
+    "hi": 39
+   },
+   "seconds": {
+    "mr": 9.79,
+    "hi": 8.93
+   },
+   "measured": true
+  },
+  {
+   "id": "S4-L4",
+   "scene": "S4",
+   "kind": "verse",
+   "ovi": 112,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "निजानंदीं रंगलेला । ऐसा योगी पाहिला । मौनेंच नमस्कार केला । चित्तीं संतोष पावोनिया",
+   "hindi": "निजानंद में रंगे हुए ऐसे योगी को देखकर, उन्होंने मन में संतोष पाकर मौन ही नमस्कार किया।",
+   "note": "The silent bow by the two visitors (read from the verse; the subject is implicit).",
+   "syllables": {
+    "mr": 33,
+    "hi": 39
+   },
+   "seconds": {
+    "mr": 7.56,
+    "hi": 7.96
+   },
+   "measured": true
+  },
+  {
+   "id": "S5-L1",
+   "scene": "S5",
+   "kind": "verse",
+   "ovi": 113,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "देविदासबुवासी । सांगूं लागले प्रेमेंसी । तुम्ही पात्र वाढून वेगेंसी । आणा एक बाहेर",
+   "hindi": "वे देविदासबुवा से प्रेम से कहने लगे — 'तुम शीघ्र एक पत्तल परोसकर बाहर ले आओ।'",
+   "note": "Table: speaker unclear (113): narrator.",
+   "syllables": {
+    "mr": 32,
+    "hi": 36
+   },
+   "seconds": {
+    "mr": 6.97,
+    "hi": 7.57
+   },
+   "measured": true
+  },
+  {
+   "id": "S5-L2",
+   "scene": "S5",
+   "kind": "verse",
+   "ovi": 114,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "देविदासें तैसें केलें । पक्वान्नांनीं भरलेलें । पात्र आणून ठेविलें । द्वारासमोर स्वामीपुढें",
+   "hindi": "देविदास ने वैसा ही किया; पक्वान्नों से भरी पत्तल लाकर द्वार के सामने स्वामी के आगे रख दी।",
+   "note": "Dishes: 'pakvanna' (rich cooked dishes); the narrower meaning is left open in the research.",
+   "syllables": {
+    "mr": 33,
+    "hi": 36
+   },
+   "seconds": {
+    "mr": 7.86,
+    "hi": 7.36
+   },
+   "measured": true
+  },
+  {
+   "id": "S5-L3",
+   "scene": "S5",
+   "kind": "verse",
+   "ovi": 115,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "ठेविलेल्या पात्रावरी । भोजना बैसली समर्थस्वारी",
+   "hindi": "रखी हुई पत्तल पर समर्थ भोजन करने बैठे।",
+   "note": "",
+   "syllables": {
+    "mr": 19,
+    "hi": 20
+   },
+   "seconds": {
+    "mr": 4.72,
+    "hi": 4.69
+   },
+   "measured": true
+  },
+  {
+   "id": "S5-L4",
+   "scene": "S5",
+   "kind": "verse",
+   "ovi": 116,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "अनुपम ब्रह्मरसाला । जो पिऊन तृप्त झाला । तो कां मागतो गुळवण्याला । मिटक्या मारीत बैसेल ?",
+   "hindi": "अनुपम ब्रह्मरस पीकर जो तृप्त हो गया, वह क्या गुड़ का पानी माँगेगा, या चटकारे लेता बैठेगा?",
+   "note": "Narrator's comparison.",
+   "syllables": {
+    "mr": 36,
+    "hi": 38
+   },
+   "seconds": {
+    "mr": 8.1,
+    "hi": 8.81
+   },
+   "measured": true
+  },
+  {
+   "id": "S5-L5",
+   "scene": "S5",
+   "kind": "verse",
+   "ovi": 117,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "जो सार्वभौम नृपवर । झाला असे साचार । अशा नरासी जहागीर । मिळाल्यासी प्रेम नुपजे",
+   "hindi": "जो सचमुच सार्वभौम राजा हो गया, उसे जागीर मिल जाने पर प्रेम (हर्ष) नहीं उपजता।",
+   "note": "Narrator's comparison.",
+   "syllables": {
+    "mr": 34,
+    "hi": 35
+   },
+   "seconds": {
+    "mr": 8.16,
+    "hi": 8.34
+   },
+   "measured": true
+  },
+  {
+   "id": "S5-L6",
+   "scene": "S5",
+   "kind": "verse",
+   "ovi": 118,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "अवघीं पक्वान्नें एक केलीं । आवडनिवड नाहीं उरली",
+   "hindi": "उन्होंने सब पक्वान्न एक कर दिए; पसंद-नापसंद नहीं रही।",
+   "note": "The mixing of the dishes (118).",
+   "syllables": {
+    "mr": 21,
+    "hi": 25
+   },
+   "seconds": {
+    "mr": 4.91,
+    "hi": 5.78
+   },
+   "measured": true
+  },
+  {
+   "id": "S6-L1",
+   "scene": "S6",
+   "kind": "verse",
+   "ovi": 119,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "बंकटलाल तें पाहून । पंतासी करी भाषण",
+   "hindi": "बंकटलाल यह देखकर पंत से बोला —",
+   "note": "",
+   "syllables": {
+    "mr": 17,
+    "hi": 16
+   },
+   "seconds": {
+    "mr": 3.16,
+    "hi": 3.54
+   },
+   "measured": true
+  },
+  {
+   "id": "S6-L2",
+   "scene": "S6",
+   "kind": "verse",
+   "ovi": 119,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "bankatlal",
+   "priority": "core",
+   "marathi": "ह्या वेडा म्हणालों आपण । ती निःसंशय झाली चुकी",
+   "hindi": "'इसे हमने पागल कहा — यह निःसंदेह हमारी भूल हुई।'",
+   "note": "Table: Bankatlal to Damodarpant.",
+   "syllables": {
+    "mr": 18,
+    "hi": 23
+   },
+   "seconds": {
+    "mr": 3.59,
+    "hi": 3.82
+   },
+   "measured": true
+  },
+  {
+   "id": "S6-L3",
+   "scene": "S6",
+   "kind": "verse",
+   "ovi": 120,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "bankatlal",
+   "priority": "core",
+   "marathi": "सुभद्रेसाठीं द्वारकेला । अर्जुन ऐसाच वेडा झाला",
+   "hindi": "'सुभद्रा के लिए द्वारका में अर्जुन भी ऐसे ही पागल हो गया था।'",
+   "note": "Table: Bankatlal (continuing).",
+   "syllables": {
+    "mr": 19,
+    "hi": 24
+   },
+   "seconds": {
+    "mr": 4.11,
+    "hi": 4.21
+   },
+   "measured": true
+  },
+  {
+   "id": "S6-L4",
+   "scene": "S6",
+   "kind": "verse",
+   "ovi": 121,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "bankatlal",
+   "priority": "core",
+   "marathi": "तैसाच हा ज्ञानजेठी । मुक्तिरुप सुभद्रेसाठीं । वेडा झाला कसवटी । याची आतां घेणें नको",
+   "hindi": "'वैसे ही यह ज्ञानजेठी मुक्तिरूपी सुभद्रा के लिए पागल हुआ है; अब इसकी कसौटी लेने की ज़रूरत नहीं।'",
+   "note": "Table: Bankatlal (continuing).",
+   "syllables": {
+    "mr": 33,
+    "hi": 42
+   },
+   "seconds": {
+    "mr": 7.11,
+    "hi": 6.56
+   },
+   "measured": true
+  },
+  {
+   "id": "S6-L5",
+   "scene": "S6",
+   "kind": "verse",
+   "ovi": 122,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "धन्य आपुलें शेगांव । दृष्टी पाहिला योगीराव",
+   "hindi": "धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए।",
+   "note": "Table: speaker unclear (122): narrator.",
+   "syllables": {
+    "mr": 17,
+    "hi": 21
+   },
+   "seconds": {
+    "mr": 3.75,
+    "hi": 4.83
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L1",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 123,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "सूर्य माध्यान्हीं आला । भाग भूमीचा तप्त झाला",
+   "hindi": "सूर्य मध्याह्न पर आ गया; भूमि का भाग तप गया।",
+   "note": "",
+   "syllables": {
+    "mr": 16,
+    "hi": 19
+   },
+   "seconds": {
+    "mr": 4.21,
+    "hi": 3.97
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L2",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 123,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "पांखरें हीं आश्रयाला । जाऊन बैसलीं वृक्षावरी",
+   "hindi": "पक्षी आश्रय के लिए जाकर पेड़ों पर बैठ गए।",
+   "note": "",
+   "syllables": {
+    "mr": 18,
+    "hi": 19
+   },
+   "seconds": {
+    "mr": 4.79,
+    "hi": 4.5
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L3",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 124,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "ऐशा भर उन्हांत । हा बैसला आनंदांत",
+   "hindi": "ऐसी भरी धूप में वह आनंद में बैठा है।",
+   "note": "Table: speaker unclear (123-124): narrator.",
+   "syllables": {
+    "mr": 15,
+    "hi": 16
+   },
+   "seconds": {
+    "mr": 3.2,
+    "hi": 3.9
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L4",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 125,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "optional",
+   "marathi": "हा जेवळा यथेच्छपणीं । तुंब्यामध्यें नाहीं पाणी । तें पंता या लागुनी । आपण देऊं आणून",
+   "hindi": "यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें।",
+   "note": "Table: Bankatlal 'inferred' from the address to the Pant: kept with the narrator.",
+   "syllables": {
+    "mr": 32,
+    "hi": 31
+   },
+   "seconds": {
+    "mr": 8.47,
+    "hi": 8.27
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L5",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 126,
+   "charans": [
+    1,
+    1
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "पुसूं लागले दामोदर",
+   "hindi": "दामोदर पूछने लगे —",
+   "note": "",
+   "syllables": {
+    "mr": 9,
+    "hi": 9
+   },
+   "seconds": {
+    "mr": 1.33,
+    "hi": 1.75
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L6",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 126,
+   "charans": [
+    2,
+    4
+   ],
+   "voice": "damodarpant",
+   "priority": "core",
+   "marathi": "तुंब्यामध्यें नाहीं नीर । मर्जी असल्या हा चाकर । पाणी द्याया तयार असे",
+   "hindi": "'तुंबे में पानी नहीं है; आपकी मर्ज़ी हो तो यह सेवक पानी देने को तैयार है।'",
+   "note": "Table: Damodarpant to Gajanan.",
+   "syllables": {
+    "mr": 26,
+    "hi": 29
+   },
+   "seconds": {
+    "mr": 5.58,
+    "hi": 5.06
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L7",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 127,
+   "charans": [
+    1,
+    3
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "ऐसे शब्द ऐकिले । समर्थांनीं हास्य केलें । उभयतांसी पाहून वदले",
+   "hindi": "ये शब्द सुनकर समर्थ हँसे और दोनों को देखकर बोले —",
+   "note": "",
+   "syllables": {
+    "mr": 26,
+    "hi": 23
+   },
+   "seconds": {
+    "mr": 5.92,
+    "hi": 4.78
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L8",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 128,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "तुम्हां गरज असेल जरी । तरी आणून घाला वारी । एक ब्रह्म जगदांतरीं । ओतप्रोत भरलें असें",
+   "hindi": "'आपको ज़रूरत हो तो पानी ले आकर दीजिए; एक ही ब्रह्म जगत के भीतर ओतप्रोत भरा है।'",
+   "note": "Table: Gajanan (127-131).",
+   "syllables": {
+    "mr": 37,
+    "hi": 37
+   },
+   "seconds": {
+    "mr": 8.22,
+    "hi": 6.86
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L9",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 129,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "तुम्ही आम्ही भेद तेथ । नाहीं उरला यत्किंचित । परी जगव्यवहार सत्य । आचरिला पाहिजे",
+   "hindi": "'वहाँ आप और हम में थोड़ा भी भेद नहीं रहा; फिर भी जगत का व्यवहार ठीक तरह निभाना चाहिए।'",
+   "note": "Teaching: practical conduct.",
+   "syllables": {
+    "mr": 34,
+    "hi": 40
+   },
+   "seconds": {
+    "mr": 7.35,
+    "hi": 7.01
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L10",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 130,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "अन्न भक्षिलें देहानीं । म्हणून त्या पाहिजे पाणी",
+   "hindi": "'देह ने अन्न खाया है, इसलिए उसे पानी चाहिए।'",
+   "note": "Teaching: practical conduct.",
+   "syllables": {
+    "mr": 17,
+    "hi": 19
+   },
+   "seconds": {
+    "mr": 3.81,
+    "hi": 4.35
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L11",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 131,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "optional",
+   "marathi": "म्हणून तुमच्या चातुर्यासी । गरज असल्या तुम्हां साची । तरतूद करा पाण्याची । म्हणजे अवघें संपलें",
+   "hindi": "'इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त।'",
+   "note": "",
+   "syllables": {
+    "mr": 38,
+    "hi": 37
+   },
+   "seconds": {
+    "mr": 7.56,
+    "hi": 7.36
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L12",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 132,
+   "charans": [
+    4,
+    4
+   ],
+   "voice": "bankatlal",
+   "priority": "core",
+   "marathi": "आपुलें आहे भाग्य धन्य",
+   "hindi": "'हमारा भाग्य धन्य है।'",
+   "note": "Table: Bankatlal (132).",
+   "syllables": {
+    "mr": 9,
+    "hi": 8
+   },
+   "seconds": {
+    "mr": 2.45,
+    "hi": 1.95
+   },
+   "measured": true
+  },
+  {
+   "id": "S7-L13",
+   "scene": "S7",
+   "kind": "verse",
+   "ovi": 133,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "पाणी आणण्या दामोदर । घरांत गेले साचार",
+   "hindi": "पानी लाने के लिए दामोदर घर के अंदर गए।",
+   "note": "Damodarpant enters Devidas's house (owner's final answer A1-5).",
+   "syllables": {
+    "mr": 17,
+    "hi": 19
+   },
+   "seconds": {
+    "mr": 3.24,
+    "hi": 3.79
+   },
+   "measured": true
+  },
+  {
+   "id": "S8-L1",
+   "scene": "S8",
+   "kind": "verse",
+   "ovi": 134,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "कूपाचिया शेजारीं । हाळ होता निर्धारीं । जेथें जनावरें सारीं । पीत होतीं पाण्याला",
+   "hindi": "कुएँ के पास एक हौद था, जहाँ सब जानवर पानी पी रहे थे।",
+   "note": "",
+   "syllables": {
+    "mr": 29,
+    "hi": 24
+   },
+   "seconds": {
+    "mr": 7.27,
+    "hi": 5.24
+   },
+   "measured": true
+  },
+  {
+   "id": "S8-L2",
+   "scene": "S8",
+   "kind": "verse",
+   "ovi": 135,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "तेथें जाऊन पाणी प्याले । तृप्ततेचे ढेकर दिले",
+   "hindi": "वहाँ जाकर उन्होंने पानी पिया और तृप्ति की डकार ली।",
+   "note": "The satisfied belch is in the verse; whether to sound it is the owner's choice.",
+   "syllables": {
+    "mr": 18,
+    "hi": 21
+   },
+   "seconds": {
+    "mr": 4.1,
+    "hi": 5.64
+   },
+   "measured": true
+  },
+  {
+   "id": "S8-L3",
+   "scene": "S8",
+   "kind": "verse",
+   "ovi": 135,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "तों इतक्यांत घेऊन आले । पंत पाणी गडव्यांत",
+   "hindi": "इतने में पंत गड़वे में पानी लेकर आ गए।",
+   "note": "",
+   "syllables": {
+    "mr": 18,
+    "hi": 18
+   },
+   "seconds": {
+    "mr": 3.73,
+    "hi": 3.89
+   },
+   "measured": true
+  },
+  {
+   "id": "S8-L4",
+   "scene": "S8",
+   "kind": "verse",
+   "ovi": 136,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "damodarpant",
+   "priority": "core",
+   "marathi": "हां हां तें गढूळ पाणी । समर्था न लावा वदनीं । तें जनावरालागुनी । योग्य आहे प्यावया",
+   "hindi": "'अरे, अरे! वह गँदला पानी, समर्थ, मुख से न लगाइए; वह तो जानवरों के पीने योग्य है।'",
+   "note": "Table: Damodarpant (confirmed by the owner).",
+   "syllables": {
+    "mr": 32,
+    "hi": 35
+   },
+   "seconds": {
+    "mr": 6.95,
+    "hi": 6.44
+   },
+   "measured": true
+  },
+  {
+   "id": "S8-L5",
+   "scene": "S8",
+   "kind": "verse",
+   "ovi": 137,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "damodarpant",
+   "priority": "core",
+   "marathi": "मीं हें पहा आणिलें नीर । गोड निर्मळ थंडगार । वासित केलें साचार । वाळा घालून यामध्यें",
+   "hindi": "'मैं यह देखिए जल ले आया — मीठा, निर्मल, ठंडा; इसमें खस डालकर सुगंधित किया है।'",
+   "note": "Table: Damodarpant (confirmed by the owner).",
+   "syllables": {
+    "mr": 34,
+    "hi": 34
+   },
+   "seconds": {
+    "mr": 6.72,
+    "hi": 5.78
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L1",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 138,
+   "charans": [
+    1,
+    2
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "ऐसें भाषण ऐकतां । महाराज वदले तत्त्वतां",
+   "hindi": "यह भाषण सुनकर महाराज बोले —",
+   "note": "",
+   "syllables": {
+    "mr": 18,
+    "hi": 15
+   },
+   "seconds": {
+    "mr": 3.09,
+    "hi": 2.89
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L2",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 138,
+   "charans": [
+    3,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "व्यावहारिक अवघ्या कथा । ह्या न सांगा आम्हां तुम्ही",
+   "hindi": "'ये सारी व्यावहारिक बातें आप हमें न सुनाइए।'",
+   "note": "Table: Gajanan (138-142).",
+   "syllables": {
+    "mr": 18,
+    "hi": 19
+   },
+   "seconds": {
+    "mr": 4.05,
+    "hi": 4.24
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L3",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 139,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "हें अवघें चरचर । ब्रह्में व्याप्त साचार । तेथें गढुळ,निर्मळ वासित नीर । हे न भेद राहिले",
+   "hindi": "'यह सारा चराचर ब्रह्म से व्याप्त है; वहाँ गँदला, निर्मल, सुगंधित जल — ये भेद नहीं रहे।'",
+   "note": "Teaching 2.",
+   "syllables": {
+    "mr": 35,
+    "hi": 35
+   },
+   "seconds": {
+    "mr": 7.38,
+    "hi": 7.46
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L4",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 140,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "पाणी तरी तोच आहे । निर्मळ गढुळ तोच पाहे । सुवास कुवास दोन्ही हें । रुप त्याचें निःसंशय",
+   "hindi": "'पानी तो वही है; निर्मल हो या गँदला, वही देखो; सुगंध और दुर्गंध — दोनों उसी के रूप हैं, इसमें संदेह नहीं।'",
+   "note": "Teaching 2.",
+   "syllables": {
+    "mr": 35,
+    "hi": 42
+   },
+   "seconds": {
+    "mr": 8.17,
+    "hi": 8.66
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L5",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 141,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "पिणाराही वेगळा । त्यापासून ना निराळा । ईश्वराची अगाध लीला । ती कळे या नरजन्मीं",
+   "hindi": "'पीने वाला भी अलग नहीं है, उससे जुदा नहीं; ईश्वर की अगाध लीला इसी मनुष्य-जन्म में समझ आती है।'",
+   "note": "Teaching 2.",
+   "syllables": {
+    "mr": 32,
+    "hi": 41
+   },
+   "seconds": {
+    "mr": 7.87,
+    "hi": 7.79
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L6",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 142,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "gajanan",
+   "priority": "core",
+   "marathi": "तें दिलें टाकून । व्यवहारीं गोविलें मन । यांचेंच करा सदा मनन । कशापासून जग झालें",
+   "hindi": "'उसे आपने छोड़ दिया और मन को व्यवहार में उलझा लिया; इसी का सदा मनन कीजिए कि जगत किससे उत्पन्न हुआ।'",
+   "note": "Teaching 2.",
+   "syllables": {
+    "mr": 34,
+    "hi": 47
+   },
+   "seconds": {
+    "mr": 7.41,
+    "hi": 8.13
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L7",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 143,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "ऐसी ऐकतां समर्थवाणी । दोघे गेले गहिंवरोनी । अनन्यभावें समर्थचरणीं । लोळावया तयार झाले",
+   "hindi": "समर्थ की ऐसी वाणी सुनकर दोनों भाव-विह्वल हो गए; अनन्य भाव से समर्थ के चरणों में लोटने को तैयार हो गए।",
+   "note": "The men are READY to fall at his feet.",
+   "syllables": {
+    "mr": 39,
+    "hi": 46
+   },
+   "seconds": {
+    "mr": 8.92,
+    "hi": 10.01
+   },
+   "measured": true
+  },
+  {
+   "id": "S9-L8",
+   "scene": "S9",
+   "kind": "verse",
+   "ovi": 144,
+   "charans": [
+    1,
+    4
+   ],
+   "voice": "narrator",
+   "priority": "core",
+   "marathi": "तो त्यांचा जाणोन हेत । महाराज निघाले पळत पळत । वायूच्या त्या गतिप्रत । अडथळा जगीं कोण करी ?",
+   "hindi": "उनका भाव जानकर महाराज दौड़ते-दौड़ते निकल पड़े; वायु की उस गति को जगत में कौन रोक सकता है?",
+   "note": "He runs; no destination.",
+   "syllables": {
+    "mr": 39,
+    "hi": 44
+   },
+   "seconds": {
+    "mr": 8.84,
+    "hi": 8.49
+   },
+   "measured": true
+  }
+ ],
+ "captions": [
+  {
+   "id": "S1-K1",
+   "scene": "S1",
+   "where": "shot 1 or 2",
+   "marathi": "१८७८",
+   "hindi": "1878",
+   "note": "Year only (owner's instruction); the narrator does not say it."
+  }
+ ],
+ "palette": [
+  {
+   "id": "bed_roadside_quiet",
+   "kind": "bed",
+   "description": "soft wind and a faint, distant village on a dusty road",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "bed_courtyard_feast_murmur",
+   "kind": "bed",
+   "description": "low murmur of a household feast, far off",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "bed_village_noon_heat",
+   "kind": "bed",
+   "description": "hot still noon: faint wind, a far-off bird, nothing else",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "bed_village_morning",
+   "kind": "bed",
+   "description": "soft early-day village ambience (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "bed_interior_quiet",
+   "kind": "bed",
+   "description": "quiet house interior (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "bed_well_and_cattle",
+   "kind": "bed",
+   "description": "a well-side place with cattle shuffling far off (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_leaf_plate_rustle",
+   "kind": "effect",
+   "description": "dry leaf plates being moved",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_footsteps_road_dust",
+   "kind": "effect",
+   "description": "two people walking on a dusty road",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_cloth_bow_rustle",
+   "kind": "effect",
+   "description": "soft cloth rustle of a respectful bow",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_plate_set_down",
+   "kind": "effect",
+   "description": "a leaf plate set down on the ground",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_birds_flutter_to_trees",
+   "kind": "effect",
+   "description": "birds flutter and settle in trees",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_door_wood_creak",
+   "kind": "effect",
+   "description": "a wooden door opening, someone stepping in",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_cattle_distant",
+   "kind": "effect",
+   "description": "cattle drinking and shuffling at a trough",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_water_trough_drink",
+   "kind": "effect",
+   "description": "water lapping at a trough",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_brass_pot_clink",
+   "kind": "effect",
+   "description": "a brass pot (gadva) carried and set down",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_wind_rush_run",
+   "kind": "effect",
+   "description": "a rush of wind as someone runs away",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_gourd_hollow_tap",
+   "kind": "effect",
+   "description": "a dry gourd tapped (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_well_rope_bucket",
+   "kind": "effect",
+   "description": "a rope and bucket at a well (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_distant_crowd_murmur",
+   "kind": "effect",
+   "description": "a small distant crowd (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_wind_gust_soft",
+   "kind": "effect",
+   "description": "a soft gust of wind (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_cow_bell_distant",
+   "kind": "effect",
+   "description": "a distant cow bell (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  },
+  {
+   "id": "fx_sandal_steps_stone",
+   "kind": "effect",
+   "description": "sandals on a stone floor (unused so far; growth)",
+   "source_status": "UNSOURCED: the owner records it or a licence-checked CC0/CC-BY file is logged (URL + licence) before use"
+  }
+ ],
+ "cues": [
+  {
+   "id": "C1",
+   "scene": "S1",
+   "sound": "bed_roadside_quiet",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C2",
+   "scene": "S2",
+   "sound": "bed_courtyard_feast_murmur",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "verse-named",
+   "ovi": 86
+  },
+  {
+   "id": "C3",
+   "scene": "S2",
+   "sound": "fx_leaf_plate_rustle",
+   "anchor_type": "picture_event",
+   "anchor": "he searches the leaf plates",
+   "label": "verse-named",
+   "ovi": 93
+  },
+  {
+   "id": "C4",
+   "scene": "S3",
+   "sound": "bed_roadside_quiet",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C5",
+   "scene": "S3",
+   "sound": "fx_footsteps_road_dust",
+   "anchor_type": "picture_event",
+   "anchor": "the two men walk along the road",
+   "label": "verse-named",
+   "ovi": 97
+  },
+  {
+   "id": "C6",
+   "scene": "S4",
+   "sound": "bed_roadside_quiet",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C7",
+   "scene": "S4",
+   "sound": "fx_cloth_bow_rustle",
+   "anchor_type": "after_line",
+   "anchor": "S4-L4",
+   "label": "verse-named",
+   "ovi": 112
+  },
+  {
+   "id": "C8",
+   "scene": "S5",
+   "sound": "bed_courtyard_feast_murmur",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C9",
+   "scene": "S5",
+   "sound": "fx_plate_set_down",
+   "anchor_type": "after_line",
+   "anchor": "S5-L2",
+   "label": "verse-named",
+   "ovi": 114
+  },
+  {
+   "id": "C10",
+   "scene": "S6",
+   "sound": "bed_roadside_quiet",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C11",
+   "scene": "S7",
+   "sound": "bed_village_noon_heat",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "verse-named",
+   "ovi": 123
+  },
+  {
+   "id": "C12",
+   "scene": "S7",
+   "sound": "fx_birds_flutter_to_trees",
+   "anchor_type": "picture_event",
+   "anchor": "birds settle in the trees at noon",
+   "label": "verse-named",
+   "ovi": 123
+  },
+  {
+   "id": "C13",
+   "scene": "S7",
+   "sound": "fx_door_wood_creak",
+   "anchor_type": "after_line",
+   "anchor": "S7-L13",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C14",
+   "scene": "S8",
+   "sound": "fx_cattle_distant",
+   "anchor_type": "picture_event",
+   "anchor": "cattle drink at the trough",
+   "label": "verse-named",
+   "ovi": 134
+  },
+  {
+   "id": "C15",
+   "scene": "S8",
+   "sound": "fx_water_trough_drink",
+   "anchor_type": "before_line",
+   "anchor": "S8-L2",
+   "label": "verse-named",
+   "ovi": 135
+  },
+  {
+   "id": "C16",
+   "scene": "S8",
+   "sound": "fx_brass_pot_clink",
+   "anchor_type": "before_line",
+   "anchor": "S8-L4",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C17",
+   "scene": "S9",
+   "sound": "bed_village_noon_heat",
+   "anchor_type": "scene_bed",
+   "anchor": "",
+   "label": "STAGING",
+   "ovi": null
+  },
+  {
+   "id": "C18",
+   "scene": "S9",
+   "sound": "fx_wind_rush_run",
+   "anchor_type": "after_line",
+   "anchor": "S9-L8",
+   "label": "verse-named",
+   "ovi": 144
+  }
+ ],
+ "split_sha256": "eca153531b0a56c0f4a35293e0e930f0751b5116af30932da315275cd5076fdb"
+}

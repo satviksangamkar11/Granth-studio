@@ -1,5 +1,5 @@
 {
- "note": "Owner-directed revision of Kimi's split (run a1_kimi_plan2, hash acb32841c7cc), no new Kimi call. Opening scene S1 written from ovi 70-83: only the year 1878 (owner's instruction), no Sajjangad theory in film-facing text (kept under research_evidence_not_narrated). 'Food is Brahman' (95-96) joins scene 2; the mixing of dishes (116-118) joins scene 5; scene 9 has 6 shots for the teaching; the silent salutation (112), the bandi (88) and digambar (92) are kept; Damodarpant fetches the water (133). Verified against the Marathi ovis. Shot budgets are the PLANNED shots from the estimated narration timing (canon/audio/A1_timing_plan.json); the first split's allocation was 2,5,4,4,4,3,5,4,6 = 37. Ovis 96, 116 and 117 are required narration (core), so the timing needs 70 planned shots.",
+ "note": "Owner-directed revision of Kimi's split (run a1_kimi_plan2, hash acb32841c7cc), no new Kimi call. Opening scene S1 written from ovi 70-83: only the year 1878 (owner's instruction), no Sajjangad theory in film-facing text (kept under research_evidence_not_narrated). 'Food is Brahman' (95-96) joins scene 2; the mixing of dishes (116-118) joins scene 5; scene 9 has 6 shots for the teaching; the silent salutation (112), the bandi (88) and digambar (92) are kept; Damodarpant fetches the water (133). Verified against the Marathi ovis. Shot budgets are the PLANNED shots from the estimated narration timing (canon/audio/A1_timing_plan.json); the first split's allocation was 2,5,4,4,4,3,5,4,6 = 37. Ovis 96, 116 and 117 are required narration (core), so the timing needs 70 planned shots. After the voices were generated, the shot budgets became the MEASURED need of the real Marathi and Hindi speech (the longer language per line, 6-second shots): 2, 9, 6, 5, 8, 5, 9, 6, 11 = 61 shots.",
  "stories": [
   {
    "story_id": "A1-T1",
@@ -48,7 +48,7 @@
       "A1:74",
       "A1:83"
      ],
-     "shot_budget": 10
+     "shot_budget": 8
     },
     {
      "scene_id": "S3",
@@ -60,7 +60,7 @@
      "context_ovi_ids": [
       "A1:94"
      ],
-     "shot_budget": 7
+     "shot_budget": 6
     },
     {
      "scene_id": "S4",
@@ -72,7 +72,7 @@
      "context_ovi_ids": [
       "A1:102"
      ],
-     "shot_budget": 6
+     "shot_budget": 5
     },
     {
      "scene_id": "S5",
@@ -82,7 +82,7 @@
      ],
      "brief": "After a request whose speaker is unnamed, Devidas sets a plate of rich cooked dishes before Gajanan; he mixes all the dishes together and eats without liking or disliking any taste (118); narrator's two comparisons (116-117).",
      "context_ovi_ids": [],
-     "shot_budget": 9
+     "shot_budget": 7
     },
     {
      "scene_id": "S6",
@@ -108,7 +108,7 @@
       "A1:89",
       "A1:118"
      ],
-     "shot_budget": 10
+     "shot_budget": 9
     },
     {
      "scene_id": "S8",
@@ -120,7 +120,7 @@
      "context_ovi_ids": [
       "A1:133"
      ],
-     "shot_budget": 7
+     "shot_budget": 5
     },
     {
      "scene_id": "S9",
@@ -132,7 +132,7 @@
      "context_ovi_ids": [
       "A1:137"
      ],
-     "shot_budget": 13
+     "shot_budget": 11
     }
    ]
   }

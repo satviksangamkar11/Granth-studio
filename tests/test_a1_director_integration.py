@@ -1,3 +1,4 @@
+import math
 """Structural dry run (no model, no network, no cost): the director consumes the REAL nine-scene split, audio plan and timing plan; a compliant plan exists for every scene and the validator holds."""
 import copy
 import importlib.util
@@ -26,7 +27,11 @@ ss_spec = importlib.util.spec_from_file_location("ss", ROOT / "scripts" / "sourc
 ss = importlib.util.module_from_spec(ss_spec)
 ss_spec.loader.exec_module(ss)
 MACRO = ss.build_macro({"stories": EDITS["stories"], "unfilmed_ranges": EDITS["unfilmed_ranges"]}, 1, sorted(OVIS), "x" * 64)
-SPLIT = {"macro": MACRO, "hash": SPLIT_HASH, "edits": EDITS, "audio": AUDIO, "timing": TIMING}
+es_spec = importlib.util.spec_from_file_location("easy", ROOT / "scripts" / "source" / "easy_script.py")
+easy = importlib.util.module_from_spec(es_spec)
+es_spec.loader.exec_module(easy)
+SIMPLE = easy.load_simple()
+SPLIT = {"macro": MACRO, "hash": SPLIT_HASH, "edits": EDITS, "audio": easy.overlay(AUDIO, SIMPLE), "timing": TIMING, "script_sha256": easy.script_sha256()}      # the director speaks the owner's EASY wording
 PRESETS = {p["preset"]: p["assets"] for p in INDEX}
 SCENES = [(int(sc["scene_id"][1:]), sc) for st in MACRO["stories"] for sc in st["scenes"]]
 
@@ -61,7 +66,7 @@ def compliant_plan(n, sc, ov):
 
 def check(n, sc, ov, plan):
     ctx = {"packet_text": dt.build_prompt(n, tuple(sc["ovi_range"]), files, OVIS, INDEX, [], 1, PJ, ov)[1], "speakers": SPEAKERS, "preset_json": PJ, "prop_materials": {},
-           "speaker_rows": ROWS, "shots_target": ov["shots_target"], "timeline": ov["timeline"], "dialogue_plan": ov["dialogue_plan"]}
+           "speaker_rows": ROWS, "shots_target": ov["shots_target"], "timeline": ov["timeline"], "dialogue_plan": ov["dialogue_plan"], "scene_image_prefix": True}
     ovi_text = {k: v for k, v in OVIS.items() if sc["ovi_range"][0] <= k <= sc["ovi_range"][1]}
     return dt.validate_scene(plan, PRESETS, ovi_text, tuple(sc["ovi_range"]), ctx, 1, f"S{n}")
 
@@ -104,7 +109,7 @@ def test_the_wrong_shot_count_and_a_missing_narration_ovi_are_caught():
 def test_the_opening_is_exactly_two_shots_and_the_teaching_scene_has_the_room_it_needs():
     ov1 = dt.split_scene_override(1, SPLIT, OVIS)
     ov9 = dt.split_scene_override(9, SPLIT, OVIS)
-    assert ov1["shots_target"] == 2 and ov9["shots_target"] >= 12
+    assert ov1["shots_target"] == 2 and ov9["shots_target"] >= 10
     covered = {o for v in ov9["timeline"].values() for o in v}
     assert {138, 139, 140, 141, 142, 143, 144} <= covered                            # the whole teaching, the readiness to fall and the run are in the timeline
 
@@ -205,3 +210,89 @@ def test_load_split_recomputes_the_hash_and_checks_the_edits_against_it(tmp_path
 
 def test_the_hash_helper_equals_the_story_split_hash():
     assert dt._sha_obj(MACRO) == ss.sha_of(MACRO)
+
+
+def test_the_director_plan_uses_the_easy_wording_not_the_verse():
+    n, sc, ov = scene_with_dialogue(next(w["ovi"] for l in AUDIO["lines"] if l["voice"] != "narrator" and l["priority"] == "core" for w in [l]))
+    ws = [w for ws_ in ov["dialogue_plan"].values() for w in ws_]
+    assert ws and all(w["marathi"] == SIMPLE[w["id"]]["mr"] and w["marathi"] != next(l for l in AUDIO["lines"] if l["id"] == w["id"])["marathi"] for w in ws)
+    assert SPLIT["script_sha256"][:12] in ov["brief_block"]
+
+
+def test_easy_dialogue_passes_but_the_old_verse_wording_or_an_invented_line_is_rejected():
+    n, sc, ov = scene_with_dialogue(next(l["ovi"] for l in AUDIO["lines"] if l["voice"] != "narrator" and l["priority"] == "core"))
+    plan = compliant_plan(n, sc, ov)
+    assert check(n, sc, ov, plan)[0] == []
+    shot = next(s for s in plan["shots"] if s["dialogue"])
+    verse = next(l["marathi"] for l in AUDIO["lines"] if l["ovi"] == int(shot["dialogue"][0]["ovi"].split(":")[1]) and l["voice"] != "narrator")
+    shot["dialogue"][0]["marathi"] = verse
+    assert any("not one of the character lines planned" in e for e in check(n, sc, ov, plan)[0])
+
+
+def test_the_easy_overlay_refuses_a_line_that_has_no_easy_wording():
+    simple = {k: v for k, v in SIMPLE.items() if k != "S2-L4"}
+    with pytest.raises(SystemExit):
+        easy.overlay(AUDIO, simple)
+
+
+@pytest.mark.parametrize("n,sc", SCENES)
+def test_the_prompt_carries_both_measured_durations_and_cut_crossings(n, sc):
+    ov = dt.split_scene_override(n, SPLIT, OVIS)
+    user = dt.build_prompt(n, tuple(sc["ovi_range"]), files, OVIS, INDEX, [], 1, PJ, ov)[1]
+    tm = next(s for s in TIMING["scenes"] if s["scene"] == f"S{n}")
+    assert "SHARED BEATS" in user
+    for b in tm["beats"]:
+        l = next(x for x in AUDIO["lines"] if x["id"] == b["line"])
+        assert f"{b['line']} starts shot {b['shot']}" in user and f"Marathi {l['seconds']['mr']:.2f} s, Hindi {l['seconds']['hi']:.2f} s" in user
+        crossing = min(math.ceil(b["end_s"] / 6 - 1e-9), tm["planned_shots"]) > b["shot"]
+        row = next(r for r in user.splitlines() if r.startswith(f"{b['line']} starts shot"))
+        assert ("CONTINUES over the cut" in row) == crossing
+
+
+def test_a_director_plan_that_writes_a_timing_is_rejected():
+    n, sc = SCENES[3]                                                                # S4
+    ov = dt.split_scene_override(n, SPLIT, OVIS)
+    plan = compliant_plan(n, sc, ov)
+    plan["shots"][0]["start_s"] = 1.5
+    errors, _ = check(n, sc, ov, plan)
+    assert any("start_s" in e for e in errors)
+
+
+def test_a_line_ending_exactly_on_a_cut_does_not_continue_and_a_long_one_lists_every_shot():
+    n, sc = SCENES[3]
+    tm = copy.deepcopy(TIMING)
+    s4 = next(s for s in tm["scenes"] if s["scene"] == "S4")
+    s4["beats"][0].update(start_s=0.5, end_s=6.0)
+    s4["beats"][2].update(shot=1, start_s=0.5, end_s=14.0)
+    ov = dt.split_scene_override(n, {**SPLIT, "timing": tm}, OVIS)
+    rows = {r.split()[0]: r for r in ov["brief_block"].splitlines() if " starts shot " in r}
+    assert "CONTINUES" not in rows["S4-L1"]
+    assert "shots 2, 3" in rows["S4-L3"]
+
+
+def test_an_image_id_without_the_scene_prefix_is_rejected():
+    n, sc = SCENES[3]
+    ov = dt.split_scene_override(n, SPLIT, OVIS)
+    plan = compliant_plan(n, sc, ov)
+    old = plan["shots"][0]["assets"]["img"]
+    plan["shots"][0]["assets"]["img"] = "sky_morning"
+    plan["images_needed"][0]["image_id"] = "sky_morning"
+    errors, _ = check(n, sc, ov, plan)
+    assert any("must start with 's4_'" in e for e in errors) and old.startswith("s4_")
+
+
+def test_one_call_mode_never_asks_the_director_twice(monkeypatch):
+    n, sc = SCENES[3]
+    ov = dt.split_scene_override(n, SPLIT, OVIS)
+    calls = []
+
+    class Dir:
+        name = "fake"
+        def __call__(self, *a, **k):
+            calls.append(1)
+            return None
+    monkeypatch.setattr(dt, "ONE_CALL", True)
+    monkeypatch.setattr(dt, "_ask", lambda *a, **k: (calls.append(1), None)[1])
+    ctx = {"speakers": SPEAKERS, "preset_json": PJ, "prop_materials": {}, "speaker_rows": ROWS}
+    out = dt.direct_scene(Dir(), [], n, tuple(sc["ovi_range"]), 1, files, OVIS, INDEX, ctx, ov)
+    assert len(calls) == 1 and out["result"] == "FAILED"
