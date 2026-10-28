@@ -158,7 +158,29 @@ def append_doc(base: dict, path_str: str, value):
     ("cast.0.status", "DELETE", "status"),
     # Schema-valid enum value tests (removing the enum value should fail these)
     ("cast.0.gender", "female", None),
-    ("cast.0.status", "NEW_PROPOSED", None),
+    ("cast.0.status", "NEW_PROPOSED", "reason"),  # NEW_PROPOSED requires reason
+    # reason field tests
+    ("cast.0.reason", "valid reason", None),  # RECURRING with reason is valid
+    ("cast.0.reason", "", "reason"),  # empty reason is invalid
+    # NEW_PROPOSED with reason tests
+    ("cast", [
+        {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
+        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED", "reason": "new voice for gajanan"},
+    ], None),  # NEW_PROPOSED with reason is valid
+    ("cast", [
+        {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
+        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED"},
+    ], "reason"),  # NEW_PROPOSED without reason fails
+    ("cast", [
+        {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
+        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED", "reason": ""},
+    ], "reason"),  # NEW_PROPOSED with empty reason fails
+    # NEW_PROPOSED entry without reason (appended) - tests missing reason on NEW_PROPOSED
+    ("cast", [
+        {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
+        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "RECURRING"},
+        {"character_id": "new_char", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED"},
+    ], "reason"),
 ])
 def test_schema(path, value, keyword):
     b = base()
@@ -197,25 +219,25 @@ def test_schema(path, value, keyword):
     ("cast", [
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
         {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "RECURRING"},
-        {"character_id": "extra_char", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED"},
+        {"character_id": "extra_char", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED", "reason": "new voice"},
     ], "extra_char"),
     # Another case: two non-narrators sharing a voice_key
     ("cast", [
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
-        {"character_id": "char1", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED"},
-        {"character_id": "char2", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED"},
+        {"character_id": "char1", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED", "reason": "reason1"},
+        {"character_id": "char2", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED", "reason": "reason2"},
     ], "char1"),
     # Two NEW_PROPOSED entries for same speaking character
     ("cast", [
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
-        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED"},
-        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED"},
+        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED", "reason": "reason1"},
+        {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED", "reason": "reason2"},
     ], "gajanan_maharaj"),
     # Narrator and two others sharing a saved key - should error for the two non-narrators
     ("cast", [
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
-        {"character_id": "charA", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "NEW_PROPOSED"},
-        {"character_id": "charB", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "female", "status": "NEW_PROPOSED"},
+        {"character_id": "charA", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "NEW_PROPOSED", "reason": "reasonA"},
+        {"character_id": "charB", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "female", "status": "NEW_PROPOSED", "reason": "reasonB"},
     ], "charA"),
     ("ctx.speaking_characters", [], None),
     # Odd data: cast is not a list
@@ -302,7 +324,7 @@ def test_validate_recurring_newproposed_duplicate_isolated():
             {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
             {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "RECURRING"},
             {"character_id": "other_char", "voice_key": "other", "voice_id": "ZZZZZZZZZZ", "gender": "male", "status": "RECURRING"},
-            {"character_id": "other_char", "voice_key": "other", "voice_id": "ZZZZZZZZZZ", "gender": "male", "status": "NEW_PROPOSED"},
+            {"character_id": "other_char", "voice_key": "other", "voice_id": "ZZZZZZZZZZ", "gender": "male", "status": "NEW_PROPOSED", "reason": "new voice"},
         ],
     }
     errs = validate(1, doc, b["docs"], ctx)

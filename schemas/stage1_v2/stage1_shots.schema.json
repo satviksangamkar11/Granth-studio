@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adhyay": {
+      "maximum": 21,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "shots": {
+      "items": {
+        "additionalProperties": false,
+        "else": {
+          "properties": {
+            "need_new": {
+              "type": "null"
+            }
+          }
+        },
+        "if": {
+          "properties": {
+            "preset": {
+              "const": "NEED_NEW"
+            }
+          }
+        },
+        "properties": {
+          "beat_line_ids": {
+            "items": {
+              "pattern": "^S[0-9]{1,2}-L[0-9]{1,3}$",
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "framing": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "need_new": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "needs_cutout": {
+            "type": "boolean"
+          },
+          "ovi_ids": {
+            "items": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "pose": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "preset": {
+            "pattern": "^([0-9]{2}_[a-z0-9_]+|NEED_NEW)$",
+            "type": "string"
+          },
+          "scene_id": {
+            "pattern": "^S[0-9]{1,2}$",
+            "type": "string"
+          },
+          "shot_id": {
+            "pattern": "^S[0-9]{1,2}-[0-9]{1,2}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "shot_id",
+          "scene_id",
+          "ovi_ids",
+          "beat_line_ids",
+          "preset",
+          "need_new",
+          "needs_cutout",
+          "pose",
+          "framing"
+        ],
+        "then": {
+          "properties": {
+            "need_new": {
+              "additionalProperties": false,
+              "properties": {
+                "class": {
+                  "enum": [
+                    "missing_image",
+                    "json_arrangement",
+                    "renderer_gap"
+                  ]
+                },
+                "reason": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reason",
+                "class"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "adhyay",
+    "shots"
+  ],
+  "title": "stage1_shots",
+  "type": "object"
+}

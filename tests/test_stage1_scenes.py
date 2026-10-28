@@ -199,6 +199,25 @@ def test_schema_ovi_range_minimum():
     errs = M.schema_errors(doc)
     assert any("ovi_range" in e for e in errs)
 
+# ---------- Additional schema bound tests (Note 3) ----------
+# adhyay maximum 21
+def test_schema_adhyay_maximum():
+    doc = set_at(base_docs()["scenes"], ["adhyay"], 22)
+    errs = M.schema_errors(doc)
+    assert any("adhyay" in e for e in errs)
+
+# ovi_range maxItems 2 (3 items)
+def test_schema_ovi_range_maxitems():
+    doc = set_at(base_docs()["scenes"], ["scenes",0,"ovi_range"], [1, 5, 9])
+    errs = M.schema_errors(doc)
+    assert any("ovi_range" in e for e in errs)
+
+# ovi_range minItems 2 (1 item)
+def test_schema_ovi_range_minitems():
+    doc = set_at(base_docs()["scenes"], ["scenes",0,"ovi_range"], [1])
+    errs = M.schema_errors(doc)
+    assert any("ovi_range" in e for e in errs)
+
 # ---------- Semantic tests ----------
 # Each row changes ONE thing; contexts stay complete unless row is about that context
 @pytest.mark.parametrize("mutate_fn,keyword,ctx_overrides", [
@@ -536,6 +555,98 @@ def test_validate_gap_after_last_inside():
     # No outside chapter ovis errors since no gaps inside effective range
     outside_errors = [e for e in errs if "outside chapter ovis" in e]
     assert not outside_errors, f"unexpected outside chapter ovis errors: {outside_errors}"
+
+# ---------- Total gap message cap regression test (Note 1) ----------
+def test_validate_total_gap_message_cap():
+    """validate() caps total 'outside chapter ovis' messages at 1000 and adds summary."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Chapter ovis: 3000 ovis spaced 3 apart (1, 4, 7, 10, ...)
+    # This creates many gaps of size 2 between each consecutive ovi
+    chapter_ovis = set(range(1, 9001, 3))  # 3000 ovis: 1, 4, 7, ..., 8998
+    ctx["chapter_ovis"] = chapter_ovis
+    # One scene covering the entire range [1, 8998]
+    docs["scenes"] = {
+        "adhyay": 1,
+        "scenes": [
+            {
+                "scene_id": "S1",
+                "section_kind": "story",
+                "ovi_range": [1, 8998],
+                "goal": "test",
+                "turn": {"ovi": 1, "text": "test"},
+                "line_ids": [],
+            }
+        ],
+    }
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Count "outside chapter ovis" messages
+    outside_msgs = [e for e in errs if "outside chapter ovis" in e and "message limit reached" not in e]
+    summary_msgs = [e for e in errs if "message limit reached" in e]
+    # Should have at most 1000 per-ovi messages
+    assert len(outside_msgs) <= 1000, f"too many outside messages: {len(outside_msgs)}"
+    # Should have exactly one summary message total
+    assert len(summary_msgs) == 1, f"expected 1 summary message, got {len(summary_msgs)}: {summary_msgs}"
+    assert "S1: more ovis outside chapter ovis (message limit reached)" in summary_msgs[0]
+    # Total messages should be reasonable (not millions)
+    assert len(errs) <= 1005, f"too many total messages: {len(errs)}"
+
+# ---------- Bool ovi regression tests (Note 2) ----------
+def test_validate_bool_chapter_ovi_ignored():
+    """validate() treats bool in chapter_ovis as non-int (ignored), not as ovi 1."""
+    docs = copy.deepcopy(base_docs())
+    ctx = copy.deepcopy(base_ctx())
+    # chapter_ovis contains True (which is 1 in Python) and 2-9
+    # True should be ignored, so ovi 1 is NOT in chapter_ovis
+    ctx["chapter_ovis"] = {True, 2, 3, 4, 5, 6, 7, 8, 9}
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # ovi 1 should be reported as not covered (since True is ignored, 1 is not in chapter_ovis)
+    # But wait: the scene range [1,5] covers 1, but 1 is not in chapter_ovis (True was ignored)
+    # So ovi 1 is in scene range but not in chapter_ovis -> gap error
+    # Actually, the logic: chapter_ovis_int filters out bool, so chapter_ovis_int = {2,3,4,5,6,7,8,9}
+    # Scene S1 range [1,5] -> effective range [2,5] (clipped to chapter_min=2)
+    # Inside ovis: [2,3,4,5]
+    # Gap before first inside: eff_lo=2, first inside=2 -> no gap
+    # But range extends below chapter ovis (1 < 2)
+    assert any("extends below chapter ovis" in e for e in errs)
+    # ovi 1 should NOT be reported as "outside chapter ovis" because it's below chapter_min
+    # and the "extends below" message covers it
+    outside_msgs = [e for e in errs if "outside chapter ovis" in e]
+    # Should not have "ovi 1: outside chapter ovis" because it's handled by "extends below"
+    assert not any("ovi 1: outside chapter ovis" in e for e in outside_msgs)
+
+def test_validate_bool_unfilmed_ovi_ignored():
+    """validate() treats bool in unfilmed_ovis as non-int (ignored)."""
+    docs = copy.deepcopy(base_docs())
+    ctx = copy.deepcopy(base_ctx())
+    # unfilmed_ovis contains True (which is 1)
+    ctx["unfilmed_ovis"] = {True}
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # True should be ignored, so no unfilmed error for ovi 1
+    unfilmed_errors = [e for e in errs if "unfilmed but inside the range" in e]
+    assert not unfilmed_errors, f"unexpected unfilmed error for bool: {unfilmed_errors}"
+
+def test_validate_bool_ovi_range_rejected():
+    """validate() treats bool in ovi_range as non-int (reports error)."""
+    docs = copy.deepcopy(base_docs())
+    ctx = copy.deepcopy(base_ctx())
+    # ovi_range with True as lo bound - build directly, not via set_at (True == 1)
+    docs["scenes"]["scenes"][0]["ovi_range"] = [True, 5]
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should report ovi_range must be integers
+    assert any("S1: ovi_range must be integers" in e for e in errs)
+
+def test_validate_bool_turn_ovi_rejected():
+    """validate() treats bool in turn.ovi as non-int (ignored for range check)."""
+    docs = copy.deepcopy(base_docs())
+    ctx = copy.deepcopy(base_ctx())
+    # turn.ovi = True (which is 1)
+    docs["scenes"]["scenes"][0]["turn"]["ovi"] = True
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should not report "turn ovi outside range" because True is not treated as int
+    # (the check requires _is_int_not_bool for turn_ovi)
+    turn_errors = [e for e in errs if "turn ovi outside range" in e]
+    assert not turn_errors, f"unexpected turn ovi error for bool: {turn_errors}"
 
 # ---------- Positive ----------
 def test_valid():

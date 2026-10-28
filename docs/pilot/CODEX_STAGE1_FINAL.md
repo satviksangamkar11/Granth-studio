@@ -1,44 +1,19 @@
-### story_map
-
-1. none
-
-### coverage
-
-1. none
-
-### scenes
-
-1. none
-
-### shots
-
-1. none
-
-### briefs
-
-1. none
-
-### looks
-
-1. none
-
-### voices
-
-1. none
-
-### sounds
-
-1. none
-
-### questions
-
-1. none
+1. **story_map:** none.
+2. **coverage:** none.
+3. **scenes:** none.
+4. **shots:** none.
+5. **briefs:** none.
+6. **looks:** none.
+7. **voices:** none.
+8. **sounds:** none.
+9. **questions:** none.
+10. **aggregate:** none.
+11. **context:** none.
 
 ## Non-blocking notes
 
-- The supplied test record reports **509 Stage 1 unit tests passed** and **575 tests passed overall**. The project Python could not be started in this sandbox, so I relied on that record.
-- An in-memory reproduction of the current scenes gap logic confirmed that the valid sparse ranges `[1,4]` and `[6,9]` do not report ovi 5; a real gap inside a range is reported; and an unfilmed ovi inside a range is detected. The `[1, 10**12]` case does not enumerate the range. Corresponding regression tests are present.
-- Source inspection confirms the earlier `ctx=None` handling and exception guards in coverage and scenes. The earlier round 9 review reported that semantic-rule mutations were caught by tests; its schema test-coverage notes fall outside the requested blocking criteria.
-- No files were edited. The in-memory scene check reproduced the relevant logic rather than executing the module, and this review does not prove behavior for every possible JSON input.
+The supplied test evidence reports **651 passed**. Independent in-memory checks confirmed the corrected scene gap behavior, detection of an unfilmed ovi inside a range, and bounded handling of `[1, 10**12]`. They also checked X1’s kind-specific messages, X8’s `six/` punctuation case on a schema-invalid document, and malformed `series_voices` values.
+
+The separate system Python lacks `jsonschema`; the independent aggregate checks substituted schema and unit validation. Schema validation and the full suite therefore rely on the supplied external test evidence. No files were changed.
 
 ## Verdict: READY

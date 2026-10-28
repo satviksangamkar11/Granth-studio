@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adhyay": {
+      "maximum": 21,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "entries": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "basis": {
+            "enum": [
+              "stated",
+              "inferred"
+            ],
+            "type": "string"
+          },
+          "entity_id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "character",
+              "place",
+              "prop"
+            ],
+            "type": "string"
+          },
+          "look": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "source_ovis": {
+            "items": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "state_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "entity_id",
+          "kind",
+          "state_id",
+          "look",
+          "source_ovis",
+          "basis"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "adhyay",
+    "entries"
+  ],
+  "title": "stage1_canon_looks",
+  "type": "object"
+}

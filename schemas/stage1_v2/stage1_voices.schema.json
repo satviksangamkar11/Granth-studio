@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adhyay": {
+      "maximum": 21,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "cast": {
+      "items": {
+        "additionalProperties": false,
+        "if": {
+          "properties": {
+            "status": {
+              "const": "NEW_PROPOSED"
+            }
+          }
+        },
+        "properties": {
+          "character_id": {
+            "type": "string"
+          },
+          "gender": {
+            "enum": [
+              "male",
+              "female"
+            ],
+            "type": "string"
+          },
+          "reason": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "RECURRING",
+              "NEW_PROPOSED"
+            ],
+            "type": "string"
+          },
+          "voice_id": {
+            "maxLength": 40,
+            "minLength": 10,
+            "type": "string"
+          },
+          "voice_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "character_id",
+          "voice_key",
+          "voice_id",
+          "gender",
+          "status"
+        ],
+        "then": {
+          "required": [
+            "reason"
+          ]
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "adhyay",
+    "cast"
+  ],
+  "title": "stage1_voice_cast",
+  "type": "object"
+}

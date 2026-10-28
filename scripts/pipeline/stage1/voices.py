@@ -26,7 +26,14 @@ SCHEMA = {
                     "voice_key": {"type": "string"},
                     "voice_id": {"type": "string", "minLength": 10, "maxLength": 40},
                     "gender": {"type": "string", "enum": ["male", "female"]},
-                    "status": {"type": "string", "enum": ["RECURRING", "NEW_PROPOSED"]}
+                    "status": {"type": "string", "enum": ["RECURRING", "NEW_PROPOSED"]},
+                    "reason": {"type": "string", "minLength": 1}
+                },
+                "if": {
+                    "properties": {"status": {"const": "NEW_PROPOSED"}}
+                },
+                "then": {
+                    "required": ["reason"]
                 }
             }
         }

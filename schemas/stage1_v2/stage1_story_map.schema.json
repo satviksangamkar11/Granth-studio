@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adhyay": {
+      "maximum": 21,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "events": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "closure": {
+            "enum": [
+              "RESOLVED_IN_ADHYAY",
+              "CONTINUES_NEXT_ADHYAY",
+              "STARTED_EARLIER",
+              "SOURCE_INCOMPLETE_OR_AMBIGUOUS",
+              "NA"
+            ]
+          },
+          "event_id": {
+            "pattern": "^E[0-9]{1,2}$",
+            "type": "string"
+          },
+          "key_ovis": {
+            "items": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "story",
+              "discourse"
+            ]
+          },
+          "ovi_range": {
+            "items": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "title": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "event_id",
+          "title",
+          "ovi_range",
+          "key_ovis",
+          "kind",
+          "closure"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "ovi_types": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "ovi": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "type": {
+            "enum": [
+              "STORY",
+              "TEACHING",
+              "PHILOSOPHY",
+              "INVOCATION",
+              "RECAP",
+              "PHALASHRUTI",
+              "OTHER"
+            ]
+          }
+        },
+        "required": [
+          "ovi",
+          "type"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "adhyay",
+    "ovi_types",
+    "events"
+  ],
+  "title": "stage1_story_map",
+  "type": "object"
+}

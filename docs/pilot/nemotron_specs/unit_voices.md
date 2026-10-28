@@ -101,3 +101,7 @@ File `docs/pilot/nemotron_specs/stage1_base.json` has the keys "docs" (the nine 
 - Tests live at their final location `tests/` (so `ROOT = Path(__file__).resolve().parents[1]` is correct there); the review staging copy is relocated before running.
 - Keyword rule for sound: a non-NEED_NEW cue carrying `sound_prompt` is a SCHEMA error (the schema forbids it).
 
+
+
+## AMENDMENT 2026-10-28
+A cast entry may carry `reason` (string, minLength 1); it is REQUIRED when `status` is NEW_PROPOSED (the voice is chosen by description from the voice library and the choice must be traceable). RECURRING entries do not need it.

@@ -76,6 +76,11 @@ SCHEMA: dict[str, Any] = {
 _validator = Draft202012Validator(SCHEMA)
 
 
+def _is_int_not_bool(x: Any) -> bool:
+    """Check if x is an int but not a bool (since bool is subclass of int in Python)."""
+    return isinstance(x, int) and not isinstance(x, bool)
+
+
 def schema_errors(doc: Any) -> list[str]:
     errors = []
     if not isinstance(doc, dict):
@@ -133,9 +138,12 @@ def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], c
     chapter_ovis = _as_usable_set(ctx.get("chapter_ovis"))
     unfilmed_ovis = _as_usable_set(ctx.get("unfilmed_ovis"))
 
-    # Filter chapter_ovis to only ints
-    chapter_ovis_int = {ovi for ovi in chapter_ovis if isinstance(ovi, int)}
+    # Filter chapter_ovis to only ints (not bool)
+    chapter_ovis_int = {ovi for ovi in chapter_ovis if _is_int_not_bool(ovi)}
     chapter_ovis_sorted = sorted(chapter_ovis_int)
+
+    # Filter unfilmed_ovis to only ints (not bool)
+    unfilmed_ovis_int = {ovi for ovi in unfilmed_ovis if _is_int_not_bool(ovi)}
 
     # Track seen items
     seen_scene_ids = set()
@@ -160,10 +168,10 @@ def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], c
         else:
             seen_scene_ids.add(scene_id)
 
-        # ovi_range lo <= hi
+        # ovi_range lo <= hi (validate bounds are ints not bool)
         if isinstance(ovi_range, list) and len(ovi_range) == 2:
             lo, hi = ovi_range[0], ovi_range[1]
-            if not (isinstance(lo, int) and isinstance(hi, int)):
+            if not (_is_int_not_bool(lo) and _is_int_not_bool(hi)):
                 errors.append(f"{scene_id}: ovi_range must be integers")
             elif lo > hi:
                 errors.append(f"{scene_id}: ovi_range lo > hi")
@@ -174,9 +182,9 @@ def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], c
 
         # turn ovi inside its range - validate bounds are ints first
         turn_ovi = turn.get("ovi") if isinstance(turn, dict) else None
-        if isinstance(turn_ovi, int) and isinstance(ovi_range, list) and len(ovi_range) == 2:
+        if _is_int_not_bool(turn_ovi) and isinstance(ovi_range, list) and len(ovi_range) == 2:
             lo, hi = ovi_range[0], ovi_range[1]
-            if isinstance(lo, int) and isinstance(hi, int):
+            if _is_int_not_bool(lo) and _is_int_not_bool(hi):
                 if not (lo <= turn_ovi <= hi):
                     errors.append(f"{scene_id}: turn ovi outside range")
 
@@ -228,15 +236,13 @@ def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], c
 
     # every chapter ovi not unfilmed is inside a scene range
     for ovi in chapter_ovis_int:
-        if ovi in unfilmed_ovis:
+        if ovi in unfilmed_ovis_int:
             continue
         if ovi not in all_covered_ovis:
             errors.append(f"ovi {ovi}: not covered by any scene")
 
     # unfilmed ovi inside a range is an error - check directly against scene ranges
-    for ovi in unfilmed_ovis:
-        if not isinstance(ovi, int):
-            continue
+    for ovi in unfilmed_ovis_int:
         for lo, hi, sid in scene_ranges:
             if lo <= ovi <= hi:
                 errors.append(f"{sid}: ovi {ovi} is unfilmed but inside the range")
@@ -245,6 +251,10 @@ def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], c
     # Check for ovis inside scene ranges that are not chapter ovis (gaps and outside)
     # Use sorted chapter ovis to find gaps without enumerating large ranges
     GAP_REPORT_LIMIT = 1000
+    total_gap_messages = 0
+    gap_limit_reached = False
+    summary_emitted = False
+
     if chapter_ovis_sorted:
         chapter_min = chapter_ovis_sorted[0]
         chapter_max = chapter_ovis_sorted[-1]
@@ -275,11 +285,27 @@ def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], c
                         gap_start = a + 1
                         gap_end = b - 1
                         gap_size = gap_end - gap_start + 1
-                        if gap_size <= GAP_REPORT_LIMIT:
-                            for g in range(gap_start, gap_end + 1):
-                                errors.append(f"ovi {g}: outside chapter ovis")
+                        if not gap_limit_reached:
+                            if total_gap_messages + gap_size <= GAP_REPORT_LIMIT:
+                                for g in range(gap_start, gap_end + 1):
+                                    errors.append(f"ovi {g}: outside chapter ovis")
+                                total_gap_messages += gap_size
+                            else:
+                                # Emit remaining allowed per-ovi messages
+                                remaining = GAP_REPORT_LIMIT - total_gap_messages
+                                for g in range(gap_start, gap_start + remaining):
+                                    errors.append(f"ovi {g}: outside chapter ovis")
+                                total_gap_messages = GAP_REPORT_LIMIT
+                                # Add summary message (only once total)
+                                if not summary_emitted:
+                                    errors.append(f"{sid}: more ovis outside chapter ovis (message limit reached)")
+                                    summary_emitted = True
+                                gap_limit_reached = True
                         else:
-                            errors.append(f"{sid}: ovi_range contains {gap_size} ovis outside chapter ovis (gap)")
+                            # Already at limit, add summary only once total
+                            if not summary_emitted:
+                                errors.append(f"{sid}: more ovis outside chapter ovis (message limit reached)")
+                                summary_emitted = True
     else:
         # No chapter ovis - any range is outside
         for lo, hi, sid in scene_ranges:

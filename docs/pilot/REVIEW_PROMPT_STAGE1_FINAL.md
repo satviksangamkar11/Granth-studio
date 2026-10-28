@@ -1,6 +1,6 @@
 # FINAL read-only review: Stage 1 unit modules (do NOT edit any file except your own report)
 
-Units: `scripts/pipeline/stage1/{story_map,coverage,scenes,shots,briefs,looks,voices,sounds,questions}.py`, tests `tests/test_stage1_<unit>.py`, specs `docs/pilot/nemotron_specs/unit_<unit>.md` (the only authority), base `stage1_base.json`, rules `docs/pilot/STAGE1_RULES.md`.
+Units: `scripts/pipeline/stage1/{story_map,coverage,scenes,shots,briefs,looks,voices,sounds,questions}.py` AND the NEW `scripts/pipeline/stage1/aggregate.py` (spec `docs/pilot/nemotron_specs/aggregate.md`, test `tests/test_stage1_aggregate.py`: nine-document validator with eight cross-document rules X1-X8). Changes since your last READY: scenes (total cap on gap messages, bool ovi excluded, schema bound tests), voices (new `reason` field, required for NEW_PROPOSED), aggregate.py new. Check those; the rest is unchanged, tests `tests/test_stage1_<unit>.py`, specs `docs/pilot/nemotron_specs/unit_<unit>.md` (the only authority), base `stage1_base.json`, rules `docs/pilot/STAGE1_RULES.md`.
 Evidence you may rely on: `docs/pilot/TEST_RUN_STAGE1.txt` is a REAL pytest run done outside your sandbox (you cannot start the project's Python): treat it as the test result. Earlier reports: `docs/pilot/*_STAGE1_UNITS_ROUND1.md` ... `ROUND9.md` and `*_STAGE1_FINAL_ROUND1.md` (its blocking findings, ctx None handling, missing catch-all in coverage and scenes, and huge ovi_range enumeration in scenes, were fixed: please re-verify them). Round 2 final reports `*_STAGE1_FINAL_ROUND2.md`: Codex found two Class 1 defects in scenes (chapter gap inside a range missed; unfilmed ovi inside a range not reported); the coder rewrote the range logic without enumerating huge ranges: please re-verify those two plus the huge-range case [1, 10**12]. Round 3 final reports `*_STAGE1_FINAL_ROUND3.md`: both reviewers found the gap-walk false error (valid late range reported earlier chapter ovis as outside, e.g. chapter {1-4,6-9}, S1 [1,4], S2 [6,9] returned an error for ovi 5); the coder rewrote the walk: re-verify that and that real gaps are still reported. DO NOT recommend further hardening beyond the STOP RULE; the owner wants no over-engineering. Known design rule (do not report): the catch-all sentinel text `malformed structure` is project-defined and tests assert it absent on purpose.
 
 ## STOP RULE (this is the definition of READY)
@@ -9,3 +9,19 @@ Verify every claim with a small in-memory check before reporting it. Do not gues
 
 ## Output
 A markdown report ending with exactly one line: `## Verdict: READY` or `## Verdict: FIX FIRST`. Before it, per unit a numbered list of BLOCKING defects (file:line, what, exact fix) or `none`, then `## Non-blocking notes`.
+
+
+## Changes since your last report (round 5 reports `*_STAGE1_FINAL_ROUND5.md`)
+The aggregator was changed: ctx values of any wrong type are handled (no raise; `aggregate: internal error` is a last-resort sentinel and must NOT appear for them); X1 is kind-aware (STORY needs a story event, TEACHING a discourse event); X2 was REMOVED on purpose (STAGE1_RULES.md says type does not decide omission, the owner approval X3 decides); new X9 (event ranges and key ovis inside the chapter); X8 now flags any 6-word run copied from the script and runs whatever the schema status. Re-verify these; report only BLOCKING defects per the STOP RULE.
+
+
+## Changes since round 6 (reports `*_STAGE1_FINAL_ROUND6.md`)
+Codex's blocking item (main --export-schemas returned early without validating) was fixed: it now exports and then validates. Added: X10 (scene section_kind must match at least one overlapping event kind), X7 extension (a NEW_PROPOSED character may not reuse a series voice of another character), X11 (optional ctx `verified_voices`). The spec text `docs/pilot/nemotron_specs/aggregate.md` was amended (section AMENDMENTS is authoritative). Re-verify; report only BLOCKING defects per the STOP RULE. Deferred on purpose (checklist N9-N15): do not report them.
+
+
+## Changes since round 7 (reports `*_STAGE1_FINAL_ROUND7.md`)
+Your round 7 blocking findings were correct: X1 had lost its kind check and X2 had come back (a coder regression). Both were restored/removed again: X1 is kind-aware, X2 is gone, and tests now assert that. NEW unit: `scripts/pipeline/stage1/context.py` with `tests/test_stage1_context.py` (spec `docs/pilot/nemotron_specs/context.md`): builds the `ctx` for the aggregator from real data (chapter ovis, owner-approved omissions through approvals/hash, voice library, presets) and reports missing sources as problems instead of raising. Review `aggregate.py` (all rules X1, X3-X11 must be present and tested) and `context.py` under the STOP RULE; the older nine units are unchanged. Report only BLOCKING defects.
+
+
+## Changes since round 8 (reports `*_STAGE1_FINAL_ROUND8.md`)
+Fixed: aggregate X7 reads series_voices through a helper that keeps only str keys and str values (no sentinel for unhashable values); X8 strips punctuation (Unicode categories P and S, at token ends) the same on both sides so `six/` still matches; context.py handles valid-JSON-but-not-an-object for every source (omissions, voice library, jsonl lines, preset index, sound palette, approvals) as a source problem and never raises. NOT changed on purpose (do not report): X10 reports nothing for a scene with no overlapping event (X1 already fails story/teaching ovis in no event). Verify by small in-memory checks on the live files; report only BLOCKING defects per the STOP RULE.

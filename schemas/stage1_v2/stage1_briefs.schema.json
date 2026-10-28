@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adhyay": {
+      "maximum": 21,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "images": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "camera": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "image_id": {
+            "pattern": "^s[0-9]{1,2}_[a-z][a-z0-9_]{0,40}$",
+            "type": "string"
+          },
+          "light": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "on_screen_facts": {
+            "items": {
+              "maxLength": 400,
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "people": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "gaze": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "pose": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "position": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "position",
+                "pose",
+                "gaze"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "place_id": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "prop": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "prop_state": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reason_new": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "references": {
+            "additionalProperties": false,
+            "properties": {
+              "characters": {
+                "items": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "place": {
+                "maxLength": 400,
+                "minLength": 1,
+                "type": "string"
+              },
+              "prop": {
+                "maxLength": 400,
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "style_anchor": {
+                "maxLength": 400,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "characters",
+              "place",
+              "style_anchor",
+              "prop"
+            ],
+            "type": "object"
+          },
+          "scene_id": {
+            "pattern": "^S[0-9]{1,2}$",
+            "type": "string"
+          },
+          "shot_ids": {
+            "items": {
+              "pattern": "^S[0-9]{1,2}-[0-9]{1,2}$",
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "image_id",
+          "scene_id",
+          "shot_ids",
+          "people",
+          "place_id",
+          "prop",
+          "prop_state",
+          "camera",
+          "light",
+          "reason_new",
+          "on_screen_facts",
+          "references"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "adhyay",
+    "images"
+  ],
+  "title": "stage1_image_briefs",
+  "type": "object"
+}

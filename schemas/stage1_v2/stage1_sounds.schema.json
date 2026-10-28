@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adhyay": {
+      "maximum": 21,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "cues": {
+      "items": {
+        "additionalProperties": false,
+        "else": {
+          "not": {
+            "required": [
+              "sound_prompt"
+            ]
+          }
+        },
+        "if": {
+          "properties": {
+            "sound_id": {
+              "const": "NEED_NEW"
+            }
+          }
+        },
+        "properties": {
+          "anchor_line_id": {
+            "pattern": "^S[0-9]{1,2}-L[0-9]{1,3}$",
+            "type": "string"
+          },
+          "basis": {
+            "enum": [
+              "stated",
+              "staging"
+            ],
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "bed",
+              "fx"
+            ],
+            "type": "string"
+          },
+          "purpose": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "scene_id": {
+            "pattern": "^S[0-9]{1,2}$",
+            "type": "string"
+          },
+          "sound_id": {
+            "pattern": "^(bed|fx)_[a-z0-9_]+$|^NEED_NEW$",
+            "type": "string"
+          },
+          "sound_prompt": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "scene_id",
+          "anchor_line_id",
+          "sound_id",
+          "kind",
+          "purpose",
+          "basis"
+        ],
+        "then": {
+          "required": [
+            "sound_prompt"
+          ]
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "adhyay",
+    "cues"
+  ],
+  "title": "stage1_sound_suggestions",
+  "type": "object"
+}
