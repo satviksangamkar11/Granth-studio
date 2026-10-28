@@ -3,16 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-
-=================================== ERRORS ====================================
-_______________ ERROR collecting tests/test_stage1_story_map.py _______________
-tests\test_stage1_story_map.py:93: in <module>
-    @pytest.mark.parametrize("path,value,keyword", [
-     ^^^^^^
-E   NameError: name 'pytest' is not defined
-=========================== short test summary info ===========================
-ERROR tests/test_stage1_story_map.py - NameError: name 'pytest' is not defined
-!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+................................                                         [100%]
 
 ```
 
@@ -303,6 +294,7 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
 from __future__ import annotations
 import copy
 import sys
+import pytest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -311,36 +303,38 @@ import story_map as sm
 
 # ---------- robust helpers ----------
 def get_parent(doc: dict, path: list):
+    """Return (parent_container, key) where parent_container[key] is the target"""
     cur = doc
     for p in path[:-1]:
-        cur = cur[p] if isinstance(p, str) else cur[p]
+        cur = cur[p]
     return cur, path[-1]
+
+def get_target(doc: dict, path: list):
+    """Return the target object at path"""
+    cur = doc
+    for p in path:
+        cur = cur[p]
+    return cur
 
 def set_at(base: dict, path: list, value) -> dict:
     doc = copy.deepcopy(base)
     parent, key = get_parent(doc, path)
-    if isinstance(parent, list):
-        parent[key] = value
-    else:
-        parent[key] = value
+    parent[key] = value
     assert doc != base, "mutation had no effect"
     return doc
 
 def delete_at(base: dict, path: list) -> dict:
     doc = copy.deepcopy(base)
     parent, key = get_parent(doc, path)
-    if isinstance(parent, list):
-        del parent[key]
-    else:
-        del parent[key]
+    del parent[key]
     assert doc != base, "mutation had no effect"
     return doc
 
 def append_at(base: dict, path: list, value) -> dict:
     doc = copy.deepcopy(base)
-    parent, key = get_parent(doc, path)
-    assert isinstance(parent, list), "append target must be list"
-    parent.append(value)
+    target = get_target(doc, path)
+    assert isinstance(target, list), "append target must be list"
+    target.append(value)
     assert doc != base, "mutation had no effect"
     return doc
 
@@ -448,10 +442,10 @@ def test_schema_errors(path, value, keyword):
     (1, [(["ovi_types"], {"ovi": 1, "type": "STORY"})], ["ovi 1", "typed twice"]),
     # ovi outside chapter (append ovi 99)
     (1, [(["ovi_types"], {"ovi": 99, "type": "STORY"})], ["ovi 99"]),
-    # event ovi_range lo > hi (semantic, not schema)
-    (1, [(["events", 0, "ovi_range"], [5, 1])], ["E1"]),
+    # event ovi_range lo > hi (semantic, not schema) - isolate by clearing key_ovis
+    (1, [(["events", 0, "ovi_range"], [5, 1]), (["events", 0, "key_ovis"], [])], ["E1", "lo > hi"]),
     # key_ovis outside range
-    (1, [(["events", 0, "key_ovis"], [9])], ["E1"]),
+    (1, [(["events", 0, "key_ovis"], [9])], ["E1", "key_ovi", "outside"]),
     # empty events valid
     (1, [(["events"], [])], []),
     # empty ovi_types -> all untyped

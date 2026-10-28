@@ -59,3 +59,6 @@ Approved flat-colour style (steady navy outlines, light hatching, warm palette, 
 
 ## 10. Must NOT
 Kimi never writes/edits/translates/critiques the EASY script, writes no timings or hashes or approvals, invents no events/dialogue/closure, makes no images or voices, writes no code, invents no preset or image id, redecides no known cast/place/style, and gets no automatic paid retry.
+
+## Catch-all sentinel (design rule, 2026-10-28; reviewers must not report it as unquoted wording)
+Each Stage 1 unit's `validate` has a last-line guard that turns any unexpected exception into the single error `"<unit>: malformed structure"`. This text is a PROJECT-DEFINED sentinel, not a spec wording. Odd-data tests deliberately assert that the sentinel is ABSENT (`not any("malformed structure" in e ...)`) so that an odd input is proven to be handled by the real checks and not hidden by the guard. These assertions were requested by reviewers in rounds 3 and 4 and must stay.

@@ -3,16 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-............................F..                                          [100%]
-================================== FAILURES ===================================
-_ test_validate_errors[duplicate_entity_state-path4-gajanan_maharaj-gajanan_maharaj] _
-tests\test_stage1_looks.py:151: in test_validate_errors
-    assert any(expected_keyword in e for e in errors), f"{name}: {errors}"
-E   AssertionError: duplicate_entity_state: []
-E   assert False
-E    +  where False = any(<generator object test_validate_errors.<locals>.<genexpr> at 0x00000139D8C91E50>)
-=========================== short test summary info ===========================
-FAILED tests/test_stage1_looks.py::test_validate_errors[duplicate_entity_state-path4-gajanan_maharaj-gajanan_maharaj]
+................................                                         [100%]
 
 ```
 
@@ -149,7 +140,7 @@ SCHEMA: dict[str, Any] = {
         "adhyay": {
             "type": "integer",
             "minimum": 1,
-            "maximum": 21
+            "maximum": 21,
         },
         "entries": {
             "type": "array",
@@ -165,20 +156,30 @@ SCHEMA: dict[str, Any] = {
                     "source_ovis": {
                         "type": "array",
                         "minItems": 1,
-                        "items": {"type": "integer", "minimum": 1}
+                        "items": {"type": "integer", "minimum": 1},
                     },
-                    "basis": {"type": "string", "enum": ["stated", "inferred"]}
-                }
-            }
-        }
-    }
+                    "basis": {"type": "string", "enum": ["stated", "inferred"]},
+                },
+            },
+        },
+    },
 }
 
 _validator = Draft202012Validator(SCHEMA)
 
 
+def _as_set(value: Any) -> set[Any]:
+    """ctx lists/sets -> real set; anything else becomes an empty set (never raises)."""
+    if isinstance(value, (list, tuple, set, frozenset)):
+        try:
+            return set(value)
+        except TypeError:
+            return set()
+    return set()
+
+
 def schema_errors(doc: Any) -> list[str]:
-    errors = []
+    errors: list[str] = []
     for error in _validator.iter_errors(doc):
         path = "/".join(str(p) for p in error.path) if error.path else "doc"
         errors.append(f"looks {path}: {error.message}")
@@ -200,12 +201,14 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
     if not isinstance(entries, list):
         return messages
 
-    chapter_ovis = set(ctx.get("chapter_ovis", []))
-    known_states = ctx.get("known_states", {})
+    if not isinstance(ctx, dict):
+        ctx = {}
+    chapter_ovis = _as_set(ctx.get("chapter_ovis"))
+    known_states = ctx.get("known_states")
     if not isinstance(known_states, dict):
         known_states = {}
 
-    seen_pairs = set()
+    seen_pairs: set[tuple[str, str]] = set()
 
     for idx, entry in enumerate(entries):
         if not isinstance(entry, dict):
@@ -215,9 +218,15 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
         state_id = entry.get("state_id")
         source_ovis = entry.get("source_ovis")
 
-        item_id = f"{entity_id}:{state_id}" if entity_id and state_id else f"entry[{idx}]"
+        pair_ok = (
+            isinstance(entity_id, str)
+            and isinstance(state_id, str)
+            and bool(entity_id)
+            and bool(state_id)
+        )
+        item_id = f"{entity_id}:{state_id}" if pair_ok else f"entry[{idx}]"
 
-        if entity_id and state_id:
+        if pair_ok:
             pair = (entity_id, state_id)
             if pair in seen_pairs:
                 messages.append(f"{item_id}: duplicate entity_id+state_id")
@@ -226,11 +235,15 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
 
         if isinstance(source_ovis, list):
             for ovi in source_ovis:
-                if ovi not in chapter_ovis:
+                try:
+                    inside = ovi in chapter_ovis
+                except TypeError:
+                    inside = False
+                if not inside:
                     messages.append(f"{item_id}: source_ovi {ovi} not in chapter_ovis")
 
-        if entity_id in known_states and isinstance(known_states[entity_id], (list, set)):
-            known = set(known_states[entity_id])
+        if isinstance(entity_id, str) and isinstance(state_id, str):
+            known = _as_set(known_states.get(entity_id))
             if state_id in known:
                 messages.append(f"{entity_id}: known state {state_id} redecided")
 
@@ -242,9 +255,10 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
 ## CURRENT TESTS tests/test_stage1_looks.py
 ```python
 import copy
-import pytest
-from pathlib import Path
 import importlib.util
+from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "scripts" / "pipeline" / "stage1" / "looks.py"
@@ -376,7 +390,16 @@ SEMANTIC_CASES = [
     ("adhyay_mismatch", ["docs", "looks", "adhyay"], 2, "adhyay"),
     ("source_ovi_unknown", ["docs", "looks", "entries", 0, "source_ovis"], [99], "gajanan_maharaj"),
     ("known_state_redecided", ["docs", "looks", "entries", 0, "state_id"], "adult_youth_v1", "redecided"),
-    ("duplicate_entity_state", ["docs", "looks", "entries", 1, "entity_id"], "gajanan_maharaj", "gajanan_maharaj"),
+    # real duplicate pair: entry 1 becomes an exact copy of entry 0
+    # -> (gajanan_maharaj, adult_youth_v2) appears twice
+    (
+        "duplicate_entity_state",
+        ["docs", "looks", "entries", 1],
+        copy.deepcopy(BASE_DOCS["looks"]["entries"][0]),
+        "gajanan_maharaj",
+    ),
+    # same state_id on a DIFFERENT entity is NOT a duplicate pair
+    ("same_state_different_entity", ["docs", "looks", "entries", 1, "state_id"], "adult_youth_v2", []),
     ("new_state_known_entity", ["docs", "looks", "entries", 0, "state_id"], "adult_youth_v3", []),
     ("unknown_entity", ["docs", "looks", "entries", 0, "entity_id"], "new_entity", []),
 ]

@@ -3,37 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-....................FF...FF.                                             [100%]
-================================== FAILURES ===================================
-___________ test_validate[cast.0-None-narrator: no voice assigned] ____________
-tests\test_stage1_voices.py:202: in test_validate
-    errs = validate(1, doc["docs"]["voices"], doc["docs"], doc["ctx"])
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-scripts\pipeline\stage1\voices.py:64: in validate
-    cid = entry.get("character_id")
-          ^^^^^^^^^
-E   AttributeError: 'NoneType' object has no attribute 'get'
-________ test_validate[cast.1-None-gajanan_maharaj: no voice assigned] ________
-tests\test_stage1_voices.py:202: in test_validate
-    errs = validate(1, doc["docs"]["voices"], doc["docs"], doc["ctx"])
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-scripts\pipeline\stage1\voices.py:64: in validate
-    cid = entry.get("character_id")
-          ^^^^^^^^^
-E   AttributeError: 'NoneType' object has no attribute 'get'
-_ test_validate[cast-value7-gajanan_maharaj: voice_key shared with another character] _
-tests\test_stage1_voices.py:206: in test_validate
-    assert errs
-E   assert []
-_ test_validate[cast-value8-extra_char: voice_key shared with another character] _
-tests\test_stage1_voices.py:206: in test_validate
-    assert errs
-E   assert []
-=========================== short test summary info ===========================
-FAILED tests/test_stage1_voices.py::test_validate[cast.0-None-narrator: no voice assigned]
-FAILED tests/test_stage1_voices.py::test_validate[cast.1-None-gajanan_maharaj: no voice assigned]
-FAILED tests/test_stage1_voices.py::test_validate[cast-value7-gajanan_maharaj: voice_key shared with another character]
-FAILED tests/test_stage1_voices.py::test_validate[cast-value8-extra_char: voice_key shared with another character]
+............................                                             [100%]
 
 ```
 
@@ -208,9 +178,11 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
 
     cast = doc.get("cast", [])
 
-    # Build lookup: character_id -> list of entries
+    # Build lookup: character_id -> list of entries (skip None entries)
     char_entries = {}
     for entry in cast:
+        if entry is None:
+            continue
         cid = entry.get("character_id")
         if cid not in char_entries:
             char_entries[cid] = []
@@ -222,8 +194,7 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
         if len(entries) == 0:
             messages.append(f"{char}: no voice assigned")
         elif len(entries) > 1:
-            # Check if any is RECURRING - but the rule says "a character already RECURRING must not be listed twice"
-            # This means if a character has multiple entries and any is RECURRING, it's an error
+            # A character already RECURRING must not be listed twice
             for e in entries:
                 if e.get("status") == "RECURRING":
                     messages.append(f"{char}: recurring character listed twice")
@@ -231,6 +202,8 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
 
     # Rule: voice_key must be in saved_voices and voice_id must match
     for entry in cast:
+        if entry is None:
+            continue
         char = entry.get("character_id")
         vkey = entry.get("voice_key")
         vid = entry.get("voice_id")
@@ -242,6 +215,8 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
     # Rule: two characters must not share a voice_key unless one is the narrator
     voice_key_to_chars = {}
     for entry in cast:
+        if entry is None:
+            continue
         vkey = entry.get("voice_key")
         char = entry.get("character_id")
         if vkey not in voice_key_to_chars:
@@ -250,7 +225,7 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
 
     for vkey, chars in voice_key_to_chars.items():
         if len(chars) > 1:
-            # Check if one is narrator
+            # Check if one is narrator - sharing with narrator is allowed
             if "narrator" not in chars:
                 # Report for each character sharing the key
                 for char in chars:
@@ -429,24 +404,31 @@ def test_schema(path, value, keyword):
 @pytest.mark.parametrize("path,value,keyword", [
     (None, None, None),
     ("adhyay", 2, "adhyay"),
+    # Remove cast entry for narrator -> no voice assigned
     ("cast.0", None, "narrator: no voice assigned"),
+    # Remove cast entry for gajanan_maharaj -> no voice assigned
     ("cast.1", None, "gajanan_maharaj: no voice assigned"),
     ("cast.0.voice_key", "unknown", "narrator: voice not in the saved cast"),
-    ("cast.0.voice_id", "wrong", "narrator: voice not in the saved cast"),
+    # Use valid-length but wrong voice_id
+    ("cast.0.voice_id", "x" * 10, "narrator: voice not in the saved cast"),
+    # Duplicate narrator entry (RECURRING listed twice)
     ("cast", [
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
         {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "RECURRING"},
-    ], "narrator"),
-    ("cast", [
-        {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
-        {"character_id": "gajanan_maharaj", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
-    ], "gajanan_maharaj: voice_key shared with another character"),
+    ], "narrator: recurring character listed twice"),
+    # Two non-narrators sharing a voice_key (gajanan) -> forbidden
     ("cast", [
         {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
         {"character_id": "gajanan_maharaj", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "RECURRING"},
-        {"character_id": "extra_char", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "female", "status": "NEW_PROPOSED"},
-    ], "extra_char: voice_key shared with another character"),
+        {"character_id": "extra_char", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED"},
+    ], "extra_char: voice key shared with another character"),
+    # Another case: two non-narrators sharing a voice_key
+    ("cast", [
+        {"character_id": "narrator", "voice_key": "narrator", "voice_id": "CXkeo30p0Sk4Lr0TAzeo", "gender": "male", "status": "RECURRING"},
+        {"character_id": "char1", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "male", "status": "NEW_PROPOSED"},
+        {"character_id": "char2", "voice_key": "gajanan", "voice_id": "8fqGzH80bdkm2UseeV9f", "gender": "female", "status": "NEW_PROPOSED"},
+    ], "char1: voice key shared with another character"),
     ("ctx.speaking_characters", [], None),
 ])
 def test_validate(path, value, keyword):

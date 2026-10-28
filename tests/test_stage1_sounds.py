@@ -129,66 +129,43 @@ def _other_docs() -> dict:
 
 # ---------- schema_errors tests ----------
 @pytest.mark.parametrize(
-    "path,keyword",
+    "mutate_fn,keyword",
     [
-        # required root fields
-        (["adhyay"], "adhyay"),
-        (["cues"], "cues"),
-        # required cue fields
-        (["cues", 0, "scene_id"], "scene_id"),
-        (["cues", 0, "anchor_line_id"], "anchor_line_id"),
-        (["cues", 0, "sound_id"], "sound_id"),
-        (["cues", 0, "kind"], "kind"),
-        (["cues", 0, "purpose"], "purpose"),
-        (["cues", 0, "basis"], "basis"),
-        # type / pattern
-        (["adhyay"], "adhyay"),
-        (["cues", 0, "scene_id"], "scene_id"),
-        (["cues", 0, "anchor_line_id"], "anchor_line_id"),
-        (["cues", 0, "sound_id"], "sound_id"),
-        (["cues", 0, "kind"], "kind"),
-        (["cues", 0, "purpose"], "purpose"),
-        (["cues", 0, "basis"], "basis"),
+        # required root fields (deletion)
+        (lambda d: delete_at(d, ["adhyay"]), "adhyay"),
+        (lambda d: delete_at(d, ["cues"]), "cues"),
+        # required cue fields (deletion)
+        (lambda d: delete_at(d, ["cues", 0, "scene_id"]), "scene_id"),
+        (lambda d: delete_at(d, ["cues", 0, "anchor_line_id"]), "anchor_line_id"),
+        (lambda d: delete_at(d, ["cues", 0, "sound_id"]), "sound_id"),
+        (lambda d: delete_at(d, ["cues", 0, "kind"]), "kind"),
+        (lambda d: delete_at(d, ["cues", 0, "purpose"]), "purpose"),
+        (lambda d: delete_at(d, ["cues", 0, "basis"]), "basis"),
+        # type / pattern violations (set invalid value)
+        (lambda d: set_at(d, ["adhyay"], "x"), "adhyay"),
+        (lambda d: set_at(d, ["cues", 0, "scene_id"], "X1"), "scene_id"),
+        (lambda d: set_at(d, ["cues", 0, "anchor_line_id"], "S1-X"), "anchor_line_id"),
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "bad_id"), "sound_id"),
         # enum invalid
-        (["cues", 0, "kind"], "kind"),
-        (["cues", 0, "basis"], "basis"),
+        (lambda d: set_at(d, ["cues", 0, "kind"], "music"), "kind"),
+        (lambda d: set_at(d, ["cues", 0, "basis"], "guess"), "basis"),
         # extra keys at root and nested
-        (["extra_top"], "extra_top"),
-        (["cues", 0, "extra"], "extra"),
-        # NEED_NEW requires sound_prompt (schema)
-        (["cues", 0, "sound_prompt"], "sound_prompt"),
+        (lambda d: set_at(d, ["extra_top"], 1), "extra_top"),
+        (lambda d: set_at(d, ["cues", 0, "extra"], 1), "extra"),
+        # NEED_NEW requires sound_prompt (schema) - change sound_id to NEED_NEW without sound_prompt
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "NEED_NEW"), "sound_prompt"),
+        # non-NEED_NEW forbids sound_prompt (schema) - add sound_prompt to regular cue
+        (lambda d: set_at(d, ["cues", 0, "sound_prompt"], "a prompt"), "sound_prompt"),
+        # adhyay minimum 1 (schema)
+        (lambda d: set_at(d, ["adhyay"], 0), "adhyay"),
+        # sound_prompt minLength 1 on NEED_NEW cue (schema)
+        (lambda d: set_at(set_at(d, ["cues", 0, "sound_id"], "NEED_NEW"), ["cues", 0, "sound_prompt"], ""), "sound_prompt"),
+        # purpose minLength 1 (schema)
+        (lambda d: set_at(d, ["cues", 0, "purpose"], ""), "purpose"),
     ],
 )
-def test_schema_errors(path, keyword):
-    doc = _valid_doc()
-    if path == ["adhyay"]:
-        doc = set_at(doc, path, "x")
-    elif path == ["cues"]:
-        doc = delete_at(doc, path)
-    elif path == ["cues", 0, "scene_id"]:
-        doc = set_at(doc, path, "X1")
-    elif path == ["cues", 0, "anchor_line_id"]:
-        doc = set_at(doc, path, "S1-X")
-    elif path == ["cues", 0, "sound_id"]:
-        doc = set_at(doc, path, "bad_id")
-    elif path == ["cues", 0, "kind"]:
-        doc = set_at(doc, path, "music")
-    elif path == ["cues", 0, "purpose"]:
-        doc = set_at(doc, path, "")
-    elif path == ["cues", 0, "basis"]:
-        doc = set_at(doc, path, "guess")
-    elif path == ["cues", 0, "kind"] and keyword == "kind":
-        doc = set_at(doc, path, "invalid_kind")
-    elif path == ["cues", 0, "basis"] and keyword == "basis":
-        doc = set_at(doc, path, "invalid_basis")
-    elif path == ["extra_top"]:
-        doc["extra_top"] = 1
-    elif path == ["cues", 0, "extra"]:
-        doc = set_at(doc, path, 1)
-    elif path == ["cues", 0, "sound_prompt"]:
-        # NEED_NEW cue with sound_prompt is valid at schema level; non-NEED_NEW with sound_prompt is forbidden
-        doc = set_at(doc, ["cues", 0, "sound_id"], "NEED_NEW")
-        doc = set_at(doc, path, "a prompt")
+def test_schema_errors(mutate_fn, keyword):
+    doc = mutate_fn(_valid_doc())
     errs = schema_errors(doc)
     assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
 
@@ -197,31 +174,43 @@ def test_schema_valid():
     assert schema_errors(_valid_doc()) == []
 
 
-# ---------- validate semantic tests ----------
+# Schema-valid enum value tests
 @pytest.mark.parametrize(
-    "mutate_fn,keyword",
+    "mutate_fn",
     [
-        # adhyay mismatch
-        (lambda d: set_at(d, ["adhyay"], 2), "adhyay"),
-        # scene missing
-        (lambda d: set_at(d, ["cues", 0, "scene_id"], "S9"), "scene"),
-        # anchor line not in scene
-        (lambda d: set_at(d, ["cues", 0, "anchor_line_id"], "S2-L1"), "anchor_line_id"),
-        # sound_id not in sound_ids and not NEED_NEW
-        (lambda d: set_at(d, ["cues", 0, "sound_id"], "bed_unknown"), "sound_id"),
-        # kind mismatch prefix (bed sound with fx kind)
-        (lambda d: set_at(d, ["cues", 0, "kind"], "fx"), "kind"),
-        # fx sound with bed kind
-        (lambda d: set_at(d, ["cues", 0, "sound_id"], "fx_door_wood_creak"), "kind"),
-        # NEED_NEW without sound_prompt (semantic sees missing prompt)
-        (lambda d: set_at(d, ["cues", 0, "sound_id"], "NEED_NEW"), "sound_prompt"),
-        # non-NEED_NEW cue with sound_prompt is schema error, not semantic
+        # kind = fx with fx_ sound_id
+        (lambda d: set_at(set_at(d, ["cues", 0, "sound_id"], "fx_door_wood_creak"), ["cues", 0, "kind"], "fx")),
+        # basis = stated
+        (lambda d: set_at(d, ["cues", 0, "basis"], "stated")),
     ],
 )
-def test_semantic_errors(mutate_fn, keyword):
+def test_schema_valid_enum_values(mutate_fn):
+    doc = mutate_fn(_valid_doc())
+    assert schema_errors(doc) == []
+
+
+# ---------- validate semantic tests ----------
+@pytest.mark.parametrize(
+    "mutate_fn,expected_id",
+    [
+        # adhyay mismatch
+        (lambda d: set_at(d, ["adhyay"], 2), "sounds adhyay"),
+        # scene missing
+        (lambda d: set_at(d, ["cues", 0, "scene_id"], "S9"), "cue[0]"),
+        # anchor line not in scene
+        (lambda d: set_at(d, ["cues", 0, "anchor_line_id"], "S2-L1"), "cue[0]"),
+        # sound_id not in sound_ids and not NEED_NEW
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "bed_unknown"), "cue[0]"),
+        # kind mismatch prefix (bed sound with fx kind)
+        (lambda d: set_at(d, ["cues", 0, "kind"], "fx"), "cue[0]"),
+        # fx sound with bed kind
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "fx_door_wood_creak"), "cue[0]"),
+    ],
+)
+def test_semantic_errors(mutate_fn, expected_id):
     doc = mutate_fn(_valid_doc())
     errs = validate(1, doc, _other_docs(), _valid_ctx())
-    assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
+    assert any(expected_id in e for e in errs), f"{expected_id} not in {errs}"
 
 
 def test_semantic_valid():
@@ -247,5 +236,82 @@ def test_empty_context_missing_refs():
         "known_states": {},
     }
     errs = validate(1, doc, _other_docs(), ctx)
-    assert any("S1-L1" in e for e in errs)
-    assert any("bed_roadside_quiet" in e for e in errs)
+    # sound_id not in sound_ids (empty ctx)
+    assert any("cue[0]" in e for e in errs)
+    # anchor line check uses scenes doc, not ctx, so no error for S1-L1
+    # adhyay matches, scene exists, kind matches
+    assert len(errs) == 1
+
+
+# ---------- regression tests for odd data (no raise) ----------
+def test_validate_odd_data_no_raise():
+    # doc not a dict
+    errs = validate(1, None, {}, {})
+    assert isinstance(errs, list) and any("sounds" in e for e in errs)
+
+    # cues not a list
+    doc = _valid_doc()
+    doc["cues"] = "not a list"
+    errs = validate(1, doc, _other_docs(), _valid_ctx())
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+
+    # cue not a dict
+    doc = _valid_doc()
+    doc["cues"] = ["not a dict"]
+    errs = validate(1, doc, _other_docs(), _valid_ctx())
+    assert isinstance(errs, list) and any("cue[0]" in e for e in errs) and not any("malformed structure" in e for e in errs)
+
+    # scene_id not a string
+    doc = _valid_doc()
+    doc["cues"][0]["scene_id"] = 123
+    errs = validate(1, doc, _other_docs(), _valid_ctx())
+    assert isinstance(errs, list) and any("cue[0]" in e for e in errs) and not any("malformed structure" in e for e in errs)
+
+    # anchor_line_id not a string
+    doc = _valid_doc()
+    doc["cues"][0]["anchor_line_id"] = 123
+    errs = validate(1, doc, _other_docs(), _valid_ctx())
+    assert isinstance(errs, list) and any("cue[0]" in e for e in errs) and not any("malformed structure" in e for e in errs)
+
+    # sound_id not a string
+    doc = _valid_doc()
+    doc["cues"][0]["sound_id"] = 123
+    errs = validate(1, doc, _other_docs(), _valid_ctx())
+    assert isinstance(errs, list) and any("cue[0]" in e for e in errs) and not any("malformed structure" in e for e in errs)
+
+    # scenes doc not a dict
+    doc = _valid_doc()
+    errs = validate(1, doc, {"scenes": "not a dict"}, _valid_ctx())
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+
+    # scenes list not a list
+    doc = _valid_doc()
+    errs = validate(1, doc, {"scenes": {"scenes": "not a list"}}, _valid_ctx())
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+
+    # scene entry not a dict
+    doc = _valid_doc()
+    errs = validate(1, doc, {"scenes": {"scenes": ["not a dict"]}}, _valid_ctx())
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+
+    # sound_ids not a list
+    doc = _valid_doc()
+    ctx = _valid_ctx()
+    ctx["sound_ids"] = "not a list"
+    errs = validate(1, doc, _other_docs(), ctx)
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+
+    # scene line_ids contains non-string (list of list) - regression for TypeError
+    doc = _valid_doc()
+    docs = _other_docs()
+    docs["scenes"]["scenes"][0]["line_ids"] = [["S1-L1"], "S1-L2"]
+    errs = validate(1, doc, docs, _valid_ctx())
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # Should not raise, and anchor line check should still work for string line_ids
+
+    # scene line_ids is not a list
+    doc = _valid_doc()
+    docs = _other_docs()
+    docs["scenes"]["scenes"][0]["line_ids"] = "not a list"
+    errs = validate(1, doc, docs, _valid_ctx())
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)

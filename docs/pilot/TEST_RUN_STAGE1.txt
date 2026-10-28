@@ -1,0 +1,16 @@
+# Real test run (executed by Claude with the project venv, 2026-10-28 16:03 IST)
+tests/test_stage1_briefs.py: 93 passed in 0.11s
+tests/test_stage1_coverage.py: 66 passed in 0.08s
+tests/test_stage1_looks.py: 39 passed in 0.05s
+tests/test_stage1_questions.py: 27 passed in 0.04s
+tests/test_stage1_scenes.py: 91 passed in 0.10s
+tests/test_stage1_shots.py: 60 passed in 0.09s
+tests/test_stage1_sounds.py: 34 passed in 0.06s
+tests/test_stage1_story_map.py: 54 passed in 0.07s
+tests/test_stage1_voices.py: 45 passed in 0.06s
+tests/test_endpoint_probe.py: 15 passed, 1 warning in 0.16s
+tests/test_draft_source.py: 15 passed in 0.18s
+tests/test_nemotron_code.py: 12 passed in 0.07s
+tests/test_coder_run.py: 4 passed in 0.03s
+tests/test_import_canon_docx.py: 20 passed in 0.15s
+ALL: 575 passed, 1 warning in 0.96s

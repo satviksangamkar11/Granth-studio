@@ -3,31 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-......................F........................F....F                    [100%]
-================================== FAILURES ===================================
-_________________ test_schema_errors[path7-value7-ovi_range] __________________
-tests\test_stage1_scenes.py:160: in test_schema_errors
-    assert any(keyword in e for e in errs), f"missing {keyword} in {errs}"
-E   AssertionError: missing ovi_range in []
-E   assert False
-E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000001BFBF3AA330>)
-______________ test_semantic_errors[<lambda>-S1-ctx_overrides9] _______________
-tests\test_stage1_scenes.py:200: in test_semantic_errors
-    assert any(keyword in e for e in errs), f"missing {keyword} in {errs}"
-E   AssertionError: missing S1 in []
-E   assert False
-E    +  where False = any(<generator object test_semantic_errors.<locals>.<genexpr> at 0x000001BFBF53BAC0>)
-_________________________________ test_valid __________________________________
-tests\test_stage1_scenes.py:207: in test_valid
-    assert M.validate(1, docs["scenes"], docs, ctx) == []
-E   AssertionError: assert ['S1: line_id...script order'] == []
-E     
-E     Left contains one more item: 'S1: line_ids not in script order'
-E     Use -v to get more diff
-=========================== short test summary info ===========================
-FAILED tests/test_stage1_scenes.py::test_schema_errors[path7-value7-ovi_range]
-FAILED tests/test_stage1_scenes.py::test_semantic_errors[<lambda>-S1-ctx_overrides9]
-FAILED tests/test_stage1_scenes.py::test_valid - AssertionError: assert ['S1:...
+....................................................                     [100%]
 
 ```
 
@@ -213,9 +189,17 @@ SCHEMA: dict[str, Any] = {
                         "enum": ["none", "narration_over_typography", "contemplative_hold", "symbol_from_text"],
                     },
                 },
-                "if": {"properties": {"section_kind": {"const": "discourse"}}},
-                "then": {"required": ["teaching_treatment"]},
-                "else": {"not": {"required": ["teaching_treatment"]}},
+                "allOf": [
+                    {
+                        "if": {"properties": {"section_kind": {"const": "discourse"}}},
+                        "then": {"required": ["teaching_treatment"]},
+                        "else": {"not": {"required": ["teaching_treatment"]}},
+                    },
+                    {
+                        "if": {"properties": {"section_kind": {"const": "story"}}},
+                        "then": {"not": {"required": ["teaching_treatment"]}},
+                    },
+                ],
             },
         },
     },
@@ -245,8 +229,9 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
     if not isinstance(scenes, list):
         return errors + notes
 
-    # Convert ctx lists/sets to sets
-    script_line_ids = set(ctx.get("script_line_ids", []))
+    # Convert ctx lists/sets to sets for membership, keep script_line_ids as list for order
+    script_line_ids_list = list(ctx.get("script_line_ids", []))
+    script_line_ids_set = set(script_line_ids_list)
     core_line_ids = set(ctx.get("core_line_ids", []))
     chapter_ovis = set(ctx.get("chapter_ovis", []))
     unfilmed_ovis = set(ctx.get("unfilmed_ovis", []))
@@ -297,14 +282,14 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
         if isinstance(line_ids, list):
             prev_idx = -1
             for line_id in line_ids:
-                if line_id not in script_line_ids:
+                if line_id not in script_line_ids_set:
                     errors.append(f"{line_id}: line is not in the script")
                 if line_id in seen_line_ids:
                     errors.append(f"{line_id}: line used in multiple scenes")
                 seen_line_ids.add(line_id)
                 # check script order within scene
                 try:
-                    idx = list(script_line_ids).index(line_id) if line_id in script_line_ids else -1
+                    idx = script_line_ids_list.index(line_id)
                 except ValueError:
                     idx = -1
                 if idx != -1 and idx <= prev_idx:
@@ -502,7 +487,6 @@ def test_schema_enum(path, value):
     (["adhyay"], 0, "adhyay"), (["adhyay"], 22, "adhyay"), (["adhyay"], "1", "adhyay"),
     (["scenes"], "x", "scenes"), (["scenes",0], "x", "scenes"),
     (["scenes",0,"scene_id"], "X1", "scene_id"), (["scenes",0,"scene_id"], "S100", "scene_id"),
-    (["scenes",0,"ovi_range"], [5,1], "ovi_range"),  # schema: minItems/maxItems/type ok, but lo>hi is semantic
     (["scenes",0,"ovi_range"], [1], "ovi_range"), (["scenes",0,"ovi_range"], [1,5,9], "ovi_range"),
     (["scenes",0,"ovi_range"], ["1",5], "ovi_range"),
     (["scenes",0,"goal"], "", "goal"), (["scenes",0,"goal"], 123, "goal"),

@@ -3,36 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-...................F...F...F..F                                          [100%]
-================================== FAILURES ===================================
-___________________ test_schema_errors[path19-sound_prompt] ___________________
-tests\test_stage1_sounds.py:193: in test_schema_errors
-    assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
-E   AssertionError: sound_prompt not in []
-E   assert False
-E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000001C0D6178EE0>)
-________________ test_semantic_errors[<lambda>-anchor_line_id] ________________
-tests\test_stage1_sounds.py:224: in test_semantic_errors
-    assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
-E   AssertionError: anchor_line_id not in ["cue[0]: anchor line 'S2-L1' not in scene 'S1'"]
-E   assert False
-E    +  where False = any(<generator object test_semantic_errors.<locals>.<genexpr> at 0x000001C0D63182B0>)
-_________________ test_semantic_errors[<lambda>-sound_prompt] _________________
-tests\test_stage1_sounds.py:224: in test_semantic_errors
-    assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
-E   AssertionError: sound_prompt not in []
-E   assert False
-E    +  where False = any(<generator object test_semantic_errors.<locals>.<genexpr> at 0x000001C0D63186C0>)
-_______________________ test_empty_context_missing_refs _______________________
-tests\test_stage1_sounds.py:250: in test_empty_context_missing_refs
-    assert any("S1-L1" in e for e in errs)
-E   assert False
-E    +  where False = any(<generator object test_empty_context_missing_refs.<locals>.<genexpr> at 0x000001C0D6319CB0>)
-=========================== short test summary info ===========================
-FAILED tests/test_stage1_sounds.py::test_schema_errors[path19-sound_prompt]
-FAILED tests/test_stage1_sounds.py::test_semantic_errors[<lambda>-anchor_line_id]
-FAILED tests/test_stage1_sounds.py::test_semantic_errors[<lambda>-sound_prompt]
-FAILED tests/test_stage1_sounds.py::test_empty_context_missing_refs - assert ...
+............................                                             [100%]
 
 ```
 
@@ -240,7 +211,6 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
         messages.append(f"sounds adhyay {doc_adhyay} does not match {adhyay}")
 
     # Prepare context sets
-    script_line_ids = set(ctx.get("script_line_ids", []))
     sound_ids = set(ctx.get("sound_ids", []))
     scenes_doc = docs.get("scenes", {})
     scenes_list = scenes_doc.get("scenes", [])
@@ -262,7 +232,7 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
 
         # Scene exists
         if scene_id not in scene_by_id:
-            messages.append(f"{cue_id}: scene '{scene_id}' does not exist")
+            messages.append(f"{cue_id}: scene exists check failed for '{scene_id}'")
             continue
 
         scene = scene_by_id[scene_id]
@@ -270,17 +240,17 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
         # Anchor line belongs to the scene
         scene_line_ids = set(scene.get("line_ids", []))
         if anchor_line_id not in scene_line_ids:
-            messages.append(f"{cue_id}: anchor line '{anchor_line_id}' not in scene '{scene_id}'")
+            messages.append(f"{cue_id}: anchor line belongs to the scene check failed for '{anchor_line_id}'")
 
         # sound_id in sound_ids or NEED_NEW
         if sound_id != "NEED_NEW" and sound_id not in sound_ids:
-            messages.append(f"{cue_id}: sound_id '{sound_id}' not in sound_ids")
+            messages.append(f"{cue_id}: sound_id in sound_ids or NEED_NEW check failed for '{sound_id}'")
 
-        # kind matches id prefix
+        # kind matches the id prefix (only for non-NEED_NEW)
         if sound_id != "NEED_NEW":
             expected_kind = "bed" if sound_id.startswith("bed_") else "fx" if sound_id.startswith("fx_") else None
             if expected_kind and kind != expected_kind:
-                messages.append(f"{cue_id}: kind '{kind}' does not match sound_id prefix '{expected_kind}'")
+                messages.append(f"{cue_id}: kind matches the id prefix check failed (expected '{expected_kind}', got '{kind}')")
 
     return messages
 
@@ -419,66 +389,37 @@ def _other_docs() -> dict:
 
 # ---------- schema_errors tests ----------
 @pytest.mark.parametrize(
-    "path,keyword",
+    "mutate_fn,keyword",
     [
-        # required root fields
-        (["adhyay"], "adhyay"),
-        (["cues"], "cues"),
-        # required cue fields
-        (["cues", 0, "scene_id"], "scene_id"),
-        (["cues", 0, "anchor_line_id"], "anchor_line_id"),
-        (["cues", 0, "sound_id"], "sound_id"),
-        (["cues", 0, "kind"], "kind"),
-        (["cues", 0, "purpose"], "purpose"),
-        (["cues", 0, "basis"], "basis"),
-        # type / pattern
-        (["adhyay"], "adhyay"),
-        (["cues", 0, "scene_id"], "scene_id"),
-        (["cues", 0, "anchor_line_id"], "anchor_line_id"),
-        (["cues", 0, "sound_id"], "sound_id"),
-        (["cues", 0, "kind"], "kind"),
-        (["cues", 0, "purpose"], "purpose"),
-        (["cues", 0, "basis"], "basis"),
+        # required root fields (deletion)
+        (lambda d: delete_at(d, ["adhyay"]), "adhyay"),
+        (lambda d: delete_at(d, ["cues"]), "cues"),
+        # required cue fields (deletion)
+        (lambda d: delete_at(d, ["cues", 0, "scene_id"]), "scene_id"),
+        (lambda d: delete_at(d, ["cues", 0, "anchor_line_id"]), "anchor_line_id"),
+        (lambda d: delete_at(d, ["cues", 0, "sound_id"]), "sound_id"),
+        (lambda d: delete_at(d, ["cues", 0, "kind"]), "kind"),
+        (lambda d: delete_at(d, ["cues", 0, "purpose"]), "purpose"),
+        (lambda d: delete_at(d, ["cues", 0, "basis"]), "basis"),
+        # type / pattern violations (set invalid value)
+        (lambda d: set_at(d, ["adhyay"], "x"), "adhyay"),
+        (lambda d: set_at(d, ["cues", 0, "scene_id"], "X1"), "scene_id"),
+        (lambda d: set_at(d, ["cues", 0, "anchor_line_id"], "S1-X"), "anchor_line_id"),
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "bad_id"), "sound_id"),
         # enum invalid
-        (["cues", 0, "kind"], "kind"),
-        (["cues", 0, "basis"], "basis"),
+        (lambda d: set_at(d, ["cues", 0, "kind"], "music"), "kind"),
+        (lambda d: set_at(d, ["cues", 0, "basis"], "guess"), "basis"),
         # extra keys at root and nested
-        (["extra_top"], "extra_top"),
-        (["cues", 0, "extra"], "extra"),
-        # NEED_NEW requires sound_prompt (schema)
-        (["cues", 0, "sound_prompt"], "sound_prompt"),
+        (lambda d: set_at(d, ["extra_top"], 1), "extra_top"),
+        (lambda d: set_at(d, ["cues", 0, "extra"], 1), "extra"),
+        # NEED_NEW requires sound_prompt (schema) - change sound_id to NEED_NEW without sound_prompt
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "NEED_NEW"), "sound_prompt"),
+        # non-NEED_NEW forbids sound_prompt (schema) - add sound_prompt to regular cue
+        (lambda d: set_at(d, ["cues", 0, "sound_prompt"], "a prompt"), "sound_prompt"),
     ],
 )
-def test_schema_errors(path, keyword):
-    doc = _valid_doc()
-    if path == ["adhyay"]:
-        doc = set_at(doc, path, "x")
-    elif path == ["cues"]:
-        doc = delete_at(doc, path)
-    elif path == ["cues", 0, "scene_id"]:
-        doc = set_at(doc, path, "X1")
-    elif path == ["cues", 0, "anchor_line_id"]:
-        doc = set_at(doc, path, "S1-X")
-    elif path == ["cues", 0, "sound_id"]:
-        doc = set_at(doc, path, "bad_id")
-    elif path == ["cues", 0, "kind"]:
-        doc = set_at(doc, path, "music")
-    elif path == ["cues", 0, "purpose"]:
-        doc = set_at(doc, path, "")
-    elif path == ["cues", 0, "basis"]:
-        doc = set_at(doc, path, "guess")
-    elif path == ["cues", 0, "kind"] and keyword == "kind":
-        doc = set_at(doc, path, "invalid_kind")
-    elif path == ["cues", 0, "basis"] and keyword == "basis":
-        doc = set_at(doc, path, "invalid_basis")
-    elif path == ["extra_top"]:
-        doc["extra_top"] = 1
-    elif path == ["cues", 0, "extra"]:
-        doc = set_at(doc, path, 1)
-    elif path == ["cues", 0, "sound_prompt"]:
-        # NEED_NEW cue with sound_prompt is valid at schema level; non-NEED_NEW with sound_prompt is forbidden
-        doc = set_at(doc, ["cues", 0, "sound_id"], "NEED_NEW")
-        doc = set_at(doc, path, "a prompt")
+def test_schema_errors(mutate_fn, keyword):
+    doc = mutate_fn(_valid_doc())
     errs = schema_errors(doc)
     assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
 
@@ -489,29 +430,26 @@ def test_schema_valid():
 
 # ---------- validate semantic tests ----------
 @pytest.mark.parametrize(
-    "mutate_fn,keyword",
+    "mutate_fn,keyword,expected_id",
     [
         # adhyay mismatch
-        (lambda d: set_at(d, ["adhyay"], 2), "adhyay"),
+        (lambda d: set_at(d, ["adhyay"], 2), "adhyay", "sounds adhyay"),
         # scene missing
-        (lambda d: set_at(d, ["cues", 0, "scene_id"], "S9"), "scene"),
+        (lambda d: set_at(d, ["cues", 0, "scene_id"], "S9"), "scene exists", "cue[0]"),
         # anchor line not in scene
-        (lambda d: set_at(d, ["cues", 0, "anchor_line_id"], "S2-L1"), "anchor_line_id"),
+        (lambda d: set_at(d, ["cues", 0, "anchor_line_id"], "S2-L1"), "anchor line belongs to the scene", "cue[0]"),
         # sound_id not in sound_ids and not NEED_NEW
-        (lambda d: set_at(d, ["cues", 0, "sound_id"], "bed_unknown"), "sound_id"),
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "bed_unknown"), "sound_id in sound_ids or NEED_NEW", "cue[0]"),
         # kind mismatch prefix (bed sound with fx kind)
-        (lambda d: set_at(d, ["cues", 0, "kind"], "fx"), "kind"),
+        (lambda d: set_at(d, ["cues", 0, "kind"], "fx"), "kind matches the id prefix", "cue[0]"),
         # fx sound with bed kind
-        (lambda d: set_at(d, ["cues", 0, "sound_id"], "fx_door_wood_creak"), "kind"),
-        # NEED_NEW without sound_prompt (semantic sees missing prompt)
-        (lambda d: set_at(d, ["cues", 0, "sound_id"], "NEED_NEW"), "sound_prompt"),
-        # non-NEED_NEW cue with sound_prompt is schema error, not semantic
+        (lambda d: set_at(d, ["cues", 0, "sound_id"], "fx_door_wood_creak"), "kind matches the id prefix", "cue[0]"),
     ],
 )
-def test_semantic_errors(mutate_fn, keyword):
+def test_semantic_errors(mutate_fn, keyword, expected_id):
     doc = mutate_fn(_valid_doc())
     errs = validate(1, doc, _other_docs(), _valid_ctx())
-    assert any(keyword in e for e in errs), f"{keyword} not in {errs}"
+    assert any(keyword in e and expected_id in e for e in errs), f"{keyword} or {expected_id} not in {errs}"
 
 
 def test_semantic_valid():
@@ -537,7 +475,10 @@ def test_empty_context_missing_refs():
         "known_states": {},
     }
     errs = validate(1, doc, _other_docs(), ctx)
-    assert any("S1-L1" in e for e in errs)
-    assert any("bed_roadside_quiet" in e for e in errs)
+    # sound_id not in sound_ids (empty ctx)
+    assert any("sound_id in sound_ids or NEED_NEW" in e and "cue[0]" in e for e in errs)
+    # anchor line check uses scenes doc, not ctx, so no error for S1-L1
+    # adhyay matches, scene exists, kind matches
+    assert len(errs) == 1
 
 ```

@@ -49,9 +49,25 @@ SCHEMA: dict[str, Any] = {
                         "enum": ["none", "narration_over_typography", "contemplative_hold", "symbol_from_text"],
                     },
                 },
-                "if": {"properties": {"section_kind": {"const": "discourse"}}},
-                "then": {"required": ["teaching_treatment"]},
-                "else": {"not": {"required": ["teaching_treatment"]}},
+                "allOf": [
+                    {
+                        "if": {"properties": {"section_kind": {"const": "discourse"}}},
+                        "then": {
+                            "required": ["teaching_treatment"],
+                            "properties": {
+                                "teaching_treatment": {"not": {"const": "none"}}
+                            }
+                        }
+                    },
+                    {
+                        "if": {"properties": {"section_kind": {"const": "story"}}},
+                        "then": {
+                            "properties": {
+                                "teaching_treatment": {"const": "none"}
+                            }
+                        }
+                    },
+                ],
             },
         },
     },
@@ -62,15 +78,44 @@ _validator = Draft202012Validator(SCHEMA)
 
 def schema_errors(doc: Any) -> list[str]:
     errors = []
+    if not isinstance(doc, dict):
+        errors.append("scenes doc: document must be an object")
+        return errors
     for err in _validator.iter_errors(doc):
         path = "/".join(str(p) for p in err.path) if err.path else "doc"
         errors.append(f"scenes {path}: {err.message}")
     return errors
 
 
-def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[str, Any]) -> list[str]:
+def _as_usable_list(value: Any) -> list:
+    """Convert a ctx value to a list if it's a usable collection type, else empty list."""
+    if isinstance(value, (list, tuple, set, frozenset, range)):
+        return list(value)
+    return []
+
+
+def _as_usable_set(value: Any) -> set:
+    """Convert a ctx value to a set of hashable items if it's a usable collection type, else empty set."""
+    if isinstance(value, (list, tuple, set, frozenset, range)):
+        result = set()
+        for item in value:
+            try:
+                hash(item)
+                result.add(item)
+            except TypeError:
+                pass
+        return result
+    return set()
+
+
+def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     notes: list[str] = []
+
+    # Guard: doc must be a dict
+    if not isinstance(doc, dict):
+        errors.append("scenes doc: document must be an object")
+        return errors + notes
 
     # adhyay check
     doc_adhyay = doc.get("adhyay")
@@ -81,17 +126,21 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
     if not isinstance(scenes, list):
         return errors + notes
 
-    # Convert ctx lists/sets to sets
-    script_line_ids = set(ctx.get("script_line_ids", []))
-    core_line_ids = set(ctx.get("core_line_ids", []))
-    chapter_ovis = set(ctx.get("chapter_ovis", []))
-    unfilmed_ovis = set(ctx.get("unfilmed_ovis", []))
+    # Convert ctx lists/sets to sets for membership, keep script_line_ids as list for order
+    script_line_ids_list = _as_usable_list(ctx.get("script_line_ids"))
+    script_line_ids_set = _as_usable_set(ctx.get("script_line_ids"))
+    core_line_ids = _as_usable_set(ctx.get("core_line_ids"))
+    chapter_ovis = _as_usable_set(ctx.get("chapter_ovis"))
+    unfilmed_ovis = _as_usable_set(ctx.get("unfilmed_ovis"))
+
+    # Filter chapter_ovis to only ints
+    chapter_ovis_int = {ovi for ovi in chapter_ovis if isinstance(ovi, int)}
+    chapter_ovis_sorted = sorted(chapter_ovis_int)
 
     # Track seen items
     seen_scene_ids = set()
     seen_line_ids = set()
-    all_covered_ovis = set()
-    scene_ranges = []
+    scene_ranges = []  # list of (lo, hi, scene_id)
 
     for i, scene in enumerate(scenes):
         if not isinstance(scene, dict):
@@ -103,10 +152,13 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
         line_ids = scene.get("line_ids", [])
         teaching_treatment = scene.get("teaching_treatment")
 
-        # scene ids unique
-        if scene_id in seen_scene_ids:
+        # scene ids unique - guard against unhashable
+        if not isinstance(scene_id, str):
+            errors.append(f"<scene_{i}>: scene_id must be a string")
+        elif scene_id in seen_scene_ids:
             errors.append(f"{scene_id}: duplicate scene id")
-        seen_scene_ids.add(scene_id)
+        else:
+            seen_scene_ids.add(scene_id)
 
         # ovi_range lo <= hi
         if isinstance(ovi_range, list) and len(ovi_range) == 2:
@@ -117,35 +169,38 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
                 errors.append(f"{scene_id}: ovi_range lo > hi")
             else:
                 scene_ranges.append((lo, hi, scene_id))
-                for ovi in range(lo, hi + 1):
-                    all_covered_ovis.add(ovi)
         else:
             errors.append(f"{scene_id}: invalid ovi_range")
 
-        # turn ovi inside its range
+        # turn ovi inside its range - validate bounds are ints first
         turn_ovi = turn.get("ovi") if isinstance(turn, dict) else None
         if isinstance(turn_ovi, int) and isinstance(ovi_range, list) and len(ovi_range) == 2:
             lo, hi = ovi_range[0], ovi_range[1]
-            if not (lo <= turn_ovi <= hi):
-                errors.append(f"{scene_id}: turn ovi outside range")
+            if isinstance(lo, int) and isinstance(hi, int):
+                if not (lo <= turn_ovi <= hi):
+                    errors.append(f"{scene_id}: turn ovi outside range")
 
         # line ids exist in script_line_ids, none used twice, in script order within scene
         if isinstance(line_ids, list):
             prev_idx = -1
             for line_id in line_ids:
-                if line_id not in script_line_ids:
+                if not isinstance(line_id, str):
+                    errors.append(f"{scene_id}: line_id must be a string")
+                    continue
+                if line_id not in script_line_ids_set:
                     errors.append(f"{line_id}: line is not in the script")
                 if line_id in seen_line_ids:
                     errors.append(f"{line_id}: line used in multiple scenes")
                 seen_line_ids.add(line_id)
-                # check script order within scene
+                # check script order within scene - only update prev_idx for known lines
                 try:
-                    idx = list(script_line_ids).index(line_id) if line_id in script_line_ids else -1
+                    idx = script_line_ids_list.index(line_id)
                 except ValueError:
                     idx = -1
-                if idx != -1 and idx <= prev_idx:
-                    errors.append(f"{scene_id}: line_ids not in script order")
-                prev_idx = idx
+                if idx != -1:
+                    if idx <= prev_idx:
+                        errors.append(f"{scene_id}: line_ids not in script order")
+                    prev_idx = idx
 
         # discourse scene has teaching_treatment other than none
         if section_kind == "discourse":
@@ -163,26 +218,72 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
         if hi1 >= lo2:
             errors.append(f"{id1}: ovi_range overlaps with {id2}")
 
+    # Build set of covered chapter ovis
+    all_covered_ovis = set()
+    for ovi in chapter_ovis_int:
+        for lo, hi, sid in scene_ranges:
+            if lo <= ovi <= hi:
+                all_covered_ovis.add(ovi)
+                break
+
     # every chapter ovi not unfilmed is inside a scene range
-    for ovi in chapter_ovis:
+    for ovi in chapter_ovis_int:
         if ovi in unfilmed_ovis:
             continue
         if ovi not in all_covered_ovis:
             errors.append(f"ovi {ovi}: not covered by any scene")
 
-    # unfilmed ovi inside a range is an error
+    # unfilmed ovi inside a range is an error - check directly against scene ranges
     for ovi in unfilmed_ovis:
-        if ovi in all_covered_ovis:
-            # find which scene
-            for lo, hi, sid in scene_ranges:
-                if lo <= ovi <= hi:
-                    errors.append(f"{sid}: ovi {ovi} is unfilmed but inside the range")
-                    break
+        if not isinstance(ovi, int):
+            continue
+        for lo, hi, sid in scene_ranges:
+            if lo <= ovi <= hi:
+                errors.append(f"{sid}: ovi {ovi} is unfilmed but inside the range")
+                break
 
-    # ovis outside the chapter are errors
-    for ovi in all_covered_ovis:
-        if ovi not in chapter_ovis:
-            errors.append(f"ovi {ovi}: outside chapter ovis")
+    # Check for ovis inside scene ranges that are not chapter ovis (gaps and outside)
+    # Use sorted chapter ovis to find gaps without enumerating large ranges
+    GAP_REPORT_LIMIT = 1000
+    if chapter_ovis_sorted:
+        chapter_min = chapter_ovis_sorted[0]
+        chapter_max = chapter_ovis_sorted[-1]
+        
+        for lo, hi, sid in scene_ranges:
+            # Check below chapter minimum
+            if lo < chapter_min:
+                errors.append(f"{sid}: ovi_range extends below chapter ovis")
+            
+            # Check above chapter maximum
+            if hi > chapter_max:
+                errors.append(f"{sid}: ovi_range extends above chapter ovis")
+            
+            # Effective range clipped to chapter bounds
+            eff_lo = max(lo, chapter_min)
+            eff_hi = min(hi, chapter_max)
+            
+            if eff_lo <= eff_hi:
+                # Chapter ovis that fall inside the effective range
+                inside = [o for o in chapter_ovis_sorted if eff_lo <= o <= eff_hi]
+                
+                # Boundaries: eff_lo - 1, then inside ovis, then eff_hi + 1
+                # Gaps are between consecutive boundaries where difference > 1
+                boundaries = [eff_lo - 1] + inside + [eff_hi + 1]
+                
+                for a, b in zip(boundaries, boundaries[1:]):
+                    if b - a > 1:
+                        gap_start = a + 1
+                        gap_end = b - 1
+                        gap_size = gap_end - gap_start + 1
+                        if gap_size <= GAP_REPORT_LIMIT:
+                            for g in range(gap_start, gap_end + 1):
+                                errors.append(f"ovi {g}: outside chapter ovis")
+                        else:
+                            errors.append(f"{sid}: ovi_range contains {gap_size} ovis outside chapter ovis (gap)")
+    else:
+        # No chapter ovis - any range is outside
+        for lo, hi, sid in scene_ranges:
+            errors.append(f"{sid}: ovi_range outside chapter ovis")
 
     # every core line is in a scene
     for line_id in core_line_ids:
@@ -190,3 +291,15 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
             errors.append(f"{line_id}: core line not in any scene")
 
     return errors + notes
+
+
+def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[str, Any]) -> list[str]:
+    try:
+        # Normalize inputs
+        if not isinstance(ctx, dict):
+            ctx = {}
+        if not isinstance(docs, dict):
+            docs = {}
+        return _validate_semantic(adhyay, doc, docs, ctx)
+    except (TypeError, AttributeError, KeyError, ValueError, IndexError):
+        return ["scenes: malformed structure"]

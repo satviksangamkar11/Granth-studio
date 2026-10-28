@@ -3,18 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-............F.                                                           [100%]
-================================== FAILURES ===================================
-_________________________ test_validate_duplicate_id __________________________
-tests\test_stage1_questions.py:141: in test_validate_duplicate_id
-    doc = append_at(base(), ["docs", "questions", "questions"], dup)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests\test_stage1_questions.py:95: in append_at
-    assert isinstance(parent, list)
-E   AssertionError: assert False
-E    +  where False = isinstance({'adhyay': 1, 'questions': [{'id': 'Q1', 'text': 'Which hand holds the gourd?', 'scene_id': 'S1'}]}, list)
-=========================== short test summary info ===========================
-FAILED tests/test_stage1_questions.py::test_validate_duplicate_id - Assertion...
+..............                                                           [100%]
 
 ```
 
@@ -342,8 +331,9 @@ def delete_at(base, path):
 def append_at(base, path, value):
     doc = copy.deepcopy(base)
     parent, key = get_parent(doc, path)
-    assert isinstance(parent, list)
-    parent.append(value)
+    target = parent[key] if isinstance(parent, dict) else parent[int(key)]
+    assert isinstance(target, list)
+    target.append(value)
     assert doc != base
     return doc
 

@@ -43,13 +43,16 @@ _validator = Draft202012Validator(SCHEMA)
 
 def schema_errors(doc: Any) -> list[str]:
     errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("sounds doc: document must be an object")
+        return errors
     for err in _validator.iter_errors(doc):
         path = "/".join(str(p) for p in err.path) if err.path else "doc"
         errors.append(f"sounds {path}: {err.message}")
     return errors
 
 
-def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[str, Any]) -> list[str]:
+def _validate_semantic(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[str, Any]) -> list[str]:
     messages: list[str] = []
 
     # Adhyay check
@@ -58,46 +61,76 @@ def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[s
         messages.append(f"sounds adhyay {doc_adhyay} does not match {adhyay}")
 
     # Prepare context sets
-    script_line_ids = set(ctx.get("script_line_ids", []))
-    sound_ids = set(ctx.get("sound_ids", []))
+    sound_ids = set(ctx.get("sound_ids", [])) if isinstance(ctx.get("sound_ids"), (list, set)) else set()
     scenes_doc = docs.get("scenes", {})
-    scenes_list = scenes_doc.get("scenes", [])
+    scenes_list = scenes_doc.get("scenes", []) if isinstance(scenes_doc, dict) else []
 
     # Build scene lookup
     scene_by_id: dict[str, dict[str, Any]] = {}
-    for sc in scenes_list:
-        sid = sc.get("scene_id")
-        if sid:
-            scene_by_id[sid] = sc
+    if isinstance(scenes_list, list):
+        for sc in scenes_list:
+            if not isinstance(sc, dict):
+                continue
+            sid = sc.get("scene_id")
+            if isinstance(sid, str):
+                scene_by_id[sid] = sc
 
     cues = doc.get("cues", [])
+    if not isinstance(cues, list):
+        cues = []
+
     for i, cue in enumerate(cues):
         cue_id = f"cue[{i}]"
+        if not isinstance(cue, dict):
+            messages.append(f"{cue_id}: cue must be an object")
+            continue
+
         scene_id = cue.get("scene_id")
         anchor_line_id = cue.get("anchor_line_id")
         sound_id = cue.get("sound_id")
         kind = cue.get("kind")
 
         # Scene exists
-        if scene_id not in scene_by_id:
-            messages.append(f"{cue_id}: scene '{scene_id}' does not exist")
+        if not isinstance(scene_id, str) or scene_id not in scene_by_id:
+            messages.append(f"{cue_id}: scene does not exist")
             continue
 
         scene = scene_by_id[scene_id]
 
-        # Anchor line belongs to the scene
-        scene_line_ids = set(scene.get("line_ids", []))
-        if anchor_line_id not in scene_line_ids:
-            messages.append(f"{cue_id}: anchor line '{anchor_line_id}' not in scene '{scene_id}'")
+        # Anchor line belongs to the scene - filter for string line_ids
+        if not isinstance(anchor_line_id, str):
+            messages.append(f"{cue_id}: anchor_line_id must be a string")
+        else:
+            scene_line_ids_raw = scene.get("line_ids", [])
+            scene_line_ids = set()
+            if isinstance(scene_line_ids_raw, (list, set)):
+                for lid in scene_line_ids_raw:
+                    if isinstance(lid, str):
+                        scene_line_ids.add(lid)
+            if anchor_line_id not in scene_line_ids:
+                messages.append(f"{cue_id}: anchor line not in scene")
 
         # sound_id in sound_ids or NEED_NEW
-        if sound_id != "NEED_NEW" and sound_id not in sound_ids:
-            messages.append(f"{cue_id}: sound_id '{sound_id}' not in sound_ids")
+        if not isinstance(sound_id, str):
+            messages.append(f"{cue_id}: sound_id must be a string")
+        elif sound_id != "NEED_NEW" and sound_id not in sound_ids:
+            messages.append(f"{cue_id}: sound_id not in sound_ids and not NEED_NEW")
 
-        # kind matches id prefix
-        if sound_id != "NEED_NEW":
+        # kind matches the id prefix (only for non-NEED_NEW)
+        if isinstance(sound_id, str) and sound_id != "NEED_NEW" and isinstance(kind, str):
             expected_kind = "bed" if sound_id.startswith("bed_") else "fx" if sound_id.startswith("fx_") else None
             if expected_kind and kind != expected_kind:
-                messages.append(f"{cue_id}: kind '{kind}' does not match sound_id prefix '{expected_kind}'")
+                messages.append(f"{cue_id}: kind does not match sound_id prefix")
 
     return messages
+
+
+def validate(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: dict[str, Any]) -> list[str]:
+    # Guard: doc must be a dict
+    if not isinstance(doc, dict):
+        return ["sounds doc: document must be an object"]
+
+    try:
+        return _validate_semantic(adhyay, doc, docs, ctx)
+    except (TypeError, AttributeError, KeyError, ValueError, IndexError):
+        return ["sounds: malformed structure"]

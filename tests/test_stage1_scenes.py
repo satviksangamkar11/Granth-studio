@@ -141,7 +141,6 @@ def test_schema_enum(path, value):
     (["adhyay"], 0, "adhyay"), (["adhyay"], 22, "adhyay"), (["adhyay"], "1", "adhyay"),
     (["scenes"], "x", "scenes"), (["scenes",0], "x", "scenes"),
     (["scenes",0,"scene_id"], "X1", "scene_id"), (["scenes",0,"scene_id"], "S100", "scene_id"),
-    (["scenes",0,"ovi_range"], [5,1], "ovi_range"),  # schema: minItems/maxItems/type ok, but lo>hi is semantic
     (["scenes",0,"ovi_range"], [1], "ovi_range"), (["scenes",0,"ovi_range"], [1,5,9], "ovi_range"),
     (["scenes",0,"ovi_range"], ["1",5], "ovi_range"),
     (["scenes",0,"goal"], "", "goal"), (["scenes",0,"goal"], 123, "goal"),
@@ -159,21 +158,69 @@ def test_schema_errors(path, value, keyword):
     errs = M.schema_errors(doc)
     assert any(keyword in e for e in errs), f"missing {keyword} in {errs}"
 
+# Story scene with non-"none" teaching_treatment rejected by schema
+def test_schema_story_scene_forbidden_treatment():
+    doc = set_at(base_docs()["scenes"], ["scenes",0,"teaching_treatment"], "narration_over_typography")
+    errs = M.schema_errors(doc)
+    assert any("teaching_treatment" in e for e in errs)
+
+# Story scene with "none" teaching_treatment accepted by schema
+def test_schema_story_scene_none_treatment_allowed():
+    doc = set_at(base_docs()["scenes"], ["scenes",0,"teaching_treatment"], "none")
+    errs = M.schema_errors(doc)
+    assert errs == []
+
+# Discourse scene with teaching_treatment = "none" rejected by schema (not just semantic)
+def test_schema_discourse_scene_none_treatment_rejected():
+    doc = set_at(base_docs()["scenes"], ["scenes",1,"teaching_treatment"], "none")
+    errs = M.schema_errors(doc)
+    assert any("teaching_treatment" in e for e in errs)
+
+# Discourse scene with each valid teaching_treatment accepted by schema
+@pytest.mark.parametrize("treatment", [
+    "narration_over_typography",
+    "contemplative_hold",
+    "symbol_from_text",
+])
+def test_schema_discourse_scene_valid_treatments(treatment):
+    base = base_docs()["scenes"]
+    # Ensure we actually mutate: if base already has this treatment, start from a different valid one
+    current = base["scenes"][1].get("teaching_treatment")
+    if current == treatment:
+        other = next(t for t in ["narration_over_typography", "contemplative_hold", "symbol_from_text"] if t != treatment)
+        base = set_at(base, ["scenes",1,"teaching_treatment"], other)
+    doc = set_at(base, ["scenes",1,"teaching_treatment"], treatment)
+    errs = M.schema_errors(doc)
+    assert errs == [], f"unexpected error for {treatment}: {errs}"
+
+# ovi_range item minimum 1 (schema constraint)
+def test_schema_ovi_range_minimum():
+    doc = set_at(base_docs()["scenes"], ["scenes",0,"ovi_range"], [0, 5])
+    errs = M.schema_errors(doc)
+    assert any("ovi_range" in e for e in errs)
+
 # ---------- Semantic tests ----------
 # Each row changes ONE thing; contexts stay complete unless row is about that context
 @pytest.mark.parametrize("mutate_fn,keyword,ctx_overrides", [
-    # duplicate scene_id (append real duplicate)
-    (lambda d: append_at(d, ["scenes"], copy.deepcopy(d["scenes"][0])), "S1", {}),
-    # ovi_range lo > hi
-    (lambda d: set_at(d, ["scenes",0,"ovi_range"], [5,1]), "S1", {}),
+    # duplicate scene_id (append real duplicate with non-overlapping range and no lines)
+    (lambda d: append_at(d, ["scenes"], {
+        "scene_id": "S1",
+        "section_kind": "story",
+        "ovi_range": [10, 12],
+        "goal": "dup",
+        "turn": {"ovi": 11, "text": "dup"},
+        "line_ids": [],
+    }), "S1", {}),
+    # ovi_range lo > hi (isolated: remove turn so only range check fires)
+    (lambda d: set_at(delete_at(d, ["scenes",0,"turn"]), ["scenes",0,"ovi_range"], [5,1]), "S1", {}),
     # overlapping ranges
     (lambda d: set_at(d, ["scenes",1,"ovi_range"], [4,9]), "S2", {}),
     # chapter ovi not covered (ovi 9 missing)
     (lambda d: set_at(d, ["scenes",1,"ovi_range"], [6,8]), "9", {}),
     # unfilmed ovi inside range
     (lambda d: d, "S1", {"unfilmed_ovis": {3}}),
-    # ovi outside chapter (ovi 10)
-    (lambda d: set_at(d, ["scenes",1,"ovi_range"], [6,10]), "10", {}),
+    # ovi outside chapter (ovi 10) - now checks range bounds
+    (lambda d: set_at(d, ["scenes",1,"ovi_range"], [6,10]), "S2", {}),
     # turn ovi outside range
     (lambda d: set_at(d, ["scenes",0,"turn","ovi"], 6), "S1", {}),
     # line_id not in script
@@ -198,6 +245,297 @@ def test_semantic_errors(mutate_fn, keyword, ctx_overrides):
     ctx.update(ctx_overrides)
     errs = M.validate(1, docs["scenes"], docs, ctx)
     assert any(keyword in e for e in errs), f"missing {keyword} in {errs}"
+
+# ---------- Regression tests for crash cases ----------
+def test_validate_odd_data_no_raise():
+    """validate() must never raise on any JSON-shaped input."""
+    # non-dict doc
+    errs = M.validate(1, None, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    errs = M.validate(1, "not a dict", {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    errs = M.validate(1, [], {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # scenes not a list
+    errs = M.validate(1, {"adhyay": 1, "scenes": "not a list"}, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # scene not a dict
+    errs = M.validate(1, {"adhyay": 1, "scenes": ["not a dict"]}, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # unhashable scene_id
+    errs = M.validate(1, {"adhyay": 1, "scenes": [{"scene_id": ["S1"], "section_kind": "story", "ovi_range": [1,5], "goal": "g", "turn": {"ovi": 1, "text": "t"}, "line_ids": []}]}, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # unhashable line_id
+    errs = M.validate(1, {"adhyay": 1, "scenes": [{"scene_id": "S1", "section_kind": "story", "ovi_range": [1,5], "goal": "g", "turn": {"ovi": 1, "text": "t"}, "line_ids": [["S1-L1"]]}]}, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # non-int ovi_range bounds
+    errs = M.validate(1, {"adhyay": 1, "scenes": [{"scene_id": "S1", "section_kind": "story", "ovi_range": ["a", 5], "goal": "g", "turn": {"ovi": 1, "text": "t"}, "line_ids": []}]}, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # turn ovi with non-int bounds
+    errs = M.validate(1, {"adhyay": 1, "scenes": [{"scene_id": "S1", "section_kind": "story", "ovi_range": ["1", 5], "goal": "g", "turn": {"ovi": 3, "text": "t"}, "line_ids": []}]}, {}, {})
+    assert isinstance(errs, list) and not any("malformed structure" in e for e in errs)
+    # unknown line id doesn't break order check
+    ctx = base_ctx()
+    docs = base_docs()
+    docs["scenes"] = set_at(docs["scenes"], ["scenes",0,"line_ids"], ["S1-L2", "S9-L9", "S1-L1"])
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should report both unknown line and order error
+    assert any("S9-L9" in e for e in errs)
+    # order error should be separate from unknown line error
+    assert any("S1" in e and "S9-L9" not in e for e in errs)
+
+def test_schema_errors_odd_data_no_raise():
+    """schema_errors() must never raise on any JSON-shaped input."""
+    assert isinstance(M.schema_errors(None), list)
+    assert isinstance(M.schema_errors("not a dict"), list)
+    assert isinstance(M.schema_errors([]), list)
+    assert isinstance(M.schema_errors({"adhyay": 1, "scenes": "not a list"}), list)
+
+# ---------- Context robustness tests ----------
+# For each ctx key used by this unit, test that None, str, int, and [[]] don't raise
+# and don't produce 'malformed structure' messages.
+CTX_KEYS_USED = ["script_line_ids", "core_line_ids", "chapter_ovis", "unfilmed_ovis"]
+BAD_VALUES = [None, "not a list", 42, [[]]]
+
+@pytest.mark.parametrize("key", CTX_KEYS_USED)
+@pytest.mark.parametrize("bad_val", BAD_VALUES)
+def test_validate_ctx_robustness(key, bad_val):
+    """validate() handles non-collection ctx values gracefully."""
+    docs = base_docs()
+    ctx = base_ctx()
+    ctx[key] = bad_val
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert isinstance(errs, list)
+    assert not any("malformed structure" in e for e in errs)
+
+# ---------- Catch-all wrapper tests ----------
+def test_validate_ctx_none_returns_list():
+    """validate() with ctx=None returns a list, no exception."""
+    docs = base_docs()
+    errs = M.validate(1, docs["scenes"], docs, None)
+    assert isinstance(errs, list)
+
+def test_validate_ctx_str_returns_list():
+    """validate() with ctx='x' returns a list, no exception."""
+    docs = base_docs()
+    errs = M.validate(1, docs["scenes"], docs, "x")
+    assert isinstance(errs, list)
+
+def test_validate_docs_none_returns_list():
+    """validate() with docs=None returns a list, no exception."""
+    docs = base_docs()
+    errs = M.validate(1, docs["scenes"], None, base_ctx())
+    assert isinstance(errs, list)
+
+# ---------- Huge range regression tests ----------
+def test_validate_huge_ovi_range_returns_quickly():
+    """validate() with huge ovi_range returns quickly without enumerating."""
+    docs = base_docs()
+    # Range far beyond chapter ovis
+    docs["scenes"] = set_at(docs["scenes"], ["scenes", 0, "ovi_range"], [1, 10**12])
+    docs["scenes"] = set_at(docs["scenes"], ["scenes", 1, "ovi_range"], [6, 10**12])
+    ctx = base_ctx()
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert isinstance(errs, list)
+    # Should report range extends above chapter ovis
+    assert any("extends above chapter ovis" in e for e in errs)
+
+def test_validate_negative_huge_ovi_range_returns_quickly():
+    """validate() with negative huge ovi_range returns quickly."""
+    docs = base_docs()
+    docs["scenes"] = set_at(docs["scenes"], ["scenes", 0, "ovi_range"], [-10**12, 10**12])
+    ctx = base_ctx()
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert isinstance(errs, list)
+    # Should report range extends below and above chapter ovis
+    assert any("extends below chapter ovis" in e for e in errs)
+    assert any("extends above chapter ovis" in e for e in errs)
+
+# ---------- Gap in chapter ovis regression test ----------
+def test_validate_gap_in_chapter_ovis_reported():
+    """validate() reports ovis inside scene range that are not in chapter_ovis (gap)."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Remove ovi 7 from chapter_ovis, creating a gap
+    ctx["chapter_ovis"] = {1,2,3,4,5,6,8,9}
+    # S2 range [6,9] contains ovi 7 which is not a chapter ovi
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert any("ovi 7: outside chapter ovis" in e for e in errs), f"missing gap error in {errs}"
+
+# ---------- Unfilmed ovi inside range but not in chapter regression test ----------
+def test_validate_unfilmed_ovi_inside_range_not_in_chapter():
+    """validate() reports unfilmed ovi inside scene range even when not a chapter ovi."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Add unfilmed ovi 10, extend S2 range to [6,10]
+    ctx["unfilmed_ovis"] = {10}
+    docs["scenes"] = set_at(docs["scenes"], ["scenes", 1, "ovi_range"], [6, 10])
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should report unfilmed ovi 10 inside S2 range
+    assert any("S2: ovi 10 is unfilmed but inside the range" in e for e in errs), f"missing unfilmed error in {errs}"
+
+# ---------- Sparse chapter ovis regression test (Class 1 bug fix) ----------
+def test_validate_sparse_chapter_ovis_no_false_gaps():
+    """validate() does not report false gaps when chapter_ovis is sparse and scene covers only filmed ovi."""
+    docs = copy.deepcopy(base_docs())
+    ctx = copy.deepcopy(base_ctx())
+    # Sparse chapter ovis: 1,2,3,4,6,7,8,9 (ovi 5 missing)
+    ctx["chapter_ovis"] = {1,2,3,4,6,7,8,9}
+    ctx["unfilmed_ovis"] = set()
+    # Adjust scene ranges: S1 covers [1,4], S2 covers [6,9] - no gap inside any range
+    docs["scenes"]["scenes"][0]["ovi_range"] = [1, 4]
+    # S2 stays [6, 9] (baseline value)
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should NOT report ovi 5 as "outside chapter ovis" because it's not in any scene range
+    outside_errors = [e for e in errs if "outside chapter ovis" in e]
+    assert not outside_errors, f"unexpected outside chapter ovis errors: {outside_errors}"
+    # Should have no errors at all for this valid setup
+    assert errs == [], f"unexpected errors: {errs}"
+
+def test_validate_gap_inside_range_reported():
+    """validate() reports gap when chapter_ovis has a hole inside a scene range."""
+    docs = copy.deepcopy(base_docs())
+    ctx = copy.deepcopy(base_ctx())
+    # Chapter ovis: 1,2,3,4,5,6,8,9 (ovi 7 missing) - BASE ranges [1,5] and [6,9]
+    ctx["chapter_ovis"] = {1,2,3,4,5,6,8,9}
+    ctx["unfilmed_ovis"] = set()
+    # S2 range [6,9] contains ovi 7 which is not a chapter ovi
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert any("ovi 7: outside chapter ovis" in e for e in errs), f"missing gap error in {errs}"
+
+# ---------- Additional gap regression tests ----------
+def test_validate_dense_chapter_ovis_no_gaps():
+    """validate() reports no gaps when chapter_ovis is dense and scene range matches."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Dense chapter ovis 1-10, scene range [3,8] - all covered, no gaps
+    ctx["chapter_ovis"] = set(range(1, 11))
+    docs["scenes"] = {
+        "adhyay": 1,
+        "scenes": [
+            {
+                "scene_id": "S1",
+                "section_kind": "story",
+                "ovi_range": [3, 8],
+                "goal": "middle",
+                "turn": {"ovi": 5, "text": "middle"},
+                "line_ids": [],
+            }
+        ],
+    }
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    outside_errors = [e for e in errs if "outside chapter ovis" in e]
+    assert not outside_errors, f"unexpected outside chapter ovis errors: {outside_errors}"
+
+def test_validate_gap_at_start_of_range():
+    """validate() reports gap at start of effective range."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Chapter ovis: 1,2,3, 6,7,8 (gap 4,5)
+    ctx["chapter_ovis"] = {1,2,3,6,7,8}
+    # Scene range [2,7] - effective range [2,7], inside ovis [2,3,6,7]
+    # Gaps: between 3 and 6 -> 4,5
+    docs["scenes"] = {
+        "adhyay": 1,
+        "scenes": [
+            {
+                "scene_id": "S1",
+                "section_kind": "story",
+                "ovi_range": [2, 7],
+                "goal": "test",
+                "turn": {"ovi": 3, "text": "test"},
+                "line_ids": [],
+            }
+        ],
+    }
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert any("ovi 4: outside chapter ovis" in e for e in errs)
+    assert any("ovi 5: outside chapter ovis" in e for e in errs)
+
+def test_validate_gap_at_end_of_range():
+    """validate() reports gap at end of effective range."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Chapter ovis: 1,2,3, 6,7,8 (gap 4,5)
+    ctx["chapter_ovis"] = {1,2,3,6,7,8}
+    # Scene range [3,8] - effective range [3,8], inside ovis [3,6,7,8]
+    # Gaps: between 3 and 6 -> 4,5
+    docs["scenes"] = {
+        "adhyay": 1,
+        "scenes": [
+            {
+                "scene_id": "S1",
+                "section_kind": "story",
+                "ovi_range": [3, 8],
+                "goal": "test",
+                "turn": {"ovi": 6, "text": "test"},
+                "line_ids": [],
+            }
+        ],
+    }
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    assert any("ovi 4: outside chapter ovis" in e for e in errs)
+    assert any("ovi 5: outside chapter ovis" in e for e in errs)
+
+def test_validate_gap_before_first_inside():
+    """validate() reports gap before first inside ovi when range starts before it."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Chapter ovis: 5,6,7,8
+    ctx["chapter_ovis"] = {5,6,7,8}
+    # Scene range [2,8] - effective range [5,8] (clipped to chapter_min=5)
+    # Inside ovis: [5,6,7,8]
+    # Gap before first inside: eff_lo=5, first inside=5 -> no gap
+    # But range extends below chapter ovis (2 < 5)
+    docs["scenes"] = {
+        "adhyay": 1,
+        "scenes": [
+            {
+                "scene_id": "S1",
+                "section_kind": "story",
+                "ovi_range": [2, 8],
+                "goal": "test",
+                "turn": {"ovi": 6, "text": "test"},
+                "line_ids": [],
+            }
+        ],
+    }
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should report extends below
+    assert any("extends below chapter ovis" in e for e in errs)
+    # No outside chapter ovis errors since no gaps inside effective range
+    outside_errors = [e for e in errs if "outside chapter ovis" in e]
+    assert not outside_errors, f"unexpected outside chapter ovis errors: {outside_errors}"
+
+def test_validate_gap_after_last_inside():
+    """validate() reports gap after last inside ovi when range ends after it."""
+    docs = base_docs()
+    ctx = base_ctx()
+    # Chapter ovis: 1,2,3,4
+    ctx["chapter_ovis"] = {1,2,3,4}
+    # Scene range [1,7] - effective range [1,4] (clipped to chapter_max=4)
+    # Inside ovis: [1,2,3,4]
+    # Gap after last inside: last inside=4, eff_hi=4 -> no gap
+    # But range extends above chapter ovis (7 > 4)
+    docs["scenes"] = {
+        "adhyay": 1,
+        "scenes": [
+            {
+                "scene_id": "S1",
+                "section_kind": "story",
+                "ovi_range": [1, 7],
+                "goal": "test",
+                "turn": {"ovi": 2, "text": "test"},
+                "line_ids": [],
+            }
+        ],
+    }
+    errs = M.validate(1, docs["scenes"], docs, ctx)
+    # Should report extends above
+    assert any("extends above chapter ovis" in e for e in errs)
+    # No outside chapter ovis errors since no gaps inside effective range
+    outside_errors = [e for e in errs if "outside chapter ovis" in e]
+    assert not outside_errors, f"unexpected outside chapter ovis errors: {outside_errors}"
 
 # ---------- Positive ----------
 def test_valid():

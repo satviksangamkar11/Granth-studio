@@ -44,7 +44,7 @@ def schema_errors(doc) -> list[str]:
     return errors
 
 
-def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
+def _validate_impl(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
     messages = []
 
     # Adhyay check
@@ -56,12 +56,46 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
     speaking_characters = set(ctx.get("speaking_characters", []))
     saved_voices = ctx.get("saved_voices", {})
 
-    cast = doc.get("cast", [])
+    # Handle cast safely - validate structure
+    cast_raw = doc.get("cast")
+    if not isinstance(cast_raw, list):
+        messages.append("cast: must be a list")
+        cast = []
+    else:
+        cast = []
+        for i, entry in enumerate(cast_raw):
+            if not isinstance(entry, dict):
+                messages.append(f"cast[{i}]: must be an object")
+                continue
+            # Check required fields
+            for field in ["character_id", "voice_key", "voice_id", "gender", "status"]:
+                if field not in entry:
+                    messages.append(f"cast[{i}].{field}: required field missing")
+            # Check types
+            if "character_id" in entry and not isinstance(entry["character_id"], str):
+                messages.append(f"cast[{i}].character_id: must be string")
+            if "voice_key" in entry and not isinstance(entry["voice_key"], str):
+                messages.append(f"cast[{i}].voice_key: must be string")
+            if "voice_id" in entry and not isinstance(entry["voice_id"], str):
+                messages.append(f"cast[{i}].voice_id: must be string")
+            if "gender" in entry and not isinstance(entry["gender"], str):
+                messages.append(f"cast[{i}].gender: must be string")
+            if "status" in entry and not isinstance(entry["status"], str):
+                messages.append(f"cast[{i}].status: must be string")
+            # Only add to cast if it has all required fields with correct types
+            if (isinstance(entry.get("character_id"), str) and
+                isinstance(entry.get("voice_key"), str) and
+                isinstance(entry.get("voice_id"), str) and
+                isinstance(entry.get("gender"), str) and
+                isinstance(entry.get("status"), str)):
+                cast.append(entry)
 
     # Build lookup: character_id -> list of entries
     char_entries = {}
     for entry in cast:
         cid = entry.get("character_id")
+        if not isinstance(cid, str):
+            continue
         if cid not in char_entries:
             char_entries[cid] = []
         char_entries[cid].append(entry)
@@ -72,19 +106,21 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
         if len(entries) == 0:
             messages.append(f"{char}: no voice assigned")
         elif len(entries) > 1:
-            # Check if any is RECURRING - but the rule says "a character already RECURRING must not be listed twice"
-            # This means if a character has multiple entries and any is RECURRING, it's an error
-            for e in entries:
-                if e.get("status") == "RECURRING":
-                    messages.append(f"{char}: recurring character listed twice")
-                    break
+            messages.append(f"{char}: listed more than once")
+
+    # Rule: a character already RECURRING must not be listed twice (any status combination)
+    for char, entries in char_entries.items():
+        if len(entries) > 1 and any(e.get("status") == "RECURRING" for e in entries):
+            messages.append(f"{char}: recurring character listed twice")
 
     # Rule: voice_key must be in saved_voices and voice_id must match
     for entry in cast:
         char = entry.get("character_id")
+        if not isinstance(char, str):
+            continue
         vkey = entry.get("voice_key")
         vid = entry.get("voice_id")
-        if vkey not in saved_voices:
+        if not isinstance(vkey, str) or vkey not in saved_voices:
             messages.append(f"{char}: voice not in the saved cast")
         elif saved_voices[vkey] != vid:
             messages.append(f"{char}: voice not in the saved cast")
@@ -94,16 +130,27 @@ def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
     for entry in cast:
         vkey = entry.get("voice_key")
         char = entry.get("character_id")
+        if not isinstance(vkey, str) or not isinstance(char, str):
+            continue
         if vkey not in voice_key_to_chars:
-            voice_key_to_chars[vkey] = []
-        voice_key_to_chars[vkey].append(char)
+            voice_key_to_chars[vkey] = set()
+        voice_key_to_chars[vkey].add(char)
 
     for vkey, chars in voice_key_to_chars.items():
-        if len(chars) > 1:
-            # Check if one is narrator
-            if "narrator" not in chars:
-                # Report for each character sharing the key
-                for char in chars:
-                    messages.append(f"{char}: voice key shared with another character")
+        # Get unique non-narrator characters sharing this key
+        non_narrator_chars = [c for c in chars if c != "narrator"]
+        if len(non_narrator_chars) > 1:
+            # Multiple different non-narrator characters share this key - error for each
+            for char in non_narrator_chars:
+                messages.append(f"{char}: voice key shared with another character")
 
     return messages
+
+
+def validate(adhyay: int, doc: dict, docs: dict, ctx: dict) -> list[str]:
+    try:
+        if not isinstance(doc, dict):
+            return ["voices doc: document must be an object"]
+        return _validate_impl(adhyay, doc, docs, ctx)
+    except (TypeError, AttributeError, KeyError, ValueError, IndexError):
+        return ["voices: malformed structure"]

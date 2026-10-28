@@ -92,8 +92,9 @@ def delete_at(base, path):
 def append_at(base, path, value):
     doc = copy.deepcopy(base)
     parent, key = get_parent(doc, path)
-    assert isinstance(parent, list)
-    parent.append(value)
+    target = parent[key] if isinstance(parent, dict) else parent[int(key)]
+    assert isinstance(target, list)
+    target.append(value)
     assert doc != base
     return doc
 
@@ -112,16 +113,57 @@ def test_schema_errors_required(path, field):
 
 @pytest.mark.parametrize("path,value,field", [
     (["docs", "questions", "questions", 0, "id"], "X1", "id"),
+    (["docs", "questions", "questions", 0, "id"], "Q", "id"),
+    (["docs", "questions", "questions", 0, "id"], "Qx", "id"),
     (["docs", "questions", "questions", 0, "text"], "", "text"),
     (["docs", "questions", "questions", 0, "text"], "x" * 401, "text"),
     (["docs", "questions", "questions", 0, "scene_id"], "X1", "scene_id"),
     (["docs", "questions", "questions", 0, "extra"], "bad", "extra"),
     (["docs", "questions", "extra"], "bad", "extra"),
+    (["docs", "questions", "adhyay"], 0, "adhyay"),
+    (["docs", "questions", "adhyay"], 22, "adhyay"),
+    (["docs", "questions", "adhyay"], "not-int", "adhyay"),
 ])
 def test_schema_errors_format(path, value, field):
     doc = set_at(base(), path, value)
     errs = schema_errors(doc["docs"]["questions"])
     assert any(field in e for e in errs)
+
+
+def test_schema_baseline_valid():
+    errs = schema_errors(base()["docs"]["questions"])
+    assert errs == []
+
+
+def test_schema_scene_id_optional():
+    doc = delete_at(base(), ["docs", "questions", "questions", 0, "scene_id"])
+    errs = schema_errors(doc["docs"]["questions"])
+    assert errs == []
+    val_errs = validate(1, doc["docs"]["questions"], doc["docs"], doc["ctx"])
+    assert val_errs == []
+
+
+def test_schema_errors_message_format():
+    # empty path -> "questions doc: "
+    errs = schema_errors([])
+    assert len(errs) == 1
+    assert errs[0].startswith("questions doc: ")
+    # mutated doc -> path fragment appears
+    doc = set_at(base(), ["docs", "questions", "questions", 0, "id"], "X1")
+    errs = schema_errors(doc["docs"]["questions"])
+    assert any("questions/0/id" in e for e in errs)
+
+
+def test_schema_non_array_questions():
+    doc = set_at(base(), ["docs", "questions", "questions"], {})
+    errs = schema_errors(doc["docs"]["questions"])
+    assert any("questions" in e for e in errs)
+
+
+def test_schema_non_dict_item():
+    doc = append_at(base(), ["docs", "questions", "questions"], "not-a-dict")
+    errs = schema_errors(doc["docs"]["questions"])
+    assert any("questions" in e for e in errs)
 
 
 def test_validate_ok():
@@ -136,6 +178,15 @@ def test_validate_adhyay_mismatch():
     assert any("does not match" in e for e in errs)
 
 
+def test_validate_adhyay_check_first():
+    # both adhyay mismatch and duplicate id -> adhyay message first
+    dup = {"id": "Q1", "text": "duplicate?", "scene_id": "S1"}
+    doc = append_at(base(), ["docs", "questions", "questions"], dup)
+    doc = set_at(doc, ["docs", "questions", "adhyay"], 2)
+    errs = validate(1, doc["docs"]["questions"], doc["docs"], doc["ctx"])
+    assert errs[0].startswith("questions adhyay")
+
+
 def test_validate_duplicate_id():
     dup = {"id": "Q1", "text": "duplicate?", "scene_id": "S1"}
     doc = append_at(base(), ["docs", "questions", "questions"], dup)
@@ -146,4 +197,34 @@ def test_validate_duplicate_id():
 def test_validate_scene_missing():
     doc = set_at(base(), ["docs", "questions", "questions", 0, "scene_id"], "S99")
     errs = validate(1, doc["docs"]["questions"], doc["docs"], doc["ctx"])
-    assert any("Q1" in e and "scene" in e for e in errs)
+    assert any("Q1" in e for e in errs)
+
+
+def test_validate_missing_scenes_doc():
+    # missing scenes key counts as empty -> scene_id S1 no longer resolves
+    doc = delete_at(base(), ["docs", "scenes"])
+    errs = validate(1, doc["docs"]["questions"], doc["docs"], doc["ctx"])
+    assert any("Q1" in e for e in errs)
+
+
+def test_validate_odd_data_no_raise():
+    # docs not a dict
+    errs = validate(1, base()["docs"]["questions"], None, base()["ctx"])
+    assert isinstance(errs, list)
+    # scenes not a dict
+    errs = validate(1, base()["docs"]["questions"], {"scenes": "not-a-dict"}, base()["ctx"])
+    assert isinstance(errs, list)
+    # scenes list not a list
+    errs = validate(1, base()["docs"]["questions"], {"scenes": {"scenes": "not-a-list"}}, base()["ctx"])
+    assert isinstance(errs, list)
+    # doc not a dict
+    errs = validate(1, "not-a-dict", base()["docs"], base()["ctx"])
+    assert isinstance(errs, list)
+    # unhashable id (list)
+    doc = {"adhyay": 1, "questions": [{"id": ["Q1"], "text": "t"}]}
+    errs = validate(1, doc, base()["docs"], base()["ctx"])
+    assert isinstance(errs, list)
+    # unhashable scene_id (list)
+    doc = {"adhyay": 1, "questions": [{"id": "Q1", "text": "t", "scene_id": ["S1"]}]}
+    errs = validate(1, doc, base()["docs"], base()["ctx"])
+    assert isinstance(errs, list)

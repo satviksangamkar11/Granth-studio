@@ -3,78 +3,7 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-.................................FFF..........FFFFFFFF.                  [100%]
-================================== FAILURES ===================================
-_________________ test_schema_errors[path33-<lambda>-camera] __________________
-tests\test_stage1_briefs.py:239: in test_schema_errors
-    assert any(field in e for e in errs), f"field {field} not in {errs}"
-E   AssertionError: field camera not in []
-E   assert False
-E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000001D884E6E740>)
-__________________ test_schema_errors[path34-<lambda>-light] __________________
-tests\test_stage1_briefs.py:239: in test_schema_errors
-    assert any(field in e for e in errs), f"field {field} not in {errs}"
-E   AssertionError: field light not in []
-E   assert False
-E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000001D884CEA400>)
-_______________ test_schema_errors[path35-<lambda>-reason_new] ________________
-tests\test_stage1_briefs.py:239: in test_schema_errors
-    assert any(field in e for e in errs), f"field {field} not in {errs}"
-E   AssertionError: field reason_new not in []
-E   assert False
-E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000001D884F20FB0>)
-____________ test_semantic_errors[adhyay mismatch-<lambda>-adhyay] ____________
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-_ test_semantic_errors[duplicate image_id-<lambda>-unique with scene prefix] __
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-_ test_semantic_errors[image_id prefix mismatch-<lambda>-unique with scene prefix] _
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-______ test_semantic_errors[scene does not exist-<lambda>-scene exists] _______
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-_ test_semantic_errors[shot_ids not in same scene-<lambda>-shot_ids exist and belong to the same scene] _
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-_ test_semantic_errors[shot_id does not exist-<lambda>-shot_ids exist and belong to the same scene] _
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-_______ test_semantic_errors[people empty name-<lambda>-no empty name] ________
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-_______ test_semantic_errors[on_screen_facts empty-<lambda>-non-empty] ________
-tests\test_stage1_briefs.py:283: in test_semantic_errors
-    errs = briefs.validate(1, docs["briefs"], docs, ctx)
-                              ^^^^^^^^^^^^^^
-E   KeyError: 'briefs'
-=========================== short test summary info ===========================
-FAILED tests/test_stage1_briefs.py::test_schema_errors[path33-<lambda>-camera]
-FAILED tests/test_stage1_briefs.py::test_schema_errors[path34-<lambda>-light]
-FAILED tests/test_stage1_briefs.py::test_schema_errors[path35-<lambda>-reason_new]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[adhyay mismatch-<lambda>-adhyay]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[duplicate image_id-<lambda>-unique with scene prefix]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[image_id prefix mismatch-<lambda>-unique with scene prefix]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[scene does not exist-<lambda>-scene exists]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[shot_ids not in same scene-<lambda>-shot_ids exist and belong to the same scene]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[shot_id does not exist-<lambda>-shot_ids exist and belong to the same scene]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[people empty name-<lambda>-no empty name]
-FAILED tests/test_stage1_briefs.py::test_semantic_errors[on_screen_facts empty-<lambda>-non-empty]
+.......................................................                  [100%]
 
 ```
 
@@ -362,9 +291,9 @@ SCHEMA: dict[str, Any] = {
                     "place_id": {"type": "string"},
                     "prop": {"type": ["string", "null"], "maxLength": 400},
                     "prop_state": {"type": ["string", "null"], "maxLength": 400},
-                    "camera": {"type": "string"},
-                    "light": {"type": "string"},
-                    "reason_new": {"type": "string"},
+                    "camera": {"type": "string", "minLength": 1},
+                    "light": {"type": "string", "minLength": 1},
+                    "reason_new": {"type": "string", "minLength": 1},
                     "on_screen_facts": {
                         "type": "array",
                         "items": {"type": "string", "minLength": 1, "maxLength": 400},
@@ -437,7 +366,7 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
             continue
 
         if img_id in seen_image_ids:
-            messages.append(f"{img_id}: duplicate image_id")
+            messages.append(f"{img_id}: unique with scene prefix")
         seen_image_ids.add(img_id)
 
         scene_id = img.get("scene_id")
@@ -446,18 +375,18 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
             if m:
                 expected_prefix = f"s{int(m.group(1))}_"
                 if not img_id.startswith(expected_prefix):
-                    messages.append(f"{img_id}: image_id must start with scene prefix {expected_prefix}")
+                    messages.append(f"{img_id}: unique with scene prefix")
 
         if scene_id and scene_id not in scene_ids:
-            messages.append(f"{img_id}: scene {scene_id} does not exist")
+            messages.append(f"{img_id}: scene exists")
 
         shot_ids = img.get("shot_ids", [])
         if isinstance(shot_ids, list):
             for sid in shot_ids:
                 if sid not in shot_map:
-                    messages.append(f"{img_id}: shot {sid} does not exist")
+                    messages.append(f"{img_id}: shot_ids exist and belong to the same scene")
                 elif shot_map[sid] != scene_id:
-                    messages.append(f"{img_id}: shot {sid} belongs to scene {shot_map[sid]}, not {scene_id}")
+                    messages.append(f"{img_id}: shot_ids exist and belong to the same scene")
 
         people = img.get("people", [])
         if isinstance(people, list):
@@ -465,11 +394,11 @@ def validate(adhyay: int, doc: Any, docs: dict[str, Any], ctx: dict[str, Any]) -
                 if isinstance(p, dict):
                     name = p.get("name")
                     if not name or not isinstance(name, str) or name.strip() == "":
-                        messages.append(f"{img_id}: people[{i}] name is empty")
+                        messages.append(f"{img_id}: no empty name")
 
         on_screen_facts = img.get("on_screen_facts", [])
         if not isinstance(on_screen_facts, list) or len(on_screen_facts) == 0:
-            messages.append(f"{img_id}: on_screen_facts must be non-empty")
+            messages.append(f"{img_id}: non-empty")
 
     return messages + notes
 
@@ -719,14 +648,14 @@ def test_schema_errors(path, mutate, field):
 
 
 # ---- Semantic error cases ----
-# Each case: (description, mutate_fn, expected_keyword_in_message)
+# Each case: (description, mutate_fn, expected_keyword_in_message, expected_item_id)
 # mutate_fn takes (docs, ctx) and returns mutated (docs, ctx)
 SEMANTIC_CASES = [
     # adhyay mismatch
-    ("adhyay mismatch", lambda docs, ctx: (set_at(docs["briefs"], ["adhyay"], 2), ctx), "adhyay"),
+    ("adhyay mismatch", lambda docs, ctx: (set_at(docs, ["briefs", "adhyay"], 2), ctx), "adhyay", "briefs"),
     # duplicate image_id (same scene prefix)
     ("duplicate image_id", lambda docs, ctx: (
-        append_at(docs["briefs"], ["images"], {
+        append_at(docs, ["briefs", "images"], {
             "image_id": "s1_maharaj_seated",
             "scene_id": "S1",
             "shot_ids": ["S1-2"],
@@ -739,28 +668,29 @@ SEMANTIC_CASES = [
             "reason_new": "new",
             "on_screen_facts": ["x"],
             "references": {"characters": [], "place": "roadside", "style_anchor": "ref", "prop": None},
-        }), ctx), "unique with scene prefix"),
+        }), ctx), "unique with scene prefix", "s1_maharaj_seated"),
     # image_id prefix mismatch (scene S1 -> s1_)
-    ("image_id prefix mismatch", lambda docs, ctx: (set_at(docs["briefs"], ["images", 0, "image_id"], "s2_wrong"), ctx), "unique with scene prefix"),
-    # scene does not exist
-    ("scene does not exist", lambda docs, ctx: (set_at(docs["briefs"], ["images", 0, "scene_id"], "S99"), ctx), "scene exists"),
+    ("image_id prefix mismatch", lambda docs, ctx: (set_at(docs, ["briefs", "images", 0, "image_id"], "s2_wrong"), ctx), "unique with scene prefix", "s2_wrong"),
+    # scene does not exist (use consistent image_id prefix for non-existent scene S99)
+    ("scene does not exist", lambda docs, ctx: (set_at(set_at(docs, ["briefs", "images", 0, "scene_id"], "S99"), ["briefs", "images", 0, "image_id"], "s99_test"), ctx), "scene exists", "s99_test"),
     # shot_ids not in same scene
-    ("shot_ids not in same scene", lambda docs, ctx: (set_at(docs["briefs"], ["images", 0, "shot_ids"], ["S2-1"]), ctx), "shot_ids exist and belong to the same scene"),
+    ("shot_ids not in same scene", lambda docs, ctx: (set_at(docs, ["briefs", "images", 0, "shot_ids"], ["S2-1"]), ctx), "shot_ids exist and belong to the same scene", "s1_maharaj_seated"),
     # shot_id does not exist
-    ("shot_id does not exist", lambda docs, ctx: (set_at(docs["briefs"], ["images", 0, "shot_ids"], ["S9-9"]), ctx), "shot_ids exist and belong to the same scene"),
+    ("shot_id does not exist", lambda docs, ctx: (set_at(docs, ["briefs", "images", 0, "shot_ids"], ["S9-9"]), ctx), "shot_ids exist and belong to the same scene", "s1_maharaj_seated"),
     # people empty name
-    ("people empty name", lambda docs, ctx: (set_at(docs["briefs"], ["images", 0, "people", 0, "name"], ""), ctx), "no empty name"),
+    ("people empty name", lambda docs, ctx: (set_at(docs, ["briefs", "images", 0, "people", 0, "name"], ""), ctx), "no empty name", "s1_maharaj_seated"),
     # on_screen_facts empty
-    ("on_screen_facts empty", lambda docs, ctx: (set_at(docs["briefs"], ["images", 0, "on_screen_facts"], []), ctx), "non-empty"),
+    ("on_screen_facts empty", lambda docs, ctx: (set_at(docs, ["briefs", "images", 0, "on_screen_facts"], []), ctx), "non-empty", "s1_maharaj_seated"),
 ]
 
 
-@pytest.mark.parametrize("desc,mutate,keyword", SEMANTIC_CASES)
-def test_semantic_errors(desc, mutate, keyword):
+@pytest.mark.parametrize("desc,mutate,keyword,item_id", SEMANTIC_CASES)
+def test_semantic_errors(desc, mutate, keyword, item_id):
     b = base()
     docs, ctx = mutate(b["docs"], b["ctx"])
     errs = briefs.validate(1, docs["briefs"], docs, ctx)
-    # For rules with quoted phrase, assert that phrase; for adhyay, assert "adhyay"
+    # Assert item id and quoted keyword from spec
+    assert any(item_id in e for e in errs), f"{desc}: item_id '{item_id}' not in {errs}"
     assert any(keyword in e for e in errs), f"{desc}: keyword '{keyword}' not in {errs}"
 
 

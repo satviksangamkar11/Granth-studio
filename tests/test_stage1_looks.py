@@ -1,7 +1,8 @@
 import copy
-import pytest
-from pathlib import Path
 import importlib.util
+from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "scripts" / "pipeline" / "stage1" / "looks.py"
@@ -110,6 +111,9 @@ SCHEMA_CASES = [
     ("look_too_long", ["docs", "looks", "entries", 0, "look"], "x" * 401, "look"),
     ("extra_root_field", ["docs", "looks", "extra"], "x", "extra"),
     ("extra_entry_field", ["docs", "looks", "entries", 0, "extra"], "x", "extra"),
+    # schema-valid enum values for kind
+    ("kind_place", ["docs", "looks", "entries", 0, "kind"], "place", []),
+    ("kind_prop", ["docs", "looks", "entries", 0, "kind"], "prop", []),
 ]
 
 
@@ -133,7 +137,16 @@ SEMANTIC_CASES = [
     ("adhyay_mismatch", ["docs", "looks", "adhyay"], 2, "adhyay"),
     ("source_ovi_unknown", ["docs", "looks", "entries", 0, "source_ovis"], [99], "gajanan_maharaj"),
     ("known_state_redecided", ["docs", "looks", "entries", 0, "state_id"], "adult_youth_v1", "redecided"),
-    ("duplicate_entity_state", ["docs", "looks", "entries", 1, "entity_id"], "gajanan_maharaj", "gajanan_maharaj"),
+    # real duplicate pair: entry 1 becomes an exact copy of entry 0
+    # -> (gajanan_maharaj, adult_youth_v2) appears twice
+    (
+        "duplicate_entity_state",
+        ["docs", "looks", "entries", 1],
+        copy.deepcopy(BASE_DOCS["looks"]["entries"][0]),
+        "gajanan_maharaj",
+    ),
+    # same state_id on a DIFFERENT entity is NOT a duplicate pair
+    ("same_state_different_entity", ["docs", "looks", "entries", 1, "state_id"], "adult_youth_v2", []),
     ("new_state_known_entity", ["docs", "looks", "entries", 0, "state_id"], "adult_youth_v3", []),
     ("unknown_entity", ["docs", "looks", "entries", 0, "entity_id"], "new_entity", []),
 ]
@@ -149,3 +162,21 @@ def test_validate_errors(name, path, value, expected_keyword):
         assert errors == [], f"{name}: {errors}"
     else:
         assert any(expected_keyword in e for e in errors), f"{name}: {errors}"
+
+
+ODD_DOCS = [
+    None,
+    [],
+    "x",
+    {"entries": None},
+    {"entries": [None, 1, {"entity_id": ["x"]}]},
+]
+
+
+@pytest.mark.parametrize("doc", ODD_DOCS)
+def test_validate_odd_doc_no_raise(doc):
+    """validate must never raise on odd data; result must be a list."""
+    result = looks.validate(1, doc, BASE_DOCS, CTX)
+    assert isinstance(result, list)
+    # ensure the catch-all message is not present (module has no catch-all, but guard against future regressions)
+    assert not any("malformed structure" in e for e in result)

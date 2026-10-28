@@ -3,40 +3,16 @@ You previously wrote the module and (in a separate call) the tests. The tests we
 
 ## PYTEST OUTPUT (mechanical truth)
 ```
-.............F..F.............F..                                        [100%]
+................F..................                                      [100%]
 ================================== FAILURES ===================================
-____________________ test_schema_errors[<lambda>-reason0] _____________________
-tests\test_stage1_coverage.py:125: in test_schema_errors
-    doc = mutator(docs["coverage"])
-          ^^^^^^^^^^^^^^^^^^^^^^^^^
-tests\test_stage1_coverage.py:111: in <lambda>
-    (lambda d: set_at(delete_at(d, ["ovis", 0, "reason"]), ["ovis", 0, "disposition"], "PROPOSE_OMISSION"), "reason"),
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests\test_stage1_coverage.py:36: in delete_at
-    del parent[key]
-        ^^^^^^^^^^^
-E   KeyError: 'reason'
 __________________ test_schema_errors[<lambda>-covered_by1] ___________________
 tests\test_stage1_coverage.py:130: in test_schema_errors
     assert any(expect_field in e for e in errs), f"expected field {expect_field} in {errs}"
 E   AssertionError: expected field covered_by in []
 E   assert False
-E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000002B0D2D1FC60>)
-_________________ test_validate[1-<lambda>-expect_keywords11] _________________
-tests\test_stage1_coverage.py:167: in test_validate
-    doc, ctx = mutator(docs["coverage"], ctx)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests\test_stage1_coverage.py:160: in <lambda>
-    (1, lambda d, c: (d, set_at(c, ["unfilmed_ovis"], [])), []),
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests\test_stage1_coverage.py:29: in set_at
-    assert mutated != base, "mutation had no effect"
-E   AssertionError: mutation had no effect
-E   assert {'script_line_ids': ['S1-L1', 'S1-L2', 'S2-L1'], 'core_line_ids': ['S1-L1', 'S2-L1'], 'chapter_ovis': [1, 2, 3, 4, 5, 6, ...], 'unfilmed_ovis': [], ...} != {'script_line_ids': ['S1-L1', 'S1-L2', 'S2-L1'], 'core_line_ids': ['S1-L1', 'S2-L1'], 'chapter_ovis': [1, 2, 3, 4, 5, 6, ...], 'unfilmed_ovis': [], ...}
+E    +  where False = any(<generator object test_schema_errors.<locals>.<genexpr> at 0x000002149E34BAC0>)
 =========================== short test summary info ===========================
-FAILED tests/test_stage1_coverage.py::test_schema_errors[<lambda>-reason0] - ...
 FAILED tests/test_stage1_coverage.py::test_schema_errors[<lambda>-covered_by1]
-FAILED tests/test_stage1_coverage.py::test_validate[1-<lambda>-expect_keywords11]
 
 ```
 
@@ -209,13 +185,13 @@ SCHEMA: dict[str, Any] = {
                         "if": {
                             "properties": {"disposition": {"const": "PROPOSE_OMISSION"}}
                         },
-                        "then": {"required": ["reason"]}
+                        "then": {"type": "object", "required": ["reason"]}
                     },
                     {
                         "if": {
                             "properties": {"disposition": {"const": "MERGED_EQUIVALENT"}}
                         },
-                        "then": {"required": ["reason", "covered_by"]}
+                        "then": {"type": "object", "required": ["reason", "covered_by"]}
                     }
                 ]
             }
@@ -405,8 +381,8 @@ def base_docs_ctx():
         (lambda d: set_at(d, ["ovis", 0, "ovi"], 0), "ovi"),
         (lambda d: set_at(d, ["ovis", 0, "ovi"], -1), "ovi"),
         (lambda d: set_at(d, ["ovis", 0, "ovi"], "1"), "ovi"),
-        # reason required for PROPOSE_OMISSION
-        (lambda d: set_at(delete_at(d, ["ovis", 0, "reason"]), ["ovis", 0, "disposition"], "PROPOSE_OMISSION"), "reason"),
+        # reason required for PROPOSE_OMISSION (add reason then delete it)
+        (lambda d: delete_at(set_at(set_at(d, ["ovis", 0, "disposition"], "PROPOSE_OMISSION"), ["ovis", 0, "reason"], "dummy"), ["ovis", 0, "reason"]), "reason"),
         # reason required for MERGED_EQUIVALENT (ovi 5)
         (lambda d: delete_at(d, ["ovis", 4, "reason"]), "reason"),
         # covered_by required for MERGED_EQUIVALENT (ovi 5)
@@ -436,11 +412,11 @@ def test_schema_errors(mutator, expect_field):
         (1, lambda d, c: (d, c), []),
         # adhyay mismatch
         (2, lambda d, c: (d, c), ["coverage adhyay 1 does not match 2"]),
-        # missing ovi disposition
-        (1, lambda d, c: (delete_at(d, ["ovis", 0, "disposition"]), c), ["ovi 1 has no disposition"]),
+        # missing ovi disposition (remove entire ovi entry for ovi 1)
+        (1, lambda d, c: (delete_at(d, ["ovis", 0]), c), ["ovi 1 has no disposition"]),
         # duplicate ovi disposition (append second ovi=1)
-        (1, lambda d, c: (append_at(d, ["ovis"], {"ovi": 1, "disposition": "VISUALISED"}), c), ["twice"]),
-        # PROPOSE_OMISSION -> note
+        (1, lambda d, c: (append_at(d, ["ovis"], {"ovi": 1, "disposition": "VISUALISED"}), c), ["ovi 1 twice"]),
+        # PROPOSE_OMISSION -> note (exactly one note, after errors)
         (1, lambda d, c: (set_at(set_at(d, ["ovis", 0, "disposition"], "PROPOSE_OMISSION"), ["ovis", 0, "reason"], "omit"), c), ["note: ovi 1 omission proposed, owner approval needed"]),
         # unfilmed but VISUALISED
         (1, lambda d, c: (d, set_at(c, ["unfilmed_ovis"], [1])), ["ovi 1 is unfilmed but VISUALISED"]),
@@ -454,8 +430,8 @@ def test_schema_errors(mutator, expect_field):
         (1, lambda d, c: (set_at(d, ["ovis", 4, "covered_by"], 3), c), []),
         # empty chapter_ovis (zero-story chapter)
         (1, lambda d, c: (d, set_at(c, ["chapter_ovis"], [])), []),
-        # empty unfilmed_ovis
-        (1, lambda d, c: (d, set_at(c, ["unfilmed_ovis"], [])), []),
+        # unfilmed_ovis with non-VISUALISED ovi (no error)
+        (1, lambda d, c: (d, set_at(c, ["unfilmed_ovis"], [3])), []),
         # ctx values as sets (should work)
         (1, lambda d, c: (d, set_at(set_at(c, ["script_line_ids"], {"S1-L1", "S1-L2"}), ["chapter_ovis"], {1, 2, 3})), []),
     ],
@@ -476,5 +452,36 @@ def test_base_valid():
     docs, ctx = base_docs_ctx()
     assert schema_errors(docs["coverage"]) == []
     assert validate(1, docs["coverage"], docs, ctx) == []
+
+
+# ---------- note ordering and count ----------
+def test_propose_omission_note_comes_after_errors():
+    docs, ctx = base_docs_ctx()
+    # Create a doc with both an error and a PROPOSE_OMISSION
+    doc = copy.deepcopy(docs["coverage"])
+    # Add an error: unfilmed but VISUALISED
+    ctx = set_at(ctx, ["unfilmed_ovis"], [1])
+    # Add a PROPOSE_OMISSION on ovi 2
+    doc = set_at(doc, ["ovis", 1, "disposition"], "PROPOSE_OMISSION")
+    doc = set_at(doc, ["ovis", 1, "reason"], "omit")
+    errs = validate(1, doc, docs, ctx)
+    # Should have error first, then note
+    assert len(errs) == 2
+    assert "ovi 1 is unfilmed but VISUALISED" in errs[0]
+    assert errs[1].startswith("note: ")
+    assert "ovi 2 omission proposed" in errs[1]
+
+
+def test_propose_omission_exactly_one_note():
+    docs, ctx = base_docs_ctx()
+    doc = copy.deepcopy(docs["coverage"])
+    # Add two PROPOSE_OMISSION entries for same ovi (should produce two notes)
+    doc = set_at(doc, ["ovis", 0, "disposition"], "PROPOSE_OMISSION")
+    doc = set_at(doc, ["ovis", 0, "reason"], "omit1")
+    doc = append_at(doc, ["ovis"], {"ovi": 1, "disposition": "PROPOSE_OMISSION", "reason": "omit2"})
+    errs = validate(1, doc, docs, ctx)
+    notes = [e for e in errs if e.startswith("note: ")]
+    assert len(notes) == 2
+    assert all("omission proposed" in n for n in notes)
 
 ```
