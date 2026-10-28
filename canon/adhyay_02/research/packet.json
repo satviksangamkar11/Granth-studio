@@ -1,0 +1,183 @@
+{
+  "adhyay": 2,
+  "characters": [
+    {
+      "raw": "Shri Gajanan Maharaj (श्री गजानन महाराज / समर्थ / योगिराज): The central divine figure and Yogi in Chapter 2. He operates beyond societal norms, teaches through direct action, rejects material wealth in favor of pure devotion, and constantly chants 'Gan Gan Ganat Bote'.",
+      "name": "Shri Gajanan Maharaj",
+      "name_mr": "श्री गजानन महाराज / समर्थ / योगिराज",
+      "description": "The central divine figure and Yogi in Chapter 2. He operates beyond societal norms, teaches through direct action, rejects material wealth in favor of pure devotion, and constantly chants 'Gan Gan Ganat Bote'."
+    },
+    {
+      "raw": "Bankatlal (बंकटलाल): A young devotee from Shegaon. Following his first encounter with Maharaj in Chapter 1, he experiences intense spiritual longing (Viraha) and brings Maharaj to stay at his home.",
+      "name": "Bankatlal",
+      "name_mr": "बंकटलाल",
+      "description": "A young devotee from Shegaon. Following his first encounter with Maharaj in Chapter 1, he experiences intense spiritual longing (Viraha) and brings Maharaj to stay at his home."
+    },
+    {
+      "raw": "Bhavaniram (भवानीराम): Bankatlal’s wise and devout father. He welcomes Maharaj at the Pradosh hour and offers ritual worship with Bilvapatra.",
+      "name": "Bhavaniram",
+      "name_mr": "भवानीराम",
+      "description": "Bankatlal’s wise and devout father. He welcomes Maharaj at the Pradosh hour and offers ritual worship with Bilvapatra."
+    },
+    {
+      "raw": "Ramajipant Deshmukh (रामाजीपंत देशमुख): An elderly, virtuous landlord and Bankatlal’s neighbor who recognizes that Maharaj is a rare, realized Yogi.",
+      "name": "Ramajipant Deshmukh",
+      "name_mr": "रामाजीपंत देशमुख",
+      "description": "An elderly, virtuous landlord and Bankatlal’s neighbor who recognizes that Maharaj is a rare, realized Yogi."
+    },
+    {
+      "raw": "Pitambar Shimpi (पितांबर शिंपी): A pure-hearted tailor and devotee who accompanies Bankatlal and witnesses the miracle of the gourd (Tumba) filling with crystal-clear water from a shallow stream.",
+      "name": "Pitambar Shimpi",
+      "name_mr": "पितांबर शिंपी",
+      "description": "A pure-hearted tailor and devotee who accompanies Bankatlal and witnesses the miracle of the gourd (Tumba) filling with crystal-clear water from a shallow stream."
+    },
+    {
+      "raw": "Govindbuwa Taklikar (गोविंदबुवा टाकळीकर): A renowned Kirtankar in the Varhad region. When Maharaj completes his verse from the Hamsagita and gently exposes the gap between preaching and practice, Govindbuwa accepts the lesson and proclaims Maharaj's divinity to the town.",
+      "name": "Govindbuwa Taklikar",
+      "name_mr": "गोविंदबुवा टाकळीकर",
+      "description": "A renowned Kirtankar in the Varhad region. When Maharaj completes his verse from the Hamsagita and gently exposes the gap between preaching and practice, Govindbuwa accepts the lesson and proclaims Maharaj's divinity to the town."
+    },
+    {
+      "raw": "Ichharam Shetji (इच्छाराम शेटजी): Bankatlal’s cousin who observes a Monday fast for Lord Shiva. Out of stubborn insistence, he insists Maharaj eat a massive feast after Maharaj has already dined.",
+      "name": "Ichharam Shetji",
+      "name_mr": "इच्छाराम शेटजी",
+      "description": "Bankatlal’s cousin who observes a Monday fast for Lord Shiva. Out of stubborn insistence, he insists Maharaj eat a massive feast after Maharaj has already dined."
+    },
+    {
+      "raw": "Sant Dasganu Maharaj (संत दासगणू महाराज): The author/narrator of Shri Gajanan Vijay, who humbly compares himself to a tiny insect acting as an instrument of Maharaj's grace.",
+      "name": "Sant Dasganu Maharaj",
+      "name_mr": "संत दासगणू महाराज",
+      "description": "The author/narrator of Shri Gajanan Vijay, who humbly compares himself to a tiny insect acting as an instrument of Maharaj's grace."
+    },
+    {
+      "raw": "Lord Pandurang / Vitthal (पांडुरंग / विठ्ठल): Invoked in the opening prayer and referenced as a devotional comparison (e.g., standing firm on faith).",
+      "name": "Lord Pandurang / Vitthal",
+      "name_mr": "पांडुरंग / विठ्ठल",
+      "description": "Invoked in the opening prayer and referenced as a devotional comparison (e.g., standing firm on faith)."
+    },
+    {
+      "raw": "Malin (माळीण): The local gardener woman from whose house Maharaj requests simple Zunka-Bhakri.",
+      "name": "Malin",
+      "name_mr": "माळीण",
+      "description": "The local gardener woman from whose house Maharaj requests simple Zunka-Bhakri."
+    },
+    {
+      "raw": "Samarth Ramdas Swami (समर्थ रामदास स्वामी): Referenced in Ovis 122–124 regarding an historical incident where he conquered his craving for Kheer.",
+      "name": "Samarth Ramdas Swami",
+      "name_mr": "समर्थ रामदास स्वामी",
+      "description": "Referenced in Ovis 122–124 regarding an historical incident where he conquered his craving for Kheer."
+    }
+  ],
+  "locations": [
+    {
+      "raw": "Shegaon (शेगाव): The primary town in the Varhad region where the entire chapter unfolds, poetically compared to Pandharpur.",
+      "name": "Shegaon",
+      "name_mr": "शेगाव",
+      "description": "The primary town in the Varhad region where the entire chapter unfolds, poetically compared to Pandharpur."
+    },
+    {
+      "raw": "Shiva Temple & Surroundings (शंकराचे मंदिर व परिसर): The village temple where Govindbuwa performs his Kirtan, featuring stone pavement (Faras) at the back and a Neem tree where Maharaj sits.",
+      "name": "Shiva Temple & Surroundings",
+      "name_mr": "शंकराचे मंदिर व परिसर",
+      "description": "The village temple where Govindbuwa performs his Kirtan, featuring stone pavement (Faras) at the back and a Neem tree where Maharaj sits."
+    },
+    {
+      "raw": "The Shallow Stream (ओढा / नाला): A muddy watercourse near the temple where the Tumba water miracle occurs.",
+      "name": "The Shallow Stream",
+      "name_mr": "ओढा / नाला",
+      "description": "A muddy watercourse near the temple where the Tumba water miracle occurs."
+    },
+    {
+      "raw": "Manik Chowk (माणिक चौक): A prominent square in Shegaon where Bankatlal reunites with Maharaj at sunset on the fourth day.",
+      "name": "Manik Chowk",
+      "name_mr": "माणिक चौक",
+      "description": "A prominent square in Shegaon where Bankatlal reunites with Maharaj at sunset on the fourth day."
+    },
+    {
+      "raw": "Bankatlal’s House (बंकटलालचे घर): The residence where Maharaj is welcomed at Pradosh, offered food, given an auspicious ceremonial bath (Mangal Snan) with 100 pots of water, and where Ichharam's feast takes place.",
+      "name": "Bankatlal’s House",
+      "name_mr": "बंकटलालचे घर",
+      "description": "The residence where Maharaj is welcomed at Pradosh, offered food, given an auspicious ceremonial bath (Mangal Snan) with 100 pots of water, and where Ichharam's feast takes place."
+    },
+    {
+      "raw": "Cattle Watering Trough (हाळ): A masonry trough explicitly referenced in Ovi 144 where Maharaj sometimes sat or visited.",
+      "name": "Cattle Watering Trough",
+      "name_mr": "हाळ",
+      "description": "A masonry trough explicitly referenced in Ovi 144 where Maharaj sometimes sat or visited."
+    }
+  ],
+  "objects": [
+    {
+      "raw": "ओवी / चरण (Ovi / Charan): A traditional four-line Marathi poetic meter.",
+      "name": "ओवी / चरण",
+      "name_mr": "Ovi / Charan",
+      "description": "A traditional four-line Marathi poetic meter."
+    },
+    {
+      "raw": "Zunka-Bhakri (झुणका-भाकरी): A humble rural meal of spiced gram-flour and flatbread requested by Maharaj from the Malin.",
+      "name": "Zunka-Bhakri",
+      "name_mr": "झुणका-भाकरी",
+      "description": "A humble rural meal of spiced gram-flour and flatbread requested by Maharaj from the Malin."
+    },
+    {
+      "raw": "Tumba (तुंबा): A traditional water vessel crafted from a dried, hollowed-out bottle gourd.",
+      "name": "Tumba",
+      "name_mr": "तुंबा",
+      "description": "A traditional water vessel crafted from a dried, hollowed-out bottle gourd."
+    },
+    {
+      "raw": "Khadku, Dudandi, Vyaghrambari (खडकू, दुदंडी, व्याघ्रांबरी): Copper/metal coins from erstwhile Muslim rule circulating in the Varhad region.",
+      "name": "Khadku, Dudandi, Vyaghrambari",
+      "name_mr": "खडकू, दुदंडी, व्याघ्रांबरी",
+      "description": "Copper/metal coins from erstwhile Muslim rule circulating in the Varhad region."
+    },
+    {
+      "raw": "Hamsagita (हंसगीता): A philosophical discourse in the 11th Skandha of the Shrimad Bhagavatam.",
+      "name": "Hamsagita",
+      "name_mr": "हंसगीता",
+      "description": "A philosophical discourse in the 11th Skandha of the Shrimad Bhagavatam."
+    },
+    {
+      "raw": "Pradosh Kaal (प्रदोष काळ): The sacred twilight period around sunset, especially auspicious on Mondays for Shiva worship with Bilvapatra.",
+      "name": "Pradosh Kaal",
+      "name_mr": "प्रदोष काळ",
+      "description": "The sacred twilight period around sunset, especially auspicious on Mondays for Shiva worship with Bilvapatra."
+    },
+    {
+      "raw": "Mangal Snan Items (मंगलस्नान साहित्य): 100 pots of warm water, Shikakai, soap, Davana, Heena, Chameli oil, Belia oil, fragrant pastes (Angarag), and a Pitambar (yellow garment).",
+      "name": "Mangal Snan Items",
+      "name_mr": "मंगलस्नान साहित्य",
+      "description": "100 pots of warm water, Shikakai, soap, Davana, Heena, Chameli oil, Belia oil, fragrant pastes (Angarag), and a Pitambar (yellow garment)."
+    },
+    {
+      "raw": "Ichharam’s Feast (इच्छारामाचा नैवेद्य): A large platter (Parat) featuring two mudis of Ambemohar rice, Jalebi, Raghavdas and Motichoor sweets, Karanji, Anarse, Ghevar, vegetables, chutneys, koshimbir, a bowl of curd, and a bowl of ghee on the left side (सव्य भागा).",
+      "name": "Ichharam’s Feast",
+      "name_mr": "इच्छारामाचा नैवेद्य",
+      "description": "A large platter (Parat) featuring two mudis of Ambemohar rice, Jalebi, Raghavdas and Motichoor sweets, Karanji, Anarse, Ghevar, vegetables, chutneys, koshimbir, a bowl of curd, and a bowl of ghee on the left side (सव्य भागा)."
+    },
+    {
+      "raw": "Dindi (दिंडी): Troupes of devotees singing bhajans and chanting the name of Lord Vitthal.",
+      "name": "Dindi",
+      "name_mr": "दिंडी",
+      "description": "Troupes of devotees singing bhajans and chanting the name of Lord Vitthal."
+    },
+    {
+      "raw": "Chilim (चिलीम): A clay smoking pipe Maharaj frequently lit as an outward play (Kautuk) without attachment.",
+      "name": "Chilim",
+      "name_mr": "चिलीम",
+      "description": "A clay smoking pipe Maharaj frequently lit as an outward play (Kautuk) without attachment."
+    },
+    {
+      "raw": "Asti-Bhati-Priya (अस्ति-भाति-प्रिया): Vedantic terms representing Existence, Consciousness, and Bliss in which Maharaj constantly abided.",
+      "name": "Asti-Bhati-Priya",
+      "name_mr": "अस्ति-भाति-प्रिया",
+      "description": "Vedantic terms representing Existence, Consciousness, and Bliss in which Maharaj constantly abided."
+    },
+    {
+      "raw": "Gan Gan Ganat Bote (गणगण गणांत बोते): Maharaj's constant chant, which led people to give him the name 'Gajanan'.",
+      "name": "Gan Gan Ganat Bote",
+      "name_mr": "गणगण गणांत बोते",
+      "description": "Maharaj's constant chant, which led people to give him the name 'Gajanan'."
+    }
+  ]
+}
