@@ -1,0 +1,86 @@
+{
+ "adhyay": 1,
+ "cues": [
+  {
+   "anchor_line_id": "S1-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient nature sounds to establish mysterious atmosphere for the unknown origins narration.",
+   "scene_id": "S1",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft ambient nature sounds: gentle wind through trees, distant bird calls, no human sounds, calm and mysterious atmosphere."
+  },
+  {
+   "anchor_line_id": "S2-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Morning ambient atmosphere at Devidas house: birds, distant village sounds, light breeze.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Early morning rural Indian village ambience: gentle birdsong, distant rooster, light wind through trees, subtle sound of cooking vessels from a household."
+  },
+  {
+   "anchor_line_id": "S2-L3",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Sound of leaf plates being thrown or settling on road.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Dry leaf plates (पत्रावळी) tossed onto dirt road, light rustle and thud."
+  },
+  {
+   "anchor_line_id": "S2-L4",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Continuation of morning ambience, now focused on road where Gajanan sits.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Morning road ambience: faint traffic of bullock carts, distant chatter, birds."
+  },
+  {
+   "anchor_line_id": "S2-L7",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Sound of fingers picking up a dry rice grain from a leaf plate.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Close-up Foley: fingertips brushing dry leaf, picking up a single hard rice grain, subtle click."
+  },
+  {
+   "anchor_line_id": "S2-L8",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Sound of grain being placed in mouth and subtle swallow.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft mouth sound: grain placed on tongue, quiet swallow."
+  },
+  {
+   "anchor_line_id": "S2-L9",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Sustained ambience under narrator's Vedic quote.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Quiet, reverent morning atmosphere, very subtle drone of tanpura or nothing, just air."
+  },
+  {
+   "anchor_line_id": "S2-L10",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambience continues as narrator explains people's lack of understanding.",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Same morning ambience, slightly lower volume to emphasize narration."
+  },
+  {
+   "anchor_line_id": "S3-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient rural road atmosphere",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Ambient sound of a quiet rural road in India: distant birds, light wind, occasional footsteps on dirt"
+  }
+ ]
+}

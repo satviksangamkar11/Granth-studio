@@ -1,0 +1,1509 @@
+{
+ "adhyay": 2,
+ "shots": [
+  {
+   "beat_line_ids": [
+    "S1-L1"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    1
+   ],
+   "pose": "Typography card with verse 1 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-1"
+  },
+  {
+   "beat_line_ids": [
+    "S1-L2"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    2
+   ],
+   "pose": "Typography card with verse 2 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-2"
+  },
+  {
+   "beat_line_ids": [
+    "S1-L3"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    3
+   ],
+   "pose": "Typography card with verse 3 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-3"
+  },
+  {
+   "beat_line_ids": [
+    "S1-L4"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    4
+   ],
+   "pose": "Typography card with verse 4 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-4"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L1",
+    "S2-L2"
+   ],
+   "framing": "Wide establishing shot of Shegaon town with streets, buildings, sky; Bankatlal small in foreground, dolly 1.0->1.28",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    5,
+    6
+   ],
+   "pose": "Bankatlal walking distractedly through Shegaon streets, head slightly bowed, eyes unfocused",
+   "preset": "01_establishing_shot",
+   "scene_id": "S2",
+   "shot_id": "S2-01"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L3",
+    "S2-L4"
+   ],
+   "framing": "Extreme close-up of Bankatlal's face, slow push 1.0->1.2 with soft halo",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    7,
+    8
+   ],
+   "pose": "Bankatlal close-up, gaze fixed ahead as if seeing Maharaj's form, eyes glistening",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S2",
+   "shot_id": "S2-02"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L5",
+    "S2-L6"
+   ],
+   "framing": "Lateral parallax move through 4 depth layers (sky, far buildings, mid street, near foreground), zoom change >=0.12",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    9,
+    10
+   ],
+   "pose": "Bankatlal walking through lanes, turning head side to side, searching",
+   "preset": "02_environmental_parallax",
+   "scene_id": "S2",
+   "shot_id": "S2-03"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L7",
+    "S2-L8"
+   ],
+   "framing": "Medium two-shot, gentle drift across both figures",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    11,
+    12
+   ],
+   "pose": "Bankatlal standing, Bhavaniram seated, facing each other, father gesturing questioningly",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S2",
+   "shot_id": "S2-04"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L9",
+    "S2-L10"
+   ],
+   "framing": "Close-up of father's face, slow push with breathing effect",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    13,
+    14
+   ],
+   "pose": "Bhavaniram close-up, concerned expression, leaning forward",
+   "preset": "07_character_reaction",
+   "scene_id": "S2",
+   "shot_id": "S2-05"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L11"
+   ],
+   "framing": "Medium shot of Bankatlal leaving, slow push 1.0->1.2",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    15
+   ],
+   "pose": "Bankatlal exiting house doorway, determined stride",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S2",
+   "shot_id": "S2-06"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L12",
+    "S2-L13"
+   ],
+   "framing": "Two-shot, gentle drift",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    16,
+    17
+   ],
+   "pose": "Bankatlal and Ramajipant seated on floor mats, facing each other, Bankatlal speaking earnestly",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S2",
+   "shot_id": "S2-07"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L14",
+    "S2-L15"
+   ],
+   "framing": "Extreme close-up, slow push with soft halo",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    18,
+    19
+   ],
+   "pose": "Ramajipant close-up, speaking with conviction, eyes bright",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S2",
+   "shot_id": "S2-08"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L16"
+   ],
+   "framing": "Close-up, slow push",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    20
+   ],
+   "pose": "Bankatlal close-up, listening intently, nodding slightly",
+   "preset": "07_character_reaction",
+   "scene_id": "S2",
+   "shot_id": "S2-09"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L17"
+   ],
+   "framing": "Medium shot, slow push 1.0->1.2",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    21
+   ],
+   "pose": "Bankatlal seated under a tree, eyes closed, serene, indicating passage of four days",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S2",
+   "shot_id": "S2-10"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L1",
+    "S3-L2",
+    "S3-L3"
+   ],
+   "framing": "Establishing shot, 4 layers: sky, far temple spire, mid crowd, fg stone pavement. Dolly 1.0->1.28.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    22,
+    23,
+    24
+   ],
+   "pose": "Wide view of Shiva temple courtyard with stone pavement, Neem tree, crowd of men and women gathering, Govindbuwa Taklikar seated on a raised platform with kirtan instruments (tanpura, cymbals).",
+   "preset": "01_establishing_shot",
+   "scene_id": "S3",
+   "shot_id": "S3-01"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L4",
+    "S3-L5"
+   ],
+   "framing": "Two figures facing each other, gentle drift across them. Medium shot.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    25,
+    26
+   ],
+   "pose": "Bankatlal (standing, facing right) and Pitambar (standing, facing left) conversing on a village path, Pitambar holding a measuring tape (tailor).",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S3",
+   "shot_id": "S3-02"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L6"
+   ],
+   "framing": "Lateral move through 4 depth layers: sky, far temple, mid path, near figures. Zoom change >=0.12.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    27
+   ],
+   "pose": "Bankatlal and Pitambar walking side by side along a path toward the temple, temple structure in background.",
+   "preset": "02_environmental_parallax",
+   "scene_id": "S3",
+   "shot_id": "S3-03"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L6"
+   ],
+   "framing": "Slow push 1.0->1.2 on Maharaj, no effects.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    27
+   ],
+   "pose": "Maharaj (Shri Gajanan Maharaj) seated cross-legged on stone pavement (faras) at the back of the temple, under a Neem tree, eyes half-closed, serene.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S3",
+   "shot_id": "S3-04"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L7"
+   ],
+   "framing": "Camera pans with Bankatlal as he runs toward seated Maharaj. Char (walking/running) and other (seated).",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    28
+   ],
+   "pose": "Bankatlal running eagerly toward seated Maharaj, Pitambar following close behind. Maharaj remains seated, calm.",
+   "preset": "04_character_entrance",
+   "scene_id": "S3",
+   "shot_id": "S3-05"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L9"
+   ],
+   "framing": "Two figures (left: Bankatlal representing both devotees; right: Maharaj) facing each other, gentle drift.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    30
+   ],
+   "pose": "Bankatlal and Pitambar standing at a respectful distance, hands folded, facing Maharaj. Maharaj seated, looking at them.",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S3",
+   "shot_id": "S3-06"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L10"
+   ],
+   "framing": "Close-up face with slow push and breathing.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    31
+   ],
+   "pose": "Close-up of Maharaj's face, speaking gently, eyes compassionate.",
+   "preset": "07_character_reaction",
+   "scene_id": "S3",
+   "shot_id": "S3-07"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L11"
+   ],
+   "framing": "Full-frame close-up insert of hands and food.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    32
+   ],
+   "pose": "Bankatlal's hands offering a bowl of zunka and half a bhakri to Maharaj's hands.",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S3",
+   "shot_id": "S3-08"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L1",
+    "S4-L2"
+   ],
+   "framing": "Medium two-shot, both figures in frame, Maharaj on left, Pitambar on right, simple background suggesting temple surroundings.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    33,
+    34
+   ],
+   "pose": "Maharaj seated eating Zunka-Bhakri, Pitambar standing nearby listening attentively.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S4",
+   "shot_id": "S4-1"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L3",
+    "S4-L4"
+   ],
+   "framing": "Close-up on Pitambar's face, neutral background, slow push in.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    35,
+    36
+   ],
+   "pose": "Pitambar close-up, face showing concern and hesitation, eyebrows slightly raised.",
+   "preset": "07_character_reaction",
+   "scene_id": "S4",
+   "shot_id": "S4-2"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L5"
+   ],
+   "framing": "Medium shot on Maharaj, slow push in, background blurred.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    37
+   ],
+   "pose": "Maharaj seated, one hand raised in firm instruction, calm authoritative expression.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S4",
+   "shot_id": "S4-3"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L6",
+    "S4-L7"
+   ],
+   "framing": "Full body shot, stream in foreground, temple structures faint in background, slow push.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    38,
+    39
+   ],
+   "pose": "Pitambar standing at the edge of the shallow stream, looking down at the water, tumba held loosely at side.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S4",
+   "shot_id": "S4-4"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L8"
+   ],
+   "framing": "Extreme close-up on hands and tumba, water surface filling frame.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    40
+   ],
+   "pose": "Hands lowering a tumba into shallow water, fingertips touching the surface.",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S4",
+   "shot_id": "S4-5"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L9"
+   ],
+   "framing": "Low angle close to water, showing the hollow and submerged tumba, slow push.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    41
+   ],
+   "pose": "Tumba fully submerged in a newly formed hollow in the stream bed, water rising around it.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S4",
+   "shot_id": "S4-6"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L10"
+   ],
+   "framing": "Close-up on tumba, clear water visible, bright highlight.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    42
+   ],
+   "pose": "Tumba held up, filled with crystal-clear water, light refracting through.",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S4",
+   "shot_id": "S4-7"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L11"
+   ],
+   "framing": "Extreme close-up, very slow push, soft halo effect.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    43
+   ],
+   "pose": "Pitambar's face, eyes wide with wonder, a soft halo of realization.",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S4",
+   "shot_id": "S4-8"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L12"
+   ],
+   "framing": "Two-shot, Pitambar lower, Maharaj higher, slow push in.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    44
+   ],
+   "pose": "Pitambar kneeling, offering the filled tumba to Maharaj who is seated finishing his meal.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S4",
+   "shot_id": "S4-9"
+  },
+  {
+   "beat_line_ids": [
+    "S5-L1",
+    "S5-L2"
+   ],
+   "framing": "Medium two-shot, slight low angle, neem tree background, warm afternoon light",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    45,
+    46
+   ],
+   "pose": "Maharaj seated on left, Bankatlal standing on right facing Maharaj, Bankatlal's hand extended offering betel nut",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S5",
+   "shot_id": "S5-1"
+  },
+  {
+   "beat_line_ids": [
+    "S5-L2",
+    "S5-L3"
+   ],
+   "framing": "Extreme close-up top-down view of hands, betel nut pieces visible",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    46,
+    47
+   ],
+   "pose": "Bankatlal's hand cracking betel nut, Maharaj's open palm receiving pieces",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S5",
+   "shot_id": "S5-2"
+  },
+  {
+   "beat_line_ids": [
+    "S5-L3",
+    "S5-L4"
+   ],
+   "framing": "Close-up of palm with coins, betel nut remnants aside",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    47,
+    48
+   ],
+   "pose": "Bankatlal placing two copper coins (Vyaghrambari and Dudandi) on Maharaj's palm",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S5",
+   "shot_id": "S5-3"
+  },
+  {
+   "beat_line_ids": [
+    "S5-L5"
+   ],
+   "framing": "Close-up, shallow depth of field, neem leaves blurred background",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    49
+   ],
+   "pose": "Maharaj smiling, eyes twinkling, head slightly tilted back in laughter",
+   "preset": "07_character_reaction",
+   "scene_id": "S5",
+   "shot_id": "S5-4"
+  },
+  {
+   "beat_line_ids": [
+    "S5-L6",
+    "S5-L7"
+   ],
+   "framing": "Tight close-up, soft halo effect, warm golden light",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    50,
+    51
+   ],
+   "pose": "Maharaj serene, one hand raised in teaching gesture (vitarka mudra), gaze direct and compassionate",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S5",
+   "shot_id": "S5-5"
+  },
+  {
+   "beat_line_ids": [
+    "S5-L8"
+   ],
+   "framing": "Wide shot, slow push in, neem tree canopy above, temple steps in distance",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    52
+   ],
+   "pose": "Maharaj seated under neem tree, Bankatlal and Pitambar walking away towards temple steps",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S5",
+   "shot_id": "S5-6"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L1",
+    "S6-L2"
+   ],
+   "framing": "Wide shot of temple courtyard with neem tree, stone pavement, Govindbuwa on raised platform beginning discourse.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    53,
+    54
+   ],
+   "pose": "Govindbuwa seated on dias, Maharaj sitting under neem tree",
+   "preset": "01_establishing_shot",
+   "scene_id": "S6",
+   "shot_id": "S6-1"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L3"
+   ],
+   "framing": "Close-up on Govindbuwa's face, slow push in.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    55
+   ],
+   "pose": "Govindbuwa's face close-up, eyes wide with astonishment",
+   "preset": "07_character_reaction",
+   "scene_id": "S6",
+   "shot_id": "S6-2"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L3"
+   ],
+   "framing": "Medium close-up on Maharaj's face, slow push.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    55
+   ],
+   "pose": "Maharaj sitting under neem tree, eyes closed, chanting",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S6",
+   "shot_id": "S6-3"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L5"
+   ],
+   "framing": "Camera pans with group as they approach seated Maharaj.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    57
+   ],
+   "pose": "Bankatlal and Pitambar walking towards Maharaj, mandali following",
+   "preset": "04_character_entrance",
+   "scene_id": "S6",
+   "shot_id": "S6-4"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L6"
+   ],
+   "framing": "Medium-wide shot showing group facing Maharaj, emphasis on stillness of Maharaj.",
+   "need_new": {
+    "class": "missing_image",
+    "reason": "Group of devotees pleading to seated Maharaj who remains unmoved; no preset covers multi-figure supplication with static central figure."
+   },
+   "needs_cutout": true,
+   "ovi_ids": [
+    58
+   ],
+   "pose": "Bankatlal, Pitambar, and mandali standing with folded hands, Maharaj seated unchanged",
+   "preset": "NEED_NEW",
+   "scene_id": "S6",
+   "shot_id": "S6-5"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L7"
+   ],
+   "framing": "Tilt down onto contact point of hands.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    59
+   ],
+   "pose": "Govindbuwa standing before Maharaj, folding hands in prayer",
+   "preset": "05_bowing_prayer",
+   "scene_id": "S6",
+   "shot_id": "S6-6"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L7",
+    "S6-L8",
+    "S6-L9",
+    "S6-L10"
+   ],
+   "framing": "Two figures facing each other, gentle drift across them.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    59,
+    60,
+    61,
+    62
+   ],
+   "pose": "Govindbuwa speaking earnestly, Maharaj listening calmly",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S6",
+   "shot_id": "S6-7"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L11",
+    "S6-L12",
+    "S6-L13",
+    "S6-L14",
+    "S6-L15"
+   ],
+   "framing": "Two figures facing each other, gentle drift, focus on Maharaj.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    63,
+    64,
+    65,
+    66,
+    67
+   ],
+   "pose": "Maharaj speaking with authority, Govindbuwa listening humbled",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S6",
+   "shot_id": "S6-8"
+  },
+  {
+   "beat_line_ids": [
+    "S6-L16",
+    "S6-L17",
+    "S6-L18",
+    "S6-L19"
+   ],
+   "framing": "Close-up on Govindbuwa's face, slower push with soft halo.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    68,
+    69,
+    70,
+    71
+   ],
+   "pose": "Govindbuwa on dias, addressing crowd with raised voice",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S6",
+   "shot_id": "S6-9"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L1"
+   ],
+   "framing": "Establishing shot, 4 layers (sky, mid, fx, fg), slow dolly 1.0->1.28",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    72
+   ],
+   "pose": "Wide view of Shiva Temple courtyard at dusk, people dispersing, Bankatlal walking toward home",
+   "preset": "01_establishing_shot",
+   "scene_id": "S7",
+   "shot_id": "S7-1"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L2",
+    "S7-L3"
+   ],
+   "framing": "Medium two-shot, gentle drift across figures",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    73,
+    74
+   ],
+   "pose": "Bankatlal standing, hands folded, speaking to seated father Bhavaniram",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S7",
+   "shot_id": "S7-2"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L4"
+   ],
+   "framing": "Slow push with soft halo",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    75
+   ],
+   "pose": "Bankatlal close-up, eyes bright, smiling",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S7",
+   "shot_id": "S7-3"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L5"
+   ],
+   "framing": "Establishing shot, 4 layers, dolly",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    76
+   ],
+   "pose": "Wide view of Manik Chowk at sunset, Bankatlal waiting",
+   "preset": "01_establishing_shot",
+   "scene_id": "S7",
+   "shot_id": "S7-4"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L6"
+   ],
+   "framing": "Camera pans with Maharaj",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    77
+   ],
+   "pose": "Maharaj walking toward Bankatlal, Bankatlal standing with folded hands",
+   "preset": "04_character_entrance",
+   "scene_id": "S7",
+   "shot_id": "S7-5"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L7",
+    "S7-L8"
+   ],
+   "framing": "Lateral parallax through depth layers (sky, far, mid, near)",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    78,
+    79
+   ],
+   "pose": "Cows gathering around Maharaj, birds on trees, cowherd nearby",
+   "preset": "02_environmental_parallax",
+   "scene_id": "S7",
+   "shot_id": "S7-6"
+  },
+  {
+   "beat_line_ids": [
+    "S7-L9"
+   ],
+   "framing": "Establishing shot of house entrance at twilight, 4 layers",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    80
+   ],
+   "pose": "Bankatlal and Maharaj approaching house, shopkeepers lighting lamps",
+   "preset": "01_establishing_shot",
+   "scene_id": "S7",
+   "shot_id": "S7-7"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L1",
+    "S8-L2"
+   ],
+   "framing": "Medium wide shot at entrance of Bankatlal's house during Pradosh twilight. Father on left, Maharaj on right. Paat visible in foreground.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    81,
+    82
+   ],
+   "pose": "Father (Bhavaniram) standing at doorway, hands folded in greeting; Maharaj (Gajanan) standing before him, calm; father then prostrates and seats Maharaj on a paat (low seat).",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-1"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L3"
+   ],
+   "framing": "Medium close-up on father, Maharaj slightly out of focus behind. Twilight light.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    83
+   ],
+   "pose": "Father speaking, one hand raised in explanation, other folded; Maharaj listening serenely.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-2"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L4"
+   ],
+   "framing": "Close-up on Maharaj's head and father's hands. Bilvapatra leaves visible.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    84
+   ],
+   "pose": "Father placing bilvapatra leaves on Maharaj's head with both hands, Maharaj eyes closed.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-3"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L5",
+    "S8-L6"
+   ],
+   "framing": "Medium shot interior, father pacing slightly, Maharaj calm.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    85,
+    86
+   ],
+   "pose": "Father standing with hand on chin, looking worried; Maharaj seated on paat, patient.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-4"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L7"
+   ],
+   "framing": "Wide shot from behind crowd towards entrance, showing father and Maharaj inside.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    87
+   ],
+   "pose": "Crowd of villagers gathered at doorway and courtyard, looking in with curiosity.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-5"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L8"
+   ],
+   "framing": "Medium shot following father's movement from interior to kitchen and back.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    88
+   ],
+   "pose": "Father walking purposefully towards kitchen area, then returning with a plate of puris.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-6"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L9",
+    "S8-L10"
+   ],
+   "framing": "Medium close-up on father's face, Maharaj's shoulder visible.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    89,
+    90
+   ],
+   "pose": "Father standing before Maharaj, hands folded, expression sincere; Maharaj gazing compassionately.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-7"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L11",
+    "S8-L12"
+   ],
+   "framing": "Top-down view of thali, then tilt up to show father applying bukka and garland.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    91,
+    92
+   ],
+   "pose": "Father placing a thali before Maharaj; thali contains puris, almonds, dates, bananas, sweet limes, radishes. Father applies bukka on Maharaj's forehead and places garland around neck.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-8"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L13"
+   ],
+   "framing": "Close-up on Maharaj's face and hands eating.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    93
+   ],
+   "pose": "Maharaj eating with relish, hand reaching for items on thali, smiling.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-9"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L14"
+   ],
+   "framing": "Medium shot interior night, Maharaj on paat, empty thali aside.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    94
+   ],
+   "pose": "Maharaj seated contentedly, patting stomach; night setting with lamp light.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-10"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L15"
+   ],
+   "framing": "Medium shot in bathing area, morning light.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    95
+   ],
+   "pose": "Bankatlal pouring water over Maharaj's head with a vessel, Maharaj standing, smiling.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-11"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L16"
+   ],
+   "framing": "Wide shot of bathing courtyard, rows of pots, people around Maharaj.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    96
+   ],
+   "pose": "Many men and women pouring water from pots onto Maharaj; steam rising.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-12"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L17"
+   ],
+   "framing": "Close-up on hands applying substances to Maharaj's skin.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    97
+   ],
+   "pose": "Some applying shikakai paste, others using soap, scrubbing Maharaj's body and feet.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-13"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L18"
+   ],
+   "framing": "Medium close-up on massage hands.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    98
+   ],
+   "pose": "People massaging Maharaj with various oils: davana, heena, chameli, belia.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-14"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L19"
+   ],
+   "framing": "Close-up on assortment of paste containers and application.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    99
+   ],
+   "pose": "Various fragrant pastes (angarag) being applied; abundant containers visible.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-15"
+  },
+  {
+   "beat_line_ids": [
+    "S8-L20"
+   ],
+   "framing": "Medium wide shot, Maharaj centered on gadi, pitambar bright.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    100
+   ],
+   "pose": "Maharaj draped in pitambar (yellow garment), seated on a gadi (cushion) with honor; Bankatlal and father attending.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S8",
+   "shot_id": "S8-16"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L1"
+   ],
+   "framing": "Close-up on Maharaj's upper body, showing adornments",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    101
+   ],
+   "pose": "Maharaj seated, adorned with saffron paste on forehead, garlands around neck, tulsi blossoms on head",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-01"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L2"
+   ],
+   "framing": "Medium shot of offerings being arranged on a platter in front of Maharaj",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    102
+   ],
+   "pose": "Devotees placing various food offerings (naivedya) before Maharaj",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-02"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L3"
+   ],
+   "framing": "Establishing shot of the house exterior, soft morning light",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    103
+   ],
+   "pose": "Wide view of Bankatlal's house transformed into Dwarka, with a sign or atmosphere indicating Monday, Shiva's day",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-03"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L4"
+   ],
+   "framing": "Group shot showing contrast between satisfied devotees and Ichharam",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    104
+   ],
+   "pose": "Group of devotees (mandali) looking fulfilled, Ichharam Shetji standing apart with unresolved expression",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-04"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L5"
+   ],
+   "framing": "Close-up on Ichharam's face, thoughtful gaze",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    105
+   ],
+   "pose": "Ichharam Shetji, cousin of Bankatlal, devout, thinking",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-05"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L6"
+   ],
+   "framing": "Close-up on Ichharam, slight upward gaze",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    106
+   ],
+   "pose": "Ichharam with hands folded, internal thought: 'Today is Monday, my fast; Shankar himself has come walking into Bankatlal's house'",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-06"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L7"
+   ],
+   "framing": "Medium shot of Ichharam in a determined pose, perhaps hands in prayer",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    107
+   ],
+   "pose": "Ichharam resolving to worship Maharaj after sunset, then break fast",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-07"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L8"
+   ],
+   "framing": "Wide shot of Ichharam bathing in a courtyard or river, twilight",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    108
+   ],
+   "pose": "Ichharam bathing at sunset, Pradosh hour, water poured over him",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-08"
+  },
+  {
+   "beat_line_ids": [
+    "S9-L9"
+   ],
+   "framing": "Close-up on Ichharam's hands performing puja, Maharaj receiving",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    109
+   ],
+   "pose": "Ichharam performing puja with worship materials, offering to Maharaj with supreme love",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S9",
+   "shot_id": "S9-09"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L1",
+    "S10-L2",
+    "S10-L3"
+   ],
+   "framing": "Two figures facing each other, gentle drift across them, medium two-shot",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    110,
+    111,
+    112
+   ],
+   "pose": "Ichharam stands with joined palms pleading; Maharaj sits refusing food and cites his Monday fast",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S10",
+   "shot_id": "S10-01"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L4",
+    "S10-L8"
+   ],
+   "framing": "Camera pans with Ichharam as he enters and sets the parat before the seated figure",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    113,
+    117
+   ],
+   "pose": "Ichharam walks in carrying a large parat of naivedyam toward seated Maharaj and places it before him; onlookers watch with curiosity",
+   "preset": "04_character_entrance",
+   "scene_id": "S10",
+   "shot_id": "S10-02"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L5",
+    "S10-L6",
+    "S10-L7"
+   ],
+   "framing": "Insert close-up of two mudis Ambemohar rice, sweets, vegetables, chutneys, koshimbir, curd bowl and ghee bowl on the left",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    114,
+    115,
+    116
+   ],
+   "pose": "Full-frame close-up of the naivedyam parat",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S10",
+   "shot_id": "S10-03"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L9",
+    "S10-L10"
+   ],
+   "framing": "Close-up face, slower closer push with a soft halo",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    118,
+    119
+   ],
+   "pose": "Maharaj close-up face speaking to himself, addressing Ganappa and the food as Aghori",
+   "preset": "08_emotional_closeup",
+   "scene_id": "S10",
+   "shot_id": "S10-04"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L11"
+   ],
+   "framing": "Medium shot of Maharaj at the platter, slow 1.0->1.2 push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    120
+   ],
+   "pose": "Maharaj seated having finished the entire meal; platter empty",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S10",
+   "shot_id": "S10-05"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L13"
+   ],
+   "framing": "Medium shot capturing the vomiting leela",
+   "need_new": {
+    "class": "missing_image",
+    "reason": "No preset exists for the forceful vomiting leela; a new image/animation rig is required."
+   },
+   "needs_cutout": false,
+   "ovi_ids": [
+    122
+   ],
+   "pose": "Maharaj forcefully vomiting and expelling the eaten food",
+   "preset": "NEED_NEW",
+   "scene_id": "S10",
+   "shot_id": "S10-06"
+  },
+  {
+   "beat_line_ids": [
+    "S10-L12",
+    "S10-L14",
+    "S10-L15",
+    "S10-L16",
+    "S10-L17",
+    "S10-L18"
+   ],
+   "framing": "Medium shot, slow 1.0->1.2 push, contemplative hold for the teaching",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    121,
+    123,
+    124,
+    125,
+    126,
+    127
+   ],
+   "pose": "Maharaj seated calmly after the leela with the empty platter before him",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S10",
+   "shot_id": "S10-07"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L1",
+    "S12-L2"
+   ],
+   "framing": "Establishing environmental parallax showing three pilgrimage sites layered in depth, conveying massive crowds.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    136,
+    137
+   ],
+   "pose": "Wide lateral move through pilgrimage sites: Pandharpur temple far, Godavari river mid, Haridwar ghats near, sky above.",
+   "preset": "02_environmental_parallax",
+   "scene_id": "S12",
+   "shot_id": "S12-1"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L3",
+    "S12-L4"
+   ],
+   "framing": "Wide establishing shot of Shegaon, showing the house becoming a temple, crowds gathering.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    138,
+    139
+   ],
+   "pose": "Shegaon town bustling, Bankatlal's house transforming into a temple (Raula), with devotees arriving.",
+   "preset": "01_establishing_shot",
+   "scene_id": "S12",
+   "shot_id": "S12-2"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L5"
+   ],
+   "framing": "Slow push on a symbolic image of the sun illuminating all beings equally.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    140
+   ],
+   "pose": "Sun radiating light equally over diverse figures, symbolizing caste transcendence.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S12",
+   "shot_id": "S12-3"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L6"
+   ],
+   "framing": "Lateral move through layers of devotees and feast preparations.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    141
+   ],
+   "pose": "Crowds of pilgrims arriving at Shegaon, communal feast (mahaprasad) being served.",
+   "preset": "02_environmental_parallax",
+   "scene_id": "S12",
+   "shot_id": "S12-4"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L7",
+    "S12-L8"
+   ],
+   "framing": "Close-up symbolic representation of author's humility.",
+   "need_new": {
+    "class": "missing_image",
+    "reason": "No preset for symbolic representation of author's humility (insect metaphor) and inability to describe routine; requires custom illustration."
+   },
+   "needs_cutout": true,
+   "ovi_ids": [
+    142,
+    143
+   ],
+   "pose": "Dasganu as a tiny insect before Maharaj's vast form, or a humble devotee with folded hands.",
+   "preset": "NEED_NEW",
+   "scene_id": "S12",
+   "shot_id": "S12-5"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L9",
+    "S12-L10"
+   ],
+   "framing": "Environmental parallax showing the trough, bath, and muddy water in layers.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    144,
+    145
+   ],
+   "pose": "Maharaj at cattle watering trough (hal), taking auspicious bath with 100 pots, drinking muddy water; wind-like unpredictability.",
+   "preset": "02_environmental_parallax",
+   "scene_id": "S12",
+   "shot_id": "S12-6"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L11"
+   ],
+   "framing": "Full-frame insert of chilim being lit, emphasizing outward play without attachment.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    146
+   ],
+   "pose": "Close-up of hands lighting a chilim (clay pipe), smoke rising.",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S12",
+   "shot_id": "S12-7"
+  },
+  {
+   "beat_line_ids": [
+    "S12-L12",
+    "S12-L13"
+   ],
+   "framing": "Slow tilt down onto folded hands, symbolizing invitation and phalashruti.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    147,
+    148
+   ],
+   "pose": "Folded hands in prayer (pranam), tilting down onto contact point.",
+   "preset": "05_bowing_prayer",
+   "scene_id": "S12",
+   "shot_id": "S12-8"
+  }
+ ]
+}

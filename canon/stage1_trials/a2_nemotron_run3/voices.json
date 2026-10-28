@@ -1,0 +1,13 @@
+{
+ "adhyay": 2,
+ "cast": [
+  {
+   "character_id": "sant_dasganu_maharaj",
+   "gender": "male",
+   "reason": "Assigned narrator voice for Sant Dasganu Maharaj as per owner decision.",
+   "status": "RECURRING",
+   "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+   "voice_key": "narrator"
+  }
+ ]
+}

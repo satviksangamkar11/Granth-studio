@@ -1,0 +1,20 @@
+{
+ "adhyay": 2,
+ "questions": [
+  {
+   "id": "Q1",
+   "scene_id": "S1",
+   "text": "Should the opening invocation be visualized only as typography cards, or should we include illustrative establishing shots of Chandrabhaga river bank and Lord Pandurang?"
+  },
+  {
+   "id": "Q2",
+   "scene_id": "S1",
+   "text": "Is the narrator (Sant Dasganu Maharaj) ever shown on screen in this chapter, or is his voice purely off-screen narration?"
+  },
+  {
+   "id": "Q3",
+   "scene_id": "S1",
+   "text": "What is the approved visual style for the typography cards (font, color, background) beyond 'flat-colour style'?"
+  }
+ ]
+}

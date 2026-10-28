@@ -1,0 +1,812 @@
+{
+ "adhyay": 1,
+ "images": [
+  {
+   "camera": "Wide angle, dolly forward 1.0->1.28",
+   "image_id": "s1_establishing_landscape",
+   "light": "Soft natural daylight, diffused, no harsh shadows",
+   "on_screen_facts": [
+    "Ambiguous ancient Indian landscape",
+    "No identifiable village or caste markers",
+    "Layered depth: sky, distant hills, mid-ground vegetation, foreground terrain"
+   ],
+   "people": [],
+   "place_id": "unknown_ancient_landscape",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "No existing place asset for the ambiguous landscape; need new establishing shot layers.",
+   "references": {
+    "characters": [],
+    "place": "unknown_ancient_landscape",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-1"
+   ]
+  },
+  {
+   "camera": "Wide angle, 4-layer parallax setup (sky, mid, fx, fg). Dolly 1.0->1.28.",
+   "image_id": "s2_establishing",
+   "light": "Morning sunlight, warm directional light from east, soft shadows.",
+   "on_screen_facts": [
+    "Devidas is a householder (grihasth).",
+    "His son's rishushanti ceremony is underway; food preparation in progress.",
+    "Used leaf plates (पत्रावळी) are thrown on the road in front of the Brahmin's house."
+   ],
+   "people": [
+    {
+     "gaze": "Towards road/leaf plates",
+     "name": "Devidas",
+     "pose": "Standing, overseeing food preparation",
+     "position": "In doorway of house, partially visible"
+    }
+   ],
+   "place_id": "devidas_house_front",
+   "prop": "leaf_plates",
+   "prop_state": "Scattered on road, used, with visible rice grains",
+   "reason_new": "Establish Devidas's household, ceremony context, and the leaf plates on road as described in OVI 84,86,87.",
+   "references": {
+    "characters": [
+     "Devidas"
+    ],
+    "place": "devidas_house_front",
+    "prop": "leaf_plates",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-1"
+   ]
+  },
+  {
+   "camera": "Medium shot, slow cinematic push 1.0->1.2.",
+   "image_id": "s2_gajanan_sitting",
+   "light": "Morning sun, warm golden light highlighting figure, subtle rim light.",
+   "on_screen_facts": [
+    "Gajanan Maharaj (Samarth Siddhayogi) sits on the road.",
+    "He wears a bandi of old cloth.",
+    "His gaze is fixed at the tip of his nose, face calm, body radiates tapobal like morning sun.",
+    "He is fully digambar (only bandi), no sense of mine/yours or like/dislike."
+   ],
+   "people": [
+    {
+     "gaze": "Downward at nose tip (nasagra drishti)",
+     "name": "Gajanan Maharaj",
+     "pose": "Cross-legged, hands on knees, wearing old cloth bandi",
+     "position": "Seated on road, centered"
+    }
+   ],
+   "place_id": "road_outside_devidas_house",
+   "prop": "bandi",
+   "prop_state": "Worn, old cloth, draped over shoulders",
+   "reason_new": "Introduce Gajanan Maharaj as digambar yogi sitting on road per OVI 88, 91, 92.",
+   "references": {
+    "characters": [
+     "Gajanan Maharaj"
+    ],
+    "place": "road_outside_devidas_house",
+    "prop": "bandi",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-2",
+    "S2-6"
+   ]
+  },
+  {
+   "camera": "Extreme close-up, slow push with subtle breathing animation.",
+   "image_id": "s2_gajanan_face",
+   "light": "Soft morning light, gentle highlight on forehead and cheeks to suggest tapobal.",
+   "on_screen_facts": [
+    "Gaze fixed at nose tip (nasagra drishti).",
+    "Face calm.",
+    "Body radiates tapobal like morning sun."
+   ],
+   "people": [
+    {
+     "gaze": "Nasagra drishti (tip of nose)",
+     "name": "Gajanan Maharaj",
+     "pose": "Eyes half-closed, focused on nose tip, serene",
+     "position": "Close-up, face filling frame"
+    }
+   ],
+   "place_id": "road_outside_devidas_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show nasagra drishti, calm face, and tapobal glow per OVI 91.",
+   "references": {
+    "characters": [
+     "Gajanan Maharaj"
+    ],
+    "place": "road_outside_devidas_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-3"
+   ]
+  },
+  {
+   "camera": "Medium-wide, slow push 1.0->1.2.",
+   "image_id": "s2_gajanan_full",
+   "light": "Morning light, even illumination.",
+   "on_screen_facts": [
+    "Entire body in digambar state (only bandi).",
+    "No sense of mine/yours or like/dislike."
+   ],
+   "people": [
+    {
+     "gaze": "Downward, not engaging with surroundings",
+     "name": "Gajanan Maharaj",
+     "pose": "Cross-legged, bandi only, no other garments",
+     "position": "Full body, seated on road"
+    }
+   ],
+   "place_id": "road_outside_devidas_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Depict digambar state and absence of distinctions per OVI 92.",
+   "references": {
+    "characters": [
+     "Gajanan Maharaj"
+    ],
+    "place": "road_outside_devidas_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-4"
+   ]
+  },
+  {
+   "camera": "Macro close-up, full-frame insert.",
+   "image_id": "s2_hand_grain",
+   "light": "Direct morning light, high contrast to show grain detail.",
+   "on_screen_facts": [
+    "Gajanan searches leaf plates for food grains (his lila).",
+    "He picks up each visible rice grain and puts it in his mouth.",
+    "Teaching: 'Anna hi Parabrahman' (food is supreme Brahman)."
+   ],
+   "people": [
+    {
+     "gaze": "Not visible (hand insert)",
+     "name": "Gajanan Maharaj",
+     "pose": "Fingers picking up a single rice grain",
+     "position": "Hand only, entering from lower right"
+    }
+   ],
+   "place_id": "road_outside_devidas_house",
+   "prop": "rice_grain",
+   "prop_state": "Single grain on leaf plate, being lifted",
+   "reason_new": "Show the act of picking rice grains from leaf plates and eating to teach 'anna parabrahma' per OVI 93,94.",
+   "references": {
+    "characters": [
+     "Gajanan Maharaj"
+    ],
+    "place": "road_outside_devidas_house",
+    "prop": "rice_grain",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-5"
+   ]
+  },
+  {
+   "camera": "wide angle, eye level",
+   "image_id": "s3_establishing",
+   "light": "daytime, natural sunlight, soft shadows",
+   "on_screen_facts": [
+    "Bankatlal Agarwal walking on road",
+    "Damodarpant Kulkarni walking beside him",
+    "Rural road environment"
+   ],
+   "people": [
+    {
+     "gaze": "forward along road",
+     "name": "bankatlal",
+     "pose": "walking, head turned slightly forward",
+     "position": "mid-ground left, walking forward"
+    },
+    {
+     "gaze": "forward along road",
+     "name": "damodarpant",
+     "pose": "walking, head turned slightly forward",
+     "position": "mid-ground right, walking forward"
+    }
+   ],
+   "place_id": "rural_road",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Establishing shot for scene S3, requires layered assets for preset 01_establishing_shot (sky, mid, fx, fg)",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "damodarpant"
+    ],
+    "place": "rural_road",
+    "prop": null,
+    "style_anchor": "flat colour style as per approved style guide"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-01"
+   ]
+  },
+  {
+   "camera": "medium shot, slow push in",
+   "image_id": "s3_reaction",
+   "light": "daytime, soft shadows",
+   "on_screen_facts": [
+    "Both characters surprised",
+    "Gazing off-screen at Gajanan"
+   ],
+   "people": [
+    {
+     "gaze": "off-screen left",
+     "name": "bankatlal",
+     "pose": "standing still, head turned left, eyebrows raised",
+     "position": "center-left, standing"
+    },
+    {
+     "gaze": "off-screen left",
+     "name": "damodarpant",
+     "pose": "standing still, head turned left, mouth slightly open",
+     "position": "center-right, standing"
+    }
+   ],
+   "place_id": "rural_road",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Two-shot for reaction and narrator lines, flat image for preset 03_slow_cinematic_push",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "damodarpant"
+    ],
+    "place": "rural_road",
+    "prop": null,
+    "style_anchor": "flat colour style as per approved style guide"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-02"
+   ]
+  },
+  {
+   "camera": "two-shot, gentle drift",
+   "image_id": "s3_dialogue",
+   "light": "daytime, even lighting",
+   "on_screen_facts": [
+    "Bankatlal speaking to Damodarpant",
+    "Damodarpant listening"
+   ],
+   "people": [
+    {
+     "gaze": "towards Damodarpant then off-screen",
+     "name": "bankatlal",
+     "pose": "standing, right hand extended pointing off-screen",
+     "position": "left, facing right"
+    },
+    {
+     "gaze": "towards Bankatlal",
+     "name": "damodarpant",
+     "pose": "standing, hands clasped, head tilted listening",
+     "position": "right, facing left"
+    }
+   ],
+   "place_id": "rural_road",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Dialogue composition for Bankatlal's line, requires transparent cutouts for left and right for preset 09_dialogue_composition",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "damodarpant"
+    ],
+    "place": "rural_road",
+    "prop": null,
+    "style_anchor": "flat colour style as per approved style guide"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-03"
+   ]
+  },
+  {
+   "camera": "medium shot, slow push in",
+   "image_id": "s3_contemplative",
+   "light": "daytime, warm tone",
+   "on_screen_facts": [
+    "Both characters deep in thought",
+    "Realization about Gajanan's true nature"
+   ],
+   "people": [
+    {
+     "gaze": "downward",
+     "name": "bankatlal",
+     "pose": "standing, chin resting on hand, thoughtful",
+     "position": "center-left, standing"
+    },
+    {
+     "gaze": "downward",
+     "name": "damodarpant",
+     "pose": "standing, hand on chin, thoughtful",
+     "position": "center-right, standing"
+    }
+   ],
+   "place_id": "rural_road",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Contemplative two-shot for narrator's reflection, flat image for preset 03_slow_cinematic_push",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "damodarpant"
+    ],
+    "place": "rural_road",
+    "prop": null,
+    "style_anchor": "flat colour style as per approved style guide"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-04"
+   ]
+  },
+  {
+   "camera": "Wide angle, high angle slightly, dolly in from 1.0 to 1.28",
+   "image_id": "s7_establishing_noon",
+   "light": "Harsh noon sun, strong shadows, heat haze visible",
+   "on_screen_facts": [
+    "Sun at zenith",
+    "Ground visibly dry and cracked",
+    "Birds seeking shade in trees"
+   ],
+   "people": [
+    {
+     "gaze": "downward at ground",
+     "name": "birds",
+     "pose": "sitting fluffed feathers, heads tucked",
+     "position": "perched on tree branches in upper mid-ground"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "First establishing shot of the well area at noon; no prior image exists for this time and light.",
+   "references": {
+    "characters": [
+     "birds"
+    ],
+    "place": "shegaon_well_area",
+    "prop": null,
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-01"
+   ]
+  },
+  {
+   "camera": "Medium shot, eye level, slow push 1.0->1.2",
+   "image_id": "s7_gajanan_seated_bliss",
+   "light": "Direct overhead sun, bright highlights on face, deep shadows",
+   "on_screen_facts": [
+    "Gajanan seated in bliss despite heat",
+    "Empty tumbi beside him"
+   ],
+   "people": [
+    {
+     "gaze": "softly forward, inward",
+     "name": "gajanan",
+     "pose": "cross-legged, hands on knees, eyes half-closed, serene",
+     "position": "center frame, seated on ground near well"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": "tumbi",
+   "prop_state": "empty, resting beside him",
+   "reason_new": "First appearance of Gajanan in this chapter; specific seated pose in heat.",
+   "references": {
+    "characters": [
+     "gajanan"
+    ],
+    "place": "shegaon_well_area",
+    "prop": "tumbi",
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-02"
+   ]
+  },
+  {
+   "camera": "Close-up, slight low angle, slow push with breathing",
+   "image_id": "s7_damodarpant_thoughtful",
+   "light": "Harsh sun, rim light on face, shadowed eyes",
+   "on_screen_facts": [
+    "Damodarpant thinking",
+    "Empty tumbi visible in foreground"
+   ],
+   "people": [
+    {
+     "gaze": "towards Gajanan's tumbi",
+     "name": "damodarpant",
+     "pose": "standing, head tilted, hand on chin, thoughtful",
+     "position": "standing right of Gajanan, slightly behind"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": "tumbi",
+   "prop_state": "empty",
+   "reason_new": "Damodarpant's reaction to narrator's suggestion; new pose.",
+   "references": {
+    "characters": [
+     "damodarpant"
+    ],
+    "place": "shegaon_well_area",
+    "prop": "tumbi",
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-03"
+   ]
+  },
+  {
+   "camera": "Two-shot, waist level, gentle lateral drift",
+   "image_id": "s7_dialogue_damodarpant_gajanan",
+   "light": "Overhead sun, even illumination on both faces",
+   "on_screen_facts": [
+    "Damodarpant offers water",
+    "Gajanan listening with smile"
+   ],
+   "people": [
+    {
+     "gaze": "at Gajanan's face",
+     "name": "damodarpant",
+     "pose": "standing, hands folded in respect, leaning slightly forward",
+     "position": "left frame, standing, hands folded"
+    },
+    {
+     "gaze": "at Damodarpant's eyes",
+     "name": "gajanan",
+     "pose": "seated, gentle smile, right hand resting on knee",
+     "position": "right frame, seated, turned towards Damodarpant"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": "tumbi",
+   "prop_state": "empty, between them",
+   "reason_new": "First dialogue composition between these two in this scene.",
+   "references": {
+    "characters": [
+     "damodarpant",
+     "gajanan"
+    ],
+    "place": "shegaon_well_area",
+    "prop": "tumbi",
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-04"
+   ]
+  },
+  {
+   "camera": "Extreme close-up, slow push with breathing, soft halo",
+   "image_id": "s7_gajanan_smile",
+   "light": "Soft diffused light on face, catchlights in eyes",
+   "on_screen_facts": [
+    "Gajanan smiles at both listeners"
+   ],
+   "people": [
+    {
+     "gaze": "alternating between Damodarpant and Bankatlal (off-screen)",
+     "name": "gajanan",
+     "pose": "smiling warmly, eyes crinkling",
+     "position": "center frame, close-up"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Emotional beat: Gajanan's smile before teaching.",
+   "references": {
+    "characters": [
+     "gajanan"
+    ],
+    "place": "shegaon_well_area",
+    "prop": null,
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-05"
+   ]
+  },
+  {
+   "camera": "Medium shot, slight low angle, slow push 1.0->1.2",
+   "image_id": "s7_gajanan_teaching",
+   "light": "Strong overhead, rim light on shoulders",
+   "on_screen_facts": [
+    "Gajanan speaks about Brahman pervading all",
+    "No difference between individuals",
+    "Body needs water after food"
+   ],
+   "people": [
+    {
+     "gaze": "directly at camera (audience) inclusive",
+     "name": "gajanan",
+     "pose": "seated, speaking, right hand gesturing openly",
+     "position": "center, medium shot"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": "tumbi",
+   "prop_state": "empty",
+   "reason_new": "Extended teaching sequence; single image pushed slowly.",
+   "references": {
+    "characters": [
+     "gajanan"
+    ],
+    "place": "shegaon_well_area",
+    "prop": "tumbi",
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-06"
+   ]
+  },
+  {
+   "camera": "Close-up, slow push with breathing",
+   "image_id": "s7_bankatlal_reaction",
+   "light": "Warm sunlight on face, gentle shadows",
+   "on_screen_facts": [
+    "Bankatlal expresses blessed fortune"
+   ],
+   "people": [
+    {
+     "gaze": "towards Gajanan (off-screen)",
+     "name": "bankatlal",
+     "pose": "standing, hands folded, head bowed slightly, eyes moist",
+     "position": "center frame, close-up"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Bankatlal's emotional reaction; new pose.",
+   "references": {
+    "characters": [
+     "bankatlal"
+    ],
+    "place": "shegaon_well_area",
+    "prop": null,
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-07"
+   ]
+  },
+  {
+   "camera": "Medium-wide from behind, slow push as he recedes",
+   "image_id": "s7_damodarpant_walks_away",
+   "light": "Doorway light spilling out, exterior harsh sun",
+   "on_screen_facts": [
+    "Damodarpant enters house to bring water"
+   ],
+   "people": [
+    {
+     "gaze": "forward towards house entrance",
+     "name": "damodarpant",
+     "pose": "walking away, back to camera, dhoti fluttering",
+     "position": "center, walking from foreground to doorway"
+    }
+   ],
+   "place_id": "shegaon_well_area",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Exit shot of Damodarpant going to fetch water.",
+   "references": {
+    "characters": [
+     "damodarpant"
+    ],
+    "place": "shegaon_well_area",
+    "prop": null,
+    "style_anchor": "flat_color_style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-08"
+   ]
+  },
+  {
+   "camera": "Wide angle, dolly 1.0->1.28, 4 layers (sky, far, mid, fg)",
+   "image_id": "s8_establishing",
+   "light": "Bright noon sunlight, harsh shadows, warm tone",
+   "on_screen_facts": [
+    "Well with trough nearby",
+    "Animals (cows, goats) drinking from trough",
+    "Noon heat implied"
+   ],
+   "people": [
+    {
+     "gaze": "down at water",
+     "name": "cow",
+     "pose": "drinking water",
+     "position": "foreground left, at trough"
+    },
+    {
+     "gaze": "down at water",
+     "name": "goat",
+     "pose": "drinking water",
+     "position": "foreground right, at trough"
+    }
+   ],
+   "place_id": "well_with_trough",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Establishing shot of well and trough with animals drinking, per ovi 134.",
+   "references": {
+    "characters": [
+     "cow",
+     "goat"
+    ],
+    "place": "well_with_trough",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S8",
+   "shot_ids": [
+    "S8-01"
+   ]
+  },
+  {
+   "camera": "Medium shot, slow cinematic push 1.0->1.2",
+   "image_id": "s8_maharaj_drinking",
+   "light": "Bright noon sunlight, warm highlights on face",
+   "on_screen_facts": [
+    "Maharaj (Gajanan) drinks from trough",
+    "Water in trough"
+   ],
+   "people": [
+    {
+     "gaze": "down at water",
+     "name": "gajanan",
+     "pose": "standing, cupping hands to drink",
+     "position": "center, at trough"
+    }
+   ],
+   "place_id": "well_with_trough",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Maharaj drinking at trough, per ovi 135 first part.",
+   "references": {
+    "characters": [
+     "gajanan"
+    ],
+    "place": "well_with_trough",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S8",
+   "shot_ids": [
+    "S8-02"
+   ]
+  },
+  {
+   "camera": "Medium shot, slow cinematic push 1.0->1.2",
+   "image_id": "s8_damodarpant_arrives",
+   "light": "Bright noon sunlight, slight glint on lota",
+   "on_screen_facts": [
+    "Damodarpant walking with lota",
+    "Maharaj at trough in background"
+   ],
+   "people": [
+    {
+     "gaze": "towards Maharaj",
+     "name": "damodarpant",
+     "pose": "walking, holding lota in right hand",
+     "position": "left, walking towards center"
+    }
+   ],
+   "place_id": "well_with_trough",
+   "prop": "lota",
+   "prop_state": "held in hand, filled with water",
+   "reason_new": "Damodarpant arrives with lota, per ovi 135 second part.",
+   "references": {
+    "characters": [
+     "damodarpant"
+    ],
+    "place": "well_with_trough",
+    "prop": "lota",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S8",
+   "shot_ids": [
+    "S8-03"
+   ]
+  },
+  {
+   "camera": "Two-shot, gentle drift across figures",
+   "image_id": "s8_dialogue",
+   "light": "Bright noon sunlight, even lighting on faces",
+   "on_screen_facts": [
+    "Damodarpant gestures stop",
+    "Maharaj pauses drinking"
+   ],
+   "people": [
+    {
+     "gaze": "at Maharaj",
+     "name": "damodarpant",
+     "pose": "standing, right hand raised in stop gesture",
+     "position": "left, facing right"
+    },
+    {
+     "gaze": "at Damodarpant",
+     "name": "gajanan",
+     "pose": "standing, hands at trough, turning head",
+     "position": "right, facing left"
+    }
+   ],
+   "place_id": "well_with_trough",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Damodarpant stops Maharaj from drinking dirty water, per ovi 136.",
+   "references": {
+    "characters": [
+     "damodarpant",
+     "gajanan"
+    ],
+    "place": "well_with_trough",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S8",
+   "shot_ids": [
+    "S8-04"
+   ]
+  },
+  {
+   "camera": "Extreme close-up, full-frame insert",
+   "image_id": "s8_lota_closeup",
+   "light": "Soft diffused light to show water clarity",
+   "on_screen_facts": [
+    "Lota with water",
+    "Hands presenting"
+   ],
+   "people": [
+    {
+     "gaze": "down at lota",
+     "name": "damodarpant_hands",
+     "pose": "hands holding lota, tilting slightly",
+     "position": "center frame"
+    }
+   ],
+   "place_id": "well_with_trough",
+   "prop": "lota",
+   "prop_state": "held, water visible inside, khus scent implied",
+   "reason_new": "Damodarpant presents scented water in lota, per ovi 137.",
+   "references": {
+    "characters": [
+     "damodarpant"
+    ],
+    "place": "well_with_trough",
+    "prop": "lota",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S8",
+   "shot_ids": [
+    "S8-05"
+   ]
+  }
+ ]
+}

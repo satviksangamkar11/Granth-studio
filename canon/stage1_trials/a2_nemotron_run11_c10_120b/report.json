@@ -1,0 +1,269 @@
+{
+ "adhyay": 2,
+ "aggregate_errors": [
+  "note: ovi 48 omission proposed, owner approval needed",
+  "note: ovi 142 omission proposed, owner approval needed",
+  "note: ovi 143 omission proposed, owner approval needed",
+  "S11-L7: core line not in any scene",
+  "S11-L8: core line not in any scene",
+  "S11: scene has no shots",
+  "S3-L8: line is in no shot beat",
+  "S6-L4: line is in no shot beat",
+  "S11-L1: line is in no shot beat",
+  "S11-L2: line is in no shot beat",
+  "S11-L3: line is in no shot beat",
+  "S11-L4: line is in no shot beat",
+  "S11-L5: line is in no shot beat",
+  "S11-L6: line is in no shot beat",
+  "sant_dasganu_maharaj: voice key shared with another character",
+  "Narrator: voice key shared with another character",
+  "Bankatlal: voice key shared with another character",
+  "bankatlal: voice key shared with another character",
+  "Govindbuwa Taklikar: voice key shared with another character",
+  "Bhavaniram: voice key shared with another character",
+  "ichharam_shetji: voice key shared with another character",
+  "Shri Gajanan Maharaj: voice key shared with another character",
+  "gajanan_maharaj: voice key shared with another character",
+  "gajanan: voice key shared with another character",
+  "pitambar_shimpi: voice key shared with another character",
+  "Pitambar Shimpi: voice key shared with another character",
+  "story_map: ovi 138 is typed TEACHING but is in no discourse event",
+  "coverage: ovi 48 omission is not approved by the owner",
+  "coverage: ovi 142 omission is not approved by the owner",
+  "coverage: ovi 143 omission is not approved by the owner",
+  "coverage: ovi 56 is VISUALISED but is in no shot",
+  "coverage: ovi 128 is VISUALISED but is in no shot",
+  "coverage: ovi 129 is VISUALISED but is in no shot",
+  "coverage: ovi 130 is VISUALISED but is in no shot",
+  "coverage: ovi 131 is VISUALISED but is in no shot",
+  "coverage: ovi 132 is VISUALISED but is in no shot",
+  "coverage: ovi 133 is VISUALISED but is in no shot"
+ ],
+ "calls": [
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "map",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "plan",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_01",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_02",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_03",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_04",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_05",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_06",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_07",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_08",
+   "parse_problems": [
+    "reply: missing key briefs",
+    "reply: missing key looks",
+    "reply: missing key voices",
+    "reply: missing key sounds",
+    "reply: missing key questions"
+   ],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_09",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "stop",
+    "model": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+    "status": 200,
+    "streamed": true,
+    "usage": {
+     "completion_tokens": 28227,
+     "prompt_tokens": 18881,
+     "total_tokens": 47108
+    },
+    "wall_s": 350.7
+   },
+   "name": "scene_10",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_11",
+   "parse_problems": [
+    "reply: missing key briefs",
+    "reply: missing key looks",
+    "reply: missing key voices",
+    "reply: missing key sounds",
+    "reply: missing key questions",
+    "reply: unexpected key adhyay"
+   ],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_12",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run8",
+   "schema_errors": [],
+   "status": "ok"
+  }
+ ],
+ "counts": {
+  "briefs": 77,
+  "cues": 68,
+  "ovis": 148,
+  "questions": 52,
+  "scenes": 12,
+  "script_lines": 148,
+  "shots": 93,
+  "voices": 14
+ },
+ "documents_written": [
+  "story_map",
+  "coverage",
+  "scenes",
+  "shots",
+  "briefs",
+  "looks",
+  "voices",
+  "sounds",
+  "questions"
+ ],
+ "dry_run": false,
+ "packet_problems": [],
+ "provider": "nemotron"
+}

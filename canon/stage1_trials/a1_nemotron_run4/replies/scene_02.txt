@@ -1,0 +1,424 @@
+{
+  "shots": {
+    "adhyay": 2,
+    "shots": [
+      {
+        "shot_id": "S2-1",
+        "scene_id": "S2",
+        "ovi_ids": [84, 86, 87],
+        "beat_line_ids": ["S2-L1", "S2-L2", "S2-L3"],
+        "preset": "01_establishing_shot",
+        "need_new": null,
+        "needs_cutout": true,
+        "pose": "Wide view of Devidas's house front with road in foreground; leaf plates scattered on road; food preparation visible in house doorway.",
+        "framing": "Establishing shot, 4 layers (sky, mid-ground house, foreground road with leaf plates, fx light for morning atmosphere). Camera dolly 1.0->1.28."
+      },
+      {
+        "shot_id": "S2-2",
+        "scene_id": "S2",
+        "ovi_ids": [88],
+        "beat_line_ids": ["S2-L4"],
+        "preset": "03_slow_cinematic_push",
+        "need_new": null,
+        "needs_cutout": false,
+        "pose": "Gajanan Maharaj seated on road, wearing old cloth bandi, body relaxed, hands resting on knees.",
+        "framing": "Medium shot, slow push 1.0->1.2, no effects. Focus on figure against road background."
+      },
+      {
+        "shot_id": "S2-3",
+        "scene_id": "S2",
+        "ovi_ids": [91],
+        "beat_line_ids": ["S2-L5"],
+        "preset": "07_character_reaction",
+        "need_new": null,
+        "needs_cutout": true,
+        "pose": "Close-up of Gajanan's face, eyes fixed on tip of nose (nasagra drishti), calm expression, subtle glow of tapobal on skin.",
+        "framing": "Extreme close-up, slow push with breathing motion. Transparent face layer for subtle animation."
+      },
+      {
+        "shot_id": "S2-4",
+        "scene_id": "S2",
+        "ovi_ids": [92],
+        "beat_line_ids": ["S2-L6"],
+        "preset": "03_slow_cinematic_push",
+        "need_new": null,
+        "needs_cutout": false,
+        "pose": "Full body view of Gajanan in digambar state (only bandi), no ornaments, posture serene, no distinction of mine/yours.",
+        "framing": "Medium-wide shot, slow push 1.0->1.2, showing entire figure on road."
+      },
+      {
+        "shot_id": "S2-5",
+        "scene_id": "S2",
+        "ovi_ids": [93, 94],
+        "beat_line_ids": ["S2-L7", "S2-L8"],
+        "preset": "10_object_hand_insert",
+        "need_new": null,
+        "needs_cutout": true,
+        "pose": "Close-up of Gajanan's hand picking up a single rice grain from a leaf plate and bringing it to mouth.",
+        "framing": "Full-frame insert of hand and leaf plate, high detail on grain. Transparent hand layer for animation."
+      },
+      {
+        "shot_id": "S2-6",
+        "scene_id": "S2",
+        "ovi_ids": [95, 96],
+        "beat_line_ids": ["S2-L9", "S2-L10"],
+        "preset": "03_slow_cinematic_push",
+        "need_new": null,
+        "needs_cutout": false,
+        "pose": "Gajanan remains seated on road, leaf plates before him, morning light continues; narrator voiceover explains Vedic quote and people's lack of understanding.",
+        "framing": "Same composition as S2-2, slow push 1.0->1.2, held for narration duration."
+      }
+    ]
+  },
+  "briefs": {
+    "adhyay": 2,
+    "images": [
+      {
+        "image_id": "s2_establishing",
+        "scene_id": "S2",
+        "shot_ids": ["S2-1"],
+        "people": [
+          {
+            "name": "Devidas",
+            "position": "In doorway of house, partially visible",
+            "pose": "Standing, overseeing food preparation",
+            "gaze": "Towards road/leaf plates"
+          }
+        ],
+        "place_id": "devidas_house_front",
+        "prop": "leaf_plates",
+        "prop_state": "Scattered on road, used, with visible rice grains",
+        "camera": "Wide angle, 4-layer parallax setup (sky, mid, fx, fg). Dolly 1.0->1.28.",
+        "light": "Morning sunlight, warm directional light from east, soft shadows.",
+        "reason_new": "Establish Devidas's household, ceremony context, and the leaf plates on road as described in OVI 84,86,87.",
+        "on_screen_facts": [
+          "Devidas is a householder (grihasth).",
+          "His son's rishushanti ceremony is underway; food preparation in progress.",
+          "Used leaf plates (पत्रावळी) are thrown on the road in front of the Brahmin's house."
+        ],
+        "references": {
+          "characters": ["Devidas"],
+          "place": "devidas_house_front",
+          "prop": "leaf_plates",
+          "style_anchor": "approved flat-colour style"
+        }
+      },
+      {
+        "image_id": "s2_gajanan_sitting",
+        "scene_id": "S2",
+        "shot_ids": ["S2-2", "S2-6"],
+        "people": [
+          {
+            "name": "Gajanan Maharaj",
+            "position": "Seated on road, centered",
+            "pose": "Cross-legged, hands on knees, wearing old cloth bandi",
+            "gaze": "Downward at nose tip (nasagra drishti)"
+          }
+        ],
+        "place_id": "road_outside_devidas_house",
+        "prop": "bandi",
+        "prop_state": "Worn, old cloth, draped over shoulders",
+        "camera": "Medium shot, slow cinematic push 1.0->1.2.",
+        "light": "Morning sun, warm golden light highlighting figure, subtle rim light.",
+        "reason_new": "Introduce Gajanan Maharaj as digambar yogi sitting on road per OVI 88, 91, 92.",
+        "on_screen_facts": [
+          "Gajanan Maharaj (Samarth Siddhayogi) sits on the road.",
+          "He wears a bandi of old cloth.",
+          "His gaze is fixed at the tip of his nose, face calm, body radiates tapobal like morning sun.",
+          "He is fully digambar (only bandi), no sense of mine/yours or like/dislike."
+        ],
+        "references": {
+          "characters": ["Gajanan Maharaj"],
+          "place": "road_outside_devidas_house",
+          "prop": "bandi",
+          "style_anchor": "approved flat-colour style"
+        }
+      },
+      {
+        "image_id": "s2_gajanan_face",
+        "scene_id": "S2",
+        "shot_ids": ["S2-3"],
+        "people": [
+          {
+            "name": "Gajanan Maharaj",
+            "position": "Close-up, face filling frame",
+            "pose": "Eyes half-closed, focused on nose tip, serene",
+            "gaze": "Nasagra drishti (tip of nose)"
+          }
+        ],
+        "place_id": "road_outside_devidas_house",
+        "prop": null,
+        "prop_state": null,
+        "camera": "Extreme close-up, slow push with subtle breathing animation.",
+        "light": "Soft morning light, gentle highlight on forehead and cheeks to suggest tapobal.",
+        "reason_new": "Show nasagra drishti, calm face, and tapobal glow per OVI 91.",
+        "on_screen_facts": [
+          "Gaze fixed at nose tip (nasagra drishti).",
+          "Face calm.",
+          "Body radiates tapobal like morning sun."
+        ],
+        "references": {
+          "characters": ["Gajanan Maharaj"],
+          "place": "road_outside_devidas_house",
+          "prop": null,
+          "style_anchor": "approved flat-colour style"
+        }
+      },
+      {
+        "image_id": "s2_gajanan_full",
+        "scene_id": "S2",
+        "shot_ids": ["S2-4"],
+        "people": [
+          {
+            "name": "Gajanan Maharaj",
+            "position": "Full body, seated on road",
+            "pose": "Cross-legged, bandi only, no other garments",
+            "gaze": "Downward, not engaging with surroundings"
+          }
+        ],
+        "place_id": "road_outside_devidas_house",
+        "prop": null,
+        "prop_state": null,
+        "camera": "Medium-wide, slow push 1.0->1.2.",
+        "light": "Morning light, even illumination.",
+        "reason_new": "Depict digambar state and absence of distinctions per OVI 92.",
+        "on_screen_facts": [
+          "Entire body in digambar state (only bandi).",
+          "No sense of mine/yours or like/dislike."
+        ],
+        "references": {
+          "characters": ["Gajanan Maharaj"],
+          "place": "road_outside_devidas_house",
+          "prop": null,
+          "style_anchor": "approved flat-colour style"
+        }
+      },
+      {
+        "image_id": "s2_hand_grain",
+        "scene_id": "S2",
+        "shot_ids": ["S2-5"],
+        "people": [
+          {
+            "name": "Gajanan Maharaj",
+            "position": "Hand only, entering from lower right",
+            "pose": "Fingers picking up a single rice grain",
+            "gaze": "Not visible (hand insert)"
+          }
+        ],
+        "place_id": "road_outside_devidas_house",
+        "prop": "rice_grain",
+        "prop_state": "Single grain on leaf plate, being lifted",
+        "camera": "Macro close-up, full-frame insert.",
+        "light": "Direct morning light, high contrast to show grain detail.",
+        "reason_new": "Show the act of picking rice grains from leaf plates and eating to teach 'anna parabrahma' per OVI 93,94.",
+        "on_screen_facts": [
+          "Gajanan searches leaf plates for food grains (his lila).",
+          "He picks up each visible rice grain and puts it in his mouth.",
+          "Teaching: 'Anna hi Parabrahman' (food is supreme Brahman)."
+        ],
+        "references": {
+          "characters": ["Gajanan Maharaj"],
+          "place": "road_outside_devidas_house",
+          "prop": "rice_grain",
+          "style_anchor": "approved flat-colour style"
+        }
+      }
+    ]
+  },
+  "looks": {
+    "adhyay": 2,
+    "entries": [
+      {
+        "entity_id": "Devidas",
+        "kind": "character",
+        "state_id": "householder_ceremony",
+        "look": "Middle-aged Brahmin householder, wearing traditional dhoti and upavita (sacred thread), calm demeanor, overseeing food preparation.",
+        "source_ovis": [84, 86],
+        "basis": "stated"
+      },
+      {
+        "entity_id": "Gajanan Maharaj",
+        "kind": "character",
+        "state_id": "digambar_yogi_road",
+        "look": "Adult male, dark complexion, seated cross-legged on road, wearing only a worn bandi (old cloth wrapper) over shoulders, body smeared with ash? (not stated), hair matted? (not stated), gaze fixed at nose tip, serene face, aura of tapobal like morning sun.",
+        "source_ovis": [88, 91, 92],
+        "basis": "stated"
+      },
+      {
+        "entity_id": "devidas_house_front",
+        "kind": "place",
+        "state_id": "morning_ceremony",
+        "look": "Traditional Brahmin house entrance with doorway, steps leading to road, courtyard visible inside with cooking vessels, morning light.",
+        "source_ovis": [84, 86, 87],
+        "basis": "stated"
+      },
+      {
+        "entity_id": "road_outside_devidas_house",
+        "kind": "place",
+        "state_id": "leaf_plates_scattered",
+        "look": "Dirt road in front of house, scattered used leaf plates (पत्रावळी) with food remnants, rice grains visible.",
+        "source_ovis": [87, 93],
+        "basis": "stated"
+      },
+      {
+        "entity_id": "leaf_plates",
+        "kind": "prop",
+        "state_id": "used_scattered",
+        "look": "Dried leaf plates (पत्रावळी), browned, some folded, scattered haphazardly, with visible rice grains and food residue.",
+        "source_ovis": [87, 93],
+        "basis": "stated"
+      },
+      {
+        "entity_id": "bandi",
+        "kind": "prop",
+        "state_id": "worn_old_cloth",
+        "look": "A simple wrapper made of old, faded cloth, draped over shoulders, rough texture.",
+        "source_ovis": [88],
+        "basis": "stated"
+      },
+      {
+        "entity_id": "rice_grain",
+        "kind": "prop",
+        "state_id": "single_on_leaf",
+        "look": "Individual white rice grain, resting on leaf plate surface.",
+        "source_ovis": [93, 94],
+        "basis": "stated"
+      }
+    ]
+  },
+  "voices": {
+    "adhyay": 2,
+    "cast": [
+      {
+        "character_id": "narrator",
+        "voice_key": "narrator",
+        "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+        "gender": "male",
+        "status": "RECURRING"
+      },
+      {
+        "character_id": "Gajanan Maharaj",
+        "voice_key": "gajanan",
+        "voice_id": "8fqGzH80bdkm2UseeV9f",
+        "gender": "male",
+        "status": "RECURRING"
+      },
+      {
+        "character_id": "Devidas",
+        "voice_key": "tukaram_confident_marathi_creator",
+        "voice_id": "9K2UKMcmIbg94SvrWWlu",
+        "gender": "male",
+        "status": "NEW_PROPOSED",
+        "reason": "Devidas is a middle-aged Brahmin householder; this voice is a confident, expressive Marathi creator voice, suitable for a householder speaking in a domestic setting."
+      }
+    ]
+  },
+  "sounds": {
+    "adhyay": 2,
+    "cues": [
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L1",
+        "sound_id": "NEED_NEW",
+        "kind": "bed",
+        "purpose": "Morning ambient atmosphere at Devidas house: birds, distant village sounds, light breeze.",
+        "basis": "staging",
+        "sound_prompt": "Early morning rural Indian village ambience: gentle birdsong, distant rooster, light wind through trees, subtle sound of cooking vessels from a household."
+      },
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L3",
+        "sound_id": "NEED_NEW",
+        "kind": "fx",
+        "purpose": "Sound of leaf plates being thrown or settling on road.",
+        "basis": "stated",
+        "sound_prompt": "Dry leaf plates (पत्रावळी) tossed onto dirt road, light rustle and thud."
+      },
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L4",
+        "sound_id": "NEED_NEW",
+        "kind": "bed",
+        "purpose": "Continuation of morning ambience, now focused on road where Gajanan sits.",
+        "basis": "staging",
+        "sound_prompt": "Morning road ambience: faint traffic of bullock carts, distant chatter, birds."
+      },
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L7",
+        "sound_id": "NEED_NEW",
+        "kind": "fx",
+        "purpose": "Sound of fingers picking up a dry rice grain from a leaf plate.",
+        "basis": "stated",
+        "sound_prompt": "Close-up Foley: fingertips brushing dry leaf, picking up a single hard rice grain, subtle click."
+      },
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L8",
+        "sound_id": "NEED_NEW",
+        "kind": "fx",
+        "purpose": "Sound of grain being placed in mouth and subtle swallow.",
+        "basis": "stated",
+        "sound_prompt": "Soft mouth sound: grain placed on tongue, quiet swallow."
+      },
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L9",
+        "sound_id": "NEED_NEW",
+        "kind": "bed",
+        "purpose": "Sustained ambience under narrator's Vedic quote.",
+        "basis": "staging",
+        "sound_prompt": "Quiet, reverent morning atmosphere, very subtle drone of tanpura or nothing, just air."
+      },
+      {
+        "scene_id": "S2",
+        "anchor_line_id": "S2-L10",
+        "sound_id": "NEED_NEW",
+        "kind": "bed",
+        "purpose": "Ambience continues as narrator explains people's lack of understanding.",
+        "basis": "staging",
+        "sound_prompt": "Same morning ambience, slightly lower volume to emphasize narration."
+      }
+    ]
+  },
+  "questions": {
+    "adhyay": 2,
+    "questions": [
+      {
+        "id": "Q1",
+        "scene_id": "S2",
+        "text": "The script mentions Devidas's son's rishushanti ceremony (S2-L2). Should the son be depicted visually? If so, what is his age and appearance?"
+      },
+      {
+        "id": "Q2",
+        "scene_id": "S2",
+        "text": "OVI 88 describes Gajanan wearing a 'bandi of old cloth'. Is there any specific color, pattern, or way it is draped that should be shown?"
+      },
+      {
+        "id": "Q3",
+        "scene_id": "S2",
+        "text": "OVI 91 mentions 'tapobal on body like morning sun rays'. Should this be visualized as a literal glow/halo, or only through lighting?"
+      },
+      {
+        "id": "Q4",
+        "scene_id": "S2",
+        "text": "OVI 92 says Gajanan is 'fully digambar' with only a bandi. Does 'digambar' here mean completely naked except for the bandi, or is there a loincloth? The term can vary."
+      },
+      {
+        "id": "Q5",
+        "scene_id": "S2",
+        "text": "For S2-L9 (Vedic quote 'annam brahma'), there is no described visual. Should we show a manuscript, a symbolic representation, or just hold on Gajanan's face?"
+      },
+      {
+        "id": "Q6",
+        "scene_id": "S2",
+        "text": "The leaf plates are described as 'used' and thrown on the road. Are they made of specific leaves (e.g., banana, palash)? This affects visual texture."
+      },
+      {
+        "id": "Q7",
+        "scene_id": "S2",
+        "text": "Devidas is a Brahmin householder. Should he wear any specific marks (tilak, shikha) beyond the upavita?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,608 @@
+You are a planning assistant for a motion-comic film pipeline. You plan only; you never write the owner's script.
+RULES:
+Use only locked source, research and owner decisions. Cite chapter-qualified ovis for facts. Reuse registered IDs; report missing identities. Never invent events, motives, miracles, dialogue or closure. Reference immutable EASY line IDs; never write, edit, translate or critique their wording. Thoughts and unclear speech remain narrator material. Separate sourced facts from STAGING and inferred visual looks. Preserve required teachings and explicit coverage; only the owner approves omissions. Use supplied preset capabilities and sound availability; report NEED_NEW honestly. Output only this call's schema. No timings, hashes, approvals, API calls or code.
+Reply with ONE JSON object only (no markdown fences, no prose) whose top-level keys are exactly ['shots', 'briefs', 'looks', 'voices', 'sounds', 'questions'], each value a complete document that includes "adhyay": <N>. The response must be wrapped exactly as: {"shots": { "adhyay": <N>, ... }, "briefs": { "adhyay": <N>, ... }, "looks": { "adhyay": <N>, ... }, "voices": { "adhyay": <N>, ... }, "sounds": { "adhyay": <N>, ... }, "questions": { "adhyay": <N>, ... }}. Do NOT return a document directly; every document must sit under its key. In every document the field "adhyay" is the CHAPTER number 1 (the same number in every call and every document; never the scene number or any other number). The reply object has SIX separate top-level keys: shots, briefs, looks, voices, sounds, questions. Never nest one document inside another. The top-level structure is: {"shots": {"adhyay": <N>, ...}, "briefs": {"adhyay": <N>, ...}, "looks": {"adhyay": <N>, ...}, "voices": {"adhyay": <N>, ...}, "sounds": {"adhyay": <N>, ...}, "questions": {"adhyay": <N>, ...}}.
+----------------------------------------
+TASK
+For ONLY the scenes in scene_ids produce shots (use a preset id from the preset list when one fits, flat images first, else NEED_NEW with reason and class), image briefs (include the image-brief lessons below), canon looks (stated vs inferred), voice casting (by DESCRIPTION from the voice library; a RECURRING character keeps the voice it is assigned to; a new character gets the best-matching unassigned voice with a short `reason`; if no saved voice fits raise a question, never invent a voice id), sound suggestions (reuse an available palette sound id else NEED_NEW with an ElevenLabs-ready sound prompt; silence is valid; no music; nothing automatic from presets), and questions for every ambiguity (never a silent guess).
+
+OUTPUT SCHEMAS
+shots
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "shots": {
+   "items": {
+    "additionalProperties": false,
+    "else": {
+     "properties": {
+      "need_new": {
+       "type": "null"
+      }
+     }
+    },
+    "if": {
+     "properties": {
+      "preset": {
+       "const": "NEED_NEW"
+      }
+     }
+    },
+    "properties": {
+     "beat_line_ids": {
+      "items": {
+       "pattern": "^S[0-9]{1,2}-L[0-9]{1,3}$",
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "framing": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "need_new": {
+      "type": [
+       "object",
+       "null"
+      ]
+     },
+     "needs_cutout": {
+      "type": "boolean"
+     },
+     "ovi_ids": {
+      "items": {
+       "minimum": 1,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "pose": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "preset": {
+      "pattern": "^([0-9]{2}_[a-z0-9_]+|NEED_NEW)$",
+      "type": "string"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "shot_id": {
+      "pattern": "^S[0-9]{1,2}-[0-9]{1,2}$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "shot_id",
+     "scene_id",
+     "ovi_ids",
+     "beat_line_ids",
+     "preset",
+     "need_new",
+     "needs_cutout",
+     "pose",
+     "framing"
+    ],
+    "then": {
+     "properties": {
+      "need_new": {
+       "additionalProperties": false,
+       "properties": {
+        "class": {
+         "enum": [
+          "missing_image",
+          "json_arrangement",
+          "renderer_gap"
+         ]
+        },
+        "reason": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "required": [
+        "reason",
+        "class"
+       ],
+       "type": "object"
+      }
+     }
+    },
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "shots"
+ ],
+ "title": "stage1_shots",
+ "type": "object"
+}
+
+briefs
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "images": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "camera": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "image_id": {
+      "pattern": "^s[0-9]{1,2}_[a-z][a-z0-9_]{0,40}$",
+      "type": "string"
+     },
+     "light": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "on_screen_facts": {
+      "items": {
+       "maxLength": 400,
+       "minLength": 1,
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "people": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "gaze": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "name": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "pose": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "position": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "required": [
+        "name",
+        "position",
+        "pose",
+        "gaze"
+       ],
+       "type": "object"
+      },
+      "type": "array"
+     },
+     "place_id": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "prop": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "prop_state": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "reason_new": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "references": {
+      "additionalProperties": false,
+      "properties": {
+       "characters": {
+        "items": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "type": "array"
+       },
+       "place": {
+        "maxLength": 400,
+        "minLength": 1,
+        "type": "string"
+       },
+       "prop": {
+        "maxLength": 400,
+        "minLength": 1,
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "style_anchor": {
+        "maxLength": 400,
+        "minLength": 1,
+        "type": "string"
+       }
+      },
+      "required": [
+       "characters",
+       "place",
+       "style_anchor",
+       "prop"
+      ],
+      "type": "object"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "shot_ids": {
+      "items": {
+       "pattern": "^S[0-9]{1,2}-[0-9]{1,2}$",
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "image_id",
+     "scene_id",
+     "shot_ids",
+     "people",
+     "place_id",
+     "prop",
+     "prop_state",
+     "camera",
+     "light",
+     "reason_new",
+     "on_screen_facts",
+     "references"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "images"
+ ],
+ "title": "stage1_image_briefs",
+ "type": "object"
+}
+
+looks
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "entries": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "basis": {
+      "enum": [
+       "stated",
+       "inferred"
+      ],
+      "type": "string"
+     },
+     "entity_id": {
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "character",
+       "place",
+       "prop"
+      ],
+      "type": "string"
+     },
+     "look": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "source_ovis": {
+      "items": {
+       "minimum": 1,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "state_id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "entity_id",
+     "kind",
+     "state_id",
+     "look",
+     "source_ovis",
+     "basis"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "entries"
+ ],
+ "title": "stage1_canon_looks",
+ "type": "object"
+}
+
+voices
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "cast": {
+   "items": {
+    "additionalProperties": false,
+    "if": {
+     "properties": {
+      "status": {
+       "const": "NEW_PROPOSED"
+      }
+     }
+    },
+    "properties": {
+     "character_id": {
+      "type": "string"
+     },
+     "gender": {
+      "enum": [
+       "male",
+       "female"
+      ],
+      "type": "string"
+     },
+     "reason": {
+      "minLength": 1,
+      "type": "string"
+     },
+     "status": {
+      "enum": [
+       "RECURRING",
+       "NEW_PROPOSED"
+      ],
+      "type": "string"
+     },
+     "voice_id": {
+      "maxLength": 40,
+      "minLength": 10,
+      "type": "string"
+     },
+     "voice_key": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "character_id",
+     "voice_key",
+     "voice_id",
+     "gender",
+     "status"
+    ],
+    "then": {
+     "required": [
+      "reason"
+     ]
+    },
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "cast"
+ ],
+ "title": "stage1_voice_cast",
+ "type": "object"
+}
+
+sounds
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "cues": {
+   "items": {
+    "additionalProperties": false,
+    "else": {
+     "not": {
+      "required": [
+       "sound_prompt"
+      ]
+     }
+    },
+    "if": {
+     "properties": {
+      "sound_id": {
+       "const": "NEED_NEW"
+      }
+     }
+    },
+    "properties": {
+     "anchor_line_id": {
+      "pattern": "^S[0-9]{1,2}-L[0-9]{1,3}$",
+      "type": "string"
+     },
+     "basis": {
+      "enum": [
+       "stated",
+       "staging"
+      ],
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "bed",
+       "fx"
+      ],
+      "type": "string"
+     },
+     "purpose": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "sound_id": {
+      "pattern": "^(bed|fx)_[a-z0-9_]+$|^NEED_NEW$",
+      "type": "string"
+     },
+     "sound_prompt": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "required": [
+     "scene_id",
+     "anchor_line_id",
+     "sound_id",
+     "kind",
+     "purpose",
+     "basis"
+    ],
+    "then": {
+     "required": [
+      "sound_prompt"
+     ]
+    },
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "cues"
+ ],
+ "title": "stage1_sound_suggestions",
+ "type": "object"
+}
+
+questions
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "questions": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "pattern": "^Q[0-9]+$",
+      "type": "string"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "text": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "text"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "questions"
+ ],
+ "title": "stage1_questions",
+ "type": "object"
+}
+
+CHAPTER DATA
+{"script_lines":[{"id":"S2-L1","scene":"S2","voice":"narrator","ovi":84,"priority":"core","marathi":"तिथे देविदास नावाचे एक भाविक गृहस्थ राहत होते.","hindi":"वहाँ देविदास नाम के एक श्रद्धालु गृहस्थ रहते थे।"},{"id":"S2-L2","scene":"S2","voice":"narrator","ovi":86,"priority":"optional","marathi":"त्यांच्या एका मुलाच्या ऋतुशांतीचा सोहळा होता, म्हणून त्यांच्या घरी जेवणाची तयारी सुरू होती.","hindi":"उनके एक बेटे का ऋतुशांति संस्कार था, इसलिए उनके घर में भोजन की तैयारी चल रही थी।"},{"id":"S2-L3","scene":"S2","voice":"narrator","ovi":87,"priority":"core","marathi":"देविदास ब्राह्मणाच्या घरासमोर रस्त्यावर जेवणानंतरच्या उष्ट्या पत्रावळी टाकलेल्या होत्या.","hindi":"देविदास ब्राह्मण के घर के सामने रास्ते पर भोजन के बाद की जूठी पत्तलें फेंकी हुई थीं।"},{"id":"S2-L4","scene":"S2","voice":"narrator","ovi":88,"priority":"core","marathi":"समर्थ सिद्धयोगी गजानन महाराज तिथेच बसले होते आणि त्यांच्या अंगावर जुन्या कापडाची एक बंडी होती.","hindi":"समर्थ सिद्धयोगी गजानन महाराज वहीं बैठे थे और उनके शरीर पर पुराने कपड़े की एक बंडी थी।"},{"id":"S2-L5","scene":"S2","voice":"narrator","ovi":91,"priority":"optional","marathi":"त्यांची नजर नाकाच्या टोकावर स्थिर होती, चेहरा शांत होता आणि अंगावर सकाळच्या कोवळ्या सूर्यासारखे तपाचे तेज झळकत होते.","hindi":"उनकी नज़र नाक के सिरे पर टिकी थी, चेहरा शांत था और शरीर पर सुबह के सूरज जैसा तपोबल चमक रहा था।"},{"id":"S2-L6","scene":"S2","voice":"narrator","ovi":92,"priority":"optional","marathi":"ते पूर्णपणे दिगंबर अवस्थेत होते; त्यांच्या मनात आपले-परके किंवा आवड-निवड असा कोणताच भेद उरला नव्हता.","hindi":"वे पूरी तरह दिगंबर अवस्था में थे; उनके मन में अपने-पराये या पसंद-नापसंद का कोई भेद नहीं बचा था।"},{"id":"S2-L7","scene":"S2","voice":"narrator","ovi":93,"priority":"optional","marathi":"समर्थ महाराज रस्त्यावर बसून आपल्याच लीलेने त्या पत्रावळीवर अन्नाचे कण शोधत होते.","hindi":"समर्थ महाराज रास्ते पर बैठकर अपनी ही लीला से उन पत्तलों में अन्न के दाने ढूँढ रहे थे।"},{"id":"S2-L8","scene":"S2","voice":"narrator","ovi":94,"priority":"core","marathi":"भाताचे एक-एक शीत दिसताच ते उचलून तोंडात टाकत होते; 'अन्न हेच परब्रह्म आहे' हेच त्यांना यातून शिकवायचे होते.","hindi":"चावल का जो भी दाना दिखता, उसे उठाकर मुँह में डाल लेते; वे यही सिखाना चाहते थे कि 'अन्न ही परब्रह्म है'।"},{"id":"S2-L9","scene":"S2","voice":"narrator","ovi":95,"priority":"core","marathi":"कारण वेद आणि उपनिषदे सुद्धा ठामपणे सांगतात की 'अन्न हेच ब्रह्म आहे'.","hindi":"क्योंकि वेद और उपनिषद भी स्पष्ट रूप से कहते हैं कि 'अन्न ही ब्रह्म है'।"},{"id":"S2-L10","scene":"S2","voice":"narrator","ovi":96,"priority":"core","marathi":"हेच सत्य पटवून देण्यासाठी दयाळू महाराज अन्नाचे कण वेचत होते, पण सामान्य लोकांना त्याचा अर्थ कळला नाही.","hindi":"यही सत्य समझाने के लिए दयालु महाराज अन्न के दाने चुन रहे थे, पर साधारण लोगों को इसका अर्थ समझ नहीं आया।"}],"ovis":[{"ovi":84,"text":"त्या वेळची तुम्हां कथा । सांगतों मी ऐका आतां । एक भाविक गृहस्थ होता । नाम ज्याचें देविदास"},{"ovi":86,"text":"त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा"},{"ovi":87,"text":"उष्टया पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या"},{"ovi":88,"text":"तो गजानन समर्थसिद्धयोगी । बसले होते तया जागीं । एक बंडी होती अंगीं । जुन्या पुराण्या कापडाची"},{"ovi":91,"text":"नासाग्र दृष्टि मुद्रा शांत । तपोबल अंगीं झळकत । प्राचीच्या वालरवीवत् । वर्णन किती करावें"},{"ovi":92,"text":"मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या"},{"ovi":93,"text":"ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें"},{"ovi":94,"text":"शीत पडल्या दृष्टीप्रत । तें मुखीं उचलुनी घालीत । हें करण्याचा हाच हेत । ’अन्नपरब्रह्म’ कळवावया"},{"ovi":95,"text":"कां कीं गर्जोन सांगे श्रुती । अन्न हेंच ब्रह्म निगुती । \"अन्नम् ब्रह्मेति\" ऐसी उक्ती । उपनिषदांठायीं असे"},{"ovi":96,"text":"त्याची पटवावया खण । शितें वेंचती दयाघन । त्याचा सामान्य जनांलागून । भावार्थ तो कळला नसे"}],"scene_cards":[{"scene_id":"S2","section_kind":"story","ovi_range":[84,93],"goal":"Introduce Devidas's household and Gajanan's first appearance as a digambar yogi scavenging food","line_ids":["S2-L1","S2-L2","S2-L3","S2-L4","S2-L5","S2-L6","S2-L7"],"teaching_treatment":"none","turn":{"ovi":88,"text":"समर्थ सिद्धयोगी गजानन महाराज तिथेच बसले होते आणि त्यांच्या अंगावर जुन्या कापडाची एक बंडी होती."}}],"presets":[{"preset":"01_establishing_shot","use":"Wide place-setting shot: 4 layers (sky far, mid subject, fx light, fg frame), 1.0->1.28 dolly. Needs: sky, mid, fx, fg.","assets":["fg","fx","mid","sky"],"simplest_renderer":"blender"},{"preset":"02_environmental_parallax","use":"Lateral move through 4 depth layers (schema requires a zoom change >= 0.12 per shot). Needs: sky, far, mid, near.","assets":["far","mid","near","sky"],"simplest_renderer":"blender"},{"preset":"03_slow_cinematic_push","use":"One image, slow 1.0->1.2 push, no effects. SIMPLEST renderer: motion.py (CPU, ffmpeg). Needs: img.","assets":["img"],"simplest_renderer":"motion.py"},{"preset":"04_character_entrance","use":"Character walks in toward a seated figure; camera pans with them. Needs: char (walking pose, transparent), other (seated pose, transparent).","assets":["char","other"],"simplest_renderer":"blender"},{"preset":"05_bowing_prayer","use":"Bow / pranam: tilt down onto the contact point. Needs: pose (both figures, transparent).","assets":["pose"],"simplest_renderer":"blender"},{"preset":"06_blessing_gesture","use":"Raised-hand blessing pose with a slow push toward the hand. LIMIT: the soft warp only nudges an already-raised hand (measured ~1 grey level, not visible); a believable raise needs an extra pose image. Needs: pose (raised hand).","assets":["pose"],"simplest_renderer":"blender"},{"preset":"07_character_reaction","use":"Close-up of a face with a slow push and breathing. Needs: face (close-up, transparent).","assets":["face"],"simplest_renderer":"blender"},{"preset":"08_emotional_closeup","use":"Slower, closer push with a soft halo for a quiet emotional beat. Needs: face (close-up, transparent).","assets":["face"],"simplest_renderer":"blender"},{"preset":"09_dialogue_composition","use":"Two figures facing each other, gentle drift across them. Needs: left, right (transparent poses facing each other). No lip-sync.","assets":["left","right"],"simplest_renderer":"blender"},{"preset":"10_object_hand_insert","use":"Close-up insert of hands / an object. Needs: insert (full-frame close-up).","assets":["insert"],"simplest_renderer":"blender"},{"preset":"11_scene_transition","use":"Two scenes joined by a 6-frame pan bridge (no slow dissolve, so no ghosting). Needs: scene_a, scene_b.","assets":["scene_a","scene_b"],"simplest_renderer":"blender"}],"sound_palette":[],"sound_palette_note":"The sound palette is empty: every sound is NEED_NEW.","voice_library":[{"voice_key":"adam_dominant_firm","voice_id":"pNInz6obpgDQGcFmaJgB","name":"Adam - Dominant, Firm","gender":"male","age":"middle_aged","accent":"american","description":"A bright tenor pitch that immediately cuts through. The delivery is brash and openly confident, speaking with unwavering certainty and a slightly aggressive self-assurance.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"alice_clear_engaging_educator","voice_id":"Xb7hH8MSUJpSbSDYk0k2","name":"Alice - Clear, Engaging Educator","gender":"female","age":"middle_aged","accent":"british","description":"Clear and engaging, friendly woman with a British accent suitable for e-learning.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"ativir_calm_yet_firm_recovery_agent","voice_id":"sQguH2NxUuPknh895Im6","name":"Ativir - Calm yet Firm Recovery Agent","gender":"male","age":"middle_aged","accent":"standard","description":"Composed, assertive and direct — Ativir handles loan recovery with the authority that drives action without ever losing composure. His steady delivery manages EMI reminders, overdue follow-ups, promise-to-pay conversations, and NPA prevention calls with the kind of controlled firmness that keeps customers engaged and pushes recovery rates higher. Perfect for banks, NBFCs, microfinance institutions, and fintech lenders building Marathi loan recovery bots and collections AI agents.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"austin_deep_raspy_and_authentic","voice_id":"Bj9UqZbhQsanLzgalpEG","name":"Austin - Deep, Raspy and Authentic","gender":"male","age":"middle_aged","accent":"us southern","description":"Good ol' boy, goes to the state fair every year, low, deep gravelly voice, proud of his state, can get intimate with a fireside talk, but can get loud when he's drinkin' with the boys.  Served with a heapin' side of STRONG Texas accent and collard greens.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"bankatlal","voice_id":"fqdB7wf4ETj9FXQ8wkLu","name":"Bipin - Rich & Clear Marathi Narrator","gender":"male","age":"middle_aged","accent":"","description":"Warm, expressive & deeply immersive — Bipin brings a Marathi narration quality that makes every story feel lived-in and worth listening to. His smooth, well-paced delivery works across literary audiobooks, cultural storytelling, historical narratives, and true crime series, where a rich, engaging presence keeps listeners absorbed. Perfect for Marathi publishers across Maharashtra and the global Marathi Diaspora.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["bankatlal"],"status":"ASSIGNED"},{"voice_key":"bella_professional_bright_warm","voice_id":"hpp4J3VqNfWAUOO0d1Us","name":"Bella - Professional, Bright, Warm","gender":"female","age":"middle_aged","accent":"american","description":"This voice is warm, bright, and professional, characterized by a Standard American accent and a polished, narrative quality. It features a medium-high pitch with crisp diction and a deliberate, rhythmic pace that makes it highly intelligible and engaging for long-form listening.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"bill_wise_mature_balanced","voice_id":"pqHfZKP75CvOlQylNhV4","name":"Bill - Wise, Mature, Balanced","gender":"male","age":"old","accent":"american","description":"Friendly and comforting voice ready to narrate your stories.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"brian_deep_resonant_and_comforting","voice_id":"nPczCjzI2devNBz1zQrb","name":"Brian - Deep, Resonant and Comforting","gender":"male","age":"middle_aged","accent":"american","description":"Middle-aged man with a resonant and comforting tone. Great for narrations and advertisements.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"callum_husky_trickster","voice_id":"N2lVS1w4EtoT3dr4eOWO","name":"Callum - Husky Trickster","gender":"male","age":"middle_aged","accent":"american","description":"Deceptively gravelly, yet unsettling edge.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"charlie_deep_confident_energetic","voice_id":"IKne3meq5aSn9XLyUdCD","name":"Charlie - Deep, Confident, Energetic","gender":"male","age":"young","accent":"australian","description":"A young Australian male with a confident and energetic voice.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"chris_charming_down_to_earth","voice_id":"iP95p4xoKVk53GoZ742B","name":"Chris - Charming, Down-to-Earth","gender":"male","age":"middle_aged","accent":"american","description":"Natural and real, this down-to-earth voice is great across many use-cases.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"damodarpant","voice_id":"rXW8MF4nX2gHMvBmCDnr","name":"Vinayak - Friendly Marathi Care Agent","gender":"male","age":"young","accent":"","description":"Easy, warm and naturally reassuring — Vinayak brings a young Marathi voice that makes every conversation feel genuine and effortless. His calm, smooth delivery works equally well for customer care queries, AI companion experiences, conversational agents, and everyday dialogue flows where a friendly, relatable voice makes all the difference. Perfect for Marathi customer care bots, companion apps, and regional consumer brands.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["damodarpant"],"status":"ASSIGNED"},{"voice_key":"daniel_steady_broadcaster","voice_id":"onwK4e9ZLuTAKqWW03F9","name":"Daniel - Steady Broadcaster","gender":"male","age":"middle_aged","accent":"british","description":"A strong voice perfect for delivering a professional broadcast or news story.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"eric_smooth_trustworthy","voice_id":"cjVigY5qzO86Huf0OWal","name":"Eric - Smooth, Trustworthy","gender":"male","age":"middle_aged","accent":"american","description":"A smooth tenor pitch from a man in his 40s - perfect for agentic use cases.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"gajanan","voice_id":"8fqGzH80bdkm2UseeV9f","name":"Sharad - Deep Powerful Marathi Narrator","gender":"male","age":"middle_aged","accent":"","description":"Commanding, warm, and impossible to ignore — Sharad brings a deep, powerful Marathi voice that owns every format it touches. His rich, resonant delivery carries equal weight across audiobooks, documentary narration, mythology, corporate content, and cultural storytelling — the rare voice that needs no introduction. Perfect for Marathi content creators, audiobook publishers, documentary filmmakers, and audio platforms building premium Marathi audio experiences.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["gajanan"],"status":"ASSIGNED"},{"voice_key":"george_warm_captivating_storyteller","voice_id":"JBFqnCBsd6RMkjVDRZzb","name":"George - Warm, Captivating Storyteller","gender":"male","age":"middle_aged","accent":"british","description":"Warm resonance that instantly captivates listeners.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"harry_fierce_warrior","voice_id":"SOYHLrjzK2X1ezoPC6cr","name":"Harry - Fierce Warrior","gender":"male","age":"young","accent":"american","description":"An animated warrior ready to charge forward.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"jessica_playful_bright_warm","voice_id":"cgSgspJ2msm6clMCkdW9","name":"Jessica - Playful, Bright, Warm","gender":"female","age":"young","accent":"american","description":"Young and popular, this playful American female voice is perfect for trendy content.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"kalyani_modulated_marathi_storyteller","voice_id":"UN3inGyhBayPW0A8lscL","name":"Kalyani - Modulated Marathi Storyteller","gender":"female","age":"young","accent":"","description":"Smooth, warm, and effortlessly immersive — Kalyani draws listeners into every story with a rich Marathi delivery that feels natural yet deeply compelling. Her soothing, modulated voice shifts seamlessly between characters, emotions, and pace — giving every audiobook the depth that flat TTS voices cannot achieve. Perfect for Marathi audiobook platforms, indie authors, and publishers building audio content that keeps listeners coming back. ","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"laura_enthusiast_quirky_attitude","voice_id":"FGY2WhTYpPnrIDTdsKH5","name":"Laura - Enthusiast, Quirky Attitude","gender":"female","age":"young","accent":"american","description":"This young adult female voice delivers sunny enthusiasm with a quirky attitude.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"liam_energetic_social_media_creator","voice_id":"TX3LPaxmHKxFdv7VOQHJ","name":"Liam - Energetic, Social Media Creator","gender":"male","age":"young","accent":"american","description":"A young adult with energy and warmth - suitable for reels and shorts.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"lily_velvety_actress","voice_id":"pFZP5JQG7iQjIQuC4Bku","name":"Lily - Velvety Actress","gender":"female","age":"middle_aged","accent":"british","description":"Velvety British female voice delivers news and narrations with warmth and clarity.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"matilda_knowledgable_professional","voice_id":"XrExE9yKIg1WjnnlVkGX","name":"Matilda - Knowledgable, Professional","gender":"female","age":"middle_aged","accent":"american","description":"A professional woman with a pleasing alto pitch. Suitable for many use cases.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"mugdha_shinde_marathi_customer_care","voice_id":"OlyuFBQHfYN9SaX9lFEK","name":"Mugdha Shinde - Marathi Customer Care","gender":"female","age":"middle_aged","accent":"","description":"Composed, patient and reassuringly steady — Mugdha Shinde brings a measured Marathi voice that makes every customer interaction feel unhurried and genuinely helpful. Her clear, even delivery handles queries, complaints, account updates, and support flows without ever losing composure. Perfect for ecommerce platforms, telecom brands, and BFSI companies building Marathi customer care bots across Maharashtra, Pune, and Mumbai.","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"mukta_parab_cute_marathi_support_agent","voice_id":"3IWTjbo2MgKIPd81jGhM","name":"Mukta Parab - Cute Marathi Support Agent","gender":"female","age":"young","accent":"","description":"Sweet, warm and instantly likeable — Mukta Parab brings a naturally cute Marathi energy that makes every interaction feel friendly and genuinely helpful. Her cheerful, approachable delivery works across companion apps, casual AI chat, customer support flows, and everyday dialogue where a relatable, endearing presence keeps users comfortable and engaged. Perfect for Marathi conversational AI platforms, companion apps, and consumer brands building warm voice experiences across Maharashtra.","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"narrator","voice_id":"CXkeo30p0Sk4Lr0TAzeo","name":"Tukaram - Smooth Marathi Storyteller","gender":"male","age":"middle_aged","accent":"","description":"Fluid, warm and effortlessly immersive — Tukaram draws listeners deep into every story with a smooth Marathi delivery that never loses pace or warmth. His rich, unhurried voice moves seamlessly through characters, emotions and narrative arcs — giving every audiobook a natural, lived-in quality that polished synthetic voices simply cannot replicate. Perfect for Marathi audiobook platforms, indie authors, and publishers building Marathi audio content for Storytel and Audible India.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["narrator"],"status":"ASSIGNED"},{"voice_key":"radha_k_warm_clear_storyteller","voice_id":"sEf6GZov1sbS8ffqkt03","name":"Radha K - Warm & Clear Storyteller","gender":"female","age":"young","accent":"standard","description":"Expressive, natural, and engaging — Radha K brings a warm female Marathi storytelling voice that makes every narrative feel intimate and effortless. Her clear, well-paced delivery works across folk tales, cultural podcasts, audiobooks, and storytelling, where an authentic, relatable presence keeps listeners absorbed from the first word to the last. Perfect for Marathi content creators and publishers.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"river_relaxed_neutral_informative","voice_id":"SAz9YHcvj6GT2YYXdXww","name":"River - Relaxed, Neutral, Informative","gender":"neutral","age":"middle_aged","accent":"american","description":"A relaxed, neutral voice ready for narrations or conversational projects.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"roger_laid_back_casual_resonant","voice_id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger - Laid-Back, Casual, Resonant","gender":"male","age":"middle_aged","accent":"american","description":"Easy going and perfect for casual conversations.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"roopa_relatable_marathi_customer_care","voice_id":"XdxOBLRN2UCpaYs8XVA7","name":"Roopa - Relatable Marathi Customer Care","gender":"female","age":"young","accent":"","description":"Warm, friendly & genuinely relatable, Roopa brings a natural Marathi energy that makes customer interactions feel like talking to someone who actually cares. Her clear, approachable delivery handles queries, complaints, order updates, and support flows with the kind of everyday warmth Marathi-speaking customers connect with instantly. Perfect for ecommerce platforms, telecom brands, and BFSI companies building Marathi customer care bots across Maharashtra, Pune, and Mumbai.","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"sarah_mature_reassuring_confident","voice_id":"EXAVITQu4vr4xnSDxMaL","name":"Sarah - Mature, Reassuring, Confident","gender":"female","age":"young","accent":"american","description":"Young adult woman with a confident and warm, mature quality and a reassuring, professional tone.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"shrey_deep_marathi_conversational","voice_id":"C9v09R5AIM6tOX6Fn06I","name":"Shrey - Deep Marathi Conversational","gender":"male","age":"young","accent":"","description":"Resonant, warm & naturally engaging, Shrey brings a deep Marathi conversational energy that makes every interaction feel grounded and genuine. His rich, measured delivery works across companion apps, casual AI chat, everyday dialogue, and conversational platforms where a deep, familiar Marathi presence builds instant trust and comfort. Perfect for Marathi conversational AI platforms, companion apps, and consumer brands across Maharashtra, Pune, and Mumbai.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"swapnil_j_recovery_agent_calm_firm","voice_id":"95HE9mkONUCgO3n9AqHl","name":"Swapnil J - Recovery Agent, Calm & Firm","gender":"male","age":"young","accent":"standard","description":"Understanding, respectful, confident. Built for overdue EMI reminders, credit card dues, loan instalment follow-ups, settlement offers, payment plans, promise-to-pay dates, address and contact verification, KYC updates and post-due callbacks that explain the situation first and then ask for the details. Also fits utility bills, insurance renewals and bounced cheque notices. Ideal for NBFCs, banks, fintech lenders, collections teams, BPOs, call centres and voicebots.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"tukaram_confident_marathi_creator","voice_id":"9K2UKMcmIbg94SvrWWlu","name":"Tukaram - Confident Marathi Creator","gender":"male","age":"middle_aged","accent":"","description":"Confident, expressive and naturally captivating — Tukaram brings a bold Marathi energy that makes every podcast and social media moment feel worth listening to. His dynamic, well-paced delivery works across talk shows, interview podcasts, lifestyle reels, knowledge series, and branded audio content where a strong, engaging Marathi presence drives listener loyalty and audience growth. ","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"will_relaxed_optimist","voice_id":"bIHbv24MWmeRgasZH58o","name":"Will - Relaxed Optimist","gender":"male","age":"young","accent":"american","description":"Conversational and laid back.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"}],"research":{},"PRIOR":{"story_map_events":[{"event_id":"E20","title":"Devidas household and Gajanan's appearance","ovi_range":[83,93],"key_ovis":[83,93],"kind":"story","closure":"RESOLVED_IN_ADHYAY"},{"event_id":"E21","title":"Teaching on Annaparabrahma","ovi_range":[94,96],"key_ovis":[94,96],"kind":"discourse","closure":"RESOLVED_IN_ADHYAY"}],"coverage":[{"ovi":84,"disposition":"VISUALISED","reason":"Covered by script line S2-L1; Devidas householder introduced"},{"ovi":86,"disposition":"VISUALISED","reason":"Covered by script line S2-L2; son's rishushanti ceremony, food prep"},{"ovi":87,"disposition":"VISUALISED","reason":"Covered by script line S2-L3; used leaf plates thrown on road"},{"ovi":88,"disposition":"VISUALISED","reason":"Covered by script line S2-L4; Gajanan sitting there in old clothes"},{"ovi":91,"disposition":"VISUALISED","reason":"Covered by script line S2-L5; nasagra drishti, calm face, tapobal"},{"ovi":92,"disposition":"VISUALISED","reason":"Covered by script line S2-L6; fully digambar, no mine/yours"},{"ovi":93,"disposition":"VISUALISED","reason":"Covered by script line S2-L7; searching leaf plates for food grains"},{"ovi":94,"disposition":"QUOTED","reason":"Covered by script line S2-L8; Gajanan's action teaching 'anna parabrahma'"},{"ovi":95,"disposition":"QUOTED","reason":"Covered by script line S2-L9; Vedic quote 'annam brahma'"},{"ovi":96,"disposition":"NARRATED","reason":"Covered by script line S2-L10; narrator explains people didn't understand"}],"scene_cards":[{"scene_id":"S2","section_kind":"story","ovi_range":[84,93],"goal":"Introduce Devidas's household and Gajanan's first appearance as a digambar yogi scavenging food","line_ids":["S2-L1","S2-L2","S2-L3","S2-L4","S2-L5","S2-L6","S2-L7"],"teaching_treatment":"none","turn":{"ovi":88,"text":"समर्थ सिद्धयोगी गजानन महाराज तिथेच बसले होते आणि त्यांच्या अंगावर जुन्या कापडाची एक बंडी होती."}}]}}
+
+MUST NOT
+- never write/edit/translate/critique the EASY script
+- no timings, hashes or approvals
+- no invented events, dialogue or closure
+- no images or voices
+- no code
+- no invented preset or image or voice id
+- no redeciding of known cast, place or style
+- omissions are only PROPOSED, the owner decides
+
+IMAGE BRIEF LESSONS
+Image-brief lessons: approved flat-colour style; full chapter-state identity of each character; exactly the visible people, each once with position, ONE action and gaze target; accepted place and fixed features; critical prop and its state; framing, angle, screen directions across adjoining cuts; preset slot, full-frame or layer need, safe crop; approved light; ONLY on-screen facts (no narration or commentary); exclude extra people, text, inset frames and modern objects; references are the visible characters, the place, one style anchor and the central prop.

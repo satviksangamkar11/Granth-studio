@@ -1,0 +1,202 @@
+{
+ "adhyay": 1,
+ "shots": [
+  {
+   "beat_line_ids": [
+    "S1-L1"
+   ],
+   "framing": "Establishing shot, wide angle, dolly from 1.0 to 1.28, showing an ambiguous ancient Indian landscape to convey mystery of unknown origins.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    70
+   ],
+   "pose": "Wide landscape with layered depth: sky, distant hills, mid-ground trees, foreground grass/rocks. No characters.",
+   "preset": "01_establishing_shot",
+   "scene_id": "S1",
+   "shot_id": "S1-1"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L1",
+    "S2-L2",
+    "S2-L3"
+   ],
+   "framing": "Establishing shot, 4 layers (sky, mid-ground house, foreground road with leaf plates, fx light for morning atmosphere). Camera dolly 1.0->1.28.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    84,
+    86,
+    87
+   ],
+   "pose": "Wide view of Devidas's house front with road in foreground; leaf plates scattered on road; food preparation visible in house doorway.",
+   "preset": "01_establishing_shot",
+   "scene_id": "S2",
+   "shot_id": "S2-1"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L4"
+   ],
+   "framing": "Medium shot, slow push 1.0->1.2, no effects. Focus on figure against road background.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    88
+   ],
+   "pose": "Gajanan Maharaj seated on road, wearing old cloth bandi, body relaxed, hands resting on knees.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S2",
+   "shot_id": "S2-2"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L5"
+   ],
+   "framing": "Extreme close-up, slow push with breathing motion. Transparent face layer for subtle animation.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    91
+   ],
+   "pose": "Close-up of Gajanan's face, eyes fixed on tip of nose (nasagra drishti), calm expression, subtle glow of tapobal on skin.",
+   "preset": "07_character_reaction",
+   "scene_id": "S2",
+   "shot_id": "S2-3"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L6"
+   ],
+   "framing": "Medium-wide shot, slow push 1.0->1.2, showing entire figure on road.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    92
+   ],
+   "pose": "Full body view of Gajanan in digambar state (only bandi), no ornaments, posture serene, no distinction of mine/yours.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S2",
+   "shot_id": "S2-4"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L7",
+    "S2-L8"
+   ],
+   "framing": "Full-frame insert of hand and leaf plate, high detail on grain. Transparent hand layer for animation.",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    93,
+    94
+   ],
+   "pose": "Close-up of Gajanan's hand picking up a single rice grain from a leaf plate and bringing it to mouth.",
+   "preset": "10_object_hand_insert",
+   "scene_id": "S2",
+   "shot_id": "S2-5"
+  },
+  {
+   "beat_line_ids": [
+    "S2-L9",
+    "S2-L10"
+   ],
+   "framing": "Same composition as S2-2, slow push 1.0->1.2, held for narration duration.",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    95,
+    96
+   ],
+   "pose": "Gajanan remains seated on road, leaf plates before him, morning light continues; narrator voiceover explains Vedic quote and people's lack of understanding.",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S2",
+   "shot_id": "S2-6"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L1",
+    "S3-L2"
+   ],
+   "framing": "Wide establishing shot of a rural road at daytime, sky above, road stretching into distance, two figures in mid-ground, foreground elements like trees or fence",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    97,
+    98
+   ],
+   "pose": "Bankatlal and Damodarpant walking side by side on a road, Bankatlal slightly ahead, both looking forward",
+   "preset": "01_establishing_shot",
+   "scene_id": "S3",
+   "shot_id": "S3-01"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L3",
+    "S3-L4",
+    "S3-L5"
+   ],
+   "framing": "Medium two-shot, camera slowly pushes in, both figures centered, background road and scenery",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    98,
+    99,
+    100
+   ],
+   "pose": "Bankatlal and Damodarpant standing still on road, both turned towards left (off-screen), expressions of surprise and curiosity",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S3",
+   "shot_id": "S3-02"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L6",
+    "S3-L7"
+   ],
+   "framing": "Two-shot composition, left Bankatlal, right Damodarpant, gentle drift between them",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    102
+   ],
+   "pose": "Bankatlal facing Damodarpant, gesturing with hand towards off-screen, Damodarpant listening attentively, slight nod",
+   "preset": "09_dialogue_composition",
+   "scene_id": "S3",
+   "shot_id": "S3-03"
+  },
+  {
+   "beat_line_ids": [
+    "S3-L8",
+    "S3-L9"
+   ],
+   "framing": "Medium two-shot, slow push in, warm lighting suggesting realization",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    104,
+    105
+   ],
+   "pose": "Bankatlal and Damodarpant standing side by side, looking thoughtful, gazes directed downward or at each other, contemplative",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S3",
+   "shot_id": "S3-04"
+  },
+  {
+   "beat_line_ids": [
+    "S4-L1"
+   ],
+   "framing": "Wide establishing shot of forest clearing with temple steps; dolly in from 1.0 to 1.28, layers: sky, mid-ground figures, foreground foliage",
+   "need_new": null,
+   "needs_cutout": true,
+   "ovi_ids": [
+    108
+   ],
+   "pose": "Bankatlal walking forward toward seated Gajanan; Damodarpant following behind; Gajanan seated cross-legged, head slightly bowed",
+   "preset": "01_establishing_shot",
+   "scene_id": "S4",
+   "shot_id": "S4-1"
+  }
+ ]
+}

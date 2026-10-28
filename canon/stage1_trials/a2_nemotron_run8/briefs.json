@@ -1,0 +1,2502 @@
+{
+ "adhyay": 2,
+ "images": [
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_1_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "Victory to You, O Unborn, Invincible Lord of all! O Lord who strolls on the banks of the Chandrabhaga, Supreme Brahman and Consort of Rukmini, Friend of the humble—protect me!"
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 1 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 1 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 1 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-1"
+   ]
+  },
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_2_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "Without Your grace and support, O Lord, all efforts are mere exhaustion. If there is no life-breath within the body, who cares for a corpse?"
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 2 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 2 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 2 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-2"
+   ]
+  },
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_3_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "The divine beauty of a lake, O Padmanabha, exists because of its water. The juicy pulp inside a fruit gives value even to its outer rind."
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 3 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 3 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 3 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-3"
+   ]
+  },
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_4_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "In the very same way, Your grace empowers those who surrender to You. Remove my sins, sorrows, and destitution—this alone is my prayer."
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 4 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 4 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 4 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-4"
+   ]
+  },
+  {
+   "camera": "wide angle, slight dolly forward",
+   "image_id": "s2_establishing_shegaon",
+   "light": "morning sunlight, soft shadows",
+   "on_screen_facts": [
+    "Bankatlal walks through Shegaon streets",
+    "Town architecture visible",
+    "Sky clear"
+   ],
+   "people": [
+    {
+     "gaze": "downward, unfocused",
+     "name": "Bankatlal",
+     "pose": "walking distractedly, head bowed",
+     "position": "foreground left, walking along street"
+    }
+   ],
+   "place_id": "shegaon_town",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Establish Shegaon setting and Bankatlal's restless state after Maharaj's departure",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "shegaon_town",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-01"
+   ]
+  },
+  {
+   "camera": "macro lens, extreme close-up",
+   "image_id": "s2_bankatlal_emotional_closeup",
+   "light": "soft diffused, subtle halo effect",
+   "on_screen_facts": [
+    "Bankatlal's face shows longing",
+    "Eyes reflect Maharaj's form"
+   ],
+   "people": [
+    {
+     "gaze": "fixed ahead, seeing Maharaj's form",
+     "name": "Bankatlal",
+     "pose": "still, eyes wide with inner vision",
+     "position": "center frame, close-up"
+    }
+   ],
+   "place_id": "shegaon_town",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Bankatlal's intense absorption and constant vision of Maharaj",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "shegaon_town",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-02"
+   ]
+  },
+  {
+   "camera": "lateral tracking, multi-layer parallax",
+   "image_id": "s2_search_parallax",
+   "light": "daylight, consistent across layers",
+   "on_screen_facts": [
+    "Bankatlal searches lanes",
+    "No sign of Maharaj"
+   ],
+   "people": [
+    {
+     "gaze": "scanning surroundings",
+     "name": "Bankatlal",
+     "pose": "walking, head turning",
+     "position": "mid-ground, moving through lanes"
+    }
+   ],
+   "place_id": "shegaon_town",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Depict Bankatlal's fruitless search across Shegaon",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "shegaon_town",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-03"
+   ]
+  },
+  {
+   "camera": "medium two-shot, gentle drift",
+   "image_id": "s2_father_dialogue",
+   "light": "warm interior, evening lamp light",
+   "on_screen_facts": [
+    "Bhavaniram asks about Bankatlal's state",
+    "Bankatlal listens"
+   ],
+   "people": [
+    {
+     "gaze": "toward father",
+     "name": "Bankatlal",
+     "pose": "standing, hands folded",
+     "position": "left, standing"
+    },
+    {
+     "gaze": "toward Bankatlal",
+     "name": "Bhavaniram",
+     "pose": "seated, leaning forward",
+     "position": "right, seated"
+    }
+   ],
+   "place_id": "bankatlal_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show father questioning Bankatlal about his restlessness",
+   "references": {
+    "characters": [
+     "Bankatlal",
+     "Bhavaniram"
+    ],
+    "place": "bankatlal_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-04"
+   ]
+  },
+  {
+   "camera": "close-up, slow push",
+   "image_id": "s2_father_closeup",
+   "light": "warm interior, focused on face",
+   "on_screen_facts": [
+    "Father's face shows worry",
+    "He asks about illness"
+   ],
+   "people": [
+    {
+     "gaze": "directly at Bankatlal",
+     "name": "Bhavaniram",
+     "pose": "concerned, leaning forward",
+     "position": "center, close-up"
+    }
+   ],
+   "place_id": "bankatlal_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Capture father's concern and probing questions",
+   "references": {
+    "characters": [
+     "Bhavaniram"
+    ],
+    "place": "bankatlal_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-05"
+   ]
+  },
+  {
+   "camera": "medium, slow push",
+   "image_id": "s2_bankatlal_leaves",
+   "light": "doorway light, exterior brighter",
+   "on_screen_facts": [
+    "Bankatlal leaves house",
+    "Determined expression"
+   ],
+   "people": [
+    {
+     "gaze": "forward",
+     "name": "Bankatlal",
+     "pose": "walking out with determination",
+     "position": "center, exiting doorway"
+    }
+   ],
+   "place_id": "bankatlal_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Bankatlal reassuring father and leaving to search again",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "bankatlal_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-06"
+   ]
+  },
+  {
+   "camera": "two-shot, gentle drift",
+   "image_id": "s2_ramajipant_dialogue",
+   "light": "soft indoor, afternoon light",
+   "on_screen_facts": [
+    "Bankatlal speaks to Ramajipant",
+    "Ramajipant listens"
+   ],
+   "people": [
+    {
+     "gaze": "toward Ramajipant",
+     "name": "Bankatlal",
+     "pose": "seated, leaning forward",
+     "position": "left, seated"
+    },
+    {
+     "gaze": "toward Bankatlal",
+     "name": "Ramajipant Deshmukh",
+     "pose": "seated, listening attentively",
+     "position": "right, seated"
+    }
+   ],
+   "place_id": "ramajipant_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Depict Bankatlal narrating events to Ramajipant",
+   "references": {
+    "characters": [
+     "Bankatlal",
+     "Ramajipant Deshmukh"
+    ],
+    "place": "ramajipant_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-07"
+   ]
+  },
+  {
+   "camera": "extreme close-up, slow push with halo",
+   "image_id": "s2_ramajipant_closeup",
+   "light": "soft, warm highlight on face",
+   "on_screen_facts": [
+    "Ramajipant speaks",
+    "Expression of certainty"
+   ],
+   "people": [
+    {
+     "gaze": "direct, slightly upward",
+     "name": "Ramajipant Deshmukh",
+     "pose": "speaking with conviction",
+     "position": "center, close-up"
+    }
+   ],
+   "place_id": "ramajipant_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Ramajipant affirming Maharaj as a Yogi",
+   "references": {
+    "characters": [
+     "Ramajipant Deshmukh"
+    ],
+    "place": "ramajipant_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-08"
+   ]
+  },
+  {
+   "camera": "close-up, slow push",
+   "image_id": "s2_bankatlal_listens",
+   "light": "soft indoor",
+   "on_screen_facts": [
+    "Bankatlal nods",
+    "Moved expression"
+   ],
+   "people": [
+    {
+     "gaze": "toward Ramajipant",
+     "name": "Bankatlal",
+     "pose": "listening, nodding slightly",
+     "position": "center, close-up"
+    }
+   ],
+   "place_id": "ramajipant_house",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Capture Bankatlal's reaction to Ramajipant's request to join darshan",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "ramajipant_house",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-09"
+   ]
+  },
+  {
+   "camera": "medium, slow push",
+   "image_id": "s2_four_days_pass",
+   "light": "late afternoon, golden hour",
+   "on_screen_facts": [
+    "Bankatlal seated calmly",
+    "Time passage implied"
+   ],
+   "people": [
+    {
+     "gaze": "inward",
+     "name": "Bankatlal",
+     "pose": "seated, eyes closed, serene",
+     "position": "center, seated under tree"
+    }
+   ],
+   "place_id": "shegaon_town",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Convey passage of four days with Bankatlal's unwavering remembrance",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "shegaon_town",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S2",
+   "shot_ids": [
+    "S2-10"
+   ]
+  },
+  {
+   "camera": "Wide angle, establishing, 4 layers (sky, far, mid, fg)",
+   "image_id": "s3_establishing",
+   "light": "Daytime, natural sunlight, soft shadows",
+   "on_screen_facts": [
+    "Shiva temple courtyard with stone pavement",
+    "Neem tree at back",
+    "Govindbuwa Taklikar seated on raised platform with instruments",
+    "Men and women devotees gathering"
+   ],
+   "people": [
+    {
+     "gaze": "toward crowd",
+     "name": "govindbuwa_taklikar",
+     "pose": "seated, playing tanpura, one hand on cymbals",
+     "position": "center on raised platform"
+    }
+   ],
+   "place_id": "shiva_temple",
+   "prop": "kirtan_instruments",
+   "prop_state": "in_use",
+   "reason_new": "Establishing shot of Shiva temple for kirtan, requires 4-layer parallax setup.",
+   "references": {
+    "characters": [
+     "govindbuwa_taklikar"
+    ],
+    "place": "shiva_temple",
+    "prop": "kirtan_instruments",
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-01"
+   ]
+  },
+  {
+   "camera": "Medium shot, eye-level",
+   "image_id": "s3_meeting",
+   "light": "Daytime, dappled light through trees",
+   "on_screen_facts": [
+    "Bankatlal and Pitambar on village path",
+    "Pitambar holds measuring tape indicating tailor profession"
+   ],
+   "people": [
+    {
+     "gaze": "toward Pitambar",
+     "name": "bankatlal",
+     "pose": "standing, hands folded, listening",
+     "position": "left, standing on path"
+    },
+    {
+     "gaze": "toward Bankatlal",
+     "name": "pitambar_shimpi",
+     "pose": "standing, holding measuring tape, speaking",
+     "position": "right, standing on path"
+    }
+   ],
+   "place_id": "shegaon_village_path",
+   "prop": "measuring_tape",
+   "prop_state": "held_in_hand",
+   "reason_new": "Bankatlal meets Pitambar on way to kirtan; two-figure dialogue composition.",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "pitambar_shimpi"
+    ],
+    "place": "shegaon_village_path",
+    "prop": "measuring_tape",
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-02"
+   ]
+  },
+  {
+   "camera": "Lateral tracking, 4 depth layers",
+   "image_id": "s3_walking",
+   "light": "Daytime, consistent with previous",
+   "on_screen_facts": [
+    "Two men walking on path",
+    "Temple structure visible in background"
+   ],
+   "people": [
+    {
+     "gaze": "forward toward temple",
+     "name": "bankatlal",
+     "pose": "walking briskly, hands at sides",
+     "position": "left, walking"
+    },
+    {
+     "gaze": "forward toward temple",
+     "name": "pitambar_shimpi",
+     "pose": "walking briskly, hands at sides",
+     "position": "right, walking"
+    }
+   ],
+   "place_id": "shegaon_village_path",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Bankatlal and Pitambar walking toward temple; environmental parallax.",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "pitambar_shimpi"
+    ],
+    "place": "shegaon_village_path",
+    "prop": null,
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-03"
+   ]
+  },
+  {
+   "camera": "Slow push in, medium close-up",
+   "image_id": "s3_maharaj_reveal",
+   "light": "Dappled shade under Neem tree, soft highlights",
+   "on_screen_facts": [
+    "Maharaj seated on stone pavement (faras) at back of temple",
+    "Neem tree above"
+   ],
+   "people": [
+    {
+     "gaze": "downward or inward",
+     "name": "gajanan_maharaj",
+     "pose": "cross-legged, eyes half-closed, serene",
+     "position": "center, seated on stone pavement"
+    }
+   ],
+   "place_id": "shiva_temple",
+   "prop": "stone_pavement",
+   "prop_state": "bare stone",
+   "reason_new": "Reveal of Maharaj seated at back of temple; slow cinematic push.",
+   "references": {
+    "characters": [
+     "gajanan_maharaj"
+    ],
+    "place": "shiva_temple",
+    "prop": "stone_pavement",
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-04"
+   ]
+  },
+  {
+   "camera": "Pan with Bankatlal, medium wide",
+   "image_id": "s3_rush",
+   "light": "Same as previous",
+   "on_screen_facts": [
+    "Bankatlal runs eagerly",
+    "Pitambar follows",
+    "Maharaj remains seated calmly"
+   ],
+   "people": [
+    {
+     "gaze": "fixed on Maharaj",
+     "name": "bankatlal",
+     "pose": "running, arms pumping, eager",
+     "position": "foreground, running toward camera right"
+    },
+    {
+     "gaze": "fixed on Maharaj",
+     "name": "pitambar_shimpi",
+     "pose": "running, slightly slower",
+     "position": "mid-ground, running behind Bankatlal"
+    },
+    {
+     "gaze": "toward approaching devotees",
+     "name": "gajanan_maharaj",
+     "pose": "seated, calm, unchanged",
+     "position": "background, seated"
+    }
+   ],
+   "place_id": "shiva_temple",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Devotees rush toward Maharaj; character entrance preset.",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "pitambar_shimpi",
+     "gajanan_maharaj"
+    ],
+    "place": "shiva_temple",
+    "prop": null,
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-05"
+   ]
+  },
+  {
+   "camera": "Two-shot composition, gentle drift",
+   "image_id": "s3_request",
+   "light": "Soft, respectful",
+   "on_screen_facts": [
+    "Bankatlal and Pitambar stand respectfully",
+    "Maharaj seated, attentive"
+   ],
+   "people": [
+    {
+     "gaze": "toward Maharaj",
+     "name": "bankatlal",
+     "pose": "standing, hands folded in respect",
+     "position": "left, standing at distance"
+    },
+    {
+     "gaze": "toward Maharaj",
+     "name": "pitambar_shimpi",
+     "pose": "standing, hands folded",
+     "position": "left, slightly behind Bankatlal"
+    },
+    {
+     "gaze": "toward Bankatlal",
+     "name": "gajanan_maharaj",
+     "pose": "seated, looking at devotees",
+     "position": "right, seated"
+    }
+   ],
+   "place_id": "shiva_temple",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Devotees humbly ask to bring food; dialogue composition.",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "pitambar_shimpi",
+     "gajanan_maharaj"
+    ],
+    "place": "shiva_temple",
+    "prop": null,
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-06"
+   ]
+  },
+  {
+   "camera": "Extreme close-up, slow push",
+   "image_id": "s3_instruction",
+   "light": "Soft, warm highlight on face",
+   "on_screen_facts": [
+    "Maharaj speaking"
+   ],
+   "people": [
+    {
+     "gaze": "directly at camera (devotees)",
+     "name": "gajanan_maharaj",
+     "pose": "face close-up, speaking gently",
+     "position": "center, close-up"
+    }
+   ],
+   "place_id": "shiva_temple",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Maharaj instructs to bring zunka-bhakri; character reaction close-up.",
+   "references": {
+    "characters": [
+     "gajanan_maharaj"
+    ],
+    "place": "shiva_temple",
+    "prop": null,
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-07"
+   ]
+  },
+  {
+   "camera": "Macro, top-down or straight-on",
+   "image_id": "s3_offering",
+   "light": "Focused on food and hands",
+   "on_screen_facts": [
+    "Bowl of zunka",
+    "Half bhakri",
+    "Hands giving and receiving"
+   ],
+   "people": [
+    {
+     "gaze": "not visible",
+     "name": "bankatlal",
+     "pose": "hands holding bowl and bread",
+     "position": "hands only, lower frame"
+    },
+    {
+     "gaze": "not visible",
+     "name": "gajanan_maharaj",
+     "pose": "hands receiving",
+     "position": "hands only, upper frame"
+    }
+   ],
+   "place_id": "shiva_temple",
+   "prop": "zunka_bhakri",
+   "prop_state": "bowl of zunka and half bhakri",
+   "reason_new": "Bankatlal offers food; object hand insert.",
+   "references": {
+    "characters": [
+     "bankatlal",
+     "gajanan_maharaj"
+    ],
+    "place": "shiva_temple",
+    "prop": "zunka_bhakri",
+    "style_anchor": "flat-colour style as per approved art direction"
+   },
+   "scene_id": "S3",
+   "shot_ids": [
+    "S3-08"
+   ]
+  },
+  {
+   "camera": "Medium two-shot, eye level",
+   "image_id": "s4_maharaj_instructs",
+   "light": "Soft natural daylight, warm tones",
+   "on_screen_facts": [
+    "Maharaj eating Zunka-Bhakri",
+    "Pitambar standing listening",
+    "Simple temple surroundings"
+   ],
+   "people": [
+    {
+     "gaze": "at Pitambar",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "eating Zunka-Bhakri, one hand raised in instruction",
+     "position": "seated left"
+    },
+    {
+     "gaze": "at Maharaj",
+     "name": "Pitambar Shimpi",
+     "pose": "standing attentively, hands folded",
+     "position": "standing right"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": "Zunka-Bhakri",
+   "prop_state": "being eaten",
+   "reason_new": "New illustration needed for this composition.",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Pitambar Shimpi"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "Zunka-Bhakri",
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-1"
+   ]
+  },
+  {
+   "camera": "Close-up, eye level",
+   "image_id": "s4_pitambar_concern",
+   "light": "Soft natural daylight",
+   "on_screen_facts": [
+    "Pitambar's face shows concern and hesitation"
+   ],
+   "people": [
+    {
+     "gaze": "slightly downward",
+     "name": "Pitambar Shimpi",
+     "pose": "face showing concern and hesitation",
+     "position": "center"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "New close-up illustration for Pitambar's reaction.",
+   "references": {
+    "characters": [
+     "Pitambar Shimpi"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-2"
+   ]
+  },
+  {
+   "camera": "Medium shot, slight low angle",
+   "image_id": "s4_maharaj_firm",
+   "light": "Warm daylight",
+   "on_screen_facts": [
+    "Maharaj seated, hand raised in instruction",
+    "Calm authoritative expression"
+   ],
+   "people": [
+    {
+     "gaze": "direct at viewer/Pitambar",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, hand raised in firm instruction",
+     "position": "center"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "New illustration for Maharaj's firm instruction.",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-3"
+   ]
+  },
+  {
+   "camera": "Full body, eye level",
+   "image_id": "s4_pitambar_at_stream",
+   "light": "Bright midday sun, reflecting on water",
+   "on_screen_facts": [
+    "Pitambar standing at stream edge",
+    "Shallow water barely covering soles",
+    "Tumba in hand"
+   ],
+   "people": [
+    {
+     "gaze": "at water",
+     "name": "Pitambar Shimpi",
+     "pose": "standing at stream edge, looking down",
+     "position": "center"
+    }
+   ],
+   "place_id": "The Shallow Stream",
+   "prop": "Tumba",
+   "prop_state": "empty, held at side",
+   "reason_new": "New illustration for Pitambar at the stream.",
+   "references": {
+    "characters": [
+     "Pitambar Shimpi"
+    ],
+    "place": "The Shallow Stream",
+    "prop": "Tumba",
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-4"
+   ]
+  },
+  {
+   "camera": "Extreme close-up, top-down",
+   "image_id": "s4_tumba_touch_water",
+   "light": "Bright sunlight, water reflections",
+   "on_screen_facts": [
+    "Hands lowering tumba into shallow water",
+    "Water surface ripples"
+   ],
+   "people": [
+    {
+     "gaze": "at water surface",
+     "name": "Pitambar Shimpi",
+     "pose": "lowering tumba into water",
+     "position": "hands only"
+    }
+   ],
+   "place_id": "The Shallow Stream",
+   "prop": "Tumba",
+   "prop_state": "touching water surface",
+   "reason_new": "New insert illustration for tumba touching water.",
+   "references": {
+    "characters": [
+     "Pitambar Shimpi"
+    ],
+    "place": "The Shallow Stream",
+    "prop": "Tumba",
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-5"
+   ]
+  },
+  {
+   "camera": "Low angle near water",
+   "image_id": "s4_tumba_submerged",
+   "light": "Bright sunlight, water sparkling",
+   "on_screen_facts": [
+    "Tumba fully submerged in a hollow in stream bed",
+    "Water level risen around tumba",
+    "Pitambar observing"
+   ],
+   "people": [
+    {
+     "gaze": "at tumba",
+     "name": "Pitambar Shimpi",
+     "pose": "watching",
+     "position": "standing behind"
+    }
+   ],
+   "place_id": "The Shallow Stream",
+   "prop": "Tumba",
+   "prop_state": "submerged in hollow, water risen",
+   "reason_new": "New illustration for miracle moment.",
+   "references": {
+    "characters": [
+     "Pitambar Shimpi"
+    ],
+    "place": "The Shallow Stream",
+    "prop": "Tumba",
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-6"
+   ]
+  },
+  {
+   "camera": "Close-up, slight angle",
+   "image_id": "s4_tumba_clear_water",
+   "light": "Bright light refracting through clear water",
+   "on_screen_facts": [
+    "Tumba held up, filled with crystal-clear water",
+    "Light refracting through water"
+   ],
+   "people": [
+    {
+     "gaze": "at tumba",
+     "name": "Pitambar Shimpi",
+     "pose": "holding tumba up",
+     "position": "hands only"
+    }
+   ],
+   "place_id": "The Shallow Stream",
+   "prop": "Tumba",
+   "prop_state": "filled with crystal-clear water",
+   "reason_new": "New insert for clear water in tumba.",
+   "references": {
+    "characters": [
+     "Pitambar Shimpi"
+    ],
+    "place": "The Shallow Stream",
+    "prop": "Tumba",
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-7"
+   ]
+  },
+  {
+   "camera": "Extreme close-up, eye level",
+   "image_id": "s4_pitambar_astonished",
+   "light": "Soft warm light, subtle halo",
+   "on_screen_facts": [
+    "Pitambar's face shows wonder and realization",
+    "Soft halo around head"
+   ],
+   "people": [
+    {
+     "gaze": "slightly upward",
+     "name": "Pitambar Shimpi",
+     "pose": "face showing wonder and realization",
+     "position": "center"
+    }
+   ],
+   "place_id": "The Shallow Stream",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "New emotional close-up for Pitambar's realization.",
+   "references": {
+    "characters": [
+     "Pitambar Shimpi"
+    ],
+    "place": "The Shallow Stream",
+    "prop": null,
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-8"
+   ]
+  },
+  {
+   "camera": "Two-shot, eye level",
+   "image_id": "s4_offering_tumba",
+   "light": "Warm evening light",
+   "on_screen_facts": [
+    "Pitambar kneeling offering tumba",
+    "Maharaj seated, accepting",
+    "Zunka-Bhakri meal finished"
+   ],
+   "people": [
+    {
+     "gaze": "at tumba",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "finishing meal, accepting tumba",
+     "position": "seated right"
+    },
+    {
+     "gaze": "at Maharaj",
+     "name": "Pitambar Shimpi",
+     "pose": "offering tumba with both hands",
+     "position": "kneeling left"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": "Tumba",
+   "prop_state": "filled with clear water, being offered",
+   "reason_new": "New illustration for offering scene.",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Pitambar Shimpi"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "Tumba",
+    "style_anchor": "Flat-colour style as per project style guide"
+   },
+   "scene_id": "S4",
+   "shot_ids": [
+    "S4-9"
+   ]
+  },
+  {
+   "camera": "medium two-shot, slight low angle",
+   "image_id": "s5_shot1",
+   "light": "warm afternoon sunlight filtering through neem leaves",
+   "on_screen_facts": [
+    "Maharaj asks for betel nut",
+    "Bankatlal offers betel nut"
+   ],
+   "people": [
+    {
+     "gaze": "looking at Bankatlal",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, hands resting on knee",
+     "position": "seated left"
+    },
+    {
+     "gaze": "looking at Maharaj",
+     "name": "Bankatlal",
+     "pose": "standing, right hand extended offering betel nut",
+     "position": "standing right"
+    }
+   ],
+   "place_id": "shiva_temple_surroundings",
+   "prop": "betel nut",
+   "prop_state": "whole in Bankatlal's hand",
+   "reason_new": "Establish interaction and offering of betel nut",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Bankatlal"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "betel nut",
+    "style_anchor": "flat-colour style as per approved"
+   },
+   "scene_id": "S5",
+   "shot_ids": [
+    "S5-1"
+   ]
+  },
+  {
+   "camera": "extreme close-up top-down",
+   "image_id": "s5_shot2",
+   "light": "direct sunlight on hands",
+   "on_screen_facts": [
+    "Bankatlal cracks betel nut",
+    "Maharaj receives pieces"
+   ],
+   "people": [
+    {
+     "gaze": "not visible",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "open palm receiving",
+     "position": "off-screen, palm visible"
+    },
+    {
+     "gaze": "not visible",
+     "name": "Bankatlal",
+     "pose": "cracking betel nut",
+     "position": "off-screen, hands visible"
+    }
+   ],
+   "place_id": "shiva_temple_surroundings",
+   "prop": "betel nut",
+   "prop_state": "cracked pieces",
+   "reason_new": "Show betel nut cracking and transfer",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Bankatlal"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "betel nut",
+    "style_anchor": "flat-colour style as per approved"
+   },
+   "scene_id": "S5",
+   "shot_ids": [
+    "S5-2"
+   ]
+  },
+  {
+   "camera": "close-up of palm",
+   "image_id": "s5_shot3",
+   "light": "soft side light highlighting coins",
+   "on_screen_facts": [
+    "Bankatlal places two copper coins on Maharaj's palm"
+   ],
+   "people": [
+    {
+     "gaze": "not visible",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "palm up with coins",
+     "position": "off-screen, palm visible"
+    },
+    {
+     "gaze": "not visible",
+     "name": "Bankatlal",
+     "pose": "placing two coins",
+     "position": "off-screen, hand visible"
+    }
+   ],
+   "place_id": "shiva_temple_surroundings",
+   "prop": "Vyaghrambari and Dudandi coins",
+   "prop_state": "two copper coins on palm",
+   "reason_new": "Show coin offering",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Bankatlal"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "Vyaghrambari and Dudandi coins",
+    "style_anchor": "flat-colour style as per approved"
+   },
+   "scene_id": "S5",
+   "shot_ids": [
+    "S5-3"
+   ]
+  },
+  {
+   "camera": "close-up, shallow depth of field",
+   "image_id": "s5_shot4",
+   "light": "warm dappled light through neem leaves",
+   "on_screen_facts": [
+    "Maharaj laughs at coin offering"
+   ],
+   "people": [
+    {
+     "gaze": "direct at camera",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "smiling, head tilted",
+     "position": "center"
+    }
+   ],
+   "place_id": "shiva_temple_surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Capture Maharaj's amused reaction to coins",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "flat-colour style as per approved"
+   },
+   "scene_id": "S5",
+   "shot_ids": [
+    "S5-4"
+   ]
+  },
+  {
+   "camera": "tight close-up",
+   "image_id": "s5_shot5",
+   "light": "soft golden light with subtle halo",
+   "on_screen_facts": [
+    "Maharaj refuses coins",
+    "Maharaj explains devotion is the only currency"
+   ],
+   "people": [
+    {
+     "gaze": "direct, compassionate",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "teaching gesture (vitarka mudra), serene",
+     "position": "center"
+    }
+   ],
+   "place_id": "shiva_temple_surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Maharaj teaching devotion over material",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "flat-colour style as per approved"
+   },
+   "scene_id": "S5",
+   "shot_ids": [
+    "S5-5"
+   ]
+  },
+  {
+   "camera": "wide shot, slow push in",
+   "image_id": "s5_shot6",
+   "light": "late afternoon golden hour",
+   "on_screen_facts": [
+    "Maharaj tells both to attend kirtan",
+    "Maharaj stays by neem tree"
+   ],
+   "people": [
+    {
+     "gaze": "watching devotees leave",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, relaxed",
+     "position": "seated under neem tree left"
+    },
+    {
+     "gaze": "forward",
+     "name": "Bankatlal",
+     "pose": "walking towards temple",
+     "position": "walking away right"
+    },
+    {
+     "gaze": "forward",
+     "name": "Pitambar Shimpi",
+     "pose": "walking towards temple",
+     "position": "walking beside Bankatlal"
+    }
+   ],
+   "place_id": "shiva_temple_surroundings",
+   "prop": "neem tree",
+   "prop_state": "full canopy",
+   "reason_new": "Show Maharaj sending devotees to kirtan and remaining under neem tree",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Bankatlal",
+     "Pitambar Shimpi"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "neem tree",
+    "style_anchor": "flat-colour style as per approved"
+   },
+   "scene_id": "S5",
+   "shot_ids": [
+    "S5-6"
+   ]
+  },
+  {
+   "camera": "Wide angle, slight dolly in from 1.0 to 1.28",
+   "image_id": "s6_establishing",
+   "light": "Morning sunlight filtering through neem canopy, dappled shadows on stone pavement",
+   "on_screen_facts": [
+    "Govindbuwa begins discourse",
+    "Maharaj sits by neem tree",
+    "Bhagavatam open at 11th skandha Hamsagita"
+   ],
+   "people": [
+    {
+     "gaze": "forward at congregation",
+     "name": "Govindbuwa Taklikar",
+     "pose": "seated, holding open Bhagavatam",
+     "position": "center-left on raised dias"
+    },
+    {
+     "gaze": "downward at ground",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated cross-legged, hands on knees",
+     "position": "right under neem tree"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": "Bhagavatam book",
+   "prop_state": "open at Hamsagita verse",
+   "reason_new": "Establish the kirtan setting with both key figures in their positions.",
+   "references": {
+    "characters": [
+     "Govindbuwa Taklikar",
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": "Bhagavatam book",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-1"
+   ]
+  },
+  {
+   "camera": "Close-up, slow push in",
+   "image_id": "s6_govindbuwa_reaction",
+   "light": "Soft frontal light highlighting facial expression",
+   "on_screen_facts": [
+    "Govindbuwa hears Maharaj chant second half",
+    "His astonishment is visible"
+   ],
+   "people": [
+    {
+     "gaze": "towards Maharaj (off-screen)",
+     "name": "Govindbuwa Taklikar",
+     "pose": "close-up face, eyes wide, eyebrows raised",
+     "position": "center frame"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Govindbuwa's astonishment at Maharaj completing the verse.",
+   "references": {
+    "characters": [
+     "Govindbuwa Taklikar"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-2"
+   ]
+  },
+  {
+   "camera": "Medium close-up, slow 1.0->1.2 push",
+   "image_id": "s6_maharaj_chanting",
+   "light": "Dappled shade from neem, warm rim light on face",
+   "on_screen_facts": [
+    "Maharaj chants the उत्तरार्ध (second half) of the Hamsagita verse"
+   ],
+   "people": [
+    {
+     "gaze": "inward",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, eyes closed, lips moving in chant",
+     "position": "center frame"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Depict Maharaj chanting the second half of the verse.",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-3"
+   ]
+  },
+  {
+   "camera": "Pan with group, lateral move through depth layers",
+   "image_id": "s6_devotees_approach",
+   "light": "Same morning light, shadows lengthening",
+   "on_screen_facts": [
+    "Bankatlal, Pitambar, and mandali set out to bring Maharaj to kirtan"
+   ],
+   "people": [
+    {
+     "gaze": "towards Maharaj",
+     "name": "Bankatlal",
+     "pose": "walking with hands folded",
+     "position": "left foreground walking"
+    },
+    {
+     "gaze": "towards Maharaj",
+     "name": "Pitambar Shimpi",
+     "pose": "walking with hands folded",
+     "position": "right foreground walking"
+    },
+    {
+     "gaze": "towards Maharaj",
+     "name": "Mandali",
+     "pose": "walking as a group",
+     "position": "behind Bankatlal and Pitambar"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show devotees approaching Maharaj to invite him to the temple.",
+   "references": {
+    "characters": [
+     "Bankatlal",
+     "Pitambar Shimpi",
+     "Mandali"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-4"
+   ]
+  },
+  {
+   "camera": "Medium-wide, static",
+   "image_id": "s6_pleading_unmoved",
+   "light": "Continued morning light",
+   "on_screen_facts": [
+    "All plead with utmost humility",
+    "Maharaj does not move an inch"
+   ],
+   "people": [
+    {
+     "gaze": "at Maharaj",
+     "name": "Bankatlal",
+     "pose": "standing with folded hands, pleading",
+     "position": "left standing"
+    },
+    {
+     "gaze": "at Maharaj",
+     "name": "Pitambar Shimpi",
+     "pose": "standing with folded hands, pleading",
+     "position": "right standing"
+    },
+    {
+     "gaze": "at Maharaj",
+     "name": "Mandali",
+     "pose": "folded hands, pleading",
+     "position": "behind, standing"
+    },
+    {
+     "gaze": "inward",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated unchanged, eyes closed",
+     "position": "center seated"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "No preset covers multi-figure supplication with static central figure; custom composition needed.",
+   "references": {
+    "characters": [
+     "Bankatlal",
+     "Pitambar Shimpi",
+     "Mandali",
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-5"
+   ]
+  },
+  {
+   "camera": "Tilt down onto contact point of hands",
+   "image_id": "s6_govindbuwa_bowing",
+   "light": "Soft overhead light",
+   "on_screen_facts": [
+    "Govindbuwa comes himself, folds hands, asks Maharaj to come to Shiva temple"
+   ],
+   "people": [
+    {
+     "gaze": "at Maharaj's feet",
+     "name": "Govindbuwa Taklikar",
+     "pose": "folding hands in prayer, slight bow",
+     "position": "center standing before Maharaj"
+    },
+    {
+     "gaze": "upward at Govindbuwa",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated unchanged",
+     "position": "seated, slightly lower in frame"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Capture the moment Govindbuwa personally invites Maharaj with folded hands.",
+   "references": {
+    "characters": [
+     "Govindbuwa Taklikar",
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-6"
+   ]
+  },
+  {
+   "camera": "Two-shot, gentle drift across figures",
+   "image_id": "s6_dialogue_govindbuwa",
+   "light": "Balanced light on both faces",
+   "on_screen_facts": [
+    "Govindbuwa says Maharaj is Shiva, temple empty without him",
+    "Govindbuwa cites past merit and fruit of kirtan"
+   ],
+   "people": [
+    {
+     "gaze": "at Maharaj",
+     "name": "Govindbuwa Taklikar",
+     "pose": "standing, speaking earnestly, hands folded",
+     "position": "left facing right"
+    },
+    {
+     "gaze": "at Govindbuwa",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, listening calmly",
+     "position": "right facing left"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Govindbuwa's heartfelt plea identifying Maharaj as Shiva.",
+   "references": {
+    "characters": [
+     "Govindbuwa Taklikar",
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-7"
+   ]
+  },
+  {
+   "camera": "Two-shot, gentle drift, focus on Maharaj",
+   "image_id": "s6_dialogue_maharaj",
+   "light": "Same balanced light",
+   "on_screen_facts": [
+    "Maharaj points out contradiction between preaching and insistence",
+    "Maharaj instructs Govindbuwa to complete kirtan, he will listen from here"
+   ],
+   "people": [
+    {
+     "gaze": "at Govindbuwa",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, speaking with authority",
+     "position": "right facing left"
+    },
+    {
+     "gaze": "at Maharaj",
+     "name": "Govindbuwa Taklikar",
+     "pose": "standing, listening humbled",
+     "position": "left facing right"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Show Maharaj's teaching on consistency of word and deed.",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj",
+     "Govindbuwa Taklikar"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-8"
+   ]
+  },
+  {
+   "camera": "Close-up, slower push with soft halo",
+   "image_id": "s6_govindbuwa_proclamation",
+   "light": "Warm spotlight effect on face, background slightly dimmed",
+   "on_screen_facts": [
+    "Govindbuwa announces priceless gem has arrived in Shegaon",
+    "Declares Shegaon has become Pandharpur",
+    "Urges people to serve and obey Maharaj as Vedic command"
+   ],
+   "people": [
+    {
+     "gaze": "out at congregation",
+     "name": "Govindbuwa Taklikar",
+     "pose": "standing, addressing crowd, one hand raised",
+     "position": "center frame on dias"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Emotional close-up for Govindbuwa's proclamation of Maharaj's divinity.",
+   "references": {
+    "characters": [
+     "Govindbuwa Taklikar"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S6",
+   "shot_ids": [
+    "S6-9"
+   ]
+  },
+  {
+   "camera": "Wide angle, 4-layer dolly",
+   "image_id": "s7_establishing_temple",
+   "light": "Dusk, warm sunset tones",
+   "on_screen_facts": [
+    "Kirtan concluded",
+    "People dispersing",
+    "Bankatlal walking home joyfully"
+   ],
+   "people": [
+    {
+     "gaze": "toward home direction",
+     "name": "Bankatlal",
+     "pose": "walking calmly, hands at sides",
+     "position": "center foreground walking right to left"
+    }
+   ],
+   "place_id": "Shiva Temple & Surroundings",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Establishing shot of temple courtyard after kirtan",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "Shiva Temple & Surroundings",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-1"
+   ]
+  },
+  {
+   "camera": "Medium two-shot, gentle drift",
+   "image_id": "s7_dialogue_father",
+   "light": "Evening indoor lamp light",
+   "on_screen_facts": [
+    "Bankatlal requests father to bring Maharaj home",
+    "Father agrees and tells Bankatlal to go himself"
+   ],
+   "people": [
+    {
+     "gaze": "toward father",
+     "name": "Bankatlal",
+     "pose": "hands folded, speaking",
+     "position": "left, standing"
+    },
+    {
+     "gaze": "toward Bankatlal",
+     "name": "Bhavaniram",
+     "pose": "listening, hand raised in blessing",
+     "position": "right, seated on mat"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Dialogue between Bankatlal and father",
+   "references": {
+    "characters": [
+     "Bankatlal",
+     "Bhavaniram"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-2"
+   ]
+  },
+  {
+   "camera": "Close-up, slow push with soft halo",
+   "image_id": "s7_emotional_bankatlal",
+   "light": "Warm indoor light",
+   "on_screen_facts": [
+    "Bankatlal rejoices at father's permission",
+    "He wonders when he will meet Gurumurti"
+   ],
+   "people": [
+    {
+     "gaze": "slightly upward, inward",
+     "name": "Bankatlal",
+     "pose": "smiling, eyes bright",
+     "position": "center frame, close-up"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Emotional close-up of Bankatlal's joy",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-3"
+   ]
+  },
+  {
+   "camera": "Wide establishing, 4-layer dolly",
+   "image_id": "s7_establishing_manik",
+   "light": "Sunset, golden hour",
+   "on_screen_facts": [
+    "Fourth day sunset",
+    "Bankatlal waiting at Manik Chowk"
+   ],
+   "people": [
+    {
+     "gaze": "toward square entrance",
+     "name": "Bankatlal",
+     "pose": "waiting, hands folded",
+     "position": "center, standing"
+    }
+   ],
+   "place_id": "Manik Chowk",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Establishing Manik Chowk at sunset",
+   "references": {
+    "characters": [
+     "Bankatlal"
+    ],
+    "place": "Manik Chowk",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-4"
+   ]
+  },
+  {
+   "camera": "Pan with walking Maharaj",
+   "image_id": "s7_entrance_maharaj",
+   "light": "Sunset, warm",
+   "on_screen_facts": [
+    "Maharaj (Sadgurunath) meets Bankatlal",
+    "Sun of wisdom rises"
+   ],
+   "people": [
+    {
+     "gaze": "toward Bankatlal",
+     "name": "Gajanan Maharaj",
+     "pose": "walking slowly, serene",
+     "position": "entering from left, walking"
+    },
+    {
+     "gaze": "toward Maharaj",
+     "name": "Bankatlal",
+     "pose": "hands folded in reverence",
+     "position": "right, standing"
+    }
+   ],
+   "place_id": "Manik Chowk",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Maharaj arrives and meets Bankatlal",
+   "references": {
+    "characters": [
+     "Gajanan Maharaj",
+     "Bankatlal"
+    ],
+    "place": "Manik Chowk",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-5"
+   ]
+  },
+  {
+   "camera": "Lateral parallax through depth layers",
+   "image_id": "s7_parallax_cows",
+   "light": "Sunset, warm",
+   "on_screen_facts": [
+    "Cowherds return with cows",
+    "Cows gather around Maharaj",
+    "Birds chirp joyfully"
+   ],
+   "people": [
+    {
+     "gaze": "toward cows",
+     "name": "Gajanan Maharaj",
+     "pose": "still, serene",
+     "position": "center, standing"
+    },
+    {
+     "gaze": "toward cows",
+     "name": "cowherd",
+     "pose": "holding staff, walking",
+     "position": "near left, guiding cows"
+    }
+   ],
+   "place_id": "Manik Chowk",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Cows and birds gather around Maharaj",
+   "references": {
+    "characters": [
+     "Gajanan Maharaj",
+     "cowherd"
+    ],
+    "place": "Manik Chowk",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-6"
+   ]
+  },
+  {
+   "camera": "Wide establishing of house entrance",
+   "image_id": "s7_establishing_home",
+   "light": "Twilight, lamps being lit",
+   "on_screen_facts": [
+    "Shopkeepers preparing evening lamps",
+    "Bankatlal brings Maharaj home"
+   ],
+   "people": [
+    {
+     "gaze": "toward house entrance",
+     "name": "Bankatlal",
+     "pose": "walking, hands folded",
+     "position": "left, walking with Maharaj"
+    },
+    {
+     "gaze": "forward",
+     "name": "Gajanan Maharaj",
+     "pose": "walking serenely",
+     "position": "right, walking beside Bankatlal"
+    },
+    {
+     "gaze": "toward lamp",
+     "name": "shopkeeper",
+     "pose": "lighting lamp",
+     "position": "background, near shop"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": "lamp",
+   "prop_state": "being lit",
+   "reason_new": "Bankatlal brings Maharaj home as shopkeepers light lamps",
+   "references": {
+    "characters": [
+     "Bankatlal",
+     "Gajanan Maharaj",
+     "shopkeeper"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": "lamp",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S7",
+   "shot_ids": [
+    "S7-7"
+   ]
+  },
+  {
+   "camera": "Close-up, eye-level, slight low angle to emphasize divinity",
+   "image_id": "s9_shot_01",
+   "light": "Soft morning light, warm golden tones",
+   "on_screen_facts": [
+    "Saffron paste applied to forehead",
+    "Diverse garlands adorn neck",
+    "Tulsi blossoms offered on head"
+   ],
+   "people": [
+    {
+     "gaze": "gentle, downward toward devotees",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, adorned with saffron paste on forehead, garlands around neck, tulsi blossoms on head",
+     "position": "center"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": "saffron paste, garlands, tulsi blossoms",
+   "prop_state": "freshly applied and placed",
+   "reason_new": "To visualize the adornments described in Ovi 101",
+   "references": {
+    "characters": [
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": "saffron paste, garlands, tulsi blossoms",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-01"
+   ]
+  },
+  {
+   "camera": "Medium shot, top-down angle showing platter",
+   "image_id": "s9_shot_02",
+   "light": "Soft morning light, even illumination",
+   "on_screen_facts": [
+    "Various food offerings presented to Samarth",
+    "Bankatlal's fortune dawned"
+   ],
+   "people": [
+    {
+     "gaze": "focused on platter",
+     "name": "Devotees",
+     "pose": "placing food offerings with reverence",
+     "position": "around platter"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": "naivedya (various food offerings)",
+   "prop_state": "arranged on a large platter",
+   "reason_new": "To show the variety of naivedya offered as per Ovi 102",
+   "references": {
+    "characters": [
+     "Devotees"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": "naivedya",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-02"
+   ]
+  },
+  {
+   "camera": "Wide establishing shot, slight dolly in",
+   "image_id": "s9_shot_03",
+   "light": "Morning light, clear sky",
+   "on_screen_facts": [
+    "Bankatlal's house truly became Dwarka",
+    "That day was Monday, sacred day of Lord Shiva"
+   ],
+   "people": [],
+   "place_id": "Bankatlal’s House",
+   "prop": "house exterior with festive decorations",
+   "prop_state": "transformed to resemble Dwarka, Monday ambience",
+   "reason_new": "To depict the house becoming Dwarka on Monday as per Ovi 103",
+   "references": {
+    "characters": [],
+    "place": "Bankatlal’s House",
+    "prop": "house exterior",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-03"
+   ]
+  },
+  {
+   "camera": "Medium-wide shot, group composition",
+   "image_id": "s9_shot_04",
+   "light": "Morning light, soft shadows",
+   "on_screen_facts": [
+    "All gathered devotees fulfilled their desires",
+    "Only Ichharam Shetji remained unresolved"
+   ],
+   "people": [
+    {
+     "gaze": "toward Maharaj",
+     "name": "Devotees (mandali)",
+     "pose": "smiling, hands folded, fulfilled",
+     "position": "group left"
+    },
+    {
+     "gaze": "toward Maharaj but thoughtful",
+     "name": "Ichharam Shetji",
+     "pose": "standing, hands at sides, unresolved expression",
+     "position": "right, slightly apart"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "To show all mandali fulfilled except Ichharam as per Ovi 104",
+   "references": {
+    "characters": [
+     "Devotees",
+     "Ichharam Shetji"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-04"
+   ]
+  },
+  {
+   "camera": "Close-up, eye-level",
+   "image_id": "s9_shot_05",
+   "light": "Soft morning light, gentle highlight on face",
+   "on_screen_facts": [
+    "Ichharam is Bankatlal's cousin",
+    "He is devout and a worshipper of Shiva"
+   ],
+   "people": [
+    {
+     "gaze": "inward, slightly upward",
+     "name": "Ichharam Shetji",
+     "pose": "standing, thoughtful, hand on chin",
+     "position": "center"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "To introduce Ichharam as cousin, devout, Shiva bhakt per Ovi 105",
+   "references": {
+    "characters": [
+     "Ichharam Shetji"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-05"
+   ]
+  },
+  {
+   "camera": "Close-up, slight low angle",
+   "image_id": "s9_shot_06",
+   "light": "Soft morning light, warm",
+   "on_screen_facts": [
+    "Today is Monday and Ichharam is fasting",
+    "He perceives Shankar walking in Bankatlal's house"
+   ],
+   "people": [
+    {
+     "gaze": "internal, upward",
+     "name": "Ichharam Shetji",
+     "pose": "hands folded in prayer, eyes closed",
+     "position": "center"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "To visualize Ichharam's internal thought about Monday fast and Shankar's presence per Ovi 106",
+   "references": {
+    "characters": [
+     "Ichharam Shetji"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-06"
+   ]
+  },
+  {
+   "camera": "Medium shot, eye-level",
+   "image_id": "s9_shot_07",
+   "light": "Evening light, transitioning to twilight",
+   "on_screen_facts": [
+    "Ichharam resolves to perform Maharaj's ritual worship after sunset",
+    "Only then will he break his fast"
+   ],
+   "people": [
+    {
+     "gaze": "focused on Maharaj",
+     "name": "Ichharam Shetji",
+     "pose": "determined, hands in prayer gesture",
+     "position": "center"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "To show Ichharam's resolve to worship after sunset then break fast per Ovi 107",
+   "references": {
+    "characters": [
+     "Ichharam Shetji"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": null,
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-07"
+   ]
+  },
+  {
+   "camera": "Wide shot, slightly elevated",
+   "image_id": "s9_shot_08",
+   "light": "Twilight, cool tones with warm horizon",
+   "on_screen_facts": [
+    "Sunset occurred",
+    "Ichharam bathed keeping Pradosh hour in mind"
+   ],
+   "people": [
+    {
+     "gaze": "downward, meditative",
+     "name": "Ichharam Shetji",
+     "pose": "bathing, water poured over head",
+     "position": "in water"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": "water",
+   "prop_state": "flowing, twilight",
+   "reason_new": "To depict Ichharam's bath at Pradosh hour per Ovi 108",
+   "references": {
+    "characters": [
+     "Ichharam Shetji"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": "water",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-08"
+   ]
+  },
+  {
+   "camera": "Close-up on hands and offerings, Maharaj in soft focus",
+   "image_id": "s9_shot_09",
+   "light": "Twilight, warm lamp light",
+   "on_screen_facts": [
+    "Ichharam takes worship materials",
+    "He worships Saint Gajanan with supreme love"
+   ],
+   "people": [
+    {
+     "gaze": "on Maharaj",
+     "name": "Ichharam Shetji",
+     "pose": "performing puja with materials",
+     "position": "foreground"
+    },
+    {
+     "gaze": "benevolent, toward Ichharam",
+     "name": "Shri Gajanan Maharaj",
+     "pose": "seated, receiving worship",
+     "position": "background"
+    }
+   ],
+   "place_id": "Bankatlal’s House",
+   "prop": "puja materials (flowers, incense, lamp)",
+   "prop_state": "arranged, being offered",
+   "reason_new": "To show Ichharam worshipping Maharaj with supreme love per Ovi 109",
+   "references": {
+    "characters": [
+     "Ichharam Shetji",
+     "Shri Gajanan Maharaj"
+    ],
+    "place": "Bankatlal’s House",
+    "prop": "puja materials",
+    "style_anchor": "approved flat-colour style"
+   },
+   "scene_id": "S9",
+   "shot_ids": [
+    "S9-09"
+   ]
+  },
+  {
+   "camera": "lateral dolly with parallax, 4 depth layers (sky, far, mid, near)",
+   "image_id": "s12_pilgrimage_parallax",
+   "light": "bright daytime, sun high, casting long shadows",
+   "on_screen_facts": [
+    "Massive crowds at Pandharpur during Ashadhi",
+    "Crowds at Godavari bank during Simhastha",
+    "Crowds at Haridwar during Kumbh",
+    "Same intensity of crowds arriving at Shegaon"
+   ],
+   "people": [
+    {
+     "gaze": "toward temple sanctums",
+     "name": "crowd of devotees",
+     "pose": "walking, standing with folded hands",
+     "position": "distributed across far, mid, near layers"
+    }
+   ],
+   "place_id": "Pilgrimage Sites (Pandharpur, Godavari, Haridwar)",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Establish the scale of pilgrimage crowds compared to Shegaon.",
+   "references": {
+    "characters": [
+     "crowd of devotees"
+    ],
+    "place": "Pilgrimage Sites (Pandharpur, Godavari, Haridwar)",
+    "prop": null,
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-1"
+   ]
+  },
+  {
+   "camera": "wide static with slow dolly in, 4 layers (sky, far, mid, fg)",
+   "image_id": "s12_shegaon_establishing",
+   "light": "evening golden hour, warm tones",
+   "on_screen_facts": [
+    "Shegaon bustling with devotees",
+    "Bankatlal's house becomes a temple (Raula)"
+   ],
+   "people": [
+    {
+     "gaze": "toward Bankatlal's house",
+     "name": "devotees",
+     "pose": "walking, carrying offerings",
+     "position": "foreground approaching house"
+    }
+   ],
+   "place_id": "Shegaon (Bankatlal's House)",
+   "prop": "house turning into temple (Raula)",
+   "prop_state": "transformation in progress, temple spire emerging",
+   "reason_new": "Show Shegaon becoming a pilgrimage center and Bankatlal's house becoming a temple.",
+   "references": {
+    "characters": [
+     "devotees"
+    ],
+    "place": "Shegaon (Bankatlal's House)",
+    "prop": "house turning into temple (Raula)",
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-2"
+   ]
+  },
+  {
+   "camera": "slow cinematic push 1.0->1.2",
+   "image_id": "s12_sun_equality",
+   "light": "intense sunlight, high contrast",
+   "on_screen_facts": [
+    "Sun light falls equally on all",
+    "Caste cannot remain for a realized being"
+   ],
+   "people": [
+    {
+     "gaze": "toward sun",
+     "name": "diverse figures",
+     "pose": "standing, sitting, various postures",
+     "position": "silhouetted against sun"
+    }
+   ],
+   "place_id": "Symbolic Space",
+   "prop": "sun",
+   "prop_state": "radiant, emitting equal light",
+   "reason_new": "Visualize the teaching that for one who reached Brahman, caste disappears like sun's equal light.",
+   "references": {
+    "characters": [
+     "diverse figures"
+    ],
+    "place": "Symbolic Space",
+    "prop": "sun",
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-3"
+   ]
+  },
+  {
+   "camera": "lateral move through 4 depth layers",
+   "image_id": "s12_feast_parallax",
+   "light": "midday, bright",
+   "on_screen_facts": [
+    "New pilgrims arrive daily",
+    "Communal feast (mahaprasad) served"
+   ],
+   "people": [
+    {
+     "gaze": "toward food and each other",
+     "name": "pilgrims",
+     "pose": "eating, serving, sitting in rows",
+     "position": "layers receding into distance"
+    }
+   ],
+   "place_id": "Shegaon (Feast Ground)",
+   "prop": "mahaprasad vessels",
+   "prop_state": "filled with food, being distributed",
+   "reason_new": "Depict daily new pilgrims arriving and communal feasts (mahaprasad).",
+   "references": {
+    "characters": [
+     "pilgrims"
+    ],
+    "place": "Shegaon (Feast Ground)",
+    "prop": "mahaprasad vessels",
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-4"
+   ]
+  },
+  {
+   "camera": "close-up, slow push",
+   "image_id": "s12_author_humility",
+   "light": "soft, reverent",
+   "on_screen_facts": [
+    "Author compares himself to an insect",
+    "Maharaj speaks through author's mouth",
+    "Author admits inability to sing Maharaj's boundless glory"
+   ],
+   "people": [
+    {
+     "gaze": "toward Maharaj's vast form",
+     "name": "Dasganu (author)",
+     "pose": "folded hands, head bowed",
+     "position": "center, small"
+    }
+   ],
+   "place_id": "Symbolic Space",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Custom illustration for author's humility metaphor (insect) and admission of inability to fully describe Maharaj's routine.",
+   "references": {
+    "characters": [
+     "Dasganu (author)"
+    ],
+    "place": "Symbolic Space",
+    "prop": null,
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-5"
+   ]
+  },
+  {
+   "camera": "lateral move through 4 depth layers",
+   "image_id": "s12_routine_parallax",
+   "light": "natural, variable",
+   "on_screen_facts": [
+    "Maharaj takes auspicious bath (Mangal Snan) with 100 pots",
+    "Maharaj visits cattle watering trough",
+    "Maharaj drinks muddy water",
+    "His routine has no fixed rule, like wind"
+   ],
+   "people": [
+    {
+     "gaze": "down at water",
+     "name": "Maharaj",
+     "pose": "sitting, drinking from trough",
+     "position": "mid layer at trough"
+    }
+   ],
+   "place_id": "Cattle Watering Trough (Hal)",
+   "prop": "100 pots for bath, muddy water",
+   "prop_state": "pots arranged, water being poured",
+   "reason_new": "Show Maharaj's unpredictable routine: auspicious bath, visiting cattle trough, drinking muddy water, no fixed rule.",
+   "references": {
+    "characters": [
+     "Maharaj"
+    ],
+    "place": "Cattle Watering Trough (Hal)",
+    "prop": "100 pots for bath, muddy water",
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-6"
+   ]
+  },
+  {
+   "camera": "full-frame close-up insert",
+   "image_id": "s12_chilim_insert",
+   "light": "warm glow from ember",
+   "on_screen_facts": [
+    "Maharaj lights chilim frequently",
+    "No attachment, only outward play"
+   ],
+   "people": [
+    {
+     "gaze": "on chilim",
+     "name": "Maharaj's hands",
+     "pose": "lighting chilim",
+     "position": "center frame"
+    }
+   ],
+   "place_id": "Shegaon (Maharaj's vicinity)",
+   "prop": "chilim (clay pipe)",
+   "prop_state": "lit, smoke rising",
+   "reason_new": "Show Maharaj's frequent chilim use as outward play (kautuk) without attachment.",
+   "references": {
+    "characters": [
+     "Maharaj's hands"
+    ],
+    "place": "Shegaon (Maharaj's vicinity)",
+    "prop": "chilim (clay pipe)",
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-7"
+   ]
+  },
+  {
+   "camera": "slow tilt down onto contact point",
+   "image_id": "s12_prayer_bowing",
+   "light": "soft, serene",
+   "on_screen_facts": [
+    "Invitation to listen to next chapter with devotion",
+    "Dasganu prays with folded hands for the biography to be ideal"
+   ],
+   "people": [
+    {
+     "gaze": "downward",
+     "name": "folded hands (devotee)",
+     "pose": "pranam, tilting down",
+     "position": "center"
+    }
+   ],
+   "place_id": "Symbolic Space",
+   "prop": null,
+   "prop_state": null,
+   "reason_new": "Closing invitation to next chapter and phalashruti (prayer for the work to be ideal for devotees).",
+   "references": {
+    "characters": [
+     "folded hands (devotee)"
+    ],
+    "place": "Symbolic Space",
+    "prop": null,
+    "style_anchor": "flat-colour motion-comic style"
+   },
+   "scene_id": "S12",
+   "shot_ids": [
+    "S12-8"
+   ]
+  }
+ ]
+}

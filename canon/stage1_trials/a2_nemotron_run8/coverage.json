@@ -1,0 +1,600 @@
+{
+ "adhyay": 2,
+ "ovis": [
+  {
+   "disposition": "QUOTED",
+   "ovi": 1
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 2
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 3
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 4
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 5
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 6
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 7
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 8
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 9
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 10
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 11
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 12
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 13
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 14
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 15
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 16
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 17
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 18
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 19
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 20
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 21
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 22
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 23
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 24
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 25
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 26
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 27
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 28
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 29
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 30
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 31
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 32
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 33
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 34
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 35
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 36
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 37
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 38
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 39
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 40
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 41
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 42
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 43
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 44
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 45
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 46
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 47
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 48,
+   "reason": "Historical numismatic detail not essential to narrative or teaching"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 49
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 50
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 51
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 52
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 53
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 54
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 55
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 56
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 57
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 58
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 59
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 60
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 61
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 62
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 63
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 64
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 65
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 66
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 67
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 68
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 69
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 70
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 71
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 72
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 73
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 74
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 75
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 76
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 77
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 78
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 79
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 80
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 81
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 82
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 83
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 84
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 85
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 86
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 87
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 88
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 89
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 90
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 91
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 92
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 93
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 94
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 95
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 96
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 97
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 98
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 99
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 100
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 101
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 102
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 103
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 104
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 105
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 106
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 107
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 108
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 109
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 110
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 111
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 112
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 113
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 114
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 115
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 116
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 117
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 118
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 119
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 120
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 121
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 122
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 123
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 124
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 125
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 126
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 127
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 128
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 129
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 130
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 131
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 132
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 133
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 134
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 135
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 136
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 137
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 138
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 139
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 140
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 141
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 142,
+   "reason": "Author's meta-commentary on own worth, not part of story"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 143,
+   "reason": "Author's meta-commentary on inability to describe routine"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 144
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 145
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 146
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 147
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 148
+  }
+ ]
+}

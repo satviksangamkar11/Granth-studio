@@ -1,0 +1,246 @@
+{
+ "adhyay": 1,
+ "scenes": [
+  {
+   "goal": "Establish the mystery of the saint's unknown origins",
+   "line_ids": [
+    "S1-L1"
+   ],
+   "ovi_range": [
+    70,
+    70
+   ],
+   "scene_id": "S1",
+   "section_kind": "discourse",
+   "teaching_treatment": "narration_over_typography",
+   "turn": {
+    "ovi": 70,
+    "text": "या महापुरुषाचे मूळ गाव कोणते किंवा त्यांची जात कोणती, याचा इतिहासात काहीच पत्ता लागत नाही."
+   }
+  },
+  {
+   "goal": "Introduce Devidas's household and Gajanan's first appearance as a digambar yogi scavenging food",
+   "line_ids": [
+    "S2-L1",
+    "S2-L2",
+    "S2-L3",
+    "S2-L4",
+    "S2-L5",
+    "S2-L6",
+    "S2-L7"
+   ],
+   "ovi_range": [
+    84,
+    93
+   ],
+   "scene_id": "S2",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 88,
+    "text": "समर्थ सिद्धयोगी गजानन महाराज तिथेच बसले होते आणि त्यांच्या अंगावर जुन्या कापडाची एक बंडी होती."
+   }
+  },
+  {
+   "goal": "Reveal the teaching 'Annaparabrahma' through Gajanan's action and Vedic authority",
+   "line_ids": [
+    "S2-L8",
+    "S2-L9",
+    "S2-L10"
+   ],
+   "ovi_range": [
+    94,
+    96
+   ],
+   "scene_id": "S3",
+   "section_kind": "discourse",
+   "teaching_treatment": "contemplative_hold",
+   "turn": {
+    "ovi": 94,
+    "text": "भाताचे एक-एक शीत दिसताच ते उचलून तोंडात टाकत होते; 'अन्न हेच परब्रह्म आहे' हेच त्यांना यातून शिकवायचे होते."
+   }
+  },
+  {
+   "goal": "Show Bankatlal and Damodarpant witnessing Gajanan and debating his nature",
+   "line_ids": [
+    "S3-L1",
+    "S3-L2",
+    "S3-L3",
+    "S3-L4",
+    "S3-L5",
+    "S3-L6"
+   ],
+   "ovi_range": [
+    97,
+    102
+   ],
+   "scene_id": "S4",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 99,
+    "text": "'याचे वागणे किती विचित्र आहे, हा तर कोणी वेडाच दिसतोय.'"
+   }
+  },
+  {
+   "goal": "Present the teaching that true saints appear mad but are knowers, recognized only by the discerning",
+   "line_ids": [
+    "S3-L7",
+    "S3-L8",
+    "S3-L9"
+   ],
+   "ovi_range": [
+    103,
+    107
+   ],
+   "scene_id": "S5",
+   "section_kind": "discourse",
+   "teaching_treatment": "narration_over_typography",
+   "turn": {
+    "ovi": 104,
+    "text": "वागण्यावरून हा वेडा दिसतोय खरा, पण हा कोणीतरी मोठा ज्ञानी पुरुष वाटतोय."
+   }
+  },
+  {
+   "goal": "Depict Bankatlal's inquiry, Gajanan's silent grace, and the feeding where he mixes all food without preference",
+   "line_ids": [
+    "S4-L1",
+    "S4-L2",
+    "S4-L3",
+    "S4-L4",
+    "S4-L5",
+    "S5-L1",
+    "S5-L2",
+    "S5-L3",
+    "S5-L4",
+    "S5-L5",
+    "S5-L6"
+   ],
+   "ovi_range": [
+    108,
+    115
+   ],
+   "scene_id": "S6",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 113,
+    "text": "तुम्ही लवकर एक ताट वाढून बाहेर घेऊन या."
+   }
+  },
+  {
+   "goal": "Teach through analogies of Brahmarasa and Arjun's madness that Gajanan's behavior signifies liberation, not madness",
+   "line_ids": [
+    "S5-L4",
+    "S5-L5",
+    "S5-L6",
+    "S6-L1",
+    "S6-L2",
+    "S6-L3",
+    "S6-L4"
+   ],
+   "ovi_range": [
+    116,
+    121
+   ],
+   "scene_id": "S7",
+   "section_kind": "discourse",
+   "teaching_treatment": "symbol_from_text",
+   "turn": {
+    "ovi": 120,
+    "text": "'सुभद्रेला मिळवण्यासाठी द्वारकेत अर्जुनही असाच वेड्यासारखा वागला होता.'"
+   }
+  },
+  {
+   "goal": "Show the noon heat, Gajanan's bliss, and the water episode initiation",
+   "line_ids": [
+    "S6-L5",
+    "S7-L1",
+    "S7-L2",
+    "S7-L3",
+    "S7-L4",
+    "S7-L5",
+    "S7-L6",
+    "S7-L7"
+   ],
+   "ovi_range": [
+    122,
+    127
+   ],
+   "scene_id": "S8",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 125,
+    "text": "हे पोटभर जेवले आहेत पण यांच्या तुंब्यात पाणी नाही; तर पंत, आपण यांच्यासाठी पाणी आणून देऊया."
+   }
+  },
+  {
+   "goal": "Gajanan teaches non-duality of Brahman while honoring worldly conduct",
+   "line_ids": [
+    "S7-L8",
+    "S7-L9",
+    "S7-L10",
+    "S7-L11"
+   ],
+   "ovi_range": [
+    128,
+    131
+   ],
+   "scene_id": "S9",
+   "section_kind": "discourse",
+   "teaching_treatment": "contemplative_hold",
+   "turn": {
+    "ovi": 128,
+    "text": "'तुम्हाला गरज वाटत असेल तर पाणी आणून द्या; कारण संपूर्ण जगात एकच ब्रह्म भरलेले आहे.'"
+   }
+  },
+  {
+   "goal": "Damodar fetches water; Gajanan drinks from animal trough; Damodar objects and offers scented water",
+   "line_ids": [
+    "S7-L12",
+    "S7-L13",
+    "S8-L1",
+    "S8-L2",
+    "S8-L3",
+    "S8-L4",
+    "S8-L5"
+   ],
+   "ovi_range": [
+    132,
+    137
+   ],
+   "scene_id": "S10",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 136,
+    "text": "'अहो समर्थ, थांबा! ते गढूळ पाणी पिऊ नका; ते तर फक्त जनावरांच्या पिण्यायोग्य आहे.'"
+   }
+  },
+  {
+   "goal": "Gajanan's final teaching on Brahman pervading all, rejecting duality, and his miraculous departure",
+   "line_ids": [
+    "S9-L1",
+    "S9-L2",
+    "S9-L3",
+    "S9-L4",
+    "S9-L5",
+    "S9-L6",
+    "S9-L7",
+    "S9-L8"
+   ],
+   "ovi_range": [
+    138,
+    144
+   ],
+   "scene_id": "S11",
+   "section_kind": "discourse",
+   "teaching_treatment": "symbol_from_text",
+   "turn": {
+    "ovi": 139,
+    "text": "'हे संपूर्ण विश्व ब्रह्माने व्यापलेले आहे; तिथे गढूळ, स्वच्छ किंवा सुगंधित पाणी असा कोणताच भेद उरलेला नाही.'"
+   }
+  }
+ ]
+}

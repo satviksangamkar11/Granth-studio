@@ -244,7 +244,7 @@ def build_packet(adhyay: int, root: Path | str) -> tuple[dict, list[str]]:
     return packet, problems
 
 
-def _system_prompt(call: str) -> str:
+def _system_prompt(call: str, adhyay: int) -> str:
     role = (
         "You are a planning assistant for a motion-comic film pipeline. "
         "You plan only; you never write the owner's script."
@@ -255,13 +255,36 @@ def _system_prompt(call: str) -> str:
     for key in output_keys:
         wrapper_parts.append(f'"{key}": {{ "adhyay": <N>, ... }}')
     wrapper_str = "{" + ", ".join(wrapper_parts) + "}"
+
+    # Adhyay sentence for every call
+    adhyay_sentence = (
+        f'In every document the field "adhyay" is the CHAPTER number {adhyay} '
+        '(the same number in every call and every document; never the scene number or any other number).'
+    )
+
     output_para = (
         "Reply with ONE JSON object only (no markdown fences, no prose) "
         f"whose top-level keys are exactly {list(output_keys)}, "
         "each value a complete document that includes \"adhyay\": <N>. "
         f"The response must be wrapped exactly as: {wrapper_str}. "
-        "Do NOT return a document directly; every document must sit under its key."
+        "Do NOT return a document directly; every document must sit under its key. "
+        f"{adhyay_sentence}"
     )
+
+    if call == "scene":
+        # One-line skeleton for the six keys
+        skeleton = (
+            '{"shots": {"adhyay": <N>, ...}, "briefs": {"adhyay": <N>, ...}, '
+            '"looks": {"adhyay": <N>, ...}, "voices": {"adhyay": <N>, ...}, '
+            '"sounds": {"adhyay": <N>, ...}, "questions": {"adhyay": <N>, ...}}'
+        )
+        scene_extra = (
+            "The reply object has SIX separate top-level keys: shots, briefs, looks, voices, sounds, questions. "
+            "Never nest one document inside another. "
+            f"The top-level structure is: {skeleton}."
+        )
+        output_para += " " + scene_extra
+
     return f"{role}\nRULES:\n{SHARED_RULE_BLOCK}\n{output_para}"
 
 
@@ -407,7 +430,7 @@ def build_prompt(call: str, packet: dict, *, scene_ids: list[str] | None = None,
         if not prior or not all(k in prior for k in ("story_map", "coverage", "scenes")):
             raise ValueError("scene call requires prior with story_map, coverage, scenes")
 
-    system = _system_prompt(call)
+    system = _system_prompt(call, packet["adhyay"])
     user = _user_prompt(call, packet, scene_ids, prior)
     return system, user
 

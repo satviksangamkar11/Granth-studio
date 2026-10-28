@@ -1,0 +1,907 @@
+{
+ "adhyay": 2,
+ "entries": [
+  {
+   "basis": "inferred",
+   "entity_id": "sant_dasganu_maharaj",
+   "kind": "character",
+   "look": "Simple traditional attire, calm demeanor, holding a manuscript",
+   "source_ovis": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "lord_pandurang_vitthal",
+   "kind": "character",
+   "look": "Standing on brick, hands on waist, dark complexion, yellow garment",
+   "source_ovis": [
+    1
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "chandrabhaga_river_bank",
+   "kind": "place",
+   "look": "River bank with steps, temple spires in distance, gentle flow",
+   "source_ovis": [
+    1
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "verse_text",
+   "kind": "prop",
+   "look": "Marathi verse in Devanagari script, flat colour style",
+   "source_ovis": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Bankatlal",
+   "kind": "character",
+   "look": "Young man, simple dhoti and kurta, lean build, expressive eyes, hair tied in a small knot",
+   "source_ovis": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    15,
+    17,
+    21
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Bhavaniram",
+   "kind": "character",
+   "look": "Middle-aged father, wearing traditional white dhoti and uparna, calm wise face, slight beard",
+   "source_ovis": [
+    11,
+    12,
+    13,
+    14
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Ramajipant Deshmukh",
+   "kind": "character",
+   "look": "Elderly man, white dhoti and shawl, long white beard, seated posture, radiant eyes",
+   "source_ovis": [
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Shri Gajanan Maharaj (vision)",
+   "kind": "character",
+   "look": "Divine form, saffron robe, matted hair, serene smile, aura of light",
+   "source_ovis": [
+    6,
+    7,
+    8
+   ],
+   "state_id": "vision"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "shegaon_town",
+   "kind": "place",
+   "look": "Dusty streets, rows of modest houses, temple spire visible, neem trees, market stalls",
+   "source_ovis": [
+    5,
+    10,
+    21
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "bankatlal_house",
+   "kind": "place",
+   "look": "Simple courtyard house, wooden door, tiled roof, small verandah, interior with low seating",
+   "source_ovis": [
+    11,
+    15
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "ramajipant_house",
+   "kind": "place",
+   "look": "Larger traditional house, spacious courtyard, carved wooden pillars, raised seating area",
+   "source_ovis": [
+    16,
+    17
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "gajanan_maharaj",
+   "kind": "character",
+   "look": "Middle-aged yogi, dark complexion, matted hair, wearing simple loincloth, seated cross-legged on stone pavement, serene expression, eyes half-closed.",
+   "source_ovis": [
+    27,
+    28,
+    30,
+    31,
+    32
+   ],
+   "state_id": "seated_on_stone_pavement"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bankatlal",
+   "kind": "character",
+   "look": "Young man, simple dhoti, bare chest, eager expression, hands folded when respectful.",
+   "source_ovis": [
+    25,
+    26,
+    27,
+    28,
+    30,
+    32
+   ],
+   "state_id": "walking_then_standing"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "pitambar_shimpi",
+   "kind": "character",
+   "look": "Middle-aged tailor, simple clothing, measuring tape around neck or in hand, gentle demeanor.",
+   "source_ovis": [
+    25,
+    26,
+    27,
+    28,
+    30
+   ],
+   "state_id": "walking_then_standing"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "govindbuwa_taklikar",
+   "kind": "character",
+   "look": "Elderly kirtankar, traditional attire, seated on platform with tanpura and cymbals, expressive face.",
+   "source_ovis": [
+    22,
+    23,
+    24
+   ],
+   "state_id": "performing_kirtan"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "shiva_temple",
+   "kind": "place",
+   "look": "Stone temple with spire, courtyard with stone pavement (faras), Neem tree at back, open space for crowd.",
+   "source_ovis": [
+    24,
+    27
+   ],
+   "state_id": "daytime_kirtan"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "shegaon_village_path",
+   "kind": "place",
+   "look": "Dirt path lined with trees, leading to temple, rural Maharashtra setting.",
+   "source_ovis": [
+    25
+   ],
+   "state_id": "daytime"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "stone_pavement",
+   "kind": "prop",
+   "look": "Flat stone slabs (faras) at rear of temple, worn smooth.",
+   "source_ovis": [
+    27
+   ],
+   "state_id": "back_of_temple"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "kirtan_instruments",
+   "kind": "prop",
+   "look": "Tanpura, cymbals (tal), possibly mrudang.",
+   "source_ovis": [
+    24
+   ],
+   "state_id": "in_use"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "measuring_tape",
+   "kind": "prop",
+   "look": "Traditional tailor's measuring tape, cloth or metal.",
+   "source_ovis": [
+    25
+   ],
+   "state_id": "held_in_hand"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "zunka_bhakri",
+   "kind": "prop",
+   "look": "Bowl of thick gram-flour porridge (zunka) and half a round millet flatbread (bhakri).",
+   "source_ovis": [
+    31,
+    32
+   ],
+   "state_id": "half_bhakri_with_zunka"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "gajanan",
+   "kind": "character",
+   "look": "A yogi with matted hair, wearing a simple loincloth, body smeared with ash, rudraksha beads, seated in a relaxed posture.",
+   "source_ovis": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    44
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "pitambar_shimpi",
+   "kind": "character",
+   "look": "A middle-aged man with a simple cotton dhoti and upper cloth, tailor's tools perhaps at waist, gentle expression.",
+   "source_ovis": [
+    34,
+    35,
+    36,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "the_shallow_stream",
+   "kind": "place",
+   "look": "A narrow muddy stream with shallow water, rocky bed, surrounded by sparse vegetation, near a temple.",
+   "source_ovis": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42
+   ],
+   "state_id": "day"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "shiva_temple_surroundings",
+   "kind": "place",
+   "look": "A modest stone temple with a Nandi bull, a neem tree, stone pavement (faras) at the back.",
+   "source_ovis": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    44
+   ],
+   "state_id": "day"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "tumba",
+   "kind": "prop",
+   "look": "A dried bottle gourd, hollowed out, with a small opening at the top, natural tan color.",
+   "source_ovis": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    44
+   ],
+   "state_id": "empty"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "tumba",
+   "kind": "prop",
+   "look": "Same tumba filled with muddy water.",
+   "source_ovis": [
+    41,
+    42
+   ],
+   "state_id": "filled_muddy"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "tumba",
+   "kind": "prop",
+   "look": "Same tumba filled with crystal-clear water, light refracting.",
+   "source_ovis": [
+    42
+   ],
+   "state_id": "filled_clear"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "zunka_bhakri",
+   "kind": "prop",
+   "look": "A coarse flatbread (bhakri) with a spiced gram-flour preparation (zunka) on a leaf plate.",
+   "source_ovis": [
+    33
+   ],
+   "state_id": "served"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Shri Gajanan Maharaj",
+   "kind": "character",
+   "look": "Middle-aged yogi with matted hair, saffron robe, rudraksha beads, serene expression, often seated on ground",
+   "source_ovis": [
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Bankatlal",
+   "kind": "character",
+   "look": "Young man, simple cotton dhoti and kurta, eager devoted expression",
+   "source_ovis": [
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Pitambar Shimpi",
+   "kind": "character",
+   "look": "Middle-aged tailor, simple clothing, calm demeanor",
+   "source_ovis": [
+    52
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "shiva_temple_surroundings",
+   "kind": "place",
+   "look": "Village Shiva temple with stone pavement (faras) at back, large neem tree providing shade, open courtyard",
+   "source_ovis": [
+    52
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "betel_nut",
+   "kind": "prop",
+   "look": "Small brown areca nut, whole or cracked into pieces",
+   "source_ovis": [
+    45,
+    46,
+    47
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Vyaghrambari_and_Dudandi_coins",
+   "kind": "prop",
+   "look": "Two small copper coins, worn with indistinct inscriptions, typical of Muslim-era Varhad region",
+   "source_ovis": [
+    47,
+    48
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "neem_tree",
+   "kind": "prop",
+   "look": "Large mature neem tree with spreading canopy, rough bark, compound leaves",
+   "source_ovis": [
+    52
+   ],
+   "state_id": "chapter2"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Shri Gajanan Maharaj",
+   "kind": "character",
+   "look": "Seated under neem tree, wearing simple cloth, calm expression, eyes closed when chanting.",
+   "source_ovis": [
+    53,
+    55
+   ],
+   "state_id": "seated_neem"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Govindbuwa Taklikar",
+   "kind": "character",
+   "look": "Traditional kirtankar attire, seated on dias with Bhagavatam, later standing with folded hands, expressive face.",
+   "source_ovis": [
+    53,
+    55,
+    59,
+    68
+   ],
+   "state_id": "kirtan_attire"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Bankatlal",
+   "kind": "character",
+   "look": "Young devotee, simple dress, folded hands when pleading.",
+   "source_ovis": [
+    57
+   ],
+   "state_id": "devotee_simple"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Pitambar Shimpi",
+   "kind": "character",
+   "look": "Tailor, simple clothes, folded hands.",
+   "source_ovis": [
+    57
+   ],
+   "state_id": "devotee_simple"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Mandali",
+   "kind": "character",
+   "look": "Group of devotees, mixed ages, simple rural attire.",
+   "source_ovis": [
+    57,
+    58
+   ],
+   "state_id": "group_devotees"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Shiva Temple & Surroundings",
+   "kind": "place",
+   "look": "Stone courtyard, Shiva temple structure, neem tree, stone pavement (faras) at back.",
+   "source_ovis": [
+    53,
+    59
+   ],
+   "state_id": "temple_courtyard"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Neem tree",
+   "kind": "prop",
+   "look": "Large neem tree with spreading canopy, shading Maharaj.",
+   "source_ovis": [
+    53
+   ],
+   "state_id": "neem_tree"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Bhagavatam book",
+   "kind": "prop",
+   "look": "Traditional palm-leaf or paper manuscript, open at Hamsagita verse.",
+   "source_ovis": [
+    54
+   ],
+   "state_id": "bhagavatam_open"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bankatlal",
+   "kind": "character",
+   "look": "Young man, simple dhoti and kurta, tilak on forehead, bright eyes, expression of devotion",
+   "source_ovis": [
+    72,
+    73,
+    74,
+    75,
+    76,
+    80
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bhavaniram",
+   "kind": "character",
+   "look": "Elderly man, white dhoti, shawl over shoulders, calm wise face, beard",
+   "source_ovis": [
+    73,
+    74
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "gajanan_maharaj",
+   "kind": "character",
+   "look": "Yogi with matted hair, saffron cloth, ash smeared, serene countenance, often chanting",
+   "source_ovis": [
+    76,
+    77,
+    78,
+    79,
+    80
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "cowherd",
+   "kind": "character",
+   "look": "Rustic villager, simple loincloth, staff, weathered skin",
+   "source_ovis": [
+    78
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "shopkeeper",
+   "kind": "character",
+   "look": "Middle-aged man, simple shirt, lighting oil lamp",
+   "source_ovis": [
+    80
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "shiva_temple",
+   "kind": "place",
+   "look": "Stone temple with Nandi, courtyard with faras (stone pavement), neem tree at back",
+   "source_ovis": [
+    72
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "manik_chowk",
+   "kind": "place",
+   "look": "Open square with shops around, central platform, dusty ground, evening shadows",
+   "source_ovis": [
+    76,
+    77
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "lamp",
+   "kind": "prop",
+   "look": "Clay oil lamp with cotton wick, flame flickering",
+   "source_ovis": [
+    80
+   ],
+   "state_id": "lit"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Shri Gajanan Maharaj",
+   "kind": "character",
+   "look": "Seated yogi with saffron paste on forehead, multiple garlands around neck, tulsi blossoms on head, simple ochre robe",
+   "source_ovis": [
+    101
+   ],
+   "state_id": "adorned"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Ichharam Shetji",
+   "kind": "character",
+   "look": "Middle-aged man, traditional attire, rudraksha beads, vibhuti on forehead, devout expression",
+   "source_ovis": [
+    105,
+    106,
+    107,
+    108,
+    109
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "Devotees",
+   "kind": "character",
+   "look": "Mixed group of men and women in traditional rural attire, hands folded, peaceful",
+   "source_ovis": [
+    101,
+    102,
+    104
+   ],
+   "state_id": "group"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Bankatlal’s House",
+   "kind": "place",
+   "look": "Traditional two-story house with festive torans, rangoli, and a subtle aura of Dwarka; Monday ambience with Shiva symbols",
+   "source_ovis": [
+    103
+   ],
+   "state_id": "dwarka_transformed"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Saffron paste",
+   "kind": "prop",
+   "look": "Bright orange-red paste applied in a vertical line on forehead",
+   "source_ovis": [
+    101
+   ],
+   "state_id": "applied"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Garlands",
+   "kind": "prop",
+   "look": "Multiple fresh flower garlands of varying colors draped around neck",
+   "source_ovis": [
+    101
+   ],
+   "state_id": "worn"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Tulsi blossoms",
+   "kind": "prop",
+   "look": "Small green tulsi leaves with tiny flowers placed on head",
+   "source_ovis": [
+    101
+   ],
+   "state_id": "offered"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Naivedya",
+   "kind": "prop",
+   "look": "Assortment of sweets, fruits, and cooked dishes on a large metal platter",
+   "source_ovis": [
+    102
+   ],
+   "state_id": "arranged"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Puja materials",
+   "kind": "prop",
+   "look": "Plate with flowers, incense sticks, ghee lamp, kumkum, rice grains",
+   "source_ovis": [
+    109
+   ],
+   "state_id": "ready"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Water",
+   "kind": "prop",
+   "look": "Clear water poured from a copper vessel, splashing gently",
+   "source_ovis": [
+    108
+   ],
+   "state_id": "bathing"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "gajanan",
+   "kind": "character",
+   "look": "Seated divine yogi, Shri Gajanan Maharaj / Samarth, simple attire, calm authority, no crown or material wealth; consistent with the central divine figure who chants Gan Gan Ganat Bote",
+   "source_ovis": [
+    110,
+    111,
+    112,
+    118,
+    119,
+    120,
+    122,
+    125,
+    126,
+    127
+   ],
+   "state_id": "gajanan_default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "ichharam_shetji",
+   "kind": "character",
+   "look": "Devotee Ichharam Shetji in traditional attire, carrying a large parat of naivedyam; observes a Monday fast for Shiva",
+   "source_ovis": [
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118
+   ],
+   "state_id": "ichharam_bringing_feast"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bankatlals_house",
+   "kind": "place",
+   "look": "Courtyard/interior of Bankatlal's house in Shegaon where Ichharam's feast is served; space for a seated figure, a large parat and gathered onlookers",
+   "source_ovis": [
+    113,
+    114,
+    115,
+    116,
+    117
+   ],
+   "state_id": "bankatlals_house_feast"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "ichharam_feast",
+   "kind": "prop",
+   "look": "Large parat with two mudis of Ambemohar rice, jalebi, ragavdas, motichoor, karanji, anarse, ghevar, vegetables, chutneys, koshimbir, a bowl of curd and a bowl of ghee on the left; enough food for four men",
+   "source_ovis": [
+    114,
+    115,
+    116,
+    117
+   ],
+   "state_id": "feast_full"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "ichharam_feast",
+   "kind": "prop",
+   "look": "The same parat now empty; not even salt or lemon remains",
+   "source_ovis": [
+    120
+   ],
+   "state_id": "feast_empty"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "gajanan",
+   "kind": "character",
+   "look": "Maharaj at cattle trough, drinking muddy water; also taking auspicious bath with 100 pots; lighting chilim.",
+   "source_ovis": [
+    144,
+    145,
+    146
+   ],
+   "state_id": "routine"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "dasganu",
+   "kind": "character",
+   "look": "Humble devotee, folded hands, small stature compared to Maharaj.",
+   "source_ovis": [
+    142,
+    143
+   ],
+   "state_id": "author"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "shegaon",
+   "kind": "place",
+   "look": "Town filled with devotees, Bankatlal's house transforming into temple with spire.",
+   "source_ovis": [
+    137,
+    139
+   ],
+   "state_id": "bustling"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "pilgrimage_sites",
+   "kind": "place",
+   "look": "Pandharpur temple, Godavari riverbank, Haridwar ghats each teeming with pilgrims.",
+   "source_ovis": [
+    136
+   ],
+   "state_id": "crowded"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "cattle_trough",
+   "kind": "place",
+   "look": "Masonry watering trough (hal) near temple, muddy water.",
+   "source_ovis": [
+    144
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "chilim",
+   "kind": "prop",
+   "look": "Clay smoking pipe, ember glowing, thin smoke rising.",
+   "source_ovis": [
+    146
+   ],
+   "state_id": "lit"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "sun",
+   "kind": "prop",
+   "look": "Bright sun emitting equal light in all directions.",
+   "source_ovis": [
+    140
+   ],
+   "state_id": "radiant"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "mahaprasad",
+   "kind": "prop",
+   "look": "Large vessels of food being distributed to rows of devotees.",
+   "source_ovis": [
+    141
+   ],
+   "state_id": "served"
+  }
+ ]
+}

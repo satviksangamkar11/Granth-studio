@@ -1,0 +1,323 @@
+{
+ "adhyay": 1,
+ "entries": [
+  {
+   "basis": "inferred",
+   "entity_id": "unknown_ancient_landscape",
+   "kind": "place",
+   "look": "Flat-colour style, ambiguous ancient Indian landscape with layered depth: sky, distant hills, mid-ground trees, foreground grass/rocks. No specific architectural or cultural markers.",
+   "source_ovis": [
+    70
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Devidas",
+   "kind": "character",
+   "look": "Middle-aged Brahmin householder, wearing traditional dhoti and upavita (sacred thread), calm demeanor, overseeing food preparation.",
+   "source_ovis": [
+    84,
+    86
+   ],
+   "state_id": "householder_ceremony"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "Gajanan Maharaj",
+   "kind": "character",
+   "look": "Adult male, dark complexion, seated cross-legged on road, wearing only a worn bandi (old cloth wrapper) over shoulders, body smeared with ash? (not stated), hair matted? (not stated), gaze fixed at nose tip, serene face, aura of tapobal like morning sun.",
+   "source_ovis": [
+    88,
+    91,
+    92
+   ],
+   "state_id": "digambar_yogi_road"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "devidas_house_front",
+   "kind": "place",
+   "look": "Traditional Brahmin house entrance with doorway, steps leading to road, courtyard visible inside with cooking vessels, morning light.",
+   "source_ovis": [
+    84,
+    86,
+    87
+   ],
+   "state_id": "morning_ceremony"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "road_outside_devidas_house",
+   "kind": "place",
+   "look": "Dirt road in front of house, scattered used leaf plates (पत्रावळी) with food remnants, rice grains visible.",
+   "source_ovis": [
+    87,
+    93
+   ],
+   "state_id": "leaf_plates_scattered"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "leaf_plates",
+   "kind": "prop",
+   "look": "Dried leaf plates (पत्रावळी), browned, some folded, scattered haphazardly, with visible rice grains and food residue.",
+   "source_ovis": [
+    87,
+    93
+   ],
+   "state_id": "used_scattered"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bandi",
+   "kind": "prop",
+   "look": "A simple wrapper made of old, faded cloth, draped over shoulders, rough texture.",
+   "source_ovis": [
+    88
+   ],
+   "state_id": "worn_old_cloth"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "rice_grain",
+   "kind": "prop",
+   "look": "Individual white rice grain, resting on leaf plate surface.",
+   "source_ovis": [
+    93,
+    94
+   ],
+   "state_id": "single_on_leaf"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bankatlal",
+   "kind": "character",
+   "look": "Middle-aged man, traditional Marathi attire (dhoti, kurta), walking with a calm demeanor, slight smile",
+   "source_ovis": [
+    97
+   ],
+   "state_id": "walking"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "damodarpant",
+   "kind": "character",
+   "look": "Middle-aged man, similar traditional attire, perhaps with a turban, walking beside Bankatlal",
+   "source_ovis": [
+    98
+   ],
+   "state_id": "walking"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "rural_road",
+   "kind": "place",
+   "look": "Dusty rural road bordered by fields and occasional trees, clear sky",
+   "source_ovis": [
+    97,
+    98
+   ],
+   "state_id": "daytime"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "bankatlal",
+   "kind": "character",
+   "look": "Middle-aged Marathi man, wearing white dhoti and uparna, tilak on forehead, graying beard, wise but expressive face",
+   "source_ovis": [
+    119,
+    120,
+    121
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "damodarpant",
+   "kind": "character",
+   "look": "Elderly Marathi man, white dhoti and shawl, clean-shaven, gentle eyes, seated posture",
+   "source_ovis": [
+    119
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "gajanan",
+   "kind": "character",
+   "look": "Yogiraj in early 30s, athletic build, wearing only kaupina, smeared with vibhuti, long matted hair, serene countenance",
+   "source_ovis": [
+    122
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "shegaon_temple_courtyard",
+   "kind": "place",
+   "look": "Ancient stone temple courtyard with carved pillars, tulsi vrindavan in center, banyan tree shade, worn stone flooring",
+   "source_ovis": [
+    122
+   ],
+   "state_id": "day"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "gajanan",
+   "kind": "character",
+   "look": "Middle-aged male, dark complexion, wearing simple white dhoti and upavastra, rudraksha mala, long matted hair tied in a knot, serene face with slight smile, eyes half-closed",
+   "source_ovis": [
+    124,
+    127,
+    128,
+    129,
+    130,
+    131
+   ],
+   "state_id": "seated_bliss"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "damodarpant",
+   "kind": "character",
+   "look": "Middle-aged male, Brahmin attire: white dhoti, angavastram, shaved head with sikha, tilak on forehead, gentle face, slight beard",
+   "source_ovis": [
+    125,
+    126,
+    133
+   ],
+   "state_id": "standing_thoughtful"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "bankatlal",
+   "kind": "character",
+   "look": "Older male, simple villager clothes: worn dhoti, bare chest, rudraksha beads, weathered face, folded hands",
+   "source_ovis": [
+    132
+   ],
+   "state_id": "standing_grateful"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "shegaon_well_area",
+   "kind": "place",
+   "look": "Open ground near a stone well, scattered neem and banyan trees, dry cracked earth, well with stone parapet, no water visible",
+   "source_ovis": [
+    123,
+    125
+   ],
+   "state_id": "noon"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "tumbi",
+   "kind": "prop",
+   "look": "Small spherical gourd with narrow neck, dried brown surface, carried by a string loop, empty",
+   "source_ovis": [
+    125,
+    126,
+    128,
+    130
+   ],
+   "state_id": "empty"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "cow",
+   "kind": "character",
+   "look": "Generic cow, standing at trough, drinking.",
+   "source_ovis": [
+    134
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "goat",
+   "kind": "character",
+   "look": "Generic goat, standing at trough, drinking.",
+   "source_ovis": [
+    134
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "well_with_trough",
+   "kind": "place",
+   "look": "Stone well with a nearby rectangular stone trough filled with water, surrounded by dry ground and sparse trees.",
+   "source_ovis": [
+    134
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "lota",
+   "kind": "prop",
+   "look": "Brass lota (traditional water pot) with narrow neck, filled with clear water.",
+   "source_ovis": [
+    135,
+    137
+   ],
+   "state_id": "filled_water"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "khus_scented_water",
+   "kind": "prop",
+   "look": "Water in lota infused with khus (vetiver) giving a faint greenish tint and aromatic quality.",
+   "source_ovis": [
+    137
+   ],
+   "state_id": "in_lota"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "gajanan",
+   "kind": "character",
+   "look": "Middle-aged male, waist-length matted hair, full beard, wearing simple saffron robe, rudraksha beads, serene yet commanding presence",
+   "source_ovis": [
+    138,
+    139,
+    140,
+    141,
+    142
+   ],
+   "state_id": "teaching_seated"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "devotee_a",
+   "kind": "character",
+   "look": "Adult male, simple cotton dhoti, bare chest, shaved head with small tuft, hands folded in reverence",
+   "source_ovis": [
+    143
+   ],
+   "state_id": "kneeling_devotee"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "devotee_b",
+   "kind": "character",
+   "look": "Adult male, simple cotton dhoti, bare chest, shaved head with small tuft, hands folded in reverence",
+   "source_ovis": [
+    143
+   ],
+   "state_id": "kneeling_devotee"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "ashram_forest_clearing",
+   "kind": "place",
+   "look": "Dense forest clearing with packed earth ground, surrounded by tall sal trees, dappled sunlight, distant bird calls implied",
+   "source_ovis": [
+    138,
+    144
+   ],
+   "state_id": "morning"
+  }
+ ]
+}

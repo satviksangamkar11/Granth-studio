@@ -140,13 +140,13 @@ def parse_reply(text: str, expected_keys: Tuple[str, ...], adhyay: int) -> Tuple
     for k in obj.keys():
         if k not in expected_keys:
             problems.append(f"reply: unexpected key {k}")
-    # Fix adhyay in nested dicts
+    # Fix adhyay in nested dicts: always set to the run's chapter number,
+    # but record mismatch if the model supplied a different value.
     for k in expected_keys:
         if k in obj and isinstance(obj[k], dict):
-            if "adhyay" not in obj[k]:
-                obj[k]["adhyay"] = adhyay
-            elif obj[k]["adhyay"] != adhyay:
+            if "adhyay" in obj[k] and obj[k]["adhyay"] != adhyay:
                 problems.append(f"{k}: adhyay {obj[k]['adhyay']} is not {adhyay}")
+            obj[k]["adhyay"] = adhyay
     return obj, problems
 
 # ----------------------------------------------------------------------
@@ -232,6 +232,7 @@ def nemotron_caller(
     thinking: str = "on",
     effort: str = "high",
     max_tokens: int = 64000,
+    json_mode: bool = True,
 ) -> Caller:
     # Load draft_source.py by path
     repo_root = Path(__file__).resolve().parents[3]
@@ -240,12 +241,16 @@ def nemotron_caller(
     # Load keys and key pool once
     keys = ds.nt.load_keys()
     pool = ds.nt.KeyPool(keys)
-    # Wrap _stream_once with apply_profile
+    # Wrap _stream_once with apply_profile and optionally json_mode
     coder_run_path = repo_root / "scripts" / "source" / "coder_run.py"
     coder_run = _load_module_by_path("coder_run", coder_run_path)
     original_stream_once = ds._stream_once
     def wrapped_stream_once(key: str, body: Dict[str, Any]):
         profiled_body = coder_run.apply_profile(body, thinking, effort)
+        if json_mode:
+            # Add response_format without overwriting existing keys
+            profiled_body = dict(profiled_body)
+            profiled_body.setdefault("response_format", {"type": "json_object"})
         return original_stream_once(key, profiled_body)
     ds._stream_once = wrapped_stream_once
 
@@ -270,9 +275,11 @@ def run_stage1(
     provider_name: str = "unknown",
     dry_run: bool = False,
     scrub_keys: List[str] = [],
+    reuse_from: Optional[Union[Path, str]] = None,
 ) -> Dict[str, Any]:
     root = Path(root)
     out_dir = Path(out_dir)
+    reuse_from_path = Path(reuse_from) if reuse_from is not None else None
 
     # Validate adhyay
     if adhyay <= 0:
@@ -374,6 +381,33 @@ def run_stage1(
         counts["questions"] = len(merged.get("questions", {}).get("questions", []))
         return counts
 
+    # Helper to try reuse a reply
+    def try_reuse(call_name: str, expected_keys: Tuple[str, ...]) -> Tuple[Optional[Dict[str, Any]], List[str], List[str], Dict[str, Any], str]:
+        """Returns (parsed, parse_problems, schema_errors, info, reason) if reused, else (None, [], [], {}, '')"""
+        if reuse_from_path is None or dry_run:
+            return None, [], [], {}, ""
+        reply_file = reuse_from_path / "replies" / f"{call_name}.txt"
+        if not reply_file.exists():
+            return None, [], [], {}, ""
+        try:
+            reply_text = reply_file.read_text(encoding="utf-8")
+        except Exception:
+            return None, [], [], {}, ""
+        # Parse and validate
+        parsed, parse_problems = parse_reply(reply_text, expected_keys, adhyay)
+        schema_errors = []
+        if parsed is not None:
+            for key in expected_keys:
+                doc = parsed.get(key)
+                if isinstance(doc, dict):
+                    unit_mod = _get_unit_module(key, repo_root)
+                    schema_errors.extend(unit_mod.schema_errors(doc))
+        if parsed is not None and not schema_errors:
+            info = {"status": 200, "wall_s": 0.0, "finish": "reused", "usage": {}}
+            reason = f"reused from {reuse_from_path}"
+            return parsed, parse_problems, schema_errors, info, reason
+        return None, [], [], {}, ""
+
     # ------------------------------------------------------------------
     # Dry-run mode: write prompts only, no calls
     # ------------------------------------------------------------------
@@ -441,62 +475,34 @@ def run_stage1(
     # 2. Call map
     system, user = prompts_mod.build_prompt("map", packet)
     write_prompt("map", system, user)
-    try:
-        reply, info = caller("map", system, user)
-    except Exception as e:
-        info = {"status": 0, "wall_s": 0.0, "finish": "error", "usage": {}, "error": type(e).__name__}
-        reply = ""
-    scrubbed_reply = _scrub_text(reply, scrub_keys)
-    write_reply("map", scrubbed_reply)
-    parsed, parse_problems = parse_reply(scrubbed_reply, prompts_mod.OUTPUT_KEYS["map"], adhyay)
-    schema_errors = []
-    if parsed is not None:
-        story_map_doc = parsed.get("story_map")
-        if isinstance(story_map_doc, dict):
-            unit_mod = _get_unit_module("story_map", repo_root)
-            schema_errors = unit_mod.schema_errors(story_map_doc)
-    if info.get("status") != 200 or parsed is None or schema_errors:
-        reason = ""
-        if info.get("status") != 200:
-            if "error" in info:
-                reason = f"error: {info['error']}"
-            else:
-                reason = f"status {info.get('status')}"
-        elif parsed is None:
-            reason = "parse failed"
+    # Try reuse
+    reused_parsed, parse_problems, schema_errors, info, reason = try_reuse("map", prompts_mod.OUTPUT_KEYS["map"])
+    if reused_parsed is not None:
+        parsed = reused_parsed
+        scrubbed_reply = ""  # we don't have the raw reply, but we can write the parsed JSON? Spec says parse stored reply exactly like live reply. We'll write the stored reply text to replies_dir.
+        # Write the stored reply to our replies_dir for consistency
+        reply_file = reuse_from_path / "replies" / "map.txt"
+        if reply_file.exists():
+            stored_reply = reply_file.read_text(encoding="utf-8")
+            write_reply("map", _scrub_text(stored_reply, scrub_keys))
         else:
-            reason = "schema errors"
-        record_call("map", "failed", reason, info, parse_problems, schema_errors)
-        # Skip plan and scene
+            write_reply("map", "")
+        record_call("map", "ok", reason, info, parse_problems, schema_errors)
     else:
-        record_call("map", "ok", "", info, parse_problems, schema_errors)
-        # Safe access: parsed may be unwrapped but parse_reply ensures expected key exists
-        story_map_val = parsed.get("story_map")
-        if isinstance(story_map_val, dict):
-            parsed_docs["story_map"] = story_map_val
-
-        # 3. Call plan
-        prior_for_plan = {"story_map": parsed_docs.get("story_map", {})}
-        system, user = prompts_mod.build_prompt("plan", packet, prior=prior_for_plan)
-        write_prompt("plan", system, user)
         try:
-            reply, info = caller("plan", system, user)
+            reply, info = caller("map", system, user)
         except Exception as e:
             info = {"status": 0, "wall_s": 0.0, "finish": "error", "usage": {}, "error": type(e).__name__}
             reply = ""
         scrubbed_reply = _scrub_text(reply, scrub_keys)
-        write_reply("plan", scrubbed_reply)
-        parsed, parse_problems = parse_reply(scrubbed_reply, prompts_mod.OUTPUT_KEYS["plan"], adhyay)
+        write_reply("map", scrubbed_reply)
+        parsed, parse_problems = parse_reply(scrubbed_reply, prompts_mod.OUTPUT_KEYS["map"], adhyay)
         schema_errors = []
         if parsed is not None:
-            coverage_doc = parsed.get("coverage")
-            scenes_doc = parsed.get("scenes")
-            if isinstance(coverage_doc, dict):
-                unit_mod = _get_unit_module("coverage", repo_root)
-                schema_errors.extend(unit_mod.schema_errors(coverage_doc))
-            if isinstance(scenes_doc, dict):
-                unit_mod = _get_unit_module("scenes", repo_root)
-                schema_errors.extend(unit_mod.schema_errors(scenes_doc))
+            story_map_doc = parsed.get("story_map")
+            if isinstance(story_map_doc, dict):
+                unit_mod = _get_unit_module("story_map", repo_root)
+                schema_errors = unit_mod.schema_errors(story_map_doc)
         if info.get("status") != 200 or parsed is None or schema_errors:
             reason = ""
             if info.get("status") != 200:
@@ -508,10 +514,69 @@ def run_stage1(
                 reason = "parse failed"
             else:
                 reason = "schema errors"
-            record_call("plan", "failed", reason, info, parse_problems, schema_errors)
-            # Skip scene calls
+            record_call("map", "failed", reason, info, parse_problems, schema_errors)
+            # Skip plan and scene
+            parsed = None
         else:
-            record_call("plan", "ok", "", info, parse_problems, schema_errors)
+            record_call("map", "ok", "", info, parse_problems, schema_errors)
+
+    if parsed is not None:
+        story_map_val = parsed.get("story_map")
+        if isinstance(story_map_val, dict):
+            parsed_docs["story_map"] = story_map_val
+
+        # 3. Call plan
+        prior_for_plan = {"story_map": parsed_docs.get("story_map", {})}
+        system, user = prompts_mod.build_prompt("plan", packet, prior=prior_for_plan)
+        write_prompt("plan", system, user)
+        # Try reuse
+        reused_parsed, parse_problems, schema_errors, info, reason = try_reuse("plan", prompts_mod.OUTPUT_KEYS["plan"])
+        if reused_parsed is not None:
+            parsed = reused_parsed
+            reply_file = reuse_from_path / "replies" / "plan.txt"
+            if reply_file.exists():
+                stored_reply = reply_file.read_text(encoding="utf-8")
+                write_reply("plan", _scrub_text(stored_reply, scrub_keys))
+            else:
+                write_reply("plan", "")
+            record_call("plan", "ok", reason, info, parse_problems, schema_errors)
+        else:
+            try:
+                reply, info = caller("plan", system, user)
+            except Exception as e:
+                info = {"status": 0, "wall_s": 0.0, "finish": "error", "usage": {}, "error": type(e).__name__}
+                reply = ""
+            scrubbed_reply = _scrub_text(reply, scrub_keys)
+            write_reply("plan", scrubbed_reply)
+            parsed, parse_problems = parse_reply(scrubbed_reply, prompts_mod.OUTPUT_KEYS["plan"], adhyay)
+            schema_errors = []
+            if parsed is not None:
+                coverage_doc = parsed.get("coverage")
+                scenes_doc = parsed.get("scenes")
+                if isinstance(coverage_doc, dict):
+                    unit_mod = _get_unit_module("coverage", repo_root)
+                    schema_errors.extend(unit_mod.schema_errors(coverage_doc))
+                if isinstance(scenes_doc, dict):
+                    unit_mod = _get_unit_module("scenes", repo_root)
+                    schema_errors.extend(unit_mod.schema_errors(scenes_doc))
+            if info.get("status") != 200 or parsed is None or schema_errors:
+                reason = ""
+                if info.get("status") != 200:
+                    if "error" in info:
+                        reason = f"error: {info['error']}"
+                    else:
+                        reason = f"status {info.get('status')}"
+                elif parsed is None:
+                    reason = "parse failed"
+                else:
+                    reason = "schema errors"
+                record_call("plan", "failed", reason, info, parse_problems, schema_errors)
+                # Skip scene calls
+                parsed = None
+            else:
+                record_call("plan", "ok", "", info, parse_problems, schema_errors)
+
+        if parsed is not None:
             coverage_val = parsed.get("coverage")
             scenes_val = parsed.get("scenes")
             if isinstance(coverage_val, dict):
@@ -573,38 +638,51 @@ def run_stage1(
                     scene_ids=group
                 )
                 write_prompt(name, system, user)
-                try:
-                    reply, info = caller(name, system, user)
-                except Exception as e:
-                    info = {"status": 0, "wall_s": 0.0, "finish": "error", "usage": {}, "error": type(e).__name__}
-                    reply = ""
-                scrubbed_reply = _scrub_text(reply, scrub_keys)
-                write_reply(name, scrubbed_reply)
-                parsed, parse_problems = parse_reply(scrubbed_reply, prompts_mod.OUTPUT_KEYS["scene"], adhyay)
-                schema_errors = []
-                if parsed is not None:
-                    # Validate each document in the scene reply
-                    for key in prompts_mod.OUTPUT_KEYS["scene"]:
-                        doc = parsed.get(key)
-                        if isinstance(doc, dict):
-                            unit_mod = _get_unit_module(key, repo_root)
-                            schema_errors.extend(unit_mod.schema_errors(doc))
-                if info.get("status") != 200 or parsed is None or schema_errors:
-                    reason = ""
-                    if info.get("status") != 200:
-                        if "error" in info:
-                            reason = f"error: {info['error']}"
-                        else:
-                            reason = f"status {info.get('status')}"
-                    elif parsed is None:
-                        reason = "parse failed"
+                # Try reuse
+                reused_parsed, parse_problems, schema_errors, info, reason = try_reuse(name, prompts_mod.OUTPUT_KEYS["scene"])
+                if reused_parsed is not None:
+                    parsed = reused_parsed
+                    reply_file = reuse_from_path / "replies" / f"{name}.txt"
+                    if reply_file.exists():
+                        stored_reply = reply_file.read_text(encoding="utf-8")
+                        write_reply(name, _scrub_text(stored_reply, scrub_keys))
                     else:
-                        reason = "schema errors"
-                    record_call(name, "failed", reason, info, parse_problems, schema_errors)
-                    # Skip remaining scene calls
-                    break
+                        write_reply(name, "")
+                    record_call(name, "ok", reason, info, parse_problems, schema_errors)
                 else:
-                    record_call(name, "ok", "", info, parse_problems, schema_errors)
+                    try:
+                        reply, info = caller(name, system, user)
+                    except Exception as e:
+                        info = {"status": 0, "wall_s": 0.0, "finish": "error", "usage": {}, "error": type(e).__name__}
+                        reply = ""
+                    scrubbed_reply = _scrub_text(reply, scrub_keys)
+                    write_reply(name, scrubbed_reply)
+                    parsed, parse_problems = parse_reply(scrubbed_reply, prompts_mod.OUTPUT_KEYS["scene"], adhyay)
+                    schema_errors = []
+                    if parsed is not None:
+                        # Validate each document in the scene reply
+                        for key in prompts_mod.OUTPUT_KEYS["scene"]:
+                            doc = parsed.get(key)
+                            if isinstance(doc, dict):
+                                unit_mod = _get_unit_module(key, repo_root)
+                                schema_errors.extend(unit_mod.schema_errors(doc))
+                    if info.get("status") != 200 or parsed is None or schema_errors:
+                        reason = ""
+                        if info.get("status") != 200:
+                            if "error" in info:
+                                reason = f"error: {info['error']}"
+                            else:
+                                reason = f"status {info.get('status')}"
+                        elif parsed is None:
+                            reason = "parse failed"
+                        else:
+                            reason = "schema errors"
+                        record_call(name, "failed", reason, info, parse_problems, schema_errors)
+                        # Continue to next scene group (do not break)
+                        continue
+                    else:
+                        record_call(name, "ok", "", info, parse_problems, schema_errors)
+                if parsed is not None:
                     scene_parts.append(parsed)
 
     # ------------------------------------------------------------------
@@ -683,6 +761,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--max-tokens", type=int, default=64000, help="Max tokens for nemotron")
     parser.add_argument("--scene-group", type=int, default=1, help="Number of scenes per scene call")
     parser.add_argument("--only-scenes", type=str, default="", help="Comma-separated list of scene ids to process")
+    parser.add_argument("--json-mode", choices=["on", "off"], default="on", help="Enable JSON response format for nemotron")
+    parser.add_argument("--reuse-from", type=Path, default=None, help="Directory to reuse replies from (previous out directory)")
     args = parser.parse_args(argv)
 
     if args.provider == "kimi":
@@ -701,6 +781,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             thinking=args.thinking,
             effort=args.effort,
             max_tokens=args.max_tokens,
+            json_mode=(args.json_mode == "on"),
         )
         dry_run = False
         provider_name = "nemotron"
@@ -715,6 +796,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             only_scenes=only_scenes,
             provider_name=provider_name,
             dry_run=dry_run,
+            reuse_from=args.reuse_from,
         )
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

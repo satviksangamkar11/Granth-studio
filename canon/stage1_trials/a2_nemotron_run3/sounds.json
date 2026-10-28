@@ -1,0 +1,14 @@
+{
+ "adhyay": 2,
+ "cues": [
+  {
+   "anchor_line_id": "S1-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Subtle ambient drone to underscore the invocation",
+   "scene_id": "S1",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A very subtle, low-frequency ambient drone with a faint temple bell resonance, creating a sacred atmosphere without melody."
+  }
+ ]
+}

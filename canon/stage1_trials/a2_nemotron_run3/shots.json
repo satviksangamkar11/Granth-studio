@@ -1,0 +1,65 @@
+{
+ "adhyay": 2,
+ "shots": [
+  {
+   "beat_line_ids": [
+    "S1-L1"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    1
+   ],
+   "pose": "Typography card with verse 1 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-1"
+  },
+  {
+   "beat_line_ids": [
+    "S1-L2"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    2
+   ],
+   "pose": "Typography card with verse 2 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-2"
+  },
+  {
+   "beat_line_ids": [
+    "S1-L3"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    3
+   ],
+   "pose": "Typography card with verse 3 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-3"
+  },
+  {
+   "beat_line_ids": [
+    "S1-L4"
+   ],
+   "framing": "Centered text on neutral background, slow cinematic push",
+   "need_new": null,
+   "needs_cutout": false,
+   "ovi_ids": [
+    4
+   ],
+   "pose": "Typography card with verse 4 text, slow push in",
+   "preset": "03_slow_cinematic_push",
+   "scene_id": "S1",
+   "shot_id": "S1-4"
+  }
+ ]
+}

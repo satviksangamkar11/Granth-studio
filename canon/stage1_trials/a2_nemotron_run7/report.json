@@ -1,0 +1,334 @@
+{
+ "adhyay": 2,
+ "aggregate_errors": [
+  "note: ovi 48 omission proposed, owner approval needed",
+  "note: ovi 142 omission proposed, owner approval needed",
+  "note: ovi 143 omission proposed, owner approval needed",
+  "S11-L8: core line not in any scene",
+  "S11-L7: core line not in any scene",
+  "S6: scene has no shots",
+  "S10: scene has no shots",
+  "S11: scene has no shots",
+  "S3-L8: line is in no shot beat",
+  "S6-L1: line is in no shot beat",
+  "S6-L2: line is in no shot beat",
+  "S6-L3: line is in no shot beat",
+  "S6-L4: line is in no shot beat",
+  "S6-L5: line is in no shot beat",
+  "S6-L6: line is in no shot beat",
+  "S6-L7: line is in no shot beat",
+  "S6-L8: line is in no shot beat",
+  "S6-L9: line is in no shot beat",
+  "S6-L10: line is in no shot beat",
+  "S6-L11: line is in no shot beat",
+  "S6-L12: line is in no shot beat",
+  "S6-L13: line is in no shot beat",
+  "S6-L14: line is in no shot beat",
+  "S6-L15: line is in no shot beat",
+  "S6-L16: line is in no shot beat",
+  "S6-L17: line is in no shot beat",
+  "S6-L18: line is in no shot beat",
+  "S6-L19: line is in no shot beat",
+  "S10-L1: line is in no shot beat",
+  "S10-L2: line is in no shot beat",
+  "S10-L3: line is in no shot beat",
+  "S10-L4: line is in no shot beat",
+  "S10-L5: line is in no shot beat",
+  "S10-L6: line is in no shot beat",
+  "S10-L7: line is in no shot beat",
+  "S10-L8: line is in no shot beat",
+  "S10-L9: line is in no shot beat",
+  "S10-L10: line is in no shot beat",
+  "S10-L11: line is in no shot beat",
+  "S10-L12: line is in no shot beat",
+  "S10-L13: line is in no shot beat",
+  "S10-L14: line is in no shot beat",
+  "S10-L15: line is in no shot beat",
+  "S10-L16: line is in no shot beat",
+  "S10-L17: line is in no shot beat",
+  "S10-L18: line is in no shot beat",
+  "S11-L1: line is in no shot beat",
+  "S11-L2: line is in no shot beat",
+  "S11-L3: line is in no shot beat",
+  "S11-L4: line is in no shot beat",
+  "S11-L5: line is in no shot beat",
+  "S11-L6: line is in no shot beat",
+  "Narrator: voice key shared with another character",
+  "sant_dasganu_maharaj: voice key shared with another character",
+  "Bankatlal: voice key shared with another character",
+  "bankatlal: voice key shared with another character",
+  "Bhavaniram: voice key shared with another character",
+  "ichharam_shetji: voice key shared with another character",
+  "gajanan_maharaj: voice key shared with another character",
+  "gajanan: voice key shared with another character",
+  "Shri Gajanan Maharaj: voice key shared with another character",
+  "story_map: ovi 138 is typed TEACHING but is in no discourse event",
+  "coverage: ovi 48 omission is not approved by the owner",
+  "coverage: ovi 142 omission is not approved by the owner",
+  "coverage: ovi 143 omission is not approved by the owner",
+  "coverage: ovi 53 is VISUALISED but is in no shot",
+  "coverage: ovi 54 is VISUALISED but is in no shot",
+  "coverage: ovi 55 is VISUALISED but is in no shot",
+  "coverage: ovi 56 is VISUALISED but is in no shot",
+  "coverage: ovi 57 is VISUALISED but is in no shot",
+  "coverage: ovi 58 is VISUALISED but is in no shot",
+  "coverage: ovi 59 is VISUALISED but is in no shot",
+  "coverage: ovi 62 is VISUALISED but is in no shot",
+  "coverage: ovi 68 is VISUALISED but is in no shot",
+  "coverage: ovi 110 is VISUALISED but is in no shot",
+  "coverage: ovi 111 is VISUALISED but is in no shot",
+  "coverage: ovi 112 is VISUALISED but is in no shot",
+  "coverage: ovi 113 is VISUALISED but is in no shot",
+  "coverage: ovi 114 is VISUALISED but is in no shot",
+  "coverage: ovi 115 is VISUALISED but is in no shot",
+  "coverage: ovi 116 is VISUALISED but is in no shot",
+  "coverage: ovi 117 is VISUALISED but is in no shot",
+  "coverage: ovi 118 is VISUALISED but is in no shot",
+  "coverage: ovi 119 is VISUALISED but is in no shot",
+  "coverage: ovi 120 is VISUALISED but is in no shot",
+  "coverage: ovi 122 is VISUALISED but is in no shot",
+  "coverage: ovi 123 is VISUALISED but is in no shot",
+  "coverage: ovi 124 is VISUALISED but is in no shot",
+  "coverage: ovi 128 is VISUALISED but is in no shot",
+  "coverage: ovi 129 is VISUALISED but is in no shot",
+  "coverage: ovi 130 is VISUALISED but is in no shot",
+  "coverage: ovi 131 is VISUALISED but is in no shot",
+  "coverage: ovi 132 is VISUALISED but is in no shot",
+  "coverage: ovi 133 is VISUALISED but is in no shot"
+ ],
+ "calls": [
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "map",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "plan",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_01",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "stop",
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "status": 200,
+    "streamed": true,
+    "usage": null,
+    "wall_s": 335.7
+   },
+   "name": "scene_02",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "stop",
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "status": 200,
+    "streamed": true,
+    "usage": null,
+    "wall_s": 238.4
+   },
+   "name": "scene_03",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_04",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_05",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "error": "TimeoutError",
+    "finish": null,
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "status": 0,
+    "streamed": true,
+    "wall_s": 303.3
+   },
+   "name": "scene_06",
+   "parse_problems": [
+    "reply: no json object"
+   ],
+   "reason": "error: TimeoutError",
+   "schema_errors": [],
+   "status": "failed"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_07",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "stop",
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "status": 200,
+    "streamed": true,
+    "usage": null,
+    "wall_s": 275.9
+   },
+   "name": "scene_08",
+   "parse_problems": [
+    "reply: missing key briefs",
+    "reply: missing key looks",
+    "reply: missing key voices",
+    "reply: missing key sounds",
+    "reply: missing key questions"
+   ],
+   "reason": "",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_09",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "error": "TimeoutError",
+    "finish": null,
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "status": 0,
+    "streamed": true,
+    "wall_s": 257.7
+   },
+   "name": "scene_10",
+   "parse_problems": [
+    "reply: no json object"
+   ],
+   "reason": "error: TimeoutError",
+   "schema_errors": [],
+   "status": "failed"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_11",
+   "parse_problems": [
+    "reply: missing key briefs",
+    "reply: missing key looks",
+    "reply: missing key voices",
+    "reply: missing key sounds",
+    "reply: missing key questions",
+    "reply: unexpected key adhyay"
+   ],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  },
+  {
+   "info": {
+    "finish": "reused",
+    "status": 200,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_12",
+   "parse_problems": [],
+   "reason": "reused from canon\\stage1_trials\\a2_nemotron_run6",
+   "schema_errors": [],
+   "status": "ok"
+  }
+ ],
+ "counts": {
+  "briefs": 61,
+  "cues": 57,
+  "ovis": 148,
+  "questions": 40,
+  "scenes": 12,
+  "script_lines": 148,
+  "shots": 77,
+  "voices": 12
+ },
+ "documents_written": [
+  "story_map",
+  "coverage",
+  "scenes",
+  "shots",
+  "briefs",
+  "looks",
+  "voices",
+  "sounds",
+  "questions"
+ ],
+ "dry_run": false,
+ "packet_problems": [],
+ "provider": "nemotron"
+}

@@ -1,0 +1,135 @@
+{
+ "adhyay": 1,
+ "questions": [
+  {
+   "id": "Q1",
+   "scene_id": "S1",
+   "text": "What is the adhyay (chapter) number for this scene?"
+  },
+  {
+   "id": "Q2",
+   "scene_id": "S1",
+   "text": "Is there a registered place ID for the ambiguous ancient landscape, or should a new place identity be created?"
+  },
+  {
+   "id": "Q3",
+   "scene_id": "S1",
+   "text": "Should the establishing shot include any specific visual markers (e.g., a temple, a sacred tree) to hint at the saint's presence, or remain completely generic?"
+  },
+  {
+   "id": "Q4",
+   "scene_id": "S1",
+   "text": "Is the narrator ever visualized on screen, or is this purely voice-over with no character representation?"
+  },
+  {
+   "id": "Q5",
+   "scene_id": "S1",
+   "text": "Confirm the approved flat-colour style anchor reference for this chapter's visuals."
+  },
+  {
+   "id": "Q6",
+   "scene_id": "S2",
+   "text": "The script mentions Devidas's son's rishushanti ceremony (S2-L2). Should the son be depicted visually? If so, what is his age and appearance?"
+  },
+  {
+   "id": "Q7",
+   "scene_id": "S2",
+   "text": "OVI 88 describes Gajanan wearing a 'bandi of old cloth'. Is there any specific color, pattern, or way it is draped that should be shown?"
+  },
+  {
+   "id": "Q8",
+   "scene_id": "S2",
+   "text": "OVI 91 mentions 'tapobal on body like morning sun rays'. Should this be visualized as a literal glow/halo, or only through lighting?"
+  },
+  {
+   "id": "Q9",
+   "scene_id": "S2",
+   "text": "OVI 92 says Gajanan is 'fully digambar' with only a bandi. Does 'digambar' here mean completely naked except for the bandi, or is there a loincloth? The term can vary."
+  },
+  {
+   "id": "Q10",
+   "scene_id": "S2",
+   "text": "For S2-L9 (Vedic quote 'annam brahma'), there is no described visual. Should we show a manuscript, a symbolic representation, or just hold on Gajanan's face?"
+  },
+  {
+   "id": "Q11",
+   "scene_id": "S2",
+   "text": "The leaf plates are described as 'used' and thrown on the road. Are they made of specific leaves (e.g., banana, palash)? This affects visual texture."
+  },
+  {
+   "id": "Q12",
+   "scene_id": "S2",
+   "text": "Devidas is a Brahmin householder. Should he wear any specific marks (tilak, shikha) beyond the upavita?"
+  },
+  {
+   "id": "Q13",
+   "scene_id": "S3",
+   "text": "What is the exact appearance of Gajanan (the madman/knower) in this scene? He is referenced but not described."
+  },
+  {
+   "id": "Q14",
+   "scene_id": "S3",
+   "text": "What time of day is it? The script doesn't specify."
+  },
+  {
+   "id": "Q15",
+   "scene_id": "S3",
+   "text": "Are there any specific props (e.g., staff, bag) that Bankatlal or Damodarpant carry?"
+  },
+  {
+   "id": "Q16",
+   "scene_id": "S3",
+   "text": "What is the specific location name for the road? (e.g., village name)"
+  },
+  {
+   "id": "Q17",
+   "scene_id": "S7",
+   "text": "What is the exact visual design of the tumbi (gourd)? Size, color, string loop details?"
+  },
+  {
+   "id": "Q18",
+   "scene_id": "S7",
+   "text": "Does Bankatlal wear any specific ornament or marking besides rudraksha beads?"
+  },
+  {
+   "id": "Q19",
+   "scene_id": "S7",
+   "text": "Is the well visible in the establishing shot, or only implied by the place name?"
+  },
+  {
+   "id": "Q20",
+   "scene_id": "S7",
+   "text": "Should the heat haze (fx layer) be stylized as flat-color distortion or realistic shimmer?"
+  },
+  {
+   "id": "Q21",
+   "scene_id": "S7",
+   "text": "What is the precise location of the house entrance Damodarpant walks into? Is it a door in a wall, a hut doorway?"
+  },
+  {
+   "id": "Q22",
+   "scene_id": "S8",
+   "text": "What specific animals are present at the trough? (ovi 134 says 'जनावरे' - animals, but not specified)"
+  },
+  {
+   "id": "Q23",
+   "scene_id": "S8",
+   "text": "What is the exact appearance of Maharaj (Gajanan) in this scene? (No description in source)"
+  },
+  {
+   "id": "Q24",
+   "scene_id": "S8",
+   "text": "What is the exact appearance of Damodarpant? (No description in source)"
+  },
+  {
+   "id": "Q25",
+   "scene_id": "S8",
+   "text": "What does the well and trough look like? (Only described as near well, trough)"
+  },
+  {
+   "id": "Q26",
+   "scene_id": "S8",
+   "text": "What is the design of the lota (material, shape)? (Only 'गडव्यात' - in a lota)"
+  }
+ ]
+}

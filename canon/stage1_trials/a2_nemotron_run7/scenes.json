@@ -1,0 +1,343 @@
+{
+ "adhyay": 2,
+ "scenes": [
+  {
+   "goal": "Establish the invocation to the Unborn Lord and the teaching that grace alone empowers the surrendered soul.",
+   "line_ids": [
+    "S1-L1",
+    "S1-L2",
+    "S1-L3",
+    "S1-L4"
+   ],
+   "ovi_range": [
+    1,
+    4
+   ],
+   "scene_id": "S1",
+   "section_kind": "discourse",
+   "teaching_treatment": "narration_over_typography",
+   "turn": {
+    "ovi": 4,
+    "text": "In the very same way, Your grace empowers those who surrender to You. Remove my sins, sorrows, and destitution—this alone is my prayer."
+   }
+  },
+  {
+   "goal": "Portray Bankatlal's restless longing, fruitless search, and the pivotal meeting with Ramajipant who affirms Maharaj as a Yogi.",
+   "line_ids": [
+    "S2-L1",
+    "S2-L2",
+    "S2-L3",
+    "S2-L4",
+    "S2-L5",
+    "S2-L6",
+    "S2-L7",
+    "S2-L8",
+    "S2-L9",
+    "S2-L10",
+    "S2-L11",
+    "S2-L12",
+    "S2-L13",
+    "S2-L14",
+    "S2-L15",
+    "S2-L16",
+    "S2-L17"
+   ],
+   "ovi_range": [
+    5,
+    21
+   ],
+   "scene_id": "S2",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 18,
+    "text": "He said to Bankatlal, 'I have heard your account. The great soul you describe to me must surely be a Yogi.'"
+   }
+  },
+  {
+   "goal": "Show Govindbuwa's kirtan at the Shiva temple, Bankatlal meeting Pitambar, and their discovery of Maharaj behind the temple.",
+   "line_ids": [
+    "S3-L1",
+    "S3-L2",
+    "S3-L3",
+    "S3-L4",
+    "S3-L5",
+    "S3-L6",
+    "S3-L7",
+    "S3-L8",
+    "S3-L9",
+    "S3-L10",
+    "S3-L11"
+   ],
+   "ovi_range": [
+    22,
+    32
+   ],
+   "scene_id": "S3",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 27,
+    "text": "As the two walked toward the Kirtan, they suddenly spotted Samarth sitting on the stone pavement at the back of the temple."
+   }
+  },
+  {
+   "goal": "Depict the Tumba water miracle at the shallow stream, Pitambar's doubt, and his realization of Maharaj's divine power.",
+   "line_ids": [
+    "S4-L1",
+    "S4-L2",
+    "S4-L3",
+    "S4-L4",
+    "S4-L5",
+    "S4-L6",
+    "S4-L7",
+    "S4-L8",
+    "S4-L9",
+    "S4-L10",
+    "S4-L11",
+    "S4-L12"
+   ],
+   "ovi_range": [
+    33,
+    44
+   ],
+   "scene_id": "S4",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 41,
+    "text": "Then a miracle occurred! Wherever he placed the gourd, a deep hollow formed in the stream bed and the gourd submerged completely."
+   }
+  },
+  {
+   "goal": "Show the betel nut offering, coin refusal, Maharaj's teaching on devotion over material, and his sending devotees to the kirtan.",
+   "line_ids": [
+    "S5-L1",
+    "S5-L2",
+    "S5-L3",
+    "S5-L4",
+    "S5-L5",
+    "S5-L6",
+    "S5-L7",
+    "S5-L8"
+   ],
+   "ovi_range": [
+    45,
+    52
+   ],
+   "scene_id": "S5",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 51,
+    "text": "'Because you possessed that devotion, I met you again. Reflect upon this in your heart, and you will understand.'"
+   }
+  },
+  {
+   "goal": "Present the kirtan discourse, Maharaj completing the verse, Govindbuwa's recognition, Maharaj's refusal to move, and his teaching on consistency of word and deed.",
+   "line_ids": [
+    "S6-L1",
+    "S6-L2",
+    "S6-L3",
+    "S6-L4",
+    "S6-L5",
+    "S6-L6",
+    "S6-L7",
+    "S6-L8",
+    "S6-L9",
+    "S6-L10",
+    "S6-L11",
+    "S6-L12",
+    "S6-L13",
+    "S6-L14",
+    "S6-L15",
+    "S6-L16",
+    "S6-L17",
+    "S6-L18",
+    "S6-L19"
+   ],
+   "ovi_range": [
+    53,
+    71
+   ],
+   "scene_id": "S6",
+   "section_kind": "discourse",
+   "teaching_treatment": "narration_over_typography",
+   "turn": {
+    "ovi": 67,
+    "text": "'Do not be a mere belly-filling preacher on this earth. Go, complete your Kirtan; I am listening from here.'"
+   }
+  },
+  {
+   "goal": "Show kirtan ending, Bankatlal's joy, father's permission, meeting Maharaj at Manik Chowk at sunset, and bringing him home.",
+   "line_ids": [
+    "S7-L1",
+    "S7-L2",
+    "S7-L3",
+    "S7-L4",
+    "S7-L5",
+    "S7-L6",
+    "S7-L7",
+    "S7-L8",
+    "S7-L9"
+   ],
+   "ovi_range": [
+    72,
+    80
+   ],
+   "scene_id": "S7",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 76,
+    "text": "Thereafter, on the fourth day at sunset, Sadgurunath met Bankatlal at Manik Chowk."
+   }
+  },
+  {
+   "goal": "Depict Maharaj's welcome at Bankatlal's home, the Pradosh worship, food dilemma, serving afternoon puris, massive meal, overnight stay, and elaborate mangal snan.",
+   "line_ids": [
+    "S8-L1",
+    "S8-L2",
+    "S8-L3",
+    "S8-L4",
+    "S8-L5",
+    "S8-L6",
+    "S8-L7",
+    "S8-L8",
+    "S8-L9",
+    "S8-L10",
+    "S8-L11",
+    "S8-L12",
+    "S8-L13",
+    "S8-L14",
+    "S8-L15",
+    "S8-L16",
+    "S8-L17",
+    "S8-L18",
+    "S8-L19",
+    "S8-L20"
+   ],
+   "ovi_range": [
+    81,
+    100
+   ],
+   "scene_id": "S8",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 94,
+    "text": "He consumed nearly three seers of food and stayed right there for the entire night."
+   }
+  },
+  {
+   "goal": "Show adornments, naivedya, house becoming Dwarka on Monday, Ichharam's unresolved wish, his fast, bath, and worship of Maharaj.",
+   "line_ids": [
+    "S9-L1",
+    "S9-L2",
+    "S9-L3",
+    "S9-L4",
+    "S9-L5",
+    "S9-L6",
+    "S9-L7",
+    "S9-L8",
+    "S9-L9"
+   ],
+   "ovi_range": [
+    101,
+    109
+   ],
+   "scene_id": "S9",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 103,
+    "text": "Bankatlal's house truly became Dwarka! That day happened to be Monday, the sacred day of Lord Shiva."
+   }
+  },
+  {
+   "goal": "Portray Ichharam's lavish feast, Maharaj's self-dialogue and consumption, the vomiting leela, Ramdas parallel, and the teaching on insistence yielding adverse results.",
+   "line_ids": [
+    "S10-L1",
+    "S10-L2",
+    "S10-L3",
+    "S10-L4",
+    "S10-L5",
+    "S10-L6",
+    "S10-L7",
+    "S10-L8",
+    "S10-L9",
+    "S10-L10",
+    "S10-L11",
+    "S10-L12",
+    "S10-L13",
+    "S10-L14",
+    "S10-L15",
+    "S10-L16",
+    "S10-L17",
+    "S10-L18"
+   ],
+   "ovi_range": [
+    110,
+    127
+   ],
+   "scene_id": "S10",
+   "section_kind": "discourse",
+   "teaching_treatment": "contemplative_hold",
+   "turn": {
+    "ovi": 122,
+    "text": "He vomited forcefully, expelling the food. A similar incident was once enacted by Sri Ramdas."
+   }
+  },
+  {
+   "goal": "Show cleanup after vomiting, reseating Maharaj, darshan by crowds, arrival of dindi troupes, bhajan, and Maharaj's continuous 'Gan Gan' chant giving him the name Gajanan.",
+   "line_ids": [
+    "S11-L1",
+    "S11-L2",
+    "S11-L3",
+    "S11-L4",
+    "S11-L5",
+    "S11-L6"
+   ],
+   "ovi_range": [
+    128,
+    133
+   ],
+   "scene_id": "S11",
+   "section_kind": "story",
+   "teaching_treatment": "none",
+   "turn": {
+    "ovi": 131,
+    "text": "Meanwhile, Maharaj on his seat chanted from his lips under the guise of bhajan: 'Gan Gan Ganat Bote'."
+   }
+  },
+  {
+   "goal": "Convey philosophical reflections on name/form, bliss, Shegaon as pilgrimage center, author's humility, Maharaj's unpredictable routine, and closing invitation with phalashruti.",
+   "line_ids": [
+    "S12-L1",
+    "S12-L2",
+    "S12-L3",
+    "S12-L4",
+    "S12-L5",
+    "S12-L6",
+    "S12-L7",
+    "S12-L8",
+    "S12-L9",
+    "S12-L10",
+    "S12-L11",
+    "S12-L12",
+    "S12-L13"
+   ],
+   "ovi_range": [
+    134,
+    148
+   ],
+   "scene_id": "S12",
+   "section_kind": "discourse",
+   "teaching_treatment": "symbol_from_text",
+   "turn": {
+    "ovi": 147,
+    "text": "Now, keep devotion to listen to the next chapter. Do not delay in seizing this spiritual opportunity!"
+   }
+  }
+ ]
+}

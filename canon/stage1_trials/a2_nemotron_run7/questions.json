@@ -1,0 +1,205 @@
+{
+ "adhyay": 2,
+ "questions": [
+  {
+   "id": "Q1",
+   "scene_id": "S1",
+   "text": "Should the opening invocation be visualized only as typography cards, or should we include illustrative establishing shots of Chandrabhaga river bank and Lord Pandurang?"
+  },
+  {
+   "id": "Q2",
+   "scene_id": "S1",
+   "text": "Is the narrator (Sant Dasganu Maharaj) ever shown on screen in this chapter, or is his voice purely off-screen narration?"
+  },
+  {
+   "id": "Q3",
+   "scene_id": "S1",
+   "text": "What is the approved visual style for the typography cards (font, color, background) beyond 'flat-colour style'?"
+  },
+  {
+   "id": "Q4",
+   "scene_id": "S2",
+   "text": "What is the exact visual appearance of Bankatlal (age, facial features, clothing details) for consistent character design?"
+  },
+  {
+   "id": "Q5",
+   "scene_id": "S2",
+   "text": "Should Maharaj's vision be shown as a translucent overlay on Bankatlal's POV shots, or as a separate cutaway?"
+  },
+  {
+   "id": "Q6",
+   "scene_id": "S2",
+   "text": "No suitable Marathi voice for elderly Ramajipant Deshmukh in library; should we use a non-Marathi voice (e.g., George) or wait for a Marathi elder voice?"
+  },
+  {
+   "id": "Q7",
+   "scene_id": "S2",
+   "text": "Is the 'four days passed' montage (S2-10) to be shown as a single slow push on a static image, or a series of dissolving images? (Preset 03 only supports single image)"
+  },
+  {
+   "id": "Q8",
+   "scene_id": "S2",
+   "text": "Should the sound of Maharaj's chant 'Gan Gan Ganat Bote' be audible in the background during Bankatlal's longing shots, or only implied?"
+  },
+  {
+   "id": "Q9",
+   "scene_id": "S3",
+   "text": "What is the exact visual appearance of Govindbuwa Taklikar (age, clothing, instruments) beyond the textual description?"
+  },
+  {
+   "id": "Q10",
+   "scene_id": "S3",
+   "text": "Should Pitambar be shown with any specific tailor tools besides measuring tape (e.g., scissors, cloth)?"
+  },
+  {
+   "id": "Q11",
+   "scene_id": "S3",
+   "text": "Is the Neem tree at the back of the temple a specific landmark to be consistently depicted across shots?"
+  },
+  {
+   "id": "Q12",
+   "scene_id": "S3",
+   "text": "Does the Malin appear on screen in this scene, or is her house only referenced? If she appears, what is her look?"
+  },
+  {
+   "id": "Q13",
+   "scene_id": "S3",
+   "text": "The similes in Ovi 29 (chataka, peacock, chakora) are narrator's poetic imagery. Should they be visualized metaphorically or left as narration only?"
+  },
+  {
+   "id": "Q14",
+   "scene_id": "S3",
+   "text": "What is the exact state of the zunka-bhakri when offered? Bowl material, bhakri thickness, portion size?"
+  },
+  {
+   "id": "Q15",
+   "scene_id": "S4",
+   "text": "Where exactly does the initial eating and instruction take place? Malin's house, Shiva temple, or Bankatlal's house?"
+  },
+  {
+   "id": "Q16",
+   "scene_id": "S4",
+   "text": "What is the visual appearance of Shri Gajanan Maharaj (clothing, hair, accessories) as per canonical description?"
+  },
+  {
+   "id": "Q17",
+   "scene_id": "S4",
+   "text": "What is the visual appearance of Pitambar Shimpi (age, clothing, distinguishing features)?"
+  },
+  {
+   "id": "Q18",
+   "scene_id": "S4",
+   "text": "Does the miracle show the hollow forming dynamically, or only the result (tumba submerged)?"
+  },
+  {
+   "id": "Q19",
+   "scene_id": "S4",
+   "text": "Is Bankatlal present during this scene, or only Pitambar and Maharaj?"
+  },
+  {
+   "id": "Q20",
+   "scene_id": "S4",
+   "text": "What time of day is it? The lighting direction affects shadows and mood."
+  },
+  {
+   "id": "Q21",
+   "scene_id": "S4",
+   "text": "What is the exact size and shape of the tumba? Is it a typical bottle gourd shape?"
+  },
+  {
+   "id": "Q22",
+   "scene_id": "S5",
+   "text": "Exact visual design of Vyaghrambari and Dudandi coins (size, inscriptions, wear) not described in source; need reference images or artistic decision."
+  },
+  {
+   "id": "Q23",
+   "scene_id": "S5",
+   "text": "Line S5-L8 says 'you both' - confirms Bankatlal and Pitambar Shimpi are the two devotees; verify Pitambar's presence in this scene."
+  },
+  {
+   "id": "Q24",
+   "scene_id": "S5",
+   "text": "Precise spatial relationship between neem tree, temple steps, and stone pavement (faras) for shot composition."
+  },
+  {
+   "id": "Q25",
+   "scene_id": "S5",
+   "text": "Malin's bhakri is referenced in dialogue but not shown; decide if any visual reference needed."
+  },
+  {
+   "id": "Q26",
+   "scene_id": "S7",
+   "text": "What is the exact architectural layout of Manik Chowk at sunset (shop positions, central feature)?"
+  },
+  {
+   "id": "Q27",
+   "scene_id": "S7",
+   "text": "Should the cowherd be visually distinct or remain a generic background figure?"
+  },
+  {
+   "id": "Q28",
+   "scene_id": "S7",
+   "text": "How many shopkeepers are visible lighting lamps, and what are their specific actions?"
+  },
+  {
+   "id": "Q29",
+   "scene_id": "S7",
+   "text": "What is Bhavaniram's exact attire and physical details (e.g., beard length, shawl color)?"
+  },
+  {
+   "id": "Q30",
+   "scene_id": "S7",
+   "text": "How should the metaphorical 'sun of wisdom' be visually suggested in the Manik Chowk establishing shot?"
+  },
+  {
+   "id": "Q31",
+   "scene_id": "S9",
+   "text": "What is the exact visual appearance of Ichharam Shetji (age, clothing, distinguishing features like rudraksha, vibhuti)?"
+  },
+  {
+   "id": "Q32",
+   "scene_id": "S9",
+   "text": "How should the transformation of Bankatlal's house into Dwarka be depicted visually (architectural details, signage, symbolic elements)?"
+  },
+  {
+   "id": "Q33",
+   "scene_id": "S9",
+   "text": "What specific naivedya items are offered beyond 'various' for accurate depiction (e.g., specific sweets, fruits)?"
+  },
+  {
+   "id": "Q34",
+   "scene_id": "S9",
+   "text": "Is there a specific color palette or line weight for the approved flat-colour style beyond the general description?"
+  },
+  {
+   "id": "Q35",
+   "scene_id": "S9",
+   "text": "Should the narrator's voice be heard over all shots, or only for the narration lines (S9-L1 to S9-L9)?"
+  },
+  {
+   "id": "Q36",
+   "scene_id": "S12",
+   "text": "Should the visual of Maharaj as Vitthal standing on a brick (Ovi 138) be a direct depiction or a symbolic representation?"
+  },
+  {
+   "id": "Q37",
+   "scene_id": "S12",
+   "text": "For the author's humility shot (Ovi 142-143), what specific imagery does the owner prefer: Dasganu as an insect, or Dasganu as a small devotee before Maharaj?"
+  },
+  {
+   "id": "Q38",
+   "scene_id": "S12",
+   "text": "The cattle watering trough (hal) is mentioned in Ovi 144. Should we show Maharaj sitting at the trough or just the trough with water?"
+  },
+  {
+   "id": "Q39",
+   "scene_id": "S12",
+   "text": "For the chilim shot (Ovi 146), should we show Maharaj's face or only hands?"
+  },
+  {
+   "id": "Q40",
+   "scene_id": "S12",
+   "text": "The closing prayer (Ovi 147-148) uses a bowing prayer preset. Is the folded hands gesture sufficient, or should we include a book or manuscript representing the text?"
+  }
+ ]
+}

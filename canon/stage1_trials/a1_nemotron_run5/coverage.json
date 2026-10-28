@@ -1,0 +1,735 @@
+{
+ "adhyay": 1,
+ "ovis": [
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 1,
+   "reason": "Opening invocation to Ganesha; no script lines in shooting script for this adhyay"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 2,
+   "reason": "Invocation describing devotees remembering Ganesha; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 3,
+   "reason": "Invocation on Ganesha's power removing obstacles; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 4,
+   "reason": "Invocation offering worship at Ganesha's feet; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 5,
+   "reason": "Invocation acknowledging ignorance and seeking grace; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 6,
+   "reason": "Invocation to Saraswati; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 7,
+   "reason": "Invocation to Jagadamba; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 8,
+   "reason": "Invocation seeking Ganesha's grace for speech; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 9,
+   "reason": "Invocation for help in writing; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 10,
+   "reason": "Invocation to Panduranga; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 11,
+   "reason": "Invocation describing God as all-witness; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 12,
+   "reason": "Invocation on God as jag, jan, janardana; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 13,
+   "reason": "Invocation on God's unfathomable glory; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 14,
+   "reason": "Story reference to Rama's grace to monkeys; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 15,
+   "reason": "Teaching on grace transcending wealth; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 16,
+   "reason": "Teaching on grace and devotee's surrender; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 17,
+   "reason": "Invocation to Pandhariraya for writing saint stories; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 18,
+   "reason": "Invocation to Shiva; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 19,
+   "reason": "Teaching on grace transcending time; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 20,
+   "reason": "Invocation as Gajanan's servant; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 21,
+   "reason": "Invocation for help in writing; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 22,
+   "reason": "Invocation to Kuladevi of Kolhapur; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 23,
+   "reason": "Invocation to Durga/Tulja Bhavani; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 24,
+   "reason": "Invocation to Dattatreya for inspiration; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 25,
+   "reason": "Invocation to various rishis and Shankaracharya; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 26,
+   "reason": "Invocation to all saints for writing; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 27,
+   "reason": "Invocation to saints like Gyaneshwar, Tukaram, Ramdas; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 28,
+   "reason": "Invocation to Shirdi Sai and others for fearlessness; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 29,
+   "reason": "Invocation seeking saints' grace for speaking; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 30,
+   "reason": "Philosophy on true Maya as mother; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 31,
+   "reason": "Philosophy on pen as instrument; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 32,
+   "reason": "Invocation offering pen to saints; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 33,
+   "reason": "Teaching instructing listeners to hear saint stories; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 34,
+   "reason": "Teaching on saints as God on earth; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 35,
+   "reason": "Teaching on saints as embodiment of conduct; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 36,
+   "reason": "Teaching to listen to saint stories leisurely; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 37,
+   "reason": "Teaching on saints as vessels of divine knowledge; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 38,
+   "reason": "Teaching on merit of serving saints' feet; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 39,
+   "reason": "Recap of saints in Bharatkhanda; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 40,
+   "reason": "Philosophy on Jambudvipa blessed by saints; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 41,
+   "reason": "Teaching on saints' feet on this land since beginningless time; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 42,
+   "reason": "Recap listing Narada, Dhruva, etc.; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 43,
+   "reason": "Recap on Shankaracharya; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 44,
+   "reason": "Recap on Madhva, Vallabha, Ramanuja; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 45,
+   "reason": "Recap listing Narsi Mehta, Tulsidas, Kabir, etc.; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 46,
+   "reason": "Recap on Mirabai; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 47,
+   "reason": "Recap on Gorakhnath, Machchindranath; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 48,
+   "reason": "Recap on Nama, Narhari, Jani, Kanhopatra; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 49,
+   "reason": "Recap on Chokha, Savata, Kurmadas, Damajipant; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 50,
+   "reason": "Recap on Mukundraj, Janardan; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 51,
+   "reason": "Recap referencing Bhaktavijay and Bhaktamala; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 52,
+   "reason": "Recap stating three books written; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 53,
+   "reason": "Teaching introducing Gajanan as avatar; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 54,
+   "reason": "Recap summarizing previous stories; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 55,
+   "reason": "Teaching on author's resolve to write Gajanan's character; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 56,
+   "reason": "Story of first sighting saint at Akot; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 57,
+   "reason": "Story of mala and Merumani; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 58,
+   "reason": "Story setting Shegaon in Varhad; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 59,
+   "reason": "Story describing Shegaon's glory; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 60,
+   "reason": "Story of Gajanan rising like lotus at Shegaon; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 61,
+   "reason": "Story of Shegaon as diamond mine with Gajanan; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 62,
+   "reason": "Teaching to hold love at Gajanan's feet; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 63,
+   "reason": "Teaching on Gajanan as cloud, listeners as peacocks; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 64,
+   "reason": "Story of Shegaon residents' fortune; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 65,
+   "reason": "Teaching on merit of saint's feet; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 66,
+   "reason": "Story of Ramchandra Patil's request; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 67,
+   "reason": "Story of author's desire to write Gajanan's story; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 68,
+   "reason": "Story of Ramchandra's plan to fulfill desire; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 69,
+   "reason": "Teaching on true saint's nature being unknowable; no script lines"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 70,
+   "reason": "Covered by script line S1-L1; narrator describes saint's unknown origin"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 71,
+   "reason": "Philosophy on Brahman's unknowable abode; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 72,
+   "reason": "Philosophy on recognizing Brahman by its radiance; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 73,
+   "reason": "Philosophy on diamond's mine being irrelevant; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 74,
+   "reason": "Story of Gajanan arriving in Shegaon at age eighteen; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 75,
+   "reason": "Story of people speculating Gajanan from Sajjangad; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 76,
+   "reason": "Teaching on proof of saint's greatness; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 77,
+   "reason": "Story of world's corruption and Samarth's miracles; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 78,
+   "reason": "Story of Gajanan as avatar for world's salvation; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 79,
+   "reason": "Teaching on yogi entering any body; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 80,
+   "reason": "Recap of other saints' unusual births; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 81,
+   "reason": "Story of Gajanan's body fully aware of yoga; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 82,
+   "reason": "Teaching on yoga's deep glory; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 83,
+   "reason": "Story setting Magh month, Vadya Saptami; no script lines"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 84,
+   "reason": "Covered by script line S2-L1; Devidas householder introduced"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 85,
+   "reason": "Covered by script line S2-L1 (implied); Devidas as Paturkar descendant, mathadhipati"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 86,
+   "reason": "Covered by script line S2-L2; son's rishushanti ceremony, food prep"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 87,
+   "reason": "Covered by script line S2-L3; used leaf plates thrown on road"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 88,
+   "reason": "Covered by script line S2-L4; Gajanan sitting there in old clothes"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 89,
+   "reason": "Covered by script line S2-L4 (implied); no title/name, only a gourd for water"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 90,
+   "reason": "Covered by script line S2-L4 (implied); raw chilim, potter's kiln"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 91,
+   "reason": "Covered by script line S2-L5; nasagra drishti, calm face, tapobal"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 92,
+   "reason": "Covered by script line S2-L6; fully digambar, no mine/yours"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 93,
+   "reason": "Covered by script line S2-L7; searching leaf plates for food grains"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 94,
+   "reason": "Covered by script line S2-L8; Gajanan's action teaching 'anna parabrahma'"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 95,
+   "reason": "Covered by script line S2-L9; Vedic quote 'annam brahma'"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 96,
+   "reason": "Covered by script line S2-L10; narrator explains people didn't understand"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 97,
+   "reason": "Covered by script line S3-L1; Bankatlal Agarwal walking"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 98,
+   "reason": "Covered by script lines S3-L2, S3-L3; Damodarpant Kulkarni, both surprised"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 99,
+   "reason": "Covered by script line S3-L4; their dialogue calling him mad"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 100,
+   "reason": "Covered by script line S3-L5; narrator's observation on hunger vs behavior"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 101,
+   "reason": "Covered by script line S3-L5 (implied); yachak at door, Devidas gives"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 102,
+   "reason": "Covered by script lines S3-L6, S3-L7; Bankatlal's dialogue to watch"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 103,
+   "reason": "Covered by script line S3-L8; narrator on Vyasa's words in Bhagavat"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 104,
+   "reason": "Covered by script line S3-L8; appears mad but great knower"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 105,
+   "reason": "Covered by script line S3-L9; jewel and appraiser analogy"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 106,
+   "reason": "Covered by script line S3-L9 (implied); thousands passed but none saw"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 107,
+   "reason": "Covered by script line S3-L9 (implied); diamond in dust, appraiser picks"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 108,
+   "reason": "Covered by script line S4-L1; Bankatlal approaches first"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 109,
+   "reason": "Covered by script line S4-L2; Bankatlal's dialogue asking why searching"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 110,
+   "reason": "Covered by script line S4-L3; Maharaj looks up, no answer"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 111,
+   "reason": "Covered by script line S4-L5; radiant face, strong arms, steady gaze"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 112,
+   "reason": "Covered by script line S4-L4; they bow in satisfaction"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 113,
+   "reason": "Covered by script line S5-L1; Gajanan asks Devidas for plate"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 114,
+   "reason": "Covered by script line S5-L2; Devidas brings filled plate"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 115,
+   "reason": "Covered by script line S5-L3; Maharaj sits to eat"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 116,
+   "reason": "Covered by script line S5-L4; teaching on Brahmarasa vs jaggery water"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 117,
+   "reason": "Covered by script line S5-L5; teaching on emperor vs small jagir"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 118,
+   "reason": "Covered by script line S5-L6; mixes all food, no preference, eats two prahar"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 119,
+   "reason": "Covered by script lines S6-L1, S6-L2; Bankatlal admits mistake"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 120,
+   "reason": "Covered by script line S6-L3; Arjun's madness for Subhadra"
+  },
+  {
+   "disposition": "NARRATED",
+   "ovi": 121,
+   "reason": "Covered by script line S6-L4; this knower mad for liberation, no more test"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 122,
+   "reason": "Covered by script line S6-L5; blessed Shegaon, saw Yogiraj"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 123,
+   "reason": "Covered by script lines S7-L1, S7-L2; noon sun, birds in shade"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 124,
+   "reason": "Covered by script line S7-L3; Maharaj sitting in bliss in heat"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 125,
+   "reason": "Covered by script line S7-L4; narrator suggests water for tumbi"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 126,
+   "reason": "Covered by script line S7-L6; Damodarpant offers water"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 127,
+   "reason": "Covered by script line S7-L7; Samarth smiles, speaks"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 128,
+   "reason": "Covered by script line S7-L8; Gajanan: if need water, bring; Brahman pervades all"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 129,
+   "reason": "Covered by script line S7-L9; no difference between you/me, but follow worldly conduct"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 130,
+   "reason": "Covered by script line S7-L10; body ate food, needs water"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 131,
+   "reason": "Covered by script line S7-L11; arrange water per your understanding"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 132,
+   "reason": "Covered by script line S7-L12; Bankatlal says blessed fortune"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 133,
+   "reason": "Covered by script line S7-L13; Damodarpant goes inside for water"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 134,
+   "reason": "Covered by script line S8-L1; well with trough, animals drinking"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 135,
+   "reason": "Covered by script line S8-L2; Maharaj drinks there, burps; Damodarpant arrives with lota"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 136,
+   "reason": "Covered by script line S8-L4; Damodarpant stops him: dirty water for animals"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 137,
+   "reason": "Covered by script line S8-L5; Damodarpant offers scented cool water"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 138,
+   "reason": "Covered by script lines S9-L1, S9-L2; Maharaj: don't tell us worldly conduct"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 139,
+   "reason": "Covered by script line S9-L3; world pervaded by Brahman, no dirty/clean water"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 140,
+   "reason": "Covered by script line S9-L4; water same, fragrance/stink both God's form"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 141,
+   "reason": "Covered by script line S9-L5; drinker not separate from God, leela understood in human birth"
+  },
+  {
+   "disposition": "QUOTED",
+   "ovi": 142,
+   "reason": "Covered by script line S9-L6; left root truth, mind in conduct; contemplate world's origin"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 143,
+   "reason": "Covered by script line S9-L7; both emotional, fall at feet"
+  },
+  {
+   "disposition": "VISUALISED",
+   "ovi": 144,
+   "reason": "Covered by script line S9-L8; Maharaj departs at wind speed"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 145,
+   "reason": "Recap pointing to next chapter; no script lines"
+  },
+  {
+   "disposition": "PROPOSE_OMISSION",
+   "ovi": 146,
+   "reason": "Phalashruti closing prayer; no script lines"
+  }
+ ]
+}

@@ -1,0 +1,608 @@
+You are a planning assistant for a motion-comic film pipeline. You plan only; you never write the owner's script.
+RULES:
+Use only locked source, research and owner decisions. Cite chapter-qualified ovis for facts. Reuse registered IDs; report missing identities. Never invent events, motives, miracles, dialogue or closure. Reference immutable EASY line IDs; never write, edit, translate or critique their wording. Thoughts and unclear speech remain narrator material. Separate sourced facts from STAGING and inferred visual looks. Preserve required teachings and explicit coverage; only the owner approves omissions. Use supplied preset capabilities and sound availability; report NEED_NEW honestly. Output only this call's schema. No timings, hashes, approvals, API calls or code.
+Reply with ONE JSON object only (no markdown fences, no prose) whose top-level keys are exactly ['shots', 'briefs', 'looks', 'voices', 'sounds', 'questions'], each value a complete document that includes "adhyay": <N>. The response must be wrapped exactly as: {"shots": { "adhyay": <N>, ... }, "briefs": { "adhyay": <N>, ... }, "looks": { "adhyay": <N>, ... }, "voices": { "adhyay": <N>, ... }, "sounds": { "adhyay": <N>, ... }, "questions": { "adhyay": <N>, ... }}. Do NOT return a document directly; every document must sit under its key. In every document the field "adhyay" is the CHAPTER number 2 (the same number in every call and every document; never the scene number or any other number). The reply object has SIX separate top-level keys: shots, briefs, looks, voices, sounds, questions. Never nest one document inside another. The top-level structure is: {"shots": {"adhyay": <N>, ...}, "briefs": {"adhyay": <N>, ...}, "looks": {"adhyay": <N>, ...}, "voices": {"adhyay": <N>, ...}, "sounds": {"adhyay": <N>, ...}, "questions": {"adhyay": <N>, ...}}.
+----------------------------------------
+TASK
+For ONLY the scenes in scene_ids produce shots (use a preset id from the preset list when one fits, flat images first, else NEED_NEW with reason and class), image briefs (include the image-brief lessons below), canon looks (stated vs inferred), voice casting (by DESCRIPTION from the voice library; a RECURRING character keeps the voice it is assigned to; a new character gets the best-matching unassigned voice with a short `reason`; if no saved voice fits raise a question, never invent a voice id), sound suggestions (reuse an available palette sound id else NEED_NEW with an ElevenLabs-ready sound prompt; silence is valid; no music; nothing automatic from presets), and questions for every ambiguity (never a silent guess).
+
+OUTPUT SCHEMAS
+shots
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "shots": {
+   "items": {
+    "additionalProperties": false,
+    "else": {
+     "properties": {
+      "need_new": {
+       "type": "null"
+      }
+     }
+    },
+    "if": {
+     "properties": {
+      "preset": {
+       "const": "NEED_NEW"
+      }
+     }
+    },
+    "properties": {
+     "beat_line_ids": {
+      "items": {
+       "pattern": "^S[0-9]{1,2}-L[0-9]{1,3}$",
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "framing": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "need_new": {
+      "type": [
+       "object",
+       "null"
+      ]
+     },
+     "needs_cutout": {
+      "type": "boolean"
+     },
+     "ovi_ids": {
+      "items": {
+       "minimum": 1,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "pose": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "preset": {
+      "pattern": "^([0-9]{2}_[a-z0-9_]+|NEED_NEW)$",
+      "type": "string"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "shot_id": {
+      "pattern": "^S[0-9]{1,2}-[0-9]{1,2}$",
+      "type": "string"
+     }
+    },
+    "required": [
+     "shot_id",
+     "scene_id",
+     "ovi_ids",
+     "beat_line_ids",
+     "preset",
+     "need_new",
+     "needs_cutout",
+     "pose",
+     "framing"
+    ],
+    "then": {
+     "properties": {
+      "need_new": {
+       "additionalProperties": false,
+       "properties": {
+        "class": {
+         "enum": [
+          "missing_image",
+          "json_arrangement",
+          "renderer_gap"
+         ]
+        },
+        "reason": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "required": [
+        "reason",
+        "class"
+       ],
+       "type": "object"
+      }
+     }
+    },
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "shots"
+ ],
+ "title": "stage1_shots",
+ "type": "object"
+}
+
+briefs
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "images": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "camera": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "image_id": {
+      "pattern": "^s[0-9]{1,2}_[a-z][a-z0-9_]{0,40}$",
+      "type": "string"
+     },
+     "light": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "on_screen_facts": {
+      "items": {
+       "maxLength": 400,
+       "minLength": 1,
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "people": {
+      "items": {
+       "additionalProperties": false,
+       "properties": {
+        "gaze": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "name": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "pose": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "position": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        }
+       },
+       "required": [
+        "name",
+        "position",
+        "pose",
+        "gaze"
+       ],
+       "type": "object"
+      },
+      "type": "array"
+     },
+     "place_id": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "prop": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "prop_state": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "reason_new": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "references": {
+      "additionalProperties": false,
+      "properties": {
+       "characters": {
+        "items": {
+         "maxLength": 400,
+         "minLength": 1,
+         "type": "string"
+        },
+        "type": "array"
+       },
+       "place": {
+        "maxLength": 400,
+        "minLength": 1,
+        "type": "string"
+       },
+       "prop": {
+        "maxLength": 400,
+        "minLength": 1,
+        "type": [
+         "string",
+         "null"
+        ]
+       },
+       "style_anchor": {
+        "maxLength": 400,
+        "minLength": 1,
+        "type": "string"
+       }
+      },
+      "required": [
+       "characters",
+       "place",
+       "style_anchor",
+       "prop"
+      ],
+      "type": "object"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "shot_ids": {
+      "items": {
+       "pattern": "^S[0-9]{1,2}-[0-9]{1,2}$",
+       "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+     }
+    },
+    "required": [
+     "image_id",
+     "scene_id",
+     "shot_ids",
+     "people",
+     "place_id",
+     "prop",
+     "prop_state",
+     "camera",
+     "light",
+     "reason_new",
+     "on_screen_facts",
+     "references"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "images"
+ ],
+ "title": "stage1_image_briefs",
+ "type": "object"
+}
+
+looks
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "entries": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "basis": {
+      "enum": [
+       "stated",
+       "inferred"
+      ],
+      "type": "string"
+     },
+     "entity_id": {
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "character",
+       "place",
+       "prop"
+      ],
+      "type": "string"
+     },
+     "look": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "source_ovis": {
+      "items": {
+       "minimum": 1,
+       "type": "integer"
+      },
+      "minItems": 1,
+      "type": "array"
+     },
+     "state_id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "entity_id",
+     "kind",
+     "state_id",
+     "look",
+     "source_ovis",
+     "basis"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "entries"
+ ],
+ "title": "stage1_canon_looks",
+ "type": "object"
+}
+
+voices
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "cast": {
+   "items": {
+    "additionalProperties": false,
+    "if": {
+     "properties": {
+      "status": {
+       "const": "NEW_PROPOSED"
+      }
+     }
+    },
+    "properties": {
+     "character_id": {
+      "type": "string"
+     },
+     "gender": {
+      "enum": [
+       "male",
+       "female"
+      ],
+      "type": "string"
+     },
+     "reason": {
+      "minLength": 1,
+      "type": "string"
+     },
+     "status": {
+      "enum": [
+       "RECURRING",
+       "NEW_PROPOSED"
+      ],
+      "type": "string"
+     },
+     "voice_id": {
+      "maxLength": 40,
+      "minLength": 10,
+      "type": "string"
+     },
+     "voice_key": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "character_id",
+     "voice_key",
+     "voice_id",
+     "gender",
+     "status"
+    ],
+    "then": {
+     "required": [
+      "reason"
+     ]
+    },
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "cast"
+ ],
+ "title": "stage1_voice_cast",
+ "type": "object"
+}
+
+sounds
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "cues": {
+   "items": {
+    "additionalProperties": false,
+    "else": {
+     "not": {
+      "required": [
+       "sound_prompt"
+      ]
+     }
+    },
+    "if": {
+     "properties": {
+      "sound_id": {
+       "const": "NEED_NEW"
+      }
+     }
+    },
+    "properties": {
+     "anchor_line_id": {
+      "pattern": "^S[0-9]{1,2}-L[0-9]{1,3}$",
+      "type": "string"
+     },
+     "basis": {
+      "enum": [
+       "stated",
+       "staging"
+      ],
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "bed",
+       "fx"
+      ],
+      "type": "string"
+     },
+     "purpose": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "sound_id": {
+      "pattern": "^(bed|fx)_[a-z0-9_]+$|^NEED_NEW$",
+      "type": "string"
+     },
+     "sound_prompt": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "required": [
+     "scene_id",
+     "anchor_line_id",
+     "sound_id",
+     "kind",
+     "purpose",
+     "basis"
+    ],
+    "then": {
+     "required": [
+      "sound_prompt"
+     ]
+    },
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "cues"
+ ],
+ "title": "stage1_sound_suggestions",
+ "type": "object"
+}
+
+questions
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adhyay": {
+   "maximum": 21,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "questions": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "pattern": "^Q[0-9]+$",
+      "type": "string"
+     },
+     "scene_id": {
+      "pattern": "^S[0-9]{1,2}$",
+      "type": "string"
+     },
+     "text": {
+      "maxLength": 400,
+      "minLength": 1,
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "text"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  }
+ },
+ "required": [
+  "adhyay",
+  "questions"
+ ],
+ "title": "stage1_questions",
+ "type": "object"
+}
+
+CHAPTER DATA
+{"script_lines":[{"id":"S2-L1","scene":"S2","voice":"narrator","ovi":5,"priority":"core","marathi":"मागील अध्यायात सांगितल्याप्रमाणे समर्थ महाराज निघून गेले. त्यामुळे बंकटलालच्या मनात त्यांना पुन्हा भेटण्याची तळमळ निर्माण झाली.","hindi":"पिछले अध्याय में जैसा कहा गया, समर्थ महाराज वहाँ से चले गए। इससे बंकटलाल के मन में उनसे दोबारा मिलने की व्याकुलता भर गई।"},{"id":"S2-L2","scene":"S2","voice":"narrator","ovi":6,"priority":"core","marathi":"अन्नपाण्यात त्याला गोडी उरली नाही, मनात सतत समर्थांचा विचार राहिला. त्याच्या डोळ्यांसमोरून गजानन महाराजांचे रूप हटेना.","hindi":"उसे भोजन-पानी में स्वाद नहीं आता था, मन निरंतर समर्थ का ध्यान करता था। उसकी आँखों के सामने से गजानन महाराज की छवि हटती नहीं थी।"},{"id":"S2-L3","scene":"S2","voice":"narrator","ovi":7,"priority":"core","marathi":"जिकडे पाहावे तिकडे त्यांचेच रूप दिसे, महाराजांचा सतत भास होत राहिला. श्रोत्यांनो, यालाच खरी तल्लीनता म्हणतात; हा काही बालिश खेळ नाही.","hindi":"जिधर देखता, उनकी ही छवि दिखाई देती, उसे हर ओर महाराज का आभास होने लगा। श्रोताओ, इसी को सच्ची लगन कहते हैं; यह बच्चों का खेल नहीं है।"},{"id":"S2-L4","scene":"S2","voice":"narrator","ovi":8,"priority":"core","marathi":"हरवलेल्या गाईला शोधणाऱ्या वासराची जशी व्याकुळ अवस्था असते, तशीच बंकटलालची स्थिती झाली होती, हे ज्ञानीजनहो.","hindi":"बिछुड़ी गाय को खोजते बछड़े की जैसी व्याकुल दशा होती है, वैसी ही बंकटलाल की अवस्था हो गई थी, हे सज्जनो।"},{"id":"S2-L5","scene":"S2","voice":"narrator","ovi":9,"priority":"core","marathi":"मनातील ही गुपित वेदना सांगायला त्याला कुणी योग्य व्यक्ती सापडेना. स्वतःच्या वडिलांशी बोलण्याचेही त्याला धैर्य होत नव्हते.","hindi":"मन की इस निजी व्यथा को कहने के लिए उसे कोई उचित व्यक्ति न मिला। अपने पिता से यह बात कहने का भी उसमें साहस नहीं था।"},{"id":"S2-L6","scene":"S2","voice":"narrator","ovi":10,"priority":"core","marathi":"असे त्याच्या मनात विचारांचे मोठे वादळ उठले. त्याने संपूर्ण शेगाव शोधले, तरी महाराजांचा ठावठिकाणा लागला नाही.","hindi":"इस प्रकार उसके मन में विचारों का तूफान उठा। उसने पूरा शेगाँव छान डाला, फिर भी महाराज का पता नहीं चला।"},{"id":"S2-L7","scene":"S2","voice":"narrator","ovi":11,"priority":"core","marathi":"घरी परतल्यावर वडिलांनी विचारले; सुज्ञ भवानीराम म्हणाले, बाळा, आज तुझे मन इतके अस्थिर का झाले आहे?","hindi":"घर लौटने पर पिता ने पूछा; समझदार भवानीराम बोले, बेटा, आज तुम्हारा मन इतना चंचल क्यों है?"},{"id":"S2-L8","scene":"S2","voice":"narrator","ovi":12,"priority":"core","marathi":"मनात उत्साह दिसत नाही, चेहऱ्यावर उदासी दिसते. असे असह्य दुःख कशामुळे झाले, मला सांग.","hindi":"मन में उत्साह नहीं दिखाई देता, चेहरे पर उदासी छाई है। ऐसी असहनीय पीड़ा किस कारण है, मुझे बताओ।"},{"id":"S2-L9","scene":"S2","voice":"narrator","ovi":13,"priority":"core","marathi":"तू तरुण, समर्थ मुलगा आहेस, तुला कशाचीही कमतरता नाही. हे सगळे खरे असूनसुद्धा तू चिंतेने ग्रस्त का दिसतोस?","hindi":"तुम युवा और स्वस्थ हो, तुम्हें किसी चीज की कमी नहीं। फिर भी, इतना सब होते हुए तुम चिंतित क्यों दिखाई देते हो?"},{"id":"S2-L10","scene":"S2","voice":"narrator","ovi":14,"priority":"core","marathi":"किंवा शरीराला काही आजार आहे का? असेल तर आधी ते सांग. मुलाने आपल्या पित्यापासून कोणतीही गोष्ट लपवू नये.","hindi":"या शरीर में कोई बीमारी है? हो तो पहले वही बताओ। बेटे को अपने पिता से कोई बात छिपानी नहीं चाहिए।"},{"id":"S2-L11","scene":"S2","voice":"narrator","ovi":15,"priority":"core","marathi":"काहीतरी सांगून त्याने वडिलांचे समाधान केले आणि शोधासाठी पुन्हा तो शेगावात फिरू लागला.","hindi":"कुछ कह-सुनकर उसने पिता को संतुष्ट किया, फिर खोजने के लिए वह शेगाँव में घूमने लगा।"},{"id":"S2-L12","scene":"S2","voice":"narrator","ovi":16,"priority":"core","marathi":"बंकटलालच्या शेजारी एक सदाचारी गृहस्थ राहत होते. त्यांच्याकडे जमीनदारी होती, पण संपत्तीचा अहंकार नव्हता.","hindi":"बंकटलाल के पड़ोस में एक सदाचारी व्यक्ति रहते थे। वे जमींदार थे, फिर भी संपत्ति का अहंकार नहीं था।"},{"id":"S2-L13","scene":"S2","voice":"narrator","ovi":17,"priority":"core","marathi":"ते रामाजीपंत देशमुख होते, वयाने फार वृद्ध होते. बंकटलालने त्यांना सर्व घटना सविस्तर सांगितली.","hindi":"वे रामाजीपंत देशमुख थे, आयु में बहुत वृद्ध थे। बंकटलाल ने उनको पूरी घटना विस्तार से सुनाई।"},{"id":"S2-L14","scene":"S2","voice":"narrator","ovi":18,"priority":"core","marathi":"ते बंकटलालला म्हणाले, तुझी कहाणी मी ऐकली. तू ज्यांचे वर्णन करतोस, ते निश्चितच एखादे योगी असावेत.","hindi":"उन्होंने बंकटलाल से कहा, मैंने तुम्हारी कथा सुनी। जिस महापुरुष का वर्णन करते हो, वे अवश्य कोई योगी होंगे।"},{"id":"S2-L15","scene":"S2","voice":"narrator","ovi":19,"priority":"core","marathi":"योग्याशिवाय अशा घटना इतरत्र पाहायला मिळत नाहीत. पूर्वीच्या पुण्याईशिवाय अशा संतांचे दर्शन घडत नाही.","hindi":"योगी के बिना ऐसी अद्भुत क्रियाएँ कहीं देखने को नहीं मिलतीं। पूर्व पुण्य के बिना ऐसे संत के दर्शन नहीं होते।"},{"id":"S2-L16","scene":"S2","voice":"narrator","ovi":20,"priority":"core","marathi":"तुला त्यांचे दर्शन घडले म्हणून तुझा जन्म धन्य झाला. ते तुला पुन्हा भेटले तर मलाही दर्शनासाठी घेऊन जा.","hindi":"तुम्हें उनके दर्शन हुए, इससे तुम्हारा जन्म धन्य हुआ। वे फिर मिलें तो मुझे भी दर्शन के लिए ले चलना।"},{"id":"S2-L17","scene":"S2","voice":"narrator","ovi":21,"priority":"core","marathi":"अशा अवस्थेत चार दिवस निघून गेले, पण बंकटलालच्या मनातून त्यांचा क्षणभरही विसर पडला नाही.","hindi":"ऐसी दशा में चार दिन बीत गए, पर बंकटलाल के मन से महाराज क्षण भर को भी विस्मृत न हुए।"}],"ovis":[{"ovi":5,"original_marathi":"मागले अध्यायीं झालें कथन ।समर्थ गेले निघून ।तेणें बंकटलाला लागून ।हुरहूर वाटूं लागली ॥५॥","simple_marathi":"मागील अध्यायात सांगितल्याप्रमाणे समर्थ महाराज निघून गेले. त्यामुळे बंकटलालच्या मनात त्यांना पुन्हा भेटण्याची तळमळ निर्माण झाली.","hindi":"पिछले अध्याय में जैसा कहा गया, समर्थ महाराज वहाँ से चले गए। इससे बंकटलाल के मन में उनसे दोबारा मिलने की व्याकुलता भर गई।","easy_english":"As narrated in the previous chapter, Samarth Maharaj departed, leaving Bankatlal's heart filled with restless longing to meet him again.","section":2},{"ovi":6,"original_marathi":"गोड न लागे अन्नपाणी ।समर्थांचा ध्यास मनीं ।न हाले दृष्टीपासोनी ।गजाननाचें रुप tें ॥६॥","simple_marathi":"अन्नपाण्यात त्याला गोडी उरली नाही, मनात सतत समर्थांचा विचार राहिला. त्याच्या डोळ्यांसमोरून गजानन महाराजांचे रूप हटेना.","hindi":"उसे भोजन-पानी में स्वाद नहीं आता था, मन निरंतर समर्थ का ध्यान करता था। उसकी आँखों के सामने से गजानन महाराज की छवि हटती नहीं थी।","easy_english":"Food and water lost their taste for him; his mind was constantly absorbed in Samarth. The divine form of Gajanan Maharaj never left his sight.","section":2},{"ovi":7,"original_marathi":"जिकडे पहावें तिकडे भास ।होवो लागला त्यांचा खास ।याचें नांव श्रोते ध्यास ।उग्या नसती पोरचेष्टा ॥७॥","simple_marathi":"जिकडे पाहावे तिकडे त्यांचेच रूप दिसे, महाराजांचा सतत भास होत राहिला. श्रोत्यांनो, यालाच खरी तल्लीनता म्हणतात; हा काही बालिश खेळ नाही.","hindi":"जिधर देखता, उनकी ही छवि दिखाई देती, उसे हर ओर महाराज का आभास होने लगा। श्रोताओ, इसी को सच्ची लगन कहते हैं; यह बच्चों का खेल नहीं है।","easy_english":"Wherever he looked, he vividly sensed Maharaj's presence. O listeners, this is what intense absorption is—it is no childish play.","section":2},{"ovi":8,"original_marathi":"चुकलेल्या धेनूची ।वत्स शुद्धि करी साची ।तैसी बंकटलालाची ।स्थिति झाली विबुध हो ! ॥८॥","simple_marathi":"हरवलेल्या गाईला शोधणाऱ्या वासराची जशी व्याकुळ अवस्था असते, तशीच बंकटलालची स्थिती झाली होती, हे ज्ञानीजनहो.","hindi":"बिछुड़ी गाय को खोजते बछड़े की जैसी व्याकुल दशा होती है, वैसी ही बंकटलाल की अवस्था हो गई थी, हे सज्जनो।","easy_english":"Just like a calf frantically searching for its lost mother cow, such was the distressed state of Bankatlal, O wise ones!","section":2},{"ovi":9,"original_marathi":"हें हितगुज सांगावया ।जागा नव्हती कोठें तया ।वडिलांपासीं बोलावया ।छाती त्याची होईना ॥९॥","simple_marathi":"मनातील ही गुपित वेदना सांगायला त्याला कुणी योग्य व्यक्ती सापडेना. स्वतःच्या वडिलांशी बोलण्याचेही त्याला धैर्य होत नव्हते.","hindi":"मन की इस निजी व्यथा को कहने के लिए उसे कोई उचित व्यक्ति न मिला। अपने पिता से यह बात कहने का भी उसमें साहस नहीं था।","easy_english":"He had no one with whom he could share this secret yearning of his heart, nor did he have the courage to speak of it to his father.","section":2},{"ovi":10,"original_marathi":"ऐशा रीति चित्तीं भलें ।विचाराचें काहूर झालें ।शेगांव अवघें धुंडाळिलें ।परी न पत्ता लागला ॥१०॥","simple_marathi":"असे त्याच्या मनात विचारांचे मोठे वादळ उठले. त्याने संपूर्ण शेगाव शोधले, तरी महाराजांचा ठावठिकाणा लागला नाही.","hindi":"इस प्रकार उसके मन में विचारों का तूफान उठा। उसने पूरा शेगाँव छान डाला, फिर भी महाराज का पता नहीं चला।","easy_english":"Thus, a storm of thoughts raged in his mind. He searched the entire town of Shegaon, yet found no trace of Maharaj.","section":2},{"ovi":11,"original_marathi":"घरीं येतां वडील पुसती ।भवानी राम सन्मती ।बाळा तुझी आज वृत्ती ।का रे झाली चंचळ ॥११॥","simple_marathi":"घरी परतल्यावर वडिलांनी विचारले; सुज्ञ भवानीराम म्हणाले, बाळा, आज तुझे मन इतके अस्थिर का झाले आहे?","hindi":"घर लौटने पर पिता ने पूछा; समझदार भवानीराम बोले, बेटा, आज तुम्हारा मन इतना चंचल क्यों है?","easy_english":"When he returned home, his wise father Bhavaniram asked, 'Son, why is your mind so restless today?'","section":2},{"ovi":12,"original_marathi":"चित्तीं उत्साह दिसेना ।वदनीं दिसे म्लानपणा ।ऐशा असह्य यातना ।होती कशाच्या सांग मज ? ॥१२॥","simple_marathi":"मनात उत्साह दिसत नाही, चेहऱ्यावर उदासी दिसते. असे असह्य दुःख कशामुळे झाले, मला सांग.","hindi":"मन में उत्साह नहीं दिखाई देता, चेहरे पर उदासी छाई है। ऐसी असहनीय पीड़ा किस कारण है, मुझे बताओ।","easy_english":"'There is no joy in your heart, and your face looks pale and sad. Tell me, what is causing you such unbearable anguish?'","section":2},{"ovi":13,"original_marathi":"तूं पोर्‍या तरणा ज्वान ।नाहीं कशाची तुला वाण ।ऐसें साच असोन ।चिंतातुर दिसतोसी ॥१३॥","simple_marathi":"तू तरुण, समर्थ मुलगा आहेस, तुला कशाचीही कमतरता नाही. हे सगळे खरे असूनसुद्धा तू चिंतेने ग्रस्त का दिसतोस?","hindi":"तुम युवा और स्वस्थ हो, तुम्हें किसी चीज की कमी नहीं। फिर भी, इतना सब होते हुए तुम चिंतित क्यों दिखाई देते हो?","easy_english":"'You are a strong young man, lacking nothing in life. Despite having everything, why do you look so worried?'","section":2},{"ovi":14,"original_marathi":"किंवा शरीरीं कांहीं व्याधी ।होतसे ती सांग आधीं ।चोरुन पुत्र ठेवी न कधीं ।गोष्ट कोणती पित्याला ॥१४॥","simple_marathi":"किंवा शरीराला काही आजार आहे का? असेल तर आधी ते सांग. मुलाने आपल्या पित्यापासून कोणतीही गोष्ट लपवू नये.","hindi":"या शरीर में कोई बीमारी है? हो तो पहले वही बताओ। बेटे को अपने पिता से कोई बात छिपानी नहीं चाहिए।","easy_english":"'Or is some illness troubling your body? Tell me first if so. A son should never hide anything from his father.'","section":2},{"ovi":15,"original_marathi":"कांहीं तरी सांगून ।केलें पित्याचें समाधान ।पुन्हा शोधाकारण ।फिरुं लागला शेगांवीं ॥१५॥","simple_marathi":"काहीतरी सांगून त्याने वडिलांचे समाधान केले आणि शोधासाठी पुन्हा तो शेगावात फिरू लागला.","hindi":"कुछ कह-सुनकर उसने पिता को संतुष्ट किया, फिर खोजने के लिए वह शेगाँव में घूमने लगा।","easy_english":"Giving some reassuring reply, he pacified his father and set out once again to wander through Shegaon in search of Maharaj.","section":2},{"ovi":16,"original_marathi":"बंकटलालाचे शेजारीं ।एक होते सदाचारी ।घरीं होती जमेदारी ।परी अभिमान नसे त्याचा ॥१६॥","simple_marathi":"बंकटलालच्या शेजारी एक सदाचारी गृहस्थ राहत होते. त्यांच्याकडे जमीनदारी होती, पण संपत्तीचा अहंकार नव्हता.","hindi":"बंकटलाल के पड़ोस में एक सदाचारी व्यक्ति रहते थे। वे जमींदार थे, फिर भी संपत्ति का अहंकार नहीं था।","easy_english":"In Bankatlal’s neighborhood lived a righteous gentleman. Though his family held a landlord's estate, he had no pride in his wealth.","section":2},{"ovi":17,"original_marathi":"ते देशमुख रामाजीपंत ।वयानें वृद्ध अत्यंत ।बंकटलालानें इत्यंभूत ।हकीकत त्यांना निवेदिली ॥१७॥","simple_marathi":"ते रामाजीपंत देशमुख होते, वयाने फार वृद्ध होते. बंकटलालने त्यांना सर्व घटना सविस्तर सांगितली.","hindi":"वे रामाजीपंत देशमुख थे, आयु में बहुत वृद्ध थे। बंकटलाल ने उनको पूरी घटना विस्तार से सुनाई।","easy_english":"He was Ramajipant Deshmukh, very advanced in years. Bankatlal narrated the entire incident to him in complete detail.","section":2},{"ovi":18,"original_marathi":"ते बोलले बंकटलाला ।तुझा वृत्तान्त मी ऐकिला ।तूं जो पुरुष कथिसी मला ।तो योगी असावा कोणीतरी ॥१८॥","simple_marathi":"ते बंकटलालला म्हणाले, तुझी कहाणी मी ऐकली. तू ज्यांचे वर्णन करतोस, ते निश्चितच एखादे योगी असावेत.","hindi":"उन्होंने बंकटलाल से कहा, मैंने तुम्हारी कथा सुनी। जिस महापुरुष का वर्णन करते हो, वे अवश्य कोई योगी होंगे।","easy_english":"He said to Bankatlal, 'I have heard your account. The great soul you describe to me must surely be a Yogi.'","section":2},{"ovi":19,"original_marathi":"योग्यावांचुनी ऐशा क्रिया ।मिळती न कोठें पाहावया ।पूर्वसुकृता वांचोनिया ।होणें न दर्शन अशाचें ॥१९॥","simple_marathi":"योग्याशिवाय अशा घटना इतरत्र पाहायला मिळत नाहीत. पूर्वीच्या पुण्याईशिवाय अशा संतांचे दर्शन घडत नाही.","hindi":"योगी के बिना ऐसी अद्भुत क्रियाएँ कहीं देखने को नहीं मिलतीं। पूर्व पुण्य के बिना ऐसे संत के दर्शन नहीं होते।","easy_english":"'Except in a true Yogi, such divine acts are nowhere to be seen. Without the merit of past lives, one cannot obtain the darshan of such a being.'","section":2},{"ovi":20,"original_marathi":"तूं घेतलें दर्शन ।जन्म तुझा धन्य धन्य ।भेटतां ते तुजलागून ।ने मलाही दर्शना ॥२०॥","simple_marathi":"तुला त्यांचे दर्शन घडले म्हणून तुझा जन्म धन्य झाला. ते तुला पुन्हा भेटले तर मलाही दर्शनासाठी घेऊन जा.","hindi":"तुम्हें उनके दर्शन हुए, इससे तुम्हारा जन्म धन्य हुआ। वे फिर मिलें तो मुझे भी दर्शन के लिए ले चलना।","easy_english":"'You have received his darshan, making your life blessed! When you meet him again, take me along for his darshan too.'","section":2},{"ovi":21,"original_marathi":"ऐशा स्थितींत दिवस चार ।गेले निघून साचार ।बंकटलालासी तीळभर ।विसर न पडे तयाचा ॥२१॥","simple_marathi":"अशा अवस्थेत चार दिवस निघून गेले, पण बंकटलालच्या मनातून त्यांचा क्षणभरही विसर पडला नाही.","hindi":"ऐसी दशा में चार दिन बीत गए, पर बंकटलाल के मन से महाराज क्षण भर को भी विस्मृत न हुए।","easy_english":"In this state, four days passed by, yet Bankatlal did not forget Maharaj even for a single moment.","section":2}],"scene_cards":[{"scene_id":"S2","section_kind":"story","ovi_range":[5,21],"goal":"Portray Bankatlal's restless longing, fruitless search, and the pivotal meeting with Ramajipant who affirms Maharaj as a Yogi.","line_ids":["S2-L1","S2-L2","S2-L3","S2-L4","S2-L5","S2-L6","S2-L7","S2-L8","S2-L9","S2-L10","S2-L11","S2-L12","S2-L13","S2-L14","S2-L15","S2-L16","S2-L17"],"teaching_treatment":"none","turn":{"ovi":18,"text":"He said to Bankatlal, 'I have heard your account. The great soul you describe to me must surely be a Yogi.'"}}],"presets":[{"preset":"01_establishing_shot","use":"Wide place-setting shot: 4 layers (sky far, mid subject, fx light, fg frame), 1.0->1.28 dolly. Needs: sky, mid, fx, fg.","assets":["fg","fx","mid","sky"],"simplest_renderer":"blender"},{"preset":"02_environmental_parallax","use":"Lateral move through 4 depth layers (schema requires a zoom change >= 0.12 per shot). Needs: sky, far, mid, near.","assets":["far","mid","near","sky"],"simplest_renderer":"blender"},{"preset":"03_slow_cinematic_push","use":"One image, slow 1.0->1.2 push, no effects. SIMPLEST renderer: motion.py (CPU, ffmpeg). Needs: img.","assets":["img"],"simplest_renderer":"motion.py"},{"preset":"04_character_entrance","use":"Character walks in toward a seated figure; camera pans with them. Needs: char (walking pose, transparent), other (seated pose, transparent).","assets":["char","other"],"simplest_renderer":"blender"},{"preset":"05_bowing_prayer","use":"Bow / pranam: tilt down onto the contact point. Needs: pose (both figures, transparent).","assets":["pose"],"simplest_renderer":"blender"},{"preset":"06_blessing_gesture","use":"Raised-hand blessing pose with a slow push toward the hand. LIMIT: the soft warp only nudges an already-raised hand (measured ~1 grey level, not visible); a believable raise needs an extra pose image. Needs: pose (raised hand).","assets":["pose"],"simplest_renderer":"blender"},{"preset":"07_character_reaction","use":"Close-up of a face with a slow push and breathing. Needs: face (close-up, transparent).","assets":["face"],"simplest_renderer":"blender"},{"preset":"08_emotional_closeup","use":"Slower, closer push with a soft halo for a quiet emotional beat. Needs: face (close-up, transparent).","assets":["face"],"simplest_renderer":"blender"},{"preset":"09_dialogue_composition","use":"Two figures facing each other, gentle drift across them. Needs: left, right (transparent poses facing each other). No lip-sync.","assets":["left","right"],"simplest_renderer":"blender"},{"preset":"10_object_hand_insert","use":"Close-up insert of hands / an object. Needs: insert (full-frame close-up).","assets":["insert"],"simplest_renderer":"blender"},{"preset":"11_scene_transition","use":"Two scenes joined by a 6-frame pan bridge (no slow dissolve, so no ghosting). Needs: scene_a, scene_b.","assets":["scene_a","scene_b"],"simplest_renderer":"blender"}],"sound_palette":[],"sound_palette_note":"The sound palette is empty: every sound is NEED_NEW.","voice_library":[{"voice_key":"adam_dominant_firm","voice_id":"pNInz6obpgDQGcFmaJgB","name":"Adam - Dominant, Firm","gender":"male","age":"middle_aged","accent":"american","description":"A bright tenor pitch that immediately cuts through. The delivery is brash and openly confident, speaking with unwavering certainty and a slightly aggressive self-assurance.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"alice_clear_engaging_educator","voice_id":"Xb7hH8MSUJpSbSDYk0k2","name":"Alice - Clear, Engaging Educator","gender":"female","age":"middle_aged","accent":"british","description":"Clear and engaging, friendly woman with a British accent suitable for e-learning.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"ativir_calm_yet_firm_recovery_agent","voice_id":"sQguH2NxUuPknh895Im6","name":"Ativir - Calm yet Firm Recovery Agent","gender":"male","age":"middle_aged","accent":"standard","description":"Composed, assertive and direct — Ativir handles loan recovery with the authority that drives action without ever losing composure. His steady delivery manages EMI reminders, overdue follow-ups, promise-to-pay conversations, and NPA prevention calls with the kind of controlled firmness that keeps customers engaged and pushes recovery rates higher. Perfect for banks, NBFCs, microfinance institutions, and fintech lenders building Marathi loan recovery bots and collections AI agents.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"austin_deep_raspy_and_authentic","voice_id":"Bj9UqZbhQsanLzgalpEG","name":"Austin - Deep, Raspy and Authentic","gender":"male","age":"middle_aged","accent":"us southern","description":"Good ol' boy, goes to the state fair every year, low, deep gravelly voice, proud of his state, can get intimate with a fireside talk, but can get loud when he's drinkin' with the boys.  Served with a heapin' side of STRONG Texas accent and collard greens.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"bankatlal","voice_id":"fqdB7wf4ETj9FXQ8wkLu","name":"Bipin - Rich & Clear Marathi Narrator","gender":"male","age":"middle_aged","accent":"","description":"Warm, expressive & deeply immersive — Bipin brings a Marathi narration quality that makes every story feel lived-in and worth listening to. His smooth, well-paced delivery works across literary audiobooks, cultural storytelling, historical narratives, and true crime series, where a rich, engaging presence keeps listeners absorbed. Perfect for Marathi publishers across Maharashtra and the global Marathi Diaspora.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["bankatlal"],"status":"ASSIGNED"},{"voice_key":"bella_professional_bright_warm","voice_id":"hpp4J3VqNfWAUOO0d1Us","name":"Bella - Professional, Bright, Warm","gender":"female","age":"middle_aged","accent":"american","description":"This voice is warm, bright, and professional, characterized by a Standard American accent and a polished, narrative quality. It features a medium-high pitch with crisp diction and a deliberate, rhythmic pace that makes it highly intelligible and engaging for long-form listening.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"bill_wise_mature_balanced","voice_id":"pqHfZKP75CvOlQylNhV4","name":"Bill - Wise, Mature, Balanced","gender":"male","age":"old","accent":"american","description":"Friendly and comforting voice ready to narrate your stories.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"brian_deep_resonant_and_comforting","voice_id":"nPczCjzI2devNBz1zQrb","name":"Brian - Deep, Resonant and Comforting","gender":"male","age":"middle_aged","accent":"american","description":"Middle-aged man with a resonant and comforting tone. Great for narrations and advertisements.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"callum_husky_trickster","voice_id":"N2lVS1w4EtoT3dr4eOWO","name":"Callum - Husky Trickster","gender":"male","age":"middle_aged","accent":"american","description":"Deceptively gravelly, yet unsettling edge.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"charlie_deep_confident_energetic","voice_id":"IKne3meq5aSn9XLyUdCD","name":"Charlie - Deep, Confident, Energetic","gender":"male","age":"young","accent":"australian","description":"A young Australian male with a confident and energetic voice.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"chris_charming_down_to_earth","voice_id":"iP95p4xoKVk53GoZ742B","name":"Chris - Charming, Down-to-Earth","gender":"male","age":"middle_aged","accent":"american","description":"Natural and real, this down-to-earth voice is great across many use-cases.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"damodarpant","voice_id":"rXW8MF4nX2gHMvBmCDnr","name":"Vinayak - Friendly Marathi Care Agent","gender":"male","age":"young","accent":"","description":"Easy, warm and naturally reassuring — Vinayak brings a young Marathi voice that makes every conversation feel genuine and effortless. His calm, smooth delivery works equally well for customer care queries, AI companion experiences, conversational agents, and everyday dialogue flows where a friendly, relatable voice makes all the difference. Perfect for Marathi customer care bots, companion apps, and regional consumer brands.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["damodarpant"],"status":"ASSIGNED"},{"voice_key":"daniel_steady_broadcaster","voice_id":"onwK4e9ZLuTAKqWW03F9","name":"Daniel - Steady Broadcaster","gender":"male","age":"middle_aged","accent":"british","description":"A strong voice perfect for delivering a professional broadcast or news story.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"eric_smooth_trustworthy","voice_id":"cjVigY5qzO86Huf0OWal","name":"Eric - Smooth, Trustworthy","gender":"male","age":"middle_aged","accent":"american","description":"A smooth tenor pitch from a man in his 40s - perfect for agentic use cases.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"gajanan","voice_id":"8fqGzH80bdkm2UseeV9f","name":"Sharad - Deep Powerful Marathi Narrator","gender":"male","age":"middle_aged","accent":"","description":"Commanding, warm, and impossible to ignore — Sharad brings a deep, powerful Marathi voice that owns every format it touches. His rich, resonant delivery carries equal weight across audiobooks, documentary narration, mythology, corporate content, and cultural storytelling — the rare voice that needs no introduction. Perfect for Marathi content creators, audiobook publishers, documentary filmmakers, and audio platforms building premium Marathi audio experiences.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["gajanan"],"status":"ASSIGNED"},{"voice_key":"george_warm_captivating_storyteller","voice_id":"JBFqnCBsd6RMkjVDRZzb","name":"George - Warm, Captivating Storyteller","gender":"male","age":"middle_aged","accent":"british","description":"Warm resonance that instantly captivates listeners.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"harry_fierce_warrior","voice_id":"SOYHLrjzK2X1ezoPC6cr","name":"Harry - Fierce Warrior","gender":"male","age":"young","accent":"american","description":"An animated warrior ready to charge forward.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"jessica_playful_bright_warm","voice_id":"cgSgspJ2msm6clMCkdW9","name":"Jessica - Playful, Bright, Warm","gender":"female","age":"young","accent":"american","description":"Young and popular, this playful American female voice is perfect for trendy content.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"kalyani_modulated_marathi_storyteller","voice_id":"UN3inGyhBayPW0A8lscL","name":"Kalyani - Modulated Marathi Storyteller","gender":"female","age":"young","accent":"","description":"Smooth, warm, and effortlessly immersive — Kalyani draws listeners into every story with a rich Marathi delivery that feels natural yet deeply compelling. Her soothing, modulated voice shifts seamlessly between characters, emotions, and pace — giving every audiobook the depth that flat TTS voices cannot achieve. Perfect for Marathi audiobook platforms, indie authors, and publishers building audio content that keeps listeners coming back. ","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"laura_enthusiast_quirky_attitude","voice_id":"FGY2WhTYpPnrIDTdsKH5","name":"Laura - Enthusiast, Quirky Attitude","gender":"female","age":"young","accent":"american","description":"This young adult female voice delivers sunny enthusiasm with a quirky attitude.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"liam_energetic_social_media_creator","voice_id":"TX3LPaxmHKxFdv7VOQHJ","name":"Liam - Energetic, Social Media Creator","gender":"male","age":"young","accent":"american","description":"A young adult with energy and warmth - suitable for reels and shorts.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"lily_velvety_actress","voice_id":"pFZP5JQG7iQjIQuC4Bku","name":"Lily - Velvety Actress","gender":"female","age":"middle_aged","accent":"british","description":"Velvety British female voice delivers news and narrations with warmth and clarity.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"matilda_knowledgable_professional","voice_id":"XrExE9yKIg1WjnnlVkGX","name":"Matilda - Knowledgable, Professional","gender":"female","age":"middle_aged","accent":"american","description":"A professional woman with a pleasing alto pitch. Suitable for many use cases.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"mugdha_shinde_marathi_customer_care","voice_id":"OlyuFBQHfYN9SaX9lFEK","name":"Mugdha Shinde - Marathi Customer Care","gender":"female","age":"middle_aged","accent":"","description":"Composed, patient and reassuringly steady — Mugdha Shinde brings a measured Marathi voice that makes every customer interaction feel unhurried and genuinely helpful. Her clear, even delivery handles queries, complaints, account updates, and support flows without ever losing composure. Perfect for ecommerce platforms, telecom brands, and BFSI companies building Marathi customer care bots across Maharashtra, Pune, and Mumbai.","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"mukta_parab_cute_marathi_support_agent","voice_id":"3IWTjbo2MgKIPd81jGhM","name":"Mukta Parab - Cute Marathi Support Agent","gender":"female","age":"young","accent":"","description":"Sweet, warm and instantly likeable — Mukta Parab brings a naturally cute Marathi energy that makes every interaction feel friendly and genuinely helpful. Her cheerful, approachable delivery works across companion apps, casual AI chat, customer support flows, and everyday dialogue where a relatable, endearing presence keeps users comfortable and engaged. Perfect for Marathi conversational AI platforms, companion apps, and consumer brands building warm voice experiences across Maharashtra.","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"narrator","voice_id":"CXkeo30p0Sk4Lr0TAzeo","name":"Tukaram - Smooth Marathi Storyteller","gender":"male","age":"middle_aged","accent":"","description":"Fluid, warm and effortlessly immersive — Tukaram draws listeners deep into every story with a smooth Marathi delivery that never loses pace or warmth. His rich, unhurried voice moves seamlessly through characters, emotions and narrative arcs — giving every audiobook a natural, lived-in quality that polished synthetic voices simply cannot replicate. Perfect for Marathi audiobook platforms, indie authors, and publishers building Marathi audio content for Storytel and Audible India.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":["narrator"],"status":"ASSIGNED"},{"voice_key":"radha_k_warm_clear_storyteller","voice_id":"sEf6GZov1sbS8ffqkt03","name":"Radha K - Warm & Clear Storyteller","gender":"female","age":"young","accent":"standard","description":"Expressive, natural, and engaging — Radha K brings a warm female Marathi storytelling voice that makes every narrative feel intimate and effortless. Her clear, well-paced delivery works across folk tales, cultural podcasts, audiobooks, and storytelling, where an authentic, relatable presence keeps listeners absorbed from the first word to the last. Perfect for Marathi content creators and publishers.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"river_relaxed_neutral_informative","voice_id":"SAz9YHcvj6GT2YYXdXww","name":"River - Relaxed, Neutral, Informative","gender":"neutral","age":"middle_aged","accent":"american","description":"A relaxed, neutral voice ready for narrations or conversational projects.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"roger_laid_back_casual_resonant","voice_id":"CwhRBWXzGAHq8TQ4Fs17","name":"Roger - Laid-Back, Casual, Resonant","gender":"male","age":"middle_aged","accent":"american","description":"Easy going and perfect for casual conversations.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"roopa_relatable_marathi_customer_care","voice_id":"XdxOBLRN2UCpaYs8XVA7","name":"Roopa - Relatable Marathi Customer Care","gender":"female","age":"young","accent":"","description":"Warm, friendly & genuinely relatable, Roopa brings a natural Marathi energy that makes customer interactions feel like talking to someone who actually cares. Her clear, approachable delivery handles queries, complaints, order updates, and support flows with the kind of everyday warmth Marathi-speaking customers connect with instantly. Perfect for ecommerce platforms, telecom brands, and BFSI companies building Marathi customer care bots across Maharashtra, Pune, and Mumbai.","owner_note":"","marathi_verified":true,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"sarah_mature_reassuring_confident","voice_id":"EXAVITQu4vr4xnSDxMaL","name":"Sarah - Mature, Reassuring, Confident","gender":"female","age":"young","accent":"american","description":"Young adult woman with a confident and warm, mature quality and a reassuring, professional tone.","owner_note":"","marathi_verified":false,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"shrey_deep_marathi_conversational","voice_id":"C9v09R5AIM6tOX6Fn06I","name":"Shrey - Deep Marathi Conversational","gender":"male","age":"young","accent":"","description":"Resonant, warm & naturally engaging, Shrey brings a deep Marathi conversational energy that makes every interaction feel grounded and genuine. His rich, measured delivery works across companion apps, casual AI chat, everyday dialogue, and conversational platforms where a deep, familiar Marathi presence builds instant trust and comfort. Perfect for Marathi conversational AI platforms, companion apps, and consumer brands across Maharashtra, Pune, and Mumbai.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"swapnil_j_recovery_agent_calm_firm","voice_id":"95HE9mkONUCgO3n9AqHl","name":"Swapnil J - Recovery Agent, Calm & Firm","gender":"male","age":"young","accent":"standard","description":"Understanding, respectful, confident. Built for overdue EMI reminders, credit card dues, loan instalment follow-ups, settlement offers, payment plans, promise-to-pay dates, address and contact verification, KYC updates and post-due callbacks that explain the situation first and then ask for the details. Also fits utility bills, insurance renewals and bounced cheque notices. Ideal for NBFCs, banks, fintech lenders, collections teams, BPOs, call centres and voicebots.","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"tukaram_confident_marathi_creator","voice_id":"9K2UKMcmIbg94SvrWWlu","name":"Tukaram - Confident Marathi Creator","gender":"male","age":"middle_aged","accent":"","description":"Confident, expressive and naturally captivating — Tukaram brings a bold Marathi energy that makes every podcast and social media moment feel worth listening to. His dynamic, well-paced delivery works across talk shows, interview podcasts, lifestyle reels, knowledge series, and branded audio content where a strong, engaging Marathi presence drives listener loyalty and audience growth. ","owner_note":"","marathi_verified":true,"hindi_verified":true,"assigned_to":[],"status":"AVAILABLE"},{"voice_key":"will_relaxed_optimist","voice_id":"bIHbv24MWmeRgasZH58o","name":"Will - Relaxed Optimist","gender":"male","age":"young","accent":"american","description":"Conversational and laid back.","owner_note":"","marathi_verified":false,"hindi_verified":false,"assigned_to":[],"status":"AVAILABLE"}],"research":{"adhyay":2,"characters":[{"raw":"Shri Gajanan Maharaj (श्री गजानन महाराज / समर्थ / योगिराज): The central divine figure and Yogi in Chapter 2. He operates beyond societal norms, teaches through direct action, rejects material wealth in favor of pure devotion, and constantly chants 'Gan Gan Ganat Bote'.","name":"Shri Gajanan Maharaj","name_mr":"श्री गजानन महाराज / समर्थ / योगिराज","description":"The central divine figure and Yogi in Chapter 2. He operates beyond societal norms, teaches through direct action, rejects material wealth in favor of pure devotion, and constantly chants 'Gan Gan Ganat Bote'."},{"raw":"Bankatlal (बंकटलाल): A young devotee from Shegaon. Following his first encounter with Maharaj in Chapter 1, he experiences intense spiritual longing (Viraha) and brings Maharaj to stay at his home.","name":"Bankatlal","name_mr":"बंकटलाल","description":"A young devotee from Shegaon. Following his first encounter with Maharaj in Chapter 1, he experiences intense spiritual longing (Viraha) and brings Maharaj to stay at his home."},{"raw":"Bhavaniram (भवानीराम): Bankatlal’s wise and devout father. He welcomes Maharaj at the Pradosh hour and offers ritual worship with Bilvapatra.","name":"Bhavaniram","name_mr":"भवानीराम","description":"Bankatlal’s wise and devout father. He welcomes Maharaj at the Pradosh hour and offers ritual worship with Bilvapatra."},{"raw":"Ramajipant Deshmukh (रामाजीपंत देशमुख): An elderly, virtuous landlord and Bankatlal’s neighbor who recognizes that Maharaj is a rare, realized Yogi.","name":"Ramajipant Deshmukh","name_mr":"रामाजीपंत देशमुख","description":"An elderly, virtuous landlord and Bankatlal’s neighbor who recognizes that Maharaj is a rare, realized Yogi."},{"raw":"Pitambar Shimpi (पितांबर शिंपी): A pure-hearted tailor and devotee who accompanies Bankatlal and witnesses the miracle of the gourd (Tumba) filling with crystal-clear water from a shallow stream.","name":"Pitambar Shimpi","name_mr":"पितांबर शिंपी","description":"A pure-hearted tailor and devotee who accompanies Bankatlal and witnesses the miracle of the gourd (Tumba) filling with crystal-clear water from a shallow stream."},{"raw":"Govindbuwa Taklikar (गोविंदबुवा टाकळीकर): A renowned Kirtankar in the Varhad region. When Maharaj completes his verse from the Hamsagita and gently exposes the gap between preaching and practice, Govindbuwa accepts the lesson and proclaims Maharaj's divinity to the town.","name":"Govindbuwa Taklikar","name_mr":"गोविंदबुवा टाकळीकर","description":"A renowned Kirtankar in the Varhad region. When Maharaj completes his verse from the Hamsagita and gently exposes the gap between preaching and practice, Govindbuwa accepts the lesson and proclaims Maharaj's divinity to the town."},{"raw":"Ichharam Shetji (इच्छाराम शेटजी): Bankatlal’s cousin who observes a Monday fast for Lord Shiva. Out of stubborn insistence, he insists Maharaj eat a massive feast after Maharaj has already dined.","name":"Ichharam Shetji","name_mr":"इच्छाराम शेटजी","description":"Bankatlal’s cousin who observes a Monday fast for Lord Shiva. Out of stubborn insistence, he insists Maharaj eat a massive feast after Maharaj has already dined."},{"raw":"Sant Dasganu Maharaj (संत दासगणू महाराज): The author/narrator of Shri Gajanan Vijay, who humbly compares himself to a tiny insect acting as an instrument of Maharaj's grace.","name":"Sant Dasganu Maharaj","name_mr":"संत दासगणू महाराज","description":"The author/narrator of Shri Gajanan Vijay, who humbly compares himself to a tiny insect acting as an instrument of Maharaj's grace."},{"raw":"Lord Pandurang / Vitthal (पांडुरंग / विठ्ठल): Invoked in the opening prayer and referenced as a devotional comparison (e.g., standing firm on faith).","name":"Lord Pandurang / Vitthal","name_mr":"पांडुरंग / विठ्ठल","description":"Invoked in the opening prayer and referenced as a devotional comparison (e.g., standing firm on faith)."},{"raw":"Malin (माळीण): The local gardener woman from whose house Maharaj requests simple Zunka-Bhakri.","name":"Malin","name_mr":"माळीण","description":"The local gardener woman from whose house Maharaj requests simple Zunka-Bhakri."},{"raw":"Samarth Ramdas Swami (समर्थ रामदास स्वामी): Referenced in Ovis 122–124 regarding an historical incident where he conquered his craving for Kheer.","name":"Samarth Ramdas Swami","name_mr":"समर्थ रामदास स्वामी","description":"Referenced in Ovis 122–124 regarding an historical incident where he conquered his craving for Kheer."}],"locations":[{"raw":"Shegaon (शेगाव): The primary town in the Varhad region where the entire chapter unfolds, poetically compared to Pandharpur.","name":"Shegaon","name_mr":"शेगाव","description":"The primary town in the Varhad region where the entire chapter unfolds, poetically compared to Pandharpur."},{"raw":"Shiva Temple & Surroundings (शंकराचे मंदिर व परिसर): The village temple where Govindbuwa performs his Kirtan, featuring stone pavement (Faras) at the back and a Neem tree where Maharaj sits.","name":"Shiva Temple & Surroundings","name_mr":"शंकराचे मंदिर व परिसर","description":"The village temple where Govindbuwa performs his Kirtan, featuring stone pavement (Faras) at the back and a Neem tree where Maharaj sits."},{"raw":"The Shallow Stream (ओढा / नाला): A muddy watercourse near the temple where the Tumba water miracle occurs.","name":"The Shallow Stream","name_mr":"ओढा / नाला","description":"A muddy watercourse near the temple where the Tumba water miracle occurs."},{"raw":"Manik Chowk (माणिक चौक): A prominent square in Shegaon where Bankatlal reunites with Maharaj at sunset on the fourth day.","name":"Manik Chowk","name_mr":"माणिक चौक","description":"A prominent square in Shegaon where Bankatlal reunites with Maharaj at sunset on the fourth day."},{"raw":"Bankatlal’s House (बंकटलालचे घर): The residence where Maharaj is welcomed at Pradosh, offered food, given an auspicious ceremonial bath (Mangal Snan) with 100 pots of water, and where Ichharam's feast takes place.","name":"Bankatlal’s House","name_mr":"बंकटलालचे घर","description":"The residence where Maharaj is welcomed at Pradosh, offered food, given an auspicious ceremonial bath (Mangal Snan) with 100 pots of water, and where Ichharam's feast takes place."},{"raw":"Cattle Watering Trough (हाळ): A masonry trough explicitly referenced in Ovi 144 where Maharaj sometimes sat or visited.","name":"Cattle Watering Trough","name_mr":"हाळ","description":"A masonry trough explicitly referenced in Ovi 144 where Maharaj sometimes sat or visited."}],"objects":[{"raw":"ओवी / चरण (Ovi / Charan): A traditional four-line Marathi poetic meter.","name":"ओवी / चरण","name_mr":"Ovi / Charan","description":"A traditional four-line Marathi poetic meter."},{"raw":"Zunka-Bhakri (झुणका-भाकरी): A humble rural meal of spiced gram-flour and flatbread requested by Maharaj from the Malin.","name":"Zunka-Bhakri","name_mr":"झुणका-भाकरी","description":"A humble rural meal of spiced gram-flour and flatbread requested by Maharaj from the Malin."},{"raw":"Tumba (तुंबा): A traditional water vessel crafted from a dried, hollowed-out bottle gourd.","name":"Tumba","name_mr":"तुंबा","description":"A traditional water vessel crafted from a dried, hollowed-out bottle gourd."},{"raw":"Khadku, Dudandi, Vyaghrambari (खडकू, दुदंडी, व्याघ्रांबरी): Copper/metal coins from erstwhile Muslim rule circulating in the Varhad region.","name":"Khadku, Dudandi, Vyaghrambari","name_mr":"खडकू, दुदंडी, व्याघ्रांबरी","description":"Copper/metal coins from erstwhile Muslim rule circulating in the Varhad region."},{"raw":"Hamsagita (हंसगीता): A philosophical discourse in the 11th Skandha of the Shrimad Bhagavatam.","name":"Hamsagita","name_mr":"हंसगीता","description":"A philosophical discourse in the 11th Skandha of the Shrimad Bhagavatam."},{"raw":"Pradosh Kaal (प्रदोष काळ): The sacred twilight period around sunset, especially auspicious on Mondays for Shiva worship with Bilvapatra.","name":"Pradosh Kaal","name_mr":"प्रदोष काळ","description":"The sacred twilight period around sunset, especially auspicious on Mondays for Shiva worship with Bilvapatra."},{"raw":"Mangal Snan Items (मंगलस्नान साहित्य): 100 pots of warm water, Shikakai, soap, Davana, Heena, Chameli oil, Belia oil, fragrant pastes (Angarag), and a Pitambar (yellow garment).","name":"Mangal Snan Items","name_mr":"मंगलस्नान साहित्य","description":"100 pots of warm water, Shikakai, soap, Davana, Heena, Chameli oil, Belia oil, fragrant pastes (Angarag), and a Pitambar (yellow garment)."},{"raw":"Ichharam’s Feast (इच्छारामाचा नैवेद्य): A large platter (Parat) featuring two mudis of Ambemohar rice, Jalebi, Raghavdas and Motichoor sweets, Karanji, Anarse, Ghevar, vegetables, chutneys, koshimbir, a bowl of curd, and a bowl of ghee on the left side (सव्य भागा).","name":"Ichharam’s Feast","name_mr":"इच्छारामाचा नैवेद्य","description":"A large platter (Parat) featuring two mudis of Ambemohar rice, Jalebi, Raghavdas and Motichoor sweets, Karanji, Anarse, Ghevar, vegetables, chutneys, koshimbir, a bowl of curd, and a bowl of ghee on the left side (सव्य भागा)."},{"raw":"Dindi (दिंडी): Troupes of devotees singing bhajans and chanting the name of Lord Vitthal.","name":"Dindi","name_mr":"दिंडी","description":"Troupes of devotees singing bhajans and chanting the name of Lord Vitthal."},{"raw":"Chilim (चिलीम): A clay smoking pipe Maharaj frequently lit as an outward play (Kautuk) without attachment.","name":"Chilim","name_mr":"चिलीम","description":"A clay smoking pipe Maharaj frequently lit as an outward play (Kautuk) without attachment."},{"raw":"Asti-Bhati-Priya (अस्ति-भाति-प्रिया): Vedantic terms representing Existence, Consciousness, and Bliss in which Maharaj constantly abided.","name":"Asti-Bhati-Priya","name_mr":"अस्ति-भाति-प्रिया","description":"Vedantic terms representing Existence, Consciousness, and Bliss in which Maharaj constantly abided."},{"raw":"Gan Gan Ganat Bote (गणगण गणांत बोते): Maharaj's constant chant, which led people to give him the name 'Gajanan'.","name":"Gan Gan Ganat Bote","name_mr":"गणगण गणांत बोते","description":"Maharaj's constant chant, which led people to give him the name 'Gajanan'."}]},"PRIOR":{"story_map_events":[{"event_id":"E2","title":"Bankatlal's Restless Longing and Search","ovi_range":[5,18],"key_ovis":[5,6,7,8,9,10,11,12,13,14,15,16,17,18],"kind":"story","closure":"RESOLVED_IN_ADHYAY"},{"event_id":"E3","title":"Ramajipant Affirms Maharaj as Yogi","ovi_range":[19,19],"key_ovis":[19],"kind":"discourse","closure":"RESOLVED_IN_ADHYAY"},{"event_id":"E4","title":"Bankatlal Receives Ramajipant's Blessing and Waits","ovi_range":[20,21],"key_ovis":[20,21],"kind":"story","closure":"RESOLVED_IN_ADHYAY"}],"coverage":[{"ovi":5,"disposition":"NARRATED"},{"ovi":6,"disposition":"VISUALISED"},{"ovi":7,"disposition":"VISUALISED"},{"ovi":8,"disposition":"VISUALISED"},{"ovi":9,"disposition":"VISUALISED"},{"ovi":10,"disposition":"VISUALISED"},{"ovi":11,"disposition":"VISUALISED"},{"ovi":12,"disposition":"VISUALISED"},{"ovi":13,"disposition":"VISUALISED"},{"ovi":14,"disposition":"VISUALISED"},{"ovi":15,"disposition":"VISUALISED"},{"ovi":16,"disposition":"VISUALISED"},{"ovi":17,"disposition":"VISUALISED"},{"ovi":18,"disposition":"VISUALISED"},{"ovi":19,"disposition":"QUOTED"},{"ovi":20,"disposition":"VISUALISED"},{"ovi":21,"disposition":"VISUALISED"}],"scene_cards":[{"scene_id":"S2","section_kind":"story","ovi_range":[5,21],"goal":"Portray Bankatlal's restless longing, fruitless search, and the pivotal meeting with Ramajipant who affirms Maharaj as a Yogi.","line_ids":["S2-L1","S2-L2","S2-L3","S2-L4","S2-L5","S2-L6","S2-L7","S2-L8","S2-L9","S2-L10","S2-L11","S2-L12","S2-L13","S2-L14","S2-L15","S2-L16","S2-L17"],"teaching_treatment":"none","turn":{"ovi":18,"text":"He said to Bankatlal, 'I have heard your account. The great soul you describe to me must surely be a Yogi.'"}}]}}
+
+MUST NOT
+- never write/edit/translate/critique the EASY script
+- no timings, hashes or approvals
+- no invented events, dialogue or closure
+- no images or voices
+- no code
+- no invented preset or image or voice id
+- no redeciding of known cast, place or style
+- omissions are only PROPOSED, the owner decides
+
+IMAGE BRIEF LESSONS
+Image-brief lessons: approved flat-colour style; full chapter-state identity of each character; exactly the visible people, each once with position, ONE action and gaze target; accepted place and fixed features; critical prop and its state; framing, angle, screen directions across adjoining cuts; preset slot, full-frame or layer need, safe crop; approved light; ONLY on-screen facts (no narration or commentary); exclude extra people, text, inset frames and modern objects; references are the visible characters, the place, one style anchor and the central prop.

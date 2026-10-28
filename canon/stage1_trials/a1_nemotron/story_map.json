@@ -1,0 +1,1066 @@
+{
+ "adhyay": 1,
+ "events": [
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E1",
+   "key_ovis": [
+    1,
+    6,
+    10
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    1,
+    13
+   ],
+   "title": "Mangalacharan: Invocations to Ganapati, Saraswati, and Panduranga"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E2",
+   "key_ovis": [
+    14,
+    17,
+    21
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    14,
+    21
+   ],
+   "title": "Prayer for Grace to Write Saint Charitras"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E3",
+   "key_ovis": [
+    22,
+    24,
+    27
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    22,
+    32
+   ],
+   "title": "Invocations to Kuladevata, Dattatreya, and Guru Parampara"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E4",
+   "key_ovis": [
+    33,
+    34,
+    38
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    33,
+    38
+   ],
+   "title": "Call to Listen and Glory of Saints"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E5",
+   "key_ovis": [
+    39,
+    42,
+    51
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    39,
+    52
+   ],
+   "title": "Survey of Saints Across Bharat and Jambudvipa"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E6",
+   "key_ovis": [
+    53,
+    55
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    53,
+    55
+   ],
+   "title": "Introduction to Gajanan Maharaj as Supreme Saint"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E7",
+   "key_ovis": [
+    56,
+    57,
+    58
+   ],
+   "kind": "story",
+   "ovi_range": [
+    56,
+    58
+   ],
+   "title": "Narrator's First Darshan of a Saint at Akot"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E8",
+   "key_ovis": [
+    59,
+    60,
+    61
+   ],
+   "kind": "story",
+   "ovi_range": [
+    59,
+    61
+   ],
+   "title": "Shegaon's Glory and Gajanan's Advent"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E9",
+   "key_ovis": [
+    62,
+    63
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    62,
+    63
+   ],
+   "title": "Teaching on Recognizing a True Saint"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E10",
+   "key_ovis": [
+    64
+   ],
+   "kind": "story",
+   "ovi_range": [
+    64,
+    64
+   ],
+   "title": "Gajanan's Fame at Shegaon"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E11",
+   "key_ovis": [
+    65
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    65,
+    65
+   ],
+   "title": "Teaching on Punya and Saint's Feet"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E12",
+   "key_ovis": [
+    66,
+    67,
+    68
+   ],
+   "kind": "story",
+   "ovi_range": [
+    66,
+    68
+   ],
+   "title": "Ramchandra Patil's Invitation at Pandharpur"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E13",
+   "key_ovis": [
+    69,
+    70,
+    73
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    69,
+    73
+   ],
+   "title": "Philosophy of Recognizing the Avatar"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E14",
+   "key_ovis": [
+    74,
+    75,
+    77
+   ],
+   "kind": "story",
+   "ovi_range": [
+    74,
+    77
+   ],
+   "title": "Gajanan Appears at Shegaon on Magh Shukla Saptami"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E15",
+   "key_ovis": [
+    78,
+    80,
+    82
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    78,
+    82
+   ],
+   "title": "Teaching on Avatar's Purpose and Yogic Powers"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E16",
+   "key_ovis": [
+    83,
+    84,
+    88,
+    94
+   ],
+   "kind": "story",
+   "ovi_range": [
+    83,
+    94
+   ],
+   "title": "Devidas and Gajanan's Meeting on the Road"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E17",
+   "key_ovis": [
+    95,
+    96
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    95,
+    96
+   ],
+   "title": "Leaf-Plate Incident and Teaching of Annam Brahma"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E18",
+   "key_ovis": [
+    97,
+    98,
+    102
+   ],
+   "kind": "story",
+   "ovi_range": [
+    97,
+    102
+   ],
+   "title": "Bankatlal and Damodarpant Witness the Scene"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E19",
+   "key_ovis": [
+    103,
+    104,
+    105
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    103,
+    105
+   ],
+   "title": "Discussion on Sadhu's Behavior and Knowledge"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E20",
+   "key_ovis": [
+    106
+   ],
+   "kind": "story",
+   "ovi_range": [
+    106,
+    106
+   ],
+   "title": "Bankatlal Approaches Gajanan"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E21",
+   "key_ovis": [
+    107
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    107,
+    107
+   ],
+   "title": "Parable of Diamond and Gravel"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E22",
+   "key_ovis": [
+    108,
+    111,
+    115
+   ],
+   "kind": "story",
+   "ovi_range": [
+    108,
+    115
+   ],
+   "title": "Bankatlal's Inquiry and Gajanan's Response"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E23",
+   "key_ovis": [
+    116,
+    117
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    116,
+    117
+   ],
+   "title": "Teaching on Brahmananda vs Worldly Pleasure"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E24",
+   "key_ovis": [
+    118,
+    119
+   ],
+   "kind": "story",
+   "ovi_range": [
+    118,
+    119
+   ],
+   "title": "Gajanan Eats the Feast Offered by Devidas"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E25",
+   "key_ovis": [
+    120,
+    121
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    120,
+    121
+   ],
+   "title": "Arjuna-Subhadra Analogy for Divine Madness"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E26",
+   "key_ovis": [
+    122
+   ],
+   "kind": "story",
+   "ovi_range": [
+    122,
+    122
+   ],
+   "title": "Shegaon's Fortune in Hosting the Yogi"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E27",
+   "key_ovis": [
+    123,
+    125,
+    127
+   ],
+   "kind": "story",
+   "ovi_range": [
+    123,
+    127
+   ],
+   "title": "Noon Scene: Water from Tumbler"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E28",
+   "key_ovis": [
+    128,
+    129,
+    131
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    128,
+    131
+   ],
+   "title": "Teaching on Brahman Pervading All"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E29",
+   "key_ovis": [
+    132,
+    136,
+    138
+   ],
+   "kind": "story",
+   "ovi_range": [
+    132,
+    138
+   ],
+   "title": "Water from Well and Brahman Discussion"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E30",
+   "key_ovis": [
+    139,
+    140,
+    142
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    139,
+    142
+   ],
+   "title": "Teaching on Unity of Brahman in All Forms"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E31",
+   "key_ovis": [
+    143,
+    144
+   ],
+   "kind": "story",
+   "ovi_range": [
+    143,
+    144
+   ],
+   "title": "Departure and Devotees' Surrender"
+  },
+  {
+   "closure": "CONTINUES_NEXT_ADHYAY",
+   "event_id": "E32",
+   "key_ovis": [
+    145
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    145,
+    145
+   ],
+   "title": "Transition to Next Chapter"
+  },
+  {
+   "closure": "RESOLVED_IN_ADHYAY",
+   "event_id": "E33",
+   "key_ovis": [
+    146
+   ],
+   "kind": "discourse",
+   "ovi_range": [
+    146,
+    146
+   ],
+   "title": "Phalashruti: Prayer for Completion of the Work"
+  }
+ ],
+ "ovi_types": [
+  {
+   "ovi": 1,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 2,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 3,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 4,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 5,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 6,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 7,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 8,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 9,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 10,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 11,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 12,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 13,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 14,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 15,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 16,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 17,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 18,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 19,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 20,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 21,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 22,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 23,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 24,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 25,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 26,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 27,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 28,
+   "type": "INVOCATION"
+  },
+  {
+   "ovi": 29,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 30,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 31,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 32,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 33,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 34,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 35,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 36,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 37,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 38,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 39,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 40,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 41,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 42,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 43,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 44,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 45,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 46,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 47,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 48,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 49,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 50,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 51,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 52,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 53,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 54,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 55,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 56,
+   "type": "STORY"
+  },
+  {
+   "ovi": 57,
+   "type": "STORY"
+  },
+  {
+   "ovi": 58,
+   "type": "STORY"
+  },
+  {
+   "ovi": 59,
+   "type": "STORY"
+  },
+  {
+   "ovi": 60,
+   "type": "STORY"
+  },
+  {
+   "ovi": 61,
+   "type": "STORY"
+  },
+  {
+   "ovi": 62,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 63,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 64,
+   "type": "STORY"
+  },
+  {
+   "ovi": 65,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 66,
+   "type": "STORY"
+  },
+  {
+   "ovi": 67,
+   "type": "STORY"
+  },
+  {
+   "ovi": 68,
+   "type": "STORY"
+  },
+  {
+   "ovi": 69,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 70,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 71,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 72,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 73,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 74,
+   "type": "STORY"
+  },
+  {
+   "ovi": 75,
+   "type": "STORY"
+  },
+  {
+   "ovi": 76,
+   "type": "STORY"
+  },
+  {
+   "ovi": 77,
+   "type": "STORY"
+  },
+  {
+   "ovi": 78,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 79,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 80,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 81,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 82,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 83,
+   "type": "STORY"
+  },
+  {
+   "ovi": 84,
+   "type": "STORY"
+  },
+  {
+   "ovi": 85,
+   "type": "STORY"
+  },
+  {
+   "ovi": 86,
+   "type": "STORY"
+  },
+  {
+   "ovi": 87,
+   "type": "STORY"
+  },
+  {
+   "ovi": 88,
+   "type": "STORY"
+  },
+  {
+   "ovi": 89,
+   "type": "STORY"
+  },
+  {
+   "ovi": 90,
+   "type": "STORY"
+  },
+  {
+   "ovi": 91,
+   "type": "STORY"
+  },
+  {
+   "ovi": 92,
+   "type": "STORY"
+  },
+  {
+   "ovi": 93,
+   "type": "STORY"
+  },
+  {
+   "ovi": 94,
+   "type": "STORY"
+  },
+  {
+   "ovi": 95,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 96,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 97,
+   "type": "STORY"
+  },
+  {
+   "ovi": 98,
+   "type": "STORY"
+  },
+  {
+   "ovi": 99,
+   "type": "STORY"
+  },
+  {
+   "ovi": 100,
+   "type": "STORY"
+  },
+  {
+   "ovi": 101,
+   "type": "STORY"
+  },
+  {
+   "ovi": 102,
+   "type": "STORY"
+  },
+  {
+   "ovi": 103,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 104,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 105,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 106,
+   "type": "STORY"
+  },
+  {
+   "ovi": 107,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 108,
+   "type": "STORY"
+  },
+  {
+   "ovi": 109,
+   "type": "STORY"
+  },
+  {
+   "ovi": 110,
+   "type": "STORY"
+  },
+  {
+   "ovi": 111,
+   "type": "STORY"
+  },
+  {
+   "ovi": 112,
+   "type": "STORY"
+  },
+  {
+   "ovi": 113,
+   "type": "STORY"
+  },
+  {
+   "ovi": 114,
+   "type": "STORY"
+  },
+  {
+   "ovi": 115,
+   "type": "STORY"
+  },
+  {
+   "ovi": 116,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 117,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 118,
+   "type": "STORY"
+  },
+  {
+   "ovi": 119,
+   "type": "STORY"
+  },
+  {
+   "ovi": 120,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 121,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 122,
+   "type": "STORY"
+  },
+  {
+   "ovi": 123,
+   "type": "STORY"
+  },
+  {
+   "ovi": 124,
+   "type": "STORY"
+  },
+  {
+   "ovi": 125,
+   "type": "STORY"
+  },
+  {
+   "ovi": 126,
+   "type": "STORY"
+  },
+  {
+   "ovi": 127,
+   "type": "STORY"
+  },
+  {
+   "ovi": 128,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 129,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 130,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 131,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 132,
+   "type": "STORY"
+  },
+  {
+   "ovi": 133,
+   "type": "STORY"
+  },
+  {
+   "ovi": 134,
+   "type": "STORY"
+  },
+  {
+   "ovi": 135,
+   "type": "STORY"
+  },
+  {
+   "ovi": 136,
+   "type": "STORY"
+  },
+  {
+   "ovi": 137,
+   "type": "STORY"
+  },
+  {
+   "ovi": 138,
+   "type": "STORY"
+  },
+  {
+   "ovi": 139,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 140,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 141,
+   "type": "PHILOSOPHY"
+  },
+  {
+   "ovi": 142,
+   "type": "TEACHING"
+  },
+  {
+   "ovi": 143,
+   "type": "STORY"
+  },
+  {
+   "ovi": 144,
+   "type": "STORY"
+  },
+  {
+   "ovi": 145,
+   "type": "RECAP"
+  },
+  {
+   "ovi": 146,
+   "type": "PHALASHRUTI"
+  }
+ ]
+}

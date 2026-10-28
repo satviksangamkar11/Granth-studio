@@ -1,0 +1,51 @@
+{
+ "adhyay": 2,
+ "entries": [
+  {
+   "basis": "inferred",
+   "entity_id": "sant_dasganu_maharaj",
+   "kind": "character",
+   "look": "Simple traditional attire, calm demeanor, holding a manuscript",
+   "source_ovis": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "lord_pandurang_vitthal",
+   "kind": "character",
+   "look": "Standing on brick, hands on waist, dark complexion, yellow garment",
+   "source_ovis": [
+    1
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "inferred",
+   "entity_id": "chandrabhaga_river_bank",
+   "kind": "place",
+   "look": "River bank with steps, temple spires in distance, gentle flow",
+   "source_ovis": [
+    1
+   ],
+   "state_id": "default"
+  },
+  {
+   "basis": "stated",
+   "entity_id": "verse_text",
+   "kind": "prop",
+   "look": "Marathi verse in Devanagari script, flat colour style",
+   "source_ovis": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "state_id": "default"
+  }
+ ]
+}

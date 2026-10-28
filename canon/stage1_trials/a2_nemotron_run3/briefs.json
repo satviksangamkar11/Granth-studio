@@ -1,0 +1,97 @@
+{
+ "adhyay": 2,
+ "images": [
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_1_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "Victory to You, O Unborn, Invincible Lord of all! O Lord who strolls on the banks of the Chandrabhaga, Supreme Brahman and Consort of Rukmini, Friend of the humble—protect me!"
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 1 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 1 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 1 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-1"
+   ]
+  },
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_2_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "Without Your grace and support, O Lord, all efforts are mere exhaustion. If there is no life-breath within the body, who cares for a corpse?"
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 2 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 2 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 2 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-2"
+   ]
+  },
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_3_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "The divine beauty of a lake, O Padmanabha, exists because of its water. The juicy pulp inside a fruit gives value even to its outer rind."
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 3 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 3 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 3 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-3"
+   ]
+  },
+  {
+   "camera": "Static camera, slow push in",
+   "image_id": "s1_verse_4_typography",
+   "light": "Even, neutral lighting",
+   "on_screen_facts": [
+    "In the very same way, Your grace empowers those who surrender to You. Remove my sins, sorrows, and destitution—this alone is my prayer."
+   ],
+   "people": [],
+   "place_id": "Typography card",
+   "prop": "Verse 4 text",
+   "prop_state": "Static",
+   "reason_new": "New typography image for verse 4 of opening invocation",
+   "references": {
+    "characters": [],
+    "place": "Typography card",
+    "prop": "Verse 4 text",
+    "style_anchor": "Approved flat-colour style"
+   },
+   "scene_id": "S1",
+   "shot_ids": [
+    "S1-4"
+   ]
+  }
+ ]
+}

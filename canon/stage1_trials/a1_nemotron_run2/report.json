@@ -1,0 +1,52 @@
+{
+ "adhyay": 1,
+ "aggregate_errors": [
+  "story_map: document missing",
+  "coverage: document missing",
+  "scenes: document missing",
+  "bankatlal: no voice assigned",
+  "narrator: no voice assigned",
+  "gajanan: no voice assigned",
+  "damodarpant: no voice assigned"
+ ],
+ "calls": [
+  {
+   "info": {
+    "finish": "stop",
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "status": 200,
+    "streamed": true,
+    "usage": null,
+    "wall_s": 568.6
+   },
+   "name": "map",
+   "parse_problems": [
+    "reply: bad json"
+   ],
+   "reason": "parse failed",
+   "schema_errors": [],
+   "status": "failed"
+  }
+ ],
+ "counts": {
+  "briefs": 0,
+  "cues": 0,
+  "ovis": 0,
+  "questions": 0,
+  "scenes": 9,
+  "script_lines": 62,
+  "shots": 0,
+  "voices": 0
+ },
+ "documents_written": [
+  "shots",
+  "briefs",
+  "looks",
+  "voices",
+  "sounds",
+  "questions"
+ ],
+ "dry_run": false,
+ "packet_problems": [],
+ "provider": "nemotron"
+}

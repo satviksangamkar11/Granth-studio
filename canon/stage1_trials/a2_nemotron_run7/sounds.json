@@ -1,0 +1,518 @@
+{
+ "adhyay": 2,
+ "cues": [
+  {
+   "anchor_line_id": "S1-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Subtle ambient drone to underscore the invocation",
+   "scene_id": "S1",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A very subtle, low-frequency ambient drone with a faint temple bell resonance, creating a sacred atmosphere without melody."
+  },
+  {
+   "anchor_line_id": "S2-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient morning street sounds of Shegaon",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Quiet Indian town morning: distant temple bells, birds, light footfalls on dusty road, no traffic"
+  },
+  {
+   "anchor_line_id": "S2-L3",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Subtle mystical hum to convey Maharaj's pervasive presence",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Ethereal low drone with faint chant 'Gan Gan Ganat Bote' barely audible, spatialized"
+  },
+  {
+   "anchor_line_id": "S2-L5",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Search ambience - footsteps, occasional dog bark, wind",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Walking on dirt lanes, occasional door creak, distant cow lowing, warm breeze"
+  },
+  {
+   "anchor_line_id": "S2-L7",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Door opening and closing as Bankatlal enters home",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Wooden door latch lift, heavy door swing, soft thud close"
+  },
+  {
+   "anchor_line_id": "S2-L9",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Intimate interior room tone",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Quiet room with faint oil lamp crackle, slow breathing"
+  },
+  {
+   "anchor_line_id": "S2-L11",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Footsteps departing house",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Firm steps on stone threshold, fading into outdoor ambience"
+  },
+  {
+   "anchor_line_id": "S2-L12",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Neighborhood ambience - quieter, older house",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Afternoon stillness, distant pigeon coo, rustle of dry leaves"
+  },
+  {
+   "anchor_line_id": "S2-L14",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Emphasis on Ramajipant's declaration",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft resonant bell tone, single strike, reverberant"
+  },
+  {
+   "anchor_line_id": "S2-L16",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Bankatlal's internal resolve",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Gentle inhale-exhale, subtle heartbeat"
+  },
+  {
+   "anchor_line_id": "S2-L17",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Passage of time - day to night cycles",
+   "scene_id": "S2",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Time-lapse soundscape: birds morning, cicadas noon, crickets evening, repeated four times"
+  },
+  {
+   "anchor_line_id": "S3-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient temple atmosphere with distant crowd murmur",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Outdoor Hindu temple courtyard ambience: gentle breeze, distant birds, low murmur of devotees gathering, subtle temple bell"
+  },
+  {
+   "anchor_line_id": "S3-L3",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Crowd excitement as they flock to kirtan",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Group of people walking on dirt path, shuffling feet, quiet chatter, anticipation"
+  },
+  {
+   "anchor_line_id": "S3-L4",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Footsteps of Bankatlal on path",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Single person walking briskly on dry dirt path, light footfalls"
+  },
+  {
+   "anchor_line_id": "S3-L6",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Sudden realization moment when they spot Maharaj",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft musical sting or subtle chime to mark divine revelation"
+  },
+  {
+   "anchor_line_id": "S3-L7",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Running footsteps of two men",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Two pairs of feet running on stone pavement, urgent but not chaotic"
+  },
+  {
+   "anchor_line_id": "S3-L10",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Maharaj's voice instruction (covered by voice cast, but subtle ambient)",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Quiet temple background, faint rustle of cloth"
+  },
+  {
+   "anchor_line_id": "S3-L11",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Sound of bowl and bread being placed in hands",
+   "scene_id": "S3",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft clink of metal bowl, rustle of flatbread, gentle contact of hands"
+  },
+  {
+   "anchor_line_id": "S4-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient temple atmosphere with distant chanting",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Gentle ambient sound of a Hindu temple courtyard: distant bells, faint chanting, light breeze."
+  },
+  {
+   "anchor_line_id": "S4-L3",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Subtle Foley for Pitambar's hesitant breath",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A soft intake of breath, quiet rustle of cloth."
+  },
+  {
+   "anchor_line_id": "S4-L5",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Emphasis on Maharaj's firm instruction",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A low, resonant tone underscoring authority."
+  },
+  {
+   "anchor_line_id": "S4-L6",
+   "basis": "stated",
+   "kind": "bed",
+   "purpose": "Stream ambient sound",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Gentle trickle of shallow water over stones, occasional bird call."
+  },
+  {
+   "anchor_line_id": "S4-L8",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Tumba touching water",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A gentle plop as a gourd touches water surface, small splash."
+  },
+  {
+   "anchor_line_id": "S4-L9",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Miracle hollow forming",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A mystical, rising hum as the stream bed deepens, water rushing into the hollow."
+  },
+  {
+   "anchor_line_id": "S4-L10",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Water turning clear",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A magical chime, like crystal glass ringing, signifying purification."
+  },
+  {
+   "anchor_line_id": "S4-L11",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Pitambar's internal realization",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A soft, warm harmonic swell, like a revelation."
+  },
+  {
+   "anchor_line_id": "S4-L12",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Quiet acceptance atmosphere",
+   "scene_id": "S4",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Calm ambient fade, subtle sound of a gourd being placed on stone."
+  },
+  {
+   "anchor_line_id": "S5-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient temple atmosphere",
+   "scene_id": "S5",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Gentle outdoor temple ambience: distant temple bells, birds chirping, light wind through leaves"
+  },
+  {
+   "anchor_line_id": "S5-L2",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Betel nut cracking sound",
+   "scene_id": "S5",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Sharp crisp sound of a betel nut being cracked between fingers"
+  },
+  {
+   "anchor_line_id": "S5-L3",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Coins placed on palm",
+   "scene_id": "S5",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Two small copper coins clinking softly onto skin"
+  },
+  {
+   "anchor_line_id": "S5-L5",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Maharaj's chuckle",
+   "scene_id": "S5",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Warm, low chuckle of an elderly male"
+  },
+  {
+   "anchor_line_id": "S5-L6",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Quiet contemplative moment",
+   "scene_id": "S5",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Subtle hum of distant kirtan, very faint, almost silence"
+  },
+  {
+   "anchor_line_id": "S5-L8",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Devotees walking away, kirtan growing",
+   "scene_id": "S5",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Footsteps on stone pavement receding, faint sound of cymbals and voices singing kirtan growing louder"
+  },
+  {
+   "anchor_line_id": "S7-L1",
+   "basis": "stated",
+   "kind": "bed",
+   "purpose": "Ambient temple courtyard at dusk",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Ambient sound of a temple courtyard at dusk: distant chanting fading, footsteps on stone, gentle breeze"
+  },
+  {
+   "anchor_line_id": "S7-L2",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Quiet indoor room tone",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Quiet indoor room tone with faint sound of oil lamp crackle"
+  },
+  {
+   "anchor_line_id": "S7-L4",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Convey inner joy",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft, warm breath and subtle heartbeat to convey inner joy"
+  },
+  {
+   "anchor_line_id": "S7-L5",
+   "basis": "stated",
+   "kind": "bed",
+   "purpose": "Evening village square ambience",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Evening ambience at a village square: distant cowbells, birds settling, gentle wind"
+  },
+  {
+   "anchor_line_id": "S7-L6",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Maharaj's arrival",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Slow, deliberate footsteps on dirt path, subtle mystical chime"
+  },
+  {
+   "anchor_line_id": "S7-L7",
+   "basis": "stated",
+   "kind": "bed",
+   "purpose": "Cows and birds gathering",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Cows lowing gently, birds chirping joyfully, herd moving"
+  },
+  {
+   "anchor_line_id": "S7-L9",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Lamps being lit and arrival home",
+   "scene_id": "S7",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Sound of match striking, lamp wick catching flame, footsteps on porch"
+  },
+  {
+   "anchor_line_id": "S9-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient atmosphere of worship hall with soft murmurs and distant temple bells",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Soft ambient sound of a Hindu worship hall: gentle murmurs of devotees, faint ringing of temple bells, subtle rustle of cloth"
+  },
+  {
+   "anchor_line_id": "S9-L2",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Sound of food offerings being placed on metal platter",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Clinking of metal utensils, soft thud of food items placed on a large brass plate, gentle pouring of liquids"
+  },
+  {
+   "anchor_line_id": "S9-L3",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Morning ambience of Shegaon town with distant chants",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Early morning town ambience: distant bird calls, faint sound of conch shell, low hum of morning prayers"
+  },
+  {
+   "anchor_line_id": "S9-L4",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Crowd murmurs settling into quiet for Ichharam",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Group of people murmuring happily, then gradual silence as focus shifts to one person"
+  },
+  {
+   "anchor_line_id": "S9-L5",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Subtle internal thought indicator",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Very soft, low-frequency heartbeat-like pulse, barely audible, to signify internal reflection"
+  },
+  {
+   "anchor_line_id": "S9-L6",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Continuation of internal thought",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Same subtle heartbeat pulse, perhaps with a faint chime of realization"
+  },
+  {
+   "anchor_line_id": "S9-L7",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Determined breath, resolve",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "A deep, slow inhale and exhale, conveying resolve and calm"
+  },
+  {
+   "anchor_line_id": "S9-L8",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Water pouring during bath at twilight",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Water being poured from a copper vessel onto a person, splashing gently, with a serene twilight atmosphere"
+  },
+  {
+   "anchor_line_id": "S9-L9",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Puja ritual sounds: bell, chanting, offering",
+   "scene_id": "S9",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Small brass bell ringing rhythmically, soft Sanskrit chant 'Om Namah Shivaya', sound of flowers and rice being offered"
+  },
+  {
+   "anchor_line_id": "S12-L1",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Ambient crowd murmur at pilgrimage sites",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Large crowd ambience at Hindu pilgrimage site, distant chanting, footsteps, murmurs, no music"
+  },
+  {
+   "anchor_line_id": "S12-L3",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Divine atmosphere for Maharaj as Vitthal",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Subtle ethereal drone with faint temple bell, warm and reverent"
+  },
+  {
+   "anchor_line_id": "S12-L5",
+   "basis": "staging",
+   "kind": "fx",
+   "purpose": "Sunlight equality metaphor",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Gentle rising harmonic tone, like sun rays expanding"
+  },
+  {
+   "anchor_line_id": "S12-L6",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Feast ambience",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Communal eating sounds: clatter of plates, serving spoons, low chatter"
+  },
+  {
+   "anchor_line_id": "S12-L7",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Humility and intimacy",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Quiet, intimate room tone with soft breath"
+  },
+  {
+   "anchor_line_id": "S12-L9",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Water sounds for bath and trough",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Water pouring from many pots, splashing in trough, muddy water drinking sounds"
+  },
+  {
+   "anchor_line_id": "S12-L11",
+   "basis": "stated",
+   "kind": "fx",
+   "purpose": "Chilim lighting",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Strike of match, inhale on clay pipe, soft crackle of tobacco"
+  },
+  {
+   "anchor_line_id": "S12-L12",
+   "basis": "staging",
+   "kind": "bed",
+   "purpose": "Prayerful closing",
+   "scene_id": "S12",
+   "sound_id": "NEED_NEW",
+   "sound_prompt": "Silence with very faint distant temple bell, fading out"
+  }
+ ]
+}

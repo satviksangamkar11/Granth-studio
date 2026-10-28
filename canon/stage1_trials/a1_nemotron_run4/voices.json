@@ -1,0 +1,49 @@
+{
+ "adhyay": 1,
+ "cast": [
+  {
+   "character_id": "narrator",
+   "gender": "male",
+   "reason": "Narrator voice assigned in library for Marathi narration.",
+   "status": "RECURRING",
+   "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+   "voice_key": "narrator"
+  },
+  {
+   "character_id": "Gajanan Maharaj",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  },
+  {
+   "character_id": "Devidas",
+   "gender": "male",
+   "reason": "Devidas is a middle-aged Brahmin householder; this voice is a confident, expressive Marathi creator voice, suitable for a householder speaking in a domestic setting.",
+   "status": "NEW_PROPOSED",
+   "voice_id": "9K2UKMcmIbg94SvrWWlu",
+   "voice_key": "tukaram_confident_marathi_creator"
+  },
+  {
+   "character_id": "bankatlal",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "fqdB7wf4ETj9FXQ8wkLu",
+   "voice_key": "bankatlal"
+  },
+  {
+   "character_id": "damodarpant",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "rXW8MF4nX2gHMvBmCDnr",
+   "voice_key": "damodarpant"
+  },
+  {
+   "character_id": "gajanan",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  }
+ ]
+}

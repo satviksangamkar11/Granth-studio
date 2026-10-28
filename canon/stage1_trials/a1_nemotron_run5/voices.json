@@ -1,0 +1,65 @@
+{
+ "adhyay": 1,
+ "cast": [
+  {
+   "character_id": "narrator",
+   "gender": "male",
+   "reason": "Narrator voice assigned in library for Marathi narration.",
+   "status": "RECURRING",
+   "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+   "voice_key": "narrator"
+  },
+  {
+   "character_id": "Gajanan Maharaj",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  },
+  {
+   "character_id": "Devidas",
+   "gender": "male",
+   "reason": "Devidas is a middle-aged Brahmin householder; this voice is a confident, expressive Marathi creator voice, suitable for a householder speaking in a domestic setting.",
+   "status": "NEW_PROPOSED",
+   "voice_id": "9K2UKMcmIbg94SvrWWlu",
+   "voice_key": "tukaram_confident_marathi_creator"
+  },
+  {
+   "character_id": "bankatlal",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "fqdB7wf4ETj9FXQ8wkLu",
+   "voice_key": "bankatlal"
+  },
+  {
+   "character_id": "damodarpant",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "rXW8MF4nX2gHMvBmCDnr",
+   "voice_key": "damodarpant"
+  },
+  {
+   "character_id": "gajanan",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  },
+  {
+   "character_id": "devotee_a",
+   "gender": "male",
+   "reason": "Assuming devotee_a is Damodarpant based on prior chapter presence; if not, a new voice will be needed",
+   "status": "NEW_PROPOSED",
+   "voice_id": "rXW8MF4nX2gHMvBmCDnr",
+   "voice_key": "damodarpant"
+  },
+  {
+   "character_id": "devotee_b",
+   "gender": "male",
+   "reason": "Deep Marathi conversational voice fits a devoted male disciple; unassigned and available",
+   "status": "NEW_PROPOSED",
+   "voice_id": "C9v09R5AIM6tOX6Fn06I",
+   "voice_key": "shrey_deep_marathi_conversational"
+  }
+ ]
+}

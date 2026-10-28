@@ -1,0 +1,94 @@
+{
+ "adhyay": 2,
+ "cast": [
+  {
+   "character_id": "sant_dasganu_maharaj",
+   "gender": "male",
+   "reason": "Assigned narrator voice for Sant Dasganu Maharaj as per owner decision.",
+   "status": "RECURRING",
+   "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+   "voice_key": "narrator"
+  },
+  {
+   "character_id": "Bankatlal",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "fqdB7wf4ETj9FXQ8wkLu",
+   "voice_key": "bankatlal"
+  },
+  {
+   "character_id": "Narrator",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+   "voice_key": "narrator"
+  },
+  {
+   "character_id": "Bhavaniram",
+   "gender": "male",
+   "reason": "Middle-aged wise father, Marathi voice with confident storytelling quality fits the devout father role",
+   "status": "NEW_PROPOSED",
+   "voice_id": "9K2UKMcmIbg94SvrWWlu",
+   "voice_key": "tukaram_confident_marathi_creator"
+  },
+  {
+   "character_id": "narrator",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "CXkeo30p0Sk4Lr0TAzeo",
+   "voice_key": "narrator"
+  },
+  {
+   "character_id": "gajanan_maharaj",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  },
+  {
+   "character_id": "gajanan",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  },
+  {
+   "character_id": "pitambar_shimpi",
+   "gender": "male",
+   "reason": "Warm, resonant Marathi voice suitable for a humble devotee.",
+   "status": "NEW_PROPOSED",
+   "voice_id": "C9v09R5AIM6tOX6Fn06I",
+   "voice_key": "shrey_deep_marathi_conversational"
+  },
+  {
+   "character_id": "Shri Gajanan Maharaj",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "8fqGzH80bdkm2UseeV9f",
+   "voice_key": "gajanan"
+  },
+  {
+   "character_id": "bankatlal",
+   "gender": "male",
+   "status": "RECURRING",
+   "voice_id": "fqdB7wf4ETj9FXQ8wkLu",
+   "voice_key": "bankatlal"
+  },
+  {
+   "character_id": "bhavaniram",
+   "gender": "male",
+   "reason": "Elderly wise father, calm authoritative Marathi voice",
+   "status": "NEW_PROPOSED",
+   "voice_id": "sQguH2NxUuPknh895Im6",
+   "voice_key": "ativir_calm_yet_firm_recovery_agent"
+  },
+  {
+   "character_id": "ichharam_shetji",
+   "gender": "male",
+   "reason": "Middle-aged male Marathi voice suitable for a devout cousin character",
+   "status": "NEW_PROPOSED",
+   "voice_id": "9K2UKMcmIbg94SvrWWlu",
+   "voice_key": "tukaram_confident_marathi_creator"
+  }
+ ]
+}

@@ -1,0 +1,202 @@
+{
+ "adhyay": 2,
+ "aggregate_errors": [],
+ "calls": [
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "map",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "plan",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_01",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_02",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_03",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_04",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_05",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_06",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_07",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_08",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_09",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_10",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_11",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  },
+  {
+   "info": {
+    "finish": "dry-run",
+    "status": 0,
+    "usage": {},
+    "wall_s": 0.0
+   },
+   "name": "scene_12",
+   "parse_problems": [],
+   "reason": "",
+   "schema_errors": [],
+   "status": "dry-run"
+  }
+ ],
+ "counts": {
+  "briefs": 0,
+  "cues": 0,
+  "ovis": 0,
+  "questions": 0,
+  "scenes": 0,
+  "script_lines": 0,
+  "shots": 0,
+  "voices": 0
+ },
+ "documents_written": [],
+ "dry_run": true,
+ "packet_problems": [],
+ "provider": "dry-run"
+}
