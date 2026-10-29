@@ -702,3 +702,112 @@ def test_main_exit_codes(tmp_path, capsys):
     assert rc == 2
     out = capsys.readouterr().out
     assert "refused:" in out
+
+
+# --- X12 tests ---
+
+def test_x12_mismatch_and_valid_twin():
+    """Mismatch: gajanan_maharaj cast gender male, library gender female -> X12 error.
+    Valid twin: both male -> no X12 error."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    # Base cast: narrator (male, key narrator), gajanan_maharaj (male, key gajanan)
+    # Mismatch: library says gajanan is female
+    ctx["voice_genders"] = {"narrator": "male", "gajanan": "female"}
+    errs = agg.validate_all(1, docs, ctx)
+    # Exactly one X12 error naming gajanan_maharaj and gajanan
+    x12_errs = [e for e in errs if e.startswith("voices:") and "is male but voice gajanan is female" in e]
+    assert len(x12_errs) == 1
+    assert "gajanan_maharaj" in x12_errs[0]
+    assert "gajanan" in x12_errs[0]
+    # Valid twin
+    ctx["voice_genders"] = {"narrator": "male", "gajanan": "male"}
+    errs2 = agg.validate_all(1, docs, ctx)
+    assert not any(e.startswith("voices:") and "is male but voice gajanan is female" in e for e in errs2)
+
+
+def test_x12_skips_missing_voice_key():
+    """If a voice_key is missing from voice_genders, that cast entry is skipped."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    # Provide voice_genders only for narrator
+    ctx["voice_genders"] = {"narrator": "male"}
+    errs = agg.validate_all(1, docs, ctx)
+    # No X12 error for gajanan_maharaj because its voice_key 'gajanan' is missing
+    assert not any("gajanan_maharaj" in e and "is male but voice gajanan is" in e for e in errs)
+
+
+def test_x12_skips_invalid_library_gender():
+    """If library gender is not 'male'/'female', skip that entry."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    ctx["voice_genders"] = {"narrator": "male", "gajanan": "other"}
+    errs = agg.validate_all(1, docs, ctx)
+    # No X12 error because library gender 'other' is not male/female
+    assert not any("gajanan_maharaj" in e and "is male but voice gajanan is other" in e for e in errs)
+
+
+def test_x12_skips_invalid_cast_gender():
+    """If cast gender is not 'male'/'female', skip that entry.
+    Use a copy of the voices document where gajanan_maharaj has gender 'female' while library says 'male'."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    # Change cast gender of gajanan_maharaj to 'female'
+    for cast in docs["voices"]["cast"]:
+        if cast["character_id"] == "gajanan_maharaj":
+            cast["gender"] = "female"
+            break
+    ctx["voice_genders"] = {"narrator": "male", "gajanan": "male"}
+    errs = agg.validate_all(1, docs, ctx)
+    # No X12 error because cast gender 'female' is not male/female? Wait, 'female' is in ('male','female').
+    # The spec says: "a cast gender that is not male/female (use a copy of the voices document whose cast entry has gender 'female' while the library says 'male' ONLY in the mismatch test)"
+    # Actually, 'female' is a valid gender. The rule says: if cast_gender not in ("male","female") or lib_gender not in ("male","female") -> continue.
+    # So if cast_gender is 'female' and lib_gender is 'male', both are in the set, so it would trigger a mismatch.
+    # But the test says "skip: a cast gender that is not male/female". So we need a cast gender that is NOT male/female.
+    # Let's set cast gender to 'unknown'.
+    for cast in docs["voices"]["cast"]:
+        if cast["character_id"] == "gajanan_maharaj":
+            cast["gender"] = "unknown"
+            break
+    errs2 = agg.validate_all(1, docs, ctx)
+    assert not any("gajanan_maharaj" in e and "is unknown but voice gajanan is male" in e for e in errs2)
+
+
+def test_x12_skips_voice_genders_absent():
+    """If voice_genders is absent from ctx, rule is skipped."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    # Ensure voice_genders is not in ctx
+    ctx.pop("voice_genders", None)
+    errs = agg.validate_all(1, docs, ctx)
+    assert not any(e.startswith("voices:") and "is male but voice" in e for e in errs)
+
+
+def test_x12_robustness_bad_types():
+    """voice_genders with bad types should not raise, just be treated as empty (rule skipped)."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    bad_values = [None, 5, "x", ["a"], {"a": []}, {"gajanan": 5}, {1: "male"}]
+    for bad_val in bad_values:
+        ctx["voice_genders"] = bad_val
+        errs = agg.validate_all(1, docs, ctx)
+        assert isinstance(errs, list)
+        assert not any("internal error in X12" in e for e in errs)
+        # Should not produce any X12 error because voice_genders is not a valid dict of str->str
+        assert not any(e.startswith("voices:") and "is male but voice" in e for e in errs)
+
+
+def test_x12_skipped_when_voices_schema_fails():
+    """If voices document fails schema, X12 is skipped (no error, no exception)."""
+    docs = copy.deepcopy(BASE_DOCS)
+    ctx = copy.deepcopy(BASE_CTX)
+    # Corrupt voices document: cast becomes a string
+    docs["voices"]["cast"] = "x"
+    ctx["voice_genders"] = {"narrator": "male", "gajanan": "female"}
+    errs = agg.validate_all(1, docs, ctx)
+    # Should have schema error for voices
+    assert any("voices" in e for e in errs)
+    # No X12 error
+    assert not any(e.startswith("voices:") and "is male but voice gajanan is female" in e for e in errs)
+    # No internal error
+    assert not any("internal error in X12" in e for e in errs)

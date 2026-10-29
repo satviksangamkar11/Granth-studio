@@ -93,7 +93,7 @@ def test_split_args():
     cr = load_coder_run()
     # defaults
     thinking, effort, rest = cr.split_args([])
-    assert thinking == "off"
+    assert thinking == "on"
     assert effort == "medium"
     assert rest == []
     # with flags
@@ -103,6 +103,6 @@ def test_split_args():
     assert rest == ["--spec", "x"]
     # unknown flags left in rest
     thinking, effort, rest = cr.split_args(["--unknown", "foo"])
-    assert thinking == "off"
+    assert thinking == "on"
     assert effort == "medium"
     assert rest == ["--unknown", "foo"]

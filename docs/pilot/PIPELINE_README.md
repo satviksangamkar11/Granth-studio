@@ -62,20 +62,29 @@ Owner rule (2026-10-28, replaces the 2026-10-27 wording): Claude writes NO code.
 ## 7. Build order and checklist
 `CHECKLIST_BUILD_PIPELINE.md` (this job) lists every item with its test. Old lists are HISTORICAL (execute only from the master `CHECKLIST_BUILD_PIPELINE.md`): `FINAL_ARCHITECTURE_PLAN.md` section 6 (B1-B18, D1-D6) and section 9 (K1-K14), `CHECKLIST_PROOF_SCENE_S4.md`, `CHECKLIST_REUSE_SHOT_PLANS.md`.
 
-## 2b. Producer / consumer matrix (who writes each file, what checks it, what it depends on)
-| File | Written by | Checked by | Depends on (fingerprint) |
-|---|---|---|---|
-| `source/ovis.jsonl`, `research/packet.json` | owner + code import | owner approves hash | printed book |
-| `script/easy.md` | owner | `scripts/pipeline/check_script.py` (reports only) | source, voices, glossary |
-| `stage1/scenes|shots|image_briefs|sound_suggestions|questions.json` | Kimi Stage 1 | schemas + `validate_stage1.py` | source, script, series data, sound palette |
-| `audio/clips.json` (+ audio files) | ElevenLabs via credit ledger | owner listens; caps | script, voices |
-| `audio/timing.json` (`beats`) | code | `validate_assets.validate_beats` | clips, script |
-| `images/jobs.json` | code (from approved data) | image prompt rules tests (to build) | stage1 briefs, series data |
-| `images/catalog.json` | code after owner approval | `validate_assets.validate_catalog` (live sha256) | images, jobs |
-| `animation/scenes/S<x>.json` | Kimi Stage 2 (or replay) | `validate_assets.validate_animation` | beats, catalog, presets |
-| `canon/shot_plans/A<N>/S<x>.json` | code after owner approval | `validate_assets.validate_shot_plan_fresh` | script, timing, presets, images |
-| `approvals.json` | owner (write path to define, checklist item 12) | `scripts/pipeline/gates.py` (stages call `require_approved`) | every file above |
-| `spend.jsonl` | `scripts/pipeline/caps.py` (reserve/settle/unknown/reconcile) | caps.check | `caps.json` |
+## 2b. Producer / consumer matrix (who writes each file, what checks it, what it depends on; updated 2026-10-29)
+Status: B = built and tested, P = planned (checklist row in brackets).
+| File (per chapter under `canon/adhyay_NN/` unless stated) | Written by (command) | Checked by | Depends on (fingerprint) | Status |
+|---|---|---|---|---|
+| `source/ovis.jsonl`, `source/sections.json`, `source/import_report.json`, `research/packet.json` | code from the owner's docx: `scripts/pipeline/import_canon_docx.py --docx F --adhyay N` | refuses a deviating layout; owner approves the source hash with `approve.py` | the docx sha256 | B |
+| `script/easy.md` (the owner's final script) | owner | `scripts/pipeline/check_script.py` via `check_script_cli.py` (reports only) -> `stage1/script_check_receipt.json` | source, voice library, glossary | B (CLI: row 17) |
+| `script/easy.md` DRAFT for trials | code: `stage1/script_from_docx.py --adhyay N` (docx columns unchanged, narrator only) | same checker; marked DRAFT in its heading | source | B |
+| `stage1/omissions_approved.json` | owner: `approve.py omissions --adhyay N --ovis ...` then `approve.py approve` | hash approval; read by `stage1/context.py` | the owner's decision | B (row 12) |
+| `stage1/story_map|coverage|scenes|shots|briefs|looks|voices|sounds|questions.json` (nine documents) | Kimi Stage 1 (or the free Nemotron trial) through `stage1/runner.py` (calls: map, plan, scene) | the nine unit modules (schema + semantics), `stage1/aggregate.py` (nine documents together, cross rules X1, X3-X11), advisory `stage1/crosscheck.py`; owner approves | source, script, packet (`stage1/prompts.py`), ctx (`stage1/context.py`) | B (cross-check: row S10) |
+| `stage1/prompts/*.txt`, `stage1/replies/*.txt`, `stage1/report.json` (trial audit trail; scrubbed, no keys) | `stage1/runner.py` | none (audit only); `--reuse-from` resumes | the packet | B |
+| `bible/` (characters, places, props by chapter state) | approved looks from Stage 1 (`looks.json`) | owner approves; unapproved looks never become canon (N5) | looks, source | P (N5) |
+| `canon/series/voices.json` (series-wide) | `scripts/pipeline/voice_library.py` (read-only ElevenLabs list) | owner edits descriptions; `aggregate.py` voice rules | the ElevenLabs account | B (refresh safety: N2) |
+| `canon/series/sounds/palette.json` + sound files (series-wide) | ElevenLabs Sound Effects through the credit ledger (E3, E6) | owner listens; sha256 per file; version (N14) | sound prompts | P (E2-E6) |
+| `audio/clips.json` (+ voice audio files, Marathi and Hindi) | ElevenLabs via the credit ledger | owner listens; `caps.py` | script, voices | P (row 23) |
+| `audio/timing.json` (`beats`, shared by both languages) | code | `validate_assets.validate_beats` | clips, script | P (row 24) |
+| `images/jobs.json` | code from approved briefs (`IMAGE_PROMPT_RULES.md`) | prompt rules tests | stage1 briefs, series data | P (row 25) |
+| `images/catalog.json`, `images/binding.json` | code after the owner approves the images (Haiku-low Flow agents generate them) | `validate_assets.validate_catalog` (live sha256); provenance (row 26) | images, jobs | P (rows 26, 27) |
+| `animation/scenes/S<x>.json` | Kimi Stage 2 (or replay of a saved plan) | `validate_assets.validate_animation` | beats, catalog, presets | P (rows 28, 29) |
+| `canon/shot_plans/A<N>/S<x>.json` | code after owner approval | `validate_assets.validate_shot_plan_fresh` | script, timing, presets, images | P (row 29) |
+| `render/*.mp4` shot videos, `render/receipts.jsonl` | Builder v2 (Blender, frozen) or `motion.py`; ffmpeg | frame count 144 at 24 fps, 1280x720; owner watches | animation scenes, images | P (rows 33, 34) |
+| `delivery/<lang>.mp4` (Marathi, Hindi), subtitles, mixes, `delivery/receipts.json` | ffmpeg mix of voice + effects (ducking against both languages) | same picture and same length in both; owner listens/watches | render, audio, sound pack | P (row 35, E4, E5) |
+| `approvals.json` + `approvals_log.jsonl` | `scripts/pipeline/approve.py approve ...` (the ONLY write path; owner name + confirm phrase; appends a log line) | `scripts/pipeline/gates.py` (stages call `require_approved`); a changed file makes it STALE | every approved file | B (row 12) |
+| `spend.jsonl`, `caps.json` | `scripts/pipeline/caps.py` (reserve / settle / unknown / reconcile) | `caps.check` | the cost ledger | B |
 Paths for any chapter come from `scripts/pipeline/chapter.py` (`chapter_paths`); Adhyay 1 keeps its legacy paths. Built and tested: nemotron_code, chapter, approvals, caps, gates, check_script, validate_stage1, validate_assets, nine schemas. Still to build: wiring into the existing commands (`--adhyay N`), the approval write path, prompt builders, replay, render/export (caps integration into `kimi_adapter.py` was DROPPED by the owner: the existing ledger guards stay).
 
 ## 8. WHAT A NEW ADHYAY NEEDS FROM THE OWNER (final input list, 2026-10-28)

@@ -426,6 +426,119 @@ def test_main_writes_json(tmp_path: Path, capsys: pytest.CaptureFixture):
     assert "problem: presets: missing" in captured.err
 
 
+# --- New tests for voice_genders (checklist V2) ---
+
+def test_voice_genders_happy_path(tmp_path: Path):
+    """voice_genders contains exactly the male/female entries from the library."""
+    root = _setup_synthetic_root(tmp_path, 2)
+    voice_lib = root / "canon" / "series" / "voices.json"
+    data = json.loads(voice_lib.read_text())
+    # Add gender to existing voices and add a new voice with gender
+    data["voices"][0]["gender"] = "male"
+    data["voices"][1]["gender"] = "female"
+    data["voices"].append({
+        "voice_key": "vk_female",
+        "voice_id": "vid_4",
+        "assigned_to": [],
+        "marathi_verified": True,
+        "hindi_verified": True,
+        "status": "active",
+        "description": "Female voice",
+        "gender": "female"
+    })
+    _write_json(voice_lib, data)
+
+    ctx, problems = build_ctx(2, root)
+    assert problems == []
+    assert ctx["voice_genders"] == {
+        "vk_gajanan": "male",
+        "vk_unverified": "female",
+        "vk_female": "female"
+    }
+
+
+def test_voice_genders_excludes_invalid(tmp_path: Path):
+    """Entries with gender 'other', missing gender, non-string gender, non-string voice_key are left out."""
+    root = _setup_synthetic_root(tmp_path, 2)
+    voice_lib = root / "canon" / "series" / "voices.json"
+    data = json.loads(voice_lib.read_text())
+    data["voices"] = [
+        {"voice_key": "vk_male", "voice_id": "vid_1", "gender": "male"},
+        {"voice_key": "vk_female", "voice_id": "vid_2", "gender": "female"},
+        {"voice_key": "vk_other", "voice_id": "vid_3", "gender": "other"},
+        {"voice_key": "vk_missing_gender", "voice_id": "vid_4"},
+        {"voice_key": "vk_non_string_gender", "voice_id": "vid_5", "gender": 123},
+        {"voice_key": 123, "voice_id": "vid_6", "gender": "male"},  # non-string voice_key
+        {"voice_key": "vk_non_string_gender2", "voice_id": "vid_7", "gender": ["male"]},
+    ]
+    _write_json(voice_lib, data)
+
+    ctx, problems = build_ctx(2, root)
+    assert problems == []
+    assert ctx["voice_genders"] == {
+        "vk_male": "male",
+        "vk_female": "female"
+    }
+
+
+def test_voice_genders_missing_library(tmp_path: Path):
+    """Missing voice library file -> voice_genders empty dict and problem."""
+    root = tmp_path
+    adhyay_dir = root / "canon" / "adhyay_02"
+    adhyay_dir.mkdir(parents=True)
+    (adhyay_dir / "approvals.json").write_text("{}")
+    (adhyay_dir / "stage1").mkdir(parents=True)
+    # Provide ovis and presets to avoid other problems
+    source_dir = adhyay_dir / "source"
+    source_dir.mkdir(parents=True)
+    _write_jsonl(source_dir / "ovis.jsonl", [{"ovi": 1}])
+    preset_index = root / "assets" / "v5_presets" / "index.json"
+    preset_index.parent.mkdir(parents=True)
+    _write_json(preset_index, [])
+
+    ctx, problems = build_ctx(2, root)
+    assert ctx["voice_genders"] == {}
+    assert "voice_library: missing" in problems
+
+
+def test_voice_genders_bad_library_json(tmp_path: Path):
+    """Library JSON that is not an object (list, int, string, null) -> voice_genders empty, no exception."""
+    root = _setup_synthetic_root(tmp_path, 2)
+    voice_lib = root / "canon" / "series" / "voices.json"
+    for bad_val in [[], 5, "x", None]:
+        _write_json(voice_lib, bad_val)
+        ctx, problems = build_ctx(2, root)
+        assert ctx["voice_genders"] == {}
+        # There will be a problem "voice_library: not an object", but no exception
+        assert any("voice_library: not an object" in p for p in problems)
+
+
+def test_voice_genders_extra_override(tmp_path: Path):
+    """extra={'voice_genders': {...}} overrides the computed voice_genders."""
+    root = _setup_synthetic_root(tmp_path, 2)
+    extra = {"voice_genders": {"zzz": "male"}}
+    ctx, problems = build_ctx(2, root, extra=extra)
+    assert ctx["voice_genders"] == {"zzz": "male"}
+
+
+@pytest.mark.skipif(
+    not (REPO_ROOT / "canon" / "series" / "voices.json").exists(),
+    reason="Real repo voices.json not found"
+)
+@pytest.mark.skipif(
+    not (REPO_ROOT / "assets" / "v5_presets" / "index.json").exists(),
+    reason="Real repo preset index not found"
+)
+def test_real_repo_voice_genders():
+    """Real repo test: voice_genders has <=35 entries, all values 'male' or 'female'."""
+    ctx, problems = build_ctx(1, REPO_ROOT)
+    voice_genders = ctx.get("voice_genders", {})
+    assert isinstance(voice_genders, dict)
+    assert len(voice_genders) <= 35
+    for gender in voice_genders.values():
+        assert gender in ("male", "female")
+
+
 @pytest.mark.skipif(
     not (REPO_ROOT / "canon" / "series" / "voices.json").exists(),
     reason="Real repo voices.json not found"

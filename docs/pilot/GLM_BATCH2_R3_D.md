@@ -1,0 +1,30 @@
+# Batch 2 — Final round review
+
+Scope note: the only unit files provided this round are `scripts/pipeline/stage1/aggregate.py`, `tests/test_stage1_aggregate.py` and spec `docs/pilot/nemotron_specs/aggregate.md` (AMENDMENTS authoritative). All other batch‑2 units were reviewed in earlier rounds; per the update their findings are fixed, and `docs/pilot/TEST_RUN_BATCH2.txt` (trusted) shows the suites green. Nothing below re-reports fixed findings.
+
+## scripts/pipeline/stage1/aggregate.py + tests/test_stage1_aggregate.py (spec aggregate.md + AMENDMENTS)
+
+none
+
+Verification performed (in-memory reading checks, no guessing):
+
+- **X1** is kind-aware exactly as amended: `story_event_ranges` vs `discourse_event_ranges` are built per `kind`, messages are `story_map: ovi N is typed STORY but is in no story event` / `... TEACHING ... in no discourse event` (aggregate.py X1 block). X2 is absent on purpose (comment only, no code path emits it).
+- **X3** both directions, **X4** both parts, **X5**, **X6** (overlap `lo1 <= hi2 and lo2 <= hi1`), **X7** all three parts (recurring mismatch, NEW_PROPOSED on a series char, NEW_PROPOSED reusing another character's series voice only when the char is not itself a series key), **X8** 6-word contiguous run (casefold, leading/trailing P/S stripped, whitespace split, depth limit 8, runs over raw `docs.get(unit)` so schema status is irrelevant), **X9** (min..max + membership, skipped when `chapter_ovis` reads empty), **X10** (skip when no overlapping events — pinned by `test_x10_scene_no_overlapping_event`), **X11** (runs only when `verified_voices` is a list, per amendment), **X12** (skips missing voice_key, non-male/female either side, absent/empty/wrong-typed `voice_genders`, skipped when voices fails schema) — all match the quoted messages and the tests.
+- Never-raises: non-dict `docs`/`ctx` reported once and replaced with `{}`; every cross rule and `module.validate` wrapped with the `aggregate: internal error in <step>` sentinel; `_walk_strings` depth-capped (also terminates on cyclic input); bools never treated as ints (`_is_int`); no range is ever enumerated (huge-range test is safe).
+- `export_schemas` checks all nine targets before writing anything (FileExistsError leaves files unchanged), sort_keys/indent 2/utf-8/trailing newline. `main` exports **and then** validates per the amendment; exit codes 0/1/2 and `refused:` paths match; no print outside `main`; no key/secret is read, printed or stored anywhere.
+- Test coverage vs the spec's test list: base valid; isolated violation+corrected-twin tests for X1, X3–X12 (with the amended message strings asserted); all six prescribed robustness cases plus wrong-typed ctx for every optional key; `export_schemas` and `main` exit codes. Every spec rule that the spec's test section requires has a failing test.
+
+## scripts/source/coder_run.py, scripts/source/review_run.py, scripts/pipeline/stage1/crosscheck.py, scripts/pipeline/stage1/compare_a1.py, scripts/pipeline/approve.py, scripts/pipeline/check_script_cli.py, scripts/pipeline/stage1/context.py
+
+none — files not provided in this round; no verified defect reportable. The fixes listed in the update (receipt scrubbing, secrets-path skipping + verbatim content + verdict normalisation, null-list tolerance, non-integer ovi refusal, `item_status` never raising) are accepted as stated and backed by the trusted test run.
+
+## Non-blocking notes
+
+1. **X1 kind-discrimination is not behaviorally pinned.** No assertion covers a STORY/TEACHING ovi that lies *only* inside an event of the wrong kind. `test_x1_story_ovi_not_in_story_event` already contains such a case (ovi 4 typed STORY inside discourse event E1 [4,5]) but does not assert its error; a kind-agnostic regression that kept the amended message strings would pass the whole suite. The realistic regression (reverting to the old `in no event` message) *is* caught by the current message assertions, hence non-blocking. Cheap pin: add `assert any("story_map: ovi 4 is typed STORY but is in no story event" in e for e in errs)` to `test_x1_story_ovi_not_in_story_event`, and the ovi-4 TEACHING analogue to `test_x1_teaching_ovi_not_in_discourse_event` (both pass against the current module).
+2. **Amendment bullet "a NEW_PROPOSED cast entry requires a non-empty `reason`" is not enforced in aggregate.py and has no test here.** It is a single-document rule, so it belongs to the (fixed, out-of-scope) voices unit's schema/validate; the X7 tests consistently supply `reason`, which suggests the voices unit already enforces it. Please confirm; if it does not, that bullet is currently unenforced anywhere.
+3. Dead code: `aggregate.py` imports `sys` (line 5) unused and defines `_get_dict` (~line 91) unused; the test file imports `sys` unused and defines the never-called helper `_make_minimal_valid_docs`.
+4. `validate_all` calls `module.schema_errors(doc)` (~line 155) without a try/except, unlike `module.validate`. The unit contract guarantees `schema_errors` never raises, so this is per spec; wrapping it would make `validate_all`'s never-raises guarantee independent of unit bugs. Optional.
+5. Several "corrected twin" assertions only check that the targeted message disappeared rather than `errs == []` (e.g. the X1 twins still carry an X9 error, since `chapter_ovis=[3,4]` vs event range [3,5]); the spec's "the corrected twin gives []" is only partially honored. Non-blocking: each rule still has a failing test plus a targeted clear-twin check, and full-`[]` twins would require re-balancing `chapter_ovis` in each fixture.
+6. `test_robustness_ctx_verified_voices_bad_types`'s docstring says bad values are "treated as absent (rule skipped)", but for list values like `[True, False]` X11 does run (empty verified set → "not verified" errors). The behavior matches the amendment ("when it is a list every cast voice_key must be in it") and the assertions (no internal error only) pass; only the docstring is inaccurate.
+
+## Verdict: READY

@@ -1,0 +1,86 @@
+{
+ "core_lines": {
+  "in_trial_scene_ranges": 52,
+  "total": 52
+ },
+ "date": "2026-10-29",
+ "images": {
+  "real": 59,
+  "trial": 32
+ },
+ "note": "free Nemotron trial scored against the owner's real Adhyay 1 split; no Kimi call",
+ "omissions": {
+  "both": 71,
+  "jaccard": 0.826,
+  "precision": 0.845,
+  "real": 73,
+  "recall": 0.973,
+  "trial": 84
+ },
+ "problems": [],
+ "scene_agreement": 0.791,
+ "scenes": {
+  "per_real_scene": [
+   {
+    "best_trial_scene": "S1",
+    "covered_fraction": 1.0,
+    "ovis": 1,
+    "scene": "S1"
+   },
+   {
+    "best_trial_scene": "S2",
+    "covered_fraction": 0.7,
+    "ovis": 10,
+    "scene": "S2"
+   },
+   {
+    "best_trial_scene": "S4",
+    "covered_fraction": 0.714,
+    "ovis": 7,
+    "scene": "S3"
+   },
+   {
+    "best_trial_scene": "S6",
+    "covered_fraction": 1.0,
+    "ovis": 5,
+    "scene": "S4"
+   },
+   {
+    "best_trial_scene": "S6",
+    "covered_fraction": 0.5,
+    "ovis": 6,
+    "scene": "S5"
+   },
+   {
+    "best_trial_scene": "S7",
+    "covered_fraction": 0.75,
+    "ovis": 4,
+    "scene": "S6"
+   },
+   {
+    "best_trial_scene": "S8",
+    "covered_fraction": 0.455,
+    "ovis": 11,
+    "scene": "S7"
+   },
+   {
+    "best_trial_scene": "S10",
+    "covered_fraction": 1.0,
+    "ovis": 4,
+    "scene": "S8"
+   },
+   {
+    "best_trial_scene": "S11",
+    "covered_fraction": 1.0,
+    "ovis": 7,
+    "scene": "S9"
+   }
+  ],
+  "real": 9,
+  "trial": 11
+ },
+ "shots": {
+  "real": 61,
+  "trial": 34
+ }
+}

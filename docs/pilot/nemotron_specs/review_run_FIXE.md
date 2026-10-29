@@ -1,0 +1,357 @@
+# TASK: return ONLY ONE FILE: scripts/source/review_run.py (complete). Reply with exactly one block. Your previous version fixed Haiku's defects but broke the existing test test_binary_file_skipped. Keep ALL fixes, and restore: a binary or non-UTF-8 file (UnicodeDecodeError) -> problem text EXACTLY 'skipped <path>: not text' (as the spec says); a file that cannot be read for another reason (OSError such as PermissionError) -> 'skipped <path>: not readable'. Do not change anything else.
+## CURRENT scripts/source/review_run.py (with the previous fixes)
+```python
+from __future__ import annotations
+
+import sys
+import importlib.util
+from pathlib import Path
+from typing import Callable
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+SYSTEM_PROMPT = (
+    "You are a strict READ-ONLY code and design reviewer. "
+    "You may not run anything. "
+    "Report only real, verified defects with file:line and an exact fix. "
+    "If nothing is wrong say so. "
+    "End the report with exactly one line `## Verdict: READY` or `## Verdict: FIX FIRST`."
+)
+
+
+def apply_review_profile(body: dict, effort: str) -> dict:
+    """Return a copy of body with review profile fields merged.
+
+    - Adds chat_template_kwargs.enable_thinking = true
+    - Adds reasoning_effort = effort (unless effort == 'none')
+    - Never overwrites model, messages, stream, max_tokens, temperature
+    - Unknown effort values are treated as 'medium'
+    """
+    protected = {"model", "messages", "stream", "max_tokens", "temperature"}
+    new_body = dict(body)
+    # Ensure chat_template_kwargs exists and is a dict
+    ctk = new_body.get("chat_template_kwargs")
+    if not isinstance(ctk, dict):
+        ctk = {}
+    ctk = dict(ctk)
+    ctk["enable_thinking"] = True
+    new_body["chat_template_kwargs"] = ctk
+
+    eff = effort.lower() if isinstance(effort, str) else "medium"
+    if eff not in ("low", "medium", "high", "none"):
+        eff = "medium"
+    if eff != "none":
+        new_body["reasoning_effort"] = eff
+
+    # Do not overwrite protected keys
+    for k in protected:
+        if k in body:
+            new_body[k] = body[k]
+    return new_body
+
+
+def build_prompt(
+    prompt_text: str,
+    files: list[Path],
+    root: Path,
+    max_total_bytes: int = 400_000,
+) -> tuple[str, list[str]]:
+    root = root.resolve()
+    parts: list[str] = [prompt_text]
+    problems: list[str] = []
+    used = len(prompt_text.encode("utf-8"))
+    limit_reached = False
+
+    for f in files:
+        if limit_reached:
+            problems.append(f"skipped {f}: size limit")
+            continue
+
+        try:
+            f_resolved = f.resolve()
+        except Exception:
+            problems.append(f"skipped {f}: not found")
+            continue
+
+        if not f_resolved.exists():
+            problems.append(f"skipped {f}: not found")
+            continue
+        if f_resolved.is_dir():
+            problems.append(f"skipped {f}: is a directory")
+            continue
+        try:
+            rel = f_resolved.relative_to(root)
+        except ValueError:
+            problems.append(f"skipped {f}: not under root")
+            continue
+        name = f_resolved.name
+        if "secrets" in name or name.endswith(".env") or name.endswith(".key"):
+            problems.append(f"skipped {f}: secret-like name")
+            continue
+
+        try:
+            content = f_resolved.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            problems.append(f"skipped {f}: not readable")
+            continue
+
+        # Indent content by one space so that content lines don't start with backticks
+        # This avoids false positives in fence detection heuristics
+        indented_content = "\n".join(" " + line for line in content.splitlines())
+
+        rel_posix = rel.as_posix()
+        header = f"## FILE {rel_posix}"
+        header_bytes = header.encode("utf-8")
+        content_bytes = indented_content.encode("utf-8")
+
+        fence = "```"
+        while fence in content:
+            fence += "`"
+        fence_bytes = fence.encode("utf-8")
+        newline = b"\n"
+
+        needed = (
+            len(header_bytes)
+            + len(newline)
+            + len(fence_bytes)
+            + len(newline)
+            + len(content_bytes)
+            + len(newline)
+            + len(fence_bytes)
+            + len(newline)
+        )
+
+        if used + needed > max_total_bytes:
+            remaining = max_total_bytes - used
+            if remaining < 0:
+                remaining = 0
+            overhead = (
+                len(header_bytes)
+                + len(newline)
+                + len(fence_bytes)
+                + len(newline)
+                + len(fence_bytes)
+                + len(newline) * 2
+                + 13  # account for "\n [truncated]" (13 bytes)
+            )
+            avail = remaining - overhead
+            if avail > 0:
+                # Truncate the indented content bytes
+                truncated_indented = content_bytes[:avail].decode("utf-8", errors="ignore")
+                # Add [truncated] line and ensure it's indented
+                truncated_indented += "\n[truncated]"
+                truncated_indented = "\n".join(
+                    " " + line if not line.startswith(" ") else line
+                    for line in truncated_indented.splitlines()
+                )
+                parts.append(header)
+                parts.append(fence)
+                parts.append(truncated_indented)
+                parts.append(fence)
+                used += (
+                    len(header_bytes)
+                    + len(newline)
+                    + len(fence_bytes)
+                    + len(newline)
+                    + len(truncated_indented.encode("utf-8"))
+                    + len(newline)
+                    + len(fence_bytes)
+                    + len(newline)
+                )
+                problems.append(f"truncated {f}")
+            else:
+                problems.append(f"skipped {f}: size limit")
+            limit_reached = True
+            continue
+
+        parts.append(header)
+        parts.append(fence)
+        parts.append(indented_content)
+        parts.append(fence)
+        used += needed
+
+    return "\n".join(parts), problems
+
+
+def _load_draft_source() -> object:
+    ds_path = REPO_ROOT / "scripts" / "source" / "draft_source.py"
+    spec = importlib.util.spec_from_file_location("ds", ds_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load draft_source from {ds_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_coder_run() -> object:
+    cr_path = REPO_ROOT / "scripts" / "source" / "coder_run.py"
+    spec = importlib.util.spec_from_file_location("cr", cr_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load coder_run from {cr_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def run_review(
+    model: str,
+    prompt_file: Path,
+    files: list[Path],
+    out_path: Path,
+    *,
+    root: Path | None = None,
+    max_tokens: int = 64000,
+    idle_s: int | None = None,
+    caller: Callable[[str, str], tuple[str, dict]] | None = None,
+    scrub_keys: list[str] = [],
+    effort: str = "medium",
+) -> dict:
+    if out_path.exists():
+        raise FileExistsError(f"Output file already exists: {out_path}")
+
+    if root is None:
+        root = REPO_ROOT
+
+    prompt_text = prompt_file.read_text(encoding="utf-8")
+    user_text, problems = build_prompt(prompt_text, files, root)
+
+    reply_text = ""
+    info: dict = {"status": 0, "wall_s": 0.0, "finish": "", "usage": {}, "error": ""}
+
+    try:
+        if caller is not None:
+            reply_text, info = caller(SYSTEM_PROMPT, user_text)
+        else:
+            ds = _load_draft_source()
+            cr = _load_coder_run()
+            ds = cr.with_idle_timeout(ds, idle_s)
+            # Wrap _stream_once to inject review profile
+            original_stream_once = ds._stream_once
+            def wrapped_stream_once(key, body, *args, **kwargs):
+                modified_body = apply_review_profile(body, effort)
+                return original_stream_once(key, modified_body, *args, **kwargs)
+            ds._stream_once = wrapped_stream_once
+            keys = ds.nt.load_keys()
+            pool = ds.nt.KeyPool(keys)
+            reply_text, info = ds.chat_stream(pool, keys, model, SYSTEM_PROMPT, user_text, max_tokens=max_tokens)
+            reply_text = ds.nt.scrub(reply_text, keys)
+    except Exception as e:
+        info = {"status": 0, "wall_s": 0.0, "finish": "error", "usage": {}, "error": f"{type(e).__name__}: {e}"}
+        reply_text = ""
+
+    # Scrub reply text
+    for key in scrub_keys:
+        if key:
+            reply_text = reply_text.replace(key, "[key]")
+
+    verdict = "NONE"
+    for line in reversed(reply_text.splitlines()):
+        line = line.strip()
+        if line.startswith("## Verdict:"):
+            verdict = line.split(":", 1)[1].strip()
+            break
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Scrub error message before writing to output file
+    error_msg = info.get("error", "unknown error")
+    for key in scrub_keys:
+        if key:
+            error_msg = error_msg.replace(key, "[key]")
+
+    if info.get("status") == 200 and reply_text.strip():
+        out_path.write_text(reply_text, encoding="utf-8")
+    else:
+        out_path.write_text(f"REVIEW FAILED: {error_msg}", encoding="utf-8")
+        verdict = "NONE"
+
+    # Scrub verdict and info strings
+    for key in scrub_keys:
+        if key:
+            verdict = verdict.replace(key, "[key]")
+            for k, v in info.items():
+                if isinstance(v, str):
+                    info[k] = v.replace(key, "[key]")
+
+    result = {
+        "model": model,
+        "out": str(out_path),
+        "status": info.get("status", 0),
+        "wall_s": info.get("wall_s", 0.0),
+        "finish": info.get("finish", ""),
+        "usage": info.get("usage", {}),
+        "problems": problems,
+        "chars": len(reply_text),
+        "verdict": verdict,
+        "reply": reply_text,
+        "error": info.get("error", ""),
+        "effort": effort,
+        "thinking": True,
+    }
+
+    # Scrub all string values in the result dict
+    for key in scrub_keys:
+        if not key:
+            continue
+        for k, v in list(result.items()):
+            if isinstance(v, str):
+                result[k] = v.replace(key, "[key]")
+            elif isinstance(v, list):
+                result[k] = [item.replace(key, "[key]") if isinstance(item, str) else item for item in v]
+            elif isinstance(v, dict):
+                for k2, v2 in v.items():
+                    if isinstance(v2, str):
+                        v[k2] = v2.replace(key, "[key]")
+
+    return result
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run a review via NVIDIA GLM endpoint")
+    parser.add_argument("--model", default="z-ai/glm-5.3-flash")
+    parser.add_argument("--prompt-file", type=Path, required=True)
+    parser.add_argument("--file", type=Path, action="append", default=[])
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--max-tokens", type=int, default=64000)
+    parser.add_argument("--idle-s", type=int, default=None)
+    parser.add_argument("--effort", choices=["low", "medium", "high", "none"], default="medium")
+    args = parser.parse_args(argv)
+
+    if not args.prompt_file.exists():
+        print(f"refused: prompt file not found: {args.prompt_file}")
+        return 2
+
+    if args.out.exists():
+        print(f"refused: output file already exists: {args.out}")
+        return 2
+
+    try:
+        result = run_review(
+            model=args.model,
+            prompt_file=args.prompt_file,
+            files=args.file,
+            out_path=args.out,
+            max_tokens=args.max_tokens,
+            idle_s=args.idle_s,
+            effort=args.effort,
+        )
+    except FileExistsError:
+        print(f"refused: output file already exists: {args.out}")
+        return 2
+    except Exception as e:
+        print(f"review: status=0 wall_s=0 verdict=NONE problems=0 out={args.out}")
+        return 1
+
+    print(
+        f"review: status={result['status']} wall_s={result['wall_s']:.3f} "
+        f"verdict={result['verdict']} problems={len(result['problems'])} out={result['out']}"
+    )
+    ok = result["status"] == 200 and result["chars"] > 0
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```

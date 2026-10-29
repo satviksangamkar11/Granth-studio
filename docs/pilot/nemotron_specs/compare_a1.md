@@ -1,0 +1,25 @@
+# SPEC: NEW `scripts/pipeline/stage1/compare_a1.py` + NEW `tests/test_stage1_compare_a1.py`. Return exactly these TWO files in full; do not output or change any other file.
+Checklist row 19: score a free Stage 1 trial of Adhyay 1 against the owner's REAL, already-decided split (never repeat the paid Stage 1). Pure comparison, read only, writes one receipt. Standard library only; `from __future__ import annotations`; nothing at import time except imports and definitions; plain functions; no key or secret.
+
+## Inputs (all paths relative to a `root`)
+- The trial documents: a folder with `coverage.json` (`{"adhyay": 1, "ovis": [{"ovi", "disposition", ...}]}`), `scenes.json` (`{"scenes": [{"scene_id", "ovi_range": [lo, hi], "line_ids": [...]}]}`), `shots.json` (`{"shots": [...]}`), `briefs.json` (`{"images": [...]}`).
+- The REAL decisions: (a) `canon/story_split_edits/A1_rev1.json`: `unfilmed_ranges` = list of `{"ovi_range": [lo, hi], ...}`: the real unfilmed ovis; (b) the real script `docs/pilot/A1_full_script_simple.md` parsed with `scripts/pipeline/check_script.py` `parse_script(text) -> list[dict]` (records `id, scene, ovi, priority`): the real scenes are the script's scenes and each real scene's ovis are the ovis of its lines; (c) the real image jobs `canon/drafts/A1_flow_shot_jobs.json` (a JSON list of 59 jobs); (d) the real planned shot count constant `REAL_SHOTS = 61` (from the owner's measured plan) and `REAL_SCENES = 9`.
+Repo root in this module: `Path(__file__).resolve().parents[3]`; in tests `Path(__file__).resolve().parents[1]`.
+
+## API
+- `real_unfilmed(root) -> set[int]`: the union of the ranges in `unfilmed_ranges` (inclusive; the ranges are small: expand them with `range`, but ignore a range wider than 5000 or with non-int ends).
+- `real_scenes(root) -> dict[str, set[int]]`: scene id (like `S1`) -> set of the ovis of its script lines.
+- `score(trial_dir, root) -> dict`: NEVER raises; a missing or unreadable file gives the field `null` and an entry in `problems`. Returns `{"omissions": {"trial": n, "real": n, "both": n, "precision": float|null, "recall": float|null, "jaccard": float|null}, "scenes": {"trial": n, "real": 9, "per_real_scene": [{"scene": "S1", "ovis": n, "best_trial_scene": "S2"|null, "covered_fraction": float}]}, "scene_agreement": float|null, "shots": {"trial": n, "real": 61}, "images": {"trial": n, "real": 59}, "core_lines": {"total": n, "in_trial_scene_ranges": n}, "problems": [...]}` where: omissions compare the set of ovis with disposition PROPOSE_OMISSION (trial) against `real_unfilmed` (precision = both/trial, recall = both/real, jaccard = both/union; null when a denominator is 0); for each real scene its `covered_fraction` is the largest share of its ovis that lies inside ONE trial scene's inclusive `ovi_range` (never enumerate a trial range: test membership with lo <= ovi <= hi); `scene_agreement` is the mean of the covered fractions over the real scenes; `core_lines.in_trial_scene_ranges` counts the real core lines whose ovi lies in some trial scene range. Every float is rounded to 3 decimals.
+- `write_receipt(result: dict, out_path: Path | str, today: str | None = None) -> Path`: writes json (indent 1, sort_keys, `ensure_ascii=False`) with `"date"` and `"note": "free Nemotron trial scored against the owner's real Adhyay 1 split; no Kimi call"`; raises `FileExistsError` if it exists; creates parent folders.
+- `main(argv=None) -> int`: `--trial-dir DIR` (required), `--root PATH` (default repo root), `--receipt PATH` (optional). Prints a short readable table (omissions precision/recall, scene agreement, counts trial vs real) and returns 0; with `--receipt` writes it (an existing file -> `refused: receipt exists`, return 2).
+
+## Tests (`tests/test_stage1_compare_a1.py`; synthetic data in tmp_path plus real-file tests)
+1. Build a synthetic root with a tiny `A1_rev1.json` (unfilmed ranges [1,3] and [8,8]), a script in the REAL EASY format (`## S1`, `**S1-L1** | narrator | ovi 4 | core`, `- Marathi: ..`, `- Hindi: ..`; two scenes), `canon/drafts/A1_flow_shot_jobs.json` as a list of 3 items, and a trial dir with the four documents. Check exact numbers: omissions precision/recall/jaccard on hand-computed sets; each real scene's covered fraction; the mean agreement; counts; core lines.
+2. Edge cases each isolated: an empty trial omission set (precision null, recall 0.0), identical sets (all 1.0), disjoint sets (jaccard 0.0), a trial scene with a huge range `[1, 10**12]` (fast, no enumeration), missing trial files -> null fields and problems, a corrupt JSON file -> problem not exception.
+3. `write_receipt` content and the refusal on a second write; `main` output and return codes (capsys).
+4. REAL files (skipif a file is missing): `real_unfilmed(ROOT)` contains ovi 1 and 32 and 145 and does not contain 70; `real_scenes(ROOT)` has 9 scenes; `score(trial_dir, ROOT)` on a tiny fake trial dir does not raise.
+Use plain assignment and `copy.deepcopy`; never a helper that rejects no-effect mutations.
+
+Reply with only the two FILE blocks:
+FILE: scripts/pipeline/stage1/compare_a1.py
+FILE: tests/test_stage1_compare_a1.py

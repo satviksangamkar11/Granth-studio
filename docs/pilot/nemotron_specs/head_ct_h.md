@@ -1,0 +1,3 @@
+# TASK: return ONLY ONE FILE: tests/test_coder_tools.py (complete). Reply with exactly one block `FILE: tests/test_coder_tools.py` then the python fenced. Your new tests are good but: (1) one compares floats exactly (`assert 0.30000000000000004 == 0.3`): use `pytest.approx` or round; (2) the module scripts/source/coder_run.py is being fixed in parallel so that receipts scrub every key passed in the `keys` argument of chat_stream (key strings of length >= 8 replaced by `[key]` in every string value of a receipt, nested dicts included): keep the no-key tests as they are (they will pass once the module is fixed); (3) check the other new tests by hand against the spec. Keep every other test.
+
+## CURRENT tests/test_coder_tools.py (the version from the previous call)

@@ -1,0 +1,7 @@
+# TASK: return ONLY ONE FILE: scripts/source/review_run.py (complete). Reply with exactly one block `FILE: scripts/source/review_run.py` then the python fenced. Keep everything that works (36 tests pass); apply EXACTLY these three verified fixes (reported by the GLM reviewer, each checked against the spec):
+1. SECRETS PATHS (security): the skip rule must apply to the WHOLE path, not only the file name: skip (never read, never send) a file when ANY component of its path (relative to root or absolute) contains `secrets` (case-insensitive) or when the name ends with `.env` or `.key`; problem text `skipped <path>: secrets`. Today `secrets/keys.txt` is read and sent.
+2. VERBATIM CONTENT: `build_prompt` prefixes every content line with one space before fencing, which MODIFIES the reviewed code (leading whitespace is significant in Python). Put the file content into the fenced block EXACTLY as it is (no prefix, no change); keep the fence longer than any backtick run inside the content. The `[truncated]` marker goes on its own line after the cut content and the byte accounting must still keep the total within `max_total_bytes`.
+3. VERDICT NORMALISATION: the returned `verdict` is exactly one of `READY`, `FIX FIRST`, `NONE`: a last line `## Verdict: <anything else>` (or none) gives `NONE`; compare case-insensitively after stripping.
+Change nothing else.
+
+## CURRENT scripts/source/review_run.py

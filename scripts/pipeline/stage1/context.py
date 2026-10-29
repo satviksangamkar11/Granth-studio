@@ -116,27 +116,28 @@ def _read_omissions(
         return [], problems
 
 
-def _read_voice_library(voice_lib_path: Path) -> tuple[dict[str, str], dict[str, str], list[str], list[str]]:
-    """Read voice library and return saved_voices, series_voices, verified_voices, problems."""
+def _read_voice_library(voice_lib_path: Path) -> tuple[dict[str, str], dict[str, str], list[str], dict[str, str], list[str]]:
+    """Read voice library and return saved_voices, series_voices, verified_voices, voice_genders, problems."""
     saved_voices: dict[str, str] = {}
     series_voices: dict[str, str] = {}
     verified_voices: list[str] = []
+    voice_genders: dict[str, str] = {}
     problems: list[str] = []
 
     if not voice_lib_path.is_file():
         problems.append("voice_library: missing")
-        return saved_voices, series_voices, verified_voices, problems
+        return saved_voices, series_voices, verified_voices, voice_genders, problems
 
     try:
         with voice_lib_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception as e:
         problems.append(f"voice_library: {e.__class__.__name__}")
-        return saved_voices, series_voices, verified_voices, problems
+        return saved_voices, series_voices, verified_voices, voice_genders, problems
 
     if not isinstance(data, dict):
         problems.append("voice_library: not an object")
-        return saved_voices, series_voices, verified_voices, problems
+        return saved_voices, series_voices, verified_voices, voice_genders, problems
 
     voices = data.get("voices", [])
     if not isinstance(voices, list):
@@ -166,7 +167,11 @@ def _read_voice_library(voice_lib_path: Path) -> tuple[dict[str, str], dict[str,
         if marathi is True and hindi is True and isinstance(voice_key, str):
             verified_voices.append(voice_key)
 
-    return saved_voices, series_voices, verified_voices, problems
+        gender = entry.get("gender")
+        if isinstance(voice_key, str) and gender in ("male", "female"):
+            voice_genders[voice_key] = gender
+
+    return saved_voices, series_voices, verified_voices, voice_genders, problems
 
 
 def _read_presets(preset_index_path: Path) -> tuple[list[str], list[str]]:
@@ -260,7 +265,7 @@ def build_ctx(adhyay: int, root: Path | str, extra: dict | None = None) -> tuple
 
     # 3. Voice library
     voice_lib_path = root_path / "canon" / "series" / "voices.json"
-    saved_voices, series_voices, verified_voices, voice_problems = _read_voice_library(voice_lib_path)
+    saved_voices, series_voices, verified_voices, voice_genders, voice_problems = _read_voice_library(voice_lib_path)
     problems.extend(voice_problems)
 
     # 4. Preset IDs
@@ -280,6 +285,7 @@ def build_ctx(adhyay: int, root: Path | str, extra: dict | None = None) -> tuple
         "saved_voices": saved_voices,
         "series_voices": series_voices,
         "verified_voices": verified_voices,
+        "voice_genders": voice_genders,
         "preset_ids": preset_ids,
         "sound_ids": sound_ids,
         # Defaults for keys that come from Stage 1 documents

@@ -1,0 +1,11 @@
+# Real test run 2026-10-29 03:13 IST
+tests/test_coder_run.py: 4 passed in 0.04s
+tests/test_coder_tools.py: 12 passed in 0.09s
+tests/test_review_run.py: 40 passed in 0.32s
+tests/test_stage1_crosscheck.py: 15 passed in 0.28s
+tests/test_stage1_compare_a1.py: 29 passed, 1 warning in 0.24s
+tests/test_approve.py: 36 passed in 0.27s
+tests/test_check_script_cli.py: 12 passed in 0.20s
+tests/test_stage1_aggregate.py: 49 passed in 0.42s
+tests/test_stage1_context.py: 26 passed in 0.32s
+tests/test_stage1_runner.py: 28 passed in 0.46s

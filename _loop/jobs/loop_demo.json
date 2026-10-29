@@ -1,0 +1,9 @@
+{"name": "loop_demo",
+ "spec": "docs/pilot/nemotron_specs/loop_demo.md",
+ "files": ["scripts/source/loop_demo.py", "tests/test_loop_demo.py"],
+ "tests": ["tests/test_loop_demo.py"],
+ "reference": [],
+ "max_rounds": 3,
+ "review": true,
+ "review_rounds": 2,
+ "reviewers": ["glm"]}

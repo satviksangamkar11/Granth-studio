@@ -1,0 +1,6 @@
+# TASK: return ONLY ONE FILE: tests/test_check_script_cli.py (complete). Reply with exactly one block `FILE: tests/test_check_script_cli.py` then the python fenced. The module is CORRECT (verified). Two tests are wrong:
+1. test_happy_path_without_presets_reports_problem asserts `ok is False`, but the module computes `ok = no checker errors AND no OWN problem`; a ctx problem such as `presets: missing` does NOT make ok False. Assert `ok is True`, `errors == []` and that `'presets: missing'` is in `problems`.
+2. test_main_output_and_return_codes: after deliberately adding a DUPLICATE line id (so the script has errors and main returns 1) it calls `main([... '--write-receipt'])` and expects return 0 and a receipt. main returns 1 whenever the result is not ok, so that expectation is wrong. Restructure: test the failing script alone (rc == 1, 'error:' in the output); then use a FRESH valid root (the happy fixture) for the receipt part: `--write-receipt` returns 0 and prints `receipt`, the receipt file exists with the note 'report only; the script was never edited', and a second `--write-receipt` prints `refused: receipt exists` and returns 2.
+Keep all other tests.
+
+## CURRENT tests/test_check_script_cli.py

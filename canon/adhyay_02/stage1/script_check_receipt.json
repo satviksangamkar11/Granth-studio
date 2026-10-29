@@ -1,0 +1,14 @@
+{
+ "adhyay": 2,
+ "core": 148,
+ "date": "2026-10-29",
+ "errors": [],
+ "lines": 148,
+ "note": "report only; the script was never edited",
+ "ok": true,
+ "optional": 0,
+ "problems": [],
+ "scenes": 12,
+ "script": "canon/adhyay_02/script/easy.md",
+ "script_sha256": "faf192705e73a05a78d8ab9603e33299ec4ffd2404acb49d5a4efc73c80d3f2c"
+}

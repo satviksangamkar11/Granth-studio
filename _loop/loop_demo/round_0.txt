@@ -1,0 +1,103 @@
+FILE: scripts/source/loop_demo.py
+```python
+from __future__ import annotations
+
+
+def word_count(text: str) -> int:
+    """Count whitespace-separated words in text. Non-string input returns 0."""
+    if not isinstance(text, str):
+        return 0
+    return len(text.split())
+
+
+def clean_ids(items: list) -> list[str]:
+    """Return sorted unique non-empty string items after stripping whitespace.
+    Non-strings and empty strings are skipped. Non-list input returns [].
+    """
+    if not isinstance(items, list):
+        return []
+    result = set()
+    for item in items:
+        if isinstance(item, str):
+            stripped = item.strip()
+            if stripped:
+                result.add(stripped)
+    return sorted(result)
+```
+
+FILE: tests/test_loop_demo.py
+```python
+import importlib.util
+from pathlib import Path
+
+
+def load_module():
+    module_path = Path(__file__).resolve().parents[1] / "scripts" / "source" / "loop_demo.py"
+    spec = importlib.util.spec_from_file_location("loop_demo", module_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_word_count_empty():
+    mod = load_module()
+    assert mod.word_count("") == 0
+
+
+def test_word_count_whitespace_only():
+    mod = load_module()
+    assert mod.word_count("   \t\n  ") == 0
+
+
+def test_word_count_normal_text():
+    mod = load_module()
+    assert mod.word_count("hello world") == 2
+    assert mod.word_count("one two three") == 3
+    assert mod.word_count("  leading and trailing  ") == 3
+
+
+def test_word_count_non_string_input():
+    mod = load_module()
+    assert mod.word_count(None) == 0
+    assert mod.word_count(123) == 0
+    assert mod.word_count(["a", "b"]) == 0
+
+
+def test_clean_ids_empty_list():
+    mod = load_module()
+    assert mod.clean_ids([]) == []
+
+
+def test_clean_ids_whitespace_only_strings():
+    mod = load_module()
+    assert mod.clean_ids(["   ", "\t", "\n"]) == []
+
+
+def test_clean_ids_normal_strings():
+    mod = load_module()
+    assert mod.clean_ids(["a", "b", "c"]) == ["a", "b", "c"]
+    assert mod.clean_ids(["  a  ", " b ", "c "]) == ["a", "b", "c"]
+
+
+def test_clean_ids_non_string_input():
+    mod = load_module()
+    assert mod.clean_ids([1, "a", None, "b", 2.5]) == ["a", "b"]
+
+
+def test_clean_ids_duplicates():
+    mod = load_module()
+    assert mod.clean_ids(["a", "b", "a", "c", "b"]) == ["a", "b", "c"]
+
+
+def test_clean_ids_order():
+    mod = load_module()
+    assert mod.clean_ids(["z", "a", "m"]) == ["a", "m", "z"]
+
+
+def test_clean_ids_non_list_input():
+    mod = load_module()
+    assert mod.clean_ids("not a list") == []
+    assert mod.clean_ids(123) == []
+    assert mod.clean_ids(None) == []
+    assert mod.clean_ids({"a": 1}) == []
+```

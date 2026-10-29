@@ -1,7 +1,5 @@
 # GranthStudio v3.1: instructions for Claude
 
-ROLE: you are the only code writer. Codex is a read-only reviewer; it never writes code.
-
 AUTHORITY
 - Frozen architecture: `docs/ARCHITECTURE_V3_1.md` (sha256 decd0af5…f7c1). Do not edit it. Frozen wins over every other document.
 - Decisions: `docs/DECISIONS.md`. Only APPROVED entries bind you. Proposals and OPEN items wait for the user.

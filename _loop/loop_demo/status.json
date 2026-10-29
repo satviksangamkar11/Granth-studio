@@ -1,0 +1,24 @@
+{
+  "name": "loop_demo",
+  "state": "passed",
+  "round": 0,
+  "tests_passed": true,
+  "review_verdict": "READY",
+  "rounds": [
+    {
+      "round": 0,
+      "coder_status": "200",
+      "files_ok": true,
+      "tests_passed": true,
+      "reason": null
+    },
+    {
+      "round": "review_0_glm",
+      "coder_status": "review",
+      "files_ok": true,
+      "tests_passed": true,
+      "reason": "verdict=READY"
+    }
+  ],
+  "updated": "2026-10-29T00:05:35.057996Z"
+}

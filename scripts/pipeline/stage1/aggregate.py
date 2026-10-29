@@ -427,6 +427,28 @@ def validate_all(adhyay: int, docs: Any, ctx: Any) -> list[str]:
         except Exception:
             errors.append("aggregate: internal error in X11")
 
+    # X12: voices + ctx.voice_genders
+    if all_valid("voices"):
+        try:
+            voices = unit_docs["voices"]
+            voice_genders = _get_str_dict(ctx, "voice_genders")
+            if voice_genders:
+                for cast in voices.get("cast", []):
+                    char_id = cast.get("character_id")
+                    voice_key = cast.get("voice_key")
+                    cast_gender = cast.get("gender")
+                    if not isinstance(char_id, str) or not isinstance(voice_key, str):
+                        continue
+                    if voice_key not in voice_genders:
+                        continue
+                    lib_gender = voice_genders[voice_key]
+                    if cast_gender not in ("male", "female") or lib_gender not in ("male", "female"):
+                        continue
+                    if cast_gender != lib_gender:
+                        errors.append(f"voices: {char_id} is {cast_gender} but voice {voice_key} is {lib_gender}")
+        except Exception:
+            errors.append("aggregate: internal error in X12")
+
     return errors
 
 
