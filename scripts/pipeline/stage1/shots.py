@@ -156,6 +156,9 @@ def _validate_impl(adhyay: int, doc: dict[str, Any], docs: dict[str, Any], ctx: 
         preset = shot.get("preset")
         if isinstance(preset, str) and preset != "NEED_NEW" and preset not in preset_ids:
             errors.append(f"{shot_id}: unknown preset {preset}")
+        # A layer/cut-out preset cannot be fed by a flat final alone (owner 2026-11-01, flat-first)
+        if preset in (ctx.get("cutout_presets") or []) and shot.get("needs_cutout") is False:
+            errors.append(f"{shot_id}: preset {preset} needs layers or cut-outs but needs_cutout is false")
 
         # Scene exists
         if not isinstance(scene_id, str) or scene_id not in scene_by_id:

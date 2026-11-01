@@ -433,3 +433,31 @@ class TestValidate:
         errs2 = shots.validate(1, docs2["shots"], docs2, ctx)
         # Should report error starting with "S1:" (scene S1 now has shot numbers 1, 2, 1)
         assert any(e.startswith("S1:") for e in errs2)
+
+
+class TestCutoutPresets:
+    """2026-11-01 (flat-first): a layer/cut-out preset with needs_cutout false is refused."""
+
+    def test_cutout_preset_with_needs_cutout_false_is_refused(self):
+        d, c = docs_ctx(ctx={"cutout_presets": ["01_establishing_shot"]})
+        errs = shots.validate(1, d["shots"], d, c)
+        assert any("S1-1: preset 01_establishing_shot needs layers or cut-outs" in e for e in errs)
+
+    def test_cutout_preset_with_needs_cutout_true_passes_that_rule(self):
+        d, c = docs_ctx(ctx={"cutout_presets": ["01_establishing_shot"]})
+        d["shots"]["shots"][0]["needs_cutout"] = True
+        assert not any("needs layers or cut-outs" in e for e in shots.validate(1, d["shots"], d, c))
+
+    def test_flat_preset_is_never_flagged(self):
+        d, c = docs_ctx(ctx={"cutout_presets": ["01_establishing_shot"]})
+        assert not any(e.startswith("S1-2:") and "cut-outs" in e for e in shots.validate(1, d["shots"], d, c))
+
+    def test_real_index_marks_exactly_the_layer_and_cutout_presets(self):
+        import importlib.util
+        root = Path(__file__).resolve().parents[1]
+        spec = importlib.util.spec_from_file_location("ctx_mod", root / "scripts" / "pipeline" / "stage1" / "context.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        got = set(mod._cutout_presets(root / "assets" / "v5_presets" / "index.json"))
+        assert got == {"01_establishing_shot", "02_environmental_parallax", "04_character_entrance", "05_bowing_prayer",
+                       "06_blessing_gesture", "07_character_reaction", "08_emotional_closeup", "09_dialogue_composition"}

@@ -1,0 +1,43 @@
+{
+ "adhyay": 1,
+ "frozen": "2026-11-01",
+ "status": "FROZEN speech + timing (E2/E3). Voices ACCEPTED by the owner 2026-10-26 ('now it sounds good', decision log); Hindi NOT VALIDATED until the owner listens. The 'DRAFT' wording inside A1_eleven_measured.json is historical and is left byte-unchanged on purpose (Phase A hash).",
+ "counts": {
+  "scenes": 9,
+  "shots": 59,
+  "timed_core_lines": 52,
+  "untimed_optional_lines": 10,
+  "clips": 124
+ },
+ "untimed_optional_lines": [
+  "S2-L2",
+  "S2-L5",
+  "S2-L6",
+  "S2-L7",
+  "S3-L5",
+  "S3-L9",
+  "S4-L5",
+  "S7-L11",
+  "S7-L2",
+  "S7-L4"
+ ],
+ "rules_checked": [
+  "every beat window >= max(Marathi, Hindi) measured seconds",
+  "beats in a scene never overlap",
+  "shots numbered 1..n and tile the scene with no gap",
+  "no scene picture ends before its last beat",
+  "every beat sits in the shot it names",
+  "timing split_sha256 == rev9 macro_sha256"
+ ],
+ "sha256": {
+  "canon/audio/A1_timing_plan.json": "3f1926d367639a847d10fdf237064eb4054a4a453552c5ffee9a0908234eb220",
+  "canon/audio/A1_eleven_measured.json": "7e0bbdb2a46013fb58484e531289444de403409f724a67d3f1c465d095930146",
+  "canon/audio/A1_audio_plan.json": "61173e0ffd0c5b79cae05fc64dec0fe52071411d4824aeffd15c7eab701a0a96",
+  "canon/adhyay_01/script/easy.md": "e884d3fe43d4f90fe88daf868b1b723a3d6cd2a2f5e1b716bf1ff2b857edc092",
+  "canon/director_runs/a1_split_rev9/macro_A1.json": "818b416332893a8c82d4053bbe010cd9a9b8b4cfda89825b93c20b5ddc4bce0c",
+  "D:/kaggle_upload/a1_eleven_full/eleven_manifest.json": "6107ad32f0372579cc6dbe440720a8f705cdef71b5487828f102c12049dc10f6"
+ },
+ "open": [
+  "owner listens to the 62 Hindi clips (Hindi NOT VALIDATED)"
+ ]
+}

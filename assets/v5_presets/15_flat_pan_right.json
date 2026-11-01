@@ -1,0 +1,33 @@
+{
+ "preset": "15_flat_pan_right",
+ "family": "03_slow_cinematic_push",
+ "renderer": "motion.py",
+ "roles": [
+  "img"
+ ],
+ "use": "Gentle pan left-to-right across a slightly enlarged flat image (camera travels right).",
+ "camera": {
+  "start": {
+   "zoom": 1.12,
+   "cx": 0.45,
+   "cy": 0.5
+  },
+  "end": {
+   "zoom": 1.12,
+   "cx": 0.55,
+   "cy": 0.5
+  },
+  "ease": "smooth"
+ },
+ "bounds": {
+  "zoom": [
+   1.0,
+   1.2
+  ],
+  "zoom_change_max": 0.2,
+  "pan_change_max": 0.12,
+  "move_min": 0.06,
+  "hold_allowed_only_in": "17_flat_hold"
+ },
+ "note": "Camera path only (motion.py spec 'camera' block). Image, size and duration come from the shot binding and the frozen timing. Owner decision 2026-11-01: flat-first presets for Adhyay 1."
+}

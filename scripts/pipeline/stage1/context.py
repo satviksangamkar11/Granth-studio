@@ -116,6 +116,37 @@ def _read_omissions(
         return [], problems
 
 
+DISPOSITION_KINDS = {"visual_only", "merged", "optional_line"}   # research-only ovis go in the omissions file instead
+
+
+def _read_dispositions(path: Path, approvals_path: Path) -> tuple[list[dict], list[str], list[str]]:
+    """Read the owner-approved coverage dispositions: (entries, numbering-exception line ids, problems).
+    Used only when the file's sha256 is APPROVED under item 'coverage_dispositions'; anything malformed is a problem and nothing is used."""
+    if not path.is_file():
+        return [], [], []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        status = approval_status(load_approvals(approvals_path) if approvals_path.is_file() else {}, "coverage_dispositions", sha256_file(path))
+    except Exception as e:
+        return [], [], [f"dispositions: {e.__class__.__name__}"]
+    if status != "APPROVED":
+        return [], [], [f"dispositions: {status} (the owner has not approved the current coverage_dispositions.json)"]
+    entries, exceptions, problems = data.get("dispositions"), data.get("numbering_exceptions", []), []
+    if not isinstance(entries, list) or not isinstance(exceptions, list):
+        return [], [], ["dispositions: 'dispositions' and 'numbering_exceptions' must be lists"]
+    for e in entries:
+        ok = (isinstance(e, dict) and isinstance(e.get("ovi"), int) and not isinstance(e.get("ovi"), bool)
+              and e.get("kind") in DISPOSITION_KINDS and isinstance(e.get("evidence"), str) and e["evidence"].strip()
+              and (e["kind"] == "visual_only" or isinstance(e.get("line"), str)))
+        if not ok:
+            return [], [], [f"dispositions: bad entry {e!r}"]
+    for ex in exceptions:
+        if not (isinstance(ex, dict) and isinstance(ex.get("lines"), list) and ex["lines"] and all(isinstance(x, str) for x in ex["lines"])
+                and isinstance(ex.get("reason"), str) and ex["reason"].strip()):
+            return [], [], [f"dispositions: bad numbering exception {ex!r}"]
+    return entries, [x for ex in exceptions for x in ex["lines"]], problems
+
+
 def _read_voice_library(voice_lib_path: Path) -> tuple[dict[str, str], dict[str, str], list[str], dict[str, str], list[str]]:
     """Read voice library and return saved_voices, series_voices, verified_voices, voice_genders, problems."""
     saved_voices: dict[str, str] = {}
@@ -200,6 +231,21 @@ def _read_presets(preset_index_path: Path) -> tuple[list[str], list[str]]:
     return preset_ids, problems
 
 
+FLAT_ROLES = {"img", "insert", "scene_a", "scene_b"}   # roles a flat final image can fill as it is
+
+
+def _cutout_presets(preset_index_path: Path) -> list[str]:
+    """Preset ids whose roles need layers or transparent cut-outs (any role outside FLAT_ROLES); problems are already reported by _read_presets."""
+    try:
+        data = json.loads(preset_index_path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    if not isinstance(data, list):
+        return []
+    return [x["preset"] for x in data if isinstance(x, dict) and isinstance(x.get("preset"), str)
+            and isinstance(x.get("assets"), list) and not set(x["assets"]) <= FLAT_ROLES]
+
+
 def _read_sound_palette(sound_palette_path: Path) -> tuple[list[str], list[str]]:
     """Read sound IDs from palette.json."""
     problems: list[str] = []
@@ -262,6 +308,11 @@ def build_ctx(adhyay: int, root: Path | str, extra: dict | None = None) -> tuple
         omissions_file = omissions_path / "omissions_approved.json"
         unfilmed_ovis, om_problems = _read_omissions(omissions_file, approvals_path)
         problems.extend(om_problems)
+    dispositions: list[dict] = []
+    numbering_exceptions: list[str] = []
+    if omissions_path and approvals_path:
+        dispositions, numbering_exceptions, d_problems = _read_dispositions(omissions_path / "coverage_dispositions.json", approvals_path)
+        problems.extend(d_problems)
 
     # 3. Voice library
     voice_lib_path = root_path / "canon" / "series" / "voices.json"
@@ -282,11 +333,14 @@ def build_ctx(adhyay: int, root: Path | str, extra: dict | None = None) -> tuple
     ctx: dict = {
         "chapter_ovis": chapter_ovis,
         "unfilmed_ovis": unfilmed_ovis,
+        "coverage_dispositions": dispositions,
+        "numbering_exceptions": numbering_exceptions,
         "saved_voices": saved_voices,
         "series_voices": series_voices,
         "verified_voices": verified_voices,
         "voice_genders": voice_genders,
         "preset_ids": preset_ids,
+        "cutout_presets": _cutout_presets(preset_index_path),
         "sound_ids": sound_ids,
         # Defaults for keys that come from Stage 1 documents
         "script_line_ids": [],

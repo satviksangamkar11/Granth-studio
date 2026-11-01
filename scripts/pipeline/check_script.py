@@ -91,8 +91,13 @@ def check_script(
     unfilmed_ovis: set[int],
     voices: set[str],
     glossary: dict[str, str],
+    covered_ovis: set[int] = frozenset(),
+    numbering_exceptions: set[str] = frozenset(),
 ) -> list[str]:
-    """Validate parsed script lines and return a list of error messages."""
+    """Validate parsed script lines and return a list of error messages.
+
+    `covered_ovis`: ovis the owner approved as covered without a core line (visual-only, merged, optional line).
+    `numbering_exceptions`: line ids whose out-of-order number the owner approved (the ids keep their existing audio)."""
     errors: list[str] = []
     seen_ids: set[str] = set()
     scene_counters: dict[str, int] = {}
@@ -187,7 +192,7 @@ def check_script(
 
         # line numbers consecutive within scene
         expected = scene_counters.get(scene, 1)
-        if line_num != expected:
+        if line_num != expected and id_ not in numbering_exceptions:
             errors.append(f"{id_}: line numbers must be consecutive from 1 within the scene")
         scene_counters[scene] = expected + 1
 
@@ -200,7 +205,7 @@ def check_script(
             errors.append(f"note: ovi {ovi} is unfilmed but line {id_} uses it")
 
     # coverage: required ovis (chapter minus unfilmed) must have at least one core line
-    required_ovis = sorted(chapter_ovis - unfilmed_ovis)
+    required_ovis = sorted(chapter_ovis - unfilmed_ovis - set(covered_ovis))
     for ovi in required_ovis:
         if ovi not in core_ovis_seen:
             errors.append(f"ovi {ovi} has no core line")

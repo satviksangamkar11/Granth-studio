@@ -110,12 +110,27 @@ def run_check(
     if extra_voices:
         allowed_voices.update(extra_voices)
 
-    errors = check_script(
+    # owner-approved coverage dispositions count only when they point at a real line (optional_line: that ovi's own optional line)
+    by_id = {line.get("id"): line for line in lines}
+    covered: set[int] = set()
+    disposition_errors: list[str] = []
+    for d in ctx.get("coverage_dispositions", []):
+        line = by_id.get(d.get("line"))
+        if d["kind"] == "merged" and line is None:
+            disposition_errors.append(f"disposition ovi {d['ovi']}: merged into unknown line {d.get('line')}")
+        elif d["kind"] == "optional_line" and (line is None or line.get("ovi") != d["ovi"] or line.get("priority") != "optional"):
+            disposition_errors.append(f"disposition ovi {d['ovi']}: {d.get('line')} is not an optional line for that ovi")
+        else:
+            covered.add(d["ovi"])
+
+    errors = disposition_errors + check_script(
         lines,
         set(chapter_ovis),
         set(unfilmed_ovis),
         allowed_voices,
         glossary or {},
+        covered_ovis=covered,
+        numbering_exceptions=set(ctx.get("numbering_exceptions", [])),
     )
 
     scenes = len({line.get("scene") for line in lines if line.get("scene") is not None})
