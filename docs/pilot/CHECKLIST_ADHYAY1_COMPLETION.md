@@ -1,18 +1,18 @@
-# Checklist: complete Adhyay 1 (rev 2, 2026-11-01)
+# Checklist: complete Adhyay 1 (rev 3, 2026-11-01)
 
-Goal: one finished Adhyay 1 film, Marathi + Hindi, from ONE picture timeline. Every approved shot binding is SAVED so it replays with zero model calls, and reusable preset templates are saved SEPARATELY so Adhyay 2-21 can use them.
+Goal: one finished Adhyay 1 film, Marathi + Hindi, from ONE picture timeline. Every approved shot binding is SAVED so it replays with zero new director/planning model calls, and reusable preset templates are saved SEPARATELY so Adhyay 2-21 can use them.
 Legend: [x] done and verified, [~] partial, [ ] open. Item numbers in brackets point to `CHECKLIST_BUILD_PIPELINE.md` (master) or `CHECKLIST_REUSE_SHOT_PLANS.md` (R#). This file is the working order; the master keeps the detail.
-Rules kept: the coder model writes code + tests, Claude specs/runs/reviews; Codex (medium) review; no Kimi call without the owner's yes; decisions recorded in `DECISION_LOG.md`; `_moss/`, `_tango/` and the loop experiments are READ-ONLY for this work (no broad cleanup, reset or `git add -A`); commit after review, push only with the owner's separate OK.
-Rev 2 corrects rev 1 after the owner's accuracy audit (all points checked against the files, see the end).
+Rules kept: the coder model writes code + tests, Claude specs/runs/reviews; Codex (medium) review; no Kimi call without the owner's yes; decisions recorded in `DECISION_LOG.md`; `_moss/`, `_tango/` and the loop experiments are READ-ONLY for this work (no broad cleanup, reset or `git add -A`); commit after review, push only with the owner's separate OK. Never insert artificial script lines to make a validator pass.
+Rev 3 applies the owner's second audit (all points checked against the files, see the end).
 
 ## What Adhyay 1 already has (verified from files 2026-11-01)
-- [x] rev9 split (`canon/director_runs/a1_split_rev9/macro_A1.json`): 9 scenes, 1 story; 73 unfilmed ovis in SIX ranges: 1-32 invocation, 33-38 commentary, 39-57 background, 58-69 background (one Shegaon view drawn from 58-60), 106-107 commentary, 145-146 closing. NOT yet approved (item 15)
+- [x] rev9 split (`canon/director_runs/a1_split_rev9/macro_A1.json`): 9 scenes, 1 story (ovi 70-144); 73 proposed-unfilmed ovis in SIX ranges: 1-32 invocation, 33-38 commentary, 39-57 background, 58-69 background (one Shegaon view drawn from 58-60 for Scene S1 shot 1), 106-107 commentary, 145-146 closing. NOT yet approved
 - [x] 59 shots (timing plan `canon/audio/A1_timing_plan.json`: planned 59, allocated 59): S1 2, S2 8, S3 6, S4 5, S5 7, S6 6, S7 9, S8 5, S9 11. The "61" in older notes and in `compare_a1.py` is the rev8 count and is WRONG for rev9
 - [x] 59 FINAL clean images, one per shot, sha256-bound in `canon/packets/adhyay_01/final_image_binding.json` (same per-scene counts)
-- [x] Speech: 62 lines, 124 clips (Marathi + Hindi) measured in `canon/audio/A1_eleven_measured.json`; owner accepted the voices 2026-10-26 (decision log line 26: "do not regenerate these clips"); Hindi NOT VALIDATED. The file's status label still says DRAFT: reconcile the label, do NOT regenerate
+- [x] Speech: 62 lines, 124 clips (Marathi + Hindi) measured in `canon/audio/A1_eleven_measured.json`; owner accepted the voices 2026-10-26 (decision log: "do not regenerate these clips"); Hindi NOT VALIDATED. The file's status label still says DRAFT: reconcile the label, do NOT regenerate
 - [x] 11 JSON presets + index (`assets/v5_presets/`, `canon/packets/adhyay_01/presets_index.json`), Builder v2 frozen (D-017)
 - [~] 46 MOSS sound effects for Adhyay 1+2 (`_moss/`), not yet listened to or hashed into a palette
-- Not used for Adhyay 1: the Nemotron Stage 1 trial (test of the pipeline for later chapters) and the old paid Kimi director runs of 2026-10-26 (made before the images were final and before the preset-id contract)
+- Not used for Adhyay 1: the Nemotron Stage 1 trial (test of the pipeline for later chapters) and the old paid Kimi director runs of 2026-10-26
 
 ## Preset input contract (from the index; decides what a flat final can feed)
 | Preset | Needs | Can a flat final feed it? |
@@ -23,45 +23,55 @@ Rev 2 corrects rev 1 after the owner's accuracy audit (all points checked agains
 | 10 | one full-frame insert | YES |
 | 11 | two scene images (scene_a, scene_b) | YES (two finals) |
 
+## Phase 0 - coder safety (before any coder-written A1 fix)
+- [ ] 0.1 Close N1 (`nemotron_code.py`: approved spec root, no scratch output in `scripts/ src/ tests/ schemas/`, refuse any unfinished/unexpected FILE block) - `fix_loop.py` loads it, so it is on the A1 path. Until N1 passes, A1 code goes only through `coder_run.py` with Claude checking every written file
+
 ## Phase A - freeze and baseline
-- [ ] A1 Back up + hash all Adhyay 1 data/media; byte-for-byte baseline list (item 3)
+- [ ] A1 Back up + hash the actual 59-shot baseline (split, binding, images, speech, timing); byte-for-byte list (item 3)
 - [ ] A2 Record in the decision log: pushed baseline `3adb09d` (on GitHub) and every later local commit by hash
 
-## Phase B - owner approvals: ONE consolidated sheet, one sitting
-- [ ] B1 Lock rev9 split + EASY script + 52 core / 10 optional + look questions -> `approvals.json` via `approve.py` (item 15)
-- [ ] B2 Approve the SIX unfilmed ranges as ranges (not 73 separate items); check ovis 58-60, which feed the opening Shegaon image (S5)
-- [ ] B3 The 102 checker findings are 100 "ovi has no core line" + 2 line-numbering errors (S4-L4, S4-L5). 73 of the 100 are the unfilmed ranges (closed by B2). The other 27 are FILMED ovis with no core line: 71-83, 85, 86, 89-93, 100, 101, 103, 105, 111, 125, 131. Each needs a disposition (visual-only / narrated / line missing). Fix the 2 numbering errors. Rerun the checker after B2; only what is left goes to the owner (item 17)
+## Phase B - coverage, then lock (order B2 -> B3 -> B1; ONE consolidated owner sheet)
+- [ ] B2 Owner approves the SIX proposed unfilmed ranges as ranges (master item S5); check ovis 58-60, which feed Scene S1 shot 1 (historical Shegaon)
+- [ ] B3a The 102 checker findings = 100 "ovi has no core line" + 2 line-numbering errors (S4-L4, S4-L5). 73 of the 100 are the B2 ranges. The other 27 are ovis OUTSIDE the six ranges that lack core-line coverage: 71-83, 85, 86, 89-93, 100, 101, 103, 105, 111, 125, 131
+- [ ] B3b Classify each of the 27 against the actual film treatment (`A1_story_for_approval.md`), with the source line as evidence: research-only (known: 75-82, not narrated or shown), visual-only, merged into a neighbouring line, or genuinely missing a line
+- [ ] B3c Checker change (coder writes, item 17): accept approved dispositions with source-linked evidence. Smallest change: research-only and intentionally-unfilmed ovis use the EXISTING unfilmed set; only visual-only and merged-equivalent need a new disposition. No artificial script lines
+- [ ] B3d Fix the 2 S4 numbering errors without changing any spoken wording; rerun the checker; only what is left goes to the owner
+- [ ] B1 ONLY THEN lock rev9 split + EASY script + 52 core / 10 optional + look questions + the dispositions -> `approvals.json` via `approve.py`, hash-based (item 15)
 - [ ] B4 Rights route recorded - mandatory before PUBLIC release, not before rendering (item 4)
 
 ## Phase C - preset usage, flat-first (owner decision 2026-11-01)
+Code-only preset experiments (C2) may run in parallel with Phase B.
 - [ ] C1 Shot-to-preset table for all 59 shots, decided per shot from its source beat, its actual final image and the preset contract above: preset id, roles, image id + sha256, flat-OK or cut-out-needed, NEED_NEW reason + class. Code builds the draft; owner reviews
 - [ ] C2 Bounded flat variants of preset 03 (push in, pull out, slow pan, hold) + full-frame render pass; use 10 and 11 where they fit (item 30)
 - [ ] C3 Transparent-asset presets (04-09) only with valid cut-outs, OR a separately built and tested flat variant. Cutting a figure out of a finished image needs background repair and is never assumed lossless (items 32, A1-E7)
-- [ ] C4 Cut-outs made only for shots where story or picture quality demonstrably needs them; no bulk generation of the 49 layers
+- [ ] C4 Cut-outs only where story or picture quality demonstrably needs them; no bulk generation of the 49 layers
 - [ ] C5 Every NEED_NEW gets an owner question, never a silent fallback (N12, shots/cues only)
 
-## Phase D - save
-- [ ] D1 Shot-specific approved bindings in `canon/shot_plans/`: plan id/version, ovi + beat ids, preset id + preset file hash, role -> image id + sha256, transition, source/script/timing hashes (R3)
-- [ ] D2 Exact-hash replay of D1: same inputs -> zero model calls; a changed input never matches silently (item 29, R4). This only stops REPEATING a plan; it does not make plans reusable across chapters
-- [ ] D3 Reusable preset TEMPLATES saved separately (the C2 variants + any tested flat variant), with bounds and test renders, for Adhyay 2-21 where images and timings change
-- [ ] D4 Role binding check against `final_image_binding.json`; missing/changed image blocks rendering (R5)
-- [ ] D5 Series data once accepted: voices per character (21a, N2, N13), approved looks (N5), sound palette with versions (E2, N14)
-- [ ] D6 Retire the stale `validate_stage1.py` + old shot/sound schemas (`preset_hint`, `palette_id`) (N10)
-- [ ] D7 Fix `compare_a1.py`: REAL_SHOTS = 61 is the rev8 count; read 59 from the rev9 timing plan, rescore the trial (it is 34 vs 59 shots, not 34 vs 61)
+## Phase E-speech - freeze timing BEFORE saving shot bindings
+- [ ] E2 Confirm the 124 accepted clips by hash; reconcile the DRAFT label with the 2026-10-26 acceptance; owner listens to Hindi (item 23). Reuse only, no regeneration
+- [ ] E3 Freeze the shared bilingual beat timeline from both measured speech windows; cue "after line" = after both languages (items 24, E4)
 
-## Phase E - sound and speech (REUSE, no regeneration)
-- [ ] E1 Owner listens to the 46 MOSS effects; COPY the kept ones out of `_moss/` (read-only) and hash them into `canon/series/sounds/palette.json` (E2, E6)
-- [ ] E2 Reuse the 124 accepted clips; reconcile the DRAFT label with the 2026-10-26 acceptance; owner listens to Hindi (item 23)
-- [ ] E3 Shared beats from both measured speech windows; cue "after line" = after both languages (items 24, E4)
+## Phase D - save (after B1 and E3, so the hashes are final)
+- [ ] D1 Shot-specific approved bindings in `canon/shot_plans/`: plan id/version, ovi + beat ids, preset id + preset file hash, role -> image id + sha256, transition, source/script/timing hashes (R3)
+- [ ] D2 Exact-hash replay of D1: same inputs -> zero new director/planning calls; a changed input never matches silently (item 29, R4). This only stops REPEATING a plan
+- [ ] D3 Reusable preset TEMPLATES saved separately (the C2 variants + any tested flat variant), with bounds and test renders, for Adhyay 2-21
+- [ ] D4 Role binding check against `final_image_binding.json`; missing/changed image blocks rendering (R5)
+- [ ] D5 Series data once accepted: voices per character (21a, N2, N13), approved looks (N5)
+- [ ] D6 Retire the stale `validate_stage1.py` + old shot/sound schemas (`preset_hint`, `palette_id`) (N10)
+- [ ] D7 Fix `compare_a1.py` REAL_SHOTS = 61 (rev8) -> read 59 from the rev9 timing plan; write a NEW scoring receipt; keep the old `scores_receipt.json` as historical evidence
+
+## Phase E-sound - sound palette and mix
+- [ ] E1 Owner listens to the 46 MOSS effects; COPY the kept ones out of `_moss/` (read-only) and hash them into `canon/series/sounds/palette.json` with versions (E2, E6, N14)
 - [ ] E4 Mix: ducking against the union of both windows, gain/fade set by owner listening (E5, S9)
 
 ## Phase F - proof scene S4 (5 shots, about 30 s; owner decision 2026-11-01)
 - [ ] F1 Bind + approve the 5 S4 finals; decide the staging warnings (daylight S4-1, pose S4-2, halo S4-4) (item 31, R7)
 - [ ] F2 Render S4 from saved plans; mix; subtitles; both languages (item 33). No rerun of the old paid director call
 - [ ] F3 Interrupt/resume test at shot level + changed-input invalidation (R10)
-- [ ] F4 MILESTONE: 5 S4 plans replayed from approved data, 5 renders, 2 synchronized language outputs, zero model calls, resume test passes; owner accepts; Codex reviews the evidence (R9, R11)
+- [ ] F4 TECHNICAL milestone: 5 S4 plans replayed from approved data, 5 renders, 2 synchronized language outputs, zero new director/planning model calls (review calls tracked separately), resume test passes; Codex reviews the evidence (R9, R11)
+- [ ] F5 VISUAL milestone: the owner judges that the staging and shot progression do not read as a slideshow. A technical pass alone does not pass S4; if it fails, decide cut-outs or new variants for the failing shots before Phase G
 
-## Phase G - the other 54 shots
+## Phase G - the other 54 shots (only after F4 AND F5)
 - [ ] G1 Kimi ONLY for genuinely missing shots, each with a reason, owner gate first (item 20, R8; ledger left $0.315)
 - [ ] G2 Render + mix the remaining 8 scenes from saved plans; render receipts (item 34)
 - [ ] G3 Marathi MP4 + Hindi MP4 from one picture timeline: equal frames and length (item 35)
@@ -69,15 +79,19 @@ Rev 2 corrects rev 1 after the owner's accuracy audit (all points checked agains
 - [ ] G5 One-page per-chapter runbook from what actually worked (item 36)
 
 ## Go / no-go (owner 2026-11-01)
-- GO: baseline, approval reconciliation, flat-first preset mapping, deterministic shot-plan saving, the S4 proof. Code-only preset experiments (C2) may run while Phase B waits.
-- NO-GO until the gates pass: more Kimi spending, bulk layer generation, full-film rendering.
+- GO: Phase 0, baseline, coverage reconciliation, code-only flat-preset work.
+- NO-GO until the gates pass: declaring the A1 script locked (needs B3d), more Kimi spending, bulk layer generation, full-film rendering (needs F4 + F5).
 
 ## Deferred to Adhyay 2 (not needed to finish Adhyay 1)
-Stage 1 fidelity on new chapters (trial: 13 extra + 2 missed omissions; Adhyay 2 trial: missing core lines, a scene with no shots, voice collisions): N1, N3, N6, N11, S7, S10 live run, `--adhyay N` wiring (13), Adhyay 2 dry run (37), the 3 Adhyay 2 omissions (ovis 48, 142, 143).
+Stage 1 fidelity on new chapters (trial: 13 extra + 2 missed omissions; Adhyay 2 trial: missing core lines, a scene with no shots, voice collisions): N3, N6, N11, S7, S10 live run, `--adhyay N` wiring (13), Adhyay 2 dry run (37), the 3 Adhyay 2 omissions (ovis 48, 142, 143). (N1 moved to Phase 0.)
 
-## Rev 2 corrections (owner audit 2026-11-01, each checked against the files)
-1. 59 shots, not 61 (timing plan + image binding agree; 61 = rev8).
-2. 102 findings = 100 no-core-line + 2 S4 numbering; 73 are the unfilmed ranges, 27 are filmed ovis needing a disposition (this last split is Claude's addition).
-3. Preset contract: 04-09 need transparent cut-outs, 10 and 11 take full frames; rev 1 wrongly listed 11 as layered and missed 07/08.
-4. Exact replay and reusable templates are separate items (D2, D3).
-5. Speech is reused, not regenerated; `_moss/` read-only; push only with the owner's OK.
+## Corrections log
+Rev 2 (first owner audit): 59 shots not 61; 102 findings split; preset contract table; replay vs templates separated; speech reused; `_moss/` read-only; push only with OK.
+Rev 3 (second owner audit, checked against the files):
+1. The 27 are not proven filmed: 75-82 are research-only (`A1_story_for_approval.md` lines 113-115). `check_script.py` line 203 requires a core line for every ovi not in the unfilmed set and has no visual-only disposition -> B3b/B3c added.
+2. Phase B order is now B2 -> B3 -> B1 so the lock hash is not invalidated by the S4 numbering fix.
+3. Speech/timing (E2, E3) moved before D so the saved timing hashes are final.
+4. B2 "S5" = master item S5; the Shegaon image is Scene S1 shot 1.
+5. D7 keeps the old receipt; F4 says "zero new director/planning calls"; F5 visual (anti-slideshow) gate added.
+6. N1 moved from deferred to Phase 0 (`fix_loop.py` line 130 loads `nemotron_code.py`).
+Claude's refinement on point 1: research-only ovis can use the existing unfilmed mechanism; only visual-only and merged-equivalent need new checker code (smaller change).
