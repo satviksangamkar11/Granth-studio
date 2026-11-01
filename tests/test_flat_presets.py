@@ -77,3 +77,13 @@ def test_full_frame_render_from_a_real_final(name, tmp_path):
     p = probe(out)
     assert (p.width, p.height) == (320, 180) and p.video_codec == "h264"
     assert abs(p.duration_s - 1.0) < 0.1
+
+
+def test_director_reads_flat_presets_without_blender_segments():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("dt_flat", ROOT / "scripts" / "source" / "director_test.py")
+    dt = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(dt)
+    fe = dt.frame_ends(_load("13_flat_pull_out"))
+    assert fe == {"first_roles": ["img"], "last_roles": ["img"], "zoom": [1.15, 1.0]}
+    assert dt.frame_ends(json.loads((PRESETS / "03_slow_cinematic_push.json").read_text(encoding="utf-8")))["zoom"] == [1.0, 1.2]

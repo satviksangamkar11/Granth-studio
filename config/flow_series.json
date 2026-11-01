@@ -1,0 +1,97 @@
+{
+ "_note": "Universal Flow image system (owner 2026-11-01: the one fixed system for every Adhyay). Series data only: characters, places, props (story-critical objects with an accepted sheet), style and wording rules. A new Adhyay adds characters/places HERE; scripts/flow/build_jobs_v2.py, neighbour_sheet.py and review_shot.py read it. Sentences are the strict accepted-sheet descriptions from the Adhyay 1 lessons (CODEX_IMAGE_LESSONS.md). 'sheet' paths are relative to D:/aai work/flow_outputs/adhyay_<NN>/references/ of the Adhyay that made the sheet ('sheet_adhyay').",
+ "version": 1,
+ "flow_project": "31b2d7e8-5ad8-41ba-a878-50860b49a03e",
+ "outputs_root": "D:/aai work/flow_outputs",
+ "downloads_dir": "C:/Users/Satvik/Downloads",
+ "model": {
+  "name": "Nano Banana 2.1",
+  "fallback": null,
+  "count": "x2",
+  "aspect": "16:9",
+  "download": "2K Upscaled",
+  "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+ },
+ "style": {
+  "chip": null,
+  "text": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in.",
+  "_note": "Owner 2026-11-01: NO style image chip. The only style asset in Flow, 'ref_temple_sunset.png', is a temple at sunset and Flow copied its temple and sunset into shots (SH_S2_09, SH_S2_10). Style comes from the style text + the place, prop and character sheets, all drawn in the target style."
+ },
+ "tail": "Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+ "forbidden_words": [
+  "loincloth",
+  "naked",
+  "\\bbare\\b",
+  "Maharaj",
+  "bandi",
+  "digambar",
+  "bare-chested"
+ ],
+ "characters": {
+  "GM_v01": {
+   "name": "the young ascetic",
+   "sheet_adhyay": 1,
+   "sheet": "CH_GM__v03__accepted.png",
+   "accepted": true,
+   "sentence": "the young ascetic (attached GM_v01): a slim ADULT youth with a narrow face and cropped short dark hair, exactly as in his character sheet, wearing an open frayed grey-white vest that hangs open at the front in two loose panels with the chest visible between them (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child"
+  },
+  "BA_v01": {
+   "name": "Bankatlal",
+   "sheet_adhyay": 1,
+   "sheet": "CH_BA__v01__accepted.png",
+   "accepted": true,
+   "sentence": "Bankatlal (attached BA_v01): an adult man of about 35, slightly full build, small neat moustache, cream-white round turban, long sage-green coat tied at the side over a white dhoti, cream shoulder cloth, exactly as in his character sheet"
+  },
+  "DK_v01": {
+   "name": "Damodarpant",
+   "sheet_adhyay": 1,
+   "sheet": "CH_DK__candidate_v01.png",
+   "accepted": false,
+   "sentence": "Damodarpant (attached DK_v01): an adult man of about 35, lean and slightly taller than Bankatlal, thin moustache, terracotta-red turban, plain white long-sleeved shirt with no collar and no pockets, white dhoti, off-white shoulder cloth, exactly as in his character sheet"
+  },
+  "DV_v01": {
+   "name": "Devidas",
+   "sheet_adhyay": 1,
+   "sheet": "CH_DV__candidate_v01.png",
+   "accepted": false,
+   "sentence": "Devidas (attached DV_v01): a householder of about 45, shaved head with a small tuft at the crown, greying temples, small red tilak, shoulders uncovered, white dhoti, exactly as in his character sheet"
+  }
+ },
+ "places": {
+  "ROAD": {
+   "chip": "Village road in front house",
+   "sheet_adhyay": 1,
+   "sheet": "LOC_ROAD_REF__candidate_v01.png",
+   "text": "the attached road picture in front of Devidas's house (same house, door, plinth step, leaf plates, neem trees)"
+  },
+  "WELL": {
+   "chip": "Cattle drinking",
+   "sheet_adhyay": 1,
+   "sheet": "LOC_WELL_REF__candidate_v01.png",
+   "text": "the attached well and cattle trough picture (same round stone well, long stone trough, village houses and neem tree behind)"
+  },
+  "SHEGAON": {
+   "chip": "landscape illustration",
+   "sheet_adhyay": 1,
+   "sheet": "LOC_SHEGAON_REF__candidate_v01.png",
+   "text": "the attached Shegaon village picture"
+  }
+ },
+ "props": {
+  "LEAF_PLATES": {
+   "chip": "Storybook illustration prop",
+   "sheet_adhyay": 1,
+   "sheet": "PR_LEAF_PLATES__v01__accepted.png",
+   "accepted": true,
+   "sentence": "the used leaf plates are small round plates stitched together from several dry leaves, exactly as in the attached leaf-plate sheet (never one single large leaf)"
+  },
+  "GADVA": {
+   "chip": "Devotional storybook illustratio",
+   "sheet_adhyay": 1,
+   "sheet": "PR_GADVA_VETIVER__v01__accepted.png",
+   "accepted": true,
+   "sentence": "the brass gadva water pot exactly as in the attached gadva sheet"
+  }
+ },
+ "_chip_note": "Chip names = the EXACT asset names shown by Flow's @ search (checked 2026-11-01 by agent D: 'Village road in front house', 'ref_temple_sunset.png'). WELL 'Cattle drinking', SHEGAON 'landscape illustration' and the prop chips are from the 27 Oct runbook and not re-checked."
+}

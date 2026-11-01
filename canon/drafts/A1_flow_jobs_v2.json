@@ -1,0 +1,324 @@
+[
+ {
+  "adhyay": 1,
+  "shot_id": "SH_S2_09",
+  "scene": "S2",
+  "method": "generate",
+  "file_version": "v02",
+  "flow_title": "SH_S2_09__v02",
+  "characters": [
+   "GM_v01"
+  ],
+  "people_count": 1,
+  "props": [
+   "LEAF_PLATES"
+  ],
+  "chips": [
+   "GM_v01",
+   "Village road in front house",
+   "Storybook illustration prop"
+  ],
+  "unaccepted_sheets": [],
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Exactly 1 person: the young ascetic (attached GM_v01): a slim ADULT youth with a narrow face and cropped short dark hair, exactly as in his character sheet, wearing an open frayed grey-white vest that hangs open at the front in two loose panels with the chest visible between them (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Setting: the attached road picture in front of Devidas's house (same house, door, plinth step, leaf plates, neem trees). CAMERA: medium shot at his eye level, straight from the front; his seated figure is large and fills about two thirds of the frame height, from the top of his head to just below his crossed knees; only the lower part of the house wall and the edge of its OPEN wooden door are visible behind him, no wide view of the road. The young ascetic sits cross-legged and upright on the road among the used leaf plates, perfectly still, both hands resting open on his knees, eyes lowered, face straight to the camera, a calm face free of any wish; the gourd and the small unfired clay cup stand on the ground at the viewer's right, beside his knee, as in the next shot. No temple, no other buildings in focus. The used leaf plates are small round plates stitched together from several dry leaves, exactly as in the attached leaf-plate sheet (never one single large leaf). Show only these people and no others. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+  "prompt_sha256": "15645446e353d3f71c6fead95a6d7a817145349e9f9ab3529048d6a1b97e42b9",
+  "base_edit_id": null,
+  "edit_instruction": null,
+  "previous_shot": {
+   "shot_id": "SH_S2_08",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S2_08.png",
+   "flow_title": "SH_S2_08__v04",
+   "source": "final"
+  },
+  "next_shot": {
+   "shot_id": "SH_S2_04",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S2_04.png",
+   "flow_title": "SH_S2_04__v01",
+   "source": "final"
+  },
+  "sheets": [
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_GM__v03__accepted.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\LOC_ROAD_REF__candidate_v01.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\PR_LEAF_PLATES__v01__accepted.png"
+  ],
+  "attempt_cap": 8,
+  "neighbour_chips": [
+   "SH_S2_08__v04",
+   "SH_S2_04__v01"
+  ],
+  "neighbour_sentence": "Match the attached neighbouring shot for the house, road, props and positions.",
+  "model": {
+   "name": "Nano Banana 2.1",
+   "fallback": null,
+   "count": "x2",
+   "aspect": "16:9",
+   "download": "2K Upscaled",
+   "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+  },
+  "status": "TODO"
+ },
+ {
+  "adhyay": 1,
+  "shot_id": "SH_S2_10",
+  "scene": "S2",
+  "method": "generate",
+  "file_version": "v02",
+  "flow_title": "SH_S2_10__v02",
+  "characters": [
+   "GM_v01"
+  ],
+  "people_count": 1,
+  "props": [
+   "LEAF_PLATES"
+  ],
+  "chips": [
+   "GM_v01",
+   "Storybook illustration prop",
+   "SH_S2_05__v02"
+  ],
+  "unaccepted_sheets": [],
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Exactly 1 person: the young ascetic (attached GM_v01): a slim ADULT youth with a narrow face and cropped short dark hair, exactly as in his character sheet, wearing an open frayed grey-white vest that hangs open at the front in two loose panels with the chest visible between them (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. CAMERA: extreme close-up insert filling the whole frame: the right hand of the seated young ascetic holds ONE single grain of cooked rice between thumb and fingertip just above a used leaf plate, the one grain clearly visible in the centre; the leaf plate's dry veins and a few scattered grains fill the bottom of the frame; only his crossed knee and a little road dust are visible behind; no face, no building, no temple, no sky. The used leaf plates are small round plates stitched together from several dry leaves, exactly as in the attached leaf-plate sheet (never one single large leaf). Show only these people and no others. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Match the attached close-up shot SH_S2_05 for the framing and drawing style: a close insert of one hand over one leaf plate filling the frame, no wide view, no buildings, no sky. Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+  "prompt_sha256": "973de6e90e3b61d75b2e8a6e39d3f679f9b16336db589666b3e30b268da56685",
+  "base_edit_id": null,
+  "edit_instruction": null,
+  "previous_shot": {
+   "shot_id": "SH_S2_06",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S2_06.png",
+   "flow_title": "SH_S2_06__v01",
+   "source": "final"
+  },
+  "next_shot": {
+   "shot_id": "SH_S2_07",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S2_07.png",
+   "flow_title": "SH_S2_07__v02",
+   "source": "final"
+  },
+  "sheets": [
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_GM__v03__accepted.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\PR_LEAF_PLATES__v01__accepted.png"
+  ],
+  "attempt_cap": 8,
+  "neighbour_chips": [
+   "SH_S2_06__v01",
+   "SH_S2_07__v02"
+  ],
+  "neighbour_sentence": "Match the attached neighbouring shot for the house, road, props and positions.",
+  "model": {
+   "name": "Nano Banana 2.1",
+   "fallback": null,
+   "count": "x2",
+   "aspect": "16:9",
+   "download": "2K Upscaled",
+   "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+  },
+  "status": "TODO"
+ },
+ {
+  "adhyay": 1,
+  "shot_id": "SH_S2_11",
+  "scene": "S2",
+  "method": "generate",
+  "file_version": "v02",
+  "flow_title": "SH_S2_11__v02",
+  "characters": [
+   "GM_v01"
+  ],
+  "people_count": 1,
+  "props": [
+   "LEAF_PLATES"
+  ],
+  "chips": [
+   "GM_v01",
+   "Village road in front house",
+   "Storybook illustration prop"
+  ],
+  "unaccepted_sheets": [],
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Exactly 1 person: the young ascetic (attached GM_v01): a slim ADULT youth with a narrow face and cropped short dark hair, exactly as in his character sheet, wearing an open frayed grey-white vest that hangs open at the front in two loose panels with the chest visible between them (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Setting: the attached road picture in front of Devidas's house (same house, door, plinth step, leaf plates, neem trees). Low wide view along the village road at ground level, the scattered used leaf plates large in the foreground; far down the road the young ascetic sits SMALL on the road itself (not on the plinth) before Devidas's house, still gathering grains from the leaf plates, no bowl; house roofs, neem trees and the plain beyond; the road otherwise empty; sunlight from the upper left, shadows falling to the right. The used leaf plates are small round plates stitched together from several dry leaves, exactly as in the attached leaf-plate sheet (never one single large leaf). Show only these people and no others. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+  "prompt_sha256": "685570df81e3578a17a673a2a8e1912fa151a41f99c1504e9fa7abfbcbafc127",
+  "base_edit_id": null,
+  "edit_instruction": null,
+  "previous_shot": {
+   "shot_id": "SH_S2_07",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S2_07.png",
+   "flow_title": "SH_S2_07__v02",
+   "source": "final"
+  },
+  "next_shot": null,
+  "sheets": [
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_GM__v03__accepted.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\LOC_ROAD_REF__candidate_v01.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\PR_LEAF_PLATES__v01__accepted.png"
+  ],
+  "attempt_cap": 8,
+  "neighbour_chips": [
+   "SH_S2_07__v02"
+  ],
+  "neighbour_sentence": "Match the attached neighbouring shot for the house, road, props and positions.",
+  "model": {
+   "name": "Nano Banana 2.1",
+   "fallback": null,
+   "count": "x2",
+   "aspect": "16:9",
+   "download": "2K Upscaled",
+   "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+  },
+  "status": "TODO"
+ },
+ {
+  "adhyay": 1,
+  "shot_id": "SH_S7_10",
+  "scene": "S7",
+  "method": "generate",
+  "file_version": "v01",
+  "flow_title": "SH_S7_10__v01",
+  "characters": [
+   "DK_v01"
+  ],
+  "people_count": 1,
+  "props": [],
+  "chips": [
+   "DK_v01",
+   "Village road in front house"
+  ],
+  "unaccepted_sheets": [
+   "DK_v01"
+  ],
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Exactly 1 person: Damodarpant (attached DK_v01): an adult man of about 35, lean and slightly taller than Bankatlal, thin moustache, terracotta-red turban, plain white long-sleeved shirt with no collar and no pockets, white dhoti, off-white shoulder cloth, exactly as in his character sheet. Setting: the attached road picture in front of Devidas's house (same house, door, plinth step, leaf plates, neem trees). Medium close-up of Damodarpant alone, facing screen-left toward the seated ascetic off frame, bending slightly forward, right hand on his chest in humble offer of service, earnest eager face; the hot pale road and the house wall behind him. Show only these people and no others. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+  "prompt_sha256": "4504415da50c21ce32841addd3a66fa218449dcd930aef13338cd6033d41bb3c",
+  "base_edit_id": null,
+  "edit_instruction": null,
+  "previous_shot": {
+   "shot_id": "SH_S7_03",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S7_03.png",
+   "flow_title": "SH_S7_03__v01",
+   "source": "final"
+  },
+  "next_shot": {
+   "shot_id": "SH_S7_04",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S7_04.png",
+   "flow_title": "SH_S7_04__v03",
+   "source": "final"
+  },
+  "sheets": [
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_DK__candidate_v01.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\LOC_ROAD_REF__candidate_v01.png"
+  ],
+  "attempt_cap": 8,
+  "neighbour_chips": [
+   "SH_S7_03__v01",
+   "SH_S7_04__v03"
+  ],
+  "neighbour_sentence": "Match the attached neighbouring shot for the house, road, props and positions.",
+  "model": {
+   "name": "Nano Banana 2.1",
+   "fallback": null,
+   "count": "x2",
+   "aspect": "16:9",
+   "download": "2K Upscaled",
+   "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+  },
+  "status": "TODO"
+ },
+ {
+  "adhyay": 1,
+  "shot_id": "SH_S7_11",
+  "scene": "S7",
+  "method": "generate",
+  "file_version": "v01",
+  "flow_title": "SH_S7_11__v01",
+  "characters": [
+   "GM_v01"
+  ],
+  "people_count": 1,
+  "props": [],
+  "chips": [
+   "GM_v01",
+   "Village road in front house"
+  ],
+  "unaccepted_sheets": [],
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Exactly 1 person: the young ascetic (attached GM_v01): a slim ADULT youth with a narrow face and cropped short dark hair, exactly as in his character sheet, wearing an open frayed grey-white vest that hangs open at the front in two loose panels with the chest visible between them (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child. Setting: the attached road picture in front of Devidas's house (same house, door, plinth step, leaf plates, neem trees). Medium close-up of the young ascetic seated on the road, speaking with a gentle smile, one palm turned up and open toward the two visitors off frame at the right (either hand), the empty gourd lying beside his knee; the house wall behind. Show only these people and no others. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+  "prompt_sha256": "b88233d1a71531deb0ac6ddd7bbb82eb6584a530c8d5dd40520c31fe19cfb7b9",
+  "base_edit_id": null,
+  "edit_instruction": null,
+  "previous_shot": {
+   "shot_id": "SH_S7_07",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S7_07.png",
+   "flow_title": "SH_S7_07__v03",
+   "source": "final"
+  },
+  "next_shot": {
+   "shot_id": "SH_S7_08",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S7_08.png",
+   "flow_title": "SH_S7_08__v01",
+   "source": "final"
+  },
+  "sheets": [
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_GM__v03__accepted.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\LOC_ROAD_REF__candidate_v01.png"
+  ],
+  "attempt_cap": 8,
+  "neighbour_chips": [
+   "SH_S7_07__v03",
+   "SH_S7_08__v01"
+  ],
+  "neighbour_sentence": "Match the attached neighbouring shot for the house, road, props and positions.",
+  "model": {
+   "name": "Nano Banana 2.1",
+   "fallback": null,
+   "count": "x2",
+   "aspect": "16:9",
+   "download": "2K Upscaled",
+   "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+  },
+  "status": "TODO"
+ },
+ {
+  "adhyay": 1,
+  "shot_id": "SH_S7_12",
+  "scene": "S7",
+  "method": "generate",
+  "file_version": "v01",
+  "flow_title": "SH_S7_12__v01",
+  "characters": [
+   "GM_v01",
+   "BA_v01"
+  ],
+  "people_count": 2,
+  "props": [],
+  "chips": [
+   "GM_v01",
+   "BA_v01",
+   "Village road in front house"
+  ],
+  "unaccepted_sheets": [],
+  "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Exactly 2 people: the young ascetic (attached GM_v01): a slim ADULT youth with a narrow face and cropped short dark hair, exactly as in his character sheet, wearing an open frayed grey-white vest that hangs open at the front in two loose panels with the chest visible between them (NOT a closed sleeveless undershirt, NOT a tank top) and a short white cloth wrapped at the hips, legs uncovered from above the knee down; no shirt, no trousers, never a child; Bankatlal (attached BA_v01): an adult man of about 35, slightly full build, small neat moustache, cream-white round turban, long sage-green coat tied at the side over a white dhoti, cream shoulder cloth, exactly as in his character sheet. Setting: the attached road picture in front of Devidas's house (same house, door, plinth step, leaf plates, neem trees). Wide view: the half-open door of Devidas's house with its plinth step now empty (Damodarpant has gone inside); Bankatlal waits in the thin shade of a neem tree at the right, looking at the door; the young ascetic sits in the full sun in the left foreground, calm, looking off screen-left. Show only these people and no others. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border, no inset. No text, no letters, no modern objects, no halo.",
+  "prompt_sha256": "5538efbe448aa208a4c3a0842cb841460a6f6522bca614bdcc44e6542747efe6",
+  "base_edit_id": null,
+  "edit_instruction": null,
+  "previous_shot": {
+   "shot_id": "SH_S7_09",
+   "file": "D:\\aai work\\flow_outputs\\adhyay_01\\final\\SH_S7_09.png",
+   "flow_title": "SH_S7_09__v01",
+   "source": "final"
+  },
+  "next_shot": null,
+  "sheets": [
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_GM__v03__accepted.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\CH_BA__v01__accepted.png",
+   "D:\\aai work\\flow_outputs\\adhyay_01\\references\\LOC_ROAD_REF__candidate_v01.png"
+  ],
+  "attempt_cap": 8,
+  "neighbour_chips": [
+   "SH_S7_09__v01"
+  ],
+  "neighbour_sentence": "Match the attached neighbouring shot for the house, road, props and positions.",
+  "model": {
+   "name": "Nano Banana 2.1",
+   "fallback": null,
+   "count": "x2",
+   "aspect": "16:9",
+   "download": "2K Upscaled",
+   "_note": "Owner 2026-11-01 (latest): Nano Banana 2.1 ONLY (not Pro), no fallback; always x2; both images reviewed by Haiku and Codex, Haiku decides."
+  },
+  "status": "TODO"
+ }
+]

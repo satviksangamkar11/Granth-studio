@@ -1,0 +1,133 @@
+{
+ "adhyay": 1,
+ "_note": "New shots for the re-timed S2/S7 (owner 2026-11-01). Built into jobs by scripts/flow/build_jobs_v2.py.",
+ "slot_order": {
+  "S2": [
+   "SH_S2_01",
+   "SH_S2_02",
+   "SH_S2_03",
+   "SH_S2_08",
+   "SH_S2_09",
+   "SH_S2_04",
+   "SH_S2_05",
+   "SH_S2_06",
+   "SH_S2_10",
+   "SH_S2_07",
+   "SH_S2_11"
+  ],
+  "S7": [
+   "SH_S7_01",
+   "SH_S7_02",
+   "SH_S7_03",
+   "SH_S7_10",
+   "SH_S7_04",
+   "SH_S7_05",
+   "SH_S7_06",
+   "SH_S7_07",
+   "SH_S7_11",
+   "SH_S7_08",
+   "SH_S7_09",
+   "SH_S7_12"
+  ]
+ },
+ "shots": [
+  {
+   "shot_id": "SH_S2_09",
+   "scene": "S2",
+   "method": "generate",
+   "characters": [
+    "GM_v01"
+   ],
+   "place": "ROAD",
+   "action": "CAMERA: medium shot at his eye level, straight from the front; his seated figure is large and fills about two thirds of the frame height, from the top of his head to just below his crossed knees; only the lower part of the house wall and the edge of its OPEN wooden door are visible behind him, no wide view of the road. The young ascetic sits cross-legged and upright on the road among the used leaf plates, perfectly still, both hands resting open on his knees, eyes lowered, face straight to the camera, a calm face free of any wish; the gourd and the small unfired clay cup stand on the ground at the viewer's right, beside his knee, as in the next shot. No temple, no other buildings in focus.",
+   "light": "Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right.",
+   "base_edit_id": null,
+   "edit_instruction": null,
+   "review_fix_2026_11_01": "Codex SH_S2_09 v01: wide high view, gourd and cup missing, door closed -> medium eye level, gourd+cup, open door",
+   "props": [
+    "LEAF_PLATES"
+   ],
+   "review_fix_2026_11_01b": "attempts 1-2 (agent A): wide view each time (place sheet framing copied), gourd side impossible to match both neighbours, temple added -> camera + subject size + gourd at viewer's right (as NEXT)"
+  },
+  {
+   "shot_id": "SH_S2_10",
+   "scene": "S2",
+   "method": "generate",
+   "characters": [
+    "GM_v01"
+   ],
+   "place": null,
+   "action": "CAMERA: extreme close-up insert filling the whole frame: the right hand of the seated young ascetic holds ONE single grain of cooked rice between thumb and fingertip just above a used leaf plate, the one grain clearly visible in the centre; the leaf plate's dry veins and a few scattered grains fill the bottom of the frame; only his crossed knee and a little road dust are visible behind; no face, no building, no temple, no sky.",
+   "light": "Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right.",
+   "base_edit_id": null,
+   "edit_instruction": null,
+   "props": [
+    "LEAF_PLATES"
+   ],
+   "review_fix_2026_11_01": "Codex SH_S2_10 v01: two large grains instead of one; Claude: single large leaf instead of the stitched leaf plates, figure kneeling",
+   "reference_chips": [
+    "SH_S2_05__v02"
+   ],
+   "reference_sentence": "Match the attached close-up shot SH_S2_05 for the framing and drawing style: a close insert of one hand over one leaf plate filling the frame, no wide view, no buildings, no sky.",
+   "review_fix_2026_11_01c": "agent A attempts 1-2: wide sunset scene with a temple (the temple style chip and the wide place sheet won) -> no place chip, accepted close-up SH_S2_05 as framing reference, no style chip"
+  },
+  {
+   "shot_id": "SH_S2_11",
+   "scene": "S2",
+   "method": "generate",
+   "characters": [
+    "GM_v01"
+   ],
+   "place": "ROAD",
+   "action": "Low wide view along the village road at ground level, the scattered used leaf plates large in the foreground; far down the road the young ascetic sits SMALL on the road itself (not on the plinth) before Devidas's house, still gathering grains from the leaf plates, no bowl; house roofs, neem trees and the plain beyond; the road otherwise empty; sunlight from the upper left, shadows falling to the right.",
+   "light": "Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right.",
+   "base_edit_id": null,
+   "edit_instruction": null,
+   "props": [
+    "LEAF_PLATES"
+   ],
+   "review_fix_2026_11_01": "Codex SH_S2_11 v01: on the plinth with a new bowl, shadow falls left, not small and far"
+  },
+  {
+   "shot_id": "SH_S7_10",
+   "scene": "S7",
+   "method": "generate",
+   "characters": [
+    "DK_v01"
+   ],
+   "place": "ROAD",
+   "action": "Medium close-up of Damodarpant alone, facing screen-left toward the seated ascetic off frame, bending slightly forward, right hand on his chest in humble offer of service, earnest eager face; the hot pale road and the house wall behind him.",
+   "light": "Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon.",
+   "base_edit_id": null,
+   "edit_instruction": null
+  },
+  {
+   "shot_id": "SH_S7_11",
+   "scene": "S7",
+   "method": "generate",
+   "characters": [
+    "GM_v01"
+   ],
+   "place": "ROAD",
+   "action": "Medium close-up of the young ascetic seated on the road, speaking with a gentle smile, one palm turned up and open toward the two visitors off frame at the right (either hand), the empty gourd lying beside his knee; the house wall behind.",
+   "light": "Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon.",
+   "base_edit_id": null,
+   "edit_instruction": null,
+   "review_fix_2026_11_01": "agent B: 'right palm toward visitors at the right' contradicts the seated pose; hand side is not a story fact (27 Oct lesson) -> 'one palm (either hand)'"
+  },
+  {
+   "shot_id": "SH_S7_12",
+   "scene": "S7",
+   "method": "generate",
+   "characters": [
+    "GM_v01",
+    "BA_v01"
+   ],
+   "place": "ROAD",
+   "action": "Wide view: the half-open door of Devidas's house with its plinth step now empty (Damodarpant has gone inside); Bankatlal waits in the thin shade of a neem tree at the right, looking at the door; the young ascetic sits in the full sun in the left foreground, calm, looking off screen-left.",
+   "light": "Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon.",
+   "base_edit_id": null,
+   "edit_instruction": null
+  }
+ ]
+}
