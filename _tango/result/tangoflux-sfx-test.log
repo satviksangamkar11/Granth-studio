@@ -1,0 +1,14 @@
+[{"stream_name":"stdout","time":0.663886194,"data":"pip install -q git+https://github.com/declare-lab/TangoFlux 2\u003e\u00261 | tail -3\n"}
+,{"stream_name":"stdout","time":8.27827844,"data":"ERROR: Could not find a version that satisfies the requirement torch==2.4.0 (from tangoflux) (from versions: 2.5.0, 2.5.1, 2.6.0, 2.7.0, 2.7.1, 2.8.0, 2.9.0, 2.9.1, 2.10.0, 2.11.0, 2.12.0, 2.12.1, 2.13.0, 2.14.0, 2.14.1, 2.15.0)\n"}
+,{"stream_name":"stdout","time":8.278334824,"data":"ERROR: No matching distribution found for torch==2.4.0\n"}
+,{"stream_name":"stderr","time":13.703910047,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":13.704049682,"data":"  File \"/kaggle/src/script.py\", line 5, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":13.704058771,"data":"    from tangoflux import TangoFluxInference\n"}
+,{"stream_name":"stderr","time":13.704063248,"data":"ModuleNotFoundError: No module named 'tangoflux'\n"}
+,{"stream_name":"stderr","time":17.726979823,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":17.727007387,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":17.963836031,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":17.963860008,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":18.726259542,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":19.629746988,"data":"[NbConvertApp] Writing 283273 bytes to __results__.html\n"}
+]

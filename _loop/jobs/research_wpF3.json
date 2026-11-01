@@ -1,0 +1,21 @@
+{
+ "name": "research_wpF3",
+ "spec": "docs/pilot/nemotron_specs/research_wpF3.md",
+ "files": [
+  "research/pieces/f3_publish.py",
+  "research/pieces/test_f3_publish.py"
+ ],
+ "tests": [
+  "research/pieces/test_f3_publish.py"
+ ],
+ "reference": [],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 4,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

@@ -1,0 +1,10 @@
+﻿{"name": "a_codex_review",
+ "spec": "docs/pilot/nemotron_specs/job_codex_review.md",
+ "files": ["scripts/source/codex_review.py", "tests/test_codex_review.py"],
+ "tests": ["tests/test_codex_review.py"],
+ "reference": ["docs/pilot/nemotron_specs/codex_review.md", "scripts/source/review_run.py"],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 2,
+ "reviewers": ["glm"]}
+

@@ -187,20 +187,23 @@ def test_run_codex_review_missing_prompt_file(tmp_path):
     assert not out_path.exists()
 
 
-def test_run_codex_review_secrets_skipped(tmp_path):
-    # We need to ensure that build_prompt skips secret files.
-    # Since we cannot modify review_run.py, we rely on its behavior.
-    # We'll create a file under a path that build_prompt considers secret (e.g., .secrets/secret.txt)
-    # and assert that its content never reaches the runner input.
-    prompt_file = tmp_path / "prompt.txt"
+def test_run_codex_review_secrets_skipped(tmp_path_factory):
+    # The temp directory name must NOT contain "secrets" because build_prompt
+    # (in review_run.py) treats ANY path component containing "secrets"
+    # (case-insensitive) as a secret path and skips the file. The test function
+    # name contains "secrets", so pytest's tmp_path would include it. We use
+    # tmp_path_factory with a neutral prefix to avoid this.
+    base = tmp_path_factory.mktemp("rcr")  # dir name like "rcr0", no "secrets"
+
+    prompt_file = base / "prompt.txt"
     prompt_file.write_text("Review.")
-    out_path = tmp_path / "report.md"
-    secret_dir = tmp_path / ".secrets"
+    out_path = base / "report.md"
+    secret_dir = base / ".secrets"
     secret_dir.mkdir()
     secret_file = secret_dir / "secret.txt"
     secret_content = "SUPER_SECRET"
     secret_file.write_text(secret_content, encoding="utf-8")
-    normal_file = tmp_path / "normal.py"
+    normal_file = base / "normal.py"
     normal_file.write_text("print('ok')", encoding="utf-8")
 
     captured_input = {}
@@ -214,7 +217,7 @@ def test_run_codex_review_secrets_skipped(tmp_path):
         prompt_file=prompt_file,
         files=[secret_file, normal_file],
         out_path=out_path,
-        root=tmp_path,
+        root=base,
         runner=fake_runner,
     )
     assert result["status"] == "ok"

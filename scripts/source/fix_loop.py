@@ -5,6 +5,8 @@ import sys
 import subprocess
 import copy
 import importlib.util
+import time
+import tempfile
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Any, Callable, Optional
@@ -29,7 +31,8 @@ JOB_SCHEMA = {
         "review_prompt": {"type": ["string", "null"], "default": "docs/pilot/REVIEW_PROMPT_STAGE1_FINAL.md"},
         "coder_model": {"type": "string", "default": "nvidia/nemotron-3-ultra-550b-a55b"},
         "reviewer_model": {"type": "string", "default": "z-ai/glm-5.3-flash"},
-        "reviewers": {"type": "array", "items": {"type": "string", "enum": ["glm", "codex"]}, "default": ["glm"]},
+        "reviewers": {"type": "array", "items": {"type": "string", "enum": ["glm", "codex"]}, "default": ["glm", "codex"]},
+        "fixers": {"type": "array", "items": {"type": "string", "enum": ["nemotron", "codex"]}, "default": ["nemotron", "nemotron", "codex"]},
     },
     "additionalProperties": False,
 }
@@ -74,7 +77,19 @@ def load_job(path: str | Path) -> dict:
     job.setdefault("review_prompt", "docs/pilot/REVIEW_PROMPT_STAGE1_FINAL.md")
     job.setdefault("coder_model", "nvidia/nemotron-3-ultra-550b-a55b")
     job.setdefault("reviewer_model", "z-ai/glm-5.3-flash")
-    job.setdefault("reviewers", ["glm"])
+    job.setdefault("reviewers", ["glm", "codex"])
+    job.setdefault("fixers", ["nemotron", "nemotron", "codex"])
+
+    # Validate fixers field
+    fixers = job.get("fixers")
+    if not isinstance(fixers, list):
+        raise ValueError("fixers must be a list")
+    if len(fixers) == 0:
+        raise ValueError("fixers list cannot be empty")
+    for f in fixers:
+        if f not in ("nemotron", "codex"):
+            raise ValueError(f"unknown fixer name: {f}")
+
     root = path.parent.resolve()
     _validate_path(job["spec"], root, "spec")
     for i, f in enumerate(job["files"]):
@@ -225,22 +240,110 @@ def _default_reviewers_factory(root: Path) -> dict[str, Callable[[list[Path], Pa
     return reviewers
 
 
+def codex_caller(
+    system: str,
+    user: str,
+    *,
+    status_dir: Path,
+    job_name: str,
+    round_no: int,
+    runner: Callable[[list[str], str, int], tuple[int, str]] | None = None,
+) -> tuple[str, dict]:
+    """
+    Run Codex as a fixer. Writes the combined prompt to stdin, reads the reply from the -o output file.
+    Returns (reply_text, info_dict) where info_dict has keys: status, wall_s, finish, error.
+    Never raises; on failure returns empty reply and status=0 with error text.
+    """
+    out_file = status_dir / f"codex_round_{round_no}.md"
+    cmd = [
+        "codex",
+        "exec",
+        "--sandbox",
+        "read-only",
+        "--skip-git-repo-check",
+        "-m",
+        "gpt-6-luna",
+        "-c",
+        "model_reasoning_effort=high",
+        "-o",
+        str(out_file),
+        "-",
+    ]
+    input_text = system + "\n\n" + user
+    start = time.time()
+    run_fn = runner or _default_codex_runner
+    try:
+        returncode, output = run_fn(cmd, input_text, 1800)
+    except Exception as e:
+        wall = time.time() - start
+        return "", {"status": 0, "wall_s": wall, "finish": "error", "error": f"runner exception: {e}"}
+    wall = time.time() - start
+
+    if returncode != 0:
+        return "", {"status": 0, "wall_s": wall, "finish": "error", "error": f"codex exited with {returncode}: {output.strip()}"}
+
+    if not out_file.exists() or out_file.stat().st_size == 0:
+        return "", {"status": 0, "wall_s": wall, "finish": "empty", "error": "codex produced no output file"}
+
+    reply_text = out_file.read_text(encoding="utf-8")
+    if not reply_text.strip():
+        return "", {"status": 0, "wall_s": wall, "finish": "empty", "error": "codex output file is empty"}
+
+    return reply_text, {"status": 200, "wall_s": wall, "finish": "stop", "error": None}
+
+
+def _default_codex_runner(cmd: list[str], input_text: str, timeout_s: int) -> tuple[int, str]:
+    try:
+        result = subprocess.run(
+            cmd,
+            input=input_text,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            timeout=timeout_s,
+        )
+        return result.returncode, result.stdout + result.stderr
+    except subprocess.TimeoutExpired:
+        return 1, "timeout"
+    except OSError as e:
+        return 1, f"OSError: {e}"
+
+
 def run_job(
     job: dict,
     root: Path,
     caller: Callable[[str, str], tuple[str, dict]] | None = None,
+    callers: dict[str, Callable[[str, str], tuple[str, dict]]] | None = None,
     reviewer: dict[str, Callable[[list[Path], Path], dict]] | Callable[[list[Path], Path], dict] | None = None,
     pytest_runner: Callable[[list[str], Path, int, str | None], tuple[bool, str]] | None = None,
     status_dir: Path | None = None,
     scrub_keys: list[str] | None = None,
 ) -> dict:
-    if caller is None:
-        caller = _default_caller_factory(root)
+    # Backward compatibility: if caller is provided, use it for all rounds
+    # Otherwise, build callers dict with defaults
+    if caller is not None:
+        # Legacy mode: single caller for all rounds
+        effective_callers = {"nemotron": caller, "codex": caller}
+    else:
+        if callers is None:
+            callers = {}
+        effective_callers = {}
+        if "nemotron" not in callers:
+            effective_callers["nemotron"] = _default_caller_factory(root)
+        else:
+            effective_callers["nemotron"] = callers["nemotron"]
+        if "codex" not in callers:
+            # codex_caller needs status_dir and job_name, which we don't have yet;
+            # we'll wrap it later in the loop
+            effective_callers["codex"] = None  # placeholder
+        else:
+            effective_callers["codex"] = callers["codex"]
+
     if reviewer is None:
         reviewer = _default_reviewers_factory(root)
     # Backward compatibility: if a single callable is passed, wrap it for the first reviewer
     if reviewer is not None and not isinstance(reviewer, dict):
-        reviewers_list = job.get("reviewers", ["glm"])
+        reviewers_list = job.get("reviewers", ["glm", "codex"])
         first_reviewer = reviewers_list[0] if reviewers_list else "glm"
         reviewer = {first_reviewer: reviewer}
     if pytest_runner is None:
@@ -264,7 +367,8 @@ def run_job(
     review_rounds = job.get("review_rounds", 4)
     review_files = job.get("review_files") if job.get("review_files") is not None else expected_files + [job["spec"]]
     review_prompt = job.get("review_prompt", "docs/pilot/REVIEW_PROMPT_STAGE1_FINAL.md")
-    reviewers_list = job.get("reviewers", ["glm"])
+    reviewers_list = job.get("reviewers", ["glm", "codex"])
+    fixers = job.get("fixers", ["nemotron", "nemotron", "codex"])
 
     status_dir_job = status_dir / name
     status_dir_job.mkdir(parents=True, exist_ok=True)
@@ -310,8 +414,20 @@ def run_job(
             review_report_combined = "\n\n".join(parts)
 
         system, user = build_prompt(job, root, round_no, pytest_output=last_pytest_output, review_report=review_report_combined)
+
+        # Select fixer for this round
+        fixer_name = fixers[min(round_no, len(fixers) - 1)]
+        round_caller = effective_callers.get(fixer_name)
+        if fixer_name == "codex" and round_caller is None:
+            # Create a bound codex_caller for this round
+            def make_codex_caller(rn: int):
+                def c(system: str, user: str) -> tuple[str, dict]:
+                    return codex_caller(system, user, status_dir=status_dir_job, job_name=name, round_no=rn)
+                return c
+            round_caller = make_codex_caller(round_no)
+
         try:
-            reply_text, info = caller(system, user)
+            reply_text, info = round_caller(system, user)
         except Exception as e:
             reply_text = ""
             info = {"status": 0, "error": str(e)}
@@ -367,6 +483,7 @@ def run_job(
 
         rounds_record.append({
             "round": round_no,
+            "fixer": fixer_name,
             "coder_status": coder_status,
             "files_ok": files_ok,
             "tests_passed": passed,
@@ -374,7 +491,7 @@ def run_job(
         })
         _write_status(round_no, coder_status, files_ok, passed, reason)
 
-        print(f"{name} round {round_no}: tests {'pass' if passed else 'fail'} files {'ok' if files_ok else 'bad'}")
+        print(f"{name} round {round_no}: fixer={fixer_name} tests {'pass' if passed else 'fail'} files {'ok' if files_ok else 'bad'}")
 
         if passed:
             tests_passed = True
@@ -389,6 +506,7 @@ def run_job(
                     if rfunc is None:
                         rounds_record.append({
                             "round": f"review_{review_pass_count}_{rname}",
+                            "fixer": "review",
                             "coder_status": "review",
                             "files_ok": True,
                             "tests_passed": True,
@@ -403,6 +521,7 @@ def run_job(
                     verdict = rev_result.get("verdict", "NONE")
                     rounds_record.append({
                         "round": f"review_{review_pass_count}_{rname}",
+                        "fixer": "review",
                         "coder_status": "review",
                         "files_ok": True,
                         "tests_passed": True,

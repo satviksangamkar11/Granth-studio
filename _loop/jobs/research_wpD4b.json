@@ -1,0 +1,22 @@
+{
+ "name": "research_wpD4b",
+ "spec": "docs/pilot/nemotron_specs/research_wpD4b.md",
+ "files": [
+  "research/pieces/d4_reconstruct.py",
+  "research/pieces/test_d4_reconstruct.py"
+ ],
+ "tests": [
+  "research/pieces/test_d4_reconstruct.py"
+ ],
+ "reference": [
+  "research/pieces/d1_beat_schema.py"
+ ],
+ "max_rounds": 3,
+ "review": false,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

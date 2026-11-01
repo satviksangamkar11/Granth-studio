@@ -1,0 +1,21 @@
+{
+ "name": "research_wpD1",
+ "spec": "docs/pilot/nemotron_specs/research_wpD1.md",
+ "files": [
+  "research/pieces/d1_beat_schema.py",
+  "research/pieces/test_d1_beat_schema.py"
+ ],
+ "tests": [
+  "research/pieces/test_d1_beat_schema.py"
+ ],
+ "reference": [],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 4,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

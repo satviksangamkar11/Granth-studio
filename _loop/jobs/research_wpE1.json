@@ -1,0 +1,21 @@
+{
+ "name": "research_wpE1",
+ "spec": "docs/pilot/nemotron_specs/research_wpE1.md",
+ "files": [
+  "research/pieces/a1_scene_selection.py",
+  "research/pieces/test_a1_scene_selection.py"
+ ],
+ "tests": [
+  "research/pieces/test_a1_scene_selection.py"
+ ],
+ "reference": [],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 4,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

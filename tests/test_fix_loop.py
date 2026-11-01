@@ -39,7 +39,8 @@ class TestLoadJob:
         assert job["review_prompt"] == "docs/pilot/REVIEW_PROMPT_STAGE1_FINAL.md"
         assert job["coder_model"] == "nvidia/nemotron-3-ultra-550b-a55b"
         assert job["reviewer_model"] == "z-ai/glm-5.3-flash"
-        assert job["reviewers"] == ["glm"]
+        assert job["reviewers"] == ["glm", "codex"]
+        assert job["fixers"] == ["nemotron", "nemotron", "codex"]
 
     def test_invalid_absolute_path(self, tmp_path: Path):
         job_data = {"name": "j", "spec": "/abs/path.md", "files": ["a.py"], "tests": ["tests/a.py"]}
@@ -146,6 +147,39 @@ class TestLoadJob:
         with pytest.raises(ValueError):
             fix_loop.load_job(job_file)
 
+    def test_fixers_non_list(self, tmp_path: Path):
+        job_data = {"name": "j", "spec": "spec.md", "files": ["a.py"], "tests": ["tests/a.py"], "fixers": "nemotron"}
+        job_file = tmp_path / "job.yaml"
+        job_file.write_text(yaml.dump(job_data))
+        (tmp_path / "spec.md").write_text("x")
+        with pytest.raises(ValueError, match="fixers must be a list"):
+            fix_loop.load_job(job_file)
+
+    def test_fixers_empty_list(self, tmp_path: Path):
+        job_data = {"name": "j", "spec": "spec.md", "files": ["a.py"], "tests": ["tests/a.py"], "fixers": []}
+        job_file = tmp_path / "job.yaml"
+        job_file.write_text(yaml.dump(job_data))
+        (tmp_path / "spec.md").write_text("x")
+        with pytest.raises(ValueError, match="fixers list cannot be empty"):
+            fix_loop.load_job(job_file)
+
+    def test_fixers_unknown_name(self, tmp_path: Path):
+        job_data = {"name": "j", "spec": "spec.md", "files": ["a.py"], "tests": ["tests/a.py"], "fixers": ["unknown"]}
+        job_file = tmp_path / "job.yaml"
+        job_file.write_text(yaml.dump(job_data))
+        (tmp_path / "spec.md").write_text("x")
+        with pytest.raises(ValueError, match="unknown fixer name"):
+            fix_loop.load_job(job_file)
+
+    def test_custom_fixers_list(self, tmp_path: Path):
+        job_data = {"name": "j", "spec": "spec.md", "files": ["a.py"], "tests": ["tests/a.py"], "fixers": ["codex", "nemotron"]}
+        job_file = tmp_path / "job.yaml"
+        job_file.write_text(yaml.dump(job_data))
+        (tmp_path / "spec.md").write_text("x")
+        (tmp_path / "tests").mkdir()
+        job = fix_loop.load_job(job_file)
+        assert job["fixers"] == ["codex", "nemotron"]
+
 
 class TestBuildPrompt:
     def test_round_zero_new_and_existing(self, tmp_path: Path):
@@ -220,6 +254,118 @@ class TestRunPytest:
         assert "timed out" in out.lower()
 
 
+class TestCodexCaller:
+    def test_codex_caller_success(self, tmp_path: Path):
+        status_dir = tmp_path / "_loop" / "job1"
+        status_dir.mkdir(parents=True)
+        out_file = status_dir / "codex_round_0.md"
+        out_file.write_text("FILE: a.py\n```python\nprint('hi')\n```")
+
+        def fake_runner(cmd, input_text, timeout_s):
+            assert cmd[0] == "codex"
+            assert "-o" in cmd
+            assert str(out_file) in cmd
+            return 0, ""
+
+        reply, info = fix_loop.codex_caller(
+            "system prompt", "user prompt",
+            status_dir=status_dir, job_name="job1", round_no=0,
+            runner=fake_runner
+        )
+        assert reply == "FILE: a.py\n```python\nprint('hi')\n```"
+        assert info["status"] == 200
+        assert info["finish"] == "stop"
+        assert info["error"] is None
+        assert info["wall_s"] >= 0
+
+    def test_codex_caller_empty_reply(self, tmp_path: Path):
+        status_dir = tmp_path / "_loop" / "job1"
+        status_dir.mkdir(parents=True)
+        out_file = status_dir / "codex_round_0.md"
+        out_file.write_text("")
+
+        def fake_runner(cmd, input_text, timeout_s):
+            return 0, ""
+
+        reply, info = fix_loop.codex_caller(
+            "system", "user",
+            status_dir=status_dir, job_name="job1", round_no=0,
+            runner=fake_runner
+        )
+        assert reply == ""
+        assert info["status"] == 0
+        assert info["finish"] == "empty"
+        assert "empty" in info["error"]
+
+    def test_codex_caller_missing_output_file(self, tmp_path: Path):
+        status_dir = tmp_path / "_loop" / "job1"
+        status_dir.mkdir(parents=True)
+
+        def fake_runner(cmd, input_text, timeout_s):
+            return 0, ""
+
+        reply, info = fix_loop.codex_caller(
+            "system", "user",
+            status_dir=status_dir, job_name="job1", round_no=0,
+            runner=fake_runner
+        )
+        assert reply == ""
+        assert info["status"] == 0
+        assert info["finish"] == "empty"
+        assert "no output file" in info["error"]
+
+    def test_codex_caller_nonzero_exit(self, tmp_path: Path):
+        status_dir = tmp_path / "_loop" / "job1"
+        status_dir.mkdir(parents=True)
+
+        def fake_runner(cmd, input_text, timeout_s):
+            return 1, "some error"
+
+        reply, info = fix_loop.codex_caller(
+            "system", "user",
+            status_dir=status_dir, job_name="job1", round_no=0,
+            runner=fake_runner
+        )
+        assert reply == ""
+        assert info["status"] == 0
+        assert info["finish"] == "error"
+        assert "exited with 1" in info["error"]
+
+    def test_codex_caller_timeout(self, tmp_path: Path):
+        status_dir = tmp_path / "_loop" / "job1"
+        status_dir.mkdir(parents=True)
+
+        def fake_runner(cmd, input_text, timeout_s):
+            raise subprocess.TimeoutExpired(cmd, timeout_s)
+
+        reply, info = fix_loop.codex_caller(
+            "system", "user",
+            status_dir=status_dir, job_name="job1", round_no=0,
+            runner=fake_runner
+        )
+        assert reply == ""
+        assert info["status"] == 0
+        assert info["finish"] == "error"
+        assert "timeout" in info["error"].lower()
+
+    def test_codex_caller_oserror(self, tmp_path: Path):
+        status_dir = tmp_path / "_loop" / "job1"
+        status_dir.mkdir(parents=True)
+
+        def fake_runner(cmd, input_text, timeout_s):
+            raise OSError("no such file")
+
+        reply, info = fix_loop.codex_caller(
+            "system", "user",
+            status_dir=status_dir, job_name="job1", round_no=0,
+            runner=fake_runner
+        )
+        assert reply == ""
+        assert info["status"] == 0
+        assert info["finish"] == "error"
+        assert "OSError" in info["error"]
+
+
 class TestRunJob:
     def _make_fake_caller(self, replies: list[tuple[str, dict]]):
         calls = []
@@ -287,6 +433,7 @@ class TestRunJob:
         assert result["state"] == "passed-no-review"
         assert result["tests_passed"] is True
         assert len(caller_calls) == 1
+        assert result["rounds"][0]["fixer"] == "nemotron"
 
     def test_fails_then_passes_round_one(self, tmp_path: Path, monkeypatch):
         job = {
@@ -324,6 +471,8 @@ class TestRunJob:
         assert result["state"] == "passed-no-review"
         assert len(caller_calls) == 2
         assert "fail" in caller_calls[1][1].lower()
+        assert result["rounds"][0]["fixer"] == "nemotron"
+        assert result["rounds"][1]["fixer"] == "nemotron"
 
     def test_missing_expected_file_fails_round(self, tmp_path: Path, monkeypatch):
         job = {
@@ -768,6 +917,7 @@ class TestRunJob:
         assert status["name"] == "job15"
         assert status["state"] == "passed-no-review"
         assert len(status["rounds"]) == 1
+        assert status["rounds"][0]["fixer"] == "nemotron"
 
         round_file = status_dir / "job15" / "round_0.txt"
         assert round_file.exists()
@@ -835,6 +985,233 @@ class TestRunJob:
         content = round_file.read_text()
         assert secret not in content
         assert "[REDACTED]" in content
+
+    def test_default_fixers_per_round(self, tmp_path: Path, monkeypatch):
+        """Test that default fixers are nemotron for rounds 0,1 and codex for round 2+"""
+        job = {
+            "name": "job18",
+            "spec": "spec.md",
+            "files": ["a.py"],
+            "tests": ["tests/test.py"],
+            "max_rounds": 4,
+            "review": False,
+            "review_rounds": 0,
+        }
+        (tmp_path / "spec.md").write_text("spec")
+        (tmp_path / "tests").mkdir()
+        (tmp_path / "tests" / "test.py").write_text("def test_ok(): assert False\n")
+
+        nemotron_calls = []
+        codex_calls = []
+
+        def nemotron_caller(system, user):
+            nemotron_calls.append((system, user))
+            return "", {"status": 500, "error": "nemotron fail"}
+
+        def codex_caller(system, user):
+            codex_calls.append((system, user))
+            return "FILE: a.py\n```python\nok\n```", {"status": 200}
+
+        callers = {"nemotron": nemotron_caller, "codex": codex_caller}
+        reviewer, _ = self._make_fake_reviewer({})
+        parse_files, _ = self._make_fake_parse_files([({"a.py": "ok"}, [])])
+        check_path = self._make_fake_check_path({"a.py": None})
+
+        def fake_pytest(tests, root, **kw):
+            return (True, "pass") if codex_calls else (False, "fail")
+
+        monkeypatch.setattr(fix_loop, "run_pytest", fake_pytest)
+
+        with self._setup_mocks(monkeypatch, parse_files, check_path):
+            result = fix_loop.run_job(job, tmp_path, callers=callers, reviewer=reviewer, status_dir=tmp_path / "_loop")
+
+        assert result["state"] == "passed-no-review"
+        # Round 0: nemotron, Round 1: nemotron, Round 2: codex (succeeds)
+        assert len(nemotron_calls) == 2
+        assert len(codex_calls) == 1
+        assert result["rounds"][0]["fixer"] == "nemotron"
+        assert result["rounds"][1]["fixer"] == "nemotron"
+        assert result["rounds"][2]["fixer"] == "codex"
+
+    def test_custom_fixers_list(self, tmp_path: Path, monkeypatch):
+        """Test custom fixers list is respected"""
+        job = {
+            "name": "job19",
+            "spec": "spec.md",
+            "files": ["a.py"],
+            "tests": ["tests/test.py"],
+            "max_rounds": 4,
+            "review": False,
+            "review_rounds": 0,
+            "fixers": ["codex", "nemotron"],
+        }
+        (tmp_path / "spec.md").write_text("spec")
+        (tmp_path / "tests").mkdir()
+        (tmp_path / "tests" / "test.py").write_text("def test_ok(): assert False\n")
+
+        nemotron_calls = []
+        codex_calls = []
+
+        def nemotron_caller(system, user):
+            nemotron_calls.append((system, user))
+            return "FILE: a.py\n```python\nok\n```", {"status": 200}
+
+        def codex_caller(system, user):
+            codex_calls.append((system, user))
+            return "", {"status": 500, "error": "codex fail"}
+
+        callers = {"nemotron": nemotron_caller, "codex": codex_caller}
+        reviewer, _ = self._make_fake_reviewer({})
+        parse_files, _ = self._make_fake_parse_files([({"a.py": "ok"}, [])])
+        check_path = self._make_fake_check_path({"a.py": None})
+
+        def fake_pytest(tests, root, **kw):
+            return (True, "pass") if nemotron_calls else (False, "fail")
+
+        monkeypatch.setattr(fix_loop, "run_pytest", fake_pytest)
+
+        with self._setup_mocks(monkeypatch, parse_files, check_path):
+            result = fix_loop.run_job(job, tmp_path, callers=callers, reviewer=reviewer, status_dir=tmp_path / "_loop")
+
+        assert result["state"] == "passed-no-review"
+        # Round 0: codex (fails), Round 1: nemotron (succeeds)
+        assert len(codex_calls) == 1
+        assert len(nemotron_calls) == 1
+        assert result["rounds"][0]["fixer"] == "codex"
+        assert result["rounds"][1]["fixer"] == "nemotron"
+
+    def test_legacy_caller_argument_used_for_all_rounds(self, tmp_path: Path, monkeypatch):
+        """Test that legacy caller argument is used for all rounds (backward compatibility)"""
+        job = {
+            "name": "job20",
+            "spec": "spec.md",
+            "files": ["a.py"],
+            "tests": ["tests/test.py"],
+            "max_rounds": 3,
+            "review": False,
+            "review_rounds": 0,
+        }
+        (tmp_path / "spec.md").write_text("spec")
+        (tmp_path / "tests").mkdir()
+        (tmp_path / "tests" / "test.py").write_text("def test_ok(): assert False\n")
+
+        legacy_calls = []
+
+        def legacy_caller(system, user):
+            legacy_calls.append((system, user))
+            if len(legacy_calls) == 1:
+                return "", {"status": 500, "error": "fail once"}
+            return "FILE: a.py\n```python\nok\n```", {"status": 200}
+
+        reviewer, _ = self._make_fake_reviewer({})
+        parse_files, _ = self._make_fake_parse_files([({"a.py": "ok"}, [])])
+        check_path = self._make_fake_check_path({"a.py": None})
+
+        def fake_pytest(tests, root, **kw):
+            return (True, "pass") if len(legacy_calls) > 1 else (False, "fail")
+
+        monkeypatch.setattr(fix_loop, "run_pytest", fake_pytest)
+
+        with self._setup_mocks(monkeypatch, parse_files, check_path):
+            result = fix_loop.run_job(job, tmp_path, caller=legacy_caller, reviewer=reviewer, status_dir=tmp_path / "_loop")
+
+        assert result["state"] == "passed-no-review"
+        assert len(legacy_calls) == 2
+        # Both rounds should show nemotron as fixer (legacy mode uses nemotron name)
+        assert result["rounds"][0]["fixer"] == "nemotron"
+        assert result["rounds"][1]["fixer"] == "nemotron"
+
+    def test_escalation_after_codex_round_fails(self, tmp_path: Path, monkeypatch):
+        """Test escalation happens after max_rounds even when Codex round fails"""
+        job = {
+            "name": "job21",
+            "spec": "spec.md",
+            "files": ["a.py"],
+            "tests": ["tests/test.py"],
+            "max_rounds": 2,
+            "review": False,
+            "review_rounds": 0,
+            "fixers": ["nemotron", "codex"],
+        }
+        (tmp_path / "spec.md").write_text("spec")
+        (tmp_path / "a.py").write_text("ORIGINAL")
+        (tmp_path / "tests").mkdir()
+        (tmp_path / "tests" / "test.py").write_text("def test_ok(): assert False\n")
+
+        nemotron_calls = []
+        codex_calls = []
+
+        def nemotron_caller(system, user):
+            nemotron_calls.append((system, user))
+            return "FILE: a.py\n```python\nbad\n```", {"status": 200}
+
+        def codex_caller(system, user):
+            codex_calls.append((system, user))
+            return "FILE: a.py\n```python\nbad2\n```", {"status": 200}
+
+        callers = {"nemotron": nemotron_caller, "codex": codex_caller}
+        reviewer, _ = self._make_fake_reviewer({})
+        parse_files, _ = self._make_fake_parse_files([
+            ({"a.py": "bad"}, []),
+            ({"a.py": "bad2"}, []),
+        ])
+        check_path = self._make_fake_check_path({"a.py": None})
+
+        monkeypatch.setattr(fix_loop, "run_pytest", lambda tests, root, **kw: (False, "fail"))
+
+        with self._setup_mocks(monkeypatch, parse_files, check_path):
+            result = fix_loop.run_job(job, tmp_path, callers=callers, reviewer=reviewer, status_dir=tmp_path / "_loop")
+
+        assert result["state"] == "escalate"
+        assert len(nemotron_calls) == 1
+        assert len(codex_calls) == 1
+        assert result["rounds"][0]["fixer"] == "nemotron"
+        assert result["rounds"][1]["fixer"] == "codex"
+        # Original file restored
+        assert (tmp_path / "a.py").read_text() == "ORIGINAL"
+
+    def test_status_json_contains_fixer_field(self, tmp_path: Path, monkeypatch):
+        """Test that status.json rounds contain the fixer field"""
+        job = {
+            "name": "job22",
+            "spec": "spec.md",
+            "files": ["a.py"],
+            "tests": ["tests/test.py"],
+            "max_rounds": 3,
+            "review": False,
+            "review_rounds": 0,
+            "fixers": ["nemotron", "codex"],
+        }
+        (tmp_path / "spec.md").write_text("spec")
+        (tmp_path / "tests").mkdir()
+        (tmp_path / "tests" / "test.py").write_text("def test_ok(): assert False\n")
+
+        def nemotron_caller(system, user):
+            return "", {"status": 500, "error": "fail"}
+
+        def codex_caller(system, user):
+            return "FILE: a.py\n```python\nok\n```", {"status": 200}
+
+        callers = {"nemotron": nemotron_caller, "codex": codex_caller}
+        reviewer, _ = self._make_fake_reviewer({})
+        parse_files, _ = self._make_fake_parse_files([({"a.py": "ok"}, [])])
+        check_path = self._make_fake_check_path({"a.py": None})
+
+        def fake_pytest(tests, root, **kw):
+            return (True, "pass")
+
+        monkeypatch.setattr(fix_loop, "run_pytest", fake_pytest)
+
+        status_dir = tmp_path / "_loop"
+        with self._setup_mocks(monkeypatch, parse_files, check_path):
+            fix_loop.run_job(job, tmp_path, callers=callers, reviewer=reviewer, status_dir=status_dir)
+
+        status_file = status_dir / "job22" / "status.json"
+        status = json.loads(status_file.read_text())
+        assert "rounds" in status
+        assert len(status["rounds"]) == 2
+        assert status["rounds"][0]["fixer"] == "nemotron"
+        assert status["rounds"][1]["fixer"] == "codex"
 
 
 class TestMain:

@@ -1,0 +1,21 @@
+{
+ "name": "research_wpA2",
+ "spec": "docs/pilot/nemotron_specs/research_wpA2.md",
+ "files": [
+  "research/pieces/a2_collect.py",
+  "research/pieces/test_a2_collect.py"
+ ],
+ "tests": [
+  "research/pieces/test_a2_collect.py"
+ ],
+ "reference": [],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 4,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

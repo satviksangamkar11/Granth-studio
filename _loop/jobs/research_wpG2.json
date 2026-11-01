@@ -1,0 +1,20 @@
+{
+ "name": "research_wpG2",
+ "spec": "docs/pilot/nemotron_specs/research_wpG2.md",
+ "files": [
+  "research/pieces/g2_autoloop_cli.py",
+  "research/pieces/test_g2_autoloop_cli.py"
+ ],
+ "tests": [
+  "research/pieces/test_g2_autoloop_cli.py"
+ ],
+ "reference": [],
+ "max_rounds": 3,
+ "review": false,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

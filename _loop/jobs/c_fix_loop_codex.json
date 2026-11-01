@@ -1,0 +1,10 @@
+﻿{"name": "c_fix_loop_codex",
+ "spec": "docs/pilot/nemotron_specs/job_fix_loop_codex.md",
+ "files": ["scripts/source/fix_loop.py", "tests/test_fix_loop.py"],
+ "tests": ["tests/test_fix_loop.py"],
+ "reference": ["scripts/source/codex_review.py"],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 2,
+ "reviewers": ["glm", "codex"]}
+

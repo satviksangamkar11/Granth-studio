@@ -1,0 +1,21 @@
+{
+ "name": "research_wpC1",
+ "spec": "docs/pilot/nemotron_specs/research_wpC1.md",
+ "files": [
+  "research/pieces/c1_cluster.py",
+  "research/pieces/test_c1_cluster.py"
+ ],
+ "tests": [
+  "research/pieces/test_c1_cluster.py"
+ ],
+ "reference": [],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 4,
+ "reviewers": [],
+ "fixers": [
+  "nemotron",
+  "nemotron",
+  "nemotron"
+ ]
+}

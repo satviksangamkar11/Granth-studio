@@ -1,0 +1,10 @@
+﻿{"name": "b_queue",
+ "spec": "docs/pilot/nemotron_specs/job_queue.md",
+ "files": ["scripts/source/fix_loop_queue.py", "tests/test_fix_loop_queue.py"],
+ "tests": ["tests/test_fix_loop_queue.py"],
+ "reference": ["docs/pilot/nemotron_specs/fix_loop_queue.md", "scripts/source/fix_loop.py"],
+ "max_rounds": 3,
+ "review": false,
+ "review_rounds": 2,
+ "reviewers": ["glm"]}
+
