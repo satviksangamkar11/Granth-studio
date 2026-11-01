@@ -27,8 +27,8 @@ Rev 3 applies the owner's second audit (all points checked against the files, se
 - [ ] 0.1 Close N1 (`nemotron_code.py`: approved spec root, no scratch output in `scripts/ src/ tests/ schemas/`, refuse any unfinished/unexpected FILE block) - `fix_loop.py` loads it, so it is on the A1 path. Until N1 passes, A1 code goes only through `coder_run.py` with Claude checking every written file
 
 ## Phase A - freeze and baseline
-- [ ] A1 Back up + hash the actual 59-shot baseline (split, binding, images, speech, timing); byte-for-byte list (item 3)
-- [ ] A2 Record in the decision log: pushed baseline `3adb09d` (on GitHub) and every later local commit by hash
+- [x] A1 Back up + hash the actual 59-shot baseline (split, binding, images, speech, timing); byte-for-byte list (item 3) DONE 2026-11-01: `canon/baselines/a1_baseline_2026-11-01.json`; 59/59 images match the binding, 124/124 speech clips match `eleven_manifest.json`, script hash = checker + measured hash, backup `D:/aai work/backups/a1_baseline_2026-11-01` 210/210 identical (189 MB)
+- [x] A2 Record in the decision log: pushed baseline `3adb09d` (on GitHub) and every later local commit by hash
 
 ## Phase B - coverage, then lock (order B2 -> B3 -> B1; ONE consolidated owner sheet)
 - [ ] B2 Owner approves the SIX proposed unfilmed ranges as ranges (master item S5); check ovis 58-60, which feed Scene S1 shot 1 (historical Shegaon)
