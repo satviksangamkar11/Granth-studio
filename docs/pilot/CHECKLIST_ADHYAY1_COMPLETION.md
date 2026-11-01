@@ -1,4 +1,4 @@
-# Checklist: complete Adhyay 1 (rev 3, 2026-11-01)
+# Checklist: complete Adhyay 1 (rev 3.1, 2026-11-01)
 
 Goal: one finished Adhyay 1 film, Marathi + Hindi, from ONE picture timeline. Every approved shot binding is SAVED so it replays with zero new director/planning model calls, and reusable preset templates are saved SEPARATELY so Adhyay 2-21 can use them.
 Legend: [x] done and verified, [~] partial, [ ] open. Item numbers in brackets point to `CHECKLIST_BUILD_PIPELINE.md` (master) or `CHECKLIST_REUSE_SHOT_PLANS.md` (R#). This file is the working order; the master keeps the detail.
@@ -35,7 +35,8 @@ Rev 3 applies the owner's second audit (all points checked against the files, se
 - [ ] B3a The 102 checker findings = 100 "ovi has no core line" + 2 line-numbering errors (S4-L4, S4-L5). 73 of the 100 are the B2 ranges. The other 27 are ovis OUTSIDE the six ranges that lack core-line coverage: 71-83, 85, 86, 89-93, 100, 101, 103, 105, 111, 125, 131
 - [ ] B3b Classify each of the 27 against the actual film treatment (`A1_story_for_approval.md`), with the source line as evidence: research-only (known: 75-82, not narrated or shown), visual-only, merged into a neighbouring line, or genuinely missing a line
 - [ ] B3c Checker change (coder writes, item 17): accept approved dispositions with source-linked evidence. Smallest change: research-only and intentionally-unfilmed ovis use the EXISTING unfilmed set; only visual-only and merged-equivalent need a new disposition. No artificial script lines
-- [ ] B3d Fix the 2 S4 numbering errors without changing any spoken wording; rerun the checker; only what is left goes to the owner
+- [ ] B3e Coverage count changes and must be approved, not silently redefined: the research-only ovis (75-82, eight, outside the rev9 ranges) are NEW omission decisions. If all 73 + these 8 are approved the unfilmed total is 81 (plus any other B3b research-only ovi). The owner sheet shows rev9's 73, each addition with its source evidence, and the new total; `approvals.json` records the new list and its hash
+- [ ] B3d The 2 S4 numbering errors: S4-L4 = ovi 112 (core, in the timing plan), S4-L5 = ovi 111 (optional, not in the timing plan); BOTH already have Marathi + Hindi clips under these ids (`A1_eleven_measured.json`, `A1_voice_measured.json`, `A1_audio_plan.json`). Do NOT just swap ids. Either (a) a tested, lossless id migration across every dependent manifest, timing record and the script, audio bytes unchanged and hash-verified before/after, or (b) the owner approves the legacy order as an explicit checker exception. Spoken wording and audio bytes never change; no speech regeneration. Then rerun the checker; only what is left goes to the owner
 - [ ] B1 ONLY THEN lock rev9 split + EASY script + 52 core / 10 optional + look questions + the dispositions -> `approvals.json` via `approve.py`, hash-based (item 15)
 - [ ] B4 Rights route recorded - mandatory before PUBLIC release, not before rendering (item 4)
 
@@ -95,3 +96,4 @@ Rev 3 (second owner audit, checked against the files):
 5. D7 keeps the old receipt; F4 says "zero new director/planning calls"; F5 visual (anti-slideshow) gate added.
 6. N1 moved from deferred to Phase 0 (`fix_loop.py` line 130 loads `nemotron_code.py`).
 Claude's refinement on point 1: research-only ovis can use the existing unfilmed mechanism; only visual-only and merged-equivalent need new checker code (smaller change).
+Rev 3.1 (third owner audit, checked against the files): B3d no plain id swap for S4-L4 (ovi 112, core, timed) / S4-L5 (ovi 111, optional, untimed), both have clips -> lossless tested migration or approved legacy order; B3e research-only ovis are new omission decisions (73 -> 81 if all approved), shown and approved explicitly. Owner authorized Phase 0 and Phase A only; rev 3.1 is not yet approved as final.
