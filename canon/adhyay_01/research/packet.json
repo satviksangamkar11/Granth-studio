@@ -1,0 +1,147 @@
+{
+  "adhyay": 1,
+  "characters": [
+    {
+      "raw": "Shri Gajanan Maharaj (श्री गजानन महाराज / समर्थ / सिद्धयोगी): Central saint. Ovis 70–83 address his unknown origin and devotional interpretation of his appearance; 88–144 describe the first meeting, food and the non-dual teaching. His arrival is not identified as his birth.",
+      "name": "Shri Gajanan Maharaj",
+      "name_mr": "श्री गजानन महाराज / समर्थ / सिद्धयोगी",
+      "description": "Central saint. Ovis 70–83 address his unknown origin and devotional interpretation of his appearance; 88–144 describe the first meeting, food and the non-dual teaching. His arrival is not identified as his birth."
+    },
+    {
+      "raw": "Bankatlal Agarwal (बंकटलाल आगरवाल): First observer and questioner; recognizes his mistaken first impression, asks for a meal and praises the good fortune of Shegaon (Ovis 97–122, 132).",
+      "name": "Bankatlal Agarwal",
+      "name_mr": "बंकटलाल आगरवाल",
+      "description": "First observer and questioner; recognizes his mistaken first impression, asks for a meal and praises the good fortune of Shegaon (Ovis 97–122, 132)."
+    },
+    {
+      "raw": "Damodarpant Kulkarni (दामोदरपंत कुलकर्णी): Bankatlal’s companion; offers Maharaj water, brings it in a gadva, and hears the teaching about distinctions (Ovis 98, 126, 133–143). The speaker of Ovis 136–137 is inferred from Ovi 135, not explicitly named in those two verses.",
+      "name": "Damodarpant Kulkarni",
+      "name_mr": "दामोदरपंत कुलकर्णी",
+      "description": "Bankatlal’s companion; offers Maharaj water, brings it in a gadva, and hears the teaching about distinctions (Ovis 98, 126, 133–143). The speaker of Ovis 136–137 is inferred from Ovi 135, not explicitly named in those two verses."
+    },
+    {
+      "raw": "Devidas (देविदास / देविदासबुवा): Devout householder associated with the Paturkar lineage and Madhyandina branch; described as mathadhipati in Ovi 85. A son’s ritushanti meal occasions the scene (84–87).",
+      "name": "Devidas",
+      "name_mr": "देविदास / देविदासबुवा",
+      "description": "Devout householder associated with the Paturkar lineage and Madhyandina branch; described as mathadhipati in Ovi 85. A son’s ritushanti meal occasions the scene (84–87)."
+    },
+    {
+      "raw": "Sant Dasganu Maharaj (संत दासगणू): Poet and narrator, requesting divine and saintly inspiration in the opening ovis and introducing the Shegaon story (1–69, 145–146).",
+      "name": "Sant Dasganu Maharaj",
+      "name_mr": "संत दासगणू",
+      "description": "Poet and narrator, requesting divine and saintly inspiration in the opening ovis and introducing the Shegaon story (1–69, 145–146)."
+    },
+    {
+      "raw": "Lord Ganapati / Saraswati / Pandurang / Shiva / Devi / Dattatreya: Invoked by the poet in the opening prayers; they are invocations, not additional characters participating in the Shegaon encounter (1–29).",
+      "name": "Lord Ganapati / Saraswati / Pandurang / Shiva / Devi / Dattatreya",
+      "name_mr": "",
+      "description": "Invoked by the poet in the opening prayers; they are invocations, not additional characters participating in the Shegaon encounter (1–29)."
+    },
+    {
+      "raw": "Ramchandra Patil (रामचंद्र पाटील): Requested the poet to recount Maharaj’s life during a Kartiki pilgrimage to Pandharpur (66–68).",
+      "name": "Ramchandra Patil",
+      "name_mr": "रामचंद्र पाटील",
+      "description": "Requested the poet to recount Maharaj’s life during a Kartiki pilgrimage to Pandharpur (66–68)."
+    },
+    {
+      "raw": "Arjuna and Subhadra (अर्जुन / सुभद्रा): Used in Bankatlal’s analogy for seeking liberation; not present in the Shegaon event (120–121).",
+      "name": "Arjuna and Subhadra",
+      "name_mr": "अर्जुन / सुभद्रा",
+      "description": "Used in Bankatlal’s analogy for seeking liberation; not present in the Shegaon event (120–121)."
+    }
+  ],
+  "locations": [
+    {
+      "raw": "Shegaon (शेगाव): Town in Varhad, placed in Khamgaon taluka in the poet’s account; setting of Maharaj’s appearance and the first meeting (58–64, 74, 83–144).",
+      "name": "Shegaon",
+      "name_mr": "शेगाव",
+      "description": "Town in Varhad, placed in Khamgaon taluka in the poet’s account; setting of Maharaj’s appearance and the first meeting (58–64, 74, 83–144)."
+    },
+    {
+      "raw": "Devidas’s house and road (देविदासांचे घर / रस्ता): The house hosting the ritushanti meal and the road outside where discarded leaf plates lay (84–96, 113–118).",
+      "name": "Devidas’s house and road",
+      "name_mr": "देविदासांचे घर / रस्ता",
+      "description": "The house hosting the ritushanti meal and the road outside where discarded leaf plates lay (84–96, 113–118)."
+    },
+    {
+      "raw": "Well and cattle watering trough (कूप / हाळ): The hal beside a well is explicitly a cattle-drinking trough, not a stream or river (134–140).",
+      "name": "Well and cattle watering trough",
+      "name_mr": "कूप / हाळ",
+      "description": "The hal beside a well is explicitly a cattle-drinking trough, not a stream or river (134–140)."
+    },
+    {
+      "raw": "Pandharpur and Akot (पंढरपूर / अकोट): Places mentioned in the poet’s account of the book’s creation; not part of the first Shegaon meeting (56, 66).",
+      "name": "Pandharpur and Akot",
+      "name_mr": "पंढरपूर / अकोट",
+      "description": "Places mentioned in the poet’s account of the book’s creation; not part of the first Shegaon meeting (56, 66)."
+    },
+    {
+      "raw": "Sajjangad (सज्जनगड): An alleged origin named as hearsay in Ovi 75; Ovi 76 says strong evidence is lacking. Do not present it as established fact.",
+      "name": "Sajjangad",
+      "name_mr": "सज्जनगड",
+      "description": "An alleged origin named as hearsay in Ovi 75; Ovi 76 says strong evidence is lacking. Do not present it as established fact."
+    }
+  ],
+  "objects": [
+    {
+      "raw": "ओवी / चरण (Ovi / Charan): Four-part Marathi verse form; the chapter contains 146 ovis in the transcriptions checked.",
+      "name": "ओवी / चरण",
+      "name_mr": "Ovi / Charan",
+      "description": "Four-part Marathi verse form; the chapter contains 146 ovis in the transcriptions checked."
+    },
+    {
+      "raw": "माघ वद्य सप्तमी / शके १८००: The lunar day and Shaka year in Ovis 74 and 83. The verse does not state a Gregorian date or Maharaj’s birth date.",
+      "name": "माघ वद्य सप्तमी / शके १८००",
+      "name_mr": "",
+      "description": "The lunar day and Shaka year in Ovis 74 and 83. The verse does not state a Gregorian date or Maharaj’s birth date."
+    },
+    {
+      "raw": "ऋतुशांती (Ritushanti): A traditional family rite for Devidas’s son, with a prepared feast in the household (86).",
+      "name": "ऋतुशांती",
+      "name_mr": "Ritushanti",
+      "description": "A traditional family rite for Devidas’s son, with a prepared feast in the household (86)."
+    },
+    {
+      "raw": "उष्ट्या पत्रावळी / शीत (Used leaf plates / rice grain): Discarded leaf plates and individual grains of food; central to the teaching on अन्नपरब्रह्म (87, 93–96).",
+      "name": "उष्ट्या पत्रावळी / शीत",
+      "name_mr": "Used leaf plates / rice grain",
+      "description": "Discarded leaf plates and individual grains of food; central to the teaching on अन्नपरब्रह्म (87, 93–96)."
+    },
+    {
+      "raw": "बंडी / दिगंबर (Bandi / Digambar): Ovi 88 mentions an old bandi while 92 calls his form digambar. Preserve the separate source descriptions rather than resolving them into a new physical claim.",
+      "name": "बंडी / दिगंबर",
+      "name_mr": "Bandi / Digambar",
+      "description": "Ovi 88 mentions an old bandi while 92 calls his form digambar. Preserve the separate source descriptions rather than resolving them into a new physical claim."
+    },
+    {
+      "raw": "भोपळा / तुंबा (Gourd water vessel): A gourd for drinking water, referred to again when Bankatlal offers to arrange water (89, 125–131).",
+      "name": "भोपळा / तुंबा",
+      "name_mr": "Gourd water vessel",
+      "description": "A gourd for drinking water, referred to again when Bankatlal offers to arrange water (89, 125–131)."
+    },
+    {
+      "raw": "कच्ची चिलीम (Unbaked clay chilim): Maharaj’s self-made clay pipe, explicitly described as unfired (90).",
+      "name": "कच्ची चिलीम",
+      "name_mr": "Unbaked clay chilim",
+      "description": "Maharaj’s self-made clay pipe, explicitly described as unfired (90)."
+    },
+    {
+      "raw": "गडवा / हाळ (Gadva / Hal): A water vessel carried by Damodarpant, and an animal-watering trough beside the well (134–137).",
+      "name": "गडवा / हाळ",
+      "name_mr": "Gadva / Hal",
+      "description": "A water vessel carried by Damodarpant, and an animal-watering trough beside the well (134–137)."
+    },
+    {
+      "raw": "वाळा (Vetiver / Khus): A fragrant root used to scent the water brought in a gadva (137); the speaker is contextually inferred as Damodarpant from Ovi 135.",
+      "name": "वाळा",
+      "name_mr": "Vetiver / Khus",
+      "description": "A fragrant root used to scent the water brought in a gadva (137); the speaker is contextually inferred as Damodarpant from Ovi 135."
+    },
+    {
+      "raw": "अन्नं ब्रह्मेति / गुळवणी / निरिच्छा: The Upanishadic food teaching (94–95), the named sweet preparation gulavani as an analogy (116), and desirelessness portrayed as Maharaj’s estate (122).",
+      "name": "अन्नं ब्रह्मेति / गुळवणी / निरिच्छा",
+      "name_mr": "",
+      "description": "The Upanishadic food teaching (94–95), the named sweet preparation gulavani as an analogy (116), and desirelessness portrayed as Maharaj’s estate (122)."
+    }
+  ]
+}

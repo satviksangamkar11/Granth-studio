@@ -16,9 +16,11 @@ def chapter_paths(adhyay: int, root: Path, flow_root: Path = Path("D:/aai work/f
     if adhyay == 1:
         return {
             "base": base,
-            "source_ovis": root / "canon" / "packets" / "adhyay_01" / "adhyay_01_ovis_hj.jsonl",
-            "research_packet": root / "canon" / "packets" / "adhyay_01" / "frozen_copies",
-            "script": root / "docs" / "pilot" / "A1_full_script_simple.md",
+            # source, research and script use the same docx-imported layout as Adhyay 2+ (owner 2026-11-01);
+            # audio, timing and images keep their existing files so the accepted clips and bindings stay valid
+            "source_ovis": base / "source" / "ovis.jsonl",
+            "research_packet": base / "research" / "packet.json",
+            "script": base / "script" / "easy.md",
             "bible": root / "canon" / "bible" / "adhyay_01",
             "stage1_dir": root / "canon" / "adhyay_01" / "stage1",
             "audio_plan": root / "canon" / "audio" / "A1_audio_plan.json",

@@ -133,22 +133,19 @@ def build_packet(adhyay: int, root: Path | str) -> tuple[dict, list[str]]:
         problems.append("ovis: missing")
 
     # research
-    if adhyay == 1:
-        packet["research"] = {}
-    else:
-        research_path = paths.get("research_packet")
-        if research_path and research_path.exists():
-            research_data, research_probs = _read_json_file(research_path, "research")
-            if research_probs:
-                problems.extend(research_probs)
-                packet["research"] = {}
-            elif isinstance(research_data, dict):
-                packet["research"] = research_data
-            else:
-                problems.append("research: bad shape")
-                packet["research"] = {}
-        else:
+    research_path = paths.get("research_packet")
+    if research_path and research_path.exists():
+        research_data, research_probs = _read_json_file(research_path, "research")
+        if research_probs:
+            problems.extend(research_probs)
             packet["research"] = {}
+        elif isinstance(research_data, dict):
+            packet["research"] = research_data
+        else:
+            problems.append("research: bad shape")
+            packet["research"] = {}
+    else:
+        packet["research"] = {}
 
     # script
     script_path = paths.get("script")

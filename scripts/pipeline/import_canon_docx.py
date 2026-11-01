@@ -22,6 +22,9 @@ SECTION_HEADER_PATTERN = re.compile(
     r"^Section\s+(\d+):\s*(\d+)\s*[\u2013-]\s*(\d+)\s*\|\s*(.+?)\s*\((.+?)\)\s*$"
 )
 
+# Any line that starts like a section header, even if the rest is malformed
+SECTION_PREFIX_PATTERN = re.compile(r"^Section\s+\d+")
+
 
 def _sha256_of_file(path: Path) -> str:
     h = hashlib.sha256()
@@ -81,7 +84,14 @@ def _parse_item_line(line: str) -> Dict[str, str]:
     description = ""
     # Find first ' ('
     idx_paren = line.find(" (")
-    if idx_paren != -1:
+    # Find first ': '
+    idx_colon = line.find(": ")
+    # If colon-space exists and (either no paren or colon comes before paren)
+    if idx_colon != -1 and (idx_paren == -1 or idx_colon < idx_paren):
+        name = line[:idx_colon].strip()
+        name_mr = ""
+        description = line[idx_colon + 2:].strip()
+    elif idx_paren != -1:
         name = line[:idx_paren].strip()
         rest = line[idx_paren + 2:]  # after ' ('
         idx_close = rest.find(")")
@@ -97,7 +107,6 @@ def _parse_item_line(line: str) -> Dict[str, str]:
             name_mr = rest.strip()
     else:
         # No ' (', maybe has ': '
-        idx_colon = line.find(": ")
         if idx_colon != -1:
             name = line[:idx_colon].strip()
             description = line[idx_colon + 2:].strip()
@@ -138,6 +147,7 @@ def parse_docx(path: Path) -> Dict[str, Any]:
         "objects": [],
     }
     current_part1_list: Optional[str] = None
+    source_notes: List[str] = []
 
     sections: List[Dict[str, Any]] = []
     ovis: List[Dict[str, Any]] = []
@@ -166,9 +176,13 @@ def parse_docx(path: Path) -> Dict[str, Any]:
                     current_part1_list = "locations"
                 elif para_text.startswith("3. Key Objects"):
                     current_part1_list = "objects"
-                elif style == "ListBullet" and current_part1_list is not None:
-                    item = _parse_item_line(para_text)
-                    part1_lists[current_part1_list].append(item)
+                elif style == "ListBullet":
+                    # Check for source register note (never a glossary object, even before any list heading)
+                    if para_text.startswith("Source register"):
+                        source_notes.append(para_text)
+                    elif current_part1_list is not None:
+                        item = _parse_item_line(para_text)
+                        part1_lists[current_part1_list].append(item)
                 # else ignore other paragraphs in PART 1
             elif state == "IN_PART2_SECTIONS":
                 # Expect section header
@@ -294,9 +308,15 @@ def parse_docx(path: Path) -> Dict[str, Any]:
                     if not sections:
                         # First section header must match
                         raise LayoutError(f"section header does not match pattern: {para_text!r}")
-                    else:
-                        # Closing paragraphs after last table - ignore this and all subsequent
-                        state = "AFTER_TABLES"
+                    # A malformed later header (a 'Section N' line, or one followed by
+                    # a table or context paragraph) must not silently end the section list
+                    next_child = children[i + 1] if i + 1 < len(children) else None
+                    next_tag = next_child.tag.split("}")[-1] if next_child is not None else ""
+                    next_text = _get_paragraph_text(next_child) if next_tag == "p" else ""
+                    if SECTION_PREFIX_PATTERN.match(para_text) or next_tag == "tbl" or next_text.startswith("संदर्भ:"):
+                        raise LayoutError(f"section header does not match pattern: {para_text!r}")
+                    # Closing paragraphs after last table - ignore this and all subsequent
+                    state = "AFTER_TABLES"
             elif state == "AFTER_TABLES":
                 # Ignore closing paragraphs
                 pass
@@ -305,12 +325,20 @@ def parse_docx(path: Path) -> Dict[str, Any]:
             # A table not preceded by header+context is invalid
             raise LayoutError("unexpected table without section header and context")
 
+        elif tag == "tbl" and state == "AFTER_TABLES":
+            # Any table after the closing paragraphs means sections were dropped
+            raise LayoutError("unexpected table after last section")
+
         i += 1
 
     if state not in ("IN_PART2_SECTIONS", "AFTER_TABLES"):
         # If we never reached PART 2
         if state in ("BEFORE_PART1", "IN_PART1"):
             raise LayoutError("no PART 2 paragraph found")
+
+    # PART 2 must hold at least one section header (a bare PART 2 is not an empty import)
+    if not sections:
+        raise LayoutError("PART 2 contains no section headers")
 
     # Final validation: ovi numbers should be 1..N contiguous
     if ovis:
@@ -326,12 +354,15 @@ def parse_docx(path: Path) -> Dict[str, Any]:
         "objects": part1_lists["objects"],
     }
 
+    source_note = "\n".join(source_notes) if source_notes else None
+
     return {
         "sections": sections,
         "ovis": ovis,
         "packet": packet,
         "mismatches": mismatches,
         "source_sha256": source_sha256,
+        "source_note": source_note,
     }
 
 
@@ -373,6 +404,7 @@ def write_outputs(parsed: Dict[str, Any], adhyay: int, out_root: Path) -> List[P
         "section_count": len(parsed["sections"]),
         "mismatches": parsed["mismatches"],
         "source_sha256": parsed["source_sha256"],
+        "source_note": parsed["source_note"],
     }
     with (source_dir / "import_report.json").open("w", encoding="utf-8") as f:
         json.dump(import_report, f, ensure_ascii=False, indent=2)

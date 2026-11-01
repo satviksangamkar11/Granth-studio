@@ -1,0 +1,8 @@
+{
+  "adhyay": 1,
+  "ovi_count": 146,
+  "section_count": 12,
+  "mismatches": [],
+  "source_sha256": "352fffa35eb3e2cbc2f31f995a2218e3609363a9eee028c873e47c63937637d1",
+  "source_note": "Source register & verification boundary: Original Marathi checked against TransLiteral (https://www.transliteral.org/pages/z81006221807/view) and Santvani (https://santvani.co.in/pages/granth/gajanan-vijay/adhyay-01.html); the simple-language columns are interpretive translations. No line-by-line collation with a certified printed edition has been performed. Variant readings adopted in Ovis 004, 049, 091, 096 and 139 are grounded in additional published transcriptions; the certified Sansthan print has not been directly collated."
+}

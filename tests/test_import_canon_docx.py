@@ -10,7 +10,7 @@ from xml.etree import ElementTree as ET
 
 import pytest
 
-from scripts.pipeline.import_canon_docx import parse_docx, write_outputs, main, LayoutError
+from scripts.pipeline.import_canon_docx import parse_docx, write_outputs, main, LayoutError, _parse_item_line
 
 
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
@@ -141,6 +141,31 @@ def _write_docx(tmp_path: Path, content: bytes) -> Path:
     return p
 
 
+class TestParseItemLine:
+    def test_colon_before_paren(self):
+        # GAP 1: colon-space before first ' ('
+        line = "A / B: The text (94-95) more"
+        result = _parse_item_line(line)
+        assert result["name"] == "A / B"
+        assert result["name_mr"] == ""
+        assert result["description"] == "The text (94-95) more"
+
+    def test_paren_before_colon_unchanged(self):
+        # Existing behavior: paren comes first
+        line = "Name (Marathi): desc"
+        result = _parse_item_line(line)
+        assert result["name"] == "Name"
+        assert result["name_mr"] == "Marathi"
+        assert result["description"] == "desc"
+
+    def test_colon_only_unchanged(self):
+        line = "Name: desc"
+        result = _parse_item_line(line)
+        assert result["name"] == "Name"
+        assert result["name_mr"] == ""
+        assert result["description"] == "desc"
+
+
 class TestParseDocx:
     def test_valid_synthetic(self, tmp_path: Path):
         docx_bytes = _valid_docx_bytes()
@@ -205,6 +230,9 @@ class TestParseDocx:
         assert o1["name_mr"] == "माला"
         assert o1["description"] == "Prayer beads"
 
+        # source_note should be None
+        assert parsed["source_note"] is None
+
     def test_mismatch_reporting(self, tmp_path: Path):
         # Build docx with mismatches: ovi 2 printed 5, ovi 4 no printed number
         part1_para = _p("PART 1")
@@ -247,6 +275,61 @@ class TestParseDocx:
         assert len(mismatches) == 2
         assert mismatches[0] == {"ovi": 2, "printed": 5}
         assert mismatches[1] == {"ovi": 4, "printed": None}
+
+    def test_source_note_collection(self, tmp_path: Path):
+        # Synthetic docx with one normal bullet and one source register bullet
+        part1_para = _p("PART 1")
+        char_heading = _p("1. Characters")
+        char_item = _p("Normal (नाम): description", style="ListBullet")
+        source_bullet = _p("Source register & boundary: note text", style="ListBullet")
+        part2_para = _p("PART 2")
+        sec1_header = _p("Section 1: 001–001 | T (E)")
+        sec1_context = _p("संदर्भ: c")
+        sec1_table = _tbl([["ovi", "o", "s", "h", "e"], ["001", "t", "s", "h", "e"]])
+        body_children = [part1_para, char_heading, char_item, source_bullet, part2_para, sec1_header, sec1_context, sec1_table]
+        document_xml = _build_document_xml(body_children)
+
+        content_types = """<?xml version="1.0" encoding="UTF-8"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>"""
+        rels = """<?xml version="1.0" encoding="UTF-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>"""
+        parts = {
+            "[Content_Types].xml": content_types,
+            "_rels/.rels": rels,
+            "word/document.xml": document_xml,
+        }
+        docx_bytes = _make_docx_xml(parts)
+        docx_path = _write_docx(tmp_path, docx_bytes)
+
+        parsed = parse_docx(docx_path)
+
+        # Only one object in characters
+        assert len(parsed["packet"]["characters"]) == 1
+        assert parsed["packet"]["characters"][0]["name"] == "Normal"
+        # source_note captured
+        assert parsed["source_note"] == "Source register & boundary: note text"
+
+        # Write outputs and check import_report.json includes source_note
+        out_root = tmp_path / "out"
+        write_outputs(parsed, 1, out_root)
+        report = json.loads((out_root / "adhyay_01" / "source" / "import_report.json").read_text(encoding="utf-8"))
+        assert report["source_note"] == "Source register & boundary: note text"
+
+    def test_no_source_note(self, tmp_path: Path):
+        # Same as valid synthetic but ensure source_note is None and report has null
+        docx_bytes = _valid_docx_bytes()
+        docx_path = _write_docx(tmp_path, docx_bytes)
+        parsed = parse_docx(docx_path)
+        assert parsed["source_note"] is None
+        out_root = tmp_path / "out"
+        write_outputs(parsed, 1, out_root)
+        report = json.loads((out_root / "adhyay_01" / "source" / "import_report.json").read_text(encoding="utf-8"))
+        assert report["source_note"] is None
 
     # Refusal tests
     def test_refuse_not_a_zip(self, tmp_path: Path):
@@ -581,6 +664,51 @@ class TestParseDocx:
             parse_docx(docx_path)
 
 
+def _docx_from_body(tmp_path: Path, body_children: List[ET.Element]) -> Path:
+    """A minimal docx around the given body elements (same parts as the tests above)."""
+    content_types = """<?xml version="1.0" encoding="UTF-8"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>"""
+    rels = """<?xml version="1.0" encoding="UTF-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>"""
+    parts = {"[Content_Types].xml": content_types, "_rels/.rels": rels, "word/document.xml": _build_document_xml(body_children)}
+    return _write_docx(tmp_path, _make_docx_xml(parts))
+
+
+def _section(n: int, first: int, last: int) -> List[ET.Element]:
+    rows = [["ovi", "o", "s", "h", "e"]] + [[f"{k:03d}", "t", "s", "h", "e"] for k in range(first, last + 1)]
+    return [_p(f"Section {n}: {first:03d}–{last:03d} | T (E)"), _p("संदर्भ: c"), _tbl(rows)]
+
+
+class TestLayoutRefusals2026_11_01:
+    """The three refusals added in the I2 review (bare PART 2, table after the last section, malformed later header)."""
+
+    def test_bare_part2_is_refused_not_an_empty_import(self, tmp_path: Path):
+        path = _docx_from_body(tmp_path, [_p("PART 1"), _p("PART 2")])
+        with pytest.raises(LayoutError, match="no section headers"):
+            parse_docx(path)
+
+    def test_table_after_the_closing_paragraphs_is_refused(self, tmp_path: Path):
+        body = [_p("PART 1"), _p("PART 2"), *_section(1, 1, 2), _p("closing line"), _p("second closing line"), _tbl([["x", "x", "x", "x", "x"]])]
+        with pytest.raises(LayoutError, match="after last section"):
+            parse_docx(_docx_from_body(tmp_path, body))
+
+    def test_malformed_later_section_header_is_refused(self, tmp_path: Path):
+        body = [_p("PART 1"), _p("PART 2"), *_section(1, 1, 2), _p("Section 2 broken header"), _p("संदर्भ: c"),
+                _tbl([["ovi", "o", "s", "h", "e"], ["003", "t", "s", "h", "e"]])]
+        with pytest.raises(LayoutError, match="does not match pattern"):
+            parse_docx(_docx_from_body(tmp_path, body))
+
+    def test_valid_two_sections_with_closing_lines_still_parse(self, tmp_path: Path):
+        body = [_p("PART 1"), _p("PART 2"), *_section(1, 1, 2), *_section(2, 3, 3), _p("॥ closing ॥")]
+        parsed = parse_docx(_docx_from_body(tmp_path, body))
+        assert [o["ovi"] for o in parsed["ovis"]] == [1, 2, 3] and len(parsed["sections"]) == 2
+
+
 class TestWriteOutputs:
     def test_write_outputs_creates_files(self, tmp_path: Path):
         parsed = {
@@ -600,6 +728,7 @@ class TestWriteOutputs:
             },
             "mismatches": [],
             "source_sha256": "abc123",
+            "source_note": None,
         }
         out_root = tmp_path / "out"
         paths = write_outputs(parsed, 5, out_root)
@@ -626,6 +755,7 @@ class TestWriteOutputs:
         assert report["section_count"] == 2
         assert report["mismatches"] == []
         assert report["source_sha256"] == "abc123"
+        assert report["source_note"] is None
 
         # packet.json
         packet = json.loads((out_root / "adhyay_05" / "research" / "packet.json").read_text(encoding="utf-8"))
@@ -639,6 +769,7 @@ class TestWriteOutputs:
             "packet": {"characters": [], "locations": [], "objects": []},
             "mismatches": [],
             "source_sha256": "x",
+            "source_note": None,
         }
         out_root = tmp_path / "out"
         write_outputs(parsed, 1, out_root)
@@ -686,10 +817,48 @@ class TestMain:
 
 
 @pytest.mark.skipif(
+    not (Path(__file__).resolve().parents[1] / "canon" / "test_inputs" / "Shri_Gajanan_Vijay_Chapter_1_Final.docx").exists(),
+    reason="Real canon docx not present"
+)
+class TestRealFileChapter1:
+    def test_real_file_parses_correctly(self):
+        repo_root = Path(__file__).resolve().parents[1]
+        docx_path = repo_root / "canon" / "test_inputs" / "Shri_Gajanan_Vijay_Chapter_1_Final.docx"
+        parsed = parse_docx(docx_path)
+
+        assert len(parsed["ovis"]) == 146
+        assert len(parsed["sections"]) == 12
+        # Ovi numbers 1..146 in order
+        for idx, ovi in enumerate(parsed["ovis"], 1):
+            assert ovi["ovi"] == idx
+        # Sections contiguous, first starts at 1, last ends at 146
+        assert parsed["sections"][0]["first"] == 1
+        assert parsed["sections"][-1]["last"] == 146
+        for i in range(1, len(parsed["sections"])):
+            assert parsed["sections"][i]["first"] == parsed["sections"][i-1]["last"] + 1
+
+        # Mismatches: 0
+        assert parsed["mismatches"] == []
+
+        # Packet counts
+        assert len(parsed["packet"]["characters"]) == 8
+        assert len(parsed["packet"]["locations"]) == 5
+        assert len(parsed["packet"]["objects"]) == 10
+
+        # source_note starts with "Source register"
+        assert parsed["source_note"] is not None
+        assert parsed["source_note"].startswith("Source register")
+
+        # No object name contains ": "
+        for obj in parsed["packet"]["objects"]:
+            assert ": " not in obj["name"]
+
+
+@pytest.mark.skipif(
     not (Path(__file__).resolve().parents[1] / "canon" / "test_inputs" / "Shri_Gajanan_Vijay_Chapter_2_Audited_Canon_Edition.docx").exists(),
     reason="Real canon docx not present"
 )
-class TestRealFile:
+class TestRealFileChapter2:
     def test_real_file_parses_correctly(self):
         repo_root = Path(__file__).resolve().parents[1]
         docx_path = repo_root / "canon" / "test_inputs" / "Shri_Gajanan_Vijay_Chapter_2_Audited_Canon_Edition.docx"
@@ -716,3 +885,16 @@ class TestRealFile:
 
         # Ovi 1 original Marathi starts with जयजय अज अजिता
         assert parsed["ovis"][0]["original_marathi"].startswith("जयजय अज अजिता")
+
+        # source_note should be None for Chapter 2
+        assert parsed["source_note"] is None
+
+        # Compare with committed packet.json
+        packet_path = repo_root / "canon" / "adhyay_02" / "research" / "packet.json"
+        if packet_path.exists():
+            with packet_path.open("r", encoding="utf-8") as f:
+                committed = json.load(f)
+            # Compare characters, locations, objects (order matters)
+            assert parsed["packet"]["characters"] == committed["characters"]
+            assert parsed["packet"]["locations"] == committed["locations"]
+            assert parsed["packet"]["objects"] == committed["objects"]

@@ -32,14 +32,17 @@ def test_two_digit_chapters_and_bad_numbers(tmp_path):
 def test_adhyay_1_keeps_its_existing_paths_and_they_exist():
     p = ch.chapter_paths(1, ROOT)
     assert set(p) == KEYS
-    assert p["script"] == ROOT / "docs" / "pilot" / "A1_full_script_simple.md"
+    base = ROOT / "canon" / "adhyay_01"
+    assert p["source_ovis"] == base / "source" / "ovis.jsonl"
+    assert p["research_packet"] == base / "research" / "packet.json"
+    assert p["script"] == base / "script" / "easy.md"
     assert p["audio_plan"] == ROOT / "canon" / "audio" / "A1_audio_plan.json"
     assert p["timing_plan"] == ROOT / "canon" / "audio" / "A1_timing_plan.json"
     assert p["measured"] == ROOT / "canon" / "audio" / "A1_eleven_measured.json"
     assert p["image_binding"] == ROOT / "canon" / "packets" / "adhyay_01" / "final_image_binding.json"
     assert p["flow_jobs"] == ROOT / "canon" / "drafts" / "A1_flow_shot_jobs.json"
     assert p["images_catalog"] == p["image_binding"]
-    for k in ("script", "audio_plan", "timing_plan", "measured", "image_binding", "flow_jobs", "images_catalog"):
+    for k in ("source_ovis", "research_packet", "script", "audio_plan", "timing_plan", "measured", "image_binding", "flow_jobs", "images_catalog"):
         assert p[k].exists(), k
 
 

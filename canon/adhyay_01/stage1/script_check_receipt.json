@@ -1,7 +1,7 @@
 {
  "adhyay": 1,
  "core": 52,
- "date": "2026-10-29",
+ "date": "2026-11-01",
  "errors": [
   "S4-L5: line numbers must be consecutive from 1 within the scene",
   "S4-L4: line numbers must be consecutive from 1 within the scene",
@@ -112,6 +112,6 @@
  "optional": 10,
  "problems": [],
  "scenes": 9,
- "script": "docs/pilot/A1_full_script_simple.md",
+ "script": "canon/adhyay_01/script/easy.md",
  "script_sha256": "e884d3fe43d4f90fe88daf868b1b723a3d6cd2a2f5e1b716bf1ff2b857edc092"
 }

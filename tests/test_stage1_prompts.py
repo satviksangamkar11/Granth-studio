@@ -189,27 +189,26 @@ def test_build_packet_bad_shapes():
             assert packet["sounds"] == []
 
 
-def test_build_packet_adhyay1_text_field():
+def test_build_packet_adhyay1_uses_the_docx_layout():
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp) / "repo"
         root.mkdir()
-        # Legacy ovis path for Adhyay 1
-        ovis_dir = root / "canon" / "packets" / "adhyay_01"
-        ovis_dir.mkdir(parents=True)
-        ovis = [{"adhyay": 1, "ovi": 1, "printed_no": "1", "text": "some text"}]
-        _write_jsonl(ovis_dir / "adhyay_01_ovis_hj.jsonl", ovis)
-        # Legacy research folder (skip)
-        (root / "canon" / "adhyay_01" / "research_packet").mkdir(parents=True)
-        # Legacy script path for Adhyay 1
-        script_dir = root / "docs" / "pilot"
-        script_dir.mkdir(parents=True)
+        # Adhyay 1 now uses the same docx-imported layout as Adhyay 2+ (owner 2026-11-01)
+        base = root / "canon" / "adhyay_01"
+        (base / "source").mkdir(parents=True)
+        ovis = [{"adhyay": 1, "ovi": 1, "section": 1, "original_marathi": "mar", "simple_marathi": "smar",
+                 "hindi": "hin", "easy_english": "eng", "printed_number": 1}]
+        _write_jsonl(base / "source" / "ovis.jsonl", ovis)
+        (base / "research").mkdir(parents=True)
+        _write_json(base / "research" / "packet.json", {"adhyay": 1, "characters": [{"name": "C"}], "locations": [], "objects": []})
+        (base / "script").mkdir(parents=True)
         script_md = (
             "## S1\n\n"
             "**S1-L1** | narrator | ovi 1 | core\n"
             "- Marathi: mar1\n"
             "- Hindi: hin1\n"
         )
-        (script_dir / "A1_full_script_simple.md").write_text(script_md, encoding="utf-8")
+        (base / "script" / "easy.md").write_text(script_md, encoding="utf-8")
         # presets
         (root / "assets" / "v5_presets").mkdir(parents=True)
         _write_json(root / "assets" / "v5_presets" / "index.json", [])
@@ -222,9 +221,8 @@ def test_build_packet_adhyay1_text_field():
 
         packet, problems = prompts.build_packet(1, root)
         assert problems == []
-        assert packet["ovis"][0]["text"] == "some text"
-        assert packet["research"] == {}
-        # Check that script lines were parsed
+        assert packet["ovis"][0]["original_marathi"] == "mar"
+        assert packet["research"]["characters"] == [{"name": "C"}]
         assert len(packet["script"]) == 1
         assert packet["script"][0]["id"] == "S1-L1"
 
@@ -451,8 +449,8 @@ def test_scene_call_with_full_prior_documents():
 
 
 @pytest.mark.skipif(
-    not (Path(__file__).resolve().parents[1] / "canon" / "packets" / "adhyay_01" / "adhyay_01_ovis_hj.jsonl").exists()
-    or not (Path(__file__).resolve().parents[1] / "docs" / "pilot" / "A1_full_script_simple.md").exists()
+    not (Path(__file__).resolve().parents[1] / "canon" / "adhyay_01" / "source" / "ovis.jsonl").exists()
+    or not (Path(__file__).resolve().parents[1] / "canon" / "adhyay_01" / "script" / "easy.md").exists()
     or not (Path(__file__).resolve().parents[1] / "assets" / "v5_presets" / "index.json").exists()
     or not (Path(__file__).resolve().parents[1] / "canon" / "series" / "voices.json").exists(),
     reason="Real repo not present"
@@ -462,6 +460,7 @@ def test_real_repo():
     packet, problems = prompts.build_packet(1, ROOT)
     assert problems == []
     assert len(packet["ovis"]) == 146
+    assert len(packet["research"]["characters"]) == 8
     assert len(packet["script"]) == 62
     assert len(packet["presets"]) == 11
     assert len(packet["voices"]) == 35
