@@ -66,10 +66,10 @@ def test_run_writes_clips_settles_with_the_reported_cost_and_hides_the_key(tmp_p
     assert man2["ok"] == 0 and "K" * 20 not in json.dumps(man2) and len(man2["lines"]) == 1      # stops at the first failure
 
 
-def test_the_simple_script_parses_to_all_62_plan_lines_and_replaces_the_text():
+def test_the_simple_script_parses_to_all_plan_lines_and_replaces_the_text():
     plan = json.loads((ROOT / "canon" / "audio" / "A1_audio_plan.json").read_text(encoding="utf-8"))
-    simple = el.load_simple(ROOT / "docs" / "pilot" / "A1_full_script_simple.md")
-    assert {l["id"] for l in plan["lines"]} == set(simple)
+    simple = el.load_simple(el.easy.DEFAULT)                                   # the canonical script (canon/adhyay_01/script/easy.md)
+    assert {l["id"] for l in plan["lines"]} == set(simple) and len(simple) == 61
     new = el.apply_simple(plan, simple)
     l = next(x for x in new["lines"] if x["id"] == "S2-L4")
     assert l["marathi"].startswith("समर्थ सिद्धयोगी") and "बंडी" in l["hindi"]
@@ -120,3 +120,11 @@ def test_measured_needs_every_line_in_both_languages_and_has_the_timing_shape(tm
     man = el.run(jobs, tmp_path / "o", 1000, "K" * 20, post=lambda *a, **k: (b"x", {"Character-Cost": "3"}), ledger=el.Ledger(tmp_path / "l.jsonl", 1000), probe=lambda p: 4.5)
     m = el.measured(man, PLAN, "h" * 64, "eleven_v4")
     assert m["engine"] == "elevenlabs" and m["lines"]["S1-L1"] == {"mr": 4.5, "hi": 4.5} and any("S1-L2" in p for p in m["problems"])
+
+
+def test_measured_refuses_a_clip_in_another_voice(tmp_path):
+    jobs = el.build_jobs(PLAN, ["S1-L1"], VMAP, "eleven_v4")                  # narrator takes
+    man = el.run(jobs, tmp_path / "o", 1000, "K" * 20, post=lambda *a, **k: (b"x", {"Character-Cost": "3"}), ledger=el.Ledger(tmp_path / "l.jsonl", 1000), probe=lambda p: 4.5)
+    recast = {"lines": [dict(PLAN["lines"][0], voice="gajanan")]}           # the plan now gives S1-L1 to another speaker
+    m = el.measured(man, recast, "h" * 64, "eleven_v4")
+    assert "S1-L1" not in m["lines"] and any("S1-L1.mr: clip voice narrator but the plan says gajanan" in p for p in m["problems"])

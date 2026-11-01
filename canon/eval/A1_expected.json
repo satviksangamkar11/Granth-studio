@@ -1,512 +1,522 @@
 {
-  "version": 1,
-  "status": "DRAFT evaluation rubric for the Adhyay 1 director run (no model has been scored against it yet). Every ovi number is a printed ovi of Adhyay 1.",
-  "global": {
-    "forbidden_text": [
-      "\\b(magh|saptami|vadya|february|23 feb)\\b",
-      "\\b(robe|robes|turban|crown|jewel|jewellery)\\b",
-      "sajjangad",
-      "samarth ramdas",
-      "\\bnath yogi",
-      "\\b(january|february|april|june|july|august|september|october|november|december)\\b|\\b(march|may)\\b(?=\\s+(of\\s+)?\\d)|\\b(in|on|during|since|until|from|by) (march|may)\\b|\\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\b|\\b\\d{1,2}(st|nd|rd|th)? (of )?(january|february|march|april|may|june|july|august|september|october|november|december)\\b"
-    ],
-    "forbidden_why": "no day or month; no elaborate clothing (a worn old bandi and otherwise bare); no Sajjangad / Samarth / Nath-yogi material in the pictures; no month names (the year only)",
-    "result_ok": [
-      "VALID",
-      "UNRESOLVED"
-    ]
-  },
-  "scenes": {
-    "S1": {
-      "shots": 2,
-      "beats": [
-        {
-          "id": "S1-b1",
-          "kind": "event",
-          "must_show": [
-            70
-          ],
-          "text_all": [
-            [
-              "shegaon"
-            ]
-          ],
-          "why": "historical Shegaon (58-60 as context) with the origins-unknown narration (70)"
-        },
-        {
-          "id": "S1-b2",
-          "kind": "event",
-          "text_all": [
-            [
-              "young",
-              "prime",
-              "youth"
-            ]
-          ],
-          "why": "the young Gajanan seen in Shegaon"
-        }
-      ],
-      "forbidden_text": [
-        "\\b(born|birth|childhood|child|parents?|mother|father|journey|travell?ed|arrives? from|came from)\\b"
+ "version": 1,
+ "status": "DRAFT evaluation rubric for the Adhyay 1 director run (no model has been scored against it yet). Every ovi number is a printed ovi of Adhyay 1.",
+ "global": {
+  "forbidden_text": [
+   "\\b(magh|saptami|vadya|february|23 feb)\\b",
+   "\\b(robe|robes|turban|crown|jewel|jewellery)\\b",
+   "sajjangad",
+   "samarth ramdas",
+   "\\bnath yogi",
+   "\\b(january|february|april|june|july|august|september|october|november|december)\\b|\\b(march|may)\\b(?=\\s+(of\\s+)?\\d)|\\b(in|on|during|since|until|from|by) (march|may)\\b|\\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\b|\\b\\d{1,2}(st|nd|rd|th)? (of )?(january|february|march|april|may|june|july|august|september|october|november|december)\\b"
+  ],
+  "forbidden_why": "no day or month; no elaborate clothing (a worn old bandi and otherwise bare); no Sajjangad / Samarth / Nath-yogi material in the pictures; no month names (the year only)",
+  "result_ok": [
+   "VALID",
+   "UNRESOLVED"
+  ]
+ },
+ "scenes": {
+  "S1": {
+   "shots": 2,
+   "beats": [
+    {
+     "id": "S1-b1",
+     "kind": "event",
+     "must_show": [
+      70
+     ],
+     "text_all": [
+      [
+       "shegaon"
       ]
+     ],
+     "why": "historical Shegaon (58-60 as context) with the origins-unknown narration (70)"
     },
-    "S2": {
-      "beats": [
-        {
-          "id": "S2-b1",
-          "kind": "event",
-          "must_show": [
-            84,
-            87
-          ],
-          "text_all": [
-            [
-              "plate",
-              "plates"
-            ]
-          ],
-          "why": "Devidas's house; used leaf plates thrown on the road"
-        },
-        {
-          "id": "S2-b2",
-          "kind": "continuity",
-          "must_show": [
-            88
-          ],
-          "text_all": [
-            [
-              "bandi"
-            ]
-          ],
-          "why": "the worn old bandi"
-        },
-        {
-          "id": "S2-b3",
-          "kind": "continuity",
-          "text_all": [
-            [
-              "digambar",
-              "bare",
-              "almost bare",
-              "unclothed"
-            ]
-          ],
-          "why": "digambar (92): otherwise bare"
-        },
-        {
-          "id": "S2-b4",
-          "kind": "event",
-          "must_show": [
-            94
-          ],
-          "text_all": [
-            [
-              "grain",
-              "rice"
-            ]
-          ],
-          "why": "he picks up and eats the leftover rice grains"
-        },
-        {
-          "id": "S2-b5",
-          "kind": "teaching",
-          "must_show": [
-            94,
-            95,
-            96
-          ],
-          "why": "teaching 1: food is Brahman (94-96, the narrator's explanation) stays with the grain-picking"
-        }
+    {
+     "id": "S1-b2",
+     "kind": "event",
+     "text_all": [
+      [
+       "young",
+       "prime",
+       "youth"
       ]
-    },
-    "S3": {
-      "beats": [
-        {
-          "id": "S3-b1",
-          "kind": "event",
-          "must_show": [
-            97,
-            98
-          ],
-          "text_all": [
-            [
-              "bankatlal"
-            ],
-            [
-              "damodar"
-            ]
-          ],
-          "why": "the two men see him"
-        },
-        {
-          "id": "S3-b2",
-          "kind": "event",
-          "must_show": [
-            99,
-            102
-          ],
-          "why": "they judge him mad or wise and decide to test his conduct"
-        }
-      ],
-      "no_named_dialogue": [
-        103,
-        104
-      ],
-      "must_dialogue": [
-        102
-      ]
-    },
-    "S4": {
-      "beats": [
-        {
-          "id": "S4-b1",
-          "kind": "event",
-          "must_show": [
-            108,
-            109
-          ],
-          "text_all": [
-            [
-              "bankatlal"
-            ]
-          ],
-          "why": "Bankatlal humbly asks why he searches the plates"
-        },
-        {
-          "id": "S4-b2",
-          "kind": "event",
-          "must_show": [
-            110
-          ],
-          "why": "no answer; only a steady look"
-        },
-        {
-          "id": "S4-b3",
-          "kind": "event",
-          "must_show": [
-            112
-          ],
-          "text_all": [
-            [
-              "bow",
-              "bows",
-              "bowed",
-              "salut",
-              "namaskar",
-              "pranam"
-            ]
-          ],
-          "why": "the visitors bow in silence"
-        }
-      ],
-      "no_dialogue": [
-        112
-      ],
-      "speaker_only": {
-        "109": [
-          "bankatlal",
-          "unclear"
-        ]
-      },
-      "must_dialogue": [
-        109
-      ]
-    },
-    "S5": {
-      "beats": [
-        {
-          "id": "S5-b1",
-          "kind": "event",
-          "must_show": [
-            114
-          ],
-          "text_all": [
-            [
-              "plate"
-            ]
-          ],
-          "why": "Devidas sets the plate before him at the door"
-        },
-        {
-          "id": "S5-b2",
-          "kind": "event",
-          "must_show": [
-            115,
-            118
-          ],
-          "text_all": [
-            [
-              "mix",
-              "mixes",
-              "mixed",
-              "mixing"
-            ]
-          ],
-          "why": "he mixes all the dishes together (118) and eats"
-        },
-        {
-          "id": "S5-b3",
-          "kind": "teaching",
-          "must_show": [
-            116,
-            117
-          ],
-          "why": "the narrator's two comparisons (116-117) are kept"
-        }
-      ],
-      "no_named_dialogue": [
-        113
-      ]
-    },
-    "S6": {
-      "beats": [
-        {
-          "id": "S6-b1",
-          "kind": "event",
-          "must_show": [
-            119,
-            121
-          ],
-          "text_all": [
-            [
-              "bankatlal"
-            ]
-          ],
-          "why": "Bankatlal admits calling him mad was a mistake and compares him to Arjuna"
-        }
-      ],
-      "no_named_dialogue": [
-        122
-      ],
-      "speaker_only": {
-        "119": [
-          "bankatlal",
-          "unclear"
-        ],
-        "120": [
-          "bankatlal",
-          "unclear"
-        ],
-        "121": [
-          "bankatlal",
-          "unclear"
-        ]
-      },
-      "must_dialogue": [
-        119,
-        120,
-        121
-      ]
-    },
-    "S7": {
-      "beats": [
-        {
-          "id": "S7-b1",
-          "kind": "event",
-          "must_show": [
-            123
-          ],
-          "why": "noon and the hot ground"
-        },
-        {
-          "id": "S7-b2",
-          "kind": "event",
-          "must_show": [
-            126
-          ],
-          "text_all": [
-            [
-              "damodar"
-            ]
-          ],
-          "why": "Damodarpant offers water"
-        },
-        {
-          "id": "S7-b3",
-          "kind": "teaching",
-          "must_show": [
-            128,
-            129,
-            130
-          ],
-          "why": "practical conduct (128-130) kept whole"
-        },
-        {
-          "id": "S7-b4",
-          "kind": "event",
-          "must_show": [
-            133
-          ],
-          "text_all": [
-            [
-              "damodar"
-            ]
-          ],
-          "why": "Damodarpant (not Bankatlal) goes into the house to fetch the water"
-        }
-      ],
-      "no_named_dialogue": [
-        123,
-        124
-      ],
-      "speaker_only": {
-        "126": [
-          "damodarpant",
-          "damodar"
-        ],
-        "128": [
-          "gajanan"
-        ],
-        "129": [
-          "gajanan"
-        ],
-        "130": [
-          "gajanan"
-        ]
-      },
-      "must_dialogue": [
-        126,
-        128,
-        129,
-        130,
-        132
-      ],
-      "actor_checks": [
-        {
-          "verbs": "\\b(fetch|fetches|fetched|brings?|enters?|entered|goes? into|goes? to fetch)\\b",
-          "wrong": "bankatlal",
-          "right": "damodar"
-        }
-      ]
-    },
-    "S8": {
-      "beats": [
-        {
-          "id": "S8-b1",
-          "kind": "event",
-          "must_show": [
-            134
-          ],
-          "text_all": [
-            [
-              "trough",
-              "well",
-              "cattle"
-            ]
-          ],
-          "why": "he drinks at the cattle trough beside the well"
-        },
-        {
-          "id": "S8-b2",
-          "kind": "event",
-          "must_show": [
-            136,
-            137
-          ],
-          "text_all": [
-            [
-              "damodar"
-            ]
-          ],
-          "why": "Damodarpant returns and protests; offers vetiver water"
-        }
-      ],
-      "forbidden_text": [
-        "\\b(maharaj|gajanan|he)\\b[^.;\\n]{0,40}\\bdrinks?\\b[^.;\\n]{0,40}(vetiver|cool water|damodar)"
-      ],
-      "speaker_only": {
-        "136": [
-          "damodarpant",
-          "damodar"
-        ],
-        "137": [
-          "damodarpant",
-          "damodar"
-        ]
-      },
-      "must_dialogue": [
-        136,
-        137
-      ]
-    },
-    "S9": {
-      "beats": [
-        {
-          "id": "S9-b1",
-          "kind": "teaching",
-          "must_show": [
-            138,
-            139,
-            140,
-            141,
-            142
-          ],
-          "why": "teaching 2 (138-142) kept whole: one Brahman in water and drinker, reflect on the origin of the world"
-        },
-        {
-          "id": "S9-b2",
-          "kind": "event",
-          "must_show": [
-            143
-          ],
-          "text_all": [
-            [
-              "ready",
-              "about to",
-              "on the verge",
-              "poised"
-            ]
-          ],
-          "why": "the men are READY to fall at his feet"
-        },
-        {
-          "id": "S9-b3",
-          "kind": "event",
-          "must_show": [
-            144
-          ],
-          "text_all": [
-            [
-              "run",
-              "runs",
-              "running"
-            ]
-          ],
-          "why": "he runs off like the wind"
-        }
-      ],
-      "forbidden_text": [
-        "\\bruns?\\b[^.;\\n]{0,30}\\b(to|toward|towards|into|back to|home|the temple|the forest|the river|the hills?)\\b",
-        {
-          "re": "\\b(falls?|fell|fallen|prostrates?|prostrated|prostrating)\\b",
-          "unless_before": "\\b(ready|about|prepar\\w*|poised|eager|willing|on the verge)\\b[^.;,\\n]*\\bto\\b[^.;,\\n]*$"
-        }
-      ],
-      "speaker_only": {
-        "138": [
-          "gajanan",
-          "unclear"
-        ],
-        "139": [
-          "gajanan"
-        ],
-        "140": [
-          "gajanan"
-        ],
-        "141": [
-          "gajanan"
-        ],
-        "142": [
-          "gajanan"
-        ]
-      },
-      "must_dialogue": [
-        138,
-        139,
-        140,
-        141,
-        142
-      ]
+     ],
+     "why": "the young Gajanan seen in Shegaon"
     }
+   ],
+   "forbidden_text": [
+    "\\b(born|birth|childhood|child|parents?|mother|father|journey|travell?ed|arrives? from|came from)\\b"
+   ]
+  },
+  "S2": {
+   "beats": [
+    {
+     "id": "S2-b1",
+     "kind": "event",
+     "must_show": [
+      84,
+      87
+     ],
+     "text_all": [
+      [
+       "plate",
+       "plates"
+      ]
+     ],
+     "why": "Devidas's house; used leaf plates thrown on the road"
+    },
+    {
+     "id": "S2-b2",
+     "kind": "continuity",
+     "must_show": [
+      88
+     ],
+     "text_all": [
+      [
+       "bandi"
+      ]
+     ],
+     "why": "the worn old bandi"
+    },
+    {
+     "id": "S2-b3",
+     "kind": "continuity",
+     "text_all": [
+      [
+       "digambar",
+       "bare",
+       "almost bare",
+       "unclothed"
+      ]
+     ],
+     "why": "digambar (92): otherwise bare"
+    },
+    {
+     "id": "S2-b4",
+     "kind": "event",
+     "must_show": [
+      94
+     ],
+     "text_all": [
+      [
+       "grain",
+       "rice"
+      ]
+     ],
+     "why": "he picks up and eats the leftover rice grains"
+    },
+    {
+     "id": "S2-b5",
+     "kind": "teaching",
+     "must_show": [
+      94,
+      95,
+      96
+     ],
+     "why": "teaching 1: food is Brahman (94-96, the narrator's explanation) stays with the grain-picking"
+    }
+   ]
+  },
+  "S3": {
+   "beats": [
+    {
+     "id": "S3-b1",
+     "kind": "event",
+     "must_show": [
+      97,
+      98
+     ],
+     "text_all": [
+      [
+       "bankatlal"
+      ],
+      [
+       "damodar"
+      ]
+     ],
+     "why": "the two men see him"
+    },
+    {
+     "id": "S3-b2",
+     "kind": "event",
+     "must_show": [
+      99,
+      102
+     ],
+     "why": "they judge him mad or wise and decide to test his conduct"
+    }
+   ],
+   "no_named_dialogue": [
+    103,
+    104
+   ],
+   "must_dialogue": [
+    102
+   ]
+  },
+  "S4": {
+   "beats": [
+    {
+     "id": "S4-b1",
+     "kind": "event",
+     "must_show": [
+      108,
+      109
+     ],
+     "text_all": [
+      [
+       "bankatlal"
+      ]
+     ],
+     "why": "Bankatlal humbly asks why he searches the plates"
+    },
+    {
+     "id": "S4-b2",
+     "kind": "event",
+     "must_show": [
+      110
+     ],
+     "why": "no answer; only a steady look"
+    },
+    {
+     "id": "S4-b3",
+     "kind": "event",
+     "must_show": [
+      112
+     ],
+     "text_all": [
+      [
+       "bow",
+       "bows",
+       "bowed",
+       "salut",
+       "namaskar",
+       "pranam"
+      ]
+     ],
+     "why": "the visitors bow in silence"
+    }
+   ],
+   "no_dialogue": [
+    112
+   ],
+   "speaker_only": {
+    "109": [
+     "bankatlal",
+     "unclear"
+    ]
+   },
+   "must_dialogue": [
+    109
+   ]
+  },
+  "S5": {
+   "beats": [
+    {
+     "id": "S5-b1",
+     "kind": "event",
+     "must_show": [
+      114
+     ],
+     "text_all": [
+      [
+       "plate"
+      ]
+     ],
+     "why": "Devidas sets the plate before him at the door"
+    },
+    {
+     "id": "S5-b2",
+     "kind": "event",
+     "must_show": [
+      115,
+      118
+     ],
+     "text_all": [
+      [
+       "mix",
+       "mixes",
+       "mixed",
+       "mixing"
+      ]
+     ],
+     "why": "he mixes all the dishes together (118) and eats"
+    },
+    {
+     "id": "S5-b3",
+     "kind": "teaching",
+     "must_show": [
+      116,
+      117
+     ],
+     "why": "the narrator's two comparisons (116-117) are kept"
+    }
+   ],
+   "no_named_dialogue": [
+    113
+   ]
+  },
+  "S6": {
+   "beats": [
+    {
+     "id": "S6-b1",
+     "kind": "event",
+     "must_show": [
+      119,
+      121
+     ],
+     "text_all": [
+      [
+       "bankatlal"
+      ]
+     ],
+     "why": "Bankatlal admits calling him mad was a mistake and compares him to Arjuna"
+    }
+   ],
+   "no_named_dialogue": [],
+   "speaker_only": {
+    "119": [
+     "bankatlal",
+     "unclear"
+    ],
+    "120": [
+     "bankatlal",
+     "unclear"
+    ],
+    "121": [
+     "bankatlal",
+     "unclear"
+    ],
+    "122": [
+     "bankatlal"
+    ]
+   },
+   "must_dialogue": [
+    119,
+    120,
+    121
+   ]
+  },
+  "S7": {
+   "beats": [
+    {
+     "id": "S7-b1",
+     "kind": "event",
+     "must_show": [
+      123
+     ],
+     "why": "noon and the hot ground"
+    },
+    {
+     "id": "S7-b2",
+     "kind": "event",
+     "must_show": [
+      126
+     ],
+     "text_all": [
+      [
+       "damodar"
+      ]
+     ],
+     "why": "Damodarpant offers water"
+    },
+    {
+     "id": "S7-b3",
+     "kind": "teaching",
+     "must_show": [
+      128,
+      129,
+      130
+     ],
+     "why": "practical conduct (128-130) kept whole"
+    },
+    {
+     "id": "S7-b4",
+     "kind": "event",
+     "must_show": [
+      133
+     ],
+     "text_all": [
+      [
+       "damodar"
+      ]
+     ],
+     "why": "Damodarpant (not Bankatlal) goes into the house to fetch the water"
+    }
+   ],
+   "no_named_dialogue": [
+    123,
+    124
+   ],
+   "speaker_only": {
+    "126": [
+     "damodarpant",
+     "damodar"
+    ],
+    "128": [
+     "gajanan"
+    ],
+    "129": [
+     "gajanan"
+    ],
+    "130": [
+     "gajanan"
+    ],
+    "125": [
+     "bankatlal"
+    ],
+    "131": [
+     "gajanan"
+    ]
+   },
+   "must_dialogue": [
+    126,
+    128,
+    129,
+    130,
+    132
+   ],
+   "actor_checks": [
+    {
+     "verbs": "\\b(fetch|fetches|fetched|brings?|enters?|entered|goes? into|goes? to fetch)\\b",
+     "wrong": "bankatlal",
+     "right": "damodar"
+    }
+   ]
+  },
+  "S8": {
+   "beats": [
+    {
+     "id": "S8-b1",
+     "kind": "event",
+     "must_show": [
+      134
+     ],
+     "text_all": [
+      [
+       "trough",
+       "well",
+       "cattle"
+      ]
+     ],
+     "why": "he drinks at the cattle trough beside the well"
+    },
+    {
+     "id": "S8-b2",
+     "kind": "event",
+     "must_show": [
+      136,
+      137
+     ],
+     "text_all": [
+      [
+       "damodar"
+      ]
+     ],
+     "why": "Damodarpant returns and protests; offers vetiver water"
+    }
+   ],
+   "forbidden_text": [
+    "\\b(maharaj|gajanan|he)\\b[^.;\\n]{0,40}\\bdrinks?\\b[^.;\\n]{0,40}(vetiver|cool water|damodar)"
+   ],
+   "speaker_only": {
+    "136": [
+     "damodarpant",
+     "damodar"
+    ],
+    "137": [
+     "damodarpant",
+     "damodar"
+    ]
+   },
+   "must_dialogue": [
+    136,
+    137
+   ]
+  },
+  "S9": {
+   "beats": [
+    {
+     "id": "S9-b1",
+     "kind": "teaching",
+     "must_show": [
+      138,
+      139,
+      140,
+      141,
+      142
+     ],
+     "why": "teaching 2 (138-142) kept whole: one Brahman in water and drinker, reflect on the origin of the world"
+    },
+    {
+     "id": "S9-b2",
+     "kind": "event",
+     "must_show": [
+      143
+     ],
+     "text_all": [
+      [
+       "ready",
+       "about to",
+       "on the verge",
+       "poised"
+      ]
+     ],
+     "why": "the men are READY to fall at his feet"
+    },
+    {
+     "id": "S9-b3",
+     "kind": "event",
+     "must_show": [
+      144
+     ],
+     "text_all": [
+      [
+       "run",
+       "runs",
+       "running"
+      ]
+     ],
+     "why": "he runs off like the wind"
+    }
+   ],
+   "forbidden_text": [
+    "\\bruns?\\b[^.;\\n]{0,30}\\b(to|toward|towards|into|back to|home|the temple|the forest|the river|the hills?)\\b",
+    {
+     "re": "\\b(falls?|fell|fallen|prostrates?|prostrated|prostrating)\\b",
+     "unless_before": "\\b(ready|about|prepar\\w*|poised|eager|willing|on the verge)\\b[^.;,\\n]*\\bto\\b[^.;,\\n]*$"
+    }
+   ],
+   "speaker_only": {
+    "138": [
+     "gajanan",
+     "unclear"
+    ],
+    "139": [
+     "gajanan"
+    ],
+    "140": [
+     "gajanan"
+    ],
+    "141": [
+     "gajanan"
+    ],
+    "142": [
+     "gajanan"
+    ]
+   },
+   "must_dialogue": [
+    138,
+    139,
+    140,
+    141,
+    142
+   ]
   }
+ },
+ "changes": [
+  "2026-11-01 owner locked directive: ovi 122 and 125 are Bankatlal's speech (S6-L5, S7-L4); ovi 131 is Gajanan's (S7-L11 made core); 122 removed from no_named_dialogue"
+ ]
 }

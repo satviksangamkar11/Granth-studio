@@ -50,6 +50,6 @@ def test_timing_fits_both_languages_and_tiles_every_scene():
         if scene["beats"]:
             assert sh[-1]["to_s"] + 1e-9 >= scene["beats"][-1]["end_s"], f"{scene['scene']} picture ends before its speech"
     freeze = json.loads(FREEZE.read_text(encoding="utf-8"))
-    assert shots == freeze["counts"]["shots"] == 59
+    assert shots == freeze["counts"]["shots"]
     assert sorted(set(measured["lines"]) - timed) == sorted(freeze["untimed_optional_lines"])
     assert len(timed) == freeze["counts"]["timed_core_lines"]

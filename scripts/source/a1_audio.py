@@ -251,7 +251,8 @@ def main() -> int:
         for l in plan["lines"]:
             l["measured"] = l["id"] in meas and bool(meas[l["id"]].get("mr") and meas[l["id"]].get("hi"))
         print(f"measured durations used for {n} of {len(plan['lines'])} lines")
-    errors, warnings = validate_plan(plan, ovis, res["macro"], dt.speaker_table(files["addendum"].splitlines()))
+    rows = dt.speaker_rows(files["addendum"].splitlines())                  # frozen table + owner overrides
+    errors, warnings = validate_plan(plan, ovis, res["macro"], rows)
     for w in warnings:
         print("WARN", w)
     if errors:

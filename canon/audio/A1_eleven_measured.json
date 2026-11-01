@@ -2,7 +2,7 @@
  "status": "MEASURED from ElevenLabs speech (DRAFT voices, NOT VALIDATED until the owner has listened)",
  "engine": "elevenlabs",
  "model": "eleven_v4",
- "script_sha256": "e884d3fe43d4f90fe88daf868b1b723a3d6cd2a2f5e1b716bf1ff2b857edc092",
+ "script_sha256": "a17e73e92b1067ff5f44b11f22cefd6888954debea192b1eaff30b359d092b2d",
  "problems": [],
  "clips": {
   "S1-L1.mr": {
@@ -635,24 +635,6 @@
    "text": "वैसे ही यह श्रेष्ठ ज्ञानी पुरुष मुक्तिरूपी सुभद्रा के लिए पागल बना है; अब इनकी और परीक्षा लेने की ज़रूरत नहीं.",
    "key": "53ae377c3bb2726327f361c06b6b58952c43fc02dafa040b505e2592209b4fc2"
   },
-  "S6-L5.mr": {
-   "lang": "mr",
-   "voice": "narrator",
-   "speaker": "CXkeo30p0Sk4Lr0TAzeo",
-   "seconds": 6.16,
-   "mp3_sha256": "214a92aab0e86dc7a67fa9ca52b044fab331bf2e755727987fad4b039fc8da8a",
-   "text": "आपले शेगाव खरोखर धन्य झाले, जिथे आपल्याला अशा थोर योगीराजांचे दर्शन घडले.",
-   "key": "30d5171ee4ed11c521f04cf57822da3d7ddefb64c4c19b1f0e9c33743a1ab466"
-  },
-  "S6-L5.hi": {
-   "lang": "hi",
-   "voice": "narrator",
-   "speaker": "CXkeo30p0Sk4Lr0TAzeo",
-   "seconds": 5.12,
-   "mp3_sha256": "30467d4d213d93beae3d72466cc206c25347a571ced40c62111a3a6603e101f7",
-   "text": "धन्य है हमारा शेगाँव, जहाँ हमें ऐसे महान योगीराज के दर्शन हुए.",
-   "key": "74f69f2822421477f2a942ce63e3daf79a451fd44af7fc3aacff0fb8f9020d83"
-  },
   "S7-L1.mr": {
    "lang": "mr",
    "voice": "narrator",
@@ -671,24 +653,6 @@
    "text": "दोपहर की तेज़ धूप हो गई और धरती तपने लगी.",
    "key": "ade21e67e577321ce301333a845e4811125dc72bf8c8c681956fd3a4679bf3ef"
   },
-  "S7-L2.mr": {
-   "lang": "mr",
-   "voice": "narrator",
-   "speaker": "CXkeo30p0Sk4Lr0TAzeo",
-   "seconds": 3.52,
-   "mp3_sha256": "247368cb39bae439bba4533b053a5f58620484cb1b290bea82f7b6683e30c8d7",
-   "text": "पक्षीसुद्धा सावलीच्या शोधात झाडांवर जाऊन बसले.",
-   "key": "1df5a1e16f73794137f5799141ba6052ac1f6762def783e715bdf29e70a17c03"
-  },
-  "S7-L2.hi": {
-   "lang": "hi",
-   "voice": "narrator",
-   "speaker": "CXkeo30p0Sk4Lr0TAzeo",
-   "seconds": 3.6,
-   "mp3_sha256": "718506566785504c50787bb446e2c835e26cdddf9a252ed617cc4ec192fe47a7",
-   "text": "पक्षी भी छाँव की तलाश में पेड़ों पर जाकर बैठ गए.",
-   "key": "7f7f426664d5327e6457ef1358b0325559a85b476efacd2fbf0d8a538f6cb122"
-  },
   "S7-L3.mr": {
    "lang": "mr",
    "voice": "narrator",
@@ -706,24 +670,6 @@
    "mp3_sha256": "bbfff90ec08435acabc63f0798b621255ac07410ab0cfc7d6ebae004c2e8afc1",
    "text": "ऐसी कड़ी धूप में भी महाराज आनंद से बैठे थे.",
    "key": "a21451fd157c217cd8cd648ae456431f258f657da56ce62f305088d4c0b6419a"
-  },
-  "S7-L4.mr": {
-   "lang": "mr",
-   "voice": "narrator",
-   "speaker": "CXkeo30p0Sk4Lr0TAzeo",
-   "seconds": 6.8,
-   "mp3_sha256": "adad733cc1f0ebe8f60ee3b3d229166d037ba5c3b80998c250f04716c0038d10",
-   "text": "हे पोटभर जेवले आहेत पण यांच्या तुंब्यात पाणी नाही; तर पंत, आपण यांच्यासाठी पाणी आणून देऊया.",
-   "key": "ac7c6cf36a3247dbdddc2a18a268e708da6cd2d3cbb4fdd0e5abf8800e4c58d1"
-  },
-  "S7-L4.hi": {
-   "lang": "hi",
-   "voice": "narrator",
-   "speaker": "CXkeo30p0Sk4Lr0TAzeo",
-   "seconds": 7.52,
-   "mp3_sha256": "97fdad6c8ee04687b9338dc80a257a215931b89e55e299e72b3bd77b1a6450e5",
-   "text": "इन्होंने पेट भर भोजन कर लिया है पर इनके तुंबे में पानी नहीं है; तो पंत, हम इनके लिए पानी लाकर देते हैं.",
-   "key": "101d818c2849db8c37cdc113669ac644db1bd99463df867c4e8581d0b5e9c478"
   },
   "S7-L5.mr": {
    "lang": "mr",
@@ -1120,6 +1066,42 @@
    "mp3_sha256": "c4bf0cfd9a7158faa7433cfff5387a9b1ed99a6e8bbaeeca21b7824cfde611c3",
    "text": "उनके मन का भाव जानकर महाराज वहाँ से हवा की गति से दौड़ते हुए निकल पड़े; भला हवा की उस गति को इस दुनिया में कौन रोक सकता है?",
    "key": "378cfa76d39f67640858276c82cf44d43af7d4d9f6876ca82cca2a0e68d60322"
+  },
+  "S6-L5.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "fqdB7wf4ETj9FXQ8wkLu",
+   "seconds": 5.92,
+   "mp3_sha256": "d5ecddaa1f6bc65c34b9ce2df2d01922b294b5976d3f6924e13f7df1452e8cda",
+   "text": "आपले शेगाव खरोखर धन्य झाले, जिथे आपल्याला अशा थोर योगीराजांचे दर्शन घडले.",
+   "key": "2f4ae65ffbe8a1c1fe27ab3374958ff90554f1b1ea0e4eb28afe61479cb91c94"
+  },
+  "S6-L5.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "fqdB7wf4ETj9FXQ8wkLu",
+   "seconds": 5.2,
+   "mp3_sha256": "881edf394da6b8fa798506d43d9406554b966d528a503f9e2e7796658ed07d2a",
+   "text": "धन्य है हमारा शेगाँव, जहाँ हमें ऐसे महान योगीराज के दर्शन हुए.",
+   "key": "01fb4e2d0e8ca9aa24f55fdaad971419b89a74188a2f68e582d48ca2b95ab441"
+  },
+  "S7-L4.mr": {
+   "lang": "mr",
+   "voice": "bankatlal",
+   "speaker": "fqdB7wf4ETj9FXQ8wkLu",
+   "seconds": 7.04,
+   "mp3_sha256": "1e531b87ce2951731ce6493324e41df9f9c8d74c8790c6bc347725336d0d2b03",
+   "text": "हे पोटभर जेवले आहेत पण यांच्या तुंब्यात पाणी नाही; तर पंत, आपण यांच्यासाठी पाणी आणून देऊया.",
+   "key": "971bb2b58c38244bf842a7423ae2f361a88f82973605bfe317594310ead694cb"
+  },
+  "S7-L4.hi": {
+   "lang": "hi",
+   "voice": "bankatlal",
+   "speaker": "fqdB7wf4ETj9FXQ8wkLu",
+   "seconds": 7.84,
+   "mp3_sha256": "940a8790c46a431ebc16c747e42fc67b2b5f72eb4a258d0b3b72316f8a1a2743",
+   "text": "इन्होंने पेट भर भोजन कर लिया है पर इनके तुंबे में पानी नहीं है; तो पंत, हम इनके लिए पानी लाकर देते हैं.",
+   "key": "9f9011b3266538be8c6d96ddd66ecf396d73e9d5ba109a097fec51d5aa2ab354"
   }
  },
  "lines": {
@@ -1264,24 +1246,20 @@
    "hi": 8.32
   },
   "S6-L5": {
-   "mr": 6.16,
-   "hi": 5.12
+   "mr": 5.92,
+   "hi": 5.2
   },
   "S7-L1": {
    "mr": 4.08,
    "hi": 3.92
-  },
-  "S7-L2": {
-   "mr": 3.52,
-   "hi": 3.6
   },
   "S7-L3": {
    "mr": 3.28,
    "hi": 3.52
   },
   "S7-L4": {
-   "mr": 6.8,
-   "hi": 7.52
+   "mr": 7.04,
+   "hi": 7.84
   },
   "S7-L5": {
    "mr": 1.76,

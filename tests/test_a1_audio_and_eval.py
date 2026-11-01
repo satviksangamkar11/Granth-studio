@@ -22,7 +22,7 @@ ev = load("a1_eval_t", "scripts/source/a1_eval.py")
 ss = load("ss_t", "scripts/source/story_split.py")
 dt = a1.dt
 files, OVIS, INDEX = dt.load_inputs()
-ROWS = dt.speaker_table(files["addendum"].splitlines())
+ROWS = dt.speaker_rows(files["addendum"].splitlines())                  # frozen table + owner overrides, as in a1_audio.main
 EDITS = json.loads((ROOT / "canon" / "story_split_edits" / "A1_rev1.json").read_text(encoding="utf-8"))
 MACRO = ss.build_macro({"stories": EDITS["stories"], "unfilmed_ranges": EDITS["unfilmed_ranges"]}, 1, sorted(OVIS), "x" * 64)
 EXPECTED = json.loads((ROOT / "canon" / "eval" / "A1_expected.json").read_text(encoding="utf-8"))
@@ -57,8 +57,8 @@ def test_voices_follow_the_owners_dialogue_table_and_unclear_speech_stays_with_t
     by = {}
     for l in p["lines"]:
         by.setdefault(l["voice"], set()).add(l["ovi"])
-    assert by["damodarpant"] <= {126, 136, 137} and by["gajanan"] <= {128, 129, 130, 131, 138, 139, 140, 141, 142} and by["bankatlal"] <= {102, 109, 119, 120, 121, 132}
-    unclear = {103, 104, 113, 122, 123, 124, 125, 99, 100, 101}
+    assert by["damodarpant"] <= {126, 136, 137} and by["gajanan"] <= {128, 129, 130, 131, 138, 139, 140, 141, 142} and by["bankatlal"] <= {102, 109, 119, 120, 121, 122, 125, 132}         # 122, 125: owner directive 2026-11-01
+    unclear = {103, 104, 113, 123, 124, 99, 100, 101}                  # 122 and 125 settled by the owner (2026-11-01)
     assert not [l for l in p["lines"] if l["voice"] != "narrator" and l["ovi"] in unclear]
 
 
@@ -131,8 +131,10 @@ def test_the_saved_timing_matches_the_split_budgets_and_the_split_hash():
     audio = json.loads((ROOT / "canon" / "audio" / "A1_audio_plan.json").read_text(encoding="utf-8"))
     tm = json.loads((ROOT / "canon" / "audio" / "A1_timing_plan.json").read_text(encoding="utf-8"))
     assert audio["split_sha256"] == tm["split_sha256"] and len(tm["split_sha256"]) == 64
-    assert [s["planned_shots"] for s in tm["scenes"]] == [sc["shot_budget"] for st in EDITS["stories"] for sc in st["scenes"]]
-    assert tm["planned_shots"] == tm["allocated_shots"]
+    budgets = [sc["shot_budget"] for st in EDITS["stories"] for sc in st["scenes"]]
+    assert [s["planned_shots"] for s in tm["scenes"]] == [max(s["audio_needs"], b) for s, b in zip(tm["scenes"], budgets)]   # owner 2026-11-01: add shots where the speech needs them
+    assert all(s["planned_shots"] >= b for s, b in zip(tm["scenes"], budgets))
+    assert tm["planned_shots"] == sum(s["planned_shots"] for s in tm["scenes"]) and tm["allocated_shots"] == sum(budgets)
 
 
 # ----------------------------------------------------------------------------- the evaluation scorer

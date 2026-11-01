@@ -70,7 +70,7 @@
     4
    ],
    "voice": "narrator",
-   "priority": "optional",
+   "priority": "core",
    "marathi": "त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा",
    "hindi": "उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी।",
    "note": "Ritushanti: a rite of passage for a boy of 13-16 (owner's final answer S5-3).",
@@ -166,7 +166,7 @@
     4
    ],
    "voice": "narrator",
-   "priority": "optional",
+   "priority": "core",
    "marathi": "मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या",
    "hindi": "पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं।",
    "note": "Digambar (92).",
@@ -190,7 +190,7 @@
     4
    ],
    "voice": "narrator",
-   "priority": "optional",
+   "priority": "core",
    "marathi": "ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें",
    "hindi": "वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे।",
    "note": "",
@@ -861,18 +861,18 @@
     1,
     2
    ],
-   "voice": "narrator",
+   "voice": "bankatlal",
    "priority": "core",
    "marathi": "धन्य आपुलें शेगांव । दृष्टी पाहिला योगीराव",
    "hindi": "धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए।",
-   "note": "Table: speaker unclear (122): narrator.",
+   "note": "Owner directive 2026-11-01: 119-122 are Bankatlal's speech.",
    "syllables": {
     "mr": 17,
     "hi": 21
    },
    "seconds": {
-    "mr": 6.16,
-    "hi": 5.12
+    "mr": 5.92,
+    "hi": 5.2
    },
    "measured": true
   },
@@ -897,30 +897,6 @@
    "seconds": {
     "mr": 4.08,
     "hi": 3.92
-   },
-   "measured": true
-  },
-  {
-   "id": "S7-L2",
-   "scene": "S7",
-   "kind": "verse",
-   "ovi": 123,
-   "charans": [
-    3,
-    4
-   ],
-   "voice": "narrator",
-   "priority": "optional",
-   "marathi": "पांखरें हीं आश्रयाला । जाऊन बैसलीं वृक्षावरी",
-   "hindi": "पक्षी आश्रय के लिए जाकर पेड़ों पर बैठ गए।",
-   "note": "",
-   "syllables": {
-    "mr": 18,
-    "hi": 19
-   },
-   "seconds": {
-    "mr": 3.52,
-    "hi": 3.6
    },
    "measured": true
   },
@@ -957,18 +933,18 @@
     1,
     4
    ],
-   "voice": "narrator",
-   "priority": "optional",
+   "voice": "bankatlal",
+   "priority": "core",
    "marathi": "हा जेवळा यथेच्छपणीं । तुंब्यामध्यें नाहीं पाणी । तें पंता या लागुनी । आपण देऊं आणून",
    "hindi": "यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें।",
-   "note": "Table: Bankatlal 'inferred' from the address to the Pant: kept with the narrator.",
+   "note": "Owner directive 2026-11-01: Bankatlal (addresses Pant directly); core.",
    "syllables": {
     "mr": 32,
     "hi": 31
    },
    "seconds": {
-    "mr": 6.8,
-    "hi": 7.52
+    "mr": 7.04,
+    "hi": 7.84
    },
    "measured": true
   },
@@ -1126,7 +1102,7 @@
     4
    ],
    "voice": "gajanan",
-   "priority": "optional",
+   "priority": "core",
    "marathi": "म्हणून तुमच्या चातुर्यासी । गरज असल्या तुम्हां साची । तरतूद करा पाण्याची । म्हणजे अवघें संपलें",
    "hindi": "'इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त।'",
    "note": "",

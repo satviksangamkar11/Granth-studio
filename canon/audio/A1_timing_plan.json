@@ -1,6 +1,6 @@
 {
  "estimate": false,
- "basis": "62 of 62 lines MEASURED from generated speech; the rest are estimates at the assumed rates",
+ "basis": "61 of 61 lines MEASURED from generated speech; the rest are estimates at the assumed rates",
  "assumed_rates": {
   "mr": 3.8,
   "hi": 4.6
@@ -59,15 +59,15 @@
     96
    ],
    "allocation": 8,
-   "audio_needs": 8,
-   "planned_shots": 8,
-   "marathi_s": 41.7,
-   "hindi_s": 42.0,
-   "common_s": 43.3,
+   "audio_needs": 11,
+   "planned_shots": 11,
+   "marathi_s": 62.7,
+   "hindi_s": 63.4,
+   "common_s": 65.0,
    "visual_only_shots": [
-    3,
-    7,
-    8
+    4,
+    8,
+    11
    ],
    "beats": [
     {
@@ -79,44 +79,68 @@
      "shot": 1
     },
     {
+     "line": "S2-L2",
+     "ovi": 86,
+     "voice": "narrator",
+     "start_s": 4.6,
+     "end_s": 10.52,
+     "shot": 1
+    },
+    {
      "line": "S2-L3",
      "ovi": 87,
      "voice": "narrator",
-     "start_s": 4.6,
-     "end_s": 10.84,
-     "shot": 1
+     "start_s": 11.02,
+     "end_s": 17.26,
+     "shot": 2
     },
     {
      "line": "S2-L4",
      "ovi": 88,
      "voice": "narrator",
-     "start_s": 11.34,
-     "end_s": 18.46,
-     "shot": 2
+     "start_s": 17.76,
+     "end_s": 24.88,
+     "shot": 3
+    },
+    {
+     "line": "S2-L6",
+     "ovi": 92,
+     "voice": "narrator",
+     "start_s": 25.38,
+     "end_s": 33.14,
+     "shot": 5
+    },
+    {
+     "line": "S2-L7",
+     "ovi": 93,
+     "voice": "narrator",
+     "start_s": 33.64,
+     "end_s": 40.12,
+     "shot": 6
     },
     {
      "line": "S2-L8",
      "ovi": 94,
      "voice": "narrator",
-     "start_s": 18.96,
-     "end_s": 27.6,
-     "shot": 4
+     "start_s": 40.62,
+     "end_s": 49.26,
+     "shot": 7
     },
     {
      "line": "S2-L9",
      "ovi": 95,
      "voice": "narrator",
-     "start_s": 28.1,
-     "end_s": 34.1,
-     "shot": 5
+     "start_s": 49.76,
+     "end_s": 55.76,
+     "shot": 9
     },
     {
      "line": "S2-L10",
      "ovi": 96,
      "voice": "narrator",
-     "start_s": 34.6,
-     "end_s": 42.84,
-     "shot": 6
+     "start_s": 56.26,
+     "end_s": 64.5,
+     "shot": 10
     }
    ],
    "shots": [
@@ -126,17 +150,28 @@
      "to_s": 6.0,
      "lines_starting": [
       "S2-L1",
-      "S2-L3"
+      "S2-L2"
      ],
      "ovis": [
       84,
-      87
+      86
      ]
     },
     {
      "shot": 2,
      "from_s": 6.0,
      "to_s": 12.0,
+     "lines_starting": [
+      "S2-L3"
+     ],
+     "ovis": [
+      87
+     ]
+    },
+    {
+     "shot": 3,
+     "from_s": 12.0,
+     "to_s": 18.0,
      "lines_starting": [
       "S2-L4"
      ],
@@ -145,16 +180,38 @@
      ]
     },
     {
-     "shot": 3,
-     "from_s": 12.0,
-     "to_s": 18.0,
+     "shot": 4,
+     "from_s": 18.0,
+     "to_s": 24.0,
      "lines_starting": [],
      "ovis": []
     },
     {
-     "shot": 4,
-     "from_s": 18.0,
-     "to_s": 24.0,
+     "shot": 5,
+     "from_s": 24.0,
+     "to_s": 30.0,
+     "lines_starting": [
+      "S2-L6"
+     ],
+     "ovis": [
+      92
+     ]
+    },
+    {
+     "shot": 6,
+     "from_s": 30.0,
+     "to_s": 36.0,
+     "lines_starting": [
+      "S2-L7"
+     ],
+     "ovis": [
+      93
+     ]
+    },
+    {
+     "shot": 7,
+     "from_s": 36.0,
+     "to_s": 42.0,
      "lines_starting": [
       "S2-L8"
      ],
@@ -163,9 +220,16 @@
      ]
     },
     {
-     "shot": 5,
-     "from_s": 24.0,
-     "to_s": 30.0,
+     "shot": 8,
+     "from_s": 42.0,
+     "to_s": 48.0,
+     "lines_starting": [],
+     "ovis": []
+    },
+    {
+     "shot": 9,
+     "from_s": 48.0,
+     "to_s": 54.0,
      "lines_starting": [
       "S2-L9"
      ],
@@ -174,9 +238,9 @@
      ]
     },
     {
-     "shot": 6,
-     "from_s": 30.0,
-     "to_s": 36.0,
+     "shot": 10,
+     "from_s": 54.0,
+     "to_s": 60.0,
      "lines_starting": [
       "S2-L10"
      ],
@@ -185,16 +249,9 @@
      ]
     },
     {
-     "shot": 7,
-     "from_s": 36.0,
-     "to_s": 42.0,
-     "lines_starting": [],
-     "ovis": []
-    },
-    {
-     "shot": 8,
-     "from_s": 42.0,
-     "to_s": 48.0,
+     "shot": 11,
+     "from_s": 60.0,
+     "to_s": 66.0,
      "lines_starting": [],
      "ovis": []
     }
@@ -594,9 +651,9 @@
    "allocation": 6,
    "audio_needs": 6,
    "planned_shots": 6,
-   "marathi_s": 29.0,
-   "hindi_s": 29.5,
-   "common_s": 30.5,
+   "marathi_s": 28.8,
+   "hindi_s": 29.6,
+   "common_s": 30.3,
    "visual_only_shots": [
     5,
     6
@@ -637,9 +694,9 @@
     {
      "line": "S6-L5",
      "ovi": 122,
-     "voice": "narrator",
+     "voice": "bankatlal",
      "start_s": 23.86,
-     "end_s": 30.02,
+     "end_s": 29.78,
      "shot": 4
     }
    ],
@@ -712,14 +769,13 @@
     133
    ],
    "allocation": 9,
-   "audio_needs": 9,
-   "planned_shots": 9,
-   "marathi_s": 47.9,
-   "hindi_s": 49.2,
-   "common_s": 50.0,
+   "audio_needs": 12,
+   "planned_shots": 12,
+   "marathi_s": 63.3,
+   "hindi_s": 65.9,
+   "common_s": 66.7,
    "visual_only_shots": [
-    5,
-    9
+    12
    ],
    "beats": [
     {
@@ -739,68 +795,84 @@
      "shot": 1
     },
     {
+     "line": "S7-L4",
+     "ovi": 125,
+     "voice": "bankatlal",
+     "start_s": 9.1,
+     "end_s": 16.94,
+     "shot": 2
+    },
+    {
      "line": "S7-L5",
      "ovi": 126,
      "voice": "narrator",
-     "start_s": 9.1,
-     "end_s": 10.86,
-     "shot": 2
+     "start_s": 17.44,
+     "end_s": 19.2,
+     "shot": 3
     },
     {
      "line": "S7-L6",
      "ovi": 126,
      "voice": "damodarpant",
-     "start_s": 11.36,
-     "end_s": 17.2,
-     "shot": 2
+     "start_s": 19.7,
+     "end_s": 25.54,
+     "shot": 4
     },
     {
      "line": "S7-L7",
      "ovi": 127,
      "voice": "narrator",
-     "start_s": 17.7,
-     "end_s": 22.1,
-     "shot": 3
+     "start_s": 26.04,
+     "end_s": 30.44,
+     "shot": 5
     },
     {
      "line": "S7-L8",
      "ovi": 128,
      "voice": "gajanan",
-     "start_s": 22.6,
-     "end_s": 29.96,
-     "shot": 4
+     "start_s": 30.94,
+     "end_s": 38.3,
+     "shot": 6
     },
     {
      "line": "S7-L9",
      "ovi": 129,
      "voice": "gajanan",
-     "start_s": 30.46,
-     "end_s": 37.74,
-     "shot": 6
+     "start_s": 38.8,
+     "end_s": 46.08,
+     "shot": 7
     },
     {
      "line": "S7-L10",
      "ovi": 130,
      "voice": "gajanan",
-     "start_s": 38.24,
-     "end_s": 42.64,
-     "shot": 7
+     "start_s": 46.58,
+     "end_s": 50.98,
+     "shot": 8
+    },
+    {
+     "line": "S7-L11",
+     "ovi": 131,
+     "voice": "gajanan",
+     "start_s": 51.48,
+     "end_s": 59.32,
+     "shot": 9
     },
     {
      "line": "S7-L12",
      "ovi": 132,
      "voice": "bankatlal",
-     "start_s": 43.14,
-     "end_s": 45.7,
-     "shot": 8
+     "start_s": 59.82,
+     "end_s": 62.38,
+     "shot": 10
     },
     {
      "line": "S7-L13",
      "ovi": 133,
      "voice": "narrator",
-     "start_s": 46.2,
-     "end_s": 49.48,
-     "shot": 8
+     "start_s": 62.88,
+     "end_s": 66.16,
+     "shot": 11
     }
    ],
    "shots": [
@@ -822,7 +894,28 @@
      "from_s": 6.0,
      "to_s": 12.0,
      "lines_starting": [
-      "S7-L5",
+      "S7-L4"
+     ],
+     "ovis": [
+      125
+     ]
+    },
+    {
+     "shot": 3,
+     "from_s": 12.0,
+     "to_s": 18.0,
+     "lines_starting": [
+      "S7-L5"
+     ],
+     "ovis": [
+      126
+     ]
+    },
+    {
+     "shot": 4,
+     "from_s": 18.0,
+     "to_s": 24.0,
+     "lines_starting": [
       "S7-L6"
      ],
      "ovis": [
@@ -830,9 +923,9 @@
      ]
     },
     {
-     "shot": 3,
-     "from_s": 12.0,
-     "to_s": 18.0,
+     "shot": 5,
+     "from_s": 24.0,
+     "to_s": 30.0,
      "lines_starting": [
       "S7-L7"
      ],
@@ -841,9 +934,9 @@
      ]
     },
     {
-     "shot": 4,
-     "from_s": 18.0,
-     "to_s": 24.0,
+     "shot": 6,
+     "from_s": 30.0,
+     "to_s": 36.0,
      "lines_starting": [
       "S7-L8"
      ],
@@ -852,16 +945,9 @@
      ]
     },
     {
-     "shot": 5,
-     "from_s": 24.0,
-     "to_s": 30.0,
-     "lines_starting": [],
-     "ovis": []
-    },
-    {
-     "shot": 6,
-     "from_s": 30.0,
-     "to_s": 36.0,
+     "shot": 7,
+     "from_s": 36.0,
+     "to_s": 42.0,
      "lines_starting": [
       "S7-L9"
      ],
@@ -870,9 +956,9 @@
      ]
     },
     {
-     "shot": 7,
-     "from_s": 36.0,
-     "to_s": 42.0,
+     "shot": 8,
+     "from_s": 42.0,
+     "to_s": 48.0,
      "lines_starting": [
       "S7-L10"
      ],
@@ -881,22 +967,42 @@
      ]
     },
     {
-     "shot": 8,
-     "from_s": 42.0,
-     "to_s": 48.0,
+     "shot": 9,
+     "from_s": 48.0,
+     "to_s": 54.0,
      "lines_starting": [
-      "S7-L12",
+      "S7-L11"
+     ],
+     "ovis": [
+      131
+     ]
+    },
+    {
+     "shot": 10,
+     "from_s": 54.0,
+     "to_s": 60.0,
+     "lines_starting": [
+      "S7-L12"
+     ],
+     "ovis": [
+      132
+     ]
+    },
+    {
+     "shot": 11,
+     "from_s": 60.0,
+     "to_s": 66.0,
+     "lines_starting": [
       "S7-L13"
      ],
      "ovis": [
-      132,
       133
      ]
     },
     {
-     "shot": 9,
-     "from_s": 48.0,
-     "to_s": 54.0,
+     "shot": 12,
+     "from_s": 66.0,
+     "to_s": 72.0,
      "lines_starting": [],
      "ovis": []
     }
@@ -1208,11 +1314,11 @@
    ]
   }
  ],
- "marathi_s": 309.3,
- "hindi_s": 318.3,
- "common_audio_s": 325.3,
- "planned_shots": 59,
- "planned_picture_s": 354,
+ "marathi_s": 345.5,
+ "hindi_s": 356.5,
+ "common_audio_s": 363.4,
+ "planned_shots": 65,
+ "planned_picture_s": 390,
  "allocated_shots": 59,
  "split_sha256": "285046ade8110e61ec1e9f6e85935e3354495b3dd5e54daff87663a3e4fa5949"
 }

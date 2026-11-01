@@ -128,6 +128,9 @@ def words(*texts) -> set:
 
 def frame_ends(preset_json: dict) -> dict:
     """First and last frame of a preset, derived from its own transform (never from the model): layer roles visible and camera zoom."""
+    if "segments" not in preset_json:                                        # flat motion.py preset (12-17): one image, one camera path
+        cam, roles = preset_json["camera"], sorted(preset_json["roles"])
+        return {"first_roles": roles, "last_roles": roles, "zoom": [cam["start"]["zoom"], cam["end"]["zoom"]]}
     segs = preset_json["segments"]
     return {"first_roles": sorted(l["asset"] for l in segs[0]["layers"]), "last_roles": sorted(l["asset"] for l in segs[-1]["layers"]),
             "zoom": [segs[0]["camera"]["start"]["zoom"], segs[-1]["camera"]["end"]["zoom"]]}
@@ -203,6 +206,14 @@ def speaker_table(addendum_lines: list) -> dict:
             for n in range(int(m[1]), int(m[2] or m[1]) + 1):
                 rows[n] = cell
     return rows
+
+
+def speaker_rows(addendum_lines: list) -> dict:
+    """The owner's dialogue table (frozen copy) with the owner's later decisions applied on top (a1_audio_spec.SPEAKER_OVERRIDES): use this, not speaker_table, for real Adhyay 1 rows."""
+    spec = importlib.util.spec_from_file_location("a1_audio_spec_rows", ROOT / "scripts" / "source" / "a1_audio_spec.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return {**speaker_table(addendum_lines), **getattr(mod, "SPEAKER_OVERRIDES", {})}
 
 
 def validate_scene(scene, presets: dict, ovi_text: dict, scene_range: tuple, ctx: dict, chapter: int = 1, scene_id: str | None = None) -> tuple[list, list]:
@@ -1009,7 +1020,7 @@ def main() -> int:
     if any(n not in ranges for n in wanted):
         raise SystemExit(f"unknown scene; available: {sorted(ranges)}")
     ctx = {"packet_text": "", "speakers": speaker_registry(files["analysis"].splitlines()), "preset_json": load_preset_json(presets_index), "prop_materials": {},
-           "speaker_rows": speaker_table(files["addendum"].splitlines())}
+           "speaker_rows": speaker_rows(files["addendum"].splitlines())}
     here = ROOT / "scripts" / "source"
     inputs = {"packet_files": packet_hashes, "director": director.name, "reviewers": list(names), "settings": settings, "scenes": wanted,
               "code_sha256": {**{f: _sha(here / f) for f in ("director_test.py", "director_run.py", "kimi_adapter.py", "draft_source.py")},      # the prompts live in director_test.py

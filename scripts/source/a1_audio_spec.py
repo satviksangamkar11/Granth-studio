@@ -10,17 +10,24 @@ VOICES = {"narrator": "the storyteller (reads verse narration and every unclear 
 # On-screen captions (no audio, no duration). The year ONLY; never a day or month. The year is the owner's instruction (the Granth says only 'within Shaka 1800s').
 CAPTIONS = [("S1-K1", "S1", "shot 1 or 2", "१८७८", "1878", "Year only (owner's instruction); the narrator does not say it.")]
 
+# Owner decisions that settle rows the frozen dialogue table leaves unclear (the frozen research copy itself is never edited).
+# Applied on top of director_test.speaker_table(); each entry names the decision.
+SPEAKER_OVERRIDES = {
+    122: "Bankatlal (owner directive 2026-11-01: ovis 119-122 are Bankatlal's speech)",
+    125: "Bankatlal (owner directive 2026-11-01: addresses Pant directly)",
+}
+
 # (id, scene, ovi, [c1, c2], voice, priority, hindi, note)
 LINES = [
     ("S1-L1", "S1", 70, [1, 4], "narrator", "core", "इन महापुरुष का ठौर-ठिकाना कहाँ था, या उनकी जाति का पता क्या था, यह इतिहास की दृष्टि से पता नहीं चलता।", "Origins cannot be traced. The year appears only as the caption S1-K1."),
 
     ("S2-L1", "S2", 84, [3, 4], "narrator", "core", "वहाँ एक श्रद्धालु गृहस्थ थे, उनका नाम देविदास था।", ""),
-    ("S2-L2", "S2", 86, [1, 4], "narrator", "optional", "उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी।", "Ritushanti: a rite of passage for a boy of 13-16 (owner's final answer S5-3)."),
+    ("S2-L2", "S2", 86, [1, 4], "narrator", "core", "उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी।", "Ritushanti: a rite of passage for a boy of 13-16 (owner's final answer S5-3)."),
     ("S2-L3", "S2", 87, [1, 4], "narrator", "core", "देविदास ब्राह्मण के घर के सामने रास्ते पर जूठी पत्तलें फेंकी गई थीं।", ""),
     ("S2-L4", "S2", 88, [1, 4], "narrator", "core", "समर्थ सिद्ध योगी गजानन उसी जगह बैठे थे; उनके बदन पर पुराने-धुराने कपड़े की एक बंडी थी।", "The worn old bandi (88)."),
     ("S2-L5", "S2", 91, [1, 4], "narrator", "optional", "दृष्टि नासिका के अग्रभाग पर, मुद्रा शांत; तपोबल देह में झलक रहा था, जैसे पूर्व दिशा का बाल सूर्य — कितना वर्णन करें!", "The sunrise comparison is not a time-of-day instruction."),
-    ("S2-L6", "S2", 92, [1, 4], "narrator", "optional", "पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं।", "Digambar (92)."),
-    ("S2-L7", "S2", 93, [1, 4], "narrator", "optional", "वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे।", ""),
+    ("S2-L6", "S2", 92, [1, 4], "narrator", "core", "पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं।", "Digambar (92)."),
+    ("S2-L7", "S2", 93, [1, 4], "narrator", "core", "वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे।", ""),
     ("S2-L8", "S2", 94, [1, 4], "narrator", "core", "जो भी चावल का दाना नज़र में आता, उसे उठाकर मुँह में डालते; इसका हेतु यही था — 'अन्न ही परब्रह्म है' यह समझाना।", "Teaching 1: food is Brahman."),
     ("S2-L9", "S2", 95, [1, 4], "narrator", "core", "क्योंकि श्रुति गरजकर कहती है कि अन्न ही निश्चय से ब्रह्म है — 'अन्नं ब्रह्मेति' यह उक्ति उपनिषदों में है।", "Teaching 1: the Upanishad words."),
     ("S2-L10", "S2", 96, [1, 4], "narrator", "core", "उसकी प्रतीति कराने के लिए वे दयाघन दाने चुन रहे थे; पर उसका भावार्थ साधारण लोगों को समझ में नहीं आया था।", ""),
@@ -52,19 +59,18 @@ LINES = [
     ("S6-L2", "S6", 119, [3, 4], "bankatlal", "core", "'इसे हमने पागल कहा — यह निःसंदेह हमारी भूल हुई।'", "Table: Bankatlal to Damodarpant."),
     ("S6-L3", "S6", 120, [1, 2], "bankatlal", "core", "'सुभद्रा के लिए द्वारका में अर्जुन भी ऐसे ही पागल हो गया था।'", "Table: Bankatlal (continuing)."),
     ("S6-L4", "S6", 121, [1, 4], "bankatlal", "core", "'वैसे ही यह ज्ञानजेठी मुक्तिरूपी सुभद्रा के लिए पागल हुआ है; अब इसकी कसौटी लेने की ज़रूरत नहीं।'", "Table: Bankatlal (continuing)."),
-    ("S6-L5", "S6", 122, [1, 2], "narrator", "core", "धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए।", "Table: speaker unclear (122): narrator."),
+    ("S6-L5", "S6", 122, [1, 2], "bankatlal", "core", "धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए।", "Owner directive 2026-11-01: 119-122 are Bankatlal's speech."),
 
     ("S7-L1", "S7", 123, [1, 2], "narrator", "core", "सूर्य मध्याह्न पर आ गया; भूमि का भाग तप गया।", ""),
-    ("S7-L2", "S7", 123, [3, 4], "narrator", "optional", "पक्षी आश्रय के लिए जाकर पेड़ों पर बैठ गए।", ""),
     ("S7-L3", "S7", 124, [1, 2], "narrator", "core", "ऐसी भरी धूप में वह आनंद में बैठा है।", "Table: speaker unclear (123-124): narrator."),
-    ("S7-L4", "S7", 125, [1, 4], "narrator", "optional", "यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें।", "Table: Bankatlal 'inferred' from the address to the Pant: kept with the narrator."),
+    ("S7-L4", "S7", 125, [1, 4], "bankatlal", "core", "यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें।", "Owner directive 2026-11-01: Bankatlal (addresses Pant directly); core."),
     ("S7-L5", "S7", 126, [1, 1], "narrator", "core", "दामोदर पूछने लगे —", ""),
     ("S7-L6", "S7", 126, [2, 4], "damodarpant", "core", "'तुंबे में पानी नहीं है; आपकी मर्ज़ी हो तो यह सेवक पानी देने को तैयार है।'", "Table: Damodarpant to Gajanan."),
     ("S7-L7", "S7", 127, [1, 3], "narrator", "core", "ये शब्द सुनकर समर्थ हँसे और दोनों को देखकर बोले —", ""),
     ("S7-L8", "S7", 128, [1, 4], "gajanan", "core", "'आपको ज़रूरत हो तो पानी ले आकर दीजिए; एक ही ब्रह्म जगत के भीतर ओतप्रोत भरा है।'", "Table: Gajanan (127-131)."),
     ("S7-L9", "S7", 129, [1, 4], "gajanan", "core", "'वहाँ आप और हम में थोड़ा भी भेद नहीं रहा; फिर भी जगत का व्यवहार ठीक तरह निभाना चाहिए।'", "Teaching: practical conduct."),
     ("S7-L10", "S7", 130, [1, 2], "gajanan", "core", "'देह ने अन्न खाया है, इसलिए उसे पानी चाहिए।'", "Teaching: practical conduct."),
-    ("S7-L11", "S7", 131, [1, 4], "gajanan", "optional", "'इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त।'", ""),
+    ("S7-L11", "S7", 131, [1, 4], "gajanan", "core", "'इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त।'", ""),
     ("S7-L12", "S7", 132, [4, 4], "bankatlal", "core", "'हमारा भाग्य धन्य है।'", "Table: Bankatlal (132)."),
     ("S7-L13", "S7", 133, [1, 2], "narrator", "core", "पानी लाने के लिए दामोदर घर के अंदर गए।", "Damodarpant enters Devidas's house (owner's final answer A1-5)."),
 

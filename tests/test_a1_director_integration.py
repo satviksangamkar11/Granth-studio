@@ -18,7 +18,7 @@ a_spec.loader.exec_module(a1)
 files, OVIS, INDEX = dt.load_inputs()
 PJ = dt.load_preset_json(INDEX)
 SPEAKERS = dt.speaker_registry(files["analysis"].splitlines())
-ROWS = dt.speaker_table(files["addendum"].splitlines())
+ROWS = dt.speaker_rows(files["addendum"].splitlines())                  # frozen table + owner overrides (2026-11-01)
 EDITS = json.loads((ROOT / "canon" / "story_split_edits" / "A1_rev1.json").read_text(encoding="utf-8"))
 AUDIO = json.loads((ROOT / "canon" / "audio" / "A1_audio_plan.json").read_text(encoding="utf-8"))
 TIMING = json.loads((ROOT / "canon" / "audio" / "A1_timing_plan.json").read_text(encoding="utf-8"))
@@ -84,7 +84,7 @@ def test_the_prompt_carries_the_scene_narration_timeline_and_notes(n, sc):
     ov = dt.split_scene_override(n, SPLIT, OVIS)
     system, user = dt.build_prompt(n, tuple(sc["ovi_range"]), files, OVIS, INDEX, ["Bankatlal"], 1, PJ, ov)
     tm = next(s for s in TIMING["scenes"] if s["scene"] == f"S{n}")
-    assert f"direct EXACTLY {tm['planned_shots']} shots" in user and ov["shots_target"] == sc["shot_budget"] == tm["planned_shots"]
+    assert f"direct EXACTLY {tm['planned_shots']} shots" in user and ov["shots_target"] == tm["planned_shots"] >= sc["shot_budget"]      # owner 2026-11-01: S2/S7 grew to fit the speech
     for l in [l for l in AUDIO["lines"] if l["scene"] == f"S{n}" and l["priority"] == "core"]:
         assert l["id"] in user and l["marathi"] in user                              # the exact verse is in the prompt
     for k in range(sc["ovi_range"][0], sc["ovi_range"][1] + 1):

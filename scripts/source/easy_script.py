@@ -1,4 +1,4 @@
-"""The owner's EASY spoken script (docs/pilot/A1_full_script_simple.md): one reader shared by the director and the ElevenLabs runner.
+"""The owner's EASY spoken script (canon/adhyay_01/script/easy.md since 2026-11-01; the docs/pilot copy is the original of 2026-10-26): one reader shared by the director and the ElevenLabs runner.
 Approved spoken wording = this file. The Granth verse stays the source of meaning (ovi numbers are kept per line); a changed file changes `script_sha256`."""
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT = ROOT / "docs" / "pilot" / "A1_full_script_simple.md"
+DEFAULT = ROOT / "canon" / "adhyay_01" / "script" / "easy.md"
 HEAD = re.compile(r"^\*\*(S\d+-L\d+)\*\*")
 
 

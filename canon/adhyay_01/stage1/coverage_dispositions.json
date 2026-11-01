@@ -1,116 +1,75 @@
 {
  "adhyay": 1,
- "note": "PROPOSAL by Claude 2026-11-01 for the owner's Phase B sheet; counts only after the owner approves this file's sha256 (item coverage_dispositions). Research-only ovis 75-82 are NOT here: they go in the omissions list.",
+ "note": "Revised 2026-11-01 to the owner's locked directive. Counts only after the owner approves this file's sha256 (item coverage_dispositions). Omitted ovis (research / background / bible-only) are NOT here: they go in the omissions list.",
  "dispositions": [
-  {
-   "ovi": 71,
-   "kind": "merged",
-   "line": "S1-L1",
-   "evidence": "A1_story_for_approval.md S1: 'Narrated: his place and caste cannot be traced (70-73)'; 71-73 are the narrator's similes for that point (Brahman known by realization, the diamond, the gem's mine)"
-  },
-  {
-   "ovi": 72,
-   "kind": "merged",
-   "line": "S1-L1",
-   "evidence": "same as ovi 71"
-  },
-  {
-   "ovi": 73,
-   "kind": "merged",
-   "line": "S1-L1",
-   "evidence": "same as ovi 71"
-  },
   {
    "ovi": 74,
    "kind": "visual_only",
-   "evidence": "S1: date of the appearance (Magha dark seventh, Shaka 1800) is shown as the owner's on-screen caption 1878 (caption S1-K1), not narrated"
+   "evidence": "Owner directive 2026-11-01 (date rule): on-screen caption 1878 / 23 February 1878 as Pragat Din (appearance in Shegaon, never a birth date); ovi 74 text (Shaka 1800, Magha vadya saptami) kept verbatim"
   },
   {
    "ovi": 83,
-   "kind": "visual_only",
-   "evidence": "S1: 'His coming to Shegaon in his prime (74, 83) is shown, not narrated' (shot 2)"
-  },
-  {
-   "ovi": 85,
    "kind": "merged",
-   "line": "S2-L1",
-   "evidence": "S2: Devidas the devout Brahmin householder (S2-L1, ovi 84); ovi 85 adds his lineage (Paturkar, Madhyandina branch), not filmed separately"
-  },
-  {
-   "ovi": 86,
-   "kind": "optional_line",
-   "line": "S2-L2",
-   "evidence": "Ritushanti feast for his son; own optional line S2-L2"
+   "line": "S1-L1",
+   "evidence": "Owner directive: merge into the opening (repeats the appearance-day framing)"
   },
   {
    "ovi": 89,
    "kind": "visual_only",
-   "evidence": "S2: 'a gourd for water' is part of his look on screen (prop)"
+   "evidence": "Owner directive: visual + prop registry - tumba / gourd drinking vessel"
   },
   {
    "ovi": 90,
    "kind": "visual_only",
-   "evidence": "S2: 'an unfired clay pipe he made himself' is part of his look on screen (prop)"
+   "evidence": "Owner directive: visual + prop registry - self-made, unfired clay chilim"
   },
   {
    "ovi": 91,
    "kind": "optional_line",
    "line": "S2-L5",
-   "evidence": "sunrise comparison; own optional line S2-L5"
-  },
-  {
-   "ovi": 92,
-   "kind": "optional_line",
-   "line": "S2-L6",
-   "evidence": "digambar; own optional line S2-L6"
-  },
-  {
-   "ovi": 93,
-   "kind": "optional_line",
-   "line": "S2-L7",
-   "evidence": "grain-picking; own optional line S2-L7 (also shown)"
+   "evidence": "Owner directive: keep; tip-of-the-nose gaze, kept distinct from ovi 111"
   },
   {
    "ovi": 100,
    "kind": "optional_line",
    "line": "S3-L5",
-   "evidence": "their reasoning; own optional line S3-L5"
+   "evidence": "Owner directive: keep; why the visitors ruled out ordinary hunger"
   },
   {
    "ovi": 101,
    "kind": "merged",
    "line": "S3-L6",
-   "evidence": "S3: 'a wise host never turns a beggar away' is part of the men's reasoning carried by S3-L6 (ovi 102)"
+   "evidence": "Owner directive: merge into the visitors' discussion"
   },
   {
    "ovi": 103,
    "kind": "merged",
    "line": "S3-L8",
-   "evidence": "S3: Bhagavata teaching that true sages may seem eccentric, carried by S3-L8 (ovi 104 'mad or full of knowledge'); speaker kept unclear"
+   "evidence": "Owner directive: narrator; kept only with the Vyasa/Bhagavata eccentric-sage meaning (carried with ovi 104, narrator)"
   },
   {
    "ovi": 105,
    "kind": "optional_line",
    "line": "S3-L9",
-   "evidence": "own optional line S3-L9"
+   "evidence": "Owner directive: keep the recognition metaphor, concise"
+  },
+  {
+   "ovi": 106,
+   "kind": "merged",
+   "line": "S3-L9",
+   "evidence": "Owner directive: merge with the recognition motif (others fail to recognise him) alongside ovi 105"
+  },
+  {
+   "ovi": 107,
+   "kind": "merged",
+   "line": "S3-L9",
+   "evidence": "Owner directive: merge with the recognition motif (diamond-and-stone comparison) alongside ovi 105"
   },
   {
    "ovi": 111,
    "kind": "optional_line",
    "line": "S4-L5",
-   "evidence": "own optional line S4-L5 (untimed)"
-  },
-  {
-   "ovi": 125,
-   "kind": "optional_line",
-   "line": "S7-L4",
-   "evidence": "own optional line S7-L4"
-  },
-  {
-   "ovi": 131,
-   "kind": "optional_line",
-   "line": "S7-L11",
-   "evidence": "own optional line S7-L11"
+   "evidence": "Owner directive: keep the appearance detail (bhrukuti); log whether covered by audio or a visual hold"
   }
  ],
  "numbering_exceptions": [
@@ -119,7 +78,23 @@
     "S4-L4",
     "S4-L5"
    ],
-   "reason": "Script order follows the ovis (S4-L5 = ovi 111 before S4-L4 = ovi 112); both ids already name their Marathi + Hindi clips and S4-L4 is timed, so the ids are kept (no migration, script hash e884d3fe... unchanged)."
+   "reason": "Owner directive A3: keep ids (S4-L5 = ovi 111 before S4-L4 = ovi 112); both name existing clips, S4-L4 is timed"
+  },
+  {
+   "lines": [
+    "S7-L3",
+    "S7-L4",
+    "S7-L5",
+    "S7-L6",
+    "S7-L7",
+    "S7-L8",
+    "S7-L9",
+    "S7-L10",
+    "S7-L11",
+    "S7-L12",
+    "S7-L13"
+   ],
+   "reason": "Owner directive: S7-L2 cut; S7-L3..S7-L13 keep their ids because they name existing clips and timing"
   }
  ]
 }

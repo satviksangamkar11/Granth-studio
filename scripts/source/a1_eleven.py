@@ -223,6 +223,8 @@ def measured(man: dict, plan: dict, script_sha256: str, model: str) -> dict:
             c = clips.get(f"{l['id']}.{lang}")
             if not c:
                 problems.append(f"{l['id']}.{lang}: no accepted clip")
+            elif c["voice"] != l["voice"]:                                   # a take in another voice never counts (owner 2026-11-01: speaker changes)
+                problems.append(f"{l['id']}.{lang}: clip voice {c['voice']} but the plan says {l['voice']}")
             else:
                 lines.setdefault(l["id"], {})[lang] = c["seconds"]
     return {"status": "MEASURED from ElevenLabs speech (DRAFT voices, NOT VALIDATED until the owner has listened)", "engine": "elevenlabs", "model": model, "script_sha256": script_sha256,

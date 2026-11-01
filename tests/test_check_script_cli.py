@@ -293,12 +293,12 @@ def test_main_output_and_return_codes(tmp_path: Path, capsys: pytest.CaptureFixt
 
 
 @pytest.mark.skipif(
-    not (_REPO_ROOT / "docs" / "pilot" / "A1_full_script_simple.md").exists(),
+    not (_REPO_ROOT / "canon" / "adhyay_01" / "script" / "easy.md").exists(),
     reason="Real Adhyay 1 script not present",
 )
 def test_real_adhyay_1():
     result = check_script_cli.run_check(1, _REPO_ROOT)
-    assert result["lines"] == 62
+    assert result["lines"] == 61                      # owner directive 2026-11-01: S7-L2 cut
     assert result["scenes"] == 9
     assert isinstance(result["errors"], list)
     for e in result["errors"]:

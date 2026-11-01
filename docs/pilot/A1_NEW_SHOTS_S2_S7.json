@@ -1,0 +1,148 @@
+{
+ "note": "PROPOSED 2026-11-01 (owner: add new shots). 6 new Flow jobs for the re-timed S2 (8->11) and S7 (9->12); existing SH_ ids are never renumbered; slot_order = which image fills each 6 s slot of the new timing. Same style, character, place and light text as the neighbouring accepted jobs.",
+ "slot_order": {
+  "S2": [
+   "SH_S2_01",
+   "SH_S2_02",
+   "SH_S2_03",
+   "SH_S2_08",
+   "SH_S2_09",
+   "SH_S2_04",
+   "SH_S2_05",
+   "SH_S2_06",
+   "SH_S2_10",
+   "SH_S2_07",
+   "SH_S2_11"
+  ],
+  "S7": [
+   "SH_S7_01",
+   "SH_S7_02",
+   "SH_S7_03",
+   "SH_S7_10",
+   "SH_S7_04",
+   "SH_S7_05",
+   "SH_S7_06",
+   "SH_S7_07",
+   "SH_S7_11",
+   "SH_S7_08",
+   "SH_S7_09",
+   "SH_S7_12"
+  ]
+ },
+ "jobs": [
+  {
+   "shot_id": "SH_S2_09",
+   "scene": "S2",
+   "flow_title": "SH_S2_09__v01",
+   "preset_suggested": "12_flat_push_in",
+   "characters": [
+    "GM_v01"
+   ],
+   "place_search": "Village road",
+   "style_ref_search": "ref_temple",
+   "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium shot from straight in front, at the ascetic's eye level: the young ascetic seated cross-legged and upright on the road among the used leaf plates, perfectly still, hands resting open on his knees, eyes lowered, a calm face free of any wish; the frayed old vest clearly visible; the house wall and door softly behind him. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+   "chars_in_prompt": 1255,
+   "source_refs": [
+    "A1:92 digambar, free of mine-and-yours, likes and dislikes (S2-L6, core)",
+    "timing: S2 slot 5, S2-L6 starts"
+   ],
+   "status": "PROPOSED 2026-11-01: owner approves before Flow (new shot for the re-timed scene)"
+  },
+  {
+   "shot_id": "SH_S2_10",
+   "scene": "S2",
+   "flow_title": "SH_S2_10__v01",
+   "preset_suggested": "10_object_hand_insert",
+   "characters": [
+    "GM_v01"
+   ],
+   "place_search": "Village road",
+   "style_ref_search": "ref_temple",
+   "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Close-up insert: the young ascetic's right hand holding a single grain of cooked rice between thumb and fingertip just above a used leaf plate, the grain clearly visible; the leaf plate's dry veins and a few scattered grains fill the bottom of the frame; his knee and the road dust soft behind. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+   "chars_in_prompt": 1110,
+   "source_refs": [
+    "A1:95 the Vedas: food is Brahman (S2-L9)",
+    "timing: S2 slot 9, S2-L9 starts"
+   ],
+   "status": "PROPOSED 2026-11-01: owner approves before Flow (new shot for the re-timed scene)"
+  },
+  {
+   "shot_id": "SH_S2_11",
+   "scene": "S2",
+   "flow_title": "SH_S2_11__v01",
+   "preset_suggested": "13_flat_pull_out",
+   "characters": [
+    "GM_v01"
+   ],
+   "place_search": "Village road",
+   "style_ref_search": "ref_temple",
+   "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Low wide view along the village road at ground level, the scattered used leaf plates large in the foreground, the young ascetic small and seated far down the road before Devidas's house, still gathering grains; house roofs, neem trees and the plain beyond; the road otherwise empty. Show only the attached characters and no other people. Light: clear late-morning sun from the upper left, a clean pale-blue sky with a few flat cream clouds, warm ochre ground, soft medium-length shadows falling to the right. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+   "chars_in_prompt": 1165,
+   "source_refs": [
+    "A1:96 tail: no one understood him (S2-L10 ends)",
+    "timing: S2 slot 11, scene tail (no line starts)"
+   ],
+   "status": "PROPOSED 2026-11-01: owner approves before Flow (new shot for the re-timed scene)"
+  },
+  {
+   "shot_id": "SH_S7_10",
+   "scene": "S7",
+   "flow_title": "SH_S7_10__v01",
+   "preset_suggested": "12_flat_push_in",
+   "characters": [
+    "DK_v01"
+   ],
+   "place_search": "Village road",
+   "style_ref_search": "ref_temple",
+   "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: DK_v01 (Damodarpant (terracotta-red turban, white shirt, white dhoti, slightly taller)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up of Damodarpant alone, facing screen-left toward the seated ascetic off frame, bending slightly forward, right hand on his chest in humble offer of service, earnest eager face; the hot pale road and the house wall behind him. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+   "chars_in_prompt": [
+    "DK_v01"
+   ],
+   "source_refs": [
+    "A1:126 'there is no water in your gourd; if you wish, this servant is ready to bring it' (S7-L6, damodarpant)",
+    "timing: S7 slot 4, S7-L6 starts"
+   ],
+   "status": "PROPOSED 2026-11-01: owner approves before Flow (new shot for the re-timed scene)"
+  },
+  {
+   "shot_id": "SH_S7_11",
+   "scene": "S7",
+   "flow_title": "SH_S7_11__v01",
+   "preset_suggested": "12_flat_push_in",
+   "characters": [
+    "GM_v01"
+   ],
+   "place_search": "Village road",
+   "style_ref_search": "ref_temple",
+   "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Medium close-up of the young ascetic seated on the road, speaking with a gentle smile, his right palm turned up and open toward the two visitors off frame at the right, the empty gourd lying beside his knee; the house wall behind. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+   "chars_in_prompt": 1113,
+   "source_refs": [
+    "A1:131 'so, if you judge it needed, arrange the water' (S7-L11, gajanan, core)",
+    "timing: S7 slot 9, S7-L11 starts"
+   ],
+   "status": "PROPOSED 2026-11-01: owner approves before Flow (new shot for the re-timed scene)"
+  },
+  {
+   "shot_id": "SH_S7_12",
+   "scene": "S7",
+   "flow_title": "SH_S7_12__v01",
+   "preset_suggested": "13_flat_pull_out",
+   "characters": [
+    "GM_v01",
+    "BA_v01"
+   ],
+   "place_search": "Village road",
+   "style_ref_search": "ref_temple",
+   "prompt": "Flat-colour 2D Indian devotional storybook illustration: clean dark navy-ink contour lines of steady medium weight, flat colour fills with a few fine hatch lines, warm earth palette, a FULL richly drawn frame with foreground, midground and background filled in. Use the attached characters exactly as in their reference sheets: GM_v01 (the calm young ascetic (short dark hair, worn grey-white vest)); BA_v01 (Bankatlal (cream turban, sage-green coat, cream shoulder cloth)); same faces, costumes, proportions. Setting: the attached road picture in front of Devidas's house (same house, door, leaf plates). Wide view: the half-open door of Devidas's house with its plinth step now empty (Damodarpant has gone inside); Bankatlal waits in the thin shade of a neem tree at the right, looking at the door; the young ascetic sits in the full sun in the left foreground, calm, looking off screen-left. Show only the attached characters and no other people. Light: hard high-noon sun almost straight overhead, a bleached pale white-blue sky without clouds, short dark shadows pooled under every figure and object, pale hot dust, a faint flat heat shimmer at the horizon. Full-frame 16:9 landscape picture, edge to edge, no border. No text, no letters, no modern objects, no halo.",
+   "chars_in_prompt": [
+    "GM_v01",
+    "BA_v01"
+   ],
+   "source_refs": [
+    "A1:133 tail: Damodarpant has gone in for water (S7-L13 ends)",
+    "timing: S7 slot 12, scene tail (no line starts)"
+   ],
+   "status": "PROPOSED 2026-11-01: owner approves before Flow (new shot for the re-timed scene)"
+  }
+ ]
+}

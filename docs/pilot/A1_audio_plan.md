@@ -2,17 +2,17 @@
 
 Split hash: `285046ade8110e61ec1e9f6e85935e3354495b3dd5e54daff87663a3e4fa5949`. Nothing here is approved. Draft speech was synthesised (voices NOT VALIDATED until the owner listens). **Marathi** lines are exact verse segments cut from the ovis by code (the year 1878 is an on-screen caption only). **Hindi** is a draft adaptation and is NOT VALIDATED. **Durations** (where not measured) are estimates from syllable counts at assumed speaking rates (Marathi 3.8 and Hindi 4.6 syllables per second: hypotheses to calibrate with the TTS test). One video, one picture timeline: it follows the LONGER of the two languages per line.
 
-**Whole story (core narration):** Marathi about 5 min 9 s, Hindi about 5 min 18 s, common picture timeline about 5 min 25 s. Planned shots: **59** (5 min 54 s of picture) against 59 allocated by the split. Optional lines are NOT counted.
+**Whole story (core narration):** Marathi about 5 min 46 s, Hindi about 5 min 56 s, common picture timeline about 6 min 3 s. Planned shots: **65** (6 min 30 s of picture) against 59 allocated by the split. Optional lines are NOT counted.
 
 | Scene | Ovi | Allocated | Audio needs | Planned shots | Marathi s | Hindi s | Common s |
 |---|---|---|---|---|---|---|---|
 | S1 | 70-83 | 2 | 2 | 2 | 7.4 | 7.7 | 7.7 |
-| S2 | 84-96 | 8 | 8 | 8 | 41.7 | 42.0 | 43.3 |
+| S2 | 84-96 | 8 | 11 | 11 | 62.7 | 63.4 | 65.0 |
 | S3 | 97-105 | 6 | 6 | 6 | 30.2 | 29.9 | 30.6 |
 | S4 | 108-112 | 5 | 5 | 5 | 27.9 | 29.2 | 29.3 |
 | S5 | 113-118 | 7 | 7 | 7 | 37.5 | 41.1 | 41.3 |
-| S6 | 119-122 | 6 | 6 | 6 | 29.0 | 29.5 | 30.5 |
-| S7 | 123-133 | 9 | 9 | 9 | 47.9 | 49.2 | 50.0 |
+| S6 | 119-122 | 6 | 6 | 6 | 28.8 | 29.6 | 30.3 |
+| S7 | 123-133 | 9 | 12 | 12 | 63.3 | 65.9 | 66.7 |
 | S8 | 134-137 | 5 | 5 | 5 | 28.2 | 28.3 | 28.9 |
 | S9 | 138-144 | 11 | 11 | 11 | 59.5 | 61.5 | 63.6 |
 
@@ -32,31 +32,34 @@ Sound cues (closed palette, nothing sourced yet):
 
 - C1 `bed_roadside_quiet`: under the whole scene [STAGING]
 
-## S2 (ovi 84-96), 8 shots
+## S2 (ovi 84-96), 11 shots
 
 | Line | Voice | Ovi | Marathi (exact verse) | Hindi (draft, NOT VALIDATED) | Est. s mr/hi | Priority |
 |---|---|---|---|---|---|---|
 | S2-L1 | narrator | 84 | एक भाविक गृहस्थ होता । नाम ज्याचें देविदास | वहाँ एक श्रद्धालु गृहस्थ थे, उनका नाम देविदास था। | 3.44/3.6 | core |
-| S2-L2 | narrator | 86 | त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा | उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी। | 5.92/5.92 | optional |
+| S2-L2 | narrator | 86 | त्याच्या एका मुलाची । ऋतुशांति होती साची । त्यानिमित्त भोजनाची । तयारी होती त्याचे घरा | उनके एक पुत्र का ऋतुशांति संस्कार था; उसी उपलक्ष्य में उनके घर भोजन की तैयारी थी। | 5.92/5.92 | core |
 | S2-L3 | narrator | 87 | उष्टया पत्रावळी रस्त्यावर । टाकिल्या होत्या साचार । घराचिया समोर । त्या देविदास विप्राच्या | देविदास ब्राह्मण के घर के सामने रास्ते पर जूठी पत्तलें फेंकी गई थीं। | 5.52/6.24 | core |
 | S2-L4 | narrator | 88 | तो गजानन समर्थसिद्धयोगी । बसले होते तया जागीं । एक बंडी होती अंगीं । जुन्या पुराण्या कापडाची | समर्थ सिद्ध योगी गजानन उसी जगह बैठे थे; उनके बदन पर पुराने-धुराने कपड़े की एक बंडी थी। | 7.12/7.04 | core |
 | S2-L5 | narrator | 91 | नासाग्र दृष्टि मुद्रा शांत । तपोबल अंगीं झळकत । प्राचीच्या वालरवीवत् । वर्णन किती करावें | दृष्टि नासिका के अग्रभाग पर, मुद्रा शांत; तपोबल देह में झलक रहा था, जैसे पूर्व दिशा का बाल सूर्य — कितना वर्णन करें! | 9.52/7.92 | optional |
-| S2-L6 | narrator | 92 | मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या | पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं। | 7.76/7.52 | optional |
-| S2-L7 | narrator | 93 | ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें | वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे। | 5.84/6.48 | optional |
+| S2-L6 | narrator | 92 | मूर्ति अवघी दिगंबर । भाव मावळला आपपर । आवडनिवड साचार । राहिली न जवळी जयाच्या | पूरी मूर्ति दिगंबर थी; अपने-पराये का भाव अस्त हो गया था, पसंद-नापसंद उनके पास रही ही नहीं। | 7.76/7.52 | core |
+| S2-L7 | narrator | 93 | ती समर्थांची स्वारी । बैसोनिया रस्त्यावरी । शोधन पत्रावळीचे करी । केवळ निजलीलेनें | वे समर्थ रास्ते पर बैठकर, केवल अपनी लीला से, पत्तलों को टटोल रहे थे। | 5.84/6.48 | core |
 | S2-L8 | narrator | 94 | शीत पडल्या दृष्टीप्रत । तें मुखीं उचलुनी घालीत । हें करण्याचा हाच हेत । ’अन्नपरब्रह्म’ कळवावया | जो भी चावल का दाना नज़र में आता, उसे उठाकर मुँह में डालते; इसका हेतु यही था — 'अन्न ही परब्रह्म है' यह समझाना। | 8.64/8.0 | core |
 | S2-L9 | narrator | 95 | कां कीं गर्जोन सांगे श्रुती । अन्न हेंच ब्रह्म निगुती । "अन्नम् ब्रह्मेति" ऐसी उक्ती । उपनिषदांठायीं असे | क्योंकि श्रुति गरजकर कहती है कि अन्न ही निश्चय से ब्रह्म है — 'अन्नं ब्रह्मेति' यह उक्ति उपनिषदों में है। | 6.0/5.36 | core |
 | S2-L10 | narrator | 96 | त्याची पटवावया खण । शितें वेंचती दयाघन । त्याचा सामान्य जनांलागून । भावार्थ तो कळला नसे | उसकी प्रतीति कराने के लिए वे दयाघन दाने चुन रहे थे; पर उसका भावार्थ साधारण लोगों को समझ में नहीं आया था। | 7.44/8.24 | core |
 
 Timecoded picture plan (common timeline):
 
-- shot 1 (0-6 s): S2-L1, S2-L3
-- shot 2 (6-12 s): S2-L4
-- shot 3 (12-18 s): visual only (a held or moving picture, no new line starts)
-- shot 4 (18-24 s): S2-L8
-- shot 5 (24-30 s): S2-L9
-- shot 6 (30-36 s): S2-L10
-- shot 7 (36-42 s): visual only (a held or moving picture, no new line starts)
+- shot 1 (0-6 s): S2-L1, S2-L2
+- shot 2 (6-12 s): S2-L3
+- shot 3 (12-18 s): S2-L4
+- shot 4 (18-24 s): visual only (a held or moving picture, no new line starts)
+- shot 5 (24-30 s): S2-L6
+- shot 6 (30-36 s): S2-L7
+- shot 7 (36-42 s): S2-L8
 - shot 8 (42-48 s): visual only (a held or moving picture, no new line starts)
+- shot 9 (48-54 s): S2-L9
+- shot 10 (54-60 s): S2-L10
+- shot 11 (60-66 s): visual only (a held or moving picture, no new line starts)
 
 Sound cues (closed palette, nothing sourced yet):
 
@@ -148,7 +151,7 @@ Sound cues (closed palette, nothing sourced yet):
 | S6-L2 | bankatlal | 119 | ह्या वेडा म्हणालों आपण । ती निःसंशय झाली चुकी | 'इसे हमने पागल कहा — यह निःसंदेह हमारी भूल हुई।' | 4.16/4.56 | core |
 | S6-L3 | bankatlal | 120 | सुभद्रेसाठीं द्वारकेला । अर्जुन ऐसाच वेडा झाला | 'सुभद्रा के लिए द्वारका में अर्जुन भी ऐसे ही पागल हो गया था।' | 4.88/5.28 | core |
 | S6-L4 | bankatlal | 121 | तैसाच हा ज्ञानजेठी । मुक्तिरुप सुभद्रेसाठीं । वेडा झाला कसवटी । याची आतां घेणें नको | 'वैसे ही यह ज्ञानजेठी मुक्तिरूपी सुभद्रा के लिए पागल हुआ है; अब इसकी कसौटी लेने की ज़रूरत नहीं।' | 7.84/8.32 | core |
-| S6-L5 | narrator | 122 | धन्य आपुलें शेगांव । दृष्टी पाहिला योगीराव | धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए। | 6.16/5.12 | core |
+| S6-L5 | bankatlal | 122 | धन्य आपुलें शेगांव । दृष्टी पाहिला योगीराव | धन्य है हमारा शेगाँव, जहाँ योगीराज के दर्शन हुए। | 5.92/5.2 | core |
 
 Timecoded picture plan (common timeline):
 
@@ -163,35 +166,37 @@ Sound cues (closed palette, nothing sourced yet):
 
 - C10 `bed_roadside_quiet`: under the whole scene [STAGING]
 
-## S7 (ovi 123-133), 9 shots
+## S7 (ovi 123-133), 12 shots
 
 | Line | Voice | Ovi | Marathi (exact verse) | Hindi (draft, NOT VALIDATED) | Est. s mr/hi | Priority |
 |---|---|---|---|---|---|---|
 | S7-L1 | narrator | 123 | सूर्य माध्यान्हीं आला । भाग भूमीचा तप्त झाला | सूर्य मध्याह्न पर आ गया; भूमि का भाग तप गया। | 4.08/3.92 | core |
-| S7-L2 | narrator | 123 | पांखरें हीं आश्रयाला । जाऊन बैसलीं वृक्षावरी | पक्षी आश्रय के लिए जाकर पेड़ों पर बैठ गए। | 3.52/3.6 | optional |
 | S7-L3 | narrator | 124 | ऐशा भर उन्हांत । हा बैसला आनंदांत | ऐसी भरी धूप में वह आनंद में बैठा है। | 3.28/3.52 | core |
-| S7-L4 | narrator | 125 | हा जेवळा यथेच्छपणीं । तुंब्यामध्यें नाहीं पाणी । तें पंता या लागुनी । आपण देऊं आणून | यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें। | 6.8/7.52 | optional |
+| S7-L4 | bankatlal | 125 | हा जेवळा यथेच्छपणीं । तुंब्यामध्यें नाहीं पाणी । तें पंता या लागुनी । आपण देऊं आणून | यह इच्छा भर जीम चुका; तुंबे में पानी नहीं है; पंत, यह हम इसके लिए ला दें। | 7.04/7.84 | core |
 | S7-L5 | narrator | 126 | पुसूं लागले दामोदर | दामोदर पूछने लगे — | 1.76/1.68 | core |
 | S7-L6 | damodarpant | 126 | तुंब्यामध्यें नाहीं नीर । मर्जी असल्या हा चाकर । पाणी द्याया तयार असे | 'तुंबे में पानी नहीं है; आपकी मर्ज़ी हो तो यह सेवक पानी देने को तैयार है।' | 5.44/5.84 | core |
 | S7-L7 | narrator | 127 | ऐसे शब्द ऐकिले । समर्थांनीं हास्य केलें । उभयतांसी पाहून वदले | ये शब्द सुनकर समर्थ हँसे और दोनों को देखकर बोले — | 4.32/4.4 | core |
 | S7-L8 | gajanan | 128 | तुम्हां गरज असेल जरी । तरी आणून घाला वारी । एक ब्रह्म जगदांतरीं । ओतप्रोत भरलें असें | 'आपको ज़रूरत हो तो पानी ले आकर दीजिए; एक ही ब्रह्म जगत के भीतर ओतप्रोत भरा है।' | 6.16/7.36 | core |
 | S7-L9 | gajanan | 129 | तुम्ही आम्ही भेद तेथ । नाहीं उरला यत्किंचित । परी जगव्यवहार सत्य । आचरिला पाहिजे | 'वहाँ आप और हम में थोड़ा भी भेद नहीं रहा; फिर भी जगत का व्यवहार ठीक तरह निभाना चाहिए।' | 7.28/6.96 | core |
 | S7-L10 | gajanan | 130 | अन्न भक्षिलें देहानीं । म्हणून त्या पाहिजे पाणी | 'देह ने अन्न खाया है, इसलिए उसे पानी चाहिए।' | 4.24/4.4 | core |
-| S7-L11 | gajanan | 131 | म्हणून तुमच्या चातुर्यासी । गरज असल्या तुम्हां साची । तरतूद करा पाण्याची । म्हणजे अवघें संपलें | 'इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त।' | 7.36/7.84 | optional |
+| S7-L11 | gajanan | 131 | म्हणून तुमच्या चातुर्यासी । गरज असल्या तुम्हां साची । तरतूद करा पाण्याची । म्हणजे अवघें संपलें | 'इसलिए आपकी चतुराई को ज़रूरत लगे तो पानी का प्रबंध कर लीजिए — बस, सब समाप्त।' | 7.36/7.84 | core |
 | S7-L12 | bankatlal | 132 | आपुलें आहे भाग्य धन्य | 'हमारा भाग्य धन्य है।' | 2.56/2.48 | core |
 | S7-L13 | narrator | 133 | पाणी आणण्या दामोदर । घरांत गेले साचार | पानी लाने के लिए दामोदर घर के अंदर गए। | 3.28/3.12 | core |
 
 Timecoded picture plan (common timeline):
 
 - shot 1 (0-6 s): S7-L1, S7-L3
-- shot 2 (6-12 s): S7-L5, S7-L6
-- shot 3 (12-18 s): S7-L7
-- shot 4 (18-24 s): S7-L8
-- shot 5 (24-30 s): visual only (a held or moving picture, no new line starts)
-- shot 6 (30-36 s): S7-L9
-- shot 7 (36-42 s): S7-L10
-- shot 8 (42-48 s): S7-L12, S7-L13
-- shot 9 (48-54 s): visual only (a held or moving picture, no new line starts)
+- shot 2 (6-12 s): S7-L4
+- shot 3 (12-18 s): S7-L5
+- shot 4 (18-24 s): S7-L6
+- shot 5 (24-30 s): S7-L7
+- shot 6 (30-36 s): S7-L8
+- shot 7 (36-42 s): S7-L9
+- shot 8 (42-48 s): S7-L10
+- shot 9 (48-54 s): S7-L11
+- shot 10 (54-60 s): S7-L12
+- shot 11 (60-66 s): S7-L13
+- shot 12 (66-72 s): visual only (a held or moving picture, no new line starts)
 
 Sound cues (closed palette, nothing sourced yet):
 

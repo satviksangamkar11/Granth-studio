@@ -1,5 +1,7 @@
 # Adhyay 1: FULL SCRIPT, SIMPLE MARATHI and SIMPLE HINDI (owner-supplied easy version; DRAFT, NOT VALIDATED, not yet checked against the source meaning by Claude)
 
+Revised 2026-11-01 by owner directive (Adhyay 1 locked checklist): speaker S6-L5 and S7-L4 -> bankatlal; optional -> core: S2-L2, S2-L6, S2-L7, S7-L4, S7-L11; S7-L2 cut (S7-L1 already covers ovi 123; birds stay visual). Wording unchanged.
+
 Saved as given by the owner on 2026-10-26. 62 lines, 9 scenes. The original-wording script is `A1_full_script.md`. Nothing here is wired into the pipeline yet: to use it, check each line against the ovi meaning, put it in `scripts/source/a1_audio_spec.py`, regenerate the voices, re-measure, and revise the split budgets.
 
 ## S1
@@ -14,7 +16,7 @@ caption S1-K1 (on screen): १८७८ / 1878
 - Marathi: तिथे देविदास नावाचे एक भाविक गृहस्थ राहत होते.
 - Hindi: वहाँ देविदास नाम के एक श्रद्धालु गृहस्थ रहते थे।
 
-**S2-L2** | narrator | ovi 86 | optional
+**S2-L2** | narrator | ovi 86 | core
 - Marathi: त्यांच्या एका मुलाच्या ऋतुशांतीचा सोहळा होता, म्हणून त्यांच्या घरी जेवणाची तयारी सुरू होती.
 - Hindi: उनके एक बेटे का ऋतुशांति संस्कार था, इसलिए उनके घर में भोजन की तैयारी चल रही थी।
 
@@ -30,11 +32,11 @@ caption S1-K1 (on screen): १८७८ / 1878
 - Marathi: त्यांची नजर नाकाच्या टोकावर स्थिर होती, चेहरा शांत होता आणि अंगावर सकाळच्या कोवळ्या सूर्यासारखे तपाचे तेज झळकत होते.
 - Hindi: उनकी नज़र नाक के सिरे पर टिकी थी, चेहरा शांत था और शरीर पर सुबह के सूरज जैसा तपोबल चमक रहा था।
 
-**S2-L6** | narrator | ovi 92 | optional
+**S2-L6** | narrator | ovi 92 | core
 - Marathi: ते पूर्णपणे दिगंबर अवस्थेत होते; त्यांच्या मनात आपले-परके किंवा आवड-निवड असा कोणताच भेद उरला नव्हता.
 - Hindi: वे पूरी तरह दिगंबर अवस्था में थे; उनके मन में अपने-पराये या पसंद-नापसंद का कोई भेद नहीं बचा था।
 
-**S2-L7** | narrator | ovi 93 | optional
+**S2-L7** | narrator | ovi 93 | core
 - Marathi: समर्थ महाराज रस्त्यावर बसून आपल्याच लीलेने त्या पत्रावळीवर अन्नाचे कण शोधत होते.
 - Hindi: समर्थ महाराज रास्ते पर बैठकर अपनी ही लीला से उन पत्तलों में अन्न के दाने ढूँढ रहे थे।
 
@@ -150,7 +152,7 @@ caption S1-K1 (on screen): १८७८ / 1878
 - Marathi: 'तसाच हा श्रेष्ठ ज्ञानी पुरुष मुक्तीरूपी सुभद्रेसाठी वेडा झाला आहे; आता यांची अजून परीक्षा घ्यायला नको.'
 - Hindi: 'वैसे ही यह श्रेष्ठ ज्ञानी पुरुष मुक्तिरूपी सुभद्रा के लिए पागल बना है; अब इनकी और परीक्षा लेने की ज़रूरत नहीं।'
 
-**S6-L5** | narrator | ovi 122 | core
+**S6-L5** | bankatlal | ovi 122 | core
 - Marathi: आपले शेगाव खरोखर धन्य झाले, जिथे आपल्याला अशा थोर योगीराजांचे दर्शन घडले.
 - Hindi: धन्य है हमारा शेगाँव, जहाँ हमें ऐसे महान योगीराज के दर्शन हुए।
 
@@ -159,15 +161,11 @@ caption S1-K1 (on screen): १८७८ / 1878
 - Marathi: दुपारचे रणरणते ऊन पडले आणि जमीन खूप तापली.
 - Hindi: दोपहर की तेज़ धूप हो गई और धरती तपने लगी।
 
-**S7-L2** | narrator | ovi 123 | optional
-- Marathi: पक्षीसुद्धा सावलीच्या शोधात झाडांवर जाऊन बसले.
-- Hindi: पक्षी भी छाँव की तलाश में पेड़ों पर जाकर बैठ गए।
-
 **S7-L3** | narrator | ovi 124 | core
 - Marathi: अशा भर उन्हातही महाराज आनंदात बसले होते.
 - Hindi: ऐसी कड़ी धूप में भी महाराज आनंद से बैठे थे।
 
-**S7-L4** | narrator | ovi 125 | optional
+**S7-L4** | bankatlal | ovi 125 | core
 - Marathi: हे पोटभर जेवले आहेत पण यांच्या तुंब्यात पाणी नाही; तर पंत, आपण यांच्यासाठी पाणी आणून देऊया.
 - Hindi: इन्होंने पेट भर भोजन कर लिया है पर इनके तुंबे में पानी नहीं है; तो पंत, हम इनके लिए पानी लाकर देते हैं।
 
@@ -195,7 +193,7 @@ caption S1-K1 (on screen): १८७८ / 1878
 - Marathi: 'या शरीराने अन्न खाल्ले आहे, म्हणून त्याला पाण्याची गरज आहे.'
 - Hindi: 'इस शरीर ने अन्न खाया है, इसलिए इसे पानी की ज़रूरत है।'
 
-**S7-L11** | gajanan | ovi 131 | optional
+**S7-L11** | gajanan | ovi 131 | core
 - Marathi: 'म्हणून तुमच्या समजून घेण्यानुसार तुम्हाला गरज वाटत असेल, तर पाण्याची सोय करा म्हणजे सर्व पूर्ण होईल.'
 - Hindi: 'इसलिए आपकी समझ के अनुसार यदि आपको ज़रूरत लगे, तो पानी का प्रबंध कर दीजिए — बस, सब पूरा हो जाएगा।'
 

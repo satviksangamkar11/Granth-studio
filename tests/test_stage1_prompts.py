@@ -461,7 +461,7 @@ def test_real_repo():
     assert problems == []
     assert len(packet["ovis"]) == 146
     assert len(packet["research"]["characters"]) == 8
-    assert len(packet["script"]) == 62
+    assert len(packet["script"]) == 61
     assert len(packet["presets"]) == 17
     assert len(packet["voices"]) == 35
     sys, usr = prompts.build_prompt("map", packet)
