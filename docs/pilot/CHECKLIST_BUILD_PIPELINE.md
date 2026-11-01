@@ -102,7 +102,7 @@ Order: baseline and decisions -> contracts and wiring (no model calls) -> prompt
 ## PROGRESS LOG (2026-10-28, kept current)
 - DONE since the master list was written: Phase-1 modules + tests (nemotron_code, chapter, approvals, caps v2, gates, check_script, validate_stage1 v1, validate_assets): 120 tests passing; voice library built (V1: `canon/series/voices.json`, 35 voices, 24 tests); Stage 1 docs (STAGE1_RULES, sound rules E1, cinematographer rule, voice rule, image runner, README sections 9-11); Codex research (architecture, Kimi plan, Stage 1, ElevenLabs sound) merged.
 - IN FLIGHT: nine Stage 1 unit modules/tests (5/9 pass; coverage, shots, looks, sounds being fixed by Nemotron from real pytest output); then reviews (Codex medium + Haiku low), freeze, aggregator.
-- Git: all work committed on local branch `pipeline/stage1-architecture-2026-10-28` (commit f3abc29, WIP); NOT pushed: the repo has no remote; waiting for the owner's repository URL.
+- Git: all work committed on local branch `pipeline/stage1-architecture-2026-10-28` (commit f3abc29, WIP); PUSHED 2026-11-01 to https://github.com/satviksangamkar11/Granth-studio (8 branches; working branch at da34577).
 - Counts in the master table now: see the status column ([x] done, [~] partial, [ ] open, [-] dropped).
 
 ## CODEX REVIEW 2 corrections (2026-10-28; `CODEX_CHECKLIST_REVIEW2.md`, verdict FIX FIRST; Nemotron writes all code and tests, Claude specs/runs, Codex medium + Haiku low review)
