@@ -1,5 +1,8 @@
 # FLOW RUNBOOK: how Claude operated Google Flow (built-in browser) for GranthStudio, step by step (written 2026-10-27 so a small agent, e.g. Haiku, can repeat it)
 
+> **SUPERSEDED 2026-11-01 (owner):** image generation and correction now use ONLY the final system in `docs/pilot/FLOW_IMAGE_SYSTEM.md` (jobs from `scripts/flow/build_jobs_v2.py`, review by `scripts/flow/review_shot.py`, downloads only via `scripts/flow/download_queue.py` after the owner's OK). Sections 12 (the @ method), 13 (settings after a restart) and the pitfalls (7, 9, 17) are STILL USED by the final system; the job/download/review steps in sections 5, 10, 11, 14-16 are replaced.
+
+
 Recorded from the real run for Adhyay 1 reference sheets. Everything below WORKED on the real project. Project: `GranthStudio`, id `31b2d7e8-5ad8-41ba-a878-50860b49a03e`, URL base `https://flow.google.com/project/<id>`. Account is signed in by the OWNER (never type a password; stop at any CAPTCHA/verify screen). Tools: the Claude built-in browser (`mcp__Claude_Browser__*`): `navigate`, `computer` (actions: `left_click` with `ref` or `coordinate`, `type`, `key`, `wait` max 10 s, `scroll`, `screenshot`), `find` (returns a `ref_N`), `read_page` (filter `interactive`), `browser_batch` (runs a list of actions in one call: USE IT). Screenshot coordinate frame is 800x638; `scale` 0.5 screenshots are enough. Prefer `ref` clicks (the page layout moves) and the fixed coordinates listed here only where marked "fixed".
 
 ## 0. Rules (do not break)

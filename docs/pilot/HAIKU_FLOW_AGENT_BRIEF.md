@@ -1,5 +1,8 @@
 # Brief for the Haiku Flow agent: make the Adhyay 1 shot images in Google Flow (follow exactly)
 
+> **SUPERSEDED 2026-11-01 (owner):** image generation and correction now use ONLY the final system in `docs/pilot/FLOW_IMAGE_SYSTEM.md` (jobs from `scripts/flow/build_jobs_v2.py`, review by `scripts/flow/review_shot.py`, downloads only via `scripts/flow/download_queue.py` after the owner's OK). This file is kept as history and for the click details it references.
+
+
 You operate Google Flow in the Claude built-in browser (tools `mcp__Claude_Browser__*`: `navigate`, `computer`, `find`, `read_page`, `browser_batch`) and use Bash only for `ls`, the filing script and appending to the progress file. The owner is already signed in. You make images ONLY from the job list; you never design, never rephrase except as stated below, never accept/approve anything.
 
 ## Read first (once)

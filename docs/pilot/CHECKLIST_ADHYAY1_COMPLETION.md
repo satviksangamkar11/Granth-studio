@@ -9,6 +9,7 @@ Rev 3 applies the owner's second audit (all points checked against the files, se
 - [x] rev9 split (`canon/director_runs/a1_split_rev9/macro_A1.json`): 9 scenes, 1 story (ovi 70-144); 73 proposed-unfilmed ovis in SIX ranges: 1-32 invocation, 33-38 commentary, 39-57 background, 58-69 background (one Shegaon view drawn from 58-60 for Scene S1 shot 1), 106-107 commentary, 145-146 closing. NOT yet approved
 - [x] 59 shots (timing plan `canon/audio/A1_timing_plan.json`: planned 59, allocated 59): S1 2, S2 8, S3 6, S4 5, S5 7, S6 6, S7 9, S8 5, S9 11. The "61" in older notes and in `compare_a1.py` is the rev8 count and is WRONG for rev9
 - [x] 59 FINAL clean images, one per shot, sha256-bound in `canon/packets/adhyay_01/final_image_binding.json` (same per-scene counts)
+- [~] 6 NEW shot images for the re-timed S2/S7 (SH_S2_09-11, SH_S7_10-12): being made 2026-11-01 with the FINAL image system (`FLOW_IMAGE_SYSTEM.md`; jobs `canon/drafts/A1_flow_jobs_v2.json`); download pass after Claude confirms every scene and the owner gives OK
 - [x] Speech: 62 lines, 124 clips (Marathi + Hindi) measured in `canon/audio/A1_eleven_measured.json`; owner accepted the voices 2026-10-26 (decision log: "do not regenerate these clips"); Hindi NOT VALIDATED. The file's status label still says DRAFT: reconcile the label, do NOT regenerate
 - [x] 11 JSON presets + index (`assets/v5_presets/`, `canon/packets/adhyay_01/presets_index.json`), Builder v2 frozen (D-017)
 - [~] 46 MOSS sound effects for Adhyay 1+2 (`_moss/`), not yet listened to or hashed into a palette

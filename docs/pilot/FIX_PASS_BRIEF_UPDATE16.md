@@ -1,5 +1,8 @@
 ## UPDATE 16 + 17 (owner, 2026-10-27 18:35): FINAL FIX PASS ON CODEX FINDINGS (edit-first, then regenerate) WITH NEIGHBOUR SHOTS AS REFERENCE
 
+> **SUPERSEDED 2026-11-01 (owner):** image generation and correction now use ONLY the final system in `docs/pilot/FLOW_IMAGE_SYSTEM.md` (jobs from `scripts/flow/build_jobs_v2.py`, review by `scripts/flow/review_shot.py`, downloads only via `scripts/flow/download_queue.py` after the owner's OK). This file is kept as history and for the click details it references.
+
+
 Jobs: `canon/drafts/A1_flow_edit_jobs.json` (per shot: base_version, base_edit_id = the tile to open, out_version, method, edit_instruction, regen_fix_sentence, and `previous_shot` / `next_shot` = the shot before and after in the film with their current best file and Flow title). Regenerate fallback prompts: `canon/drafts/A1_flow_regen_jobs.json` (same shot_id; file_version = out_version; characters + place).
 
 NEIGHBOUR REFERENCES (owner request): the previous and the next shot show what this shot must continue from and cut into (same house, positions, light, where Maharaj sits, which way people face, background).

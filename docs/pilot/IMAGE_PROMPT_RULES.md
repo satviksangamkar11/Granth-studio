@@ -1,5 +1,8 @@
 # Image prompt and review rules, every Adhyay (from the Adhyay 1 lessons; sources: `CODEX_IMAGE_LESSONS.md`, checked by Opus and Claude, 2026-10-27)
 
+> **SUPERSEDED 2026-11-01 (owner):** image generation and correction now use ONLY the final system in `docs/pilot/FLOW_IMAGE_SYSTEM.md` (jobs from `scripts/flow/build_jobs_v2.py`, review by `scripts/flow/review_shot.py`, downloads only via `scripts/flow/download_queue.py` after the owner's OK). Its prompt template and review rubric are now built into `build_jobs_v2.py` and `review_shot.py`.
+
+
 Owner approves story facts, reference sheets and final images. Claude builds versioned jobs from data. Flow agents generate and file candidates. A PASS belongs to ONE exact image version.
 
 ## 1. What went wrong in Adhyay 1 (so we do not repeat it)
