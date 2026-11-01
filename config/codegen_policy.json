@@ -1,0 +1,11 @@
+{
+ "_note": "PROTECTED, maintained by hand only (owner decision 2026-11-01, N1). No coder model may write or edit this file. scripts/source/nemotron_code.py reads it at run time and refuses every reply if it is missing, unreadable or malformed. Rule copied unchanged from nemotron_code.py FORBIDDEN_TEXT (D-017).",
+ "version": 1,
+ "forbidden_text": {
+  "pattern": "\\bimport\\s+bpy\\b|\\bfrom\\s+bpy\\b|\\bbpy\\.|\\bbmesh\\b|\\bmathutils\\b|blender",
+  "ignore_case": true,
+  "refusal_reason": "Blender/animation code (D-017)",
+  "system_rule": "Never write animation or Blender code.",
+  "refused_examples": ["import bpy\nbpy.ops.x()"]
+ }
+}

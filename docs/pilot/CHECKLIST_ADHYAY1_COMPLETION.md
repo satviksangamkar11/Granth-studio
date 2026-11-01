@@ -12,7 +12,7 @@ Rev 3 applies the owner's second audit (all points checked against the files, se
 - [x] Speech: 62 lines, 124 clips (Marathi + Hindi) measured in `canon/audio/A1_eleven_measured.json`; owner accepted the voices 2026-10-26 (decision log: "do not regenerate these clips"); Hindi NOT VALIDATED. The file's status label still says DRAFT: reconcile the label, do NOT regenerate
 - [x] 11 JSON presets + index (`assets/v5_presets/`, `canon/packets/adhyay_01/presets_index.json`), Builder v2 frozen (D-017)
 - [~] 46 MOSS sound effects for Adhyay 1+2 (`_moss/`), not yet listened to or hashed into a palette
-- Not used for Adhyay 1: the Nemotron Stage 1 trial (test of the pipeline for later chapters) and the old paid Kimi director runs of 2026-10-26
+- Not used for Adhyay 1: the Nemotron Stage 1 trial (test of the pipeline for later chapters) and the old paid Kimi director runs of 2026-10-26. A FRESH Kimi director call is allowed (Phase K)
 
 ## Preset input contract (from the index; decides what a flat final can feed)
 | Preset | Needs | Can a flat final feed it? |
@@ -24,7 +24,7 @@ Rev 3 applies the owner's second audit (all points checked against the files, se
 | 11 | two scene images (scene_a, scene_b) | YES (two finals) |
 
 ## Phase 0 - coder safety (before any coder-written A1 fix)
-- [ ] 0.1 Close N1 (`nemotron_code.py`: approved spec root, no scratch output in `scripts/ src/ tests/ schemas/`, refuse any unfinished/unexpected FILE block) - `fix_loop.py` loads it, so it is on the A1 path. Until N1 passes, A1 code goes only through `coder_run.py` with Claude checking every written file
+- [x] 0.1 DONE 2026-11-01 (38 tests, Codex medium READY after 3 rounds, `CODEX_N1_REVIEW.md`; policy in protected `config/codegen_policy.json`; 0 new failures vs the 5 `test_fix_loop` + 8 queue/coder baseline failures, which stay open as their own item). Close N1 (`nemotron_code.py`: approved spec root, no scratch output in `scripts/ src/ tests/ schemas/`, refuse any unfinished/unexpected FILE block) - `fix_loop.py` loads it, so it is on the A1 path. Until N1 passes, A1 code goes only through `coder_run.py` with Claude checking every written file
 
 ## Phase A - freeze and baseline
 - [x] A1 Back up + hash the actual 59-shot baseline (split, binding, images, speech, timing); byte-for-byte list (item 3) DONE 2026-11-01: `canon/baselines/a1_baseline_2026-11-01.json`; 59/59 images match the binding, 124/124 speech clips match `eleven_manifest.json`, script hash = checker + measured hash, backup `D:/aai work/backups/a1_baseline_2026-11-01` 210/210 identical (189 MB)
@@ -52,7 +52,23 @@ Code-only preset experiments (C2) may run in parallel with Phase B.
 - [ ] E2 Confirm the 124 accepted clips by hash; reconcile the DRAFT label with the 2026-10-26 acceptance; owner listens to Hindi (item 23). Reuse only, no regeneration
 - [ ] E3 Freeze the shared bilingual beat timeline from both measured speech windows; cue "after line" = after both languages (items 24, E4)
 
-## Phase D - save (after B1 and E3, so the hashes are final)
+## Phase I - put Adhyay 1 into the Adhyay 2 input format (needed before Phase K; found 2026-11-01)
+Today `scripts/pipeline/chapter.py` special-cases Adhyay 1 with legacy files: `canon/packets/adhyay_01/adhyay_01_ovis_hj.jsonl` (fields adhyay, ovi, printed_no, text only), research = a `frozen_copies` folder, script in `docs/pilot/`. Adhyay 2+ uses the docx format: `source/ovis.jsonl` (ovi, section, original_marathi, simple_marathi, hindi, easy_english, printed_number, adhyay), `source/sections.json`, `research/packet.json` (characters, locations, objects), `script/easy.md`.
+- [ ] I1 Source for Adhyay 1 in the Audited Canon docx format: the owner supplies a Chapter 1 docx like Chapter 2 (recommended: same importer, already tested), OR a code conversion of the existing data (leaves simple_marathi/hindi/easy_english/section EMPTY: nothing may be invented)
+- [ ] I2 Run `import_canon_docx.py --adhyay 1` -> `canon/adhyay_01/source/` + `research/packet.json`; compare its 146 ovis against `adhyay_01_ovis_hj.jsonl` and report every text difference and printed-number mismatch to the owner
+- [ ] I3 Copy (never move) the owner's EASY script to `canon/adhyay_01/script/easy.md` (same line format already: `**S1-L1** | narrator | ovi 70 | core`); its sha256 must stay `e884d3fe...` so the 124 clips and the timing stay valid
+- [ ] I4 Coder: drop the Adhyay 1 special case in `chapter.py` for source_ovis, research_packet and script only; audio, timing, measured, image binding keep their current paths (no file moves, Phase A hashes unchanged); tests prove A1 and A2 resolve the same way (item 13)
+- [ ] I5 Run `check_script_cli.py --adhyay 1` on the new layout: same 102 findings as before (proves nothing changed), then Phase B continues on it
+
+## Phase K - fresh Kimi director call for Adhyay 1 (owner decision 2026-11-01: allowed, same fixed rules as Adhyay 2)
+Kimi directs; it does not re-split the chapter, write dialogue or timings, or replace existing assets. Its output is data only, validated by code and approved by the owner.
+- [ ] K1 Contract fixes first, so the output is checked by the same rules Adhyay 2 will use: preset field = preset-index id or NEED_NEW with reason + class (21c), stale schemas retired (N10 = D6), foreign/unknown ovi rejected (N3 coverage part), only verified MR+HI voices (N13), sound ids carry a palette version (N14), questions for every NEED_NEW (N12 = C5)
+- [ ] K2 Inputs fixed and hashed (from B1, E3, C2): locked rev9 split + approved dispositions, the owner's EASY script (owner gives it, not Kimi; decision 2026-10-27 #5), the 59-image catalog with sha256, the preset index + tested flat variants, the frozen beat timeline, the voice cast
+- [ ] K3 Owner sets the spend before the call (provisional $5 per chapter, decision 2026-10-27 #8; total ledger cap $50 in `v5_ledger.py`); one call per scene with receipts; failed scenes rerun alone (`--reuse-from`)
+- [ ] K4 Gate on the output: aggregator + advisory cross-check; zero unknown image/preset/voice/sound ids, every shot bound to one of the 59 images or a NEED_NEW, no scene without shots, no uncovered core line; then the owner reviews the shot-to-preset table (C1). A call that returns 200 but fails the gate counts as FAILED
+- [ ] K5 Accepted output becomes the D1 shot bindings; NEED_NEW items listed for the owner (new image / cut-out / new preset variant)
+
+## Phase D - save (after B1, E3 and K5, so the hashes are final)
 - [ ] D1 Shot-specific approved bindings in `canon/shot_plans/`: plan id/version, ovi + beat ids, preset id + preset file hash, role -> image id + sha256, transition, source/script/timing hashes (R3)
 - [ ] D2 Exact-hash replay of D1: same inputs -> zero new director/planning calls; a changed input never matches silently (item 29, R4). This only stops REPEATING a plan
 - [ ] D3 Reusable preset TEMPLATES saved separately (the C2 variants + any tested flat variant), with bounds and test renders, for Adhyay 2-21
@@ -73,7 +89,7 @@ Code-only preset experiments (C2) may run in parallel with Phase B.
 - [ ] F5 VISUAL milestone: the owner judges that the staging and shot progression do not read as a slideshow. A technical pass alone does not pass S4; if it fails, decide cut-outs or new variants for the failing shots before Phase G
 
 ## Phase G - the other 54 shots (only after F4 AND F5)
-- [ ] G1 Kimi ONLY for genuinely missing shots, each with a reason, owner gate first (item 20, R8; ledger left $0.315)
+- [ ] G1 Phase K output covers the other 8 scenes; extra Kimi calls only for NEED_NEW shots, inside the owner's chapter spend (item 20, R8)
 - [ ] G2 Render + mix the remaining 8 scenes from saved plans; render receipts (item 34)
 - [ ] G3 Marathi MP4 + Hindi MP4 from one picture timeline: equal frames and length (item 35)
 - [ ] G4 Full test suite in one go + validate (items 38, N15); Codex review; commit; push only with the owner's OK (item 39)
@@ -81,7 +97,8 @@ Code-only preset experiments (C2) may run in parallel with Phase B.
 
 ## Go / no-go (owner 2026-11-01)
 - GO: Phase 0, baseline, coverage reconciliation, code-only flat-preset work.
-- NO-GO until the gates pass: declaring the A1 script locked (needs B3d), more Kimi spending, bulk layer generation, full-film rendering (needs F4 + F5).
+- GO (owner 2026-11-01): a fresh Kimi director call for Adhyay 1 under the Adhyay 2 rules, once K1-K3 are met; no need to avoid Kimi at any cost.
+- NO-GO until the gates pass: declaring the A1 script locked (needs B3d), Kimi calls before K1-K3, bulk layer generation, full-film rendering (needs F4 + F5).
 
 ## Deferred to Adhyay 2 (not needed to finish Adhyay 1)
 Stage 1 fidelity on new chapters (trial: 13 extra + 2 missed omissions; Adhyay 2 trial: missing core lines, a scene with no shots, voice collisions): N3, N6, N11, S7, S10 live run, `--adhyay N` wiring (13), Adhyay 2 dry run (37), the 3 Adhyay 2 omissions (ovis 48, 142, 143). (N1 moved to Phase 0.)
